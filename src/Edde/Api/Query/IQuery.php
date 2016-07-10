@@ -1,0 +1,24 @@
+<?php
+	namespace Edde\Api\Query;
+
+	use Edde\Api\Node\INode;
+
+	/**
+	 * Basic interface for the Edde's Intermediate Query Structure.
+	 */
+	interface IQuery {
+		/**
+		 * optimize inner structure; IQL enables to use duplicate elements (select -> ... and so) - this duplicates
+		 * are removed by this method
+		 *
+		 * @return $this
+		 */
+		public function optimize();
+
+		/**
+		 * return internal IQS node
+		 *
+		 * @return INode
+		 */
+		public function getNode();
+	}

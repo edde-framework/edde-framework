@@ -1,0 +1,26 @@
+{
+	"name": "edde-framework/edde-framework",
+	"type": "library",
+	"description": "Fast and full featured modern PHP framework.",
+	"keywords": [
+		"php",
+		"framework"
+	],
+	"authors": [
+		{
+			"name": "Marek Hanzal"
+		}
+	],
+	"config": {
+		"optimize-autoloader": true
+	},
+	"autoload": {
+		"files": [
+			"src/loader.php"
+		]
+	},
+	"require": {
+		"php": ">=5.6.0",
+		"ext-mbstring": "*"
+	}
+}

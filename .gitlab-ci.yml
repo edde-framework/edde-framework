@@ -1,0 +1,69 @@
+variables:
+    PROJECT: edde-framework
+    PAGE_TRIGGER: https://gitlab.com/api/v3/projects/1386646/trigger/builds
+    COMPOSER_TRIGGER: https://gitlab.com/api/v3/projects/1351549/trigger/builds
+
+stages:
+    - test
+    - compile
+    - doc
+    - package
+    - deploy
+
+test:
+    stage: test
+    script:
+        - php bin/composer.phar install
+        - php bin/phpunit.phar --coverage-text --colors=never
+
+compile:
+    stage: compile
+    script:
+        - php bin/compile.php
+    artifacts:
+        name: $PROJECT-$CI_BUILD_REF_NAME
+        paths:
+            - release/$PROJECT.phar
+    only:
+        - master
+        - tags
+
+doc:
+    stage: doc
+    script:
+        - php bin/apigen.phar generate
+    artifacts:
+        name: $PROJECT-$CI_BUILD_REF_NAME.doc
+        paths:
+            - doc/
+    only:
+        - master
+        - tags
+
+package:
+    stage: package
+    script: /bin/true
+    dependencies:
+        - compile
+        - doc
+    artifacts:
+        name: $PROJECT-$CI_BUILD_REF_NAME.package
+        paths:
+            - release/$PROJECT.phar
+            - doc/
+            - src/
+    only:
+        - master
+        - tags
+
+deploy:
+    stage: deploy
+    script:
+        - curl -X POST -F token=$PAGE_TOKEN -F ref=master $PAGE_TRIGGER
+        - curl -X POST -F token=$COMPOSER_TOKEN -F ref=master $COMPOSER_TRIGGER
+    dependencies:
+        - compile
+        - doc
+    only:
+        - master
+        - tags
