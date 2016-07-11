@@ -2,7 +2,14 @@
 	namespace Edde\Common\Resource;
 
 	use Edde\Api\Resource\IResourceManager;
-	use Edde\Common\AbstractObject;
+	use Edde\Api\Resource\IResourceQuery;
+	use Edde\Common\Usable\AbstractUsable;
 
-	class ResourceManager extends AbstractObject implements IResourceManager {
+	class ResourceManager extends AbstractUsable implements IResourceManager {
+		public function getResource(IResourceQuery $resourceQuery) {
+			$this->usse();
+		}
+
+		protected function prepare() {
+		}
 	}

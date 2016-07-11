@@ -4,6 +4,9 @@
 	use Edde\Api\Node\IAbstractNode;
 	use Edde\Api\Node\INode;
 
+	/**
+	 * Default full featured node implementation.
+	 */
 	class Node extends AbstractNode implements INode {
 		/**
 		 * @var string
