@@ -7,7 +7,7 @@
 	 * General object which is used to describe relations between objects (not necesarilly database objects) and
 	 * theirs hierarchy.
 	 */
-	interface ICrate {
+	interface ICrate extends IValueSet {
 		/**
 		 * return a schema of this storable
 		 *
