@@ -13,4 +13,18 @@
 		 * @return IUrl
 		 */
 		public function getUrl();
+
+		/**
+		 * return firendy name of this resource; this can be arbitrary string
+		 *
+		 * @return string
+		 */
+		public function getName();
+
+		/**
+		 * return mime type of this resource
+		 *
+		 * @return string
+		 */
+		public function getMime();
 	}

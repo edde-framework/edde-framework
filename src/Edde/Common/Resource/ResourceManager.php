@@ -1,15 +1,21 @@
 <?php
 	namespace Edde\Common\Resource;
 
+	use Edde\Api\Crypt\ICrypt;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\IResourceQuery;
 	use Edde\Api\Resource\Scanner\IScanner;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaManager;
+	use Edde\Api\Storage\IStorableFactory;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class ResourceManager extends AbstractUsable implements IResourceManager {
+		/**
+		 * @var IStorableFactory
+		 */
+		protected $storableFactory;
 		/**
 		 * @var ISchemaManager
 		 */
@@ -23,31 +29,39 @@
 		 */
 		protected $scanner;
 		/**
+		 * @var ICrypt
+		 */
+		protected $crypt;
+		/**
 		 * @var ISchema
 		 */
 		protected $resourceSchema;
 
 		/**
+		 * @param IStorableFactory $storableFactory
 		 * @param ISchemaManager $schemaManager
 		 * @param IStorage $storage where to put scanned resources
 		 * @param IScanner $scanner current resource scanner
+		 * @param ICrypt $crypt as guid generator
 		 */
-		public function __construct(ISchemaManager $schemaManager, IStorage $storage, IScanner $scanner) {
+		public function __construct(IStorableFactory $storableFactory, ISchemaManager $schemaManager, IStorage $storage, IScanner $scanner, ICrypt $crypt) {
+			$this->storableFactory = $storableFactory;
 			$this->schemaManager = $schemaManager;
 			$this->storage = $storage;
 			$this->scanner = $scanner;
+			$this->crypt = $crypt;
 		}
 
 		public function update() {
+			$this->usse();
 			foreach ($this->scanner->scan() as $resource) {
-				$resourceStorable = $this->createResourceStorable();
+				$resourceStorable = $this->storableFactory->create(ResourceStorable::class, $this->resourceSchema);
+				$resourceStorable->set('guid', $this->crypt->guid());
+				$resourceStorable->set('url', (string)$resource->getUrl());
+				$resourceStorable->set('name', $resource->getName());
+				$resourceStorable->set('mime', $resource->getMime());
 				$this->storage->store($resourceStorable);
 			}
-		}
-
-		public function createResourceStorable() {
-			$this->usse();
-			return new ResourceStorable($this->resourceSchema);
 		}
 
 		public function getResourceCollection(IResourceQuery $resourceQuery) {

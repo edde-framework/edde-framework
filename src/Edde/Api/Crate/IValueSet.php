@@ -15,6 +15,16 @@
 		public function getValueList();
 
 		/**
+		 * add the given value to this property set
+		 *
+		 * @param IValue $value
+		 * @param bool $force
+		 *
+		 * @return $this
+		 */
+		public function addValue(IValue $value, $force = false);
+
+		/**
 		 * has this property set property with the given name?
 		 *
 		 * @param string $name

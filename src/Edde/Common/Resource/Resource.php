@@ -10,15 +10,37 @@
 		 * @var IUrl
 		 */
 		protected $url;
+		/**
+		 * friendly name of this resource
+		 *
+		 * @var string
+		 */
+		protected $name;
+		/**
+		 * @var string
+		 */
+		protected $mime;
 
 		/**
 		 * @param IUrl $url
+		 * @param string|null $name
+		 * @param string|null $mime
 		 */
-		public function __construct(IUrl $url) {
+		public function __construct(IUrl $url, $name = null, $mime = null) {
 			$this->url = $url;
+			$this->name = $name;
+			$this->mime = $mime;
 		}
 
 		public function getUrl() {
 			return $this->url;
+		}
+
+		public function getName() {
+			return $this->name;
+		}
+
+		public function getMime() {
+			return $this->mime;
 		}
 	}

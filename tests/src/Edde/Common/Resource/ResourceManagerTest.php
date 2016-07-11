@@ -1,10 +1,17 @@
 <?php
 	namespace Edde\Common\Resource;
 
-	use Edde\Api\Resource\IResourceQuery;
-	use Edde\Api\Storage\IStorable;
+	use Edde\Common\Cache\CacheFactory;
+	use Edde\Common\Container\Container;
+	use Edde\Common\Container\DependencyFactory;
+	use Edde\Common\Container\Factory\FactoryFactory;
+	use Edde\Common\Container\FactoryManager;
+	use Edde\Common\Crate\CrateFactory;
+	use Edde\Common\Crypt\Crypt;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\Schema\SchemaManager;
+	use Edde\Common\Storage\StorableFactory;
+	use Edde\Ext\Cache\DevNullCacheStorage;
 	use Edde\Ext\Resource\Scanner\FilesystemScanner;
 	use phpunit\framework\TestCase;
 
@@ -17,12 +24,12 @@
 		protected function createResourceManager() {
 			$schemaManager = new SchemaManager();
 			$schemaManager->addSchema(new ResourceSchema());
-			return new ResourceManager($schemaManager, new DatabaseStorage(), new FilesystemScanner(__DIR__ . '/assets'));
+			$factoryManager = new FactoryManager();
+			$factoryManager->registerFactoryFallback(FactoryFactory::createFallback());
+			return new ResourceManager(new StorableFactory($container = new Container($factoryManager, new DependencyFactory($factoryManager, $cacheFactory = new CacheFactory(__DIR__, new DevNullCacheStorage())), $cacheFactory), new CrateFactory($container)), $schemaManager, new DatabaseStorage(), new FilesystemScanner(__DIR__ . '/assets'), new Crypt());
 		}
 
 		public function testCommon() {
 			$resourceManager = $this->createResourceManager();
-			self::assertInstanceOf(IStorable::class, $resourceManager->createResourceStorable());
-			self::assertInstanceOf(IResourceQuery::class, $resourceQuery = $resourceManager->createResourceQuery());
 		}
 	}

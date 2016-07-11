@@ -35,6 +35,15 @@
 			return $this->valueList;
 		}
 
+		public function addValue(IValue $value, $force = false) {
+			$property = $value->getProperty();
+			if (isset($this->valueList[$propertyName = $property->getName()]) && $force === false) {
+				throw new CrateException(sprintf('Value [%s] is already present in value set [%s].', $propertyName, $this->schema->getSchemaName()));
+			}
+			$this->valueList[$propertyName] = $value;
+			return $this;
+		}
+
 		public function push(array $push, $strict = true) {
 			if ($strict && ($diff = array_diff(array_keys($push), array_keys($this->valueList))) !== []) {
 				throw new CrateException(sprintf('Setting unknown values [%s] to the value set [%s].', implode(', ', $diff), $this->schema->getSchemaName()));
