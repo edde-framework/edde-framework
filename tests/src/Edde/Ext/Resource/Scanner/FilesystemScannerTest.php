@@ -9,12 +9,13 @@
 			$scanner = $this->createScanner();
 			$pathList = [];
 			foreach ($scanner->scan() as $resource) {
-				$pathList[] = str_replace(__DIR__ . '/assets\\', null, $resource->getUrl()
+				$path = str_replace('\\', '/', $resource->getUrl()
 					->getPath());
+				$pathList[] = str_replace(str_replace('\\', '/', __DIR__ . '/assets/'), null, $path);
 			}
 			$expected = [
-				'bar\bar.txt',
-				'bar\foobar.txt',
+				'bar/bar.txt',
+				'bar/foobar.txt',
 				'foo.txt',
 			];
 			sort($expected);
