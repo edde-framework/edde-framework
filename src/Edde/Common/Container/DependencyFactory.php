@@ -41,6 +41,9 @@
 		}
 
 		protected function build($name, IDependency $root) {
+			if ($this->factoryManager->hasFactory($name) === false) {
+				return;
+			}
 			$factory = $this->factoryManager->getFactory($name);
 			foreach ($factory->getParameterList() as $parameter) {
 				if ($parameter->hasClass() === false) {
