@@ -1,17 +1,20 @@
 <?php
-	namespace Edde\Common\Storage;
+	namespace Edde\Common\Crate;
 
+	use Edde\Api\Crate\ICrate;
+	use Edde\Api\Crate\IValue;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Storage\IStorable;
 	use Edde\Common\AbstractObject;
 
-	class AbstractStorable extends AbstractObject implements IStorable {
+	class Crate extends AbstractObject implements ICrate {
 		/**
-		 * schema of this storable
-		 *
 		 * @var ISchema
 		 */
 		protected $schema;
+		/**
+		 * @var IValue[]
+		 */
+		protected $valueList = [];
 
 		/**
 		 * @param ISchema $schema
@@ -22,5 +25,9 @@
 
 		public function getSchema() {
 			return $this->schema;
+		}
+
+		public function getValueList() {
+			return $this->valueList;
 		}
 	}

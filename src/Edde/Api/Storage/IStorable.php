@@ -1,16 +1,10 @@
 <?php
 	namespace Edde\Api\Storage;
 
-	use Edde\Api\Schema\ISchema;
+	use Edde\Api\Crate\ICrate;
 
 	/**
 	 * Every storable object must be formally marked by this interface.
 	 */
-	interface IStorable {
-		/**
-		 * return a schema of this storable
-		 *
-		 * @return ISchema
-		 */
-		public function getSchema();
+	interface IStorable extends ICrate {
 	}

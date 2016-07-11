@@ -1,7 +1,7 @@
 <?php
 	namespace Edde\Common\Resource;
 
-	use Edde\Common\Storage\AbstractStorable;
+	use Edde\Common\Storage\Storable;
 
-	class ResourceStorable extends AbstractStorable {
+	class ResourceStorable extends Storable {
 	}
