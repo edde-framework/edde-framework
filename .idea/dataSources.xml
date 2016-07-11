@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" hash="1743612636">
+    <data-source source="LOCAL" name="Sqlite (Xerial) - resource-test.sqlite" uuid="06aae11d-dca1-4c35-97f5-b46934e3a39b">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/tests/src/Edde/Common/Resource/resource-test.sqlite</jdbc-url>
+    </data-source>
+  </component>
+</project>

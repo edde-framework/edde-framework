@@ -4,9 +4,9 @@
 	use Edde\Api\Schema\IProperty;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\SchemaException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Usable\AbstractUsable;
 
-	class Schema extends AbstractObject implements ISchema {
+	class Schema extends AbstractUsable implements ISchema {
 		/**
 		 * @var string
 		 */
@@ -42,10 +42,12 @@
 		}
 
 		public function getPropertyList() {
+			$this->usse();
 			return $this->propertyList;
 		}
 
 		public function getProperty($name) {
+			$this->usse();
 			if ($this->hasProperty($name) === false) {
 				throw new SchemaException(sprintf('Requested unknown property [%s] in schema [%s].', $name, $this->getSchemaName()));
 			}
@@ -53,6 +55,7 @@
 		}
 
 		public function hasProperty($name) {
+			$this->usse();
 			return isset($this->propertyList[$name]);
 		}
 
@@ -95,5 +98,8 @@
 			}
 			$this->propertyList[$propertyName] = $property;
 			return $this;
+		}
+
+		protected function prepare() {
 		}
 	}

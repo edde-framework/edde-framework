@@ -3,11 +3,8 @@
 
 	use Edde\Common\Schema\Property;
 	use Edde\Common\Schema\Schema;
-	use Edde\Common\Usable\UsableTrait;
 
 	class ResourceSchema extends Schema {
-		use UsableTrait;
-
 		public function __construct() {
 			parent::__construct('Resource', __NAMESPACE__);
 		}

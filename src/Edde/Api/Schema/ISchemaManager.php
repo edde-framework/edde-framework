@@ -35,4 +35,11 @@
 		 * @throws SchemaException
 		 */
 		public function getSchema($schema);
+
+		/**
+		 * return list of all available schemas
+		 *
+		 * @return ISchema[]
+		 */
+		public function getSchemaList();
 	}

@@ -97,6 +97,9 @@
 		protected function factory(IDependency $root, array $parameterList) {
 			$dependencyList = [];
 			foreach ($root->getDependencyList() as $dependency) {
+				if ($this->factoryManager->hasFactory($dependency->getName()) === false) {
+					break;
+				}
 				$dependencyList[] = $this->factory($dependency, []);
 			}
 			return $this->factoryManager->getFactory($name = $root->getName())

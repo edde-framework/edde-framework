@@ -9,6 +9,15 @@
 	 */
 	interface IStorage extends IUsable {
 		/**
+		 * execute the given query against this storage
+		 *
+		 * @param IQuery $query
+		 *
+		 * @return ICollectionIterator
+		 */
+		public function execute(IQuery $query);
+
+		/**
 		 * try to store the given storable
 		 *
 		 * @param IStorable $storable

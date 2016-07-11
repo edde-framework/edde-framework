@@ -26,6 +26,11 @@
 			return $this->schemaList[$schema];
 		}
 
+		public function getSchemaList() {
+			$this->usse();
+			return $this->schemaList;
+		}
+
 		protected function prepare() {
 		}
 	}

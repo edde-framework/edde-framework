@@ -32,7 +32,7 @@
 			}
 			/** @var $splFileInfo SplFileInfo */
 			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->path, RecursiveDirectoryIterator::SKIP_DOTS)) as $splFileInfo) {
-				yield new Resource(Url::factory('file', (string)$splFileInfo));
+				yield new Resource(Url::factory('file', (string)$splFileInfo), (string)$splFileInfo, mime_content_type((string)$splFileInfo));
 			}
 		}
 	}

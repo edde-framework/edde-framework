@@ -15,6 +15,7 @@
 	use Edde\Api\Runtime\ISetupHandler;
 	use Edde\Api\Runtime\RuntimeException;
 	use Edde\Api\Schema\ISchemaManager;
+	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Application\Application;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Control\ControlFactory;
@@ -23,6 +24,7 @@
 	use Edde\Common\Router\RouterList;
 	use Edde\Common\Runtime\SetupHandler;
 	use Edde\Common\Schema\SchemaManager;
+	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Link\PublicLinkGenerator;
 	use Edde\Ext\Router\CliRouter;
@@ -77,6 +79,7 @@
 						});
 					},
 				],
+				IUpgradeManager::class => UpgradeManager::class,
 			], $factoryList));
 			return $setupHandler;
 		}

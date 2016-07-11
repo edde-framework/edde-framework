@@ -33,6 +33,23 @@
 			return $this;
 		}
 
+		/**
+		 * select count of the given property
+		 *
+		 * @param string $property
+		 * @param string|null $prefix
+		 * @param string|null $alias
+		 *
+		 * @return $this
+		 */
+		public function count($property, $prefix = null, $alias = null) {
+			$this->node->addNode(new Node('count', $property, [
+				'alias' => $alias,
+				'prefix' => $prefix,
+			]));
+			return $this;
+		}
+
 		public function from() {
 			return $this->selectQuery->from();
 		}

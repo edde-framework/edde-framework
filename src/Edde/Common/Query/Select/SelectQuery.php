@@ -49,14 +49,10 @@
 		}
 
 		public function getNode() {
-			$this->check();
-			return $this->selectNode;
-		}
-
-		protected function check() {
 			if ($this->selectNode === null) {
 				throw new QueryException(sprintf('Empty select query has no sense; please start with %s::select() method.', self::class));
 			}
+			return $this->selectNode;
 		}
 
 		protected function prepare() {
