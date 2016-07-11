@@ -33,5 +33,7 @@
 				$storableSchema = $storable->getSchema();
 				throw new CollectionException(sprintf('Cannot store [%s] storable because of missmatched schemas - expected [%s], got [%s].', get_class($storable), $this->schema->getSchemaName(), $storableSchema->getSchemaName()));
 			}
+			$this->storage->store($storable);
+			return $this;
 		}
 	}

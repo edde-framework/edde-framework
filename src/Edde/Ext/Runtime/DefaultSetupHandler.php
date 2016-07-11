@@ -9,19 +9,20 @@
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpRequestFactory;
 	use Edde\Api\Http\IHttpResponse;
-	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Router\IRoute;
 	use Edde\Api\Router\IRouter;
 	use Edde\Api\Router\RouterException;
 	use Edde\Api\Runtime\ISetupHandler;
 	use Edde\Api\Runtime\RuntimeException;
+	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Common\Application\Application;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Control\ControlFactory;
 	use Edde\Common\Http\HttpRequestFactory;
-	use Edde\Common\Resource\ResourceIndex;
+	use Edde\Common\Resource\ResourceSchema;
 	use Edde\Common\Router\RouterList;
 	use Edde\Common\Runtime\SetupHandler;
+	use Edde\Common\Schema\SchemaManager;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Link\PublicLinkGenerator;
 	use Edde\Ext\Router\CliRouter;
@@ -66,7 +67,16 @@
 				PublicLinkGenerator::class => function () {
 					throw new RuntimeException(sprintf('[%s] needs setup; please use current [%s] and register your own [%s] factory.', PublicLinkGenerator::class, ISetupHandler::class, PublicLinkGenerator::class));
 				},
-				IResourceIndex::class => ResourceIndex::class,
+				ISchemaManager::class => [
+					SchemaManager::class,
+					function (IFactory $factory) {
+						$factory->onSetup(function (SchemaManager $schemaManager) {
+							$schemaManager->onSetup(function (SchemaManager $schemaManager, ResourceSchema $resourceSchema) {
+								$schemaManager->addSchema($resourceSchema);
+							});
+						});
+					},
+				],
 			], $factoryList));
 			return $setupHandler;
 		}
