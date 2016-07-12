@@ -13,7 +13,6 @@ stages:
 test:
     stage: test
     script:
-        - php bin/composer.phar install
         - php bin/phpunit.phar --coverage-text --colors=never
 
 compile:
