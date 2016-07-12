@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Ext\Resource;
 
+	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Resource\IFileStorage;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceIndex;
@@ -24,7 +25,10 @@
 		 * @var IResourceIndex
 		 */
 		protected $resourceIndex;
-
+		/**
+		 * @var ITempDirectory
+		 */
+		protected $tempDirectory;
 		/**
 		 * list of current stylesheets
 		 *
@@ -36,10 +40,21 @@
 		 */
 		protected $content;
 
-		public function __construct(IFileStorage $fileStorage, IResourceIndex $resourceIndex) {
+		public function __construct(IFileStorage $fileStorage, IResourceIndex $resourceIndex, ITempDirectory $tempDirectory) {
 			parent::__construct(new Url(), null, 'text/css');
 			$this->fileStorage = $fileStorage;
 			$this->resourceIndex = $resourceIndex;
+			$this->tempDirectory = $tempDirectory;
+		}
+
+		public function getUrl() {
+			$this->usse();
+			return $this->url;
+		}
+
+		public function getName() {
+			$this->usse();
+			return $this->name;
 		}
 
 		public function addStryleSheet(IResource $resource) {
@@ -52,12 +67,12 @@
 		}
 
 		public function get() {
-			$this->prepare();
+			$this->usse();
 			return $this->content;
 		}
 
 		protected function prepare() {
-			$this->name = sha1(implode('', array_keys($this->styleSheetList)));
+			$this->name = sha1(implode('', array_keys($this->styleSheetList))) . '.css';
 			$content = [];
 			foreach ($this->styleSheetList as $resource) {
 				$current = $resource->get();
@@ -80,6 +95,7 @@
 				}
 				$content[] = $current;
 			}
-			return $this->content = implode("\n", $content);
+			$this->tempDirectory->file($this->name, $this->content = implode("\n", $content));
+			$this->url = Url::create('file:///' . $this->tempDirectory->getDirectory() . '/' . $this->name);
 		}
 	}

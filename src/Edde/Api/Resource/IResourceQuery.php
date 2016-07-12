@@ -57,4 +57,11 @@
 		 * @return IResource[]
 		 */
 		public function collection();
+
+		/**
+		 * check if the current query has some results
+		 *
+		 * @return bool
+		 */
+		public function hasResource();
 	}

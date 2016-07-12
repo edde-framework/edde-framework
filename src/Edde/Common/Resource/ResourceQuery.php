@@ -85,6 +85,10 @@
 			return $this->resourceIndex->getResourceCollection($this);
 		}
 
+		public function hasResource() {
+			return $this->resourceIndex->hasResource($this);
+		}
+
 		protected function prepare() {
 			$this->selectQuery = new SelectQuery();
 			$select = $this->selectQuery->select();

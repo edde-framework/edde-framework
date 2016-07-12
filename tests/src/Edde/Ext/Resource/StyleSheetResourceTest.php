@@ -13,12 +13,15 @@
 	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Crypt\Crypt;
 	use Edde\Common\Database\DatabaseStorage;
+	use Edde\Common\File\FileUtils;
+	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Resource\FileStorage;
 	use Edde\Common\Resource\Resource;
 	use Edde\Common\Resource\ResourceIndex;
 	use Edde\Common\Resource\ResourceSchema;
 	use Edde\Common\Resource\ResourceStorable;
 	use Edde\Common\Schema\SchemaManager;
+	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Common\Url\Url;
 	use Edde\Ext\Cache\DevNullCacheStorage;
@@ -46,6 +49,8 @@
 		protected $resourceIndex;
 
 		public function setUp() {
+			FileUtils::recreate(__DIR__ . '/public');
+			FileUtils::recreate(__DIR__ . '/temp');
 			$cacheFactory = $cacheFactory = new CacheFactory(__DIR__, new DevNullCacheStorage());
 			$factoryManager = new FactoryManager();
 			$factoryManager->registerFactoryFallback(FactoryFactory::createFallback());
@@ -70,10 +75,30 @@
 		}
 
 		public function testCommon() {
-			$styleSheetResource = new StyleSheetResource(new FileStorage($this->resourceIndex, __DIR__, __DIR__ . '/public'), $this->resourceIndex);
+			$styleSheetResource = new StyleSheetResource($fileStorage = new FileStorage($this->resourceIndex, __DIR__, __DIR__ . '/public'), $this->resourceIndex, new TempDirectory(__DIR__ . '/temp'));
 			$styleSheetResource->addStryleSheet(new Resource(Url::factory('file', __DIR__ . '/assets/css/font-awesome.css')));
 			$styleSheetResource->addStryleSheet(new Resource(Url::factory('file', __DIR__ . '/assets/css/font-awesome.min.css')));
 			$styleSheetResource->addStryleSheet(new Resource(Url::factory('file', __DIR__ . '/assets/css/simple-css.css')));
-			$styleSheetResource->compile();
+			self::assertFileExists($styleSheetResource->getUrl()
+				->getAbsoluteUrl());
+			$urlList = StringUtils::matchAll($styleSheetResource->get(), "~url\\((?<url>.*?)\\)~", true);
+			self::assertNotEmpty($urlList);
+			self::assertArrayHasKey('url', $urlList);
+			$count = 0;
+			foreach (array_unique($urlList['url']) as $url) {
+				$count++;
+				$url = str_replace([
+					'"',
+					"'",
+				], null, $url);
+				self::assertFileExists(__DIR__ . '/' . $url);
+				self::assertTrue($this->resourceIndex->query()
+					->urlLike('%' . $url)
+					->hasResource());
+			}
+			self::assertEquals(5, $count);
+			$styleSheet = $fileStorage->getResource($styleSheetResource);
+			self::assertFileExists($styleSheet->getUrl()
+				->getAbsoluteUrl());
 		}
 	}
