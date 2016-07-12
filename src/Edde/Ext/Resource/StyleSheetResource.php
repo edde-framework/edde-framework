@@ -96,6 +96,6 @@
 				$content[] = $current;
 			}
 			$this->tempDirectory->file($this->name, $this->content = implode("\n", $content));
-			$this->url = Url::create('file:///' . $this->tempDirectory->getDirectory() . '/' . $this->name);
+			$this->url = Url::create(str_replace('//', '/', 'file:///' . $this->tempDirectory->getDirectory() . '/' . $this->name));
 		}
 	}
