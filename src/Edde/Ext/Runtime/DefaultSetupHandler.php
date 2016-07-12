@@ -31,7 +31,6 @@
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Link\PublicLinkGenerator;
-	use Edde\Ext\Router\CliRouter;
 	use Edde\Ext\Router\SimpleRouter;
 
 	class DefaultSetupHandler extends SetupHandler {
@@ -54,7 +53,7 @@
 					function (IFactory $factory) {
 						$factory->onSetup(function (IContainer $container, RouterList $routerList) {
 							$routerList->onSetup(function (RouterList $routerList) use ($container) {
-								$routerList->registerRouter($container->create(CliRouter::class));
+//								$routerList->registerRouter($container->create(CliRouter::class));
 								$routerList->registerRouter($container->create(SimpleRouter::class));
 							});
 						});
