@@ -96,7 +96,7 @@
 				self::assertFileExists(__DIR__ . '/' . $url);
 				self::assertTrue($this->resourceIndex->query()
 					->urlLike('%' . $url)
-					->hasResource());
+					->hasResource(), sprintf('Missing resource [%s] in the resource index.', $url));
 			}
 			self::assertEquals(5, $count);
 			$styleSheet = $fileStorage->getResource($styleSheetResource);
