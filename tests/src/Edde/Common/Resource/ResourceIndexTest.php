@@ -97,6 +97,8 @@
 		}
 
 		protected function tearDown() {
-			$this->sqliteDriver->close();
+			if ($this->sqliteDriver) {
+				$this->sqliteDriver->close();
+			}
 		}
 	}
