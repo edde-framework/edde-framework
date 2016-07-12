@@ -39,7 +39,7 @@
 		/**
 		 * @var IResourceIndex
 		 */
-		protected $resourceManager;
+		protected $resourceIndex;
 
 		public function setUp() {
 			$cacheFactory = $cacheFactory = new CacheFactory(__DIR__, new DevNullCacheStorage());
@@ -51,9 +51,9 @@
 			$this->schemaManager = new SchemaManager();
 			$this->schemaManager->addSchema(new ResourceSchema());
 			$this->upgradeManager = new UpgradeManager();
-			$this->resourceManager = new ResourceIndex($crateFactory, $this->schemaManager, $this->storage, new FilesystemScanner(__DIR__ . '/assets'), new Crypt());
+			$this->resourceIndex = new ResourceIndex($crateFactory, $this->schemaManager, $this->storage, new FilesystemScanner(__DIR__ . '/assets'), new Crypt());
 			$factoryManager->registerFactory(ResourceStorable::class, FactoryFactory::create(ResourceStorable::class, [
-				$this->resourceManager,
+				$this->resourceIndex,
 				'createResourceStorable',
 			], false));
 			$this->upgradeManager->registerUpgrade(new InitialStorageUpgrade($this->storage, $this->schemaManager, '1.0'));
@@ -65,7 +65,7 @@
 		}
 
 		public function testUpdate() {
-			$this->resourceManager->update();
+			$this->resourceIndex->update();
 			$selectQuery = new SelectQuery();
 			$selectQuery->select()
 				->count('*', null, 'count')
@@ -81,8 +81,8 @@
 		}
 
 		public function testSimpleQueries() {
-			$this->resourceManager->update();
-			$resource = $this->resourceManager->query()
+			$this->resourceIndex->update();
+			$resource = $this->resourceIndex->query()
 				->nameLike('%.poo')
 				->resource();
 			self::assertInstanceOf(IResource::class, $resource);

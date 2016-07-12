@@ -43,7 +43,7 @@
 		/**
 		 * @var IResourceIndex
 		 */
-		protected $resourceManager;
+		protected $resourceIndex;
 
 		public function setUp() {
 			$cacheFactory = $cacheFactory = new CacheFactory(__DIR__, new DevNullCacheStorage());
@@ -55,14 +55,14 @@
 			$this->schemaManager = new SchemaManager();
 			$this->schemaManager->addSchema(new ResourceSchema());
 			$this->upgradeManager = new UpgradeManager();
-			$this->resourceManager = new ResourceIndex($crateFactory, $this->schemaManager, $this->storage, new FilesystemScanner(__DIR__ . '/assets'), new Crypt());
+			$this->resourceIndex = new ResourceIndex($crateFactory, $this->schemaManager, $this->storage, new FilesystemScanner(__DIR__ . '/assets'), new Crypt());
 			$factoryManager->registerFactory(ResourceStorable::class, FactoryFactory::create(ResourceStorable::class, [
-				$this->resourceManager,
+				$this->resourceIndex,
 				'createResourceStorable',
 			], false));
 			$this->upgradeManager->registerUpgrade(new InitialStorageUpgrade($this->storage, $this->schemaManager, '1.0'));
 			$this->upgradeManager->upgrade();
-			$this->resourceManager->update();
+			$this->resourceIndex->update();
 		}
 
 		protected function getDatabaseFileName() {
@@ -70,7 +70,7 @@
 		}
 
 		public function testCommon() {
-			$styleSheetResource = new StyleSheetResource(new FileStorage($this->resourceManager, __DIR__, __DIR__ . '/public'), $this->resourceManager);
+			$styleSheetResource = new StyleSheetResource(new FileStorage($this->resourceIndex, __DIR__, __DIR__ . '/public'), $this->resourceIndex);
 			$styleSheetResource->addStryleSheet(new Resource(Url::factory('file', __DIR__ . '/assets/css/font-awesome.css')));
 			$styleSheetResource->addStryleSheet(new Resource(Url::factory('file', __DIR__ . '/assets/css/font-awesome.min.css')));
 			$styleSheetResource->addStryleSheet(new Resource(Url::factory('file', __DIR__ . '/assets/css/simple-css.css')));

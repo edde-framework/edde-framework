@@ -17,7 +17,7 @@
 		/**
 		 * @var IResourceIndex
 		 */
-		protected $resourceManager;
+		protected $resourceIndex;
 		/**
 		 * application root directory; it is used for relative path computation
 		 *
@@ -32,12 +32,12 @@
 		protected $storage;
 
 		/**
-		 * @param IResourceIndex $resourceManager
+		 * @param IResourceIndex $resourceIndex
 		 * @param string $root
 		 * @param string $storage
 		 */
-		public function __construct(IResourceIndex $resourceManager, $root, $storage) {
-			$this->resourceManager = $resourceManager;
+		public function __construct(IResourceIndex $resourceIndex, $root, $storage) {
+			$this->resourceIndex = $resourceIndex;
 			$this->root = $root;
 			$this->storage = $storage;
 		}
@@ -59,16 +59,16 @@
 			if ($this->hasResource($resource->getUrl()) === false) {
 				return $this->store($resource);
 			}
-			return $this->resourceManager->query()
+			return $this->resourceIndex->query()
 				->name($resource->getUrl()
 					->getAbsoluteUrl())
 				->resource();
 		}
 
 		public function hasResource(IUrl $url) {
-			$resourceQuery = $this->resourceManager->query();
+			$resourceQuery = $this->resourceIndex->query();
 			$resourceQuery->name($url->getAbsoluteUrl());
-			return $this->resourceManager->hasResource($resourceQuery);
+			return $this->resourceIndex->hasResource($resourceQuery);
 		}
 
 		/**
@@ -87,12 +87,12 @@
 				throw new ResourceException(sprintf('Cannot create store folder [%s] for the resource [%s].', $path, $url));
 			}
 			copy($url, $file);
-			$resourceStorable = $this->resourceManager->createResourceStorable();
+			$resourceStorable = $this->resourceIndex->createResourceStorable();
 			$resourceStorable->set('name', $url->getAbsoluteUrl());
 			$resourceStorable->set('extension', $url->getExtension());
 			$resourceStorable->set('url', $localUrl = ('file:///' . str_replace('\\', '/', $file)));
 			$resourceStorable->set('mime', $resource->getMime());
-			$this->resourceManager->store($resourceStorable);
+			$this->resourceIndex->store($resourceStorable);
 			return new Resource(Url::create($localUrl));
 		}
 

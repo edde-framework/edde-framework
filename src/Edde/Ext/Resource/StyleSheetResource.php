@@ -22,7 +22,7 @@
 		/**
 		 * @var IResourceIndex
 		 */
-		protected $resourceManager;
+		protected $resourceIndex;
 
 		/**
 		 * list of current stylesheets
@@ -35,10 +35,10 @@
 		 */
 		protected $content;
 
-		public function __construct(IFileStorage $fileStorage, IResourceIndex $resourceManager) {
+		public function __construct(IFileStorage $fileStorage, IResourceIndex $resourceIndex) {
 			parent::__construct(new Url(), null, 'text/css');
 			$this->fileStorage = $fileStorage;
-			$this->resourceManager = $resourceManager;
+			$this->resourceIndex = $resourceIndex;
 		}
 
 		public function addStryleSheet(IResource $resource) {
@@ -75,7 +75,7 @@
 					if (($file = str_replace('\\', '/', realpath(str_replace('\\', '/', dirname($source) . '/' . $url->getPath())))) === false) {
 						throw new ResourceException(sprintf('Cannot locate css [%s] resource [%s] on the filesystem.', $source, $urlList));
 					}
-					$resource = $this->resourceManager->query()
+					$resource = $this->resourceIndex->query()
 						->urlLike('%' . $file)
 						->resource();
 					$path = $this->fileStorage->getPath($resource);

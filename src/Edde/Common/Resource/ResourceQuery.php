@@ -11,7 +11,7 @@
 		/**
 		 * @var IResourceIndex
 		 */
-		protected $resourceManager;
+		protected $resourceIndex;
 		/**
 		 * @var ISchema
 		 */
@@ -28,11 +28,11 @@
 		/**
 		 * schema should be resource schema
 		 *
-		 * @param IResourceIndex $resourceManager
+		 * @param IResourceIndex $resourceIndex
 		 * @param ISchema $schema
 		 */
-		public function __construct(IResourceIndex $resourceManager, ISchema $schema) {
-			$this->resourceManager = $resourceManager;
+		public function __construct(IResourceIndex $resourceIndex, ISchema $schema) {
+			$this->resourceIndex = $resourceIndex;
 			$this->schema = $schema;
 		}
 
@@ -78,11 +78,11 @@
 		}
 
 		public function resource() {
-			return $this->resourceManager->getResource($this);
+			return $this->resourceIndex->getResource($this);
 		}
 
 		public function collection() {
-			return $this->resourceManager->getResourceCollection($this);
+			return $this->resourceIndex->getResourceCollection($this);
 		}
 
 		protected function prepare() {

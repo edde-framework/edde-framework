@@ -88,8 +88,8 @@
 				],
 				IResourceIndex::class => ResourceIndex::class,
 				IUpgradeManager::class => UpgradeManager::class,
-				IResourceStorable::class => FactoryFactory::create(ResourceStorable::class, function (IResourceIndex $resourceManager) {
-					return $resourceManager->createResourceStorable();
+				IResourceStorable::class => FactoryFactory::create(ResourceStorable::class, function (IResourceIndex $resourceIndex) {
+					return $resourceIndex->createResourceStorable();
 				}, false),
 			], $factoryList));
 			return $setupHandler;
