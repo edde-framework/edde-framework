@@ -1,24 +1,24 @@
 <?php
 	namespace Edde\Common\Storage;
 
+	use Edde\Api\Container\IContainer;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Storage\IStorableFactory;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Storage\StorageException;
 	use Edde\Common\Usable\AbstractUsable;
 
 	abstract class AbstractStorage extends AbstractUsable implements IStorage {
 		/**
-		 * @var IStorableFactory
+		 * @var IContainer
 		 */
-		protected $storableFactory;
+		protected $container;
 
 		/**
-		 * @param IStorableFactory $storableFactory
+		 * @param IContainer $container
 		 */
-		public function __construct(IStorableFactory $storableFactory) {
-			$this->storableFactory = $storableFactory;
+		public function __construct(IContainer $container) {
+			$this->container = $container;
 		}
 
 		public function storable(ISchema $schema, IQuery $query) {
@@ -29,7 +29,7 @@
 		}
 
 		public function collection(ISchema $schema, IQuery $query) {
-			return new Collection($schema, $this, $this->storableFactory, $query);
+			return new Collection($schema, $this, $this->container, $query);
 		}
 
 	}

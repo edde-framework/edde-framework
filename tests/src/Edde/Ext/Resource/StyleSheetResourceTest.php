@@ -19,7 +19,6 @@
 	use Edde\Common\Resource\ResourceSchema;
 	use Edde\Common\Resource\ResourceStorable;
 	use Edde\Common\Schema\SchemaManager;
-	use Edde\Common\Storage\StorableFactory;
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Common\Url\Url;
 	use Edde\Ext\Cache\DevNullCacheStorage;
@@ -52,12 +51,11 @@
 			$factoryManager->registerFactoryFallback(FactoryFactory::createFallback());
 			$container = new Container($factoryManager, new DependencyFactory($factoryManager, $cacheFactory), $cacheFactory);
 			$crateFactory = new CrateFactory($container);
-			$storableFactory = new StorableFactory($container, $crateFactory);
-			$this->storage = new DatabaseStorage($storableFactory, new SqliteDriver('sqlite:' . $this->getDatabaseFileName()), $cacheFactory);
+			$this->storage = new DatabaseStorage($container, new SqliteDriver('sqlite:' . $this->getDatabaseFileName()), $cacheFactory);
 			$this->schemaManager = new SchemaManager();
 			$this->schemaManager->addSchema(new ResourceSchema());
 			$this->upgradeManager = new UpgradeManager();
-			$this->resourceManager = new ResourceManager($storableFactory, $this->schemaManager, $this->storage, new FilesystemScanner(__DIR__ . '/assets'), new Crypt());
+			$this->resourceManager = new ResourceManager($crateFactory, $this->schemaManager, $this->storage, new FilesystemScanner(__DIR__ . '/assets'), new Crypt());
 			$factoryManager->registerFactory(ResourceStorable::class, FactoryFactory::create(ResourceStorable::class, [
 				$this->resourceManager,
 				'createResourceStorable',

@@ -3,12 +3,12 @@
 
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheFactory;
+	use Edde\Api\Container\IContainer;
 	use Edde\Api\Database\IDatabaseStorage;
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\Node\INodeQuery;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Storage\IStorable;
-	use Edde\Api\Storage\IStorableFactory;
 	use Edde\Api\Storage\StorageException;
 	use Edde\Common\Node\NodeQuery;
 	use Edde\Common\Query\Insert\InsertQuery;
@@ -39,12 +39,12 @@
 		protected $transaction;
 
 		/**
-		 * @param IStorableFactory $storableFactory
+		 * @param IContainer $container
 		 * @param IDriver $driver
 		 * @param ICacheFactory $cacheFactory
 		 */
-		public function __construct(IStorableFactory $storableFactory, IDriver $driver, ICacheFactory $cacheFactory) {
-			parent::__construct($storableFactory);
+		public function __construct(IContainer $container, IDriver $driver, ICacheFactory $cacheFactory) {
+			parent::__construct($container);
 			$this->driver = $driver;
 			$this->cacheFactory = $cacheFactory;
 			$this->transaction = false;

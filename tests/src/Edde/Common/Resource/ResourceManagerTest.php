@@ -16,7 +16,6 @@
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\Query\Select\SelectQuery;
 	use Edde\Common\Schema\SchemaManager;
-	use Edde\Common\Storage\StorableFactory;
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Ext\Cache\DevNullCacheStorage;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
@@ -48,8 +47,7 @@
 			$factoryManager->registerFactoryFallback(FactoryFactory::createFallback());
 			$container = new Container($factoryManager, new DependencyFactory($factoryManager, $cacheFactory), $cacheFactory);
 			$crateFactory = new CrateFactory($container);
-			$storableFactory = new StorableFactory($container, $crateFactory);
-			$this->storage = new DatabaseStorage($storableFactory, new SqliteDriver('sqlite:' . $this->getDatabaseFileName()), $cacheFactory);
+			$this->storage = new DatabaseStorage($container, new SqliteDriver('sqlite:' . $this->getDatabaseFileName()), $cacheFactory);
 			$this->schemaManager = new SchemaManager();
 			$this->schemaManager->addSchema(new ResourceSchema());
 			$this->upgradeManager = new UpgradeManager();
