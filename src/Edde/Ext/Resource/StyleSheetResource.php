@@ -5,6 +5,7 @@
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Resource\ResourceException;
+	use Edde\Common\File\FileUtils;
 	use Edde\Common\Resource\Resource;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Url\Url;
@@ -68,7 +69,7 @@
 					], null, $item));
 					$source = $resource->getUrl()
 						->getPath();
-					if (($file = str_replace('\\', '/', realpath(str_replace('\\', '/', dirname($source) . '/' . $url->getPath())))) === false) {
+					if (($file = FileUtils::realpath(dirname($source) . '/' . $url->getPath())) === false) {
 						throw new ResourceException(sprintf('Cannot locate css [%s] resource [%s] on the filesystem.', $source, $urlList));
 					}
 					$resource = $this->resourceIndex->query()

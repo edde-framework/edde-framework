@@ -183,8 +183,8 @@
 				}
 			}
 			static::createDir(dirname($dest));
-			if (!is_dir($source) && @stream_copy_to_stream(fopen($source, 'r'), fopen($dest, 'w')) === false) {
-				throw new FileException("Unable to copy file '$source' to '$dest'.");
+			if (is_dir($source) === false && @stream_copy_to_stream(fopen($source, 'r'), fopen($dest, 'w')) === false) {
+				throw new FileException("Unable to copy file [$source] to [$dest].");
 			}
 		}
 

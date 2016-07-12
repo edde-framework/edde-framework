@@ -3,6 +3,7 @@
 
 	use Edde\Api\Cache\CacheStorageException;
 	use Edde\Common\Cache\AbstractCacheStorage;
+	use Edde\Common\File\FileUtils;
 	use RecursiveDirectoryIterator;
 	use RecursiveIteratorIterator;
 
@@ -56,19 +57,13 @@
 			$this->usse();
 			/** @var $splFileInfo \SplFileInfo */
 			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->cacheDir, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST) as $splFileInfo) {
-//				if ($splFileInfo->isDir()) {
-//					rmdir($splFileInfo);
-//					continue;
-//				}
-				unlink($splFileInfo);
+				FileUtils::delete($splFileInfo);
 			}
-			rmdir($this->cacheDir);
+			FileUtils::delete($splFileInfo);
 		}
 
 		protected function prepare() {
-			$this->cacheDir = str_replace('\\', '/', sprintf('%s/%s', $this->cacheDir ?: (sys_get_temp_dir() . '/edde'), sha1($this->namespace ?: __DIR__)));
-			if (is_dir($this->cacheDir) === false && @mkdir($this->cacheDir, 0777, true) === false) {
-				throw new CacheStorageException(sprintf('Cannot create cache dir [%s].', $this->cacheDir));
-			}
+			$this->cacheDir = FileUtils::normalize(sprintf('%s/%s', $this->cacheDir ?: (sys_get_temp_dir() . '/edde'), sha1($this->namespace ?: __DIR__)));
+			FileUtils::createDir($this->cacheDir, 0777);
 		}
 	}

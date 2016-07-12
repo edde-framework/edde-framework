@@ -2,11 +2,13 @@
 	namespace Edde\Common\Resource;
 
 	use Edde\Api\Crate\CrateException;
+	use Edde\Api\File\FileException;
 	use Edde\Api\Resource\IFileStorage;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Resource\ResourceException;
 	use Edde\Api\Url\IUrl;
+	use Edde\Common\File\FileUtils;
 	use Edde\Common\Url\Url;
 	use Edde\Common\Usable\AbstractUsable;
 
@@ -52,6 +54,7 @@
 		 * @param IResource $resource
 		 *
 		 * @return IResource
+		 * @throws FileException
 		 * @throws CrateException
 		 * @throws ResourceException
 		 */
@@ -75,6 +78,7 @@
 		 * @param IResource $resource
 		 *
 		 * @return IResource
+		 * @throws FileException
 		 * @throws CrateException
 		 * @throws ResourceException
 		 */
@@ -86,19 +90,19 @@
 			if (@mkdir($path, 0777, true) && is_dir($path) === false) {
 				throw new ResourceException(sprintf('Cannot create store folder [%s] for the resource [%s].', $path, $url));
 			}
-			copy($url, $file);
+			FileUtils::copy($url, $file);
 			$resourceStorable = $this->resourceIndex->createResourceStorable();
 			$resourceStorable->set('name', $url->getAbsoluteUrl());
 			$resourceStorable->set('extension', $url->getExtension());
-			$resourceStorable->set('url', $localUrl = ('file:///' . str_replace('\\', '/', $file)));
+			$resourceStorable->set('url', $localUrl = ('file:///' . FileUtils::normalize($file)));
 			$resourceStorable->set('mime', $resource->getMime());
 			$this->resourceIndex->store($resourceStorable);
 			return new Resource(Url::create($localUrl));
 		}
 
 		protected function prepare() {
-			$this->root = str_replace('\\', '/', $this->root);
-			$this->storage = str_replace('\\', '/', $this->storage);
+			$this->root = FileUtils::normalize($this->root);
+			$this->storage = FileUtils::normalize($this->storage);
 			if (is_dir($this->storage) === false && @mkdir($this->storage, 0777, true) && is_dir($this->storage) === false) {
 				throw new ResourceException(sprintf('Cannot create file storage directory [%s].', $this->storage));
 			}

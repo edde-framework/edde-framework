@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Ext\Resource\Scanner;
 
+	use Edde\Common\File\FileUtils;
 	use Edde\Common\Resource\Resource;
 	use Edde\Common\Resource\Scanner\AbstractScanner;
 	use Edde\Common\Url\Url;
@@ -32,8 +33,8 @@
 			}
 			/** @var $splFileInfo SplFileInfo */
 			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->path, RecursiveDirectoryIterator::SKIP_DOTS)) as $splFileInfo) {
-				$url = Url::factory('file', str_replace('\\', '/', $file = realpath((string)$splFileInfo)));
-				yield new Resource($url, $url->getResourceName(), mime_content_type($file));
+				$url = Url::factory('file', FileUtils::realpath($file = (string)$splFileInfo));
+				yield new Resource($url, $url->getResourceName(), FileUtils::mime($file));
 			}
 		}
 	}
