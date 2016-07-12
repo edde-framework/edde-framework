@@ -43,4 +43,8 @@
 		public function getMime() {
 			return $this->mime;
 		}
+
+		public function get() {
+			return file_get_contents($this->url->getAbsoluteUrl());
+		}
 	}

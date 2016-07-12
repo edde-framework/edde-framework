@@ -2,7 +2,6 @@
 	namespace Edde\Api\Resource;
 
 	use Edde\Api\Storage\ICollection;
-	use Edde\Api\Storage\IStorable;
 
 	interface IResourceManager {
 		/**
@@ -15,6 +14,13 @@
 		public function update();
 
 		/**
+		 * @param IResourceStorable $resourceStorable
+		 *
+		 * @return $this
+		 */
+		public function store(IResourceStorable $resourceStorable);
+
+		/**
 		 * return collection of resources by the given query
 		 *
 		 * @param IResourceQuery $resourceQuery
@@ -22,6 +28,13 @@
 		 * @return ICollection
 		 */
 		public function getResourceCollection(IResourceQuery $resourceQuery);
+
+		/**
+		 * @param IResourceQuery $resourceQuery
+		 *
+		 * @return bool
+		 */
+		public function hasResource(IResourceQuery $resourceQuery);
 
 		/**
 		 * query a ResourceManager by the given ResourceQuery for a Resource; if there is not such resource, exception should be thrown
@@ -35,12 +48,14 @@
 		public function getResource(IResourceQuery $resourceQuery);
 
 		/**
+		 * query for a resource
+		 *
 		 * @return IResourceQuery
 		 */
-		public function createResourceQuery();
+		public function query();
 
 		/**
-		 * @return IStorable
+		 * @return IResourceStorable
 		 */
 		public function createResourceStorable();
 	}

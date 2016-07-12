@@ -29,4 +29,32 @@
 		 * @return $this
 		 */
 		public function nameLike($name);
+
+		/**
+		 * @param string $url
+		 *
+		 * @return $this
+		 */
+		public function url($url);
+
+		/**
+		 * @param string $url
+		 *
+		 * @return $this
+		 */
+		public function urlLike($url);
+
+		/**
+		 * execute query and retrieve IResource
+		 *
+		 * @return IResource
+		 */
+		public function resource();
+
+		/**
+		 * retrieve iterator/collection of IResource
+		 *
+		 * @return IResource[]
+		 */
+		public function collection();
 	}

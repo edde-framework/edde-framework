@@ -1,7 +1,6 @@
 <?php
-	namespace Edde\Common\Resource;
+	namespace Edde\Ext\Resource;
 
-	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
@@ -14,17 +13,22 @@
 	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Crypt\Crypt;
 	use Edde\Common\Database\DatabaseStorage;
-	use Edde\Common\Query\Select\SelectQuery;
+	use Edde\Common\Resource\FileStorage;
+	use Edde\Common\Resource\Resource;
+	use Edde\Common\Resource\ResourceManager;
+	use Edde\Common\Resource\ResourceSchema;
+	use Edde\Common\Resource\ResourceStorable;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Storage\StorableFactory;
 	use Edde\Common\Upgrade\UpgradeManager;
+	use Edde\Common\Url\Url;
 	use Edde\Ext\Cache\DevNullCacheStorage;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Resource\Scanner\FilesystemScanner;
 	use Edde\Ext\Upgrade\InitialStorageUpgrade;
 	use phpunit\framework\TestCase;
 
-	class ResourceManagerTest extends TestCase {
+	class StyleSheetResourceTest extends TestCase {
 		/**
 		 * @var IStorage
 		 */
@@ -53,41 +57,25 @@
 			$this->schemaManager = new SchemaManager();
 			$this->schemaManager->addSchema(new ResourceSchema());
 			$this->upgradeManager = new UpgradeManager();
-			$this->resourceManager = new ResourceManager($crateFactory, $this->schemaManager, $this->storage, new FilesystemScanner(__DIR__ . '/assets'), new Crypt());
+			$this->resourceManager = new ResourceManager($storableFactory, $this->schemaManager, $this->storage, new FilesystemScanner(__DIR__ . '/assets'), new Crypt());
 			$factoryManager->registerFactory(ResourceStorable::class, FactoryFactory::create(ResourceStorable::class, [
 				$this->resourceManager,
 				'createResourceStorable',
 			], false));
 			$this->upgradeManager->registerUpgrade(new InitialStorageUpgrade($this->storage, $this->schemaManager, '1.0'));
 			$this->upgradeManager->upgrade();
+			$this->resourceManager->update();
 		}
 
 		protected function getDatabaseFileName() {
 			return __DIR__ . '/temp/resource-test-' . sha1(microtime() . mt_rand(0, 99999)) . '.sqlite';
 		}
 
-		public function testUpdate() {
-			$this->resourceManager->update();
-			$selectQuery = new SelectQuery();
-			$selectQuery->select()
-				->count('*', null, 'count')
-				->from()
-				->source(ResourceStorable::class);
-			$row = null;
-			/** @var $row array */
-			foreach ($this->storage->execute($selectQuery) as $row) {
-				break;
-			}
-			self::assertNotEmpty($row);
-			self::assertEquals(3, $row['count']);
-		}
-
-		public function testSimpleQueries() {
-			$this->resourceManager->update();
-			$resource = $this->resourceManager->query()
-				->nameLike('%.poo')
-				->resource();
-			self::assertInstanceOf(IResource::class, $resource);
-			self::assertContains('/assets/foo.poo', (string)$resource->getUrl());
+		public function testCommon() {
+			$styleSheetResource = new StyleSheetResource(new FileStorage($this->resourceManager, __DIR__, __DIR__ . '/public'), $this->resourceManager);
+			$styleSheetResource->addStryleSheet(new Resource(Url::factory('file', __DIR__ . '/assets/css/font-awesome.css')));
+			$styleSheetResource->addStryleSheet(new Resource(Url::factory('file', __DIR__ . '/assets/css/font-awesome.min.css')));
+			$styleSheetResource->addStryleSheet(new Resource(Url::factory('file', __DIR__ . '/assets/css/simple-css.css')));
+			$styleSheetResource->compile();
 		}
 	}

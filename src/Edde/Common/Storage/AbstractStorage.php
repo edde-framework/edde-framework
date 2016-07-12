@@ -25,7 +25,7 @@
 			foreach ($this->collection($schema, $query) as $storable) {
 				return $storable;
 			}
-			throw new StorageException('Cannot retrieve any storable [%s] by the given query.', $schema->getSchemaName());
+			throw new StorageException(sprintf('Cannot retrieve any storable [%s] by the given query.', $schema->getSchemaName()));
 		}
 
 		public function collection(ISchema $schema, IQuery $query) {

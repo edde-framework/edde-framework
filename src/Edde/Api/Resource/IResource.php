@@ -27,4 +27,11 @@
 		 * @return string
 		 */
 		public function getMime();
+
+		/**
+		 * return whole content of the URL of this Resource
+		 *
+		 * @return string
+		 */
+		public function get();
 	}

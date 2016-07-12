@@ -1,12 +1,17 @@
 <?php
 	namespace Edde\Common\Resource;
 
+	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\IResourceQuery;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Common\Query\Select\SelectQuery;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class ResourceQuery extends AbstractUsable implements IResourceQuery {
+		/**
+		 * @var IResourceManager
+		 */
+		protected $resourceManager;
 		/**
 		 * @var ISchema
 		 */
@@ -23,9 +28,11 @@
 		/**
 		 * schema should be resource schema
 		 *
+		 * @param IResourceManager $resourceManager
 		 * @param ISchema $schema
 		 */
-		public function __construct(ISchema $schema) {
+		public function __construct(IResourceManager $resourceManager, ISchema $schema) {
+			$this->resourceManager = $resourceManager;
 			$this->schema = $schema;
 		}
 
@@ -68,6 +75,14 @@
 				->property('url')
 				->parameter($url);
 			return $this;
+		}
+
+		public function resource() {
+			return $this->resourceManager->getResource($this);
+		}
+
+		public function collection() {
+			return $this->resourceManager->getResourceCollection($this);
 		}
 
 		protected function prepare() {

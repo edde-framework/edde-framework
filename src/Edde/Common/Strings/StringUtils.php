@@ -250,7 +250,7 @@
 			}
 			if ($named) {
 				foreach ($match as $k => $v) {
-					if (is_int(($k)) || ((is_array($trim) || $trim) && empty($v))) {
+					if (is_int($k) || ((is_array($trim) || $trim) && empty($v))) {
 						unset($match[$k]);
 					}
 				}
@@ -284,6 +284,37 @@
 				throw new StringException((isset($messages[$code]) ? $messages[$code] : 'Unknown error') . ' (pattern: ' . implode(' or ', (array)$args[0]) . ')', $code);
 			}
 			return $res;
+		}
+
+		/**
+		 * @param $string
+		 * @param $pattern
+		 * @param bool|false $named return only named parameters from token
+		 * @param array|bool|false $trim if array is provided, its used for named parameters defaults
+		 *
+		 * @return array|null
+		 */
+		static public function matchAll($string, $pattern, $named = false, $trim = false) {
+			$match = null;
+			$match = self::pcre('preg_match_all', [
+				$pattern,
+				$string,
+				&$match,
+			]) ? $match : null;
+			if ($match === null) {
+				return null;
+			}
+			if ($named) {
+				foreach ($match as $k => $v) {
+					if (is_int($k) || ((is_array($trim) || $trim) && empty($v))) {
+						unset($match[$k]);
+					}
+				}
+			}
+			if (is_array($trim)) {
+				$match = array_merge($trim, $match);
+			}
+			return $match;
 		}
 
 		/**

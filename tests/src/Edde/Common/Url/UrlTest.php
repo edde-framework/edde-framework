@@ -57,4 +57,13 @@
 				'bar' => 'bar-value',
 			], $url->getQuery());
 		}
+
+		public function testMissingHost() {
+			$url = Url::create('file:///c:/windows/file.txt');
+			self::assertEquals('file', $url->getScheme());
+			self::assertEmpty($url->getHost());
+			self::assertEquals('c:/windows/file.txt', $url->getPath());
+			self::assertEquals('file.txt', $url->getResourceName());
+			self::assertEquals('txt', $url->getExtension());
+		}
 	}
