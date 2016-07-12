@@ -14,6 +14,7 @@
 	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Crypt\Crypt;
 	use Edde\Common\Database\DatabaseStorage;
+	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Query\Select\SelectQuery;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Upgrade\UpgradeManager;
@@ -40,14 +41,20 @@
 		 * @var IResourceIndex
 		 */
 		protected $resourceIndex;
+		/**
+		 * @var SqliteDriver
+		 */
+		protected $sqliteDriver;
 
 		public function setUp() {
+			$tempDirectory = new TempDirectory(__DIR__ . '/temp');
+			$tempDirectory->purge();
 			$cacheFactory = $cacheFactory = new CacheFactory(__DIR__, new DevNullCacheStorage());
 			$factoryManager = new FactoryManager();
 			$factoryManager->registerFactoryFallback(FactoryFactory::createFallback());
 			$container = new Container($factoryManager, new DependencyFactory($factoryManager, $cacheFactory), $cacheFactory);
 			$crateFactory = new CrateFactory($container);
-			$this->storage = new DatabaseStorage($container, new SqliteDriver('sqlite:' . $this->getDatabaseFileName()), $cacheFactory);
+			$this->storage = new DatabaseStorage($container, $this->sqliteDriver = new SqliteDriver('sqlite:' . $this->getDatabaseFileName()), $cacheFactory);
 			$this->schemaManager = new SchemaManager();
 			$this->schemaManager->addSchema(new ResourceSchema());
 			$this->upgradeManager = new UpgradeManager();
@@ -87,5 +94,9 @@
 				->resource();
 			self::assertInstanceOf(IResource::class, $resource);
 			self::assertContains('/assets/foo.poo', (string)$resource->getUrl());
+		}
+
+		protected function tearDown() {
+			$this->sqliteDriver->close();
 		}
 	}

@@ -80,6 +80,12 @@
 			return $statement;
 		}
 
+		public function close() {
+			$this->pdo = null;
+			$this->statementList = [];
+			return $this;
+		}
+
 		protected function prepare() {
 			if (extension_loaded('pdo_sqlite') === false) {
 				throw new DriverException('Sqlite PDO is not available, oops!');

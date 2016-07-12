@@ -32,4 +32,11 @@
 		 * @return $this
 		 */
 		public function make();
+
+		/**
+		 * recreate directory in place effectively clean all it's contents
+		 *
+		 * @return $this
+		 */
+		public function purge();
 	}

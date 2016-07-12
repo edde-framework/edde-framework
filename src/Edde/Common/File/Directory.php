@@ -47,6 +47,12 @@
 			return $this;
 		}
 
+		public function purge() {
+			$this->usse();
+			FileUtils::recreate($this->directory);
+			return $this;
+		}
+
 		public function __toString() {
 			return $this->directory;
 		}
