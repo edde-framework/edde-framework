@@ -57,19 +57,15 @@
 
 		protected function prepare() {
 			$this->name = sha1(implode('', array_keys($this->styleSheetList)));
-			$content = null;
+			$content = [];
 			foreach ($this->styleSheetList as $resource) {
-				$content = $resource->get();
-				$urlList = StringUtils::matchAll($content, "~url\\((?<url>.*?)\\)~", true);
-				if (empty($urlList)) {
-					$this->content .= $content;
-					continue;
-				}
-				foreach ($urlList['url'] as $url) {
+				$current = $resource->get();
+				$urlList = StringUtils::matchAll($current, "~url\\((?<url>.*?)\\)~", true);
+				foreach (empty($urlList) ? [] : $urlList['url'] as $item) {
 					$url = Url::create(str_replace([
 						'"',
 						"'",
-					], null, $url));
+					], null, $item));
 					$source = $resource->getUrl()
 						->getPath();
 					if (($file = str_replace('\\', '/', realpath(str_replace('\\', '/', dirname($source) . '/' . $url->getPath())))) === false) {
@@ -79,8 +75,10 @@
 						->urlLike('%' . $file)
 						->resource();
 					$path = $this->fileStorage->getPath($resource);
+					$current = str_replace($item, '"' . $path . '"', $current);
 				}
+				$content[] = $current;
 			}
-			return $content;
+			return $this->content = implode("\n", $content);
 		}
 	}
