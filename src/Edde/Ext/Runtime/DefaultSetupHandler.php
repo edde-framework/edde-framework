@@ -85,7 +85,7 @@
 				],
 				IResourceManager::class => ResourceManager::class,
 				IUpgradeManager::class => UpgradeManager::class,
-				FactoryFactory::create(ResourceStorable::class, function (IResourceManager $resourceManager) {
+				ResourceStorable::class => FactoryFactory::create(ResourceStorable::class, function (IResourceManager $resourceManager) {
 					return $resourceManager->createResourceStorable();
 				}, false),
 			], $factoryList));

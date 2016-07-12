@@ -16,7 +16,7 @@
 			$factories = [];
 			foreach ($factoryList as $name => $factory) {
 				if (is_string($name) === false) {
-					throw new FactoryException(sprintf('Current factory list [%s] has item without a name.', implode(', ', array_keys($factoryList))));
+					throw new FactoryException(sprintf('Factory list [%s, ...] has an item without a name.', substr(implode(', ', array_keys($factoryList)), 0, 32)));
 				}
 				$factories[$name] = self::create($name, $factory);
 			}
