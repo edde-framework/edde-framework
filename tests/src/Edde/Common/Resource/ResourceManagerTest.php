@@ -42,24 +42,27 @@
 		protected $resourceManager;
 
 		public function setUp() {
-			@unlink($this->getDatabaseFileName());
 			$cacheFactory = $cacheFactory = new CacheFactory(__DIR__, new DevNullCacheStorage());
 			$factoryManager = new FactoryManager();
 			$factoryManager->registerFactoryFallback(FactoryFactory::createFallback());
 			$container = new Container($factoryManager, new DependencyFactory($factoryManager, $cacheFactory), $cacheFactory);
 			$crateFactory = new CrateFactory($container);
-			$this->storage = new DatabaseStorage(new SqliteDriver('sqlite:' . $this->getDatabaseFileName()), $cacheFactory);
+			$storableFactory = new StorableFactory($container, $crateFactory);
+			$this->storage = new DatabaseStorage($storableFactory, new SqliteDriver('sqlite:' . $this->getDatabaseFileName()), $cacheFactory);
 			$this->schemaManager = new SchemaManager();
 			$this->schemaManager->addSchema(new ResourceSchema());
 			$this->upgradeManager = new UpgradeManager();
-			$storableFactory = new StorableFactory($container, $crateFactory);
 			$this->resourceManager = new ResourceManager($storableFactory, $this->schemaManager, $this->storage, new FilesystemScanner(__DIR__ . '/assets'), new Crypt());
+			$factoryManager->registerFactory(ResourceStorable::class, FactoryFactory::create(ResourceStorable::class, [
+				$this->resourceManager,
+				'createResourceStorable',
+			], false));
 			$this->upgradeManager->registerUpgrade(new InitialStorageUpgrade($this->storage, $this->schemaManager, '1.0'));
 			$this->upgradeManager->upgrade();
 		}
 
 		protected function getDatabaseFileName() {
-			return __DIR__ . '/resource-test.sqlite';
+			return __DIR__ . '/temp/resource-test-' . sha1(microtime() . mt_rand(0, 99999)) . '.sqlite';
 		}
 
 		public function testUpdate() {
@@ -68,7 +71,7 @@
 			$selectQuery->select()
 				->count('*', null, 'count')
 				->from()
-				->source(Resource::class);
+				->source(ResourceStorable::class);
 			$row = null;
 			foreach ($this->storage->execute($selectQuery) as $row) {
 				break;

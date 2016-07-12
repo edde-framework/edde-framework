@@ -73,16 +73,17 @@
 				$this->storage->rollback();
 				throw $e;
 			}
+			return $this;
 		}
 
 		public function getResourceCollection(IResourceQuery $resourceQuery) {
 			$this->usse();
-			return $this->storage->collection($resourceQuery->getQuery());
+			return $this->storage->collection($this->resourceSchema, $resourceQuery->getQuery());
 		}
 
 		public function getResource(IResourceQuery $resourceQuery) {
 			$this->usse();
-			return $this->storage->storable($resourceQuery->getQuery());
+			return $this->storage->storable($this->resourceSchema, $resourceQuery->getQuery());
 		}
 
 		public function createResourceQuery() {
@@ -90,7 +91,11 @@
 			return new ResourceQuery($this->resourceSchema);
 		}
 
+		public function createResourceStorable() {
+			return new ResourceStorable($this->resourceSchema);
+		}
+
 		protected function prepare() {
-			$this->resourceSchema = $this->schemaManager->getSchema(Resource::class);
+			$this->resourceSchema = $this->schemaManager->getSchema(ResourceStorable::class);
 		}
 	}

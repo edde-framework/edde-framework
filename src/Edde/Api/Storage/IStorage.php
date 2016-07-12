@@ -2,6 +2,7 @@
 	namespace Edde\Api\Storage;
 
 	use Edde\Api\Query\IQuery;
+	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Usable\IUsable;
 
 	/**
@@ -52,22 +53,20 @@
 		/**
 		 * return collection based on the input query; if storage doesn't understand the queery, exception should be thrown
 		 *
+		 * @param ISchema $schema of Storables
 		 * @param IQuery $query
 		 *
 		 * @return ICollection|IStorable[]
-		 *
-		 * @throws StorageException
 		 */
-		public function collection(IQuery $query);
+		public function collection(ISchema $schema, IQuery $query);
 
 		/**
 		 * retrieve storable by the given query; it should formally go through a collection method; if there is no such storable, exception should be thrown
 		 *
+		 * @param ISchema $schema of requested storable
 		 * @param IQuery $query
 		 *
 		 * @return IStorable
-		 *
-		 * @throws StorageException
 		 */
-		public function storable(IQuery $query);
+		public function storable(ISchema $schema, IQuery $query);
 	}

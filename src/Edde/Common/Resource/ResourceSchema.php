@@ -6,11 +6,11 @@
 
 	class ResourceSchema extends Schema {
 		public function __construct() {
-			parent::__construct('Resource', __NAMESPACE__);
+			parent::__construct('ResourceStorable', __NAMESPACE__);
 		}
 
 		public function getName() {
-			return 'Resource';
+			return 'ResourceStorable';
 		}
 
 		public function getNamespace() {
@@ -18,7 +18,7 @@
 		}
 
 		public function getSchemaName() {
-			return Resource::class;
+			return ResourceStorable::class;
 		}
 
 		protected function prepare() {

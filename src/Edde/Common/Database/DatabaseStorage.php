@@ -8,6 +8,7 @@
 	use Edde\Api\Node\INodeQuery;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Storage\IStorable;
+	use Edde\Api\Storage\IStorableFactory;
 	use Edde\Api\Storage\StorageException;
 	use Edde\Common\Node\NodeQuery;
 	use Edde\Common\Query\Insert\InsertQuery;
@@ -38,10 +39,12 @@
 		protected $transaction;
 
 		/**
+		 * @param IStorableFactory $storableFactory
 		 * @param IDriver $driver
 		 * @param ICacheFactory $cacheFactory
 		 */
-		public function __construct(IDriver $driver, ICacheFactory $cacheFactory) {
+		public function __construct(IStorableFactory $storableFactory, IDriver $driver, ICacheFactory $cacheFactory) {
+			parent::__construct($storableFactory);
 			$this->driver = $driver;
 			$this->cacheFactory = $cacheFactory;
 			$this->transaction = false;
@@ -107,10 +110,6 @@
 		public function execute(IQuery $query) {
 			$this->usse();
 			return $this->driver->execute($query);
-		}
-
-		public function collection(IQuery $query) {
-			return new DatabaseCollection($this, $query);
 		}
 
 		protected function prepare() {

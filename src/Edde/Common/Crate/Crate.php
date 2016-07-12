@@ -55,11 +55,11 @@
 			return $this;
 		}
 
-		public function push(array $push, $strict = true) {
-			if ($strict && ($diff = array_diff(array_keys($push), array_keys($this->valueList))) !== []) {
+		public function put(array $put, $strict = true) {
+			if ($strict && ($diff = array_diff(array_keys($put), array_keys($this->valueList))) !== []) {
 				throw new CrateException(sprintf('Setting unknown values [%s] to the value set [%s].', implode(', ', $diff), $this->schema->getSchemaName()));
 			}
-			foreach ($push as $property => $value) {
+			foreach ($put as $property => $value) {
 				if (isset($this->valueList[$property]) === false) {
 					continue;
 				}
@@ -83,6 +83,20 @@
 
 		public function hasValue($name) {
 			return isset($this->valueList[$name]);
+		}
+
+		public function push(array $push, $strict = true) {
+			if ($strict && ($diff = array_diff(array_keys($push), array_keys($this->valueList))) !== []) {
+				throw new CrateException(sprintf('Setting unknown values [%s] to the value set [%s].', implode(', ', $diff), $this->schema->getSchemaName()));
+			}
+			foreach ($push as $property => $value) {
+				if (isset($this->valueList[$property]) === false) {
+					continue;
+				}
+				$this->getValue($property)
+					->push($value);
+			}
+			return $this;
 		}
 
 		public function get($name, $default = null) {

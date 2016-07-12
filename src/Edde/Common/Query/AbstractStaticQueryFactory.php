@@ -234,6 +234,10 @@
 			return new StaticQuery($alpha->getQuery() . ' ' . $operator . ' ' . $beta->getQuery(), array_merge($alpha->getParameterList(), $beta->getParameterList()));
 		}
 
+		protected function formatLike(INode $node) {
+			return $this->generateOperator($node, 'LIKE');
+		}
+
 		protected function formatNotEqual(INode $node) {
 			return $this->generateOperator($node, '!=');
 		}

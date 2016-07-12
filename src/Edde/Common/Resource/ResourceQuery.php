@@ -72,6 +72,10 @@
 
 		protected function prepare() {
 			$this->selectQuery = new SelectQuery();
+			$select = $this->selectQuery->select();
+			foreach ($this->schema->getPropertyList() as $property) {
+				$select->property($property->getName());
+			}
 			$this->selectQuery->select()
 				->from()
 				->source($this->schema->getSchemaName());

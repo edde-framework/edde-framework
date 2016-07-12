@@ -66,7 +66,19 @@
 		public function set($name, $value);
 
 		/**
-		 * put array of values inside this property set; if strict is true, any unknown property will throw exception
+		 * put (set) array of values to this crate; this can change state to dirty
+		 *
+		 * @param array $put
+		 * @param bool $strict
+		 *
+		 * @return $this
+		 */
+		public function put(array $put, $strict = true);
+
+		/**
+		 * push array of values inside this property set; if strict is true, any unknown property will throw exception
+		 *
+		 * note: this will not make crate dirty
 		 *
 		 * @param array $push
 		 * @param bool $strict

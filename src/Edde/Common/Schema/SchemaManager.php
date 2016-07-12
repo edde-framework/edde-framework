@@ -3,6 +3,7 @@
 
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaManager;
+	use Edde\Api\Schema\SchemaException;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class SchemaManager extends AbstractUsable implements ISchemaManager {
@@ -23,6 +24,9 @@
 
 		public function getSchema($schema) {
 			$this->usse();
+			if (isset($this->schemaList[$schema]) === false) {
+				throw new SchemaException(sprintf('Requested unknown schema [%s].', $schema));
+			}
 			return $this->schemaList[$schema];
 		}
 

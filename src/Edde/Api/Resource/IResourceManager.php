@@ -2,6 +2,7 @@
 	namespace Edde\Api\Resource;
 
 	use Edde\Api\Storage\ICollection;
+	use Edde\Api\Storage\IStorable;
 
 	interface IResourceManager {
 		/**
@@ -37,4 +38,9 @@
 		 * @return IResourceQuery
 		 */
 		public function createResourceQuery();
+
+		/**
+		 * @return IStorable
+		 */
+		public function createResourceStorable();
 	}
