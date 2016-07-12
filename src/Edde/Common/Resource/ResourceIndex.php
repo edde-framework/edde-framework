@@ -3,7 +3,7 @@
 
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crypt\ICrypt;
-	use Edde\Api\Resource\IResourceManager;
+	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Resource\IResourceQuery;
 	use Edde\Api\Resource\IResourceStorable;
 	use Edde\Api\Resource\Scanner\IScanner;
@@ -15,7 +15,7 @@
 	use Edde\Common\Url\Url;
 	use Edde\Common\Usable\AbstractUsable;
 
-	class ResourceManager extends AbstractUsable implements IResourceManager {
+	class ResourceIndex extends AbstractUsable implements IResourceIndex {
 		/**
 		 * @var ICrateFactory
 		 */

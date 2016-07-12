@@ -9,7 +9,7 @@
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpRequestFactory;
 	use Edde\Api\Http\IHttpResponse;
-	use Edde\Api\Resource\IResourceManager;
+	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Resource\IResourceStorable;
 	use Edde\Api\Router\IRoute;
 	use Edde\Api\Router\IRouter;
@@ -23,7 +23,7 @@
 	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Control\ControlFactory;
 	use Edde\Common\Http\HttpRequestFactory;
-	use Edde\Common\Resource\ResourceManager;
+	use Edde\Common\Resource\ResourceIndex;
 	use Edde\Common\Resource\ResourceSchema;
 	use Edde\Common\Resource\ResourceStorable;
 	use Edde\Common\Router\RouterList;
@@ -86,9 +86,9 @@
 						});
 					},
 				],
-				IResourceManager::class => ResourceManager::class,
+				IResourceIndex::class => ResourceIndex::class,
 				IUpgradeManager::class => UpgradeManager::class,
-				IResourceStorable::class => FactoryFactory::create(ResourceStorable::class, function (IResourceManager $resourceManager) {
+				IResourceStorable::class => FactoryFactory::create(ResourceStorable::class, function (IResourceIndex $resourceManager) {
 					return $resourceManager->createResourceStorable();
 				}, false),
 			], $factoryList));

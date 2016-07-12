@@ -3,7 +3,7 @@
 
 	use Edde\Api\Storage\ICollection;
 
-	interface IResourceManager {
+	interface IResourceIndex {
 		/**
 		 * rescan all available resources; this will drop current resource index and trigger scanner
 		 *
@@ -14,6 +14,8 @@
 		public function update();
 
 		/**
+		 * explicitly store resource to the index
+		 *
 		 * @param IResourceStorable $resourceStorable
 		 *
 		 * @return $this
@@ -30,6 +32,8 @@
 		public function getResourceCollection(IResourceQuery $resourceQuery);
 
 		/**
+		 * are there known storables by the given query?
+		 *
 		 * @param IResourceQuery $resourceQuery
 		 *
 		 * @return bool
@@ -37,7 +41,7 @@
 		public function hasResource(IResourceQuery $resourceQuery);
 
 		/**
-		 * query a ResourceManager by the given ResourceQuery for a Resource; if there is not such resource, exception should be thrown
+		 * query a ResourceIndex by the given ResourceQuery for a Resource; if there is not such resource, exception should be thrown
 		 *
 		 * @param IResourceQuery $resourceQuery
 		 *
@@ -55,6 +59,8 @@
 		public function query();
 
 		/**
+		 * factory method for storables
+		 *
 		 * @return IResourceStorable
 		 */
 		public function createResourceStorable();

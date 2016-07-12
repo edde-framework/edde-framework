@@ -1,7 +1,7 @@
 <?php
 	namespace Edde\Ext\Resource;
 
-	use Edde\Api\Resource\IResourceManager;
+	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Upgrade\IUpgradeManager;
@@ -15,7 +15,7 @@
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\Resource\FileStorage;
 	use Edde\Common\Resource\Resource;
-	use Edde\Common\Resource\ResourceManager;
+	use Edde\Common\Resource\ResourceIndex;
 	use Edde\Common\Resource\ResourceSchema;
 	use Edde\Common\Resource\ResourceStorable;
 	use Edde\Common\Schema\SchemaManager;
@@ -41,7 +41,7 @@
 		 */
 		protected $upgradeManager;
 		/**
-		 * @var IResourceManager
+		 * @var IResourceIndex
 		 */
 		protected $resourceManager;
 
@@ -55,7 +55,7 @@
 			$this->schemaManager = new SchemaManager();
 			$this->schemaManager->addSchema(new ResourceSchema());
 			$this->upgradeManager = new UpgradeManager();
-			$this->resourceManager = new ResourceManager($crateFactory, $this->schemaManager, $this->storage, new FilesystemScanner(__DIR__ . '/assets'), new Crypt());
+			$this->resourceManager = new ResourceIndex($crateFactory, $this->schemaManager, $this->storage, new FilesystemScanner(__DIR__ . '/assets'), new Crypt());
 			$factoryManager->registerFactory(ResourceStorable::class, FactoryFactory::create(ResourceStorable::class, [
 				$this->resourceManager,
 				'createResourceStorable',

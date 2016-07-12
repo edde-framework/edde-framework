@@ -3,7 +3,7 @@
 
 	use Edde\Api\Resource\IFileStorage;
 	use Edde\Api\Resource\IResource;
-	use Edde\Api\Resource\IResourceManager;
+	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Resource\ResourceException;
 	use Edde\Common\Resource\Resource;
 	use Edde\Common\Strings\StringUtils;
@@ -20,7 +20,7 @@
 		 */
 		protected $fileStorage;
 		/**
-		 * @var IResourceManager
+		 * @var IResourceIndex
 		 */
 		protected $resourceManager;
 
@@ -35,7 +35,7 @@
 		 */
 		protected $content;
 
-		public function __construct(IFileStorage $fileStorage, IResourceManager $resourceManager) {
+		public function __construct(IFileStorage $fileStorage, IResourceIndex $resourceManager) {
 			parent::__construct(new Url(), null, 'text/css');
 			$this->fileStorage = $fileStorage;
 			$this->resourceManager = $resourceManager;

@@ -1,7 +1,7 @@
 <?php
 	namespace Edde\Common\Resource;
 
-	use Edde\Api\Resource\IResourceManager;
+	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Resource\IResourceQuery;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Common\Query\Select\SelectQuery;
@@ -9,7 +9,7 @@
 
 	class ResourceQuery extends AbstractUsable implements IResourceQuery {
 		/**
-		 * @var IResourceManager
+		 * @var IResourceIndex
 		 */
 		protected $resourceManager;
 		/**
@@ -28,10 +28,10 @@
 		/**
 		 * schema should be resource schema
 		 *
-		 * @param IResourceManager $resourceManager
+		 * @param IResourceIndex $resourceManager
 		 * @param ISchema $schema
 		 */
-		public function __construct(IResourceManager $resourceManager, ISchema $schema) {
+		public function __construct(IResourceIndex $resourceManager, ISchema $schema) {
 			$this->resourceManager = $resourceManager;
 			$this->schema = $schema;
 		}

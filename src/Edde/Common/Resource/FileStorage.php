@@ -4,7 +4,7 @@
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Resource\IFileStorage;
 	use Edde\Api\Resource\IResource;
-	use Edde\Api\Resource\IResourceManager;
+	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Resource\ResourceException;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\Url\Url;
@@ -15,7 +15,7 @@
 	 */
 	class FileStorage extends AbstractUsable implements IFileStorage {
 		/**
-		 * @var IResourceManager
+		 * @var IResourceIndex
 		 */
 		protected $resourceManager;
 		/**
@@ -32,11 +32,11 @@
 		protected $storage;
 
 		/**
-		 * @param IResourceManager $resourceManager
+		 * @param IResourceIndex $resourceManager
 		 * @param string $root
 		 * @param string $storage
 		 */
-		public function __construct(IResourceManager $resourceManager, $root, $storage) {
+		public function __construct(IResourceIndex $resourceManager, $root, $storage) {
 			$this->resourceManager = $resourceManager;
 			$this->root = $root;
 			$this->storage = $storage;

@@ -2,7 +2,7 @@
 	namespace Edde\Common\Resource;
 
 	use Edde\Api\Resource\IResource;
-	use Edde\Api\Resource\IResourceManager;
+	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Upgrade\IUpgradeManager;
@@ -23,7 +23,7 @@
 	use Edde\Ext\Upgrade\InitialStorageUpgrade;
 	use phpunit\framework\TestCase;
 
-	class ResourceManagerTest extends TestCase {
+	class ResourceIndexTest extends TestCase {
 		/**
 		 * @var IStorage
 		 */
@@ -37,7 +37,7 @@
 		 */
 		protected $upgradeManager;
 		/**
-		 * @var IResourceManager
+		 * @var IResourceIndex
 		 */
 		protected $resourceManager;
 
@@ -51,7 +51,7 @@
 			$this->schemaManager = new SchemaManager();
 			$this->schemaManager->addSchema(new ResourceSchema());
 			$this->upgradeManager = new UpgradeManager();
-			$this->resourceManager = new ResourceManager($crateFactory, $this->schemaManager, $this->storage, new FilesystemScanner(__DIR__ . '/assets'), new Crypt());
+			$this->resourceManager = new ResourceIndex($crateFactory, $this->schemaManager, $this->storage, new FilesystemScanner(__DIR__ . '/assets'), new Crypt());
 			$factoryManager->registerFactory(ResourceStorable::class, FactoryFactory::create(ResourceStorable::class, [
 				$this->resourceManager,
 				'createResourceStorable',
