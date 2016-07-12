@@ -1,39 +1,40 @@
 <?php
 	namespace Edde\Common\Storage;
 
-	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Storage\CollectionException;
+	use Edde\Api\Query\IQuery;
 	use Edde\Api\Storage\ICollection;
-	use Edde\Api\Storage\IStorable;
+	use Edde\Api\Storage\IStorableFactory;
 	use Edde\Api\Storage\IStorage;
+	use Edde\Common\AbstractObject;
 
-	abstract class AbstractCollection extends AbstractCollectionIterator implements ICollection {
+	abstract class AbstractCollection extends AbstractObject implements ICollection {
 		/**
 		 * @var IStorage
 		 */
 		protected $storage;
 		/**
-		 * collection has some schema
-		 *
-		 * @var ISchema
+		 * @var IStorableFactory
 		 */
-		protected $schema;
+		protected $storableFactory;
+		/**
+		 * @var IQuery
+		 */
+		protected $query;
 
 		/**
 		 * @param IStorage $storage
-		 * @param ISchema $schema
+		 * @param IStorableFactory $storableFactory
+		 * @param IQuery $query
 		 */
-		public function __construct(IStorage $storage, ISchema $schema) {
+		public function __construct(IStorage $storage, IStorableFactory $storableFactory, IQuery $query) {
 			$this->storage = $storage;
-			$this->schema = $schema;
+			$this->storableFactory = $storableFactory;
+			$this->query = $query;
 		}
 
-		public function store(IStorable $storable) {
-			if ($storable->getSchema() !== $this->schema) {
-				$storableSchema = $storable->getSchema();
-				throw new CollectionException(sprintf('Cannot store [%s] storable because of missmatched schemas - expected [%s], got [%s].', get_class($storable), $this->schema->getSchemaName(), $storableSchema->getSchemaName()));
+		public function getIterator() {
+			foreach ($this->storage->execute($this->query) as $item) {
+				$storable = $this->storableFactory->create();
 			}
-			$this->storage->store($storable);
-			return $this;
 		}
 	}

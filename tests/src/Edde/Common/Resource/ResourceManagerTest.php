@@ -74,6 +74,12 @@
 				break;
 			}
 			self::assertNotEmpty($row);
-			self::assertEquals(2, $row['count']);
+			self::assertEquals(3, $row['count']);
+		}
+
+		public function testSimpleQueries() {
+			$this->resourceManager->update();
+			$resource = $this->resourceManager->getResource($this->resourceManager->createResourceQuery()
+				->nameLike('%.poo'));
 		}
 	}

@@ -1,7 +1,6 @@
 <?php
 	namespace Edde\Common\Resource;
 
-	use Edde\Api\Query\IQuery;
 	use Edde\Api\Resource\IResourceQuery;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Common\Query\Select\SelectQuery;
@@ -13,9 +12,9 @@
 		 */
 		protected $schema;
 		/**
-		 * @var IQuery
+		 * @var SelectQuery
 		 */
-		protected $query;
+		protected $selectQuery;
 		/**
 		 * @var string
 		 */
@@ -32,15 +31,49 @@
 
 		public function getQuery() {
 			$this->usse();
-			return $this->query;
+			return $this->selectQuery;
 		}
 
 		public function name($name) {
-			$this->name = $name;
+			$this->usse();
+			$this->selectQuery->where()
+				->eq()
+				->property('name')
+				->parameter($name);
+			return $this;
+		}
+
+		public function nameLike($name) {
+			$this->usse();
+			$this->selectQuery->where()
+				->like()
+				->property('name')
+				->parameter($name);
+			return $this;
+		}
+
+		public function url($url) {
+			$this->usse();
+			$this->selectQuery->where()
+				->eq()
+				->property('url')
+				->parameter($url);
+			return $this;
+		}
+
+		public function urlLike($url) {
+			$this->usse();
+			$this->selectQuery->where()
+				->like()
+				->property('url')
+				->parameter($url);
 			return $this;
 		}
 
 		protected function prepare() {
-			$this->query = new SelectQuery();
+			$this->selectQuery = new SelectQuery();
+			$this->selectQuery->select()
+				->from()
+				->source($this->schema->getSchemaName());
 		}
 	}

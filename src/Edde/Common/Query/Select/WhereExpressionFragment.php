@@ -101,6 +101,13 @@
 		}
 
 		/**
+		 * @return WhereFragment
+		 */
+		public function like() {
+			return $this->createWhereFragment('like');
+		}
+
+		/**
 		 * @return WhereExpressionFragment
 		 */
 		public function group() {

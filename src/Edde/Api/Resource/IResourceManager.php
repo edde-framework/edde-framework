@@ -32,4 +32,9 @@
 		 * @throws ResourceException
 		 */
 		public function getResource(IResourceQuery $resourceQuery);
+
+		/**
+		 * @return IResourceQuery
+		 */
+		public function createResourceQuery();
 	}

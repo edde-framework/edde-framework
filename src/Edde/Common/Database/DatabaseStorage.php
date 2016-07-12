@@ -110,6 +110,7 @@
 		}
 
 		public function collection(IQuery $query) {
+			return new DatabaseCollection($this, $query);
 		}
 
 		protected function prepare() {

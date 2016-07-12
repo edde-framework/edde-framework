@@ -60,9 +60,11 @@
 				$this->storage->execute(new DeleteQuery($this->resourceSchema->getSchemaName()));
 				foreach ($this->scanner->scan() as $resource) {
 					$resourceStorable = $this->storableFactory->create(ResourceStorable::class, $this->resourceSchema);
+					$url = $resource->getUrl();
 					$resourceStorable->set('guid', $this->crypt->guid());
-					$resourceStorable->set('url', (string)$resource->getUrl());
+					$resourceStorable->set('url', $url->getAbsoluteUrl());
 					$resourceStorable->set('name', $resource->getName());
+					$resourceStorable->set('extension', $url->getExtension());
 					$resourceStorable->set('mime', $resource->getMime());
 					$this->storage->store($resourceStorable);
 				}

@@ -32,11 +32,11 @@
 		public function rollback();
 
 		/**
-		 * execute the given query against this storage
+		 * execute the given query against this storage and return storage's native result
 		 *
 		 * @param IQuery $query
 		 *
-		 * @return ICollectionIterator
+		 * @return mixed
 		 */
 		public function execute(IQuery $query);
 
