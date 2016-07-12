@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Common\Resource;
 
+	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
@@ -73,6 +74,7 @@
 				->from()
 				->source(ResourceStorable::class);
 			$row = null;
+			/** @var $row array */
 			foreach ($this->storage->execute($selectQuery) as $row) {
 				break;
 			}
@@ -82,7 +84,10 @@
 
 		public function testSimpleQueries() {
 			$this->resourceManager->update();
-			$resource = $this->resourceManager->getResource($this->resourceManager->createResourceQuery()
-				->nameLike('%.poo'));
+			$query = $this->resourceManager->createResourceQuery();
+			$query->nameLike('%.poo');
+			$resource = $this->resourceManager->getResource($query);
+			self::assertInstanceOf(IResource::class, $resource);
+			self::assertContains('/assets/foo.poo', (string)$resource->getUrl());
 		}
 	}

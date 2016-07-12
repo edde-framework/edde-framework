@@ -10,6 +10,7 @@
 	use Edde\Api\Storage\IStorableFactory;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Common\Query\Delete\DeleteQuery;
+	use Edde\Common\Url\Url;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class ResourceManager extends AbstractUsable implements IResourceManager {
@@ -62,7 +63,7 @@
 					$resourceStorable = $this->storableFactory->create(ResourceStorable::class, $this->resourceSchema);
 					$url = $resource->getUrl();
 					$resourceStorable->set('guid', $this->crypt->guid());
-					$resourceStorable->set('url', $url->getAbsoluteUrl());
+					$resourceStorable->set('url', str_replace('\\', '/', $url->getAbsoluteUrl()));
 					$resourceStorable->set('name', $resource->getName());
 					$resourceStorable->set('extension', $url->getExtension());
 					$resourceStorable->set('mime', $resource->getMime());
@@ -78,12 +79,15 @@
 
 		public function getResourceCollection(IResourceQuery $resourceQuery) {
 			$this->usse();
-			return $this->storage->collection($this->resourceSchema, $resourceQuery->getQuery());
+			foreach ($this->storage->collection($this->resourceSchema, $resourceQuery->getQuery()) as $storable) {
+				yield new Resource(Url::create($storable->get('url')), $storable->get('name'), $storable->get('mime'));
+			}
 		}
 
 		public function getResource(IResourceQuery $resourceQuery) {
 			$this->usse();
-			return $this->storage->storable($this->resourceSchema, $resourceQuery->getQuery());
+			$storable = $this->storage->storable($this->resourceSchema, $resourceQuery->getQuery());
+			return new Resource(Url::create($storable->get('url')), $storable->get('name'), $storable->get('mime'));
 		}
 
 		public function createResourceQuery() {
