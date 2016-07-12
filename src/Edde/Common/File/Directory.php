@@ -48,8 +48,8 @@
 		}
 
 		public function purge() {
-			$this->usse();
 			FileUtils::recreate($this->directory);
+			$this->directory = FileUtils::realpath($this->directory);
 			return $this;
 		}
 
