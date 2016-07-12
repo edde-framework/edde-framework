@@ -2,12 +2,16 @@
 	namespace Edde\Common\Resource;
 
 	use Edde\Api\Crate\CrateException;
+	use Edde\Api\File\DirectoryException;
 	use Edde\Api\File\FileException;
+	use Edde\Api\File\IDirectory;
+	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Resource\IFileStorage;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Resource\ResourceException;
 	use Edde\Api\Url\IUrl;
+	use Edde\Common\File\Directory;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\Url\Url;
 	use Edde\Common\Usable\AbstractUsable;
@@ -23,30 +27,30 @@
 		/**
 		 * application root directory; it is used for relative path computation
 		 *
-		 * @var string
+		 * @var IRootDirectory
 		 */
-		protected $root;
+		protected $rootDirectory;
 		/**
 		 * storage dir; path to store incoming files
 		 *
-		 * @var string
+		 * @var IDirectory
 		 */
 		protected $storage;
 
 		/**
 		 * @param IResourceIndex $resourceIndex
-		 * @param string $root
-		 * @param string $storage
+		 * @param IRootDirectory $rootDirectory
+		 * @param IDirectory $storage
 		 */
-		public function __construct(IResourceIndex $resourceIndex, $root, $storage) {
+		public function __construct(IResourceIndex $resourceIndex, IRootDirectory $rootDirectory, IDirectory $storage) {
 			$this->resourceIndex = $resourceIndex;
-			$this->root = $root;
+			$this->rootDirectory = $rootDirectory;
 			$this->storage = $storage;
 		}
 
 		public function getPath(IResource $resource) {
 			$resource = $this->getResource($resource);
-			return str_replace($this->root, null, $resource->getUrl()
+			return str_replace($this->rootDirectory, null, $resource->getUrl()
 				->getPath());
 		}
 
@@ -85,11 +89,13 @@
 		public function store(IResource $resource) {
 			$this->usse();
 			$url = $resource->getUrl();
-			$path = $this->storage . '/' . sha1(dirname($url->getPath()));
-			$file = $path . '/' . $url->getResourceName();
-			if (@mkdir($path, 0777, true) && is_dir($path) === false) {
-				throw new ResourceException(sprintf('Cannot create store folder [%s] for the resource [%s].', $path, $url));
+			$directory = new Directory($this->storage->getDirectory() . '/' . sha1(dirname($url->getPath())));
+			try {
+				$directory->make();
+			} catch (DirectoryException $e) {
+				throw new ResourceException(sprintf('Cannot create store folder [%s] for the resource [%s].', $directory, $url), 0, $e);
 			}
+			$file = $directory->getDirectory() . '/' . $url->getResourceName();
 			FileUtils::copy($url, $file);
 			$resourceStorable = $this->resourceIndex->createResourceStorable();
 			$resourceStorable->set('name', $url->getAbsoluteUrl());
@@ -101,13 +107,9 @@
 		}
 
 		protected function prepare() {
-			$this->root = FileUtils::normalize($this->root);
-			$this->storage = FileUtils::normalize($this->storage);
-			if (is_dir($this->storage) === false && @mkdir($this->storage, 0777, true) && is_dir($this->storage) === false) {
-				throw new ResourceException(sprintf('Cannot create file storage directory [%s].', $this->storage));
-			}
-			if (strpos($this->storage, $this->root) === false) {
-				throw new ResourceException(sprintf('Storage path [%s] is not in the given root [%s].', $this->storage, $this->root));
+			$this->storage->make();
+			if (strpos($this->storage->getDirectory(), $this->rootDirectory->getDirectory()) === false) {
+				throw new ResourceException(sprintf('Storage path [%s] is not in the given root [%s].', $this->storage, $this->rootDirectory));
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Common\File;
 
+	use Edde\Api\File\DirectoryException;
 	use Edde\Api\File\IDirectory;
 	use Edde\Common\Usable\AbstractUsable;
 
@@ -21,7 +22,15 @@
 		}
 
 		public function getDirectory() {
+			$this->usse();
 			return $this->directory;
+		}
+
+		public function getFileList() {
+			$this->usse();
+			foreach (new \RecursiveDirectoryIterator($this->directory, \RecursiveDirectoryIterator::SKIP_DOTS) as $path) {
+				yield $path;
+			}
 		}
 
 		public function file($name, $content) {
@@ -30,11 +39,12 @@
 			return $this;
 		}
 
-		public function getFileList() {
-			$this->usse();
-			foreach (new \RecursiveDirectoryIterator($this->directory, \RecursiveDirectoryIterator::SKIP_DOTS) as $path) {
-				yield $path;
+		public function make() {
+			if (is_dir($this->directory) === false && @mkdir($this->directory, 0777, true) && is_dir($this->directory) === false) {
+				throw new DirectoryException(sprintf('Cannot create directory [%s].', $this->directory));
 			}
+			$this->directory = FileUtils::realpath($this->directory);
+			return $this;
 		}
 
 		public function __toString() {

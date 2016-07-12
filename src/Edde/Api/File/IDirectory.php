@@ -25,4 +25,11 @@
 		 * @return $this
 		 */
 		public function file($name, $content);
+
+		/**
+		 * create all directories until the current one
+		 *
+		 * @return $this
+		 */
+		public function make();
 	}

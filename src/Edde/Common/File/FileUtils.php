@@ -165,7 +165,7 @@
 		 * @throws FileException
 		 */
 		static public function copy($source, $dest, $overwrite = true) {
-			if (stream_is_local($source) && !file_exists($source)) {
+			if (stream_is_local($source) && file_exists($source) === false) {
 				throw new FileException ("File or directory [$source] not found.");
 			} else if ($overwrite === false && file_exists($dest)) {
 				throw new FileException("File or directory [$dest] already exists.");
