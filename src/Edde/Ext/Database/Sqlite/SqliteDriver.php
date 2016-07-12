@@ -33,6 +33,24 @@
 			$this->dsn = $dsn;
 		}
 
+		public function start($exclusive = false) {
+			$this->usse();
+			$this->pdo->beginTransaction();
+			return $this;
+		}
+
+		public function commit() {
+			$this->usse();
+			$this->pdo->commit();
+			return $this;
+		}
+
+		public function rollback() {
+			$this->usse();
+			$this->pdo->rollBack();
+			return $this;
+		}
+
 		public function delimite($delimite) {
 			return '"' . str_replace('"', '""', $delimite) . '"';
 		}

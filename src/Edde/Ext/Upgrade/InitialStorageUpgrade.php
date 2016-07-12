@@ -31,8 +31,15 @@
 		}
 
 		protected function onUpgrade() {
-			foreach ($this->schemaManager->getSchemaList() as $schema) {
-				$this->storage->execute(new CreateSchemaQuery($schema));
+			$this->storage->start();
+			try {
+				foreach ($this->schemaManager->getSchemaList() as $schema) {
+					$this->storage->execute(new CreateSchemaQuery($schema));
+				}
+				$this->storage->commit();
+			} catch (\Exception $e) {
+				$this->storage->rollback();
+				throw $e;
 			}
 		}
 

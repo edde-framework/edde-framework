@@ -8,6 +8,7 @@
 	use Edde\Api\Node\INodeQuery;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Storage\IStorable;
+	use Edde\Api\Storage\StorageException;
 	use Edde\Common\Node\NodeQuery;
 	use Edde\Common\Query\Insert\InsertQuery;
 	use Edde\Common\Query\Select\SelectQuery;
@@ -31,6 +32,10 @@
 		 * @var INodeQuery
 		 */
 		protected $sourceNodeQuery;
+		/**
+		 * @var bool
+		 */
+		protected $transaction;
 
 		/**
 		 * @param IDriver $driver
@@ -39,6 +44,30 @@
 		public function __construct(IDriver $driver, ICacheFactory $cacheFactory) {
 			$this->driver = $driver;
 			$this->cacheFactory = $cacheFactory;
+			$this->transaction = false;
+		}
+
+		public function start($exclusive = false) {
+			$this->usse();
+			if ($this->transaction && $exclusive) {
+				throw new StorageException('Cannot start exclusive transaction, there is already running another one.');
+			}
+			$this->driver->start();
+			return $this;
+		}
+
+		public function commit() {
+			$this->usse();
+			$this->transaction = false;
+			$this->driver->commit();
+			return $this;
+		}
+
+		public function rollback() {
+			$this->usse();
+			$this->transaction = false;
+			$this->driver->rollback();
+			return $this;
 		}
 
 		public function store(IStorable $storable) {

@@ -67,7 +67,16 @@
 			$this->createSchemaNodeQuery = new NodeQuery('/create-schema-query/*');
 		}
 
+		protected function formatDeleteQuery(INode $node) {
+			$this->usse();
+			$sql = 'DELETE FROM ' . $this->delimite($node->getValue());
+			return new StaticQuery($sql, []);
+		}
+
+		abstract protected function delimite($delimite);
+
 		protected function formatInsertQuery(INode $node) {
+			$this->usse();
 			$parameterList = [];
 			$nameList = [];
 			$columnList = [];
@@ -81,8 +90,6 @@
 			$sql .= implode(',', $nameList) . ') VALUES (';
 			return new StaticQuery($sql . implode(', ', $columnList) . ')', $parameterList);
 		}
-
-		abstract protected function delimite($delimite);
 
 		protected function formatCreateSchemaQuery(INode $node) {
 			$this->usse();

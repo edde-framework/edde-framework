@@ -9,6 +9,29 @@
 	 */
 	interface IStorage extends IUsable {
 		/**
+		 * start a transaction
+		 *
+		 * @param bool $exclusive if true and there is already transaction, exception should be thrown
+		 *
+		 * @return $this
+		 */
+		public function start($exclusive = false);
+
+		/**
+		 * commit a transaciton
+		 *
+		 * @return $this
+		 */
+		public function commit();
+
+		/**
+		 * rollback a transaction
+		 *
+		 * @return $this
+		 */
+		public function rollback();
+
+		/**
 		 * execute the given query against this storage
 		 *
 		 * @param IQuery $query

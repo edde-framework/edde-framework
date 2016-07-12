@@ -9,6 +9,7 @@
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorableFactory;
 	use Edde\Api\Storage\IStorage;
+	use Edde\Common\Query\Delete\DeleteQuery;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class ResourceManager extends AbstractUsable implements IResourceManager {
@@ -54,13 +55,21 @@
 
 		public function update() {
 			$this->usse();
-			foreach ($this->scanner->scan() as $resource) {
-				$resourceStorable = $this->storableFactory->create(ResourceStorable::class, $this->resourceSchema);
-				$resourceStorable->set('guid', $this->crypt->guid());
-				$resourceStorable->set('url', (string)$resource->getUrl());
-				$resourceStorable->set('name', $resource->getName());
-				$resourceStorable->set('mime', $resource->getMime());
-				$this->storage->store($resourceStorable);
+			$this->storage->start();
+			try {
+				$this->storage->execute(new DeleteQuery($this->resourceSchema->getSchemaName()));
+				foreach ($this->scanner->scan() as $resource) {
+					$resourceStorable = $this->storableFactory->create(ResourceStorable::class, $this->resourceSchema);
+					$resourceStorable->set('guid', $this->crypt->guid());
+					$resourceStorable->set('url', (string)$resource->getUrl());
+					$resourceStorable->set('name', $resource->getName());
+					$resourceStorable->set('mime', $resource->getMime());
+					$this->storage->store($resourceStorable);
+				}
+				$this->storage->commit();
+			} catch (\Exception $e) {
+				$this->storage->rollback();
+				throw $e;
 			}
 		}
 
