@@ -100,7 +100,7 @@
 			$resourceStorable = $this->resourceIndex->createResourceStorable();
 			$resourceStorable->set('name', $url->getAbsoluteUrl());
 			$resourceStorable->set('extension', $url->getExtension());
-			$resourceStorable->set('url', $localUrl = ('file:///' . FileUtils::normalize($file)));
+			$resourceStorable->set('url', $localUrl = (string)FileUtils::url(FileUtils::normalize($file)));
 			$resourceStorable->set('mime', $resource->getMime());
 			$this->resourceIndex->store($resourceStorable);
 			return new Resource(Url::create($localUrl));

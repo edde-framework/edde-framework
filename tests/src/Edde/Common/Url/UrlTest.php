@@ -2,6 +2,7 @@
 	namespace Edde\Common\Url;
 
 	use Edde\Api\Url\UrlException;
+	use Edde\Common\File\FileUtils;
 	use phpunit\framework\TestCase;
 
 	class UrlTest extends TestCase {
@@ -59,7 +60,7 @@
 		}
 
 		public function testMissingHost() {
-			$url = Url::create('file:///c:/windows/file.txt');
+			$url = FileUtils::url('c:\\windows\\file.txt');
 			self::assertEquals('file', $url->getScheme());
 			self::assertEmpty($url->getHost());
 			self::assertEquals('c:/windows/file.txt', $url->getPath());

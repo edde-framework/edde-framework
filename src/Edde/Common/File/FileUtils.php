@@ -2,7 +2,9 @@
 	namespace Edde\Common\File;
 
 	use Edde\Api\File\FileException;
+	use Edde\Api\Url\IUrl;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Url\Url;
 
 	class FileUtils extends AbstractObject {
 		/**
@@ -208,5 +210,16 @@
 			if (@rename($name, $rename) === false) {
 				throw new FileException("Unable to rename file or directory [$name] to [$rename].");
 			}
+		}
+
+		/**
+		 * create url from the given file/path
+		 *
+		 * @param string $file
+		 *
+		 * @return IUrl
+		 */
+		static public function url($file) {
+			return Url::create(str_replace('file:////', 'file:///', 'file:///' . self::normalize($file)));
 		}
 	}
