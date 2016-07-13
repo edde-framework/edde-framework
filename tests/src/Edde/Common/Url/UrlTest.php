@@ -76,4 +76,14 @@
 			self::assertEquals('config.conf', $url->getResourceName());
 			self::assertEquals('conf', $url->getExtension());
 		}
+
+		public function testLinuxPath2() {
+			$url = Url::create($file = 'file:///etc/some/hidden/config.conf');
+			self::assertEquals($file, $url->getAbsoluteUrl());
+			self::assertEquals('file', $url->getScheme());
+			self::assertEmpty($url->getHost());
+			self::assertEquals('/etc/some/hidden/config.conf', $url->getPath());
+			self::assertEquals('config.conf', $url->getResourceName());
+			self::assertEquals('conf', $url->getExtension());
+		}
 	}

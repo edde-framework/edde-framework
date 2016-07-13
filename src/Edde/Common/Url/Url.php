@@ -116,7 +116,7 @@
 				}
 				$url .= '@';
 			}
-			$url .= ($host = $this->getHost()) ?: '/';
+			$url .= ($host = $this->getHost()) ?: null;
 			if ($host !== null && ($port = $this->getPort()) !== null) {
 				$url .= ':' . $port;
 			}
