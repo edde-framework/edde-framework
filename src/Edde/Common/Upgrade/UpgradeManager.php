@@ -4,9 +4,9 @@
 	use Edde\Api\Upgrade\IUpgrade;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Upgrade\UpgradeException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Usable\AbstractUsable;
 
-	class UpgradeManager extends AbstractObject implements IUpgradeManager {
+	class UpgradeManager extends AbstractUsable implements IUpgradeManager {
 		/**
 		 * @var IUpgrade[]
 		 */
@@ -22,6 +22,7 @@
 		}
 
 		public function getUpgradeList() {
+			$this->usse();
 			return $this->upgradeList;
 		}
 
@@ -30,6 +31,7 @@
 		}
 
 		public function upgradeTo($version = null) {
+			$this->usse();
 			if ($version === null) {
 				end($this->upgradeList);
 				$version = key($this->upgradeList);
@@ -51,5 +53,8 @@
 				throw new UpgradeException(sprintf('No upgrades has been run for version [%s].', $version));
 			}
 			return $upgrade;
+		}
+
+		protected function prepare() {
 		}
 	}
