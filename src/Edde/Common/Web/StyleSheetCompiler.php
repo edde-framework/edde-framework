@@ -31,7 +31,9 @@
 		}
 
 		public function compile(IResourceList $resourceList) {
-			$name = $resourceList->getResourceName() . '.css';
+			if ($this->fileStorage->hasFile($name = $resourceList->getResourceName() . '.css')) {
+				return $this->fileStorage->getFile($name);
+			}
 			$content = [];
 			foreach ($resourceList->getResourceList() as $resource) {
 				$current = $resource->get();

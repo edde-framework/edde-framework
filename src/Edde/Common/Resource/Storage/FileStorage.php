@@ -117,6 +117,18 @@
 			return $resource;
 		}
 
+		public function hasFile($name) {
+			return $this->resourceIndex->query()
+				->nameLike('%' . $name)
+				->hasResource();
+		}
+
+		public function getFile($name) {
+			return $this->resourceIndex->query()
+				->nameLike('%' . $name)
+				->resource();
+		}
+
 		protected function prepare() {
 			$this->storageDirectory->make();
 			if (strpos($this->storageDirectory->getDirectory(), $this->rootDirectory->getDirectory()) === false) {
