@@ -48,6 +48,10 @@
 		 * @var IResourceIndex
 		 */
 		protected $resourceIndex;
+		/**
+		 * @var SqliteDriver
+		 */
+		protected $sqliteDriver;
 
 		public function setUp() {
 			FileUtils::recreate(__DIR__ . '/public');
@@ -57,7 +61,7 @@
 			$factoryManager->registerFactoryFallback(FactoryFactory::createFallback());
 			$container = new Container($factoryManager, new DependencyFactory($factoryManager, $cacheFactory), $cacheFactory);
 			$crateFactory = new CrateFactory($container);
-			$this->storage = new DatabaseStorage($container, new SqliteDriver('sqlite:' . $this->getDatabaseFileName()), $cacheFactory);
+			$this->storage = new DatabaseStorage($container, $this->sqliteDriver = new SqliteDriver('sqlite:' . $this->getDatabaseFileName()), $cacheFactory);
 			$this->schemaManager = new SchemaManager();
 			$this->schemaManager->addSchema(new ResourceSchema());
 			$this->upgradeManager = new UpgradeManager();
@@ -101,5 +105,13 @@
 			$styleSheet = $fileStorage->getResource($styleSheetResource);
 			self::assertFileExists($styleSheet->getUrl()
 				->getAbsoluteUrl());
+		}
+
+		protected function tearDown() {
+			if ($this->sqliteDriver) {
+				$this->sqliteDriver->close();
+			}
+			FileUtils::delete(__DIR__ . '/public');
+			FileUtils::delete(__DIR__ . '/temp');
 		}
 	}

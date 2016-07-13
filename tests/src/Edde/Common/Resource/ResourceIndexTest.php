@@ -14,6 +14,7 @@
 	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Crypt\Crypt;
 	use Edde\Common\Database\DatabaseStorage;
+	use Edde\Common\File\FileUtils;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Query\Select\SelectQuery;
 	use Edde\Common\Schema\SchemaManager;
@@ -100,5 +101,6 @@
 			if ($this->sqliteDriver) {
 				$this->sqliteDriver->close();
 			}
+			FileUtils::delete(__DIR__ . '/temp');
 		}
 	}
