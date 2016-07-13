@@ -3,6 +3,7 @@
 
 	use Edde\Api\File\DirectoryException;
 	use Edde\Api\File\IDirectory;
+	use Edde\Common\Resource\FileResource;
 	use Edde\Common\Usable\AbstractUsable;
 
 	/**
@@ -35,8 +36,8 @@
 
 		public function file($name, $content) {
 			$this->usse();
-			file_put_contents($this->directory . '/' . $name, $content);
-			return $this;
+			file_put_contents($file = ($this->directory . '/' . $name), $content);
+			return new FileResource(FileUtils::url($file));
 		}
 
 		public function make() {

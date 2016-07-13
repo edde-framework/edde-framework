@@ -13,8 +13,7 @@
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\File\Directory;
 	use Edde\Common\File\FileUtils;
-	use Edde\Common\Resource\Resource;
-	use Edde\Common\Url\Url;
+	use Edde\Common\Resource\FileResource;
 	use Edde\Common\Usable\AbstractUsable;
 
 	/**
@@ -96,15 +95,26 @@
 			} catch (DirectoryException $e) {
 				throw new ResourceException(sprintf('Cannot create store folder [%s] for the resource [%s].', $directory, $url), 0, $e);
 			}
-			$file = $directory->getDirectory() . '/' . $url->getResourceName();
-			FileUtils::copy($url, $file);
+			FileUtils::copy($url, $file = $directory->getDirectory() . '/' . $url->getResourceName());
+			$this->updateIndex($resource, $file);
+			return new FileResource($file);
+		}
+
+		protected function updateIndex(IResource $resource, $file) {
+			$url = $resource->getUrl();
 			$resourceStorable = $this->resourceIndex->createResourceStorable();
 			$resourceStorable->set('name', $url->getAbsoluteUrl());
 			$resourceStorable->set('extension', $url->getExtension());
-			$resourceStorable->set('url', $localUrl = (string)FileUtils::url(FileUtils::normalize($file)));
+			$resourceStorable->set('url', (string)($file instanceof IUrl ? $file : (string)FileUtils::url($file)));
 			$resourceStorable->set('mime', $resource->getMime());
 			$this->resourceIndex->store($resourceStorable);
-			return new Resource(Url::create($localUrl));
+		}
+
+		public function file($name, $content) {
+			$this->usse();
+			$this->updateIndex($resource = new FileResource($url = $this->storageDirectory->file($name, $content)
+				->getUrl()), $url);
+			return $resource;
 		}
 
 		protected function prepare() {

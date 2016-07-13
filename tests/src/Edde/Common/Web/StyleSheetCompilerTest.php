@@ -1,5 +1,5 @@
 <?php
-	namespace Edde\Ext\Resource;
+	namespace Edde\Common\Web;
 
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Schema\ISchemaManager;
@@ -15,9 +15,9 @@
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\File\RootDirectory;
-	use Edde\Common\File\TempDirectory;
-	use Edde\Common\Resource\Resource;
+	use Edde\Common\Resource\FileResource;
 	use Edde\Common\Resource\ResourceIndex;
+	use Edde\Common\Resource\ResourceList;
 	use Edde\Common\Resource\ResourceSchema;
 	use Edde\Common\Resource\ResourceStorable;
 	use Edde\Common\Resource\Storage\FileStorage;
@@ -31,7 +31,7 @@
 	use Edde\Ext\Upgrade\InitialStorageUpgrade;
 	use phpunit\framework\TestCase;
 
-	class StyleSheetResourceTest extends TestCase {
+	class StyleSheetCompilerTest extends TestCase {
 		/**
 		 * @var IStorage
 		 */
@@ -80,13 +80,18 @@
 		}
 
 		public function testCommon() {
-			$styleSheetResource = new StyleSheetResource($fileStorage = new FileStorage($this->resourceIndex, new RootDirectory(__DIR__), new StorageDirectory(__DIR__ . '/public')), $this->resourceIndex, new TempDirectory(__DIR__ . '/temp'));
-			$styleSheetResource->addStryleSheet(new Resource(FileUtils::url(__DIR__ . '/assets/css/font-awesome.css')));
-			$styleSheetResource->addStryleSheet(new Resource(FileUtils::url(__DIR__ . '/assets/css/font-awesome.min.css')));
-			$styleSheetResource->addStryleSheet(new Resource(FileUtils::url(__DIR__ . '/assets/css/simple-css.css')));
-			self::assertFileExists($styleSheetResource->getUrl()
+			$styleSheetCompiler = new StyleSheetCompiler($fileStorage = new FileStorage($this->resourceIndex, new RootDirectory(__DIR__), new StorageDirectory(__DIR__ . '/public')), $this->resourceIndex);
+
+			$resourceList = new ResourceList();
+			$resourceList->addResource(new FileResource(__DIR__ . '/assets/css/font-awesome.css'));
+			$resourceList->addResource(new FileResource(__DIR__ . '/assets/css/font-awesome.min.css'));
+			$resourceList->addResource(new FileResource(__DIR__ . '/assets/css/simple-css.css'));
+
+			$resource = $styleSheetCompiler->compile($resourceList);
+
+			self::assertFileExists($resource->getUrl()
 				->getAbsoluteUrl());
-			$urlList = StringUtils::matchAll($styleSheetResource->get(), "~url\\((?<url>.*?)\\)~", true);
+			$urlList = StringUtils::matchAll($resource->get(), "~url\\((?<url>.*?)\\)~", true);
 			self::assertNotEmpty($urlList);
 			self::assertArrayHasKey('url', $urlList);
 			$count = 0;
@@ -102,7 +107,7 @@
 					->hasResource(), sprintf('Missing resource [%s] in the resource index.', $url));
 			}
 			self::assertEquals(5, $count);
-			$styleSheet = $fileStorage->getResource($styleSheetResource);
+			$styleSheet = $fileStorage->getResource($resource);
 			self::assertFileExists($styleSheet->getUrl()
 				->getAbsoluteUrl());
 		}

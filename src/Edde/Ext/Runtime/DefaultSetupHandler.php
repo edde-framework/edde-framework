@@ -17,6 +17,7 @@
 	use Edde\Api\Runtime\RuntimeException;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Upgrade\IUpgradeManager;
+	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Application\Application;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Container\Factory\FactoryFactory;
@@ -29,6 +30,7 @@
 	use Edde\Common\Runtime\SetupHandler;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Upgrade\UpgradeManager;
+	use Edde\Common\Web\StyleSheetCompiler;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Router\CliRouter;
 	use Edde\Ext\Router\SimpleRouter;
@@ -86,6 +88,7 @@
 				IResourceStorable::class => FactoryFactory::create(ResourceStorable::class, function (IResourceIndex $resourceIndex) {
 					return $resourceIndex->createResourceStorable();
 				}, false),
+				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 			], $factoryList));
 			return $setupHandler;
 		}

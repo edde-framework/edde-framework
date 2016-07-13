@@ -1,6 +1,8 @@
 <?php
 	namespace Edde\Api\File;
 
+	use Edde\Api\Resource\IResource;
+
 	interface IDirectory {
 		/**
 		 * return string path of this directory (can be non-existent)
@@ -22,7 +24,7 @@
 		 * @param string $name
 		 * @param mixed $content
 		 *
-		 * @return $this
+		 * @return IResource
 		 */
 		public function file($name, $content);
 
