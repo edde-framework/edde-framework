@@ -220,6 +220,6 @@
 		 * @return IUrl
 		 */
 		static public function url($file) {
-			return Url::create(str_replace('file:////', 'file://', 'file:///' . self::normalize($file)));
+			return Url::create(str_replace('file:////', 'file:///', 'file:///' . ltrim(self::normalize($file), '/')));
 		}
 	}
