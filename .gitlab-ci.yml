@@ -14,6 +14,10 @@ test:
     stage: test
     script:
         - php bin/phpunit.phar --coverage-text --colors=never
+    artifacts:
+        name: $PROJECT-$CI_BUILD_REF_NAME
+        untracked: true
+        when: on_failure
 
 compile:
     stage: compile
