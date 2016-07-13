@@ -2,8 +2,8 @@
 	namespace Edde\Ext\Link;
 
 	use Edde\Api\Resource\ResourceException;
+	use Edde\Common\File\FileUtils;
 	use Edde\Common\Resource\Resource;
-	use Edde\Common\Url\Url;
 	use phpunit\framework\TestCase;
 
 	class PublicLinkGeneratorTest extends TestCase {
@@ -11,7 +11,7 @@
 			$publicLinkGenerator = new PublicLinkGenerator(__DIR__, __DIR__ . '/public');
 			self::assertFalse($publicLinkGenerator->isUsed());
 			file_put_contents(__DIR__ . '/assets/file', $data = mt_rand(0, 9999999));
-			$url = $publicLinkGenerator->generate(new Resource(Url::factory('file', __DIR__ . '/assets/file')));
+			$url = $publicLinkGenerator->generate(new Resource(FileUtils::url(__DIR__ . '/assets/file')));
 			self::assertFileExists($file = (__DIR__ . $url->getPath()));
 			self::assertEquals($data, file_get_contents($file));
 		}

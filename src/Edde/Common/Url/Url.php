@@ -72,19 +72,6 @@
 			return $this;
 		}
 
-		/**
-		 * @param string $scheme
-		 * @param string $path
-		 *
-		 * @return IUrl
-		 */
-		static public function factory($scheme, $path) {
-			$url = new self();
-			$url->setScheme($scheme);
-			$url->setPath($path);
-			return $url;
-		}
-
 		public function getResourceName() {
 			$pathList = $this->getPathList();
 			return end($pathList);

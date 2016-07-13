@@ -4,7 +4,6 @@
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\Resource\Resource;
 	use Edde\Common\Resource\Scanner\AbstractScanner;
-	use Edde\Common\Url\Url;
 	use RecursiveDirectoryIterator;
 	use RecursiveIteratorIterator;
 	use SplFileInfo;
@@ -33,8 +32,7 @@
 			}
 			/** @var $splFileInfo SplFileInfo */
 			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->path, RecursiveDirectoryIterator::SKIP_DOTS)) as $splFileInfo) {
-				$url = Url::factory('file', FileUtils::realpath($file = (string)$splFileInfo));
-				yield new Resource($url, $url->getResourceName(), FileUtils::mime($file));
+				yield new Resource($url = FileUtils::url(FileUtils::realpath($file = (string)$splFileInfo)), $url->getResourceName(), FileUtils::mime($file));
 			}
 		}
 	}
