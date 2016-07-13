@@ -12,7 +12,7 @@
 
 		public function actionUpdate() {
 			$this->resourceIndex->update();
-			echo 'ok';
+			printf("Resources updated.\n");
 		}
 
 		protected function onPrepare() {
