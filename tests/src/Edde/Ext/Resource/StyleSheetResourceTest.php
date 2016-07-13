@@ -25,7 +25,6 @@
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Upgrade\UpgradeManager;
-	use Edde\Common\Url\Url;
 	use Edde\Ext\Cache\DevNullCacheStorage;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Resource\Scanner\FilesystemScanner;
@@ -78,9 +77,9 @@
 
 		public function testCommon() {
 			$styleSheetResource = new StyleSheetResource($fileStorage = new FileStorage($this->resourceIndex, new RootDirectory(__DIR__), new Directory(__DIR__ . '/public')), $this->resourceIndex, new TempDirectory(__DIR__ . '/temp'));
-			$styleSheetResource->addStryleSheet(new Resource(Url::factory('file', __DIR__ . '/assets/css/font-awesome.css')));
-			$styleSheetResource->addStryleSheet(new Resource(Url::factory('file', __DIR__ . '/assets/css/font-awesome.min.css')));
-			$styleSheetResource->addStryleSheet(new Resource(Url::factory('file', __DIR__ . '/assets/css/simple-css.css')));
+			$styleSheetResource->addStryleSheet(new Resource(FileUtils::url(__DIR__ . '/assets/css/font-awesome.css')));
+			$styleSheetResource->addStryleSheet(new Resource(FileUtils::url(__DIR__ . '/assets/css/font-awesome.min.css')));
+			$styleSheetResource->addStryleSheet(new Resource(FileUtils::url(__DIR__ . '/assets/css/simple-css.css')));
 			self::assertFileExists($styleSheetResource->getUrl()
 				->getAbsoluteUrl());
 			$urlList = StringUtils::matchAll($styleSheetResource->get(), "~url\\((?<url>.*?)\\)~", true);
