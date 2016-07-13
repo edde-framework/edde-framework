@@ -49,8 +49,8 @@
 		}
 
 		public function getPath(IResource $resource) {
-			$resource = $this->getResource($resource);
-			return str_replace($this->rootDirectory, null, $resource->getUrl()
+			return str_replace($this->rootDirectory, null, $this->getResource($resource)
+				->getUrl()
 				->getPath());
 		}
 
