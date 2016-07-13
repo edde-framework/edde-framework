@@ -15,7 +15,7 @@ test:
     script:
         - php bin/phpunit.phar --coverage-text --colors=never
     artifacts:
-        name: $PROJECT-$CI_BUILD_REF_NAME
+        name: $PROJECT-$CI_BUILD_REF_NAME-failed
         untracked: true
         when: on_failure
 
