@@ -11,7 +11,7 @@
 			$url->setHost('edde-framework.org');
 			$url->setPort(8182);
 			$url->setScheme('https');
-			self::assertSame($expected = 'https://edde-framework.org:8182', (string)$url);
+			self::assertSame($expected = 'https://edde-framework.org:8182/', (string)$url);
 			self::assertSame($expected, $url->getAbsoluteUrl());
 		}
 
@@ -24,7 +24,7 @@
 				'foo' => 'foo-value',
 				'bar' => 'bar-value',
 			]);
-			self::assertSame($expected = 'https://edde-framework.org:8182?foo=foo-value&bar=bar-value', (string)$url);
+			self::assertSame($expected = 'https://edde-framework.org:8182/?foo=foo-value&bar=bar-value', (string)$url);
 			self::assertSame($expected, $url->getAbsoluteUrl());
 		}
 
@@ -60,7 +60,8 @@
 		}
 
 		public function testMissingHost() {
-			$url = FileUtils::url('c:\\windows\\file.txt');
+			$url = FileUtils::url($file = 'c:\\windows\\file.txt');
+			self::assertSame('file:///' . FileUtils::normalize($file), $url->getAbsoluteUrl());
 			self::assertEquals('file', $url->getScheme());
 			self::assertEmpty($url->getHost());
 			self::assertEquals('c:/windows/file.txt', $url->getPath());

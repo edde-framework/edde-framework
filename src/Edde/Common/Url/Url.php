@@ -116,11 +116,11 @@
 				}
 				$url .= '@';
 			}
-			$url .= ($host = $this->getHost()) ?: null;
+			$url .= ($host = $this->getHost());
 			if ($host !== null && ($port = $this->getPort()) !== null) {
 				$url .= ':' . $port;
 			}
-			$url .= $this->getPath();
+			$url .= '/' . ltrim($this->getPath(), '/');
 			$query = $this->getQuery();
 			if (empty($query) === false) {
 				$url .= '?' . http_build_query($this->getQuery());

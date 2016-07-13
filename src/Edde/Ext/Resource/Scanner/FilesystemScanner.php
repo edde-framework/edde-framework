@@ -32,7 +32,7 @@
 			}
 			/** @var $splFileInfo SplFileInfo */
 			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->path, RecursiveDirectoryIterator::SKIP_DOTS)) as $splFileInfo) {
-				yield new Resource($url = FileUtils::url(FileUtils::realpath($file = (string)$splFileInfo)), $url->getResourceName(), FileUtils::mime($file));
+				yield new Resource($url = FileUtils::url($file = FileUtils::realpath((string)$splFileInfo)), $url->getResourceName(), FileUtils::mime($file));
 			}
 		}
 	}
