@@ -4,7 +4,6 @@
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IFactory;
 	use Edde\Api\Control\IControlFactory;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crypt\ICrypt;
@@ -67,17 +66,10 @@
 				},
 				CliRouter::class => CliRouter::class,
 				SimpleRouter::class => SimpleRouter::class,
-				IRouter::class => [
-					RouterList::class,
-					function (IFactory $factory) {
-						$factory->onSetup(function (IContainer $container, RouterList $routerList) {
-							$routerList->onSetup(function (RouterList $routerList) use ($container) {
-								$routerList->registerRouter($container->create(CliRouter::class));
-								$routerList->registerRouter($container->create(SimpleRouter::class));
-							});
-						});
-					},
-				],
+				IRouter::class => $setupHandler->factory(RouterList::class, function (IContainer $container, RouterList $routerList) {
+					$routerList->registerRouter($container->create(CliRouter::class));
+					$routerList->registerRouter($container->create(SimpleRouter::class));
+				}),
 				/**
 				 * Http request support
 				 */
@@ -88,16 +80,9 @@
 				IHttpResponse::class => function () {
 					throw new RuntimeException(sprintf('Do not request [%s] from the global space (container) as it is bad practice.', IHttpResponse::class));
 				},
-				ISchemaManager::class => [
-					SchemaManager::class,
-					function (IFactory $factory) {
-						$factory->onSetup(function (SchemaManager $schemaManager) {
-							$schemaManager->onSetup(function (SchemaManager $schemaManager) {
-								$schemaManager->addSchema(new ResourceSchema());
-							});
-						});
-					},
-				],
+				ISchemaManager::class => $setupHandler->factory(SchemaManager::class, function (SchemaManager $schemaManager) {
+					$schemaManager->addSchema(new ResourceSchema());
+				}),
 				IRootDirectory::class => function () {
 					throw new RuntimeException(sprintf('If you want use root directory [%s], you must register it to the container!', IRootDirectory::class));
 				},
@@ -117,6 +102,9 @@
 				},
 				IStorage::class => DatabaseStorage::class,
 				ICrateFactory::class => CrateFactory::class,
+				ResourceStorable::class => function (IResourceIndex $resourceIndex) {
+					return $resourceIndex->createResourceStorable();
+				},
 				IResourceIndex::class => ResourceIndex::class,
 				IUpgradeManager::class => UpgradeManager::class,
 				IResourceStorable::class => FactoryFactory::create(ResourceStorable::class, function (IResourceIndex $resourceIndex) {

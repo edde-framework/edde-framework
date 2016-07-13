@@ -10,6 +10,10 @@
 		 */
 		protected $resourceIndex;
 
+		final public function injectResourceIndex(IResourceIndex $resourceIndex) {
+			$this->resourceIndex = $resourceIndex;
+		}
+
 		public function actionUpdate() {
 			$this->resourceIndex->update();
 			printf("Resources updated.\n");
