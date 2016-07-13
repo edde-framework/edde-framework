@@ -1,18 +1,19 @@
 <?php
-	namespace Edde\Common\Resource;
+	namespace Edde\Common\Resource\Storage;
 
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\File\DirectoryException;
 	use Edde\Api\File\FileException;
-	use Edde\Api\File\IDirectory;
 	use Edde\Api\File\IRootDirectory;
-	use Edde\Api\Resource\IFileStorage;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Resource\ResourceException;
+	use Edde\Api\Resource\Storage\IFileStorage;
+	use Edde\Api\Resource\Storage\IStorageDirectory;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\File\Directory;
 	use Edde\Common\File\FileUtils;
+	use Edde\Common\Resource\Resource;
 	use Edde\Common\Url\Url;
 	use Edde\Common\Usable\AbstractUsable;
 
@@ -33,19 +34,19 @@
 		/**
 		 * storage dir; path to store incoming files
 		 *
-		 * @var IDirectory
+		 * @var IStorageDirectory
 		 */
-		protected $storage;
+		protected $storageDirectory;
 
 		/**
 		 * @param IResourceIndex $resourceIndex
 		 * @param IRootDirectory $rootDirectory
-		 * @param IDirectory $storage
+		 * @param IStorageDirectory $storageDirectory
 		 */
-		public function __construct(IResourceIndex $resourceIndex, IRootDirectory $rootDirectory, IDirectory $storage) {
+		public function __construct(IResourceIndex $resourceIndex, IRootDirectory $rootDirectory, IStorageDirectory $storageDirectory) {
 			$this->resourceIndex = $resourceIndex;
 			$this->rootDirectory = $rootDirectory;
-			$this->storage = $storage;
+			$this->storageDirectory = $storageDirectory;
 		}
 
 		public function getPath(IResource $resource) {
@@ -89,7 +90,7 @@
 		public function store(IResource $resource) {
 			$this->usse();
 			$url = $resource->getUrl();
-			$directory = new Directory($this->storage->getDirectory() . '/' . sha1(dirname($url->getPath())));
+			$directory = new Directory($this->storageDirectory->getDirectory() . '/' . sha1(dirname($url->getPath())));
 			try {
 				$directory->make();
 			} catch (DirectoryException $e) {
@@ -107,9 +108,9 @@
 		}
 
 		protected function prepare() {
-			$this->storage->make();
-			if (strpos($this->storage->getDirectory(), $this->rootDirectory->getDirectory()) === false) {
-				throw new ResourceException(sprintf('Storage path [%s] is not in the given root [%s].', $this->storage, $this->rootDirectory));
+			$this->storageDirectory->make();
+			if (strpos($this->storageDirectory->getDirectory(), $this->rootDirectory->getDirectory()) === false) {
+				throw new ResourceException(sprintf('Storage path [%s] is not in the given root [%s].', $this->storageDirectory, $this->rootDirectory));
 			}
 		}
 	}

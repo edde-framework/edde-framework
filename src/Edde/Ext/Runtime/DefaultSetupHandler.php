@@ -14,7 +14,6 @@
 	use Edde\Api\Router\IRoute;
 	use Edde\Api\Router\IRouter;
 	use Edde\Api\Router\RouterException;
-	use Edde\Api\Runtime\ISetupHandler;
 	use Edde\Api\Runtime\RuntimeException;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Upgrade\IUpgradeManager;
@@ -31,7 +30,6 @@
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
-	use Edde\Ext\Link\PublicLinkGenerator;
 	use Edde\Ext\Router\CliRouter;
 	use Edde\Ext\Router\SimpleRouter;
 
@@ -72,9 +70,6 @@
 				},
 				IHttpResponse::class => function () {
 					throw new RuntimeException(sprintf('Do not request [%s] from the global space (container) as it is bad practice.', IHttpResponse::class));
-				},
-				PublicLinkGenerator::class => function () {
-					throw new RuntimeException(sprintf('[%s] needs setup; please use current [%s] and register your own [%s] factory.', PublicLinkGenerator::class, ISetupHandler::class, PublicLinkGenerator::class));
 				},
 				ISchemaManager::class => [
 					SchemaManager::class,

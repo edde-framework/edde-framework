@@ -2,10 +2,10 @@
 	namespace Edde\Ext\Resource;
 
 	use Edde\Api\File\ITempDirectory;
-	use Edde\Api\Resource\IFileStorage;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Resource\ResourceException;
+	use Edde\Api\Resource\Storage\IFileStorage;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\Resource\Resource;
 	use Edde\Common\Strings\StringUtils;

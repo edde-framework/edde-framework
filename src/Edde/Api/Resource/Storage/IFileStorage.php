@@ -1,6 +1,7 @@
 <?php
-	namespace Edde\Api\Resource;
+	namespace Edde\Api\Resource\Storage;
 
+	use Edde\Api\Resource\IResource;
 	use Edde\Api\Url\IUrl;
 
 	interface IFileStorage {
