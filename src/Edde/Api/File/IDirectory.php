@@ -2,8 +2,9 @@
 	namespace Edde\Api\File;
 
 	use Edde\Api\Resource\IResource;
+	use IteratorAggregate;
 
-	interface IDirectory {
+	interface IDirectory extends IteratorAggregate {
 		/**
 		 * return string path of this directory (can be non-existent)
 		 *
@@ -41,4 +42,14 @@
 		 * @return $this
 		 */
 		public function purge();
+
+		/**
+		 * @return bool
+		 */
+		public function exists();
+
+		/**
+		 * @return IResource[]
+		 */
+		public function getIterator();
 	}

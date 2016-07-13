@@ -13,6 +13,7 @@
 	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Crypt\Crypt;
 	use Edde\Common\Database\DatabaseStorage;
+	use Edde\Common\File\Directory;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\Resource\FileResource;
@@ -65,7 +66,7 @@
 			$this->schemaManager = new SchemaManager();
 			$this->schemaManager->addSchema(new ResourceSchema());
 			$this->upgradeManager = new UpgradeManager();
-			$this->resourceIndex = new ResourceIndex($crateFactory, $this->schemaManager, $this->storage, new FilesystemScanner(__DIR__ . '/assets'), new Crypt());
+			$this->resourceIndex = new ResourceIndex($crateFactory, $this->schemaManager, $this->storage, new FilesystemScanner(new Directory(__DIR__ . '/assets')), new Crypt());
 			$factoryManager->registerFactory(ResourceStorable::class, FactoryFactory::create(ResourceStorable::class, [
 				$this->resourceIndex,
 				'createResourceStorable',

@@ -1,12 +1,8 @@
 <?php
 	namespace Edde\Ext\Resource\Scanner;
 
-	use Edde\Common\File\FileUtils;
-	use Edde\Common\Resource\Resource;
+	use Edde\Api\File\IDirectory;
 	use Edde\Common\Resource\Scanner\AbstractScanner;
-	use RecursiveDirectoryIterator;
-	use RecursiveIteratorIterator;
-	use SplFileInfo;
 
 	/**
 	 * Simple filesystem scanner; it does not any caching, so it's usage is heavily suboptimal! Use only when needed and with cache.
@@ -15,24 +11,18 @@
 		/**
 		 * path to scan
 		 *
-		 * @var string
+		 * @var IDirectory
 		 */
-		protected $path;
+		protected $directory;
 
-		/**
-		 * @param string $path
-		 */
-		public function __construct($path) {
-			$this->path = $path;
+		public function __construct(IDirectory $directory) {
+			$this->directory = $directory;
 		}
 
 		public function scan() {
-			if (is_dir($this->path) === false) {
-				return;
+			if ($this->directory->exists() === false) {
+				return [];
 			}
-			/** @var $splFileInfo SplFileInfo */
-			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->path, RecursiveDirectoryIterator::SKIP_DOTS)) as $splFileInfo) {
-				yield new Resource($url = FileUtils::url($file = FileUtils::realpath((string)$splFileInfo)), $url->getResourceName(), FileUtils::mime($file));
-			}
+			return $this->directory->getIterator();
 		}
 	}

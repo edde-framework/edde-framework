@@ -2,6 +2,7 @@
 	namespace Edde\Ext\Resource\Scanner;
 
 	use Edde\Api\Resource\Scanner\IScanner;
+	use Edde\Common\File\Directory;
 	use phpunit\framework\TestCase;
 
 	class FilesystemScannerTest extends TestCase {
@@ -28,6 +29,6 @@
 		 * @return IScanner
 		 */
 		protected function createScanner() {
-			return new FilesystemScanner(__DIR__ . '/assets');
+			return new FilesystemScanner(new Directory(__DIR__ . '/assets'));
 		}
 	}

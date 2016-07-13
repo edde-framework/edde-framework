@@ -45,40 +45,6 @@
 		}
 
 		/**
-		 * return realpath for the given path
-		 *
-		 * @param string $path
-		 * @param bool $required
-		 *
-		 * @return string
-		 * @throws FileException
-		 */
-		static public function realpath($path, $required = true) {
-			if (($real = realpath($path)) === false) {
-				if ($required) {
-					throw new FileException(sprintf('Cannot get real path from given string [%s].', $path));
-				}
-				$real = $path;
-			}
-			return self::normalize($real);
-		}
-
-		/**
-		 * @param string $path
-		 *
-		 * @return string
-		 */
-		static public function normalize($path) {
-			return rtrim(str_replace([
-				'\\',
-				'//',
-			], [
-				'/',
-				'/',
-			], $path), '/');
-		}
-
-		/**
 		 * generate temporary file name; it uses system temp dir (sys_get_temp_dir())
 		 *
 		 * @param string|null $prefix
@@ -218,8 +184,43 @@
 		 * @param string $file
 		 *
 		 * @return IUrl
+		 * @throws FileException
 		 */
 		static public function url($file) {
-			return Url::create('file:///' . ltrim(self::normalize($file), '/'));
+			return Url::create('file:///' . ltrim(self::realpath($file, false), '/'));
+		}
+
+		/**
+		 * return realpath for the given path
+		 *
+		 * @param string $path
+		 * @param bool $required
+		 *
+		 * @return string
+		 * @throws FileException
+		 */
+		static public function realpath($path, $required = true) {
+			if (($real = realpath($path)) === false) {
+				if ($required) {
+					throw new FileException(sprintf('Cannot get real path from given string [%s].', $path));
+				}
+				$real = $path;
+			}
+			return self::normalize($real);
+		}
+
+		/**
+		 * @param string $path
+		 *
+		 * @return string
+		 */
+		static public function normalize($path) {
+			return rtrim(str_replace([
+				'\\',
+				'//',
+			], [
+				'/',
+				'/',
+			], $path), '/');
 		}
 	}

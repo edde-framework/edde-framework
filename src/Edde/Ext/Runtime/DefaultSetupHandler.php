@@ -6,26 +6,35 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Control\IControlFactory;
+	use Edde\Api\Crate\ICrateFactory;
+	use Edde\Api\Database\DriverException;
+	use Edde\Api\Database\IDriver;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpRequestFactory;
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Resource\IResourceStorable;
+	use Edde\Api\Resource\Scanner\IScanner;
+	use Edde\Api\Resource\Storage\IFileStorage;
 	use Edde\Api\Router\IRoute;
 	use Edde\Api\Router\IRouter;
 	use Edde\Api\Router\RouterException;
 	use Edde\Api\Runtime\RuntimeException;
 	use Edde\Api\Schema\ISchemaManager;
+	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Application\Application;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Control\ControlFactory;
+	use Edde\Common\Crate\CrateFactory;
+	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\Http\HttpRequestFactory;
 	use Edde\Common\Resource\ResourceIndex;
 	use Edde\Common\Resource\ResourceSchema;
 	use Edde\Common\Resource\ResourceStorable;
+	use Edde\Common\Resource\Storage\FileStorage;
 	use Edde\Common\Router\RouterList;
 	use Edde\Common\Runtime\SetupHandler;
 	use Edde\Common\Schema\SchemaManager;
@@ -83,6 +92,15 @@
 						});
 					},
 				],
+				IScanner::class => function () {
+					throw new DriverException(sprintf('If you want use [%s], you must register it to the container!', IScanner::class));
+				},
+				IFileStorage::class => FileStorage::class,
+				IDriver::class => function () {
+					throw new DriverException(sprintf('If you want use DatabaseStorage (or [%s]), you must register it to the container!', IDriver::class));
+				},
+				IStorage::class => DatabaseStorage::class,
+				ICrateFactory::class => CrateFactory::class,
 				IResourceIndex::class => ResourceIndex::class,
 				IUpgradeManager::class => UpgradeManager::class,
 				IResourceStorable::class => FactoryFactory::create(ResourceStorable::class, function (IResourceIndex $resourceIndex) {
