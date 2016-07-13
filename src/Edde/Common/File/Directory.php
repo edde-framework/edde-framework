@@ -5,6 +5,8 @@
 	use Edde\Api\File\IDirectory;
 	use Edde\Common\Resource\FileResource;
 	use Edde\Common\Usable\AbstractUsable;
+	use RecursiveDirectoryIterator;
+	use RecursiveIteratorIterator;
 
 	/**
 	 * Representation of directory on the filesystem.
@@ -52,6 +54,17 @@
 			FileUtils::recreate($this->directory);
 			$this->directory = FileUtils::realpath($this->directory);
 			return $this;
+		}
+
+		public function exists() {
+			return is_dir($this->directory);
+		}
+
+		public function getIterator() {
+			$this->usse();
+			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->directory, RecursiveDirectoryIterator::SKIP_DOTS)) as $splFileInfo) {
+				yield new FileResource((string)$splFileInfo);
+			}
 		}
 
 		public function __toString() {
