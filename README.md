@@ -1,3 +1,2 @@
 # Edde Framework
 
-...some "blah"s here...
