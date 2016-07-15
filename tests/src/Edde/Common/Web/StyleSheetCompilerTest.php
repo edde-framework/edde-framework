@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Common\Web;
 
+	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
@@ -16,6 +17,7 @@
 	use Edde\Common\File\Directory;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\File\RootDirectory;
+	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Resource\FileResource;
 	use Edde\Common\Resource\ResourceIndex;
 	use Edde\Common\Resource\ResourceList;
@@ -33,6 +35,10 @@
 	use phpunit\framework\TestCase;
 
 	class StyleSheetCompilerTest extends TestCase {
+		/**
+		 * @var ITempDirectory
+		 */
+		protected $tempDirectory;
 		/**
 		 * @var IStorage
 		 */
@@ -56,7 +62,8 @@
 
 		public function setUp() {
 			FileUtils::recreate(__DIR__ . '/public');
-			FileUtils::recreate(__DIR__ . '/temp');
+			$this->tempDirectory = new TempDirectory(__DIR__ . '/temp');
+			$this->tempDirectory->purge();
 			$cacheFactory = $cacheFactory = new CacheFactory(__DIR__, new DevNullCacheStorage());
 			$factoryManager = new FactoryManager();
 			$factoryManager->registerFactoryFallback(FactoryFactory::createFallback());
@@ -81,7 +88,7 @@
 		}
 
 		public function testCommon() {
-			$styleSheetCompiler = new StyleSheetCompiler($fileStorage = new FileStorage($this->resourceIndex, new RootDirectory(__DIR__), new StorageDirectory(__DIR__ . '/public')), $this->resourceIndex);
+			$styleSheetCompiler = new StyleSheetCompiler($fileStorage = new FileStorage($this->resourceIndex, new RootDirectory(__DIR__), new StorageDirectory(__DIR__ . '/public')), $this->resourceIndex, $this->tempDirectory);
 
 			$resourceList = new ResourceList();
 			$resourceList->addResource(new FileResource(__DIR__ . '/assets/css/font-awesome.css'));

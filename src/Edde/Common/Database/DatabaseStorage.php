@@ -4,6 +4,7 @@
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Database\DriverException;
 	use Edde\Api\Database\IDatabaseStorage;
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\Node\INodeQuery;
@@ -15,6 +16,7 @@
 	use Edde\Common\Query\Select\SelectQuery;
 	use Edde\Common\Query\Update\UpdateQuery;
 	use Edde\Common\Storage\AbstractStorage;
+	use PDOException;
 
 	class DatabaseStorage extends AbstractStorage implements IDatabaseStorage {
 		/**
@@ -103,13 +105,17 @@
 				$property = $value->getProperty();
 				$source[$property->getName()] = $value->get();
 			}
-			$this->driver->execute(new $name($schema, $source));
+			$this->execute(new $name($schema, $source));
 			return $this;
 		}
 
 		public function execute(IQuery $query) {
 			$this->usse();
-			return $this->driver->execute($query);
+			try {
+				return $this->driver->execute($query);
+			} catch (PDOException $e) {
+				throw new DriverException(sprintf('Driver [%s] execution failed: %s.', get_class($this->driver), $e->getMessage()), 0, $e);
+			}
 		}
 
 		protected function prepare() {

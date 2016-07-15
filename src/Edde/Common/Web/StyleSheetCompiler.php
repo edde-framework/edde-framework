@@ -39,27 +39,34 @@
 
 		public function compile(IResourceList $resourceList) {
 			$content = [];
+			$pathList = [];
 			foreach ($resourceList->getResourceList() as $resource) {
 				$current = $resource->get();
 				$urlList = StringUtils::matchAll($current, "~url\\((?<url>.*?)\\)~", true);
-				foreach (empty($urlList) ? [] : $urlList['url'] as $item) {
+				$resourcePath = $source = $resource->getUrl()
+					->getPath();
+				$resourcePath = dirname($resourcePath);
+				foreach (empty($urlList) ? [] : array_unique($urlList['url']) as $item) {
 					$url = Url::create(str_replace([
 						'"',
 						"'",
 					], null, $item));
-					$source = $resource->getUrl()
-						->getPath();
-					if (($file = FileUtils::realpath(dirname($source) . '/' . $url->getPath())) === false) {
+					if (isset($pathList[$path = $url->getPath()])) {
+						$current = str_replace($item, '"' . $pathList[$path] . '"', $current);
+						continue;
+					}
+					if (($file = FileUtils::realpath($resourcePath . '/' . $path)) === false) {
 						throw new WebException(sprintf('Cannot locate css [%s] resource [%s] on the filesystem.', $source, $urlList));
 					}
 					$resource = $this->resourceIndex->query()
 						->urlLike('%' . $file)
 						->resource();
 					$this->resourceIndex->save($resource = $this->fileStorage->store($resource));
-					$current = str_replace($item, '"' . $resource->getRelativePath() . '"', $current);
+					$current = str_replace($item, '"' . ($pathList[$path] = $resource->getRelativePath()) . '"', $current);
 				}
 				$content[] = $current;
 			}
-			return $this->fileStorage->store($this->tempDirectory->file($resourceList->getResourceName() . '.css', implode("\n", $content)));
+			$this->resourceIndex->save($resource = $this->fileStorage->store($this->tempDirectory->file($resourceList->getResourceName() . '.css', implode("\n", $content))));
+			return $resource;
 		}
 	}

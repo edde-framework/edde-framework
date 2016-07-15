@@ -65,7 +65,7 @@
 		public function getResource(IResource $resource) {
 			$this->usse();
 			return $this->resourceIndex->query()
-				->name($resource->getUrl()
+				->url($resource->getUrl()
 					->getAbsoluteUrl())
 				->resource();
 		}
