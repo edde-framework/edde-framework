@@ -68,7 +68,7 @@
 
 		public function render() {
 			$this->usse();
-			/** @var $control IHtmlControl */
+ 			/** @var $control IHtmlControl */
 			if (($tag = $this->getTag()) === null) {
 				foreach ($this->getControlList() as $control) {
 					$control->render();

@@ -29,6 +29,13 @@
 		public function getMime();
 
 		/**
+		 * is this resource available? (file exists, ...)
+		 *
+		 * @return bool
+		 */
+		public function isAvailable();
+
+		/**
 		 * return whole content of the URL of this Resource
 		 *
 		 * @return string

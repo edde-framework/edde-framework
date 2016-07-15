@@ -44,6 +44,10 @@
 			return $this->mime;
 		}
 
+		public function isAvailable() {
+			return file_exists($url = $this->url->getAbsoluteUrl()) && is_readable($url);
+		}
+
 		public function get() {
 			return file_get_contents($this->url->getAbsoluteUrl());
 		}

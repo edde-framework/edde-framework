@@ -15,21 +15,20 @@
 	 */
 	class SimpleRouter extends AbstractRouter {
 		use LazyInjectTrait;
-
-		/**
-		 * @var IHttpRequest
-		 */
-		private $httpRequest;
 		/**
 		 * @var IRuntime
 		 */
-		private $runtime;
+		protected $runtime;
+		/**
+		 * @var IHttpRequest
+		 */
+		protected $httpRequest;
 
 		public function __construct(IRuntime $runtime) {
 			$this->runtime = $runtime;
 		}
 
-		public function lazyHttpRequest(IHttpRequest $httpRequest) {
+		final public function lazyHttpRequest(IHttpRequest $httpRequest) {
 			$this->httpRequest = $httpRequest;
 		}
 

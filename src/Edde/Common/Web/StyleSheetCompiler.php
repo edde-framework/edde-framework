@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Common\Web;
 
+	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Resource\IResourceList;
 	use Edde\Api\Resource\Storage\IFileStorage;
@@ -20,20 +21,23 @@
 		 * @var IResourceIndex
 		 */
 		protected $resourceIndex;
+		/**
+		 * @var ITempDirectory
+		 */
+		protected $tempDirectory;
 
 		/**
 		 * @param IFileStorage $fileStorage
 		 * @param IResourceIndex $resourceIndex
+		 * @param ITempDirectory $tempDirectory
 		 */
-		public function __construct(IFileStorage $fileStorage, IResourceIndex $resourceIndex) {
+		public function __construct(IFileStorage $fileStorage, IResourceIndex $resourceIndex, ITempDirectory $tempDirectory) {
 			$this->fileStorage = $fileStorage;
 			$this->resourceIndex = $resourceIndex;
+			$this->tempDirectory = $tempDirectory;
 		}
 
 		public function compile(IResourceList $resourceList) {
-			if ($this->fileStorage->hasFile($name = $resourceList->getResourceName() . '.css')) {
-				return $this->fileStorage->getFile($name);
-			}
 			$content = [];
 			foreach ($resourceList->getResourceList() as $resource) {
 				$current = $resource->get();
@@ -56,6 +60,6 @@
 				}
 				$content[] = $current;
 			}
-			return $this->fileStorage->file($name, implode("\n", $content));
+			return $this->fileStorage->store($this->tempDirectory->file($resourceList->getResourceName() . '.css', implode("\n", $content)));
 		}
 	}

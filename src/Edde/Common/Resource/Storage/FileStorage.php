@@ -96,37 +96,7 @@
 				throw new ResourceException(sprintf('Cannot create store folder [%s] for the resource [%s].', $directory, $url), 0, $e);
 			}
 			FileUtils::copy($url, $file = $directory->getDirectory() . '/' . $url->getResourceName());
-			$this->updateIndex($resource, $file);
 			return new FileResource($file);
-		}
-
-		protected function updateIndex(IResource $resource, $file) {
-			$url = $resource->getUrl();
-			$resourceStorable = $this->resourceIndex->createResourceStorable();
-			$resourceStorable->set('name', $url->getAbsoluteUrl());
-			$resourceStorable->set('extension', $url->getExtension());
-			$resourceStorable->set('url', (string)($file instanceof IUrl ? $file : (string)FileUtils::url($file)));
-			$resourceStorable->set('mime', $resource->getMime());
-			$this->resourceIndex->store($resourceStorable);
-		}
-
-		public function file($name, $content) {
-			$this->usse();
-			$this->updateIndex($resource = new FileResource($url = $this->storageDirectory->file($name, $content)
-				->getUrl()), $url);
-			return $resource;
-		}
-
-		public function hasFile($name) {
-			return $this->resourceIndex->query()
-				->nameLike('%' . $name)
-				->hasResource();
-		}
-
-		public function getFile($name) {
-			return $this->resourceIndex->query()
-				->nameLike('%' . $name)
-				->resource();
 		}
 
 		protected function prepare() {

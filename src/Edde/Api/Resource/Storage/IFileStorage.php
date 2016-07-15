@@ -13,34 +13,6 @@
 		public function store(IResource $resource);
 
 		/**
-		 * save the content of the given name to this storage and return a new IResource
-		 *
-		 * @param string $name
-		 * @param string $content
-		 *
-		 * @return IResource
-		 */
-		public function file($name, $content);
-
-		/**
-		 * check if the given file is already present in this FileStorage
-		 *
-		 * @param string $name
-		 *
-		 * @return bool
-		 */
-		public function hasFile($name);
-
-		/**
-		 * retrieve file by the given name
-		 *
-		 * @param string $name
-		 *
-		 * @return IResource
-		 */
-		public function getFile($name);
-
-		/**
 		 * check if the given url is known in the file storage; requested URL shu7ld be external resource
 		 *
 		 * @param IUrl $url

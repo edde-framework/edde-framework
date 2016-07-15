@@ -6,16 +6,20 @@
 	 */
 	interface IHttpResponse {
 		/**
+		 * set the http response code
+		 *
+		 * @param int $code
+		 *
+		 * @return $this
+		 */
+		public function setCode($code);
+
+		/**
 		 * return http response code
 		 *
 		 * @return int
 		 */
 		public function getCode();
-
-		/**
-		 * @return IHeaderList
-		 */
-		public function getHeaderList();
 
 		/**
 		 * @param IHeaderList $headerList
@@ -25,9 +29,9 @@
 		public function setHeaderList(IHeaderList $headerList);
 
 		/**
-		 * @return ICookieList|ICookie[]
+		 * @return IHeaderList
 		 */
-		public function getCookieList();
+		public function getHeaderList();
 
 		/**
 		 * @param ICookieList $cookieList
@@ -35,6 +39,18 @@
 		 * @return $this
 		 */
 		public function setCookieList(ICookieList $cookieList);
+
+		/**
+		 * @return ICookieList|ICookie[]
+		 */
+		public function getCookieList();
+
+		/**
+		 * @param callable $callback
+		 *
+		 * @return $this
+		 */
+		public function setRenderCallback(callable $callback);
 
 		/**
 		 * execute response "rendering"; basically it "echoes" output

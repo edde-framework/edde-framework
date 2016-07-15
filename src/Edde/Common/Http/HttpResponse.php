@@ -24,25 +24,27 @@
 		 */
 		private $renderCallback;
 
-		/**
-		 * @param int $code
-		 * @param IHeaderList $headerList
-		 * @param ICookieList $cookieList
-		 * @param callable $renderCallback
-		 */
-		public function __construct($code, IHeaderList $headerList, ICookieList $cookieList, callable $renderCallback) {
+		public function __construct() {
+			$this->code = 200;
+			$this->headerList = new HeaderList();
+			$this->cookieList = new CookieList();
+			$this->renderCallback = function () {
+				http_response_code($this->getCode());
+				foreach ($this->getHeaderList() as $header => $value) {
+					header("$header: $value");
+				}
+				foreach ($this->getCookieList() as $cookie) {
+					setcookie($cookie->getName(), $cookie->getValue(), $cookie->getExpire(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly());
+				}
+			};
+		}
+
+		public function setCode($code) {
 			$this->code = $code;
-			$this->headerList = $headerList;
-			$this->cookieList = $cookieList;
-			$this->renderCallback = $renderCallback;
 		}
 
 		public function getCode() {
 			return $this->code;
-		}
-
-		public function getHeaderList() {
-			return $this->headerList;
 		}
 
 		public function setHeaderList(IHeaderList $headerList) {
@@ -50,12 +52,21 @@
 			return $this;
 		}
 
-		public function getCookieList() {
-			return $this->cookieList;
+		public function getHeaderList() {
+			return $this->headerList;
 		}
 
 		public function setCookieList(ICookieList $cookieList) {
 			$this->cookieList = $cookieList;
+			return $this;
+		}
+
+		public function getCookieList() {
+			return $this->cookieList;
+		}
+
+		public function setRenderCallback(callable $callback) {
+			$this->renderCallback = $callback;
 			return $this;
 		}
 
