@@ -1,0 +1,36 @@
+:4080
+gzip
+
+log logs/caddy-access.log {
+	rotate {
+		size    12
+		age     1
+		keep    3
+	}
+}
+
+errors {
+	log logs/caddy-error.log {
+		size    12
+		age     1
+		keep    3
+	}
+}
+
+fastcgi / 127.0.0.1:9080 {
+	index /index.php
+}
+rewrite / {
+	to {path} /index.php
+}
+mime {
+	.css    text/css
+	.js     application/x-javascript
+	.html   text/html
+	.htm    text/html
+	.xml    text/xml
+	.rss    text/xml
+	.png    image/png
+	.jpeg   image/jpeg
+	.gif    image/gif
+}
