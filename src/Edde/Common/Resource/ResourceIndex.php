@@ -3,6 +3,7 @@
 
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crypt\ICrypt;
+	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Resource\IResourceQuery;
 	use Edde\Api\Resource\IResourceStorable;
@@ -62,13 +63,7 @@
 			try {
 				$this->storage->execute(new DeleteQuery($this->resourceSchema->getSchemaName()));
 				foreach ($this->scanner->scan() as $resource) {
-					$resourceStorable = $this->createResourceStorable();
-					$url = $resource->getUrl();
-					$resourceStorable->set('url', $url->getAbsoluteUrl());
-					$resourceStorable->set('name', $resource->getName());
-					$resourceStorable->set('extension', $url->getExtension());
-					$resourceStorable->set('mime', $resource->getMime());
-					$this->storage->store($resourceStorable);
+					$this->save($resource);
 				}
 				$this->storage->commit();
 			} catch (\Exception $e) {
@@ -89,10 +84,22 @@
 			return $this;
 		}
 
+		public function save(IResource $resource) {
+			$url = $resource->getUrl();
+			$resourceStorable = $this->createResourceStorable();
+			$resourceStorable->set('url', $url->getAbsoluteUrl());
+			$resourceStorable->set('base', $resource->getBase());
+			$resourceStorable->set('name', $resource->getName());
+			$resourceStorable->set('extension', $url->getExtension());
+			$resourceStorable->set('mime', $resource->getMime());
+			$this->store($resourceStorable);
+			return $this;
+		}
+
 		public function getResourceCollection(IResourceQuery $resourceQuery) {
 			$this->usse();
 			foreach ($this->storage->collection($this->resourceSchema, $resourceQuery->getQuery()) as $storable) {
-				yield new Resource(Url::create($storable->get('url')), $storable->get('name'), $storable->get('mime'));
+				yield new Resource(Url::create($storable->get('url')), $storable->get('base'), $storable->get('name'), $storable->get('mime'));
 			}
 		}
 
@@ -109,7 +116,7 @@
 		public function getResource(IResourceQuery $resourceQuery) {
 			$this->usse();
 			$storable = $this->storage->storable($this->resourceSchema, $resourceQuery->getQuery());
-			return new Resource(Url::create($storable->get('url')), $storable->get('name'), $storable->get('mime'));
+			return new Resource(Url::create($storable->get('url')), $storable->get('base'), $storable->get('name'), $storable->get('mime'));
 		}
 
 		public function query() {

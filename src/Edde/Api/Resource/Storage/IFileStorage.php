@@ -6,9 +6,11 @@
 
 	interface IFileStorage {
 		/**
+		 * save the given resource to the file storage and return a new resource (local resource file)
+		 *
 		 * @param IResource $resource
 		 *
-		 * @return $this
+		 * @return IResource
 		 */
 		public function store(IResource $resource);
 

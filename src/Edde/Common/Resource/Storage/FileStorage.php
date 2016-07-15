@@ -63,9 +63,7 @@
 		 * @throws ResourceException
 		 */
 		public function getResource(IResource $resource) {
-			if ($this->hasResource($resource->getUrl()) === false) {
-				return $this->store($resource);
-			}
+			$this->usse();
 			return $this->resourceIndex->query()
 				->name($resource->getUrl()
 					->getAbsoluteUrl())
@@ -73,19 +71,12 @@
 		}
 
 		public function hasResource(IUrl $url) {
+			$this->usse();
 			$resourceQuery = $this->resourceIndex->query();
 			$resourceQuery->name($url->getAbsoluteUrl());
 			return $this->resourceIndex->hasResource($resourceQuery);
 		}
 
-		/**
-		 * @param IResource $resource
-		 *
-		 * @return IResource
-		 * @throws FileException
-		 * @throws CrateException
-		 * @throws ResourceException
-		 */
 		public function store(IResource $resource) {
 			$this->usse();
 			$url = $resource->getUrl();
@@ -96,7 +87,7 @@
 				throw new ResourceException(sprintf('Cannot create store folder [%s] for the resource [%s].', $directory, $url), 0, $e);
 			}
 			FileUtils::copy($url, $file = $directory->getDirectory() . '/' . $url->getResourceName());
-			return new FileResource($file);
+			return new FileResource($file, dirname($this->storageDirectory->getDirectory()));
 		}
 
 		protected function prepare() {

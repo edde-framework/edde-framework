@@ -23,6 +23,15 @@
 		public function store(IResourceStorable $resourceStorable);
 
 		/**
+		 * shortcut for saving IResourceStorable
+		 *
+		 * @param IResource $resource
+		 *
+		 * @return $this
+		 */
+		public function save(IResource $resource);
+
+		/**
 		 * return collection of resources by the given query
 		 *
 		 * @param IResourceQuery $resourceQuery

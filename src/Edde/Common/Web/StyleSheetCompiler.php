@@ -55,8 +55,8 @@
 					$resource = $this->resourceIndex->query()
 						->urlLike('%' . $file)
 						->resource();
-					$path = $this->fileStorage->getPath($resource);
-					$current = str_replace($item, '"' . $path . '"', $current);
+					$this->resourceIndex->save($resource = $this->fileStorage->store($resource));
+					$current = str_replace($item, '"' . $resource->getRelativePath() . '"', $current);
 				}
 				$content[] = $current;
 			}

@@ -15,6 +15,22 @@
 		public function getUrl();
 
 		/**
+		 * return relative path; if there is no base dir either in a resource or specified in parameter, exception should be thrown; if base dir is not subset of path, exception should be thrown
+		 *
+		 * @param string|null $base
+		 *
+		 * @return string
+		 */
+		public function getRelativePath($base = null);
+
+		/**
+		 * return base path if set
+		 *
+		 * @return string|null
+		 */
+		public function getBase();
+
+		/**
 		 * return firendy name of this resource; this can be arbitrary string
 		 *
 		 * @return string

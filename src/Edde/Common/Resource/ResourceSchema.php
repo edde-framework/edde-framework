@@ -26,6 +26,7 @@
 				new Property($this, 'guid', 'string', true, true, true, null),
 				new Property($this, 'name', 'string', true, false, false, null),
 				new Property($this, 'url', 'string', true, true, false, null),
+				new Property($this, 'base', 'string', false, false, false, null),
 				new Property($this, 'extension', 'string', false, false, false, null),
 				new Property($this, 'mime', 'string', false, false, false, null),
 			]);

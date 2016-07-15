@@ -7,12 +7,13 @@
 
 	class FileResource extends Resource {
 		/**
-		 * @param string $file
+		 * @param string|IUrl $file
+		 * @param string|null $base
 		 *
 		 * @throws FileException
 		 */
-		public function __construct($file) {
-			parent::__construct($file instanceof IUrl ? $file : FileUtils::url($file), null, null);
+		public function __construct($file, $base = null) {
+			parent::__construct($file instanceof IUrl ? $file : FileUtils::url($file), $base);
 		}
 
 		public function getName() {
