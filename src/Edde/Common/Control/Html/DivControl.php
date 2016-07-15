@@ -17,5 +17,6 @@
 		}
 
 		protected function onPrepare() {
+			parent::setTag('div');
 		}
 	}
