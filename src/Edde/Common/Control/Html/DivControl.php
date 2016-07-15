@@ -16,7 +16,11 @@
 			return true;
 		}
 
-		protected function onPrepare() {
+		protected function prepare() {
+			parent::prepare();
 			parent::setTag('div');
+		}
+
+		protected function onPrepare() {
 		}
 	}
