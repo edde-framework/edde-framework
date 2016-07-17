@@ -3,13 +3,19 @@ var Edde = {
 		return $.post('?control=' + control + '&action=' + action, parameterList || {}).fail(function () {
 			alert('General server error; this should be fixed by a developer.');
 		}).done(function (data) {
-			$.each(data, function (selector, value) {
-				switch (value.action) {
-					case 'replace':
-						$(selector).replaceWith(value.source);
-						break;
-				}
-			});
+			console.log(data);
+			if (data.redirect) {
+				window.location.replace(data.redirect);
+			}
+			if (data.selector) {
+				$.each(data.selector, function (selector, value) {
+					switch (value.action) {
+						case 'replace':
+							$(selector).replaceWith(value.source);
+							break;
+					}
+				});
+			}
 		});
 	}
 };

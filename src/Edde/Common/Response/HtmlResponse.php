@@ -6,9 +6,18 @@
 
 	class HtmlResponse extends AbstractResponse {
 		/**
+		 * @var string
+		 */
+		protected $redirect;
+		/**
 		 * @var IHtmlControl[]
 		 */
 		protected $controlList = [];
+
+		public function redirect($redirect) {
+			$this->redirect = $redirect;
+			return $this;
+		}
 
 		public function addControl($selector, IHtmlControl $htmlControl) {
 			$this->controlList[$selector] = $htmlControl;
@@ -17,15 +26,18 @@
 
 		public function send() {
 			$httpResponse = new HttpResponse();
-			$httpResponse->getHeaderList()
-				->set('Content-Type', 'application/json');
+			$headerList = $httpResponse->getHeaderList();
+			$headerList->set('Content-Type', 'application/json');
 			$httpResponse->render();
 			$response = [];
 			foreach ($this->controlList as $selector => $control) {
-				$response[$selector] = [
+				$response['selector'][$selector] = [
 					'action' => 'replace',
 					'source' => $control->render(),
 				];
+			}
+			if ($this->redirect !== null) {
+				$response['redirect'] = $this->redirect;
 			}
 			echo json_encode($response);
 		}

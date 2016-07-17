@@ -25,6 +25,13 @@
 		public function getTag();
 
 		/**
+		 * @param string $text
+		 *
+		 * @return $this
+		 */
+		public function setText($text);
+
+		/**
 		 * tells if this control is paired tag
 		 *
 		 * @return bool
