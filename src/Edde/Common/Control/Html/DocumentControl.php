@@ -58,8 +58,12 @@
 			return $this;
 		}
 
-		protected function onPrepare() {
+		protected function prepare() {
+			parent::prepare();
 			parent::addControl($this->head = new HeadControl());
 			parent::addControl($this->body = new BodyControl());
+		}
+
+		protected function onPrepare() {
 		}
 	}

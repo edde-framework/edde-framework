@@ -8,7 +8,6 @@
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Control\Html\HtmlPresenter;
 	use Edde\Common\Resource\FileResource;
-	use Edde\Common\Response\HtmlResponse;
 
 	class EddePresenter extends HtmlPresenter {
 		use LazyInjectTrait;
@@ -20,6 +19,10 @@
 		 * @var IResourceIndex
 		 */
 		protected $resourceIndex;
+		/**
+		 * @var IHtmlControl
+		 */
+		protected $message;
 
 		final public function lazyUpgradeManager(IUpgradeManager $upgradeManager) {
 			$this->upgradeManager = $upgradeManager;
@@ -30,11 +33,12 @@
 		}
 
 		public function actionSetup() {
+			$this->usse();
 			$this->setTitle('Edde Control');
 			$this->addStyleSheet(new FileResource(__DIR__ . '/assets/css/kube.css'));
 			$this->addJavaScript(new FileResource(__DIR__ . '/assets/js/jquery-3.1.0.js'));
 			$this->addJavaScript(new FileResource(__DIR__ . '/assets/js/edde-framework.js'));
-			$this->addControl($this->createGlobalMessage());
+			$this->addControl($this->message);
 			$this->addControl($content = $this->createDivControl());
 			$content->addClass('row centered');
 			$content->addControl($column = $this->createDivControl());
@@ -44,36 +48,33 @@
 			$this->send();
 		}
 
-		/**
-		 * @return IHtmlControl
-		 */
-		protected function createGlobalMessage() {
-			return $this->createDivControl()
-				->addClass('alert')
-				->setId('global-message');
-		}
-
 		public function handleOnUpgrade() {
-			$htmlResponse = new HtmlResponse();
-			$globalMessage = $this->createGlobalMessage();
+			$this->usse();
+			$this->addControl($this->message);
 			try {
 				$this->upgradeManager->upgrade();
 			} catch (EddeException $e) {
-				$htmlResponse->addControl('#' . $globalMessage->getId(), $globalMessage->addClass('error')
-					->setText($e->getMessage()));
+				$this->message->addClass('error')
+					->setText($e->getMessage());
 			}
-			$htmlResponse->send();
+			$this->response();
 		}
 
 		public function handleOnUpdateIndex() {
-			$htmlResponse = new HtmlResponse();
-			$globalMessage = $this->createGlobalMessage();
+			$this->usse();
+			$this->addControl($this->message);
 			try {
 				$this->resourceIndex->update();
 			} catch (EddeException $e) {
-				$htmlResponse->addControl('#' . $globalMessage->getId(), $globalMessage->addClass('error')
-					->setText($e->getMessage()));
+				$this->message->addClass('error')
+					->setText($e->getMessage());
 			}
-			$htmlResponse->send();
+			$this->response();
+		}
+
+		protected function onPrepare() {
+			$this->message = $this->createDivControl()
+				->addClass('alert')
+				->setId('global-message');
 		}
 	}

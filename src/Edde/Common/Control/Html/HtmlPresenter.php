@@ -8,6 +8,7 @@
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Control\ControlTrait;
 	use Edde\Common\Resource\ResourceList;
+	use Edde\Common\Response\HtmlResponse;
 
 	/**
 	 * Formal root control for displaying page.
@@ -64,6 +65,18 @@
 			$this->head->addJavaScript($this->javaScriptCompiler->compile($this->javaScriptList)
 				->getRelativePath());
 			return parent::render();
+		}
+
+		/**
+		 * method specific for this "presenter"; this will sent a HtmlResponse with controls currently set to the body
+		 *
+		 * @return $this
+		 */
+		public function response() {
+			$htmlResponse = new HtmlResponse();
+			$htmlResponse->setControlList($this->body->getControlList());
+			$htmlResponse->send();
+			return $this;
 		}
 
 		protected function prepare() {

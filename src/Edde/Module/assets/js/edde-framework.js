@@ -3,7 +3,6 @@ var Edde = {
 		return $.post('?control=' + control + '&action=' + action, parameterList || {}).fail(function () {
 			alert('General server error; this should be fixed by a developer.');
 		}).done(function (data) {
-			console.log(data);
 			if (data.redirect) {
 				window.location.replace(data.redirect);
 			}
@@ -21,8 +20,11 @@ var Edde = {
 };
 
 $(document).ready(function () {
-	$(document).on('click', '.edde-clickable', function () {
+	$(document).on('click', '.edde-clickable:not(.disabled)', function () {
 		var $this = $(this);
-		Edde.execute($this.data('control'), $this.data('action'));
+		$this.addClass('disabled');
+		Edde.execute($this.data('control'), $this.data('action')).always(function () {
+			$this.removeClass('disabled');
+		});
 	});
 });

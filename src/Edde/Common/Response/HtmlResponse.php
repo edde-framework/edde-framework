@@ -4,6 +4,10 @@
 	use Edde\Api\Control\Html\IHtmlControl;
 	use Edde\Common\Http\HttpResponse;
 
+	/**
+	 * This response is useful for a response to the html page; there must be "something" listening to the specific data of this
+	 * response.
+	 */
 	class HtmlResponse extends AbstractResponse {
 		/**
 		 * @var string
@@ -19,8 +23,16 @@
 			return $this;
 		}
 
-		public function addControl($selector, IHtmlControl $htmlControl) {
-			$this->controlList[$selector] = $htmlControl;
+		public function setControlList($controlList) {
+			$this->controlList = [];
+			foreach ($controlList as $selector => $control) {
+				$this->addControl($control, is_string($selector) ? $selector : null);
+			}
+			return $this;
+		}
+
+		public function addControl(IHtmlControl $htmlControl, $selector = null) {
+			$this->controlList[$selector ?: '#' . $htmlControl->getId()] = $htmlControl;
 			return $this;
 		}
 
