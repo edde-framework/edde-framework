@@ -42,8 +42,7 @@
 
 		public function render() {
 			$this->usse();
-			echo "<!DOCTYPE html>\n";
-			parent::render();
+			return "<!DOCTYPE html>\n" . parent::render();
 		}
 
 		/**

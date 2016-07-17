@@ -26,6 +26,7 @@
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Upgrade\IUpgradeManager;
+	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Application\Application;
 	use Edde\Common\Cache\CacheDirectory;
@@ -46,6 +47,7 @@
 	use Edde\Common\Runtime\SetupHandler;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Upgrade\UpgradeManager;
+	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Resource\Scanner\FilesystemScanner;
@@ -117,6 +119,7 @@
 					return $resourceIndex->createResourceStorable();
 				}, false),
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
+				IJavaScriptCompiler::class => JavaScriptCompiler::class,
 			], $factoryList));
 			return $setupHandler;
 		}

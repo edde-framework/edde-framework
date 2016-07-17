@@ -1,7 +1,5 @@
 <?php
-	namespace Edde\Ext\Response;
-
-	use Edde\Common\Response\AbstractResponse;
+	namespace Edde\Common\Response;
 
 	class JsonResponse extends AbstractResponse {
 		/**

@@ -193,4 +193,11 @@
 			$this->fragment = $fragment;
 			return $this;
 		}
+
+		public function getParameter($name, $default = null) {
+			if (isset($this->query[$name]) === false) {
+				return $default;
+			}
+			return $this->query[$name];
+		}
 	}

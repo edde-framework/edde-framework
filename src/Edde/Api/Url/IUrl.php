@@ -57,6 +57,14 @@
 		public function getQuery();
 
 		/**
+		 * @param string $name
+		 * @param string|null $default
+		 *
+		 * @return string
+		 */
+		public function getParameter($name, $default = null);
+
+		/**
 		 * @return string
 		 */
 		public function getFragment();

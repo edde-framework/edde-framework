@@ -4,7 +4,7 @@
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceList;
 
-	interface IJavaScriptCompiler extends IResource {
+	interface IJavaScriptCompiler {
 		/**
 		 * compile the given list into single resource
 		 *

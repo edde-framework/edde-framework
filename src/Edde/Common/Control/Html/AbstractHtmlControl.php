@@ -16,13 +16,8 @@
 
 		public function setId($id) {
 			$this->usse();
-			$this->node->setAttribute('id', $id);
+			$this->setAttribute('id', $id);
 			return $this;
-		}
-
-		public function getId() {
-			$this->usse();
-			return $this->node->getAttribute('id');
 		}
 
 		public function setAttribute($attribute, $value) {
@@ -36,6 +31,22 @@
 		public function getAttributeList() {
 			$this->usse();
 			return $this->node->getAttribute('attribute-list', []);
+		}
+
+		public function getId() {
+			$this->usse();
+			return $this->getAttribute('id');
+		}
+
+		public function getAttribute($name, $default = null) {
+			$attributeList = $this->node->getAttribute('attribute-list', []);
+			return isset($attributeList[$name]) || array_key_exists($name, $attributeList) ? $attributeList[$name] : $default;
+		}
+
+		public function setText($text) {
+			$this->usse();
+			$this->node->setValue($text);
+			return $this;
 		}
 
 		public function setAttributeList(array $attributeList) {
@@ -72,45 +83,49 @@
 			return isset($attributeList['class']) ? $attributeList['class'] : [];
 		}
 
+		public function send() {
+			echo $this->render();
+		}
+
 		public function render() {
 			$this->usse();
+			$content = [];
 			/** @var $control IHtmlControl */
 			if (($tag = $this->getTag()) === null) {
 				foreach ($this->getControlList() as $control) {
-					$control->render();
+					$content[] = $control->render();
 				}
-				return $this;
+				return implode('', $content);
 			}
-			$indent = str_repeat("\t", $this->node->getLevel());
-			echo $indent;
-			echo '<' . $this->getTag();
+			$content[] = $indent = str_repeat("\t", $this->node->getLevel());
+			$content[] = '<' . $this->getTag();
 			foreach ($this->getAttributeList() as $name => $list) {
 				if (is_array($list)) {
-					echo ' ' . $name . '="' . implode(' ', $list) . '"';
+					$content[] = ' ' . $name . '="' . implode(' ', $list) . '"';
 					continue;
 				}
-				echo ' ' . $name . '="' . $list . '"';
+				$content[] = ' ' . $name . '="' . $list . '"';
 			}
 			$pair = '>';
-			echo $pair;
+			$content[] = $pair;
 			$newline = "\n";
 			if (($value = $this->node->getValue()) !== null) {
 				$newline = null;
 				$indent = null;
-				echo $value;
+				$content[] = $value;
 			}
 			if ($this->node->isLeaf() && $this->isPair() === true) {
 				$newline = null;
 				$indent = null;
 			}
-			echo $newline;
+			$content[] = $newline;
 			foreach ($this->getControlList() as $control) {
-				$control->render();
+				$content[] = $control->render();
 			}
 			if ($this->isPair()) {
-				echo $indent . '</' . $this->getTag() . ">\n";
+				$content[] = $indent . '</' . $this->getTag() . ">\n";
 			}
-			return $this;
+			return implode('', $content);
 		}
 
 		public function getTag() {

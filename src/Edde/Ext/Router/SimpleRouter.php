@@ -38,14 +38,18 @@
 				return null;
 			}
 			$url = $this->httpRequest->getUrl();
-			$pathList = $url->getPathList();
-			$action = StringUtils::camelize(array_pop($pathList));
-			foreach ($pathList as &$path) {
-				$path = StringUtils::camelize($path);
-			}
-			unset($path);
-			if (class_exists($class = implode('\\', $pathList)) === false) {
-				return null;
+			$class = $url->getParameter('control', false);
+			$action = $url->getParameter('action', false);
+			if ($action === false) {
+				$pathList = $url->getPathList();
+				$action = StringUtils::camelize(array_pop($pathList));
+				foreach ($pathList as &$path) {
+					$path = StringUtils::camelize($path);
+				}
+				unset($path);
+				if (class_exists($class = implode('\\', $pathList)) === false) {
+					return null;
+				}
 			}
 			$method = 'action' . $action;
 			if ($this->httpRequest->isMethod('POST')) {

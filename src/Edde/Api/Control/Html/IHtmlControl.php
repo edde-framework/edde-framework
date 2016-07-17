@@ -114,9 +114,16 @@
 		public function getControlList();
 
 		/**
-		 * execute output rendering of this control
+		 * execute output rendering of this control - return string version of this control
+		 *
+		 * @return string
+		 */
+		public function render();
+
+		/**
+		 * execute "echo" of this component
 		 *
 		 * @return $this
 		 */
-		public function render();
+		public function send();
 	}
