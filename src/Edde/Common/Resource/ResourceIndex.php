@@ -73,17 +73,6 @@
 			return $this;
 		}
 
-		public function createResourceStorable() {
-			$this->crateFactory->fill($resourceStorable = new ResourceStorable($this->resourceSchema));
-			$resourceStorable->set('guid', $this->crypt->guid());
-			return $resourceStorable;
-		}
-
-		public function store(IResourceStorable $resourceStorable) {
-			$this->storage->store($resourceStorable);
-			return $this;
-		}
-
 		public function save(IResource $resource) {
 			$url = $resource->getUrl();
 			$resourceStorable = $this->createResourceStorable();
@@ -93,6 +82,18 @@
 			$resourceStorable->set('extension', $url->getExtension());
 			$resourceStorable->set('mime', $resource->getMime());
 			$this->store($resourceStorable);
+			return $this;
+		}
+
+		public function createResourceStorable() {
+			$this->usse();
+			$this->crateFactory->fill($resourceStorable = new ResourceStorable($this->resourceSchema));
+			$resourceStorable->set('guid', $this->crypt->guid());
+			return $resourceStorable;
+		}
+
+		public function store(IResourceStorable $resourceStorable) {
+			$this->storage->store($resourceStorable);
 			return $this;
 		}
 

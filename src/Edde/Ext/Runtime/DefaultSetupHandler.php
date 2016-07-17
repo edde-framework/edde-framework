@@ -2,6 +2,7 @@
 	namespace Edde\Ext\Runtime;
 
 	use Edde\Api\Application\IApplication;
+	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Control\IControlFactory;
@@ -27,6 +28,7 @@
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Application\Application;
+	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Control\ControlFactory;
@@ -46,6 +48,7 @@
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Common\Web\StyleSheetCompiler;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
+	use Edde\Ext\Resource\Scanner\FilesystemScanner;
 	use Edde\Ext\Router\CliRouter;
 	use Edde\Ext\Router\SimpleRouter;
 
@@ -89,16 +92,19 @@
 				ITempDirectory::class => function (IRootDirectory $rootDirectory) {
 					return new TempDirectory($rootDirectory->getDirectory() . '/temp');
 				},
+				ICacheDirectory::class => function (IRootDirectory $rootDirectory) {
+					return new CacheDirectory($rootDirectory->getDirectory() . '/temp/cache');
+				},
 				IStorageDirectory::class => function (IRootDirectory $rootDirectory) {
 					return new StorageDirectory($rootDirectory->getDirectory() . '/.storage');
 				},
 				ICrypt::class => Crypt::class,
-				IScanner::class => function () {
-					throw new RuntimeException(sprintf('If you want use [%s], you must register it to the container!', IScanner::class));
+				IScanner::class => function (IRootDirectory $rootDirectory) {
+					return new FilesystemScanner($rootDirectory);
 				},
 				IFileStorage::class => FileStorage::class,
 				IDriver::class => function () {
-					throw new RuntimeException(sprintf('If you want use DatabaseStorage (or [%s]), you must register it to the container!', IDriver::class));
+					throw new RuntimeException(sprintf('If you want to use DatabaseStorage (or [%s]), you must register it to the container at first!', IDriver::class));
 				},
 				IStorage::class => DatabaseStorage::class,
 				ICrateFactory::class => CrateFactory::class,

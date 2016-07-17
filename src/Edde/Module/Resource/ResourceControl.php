@@ -1,5 +1,5 @@
 <?php
-	namespace Edde\Runtime\Resource;
+	namespace Edde\Module\Resource;
 
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Common\Control\AbstractControl;

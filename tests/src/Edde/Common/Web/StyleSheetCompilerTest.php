@@ -88,7 +88,7 @@
 		}
 
 		public function testCommon() {
-			$styleSheetCompiler = new StyleSheetCompiler($fileStorage = new FileStorage($this->resourceIndex, new RootDirectory(__DIR__), new StorageDirectory(__DIR__ . '/public')), $this->resourceIndex, $this->tempDirectory);
+			$styleSheetCompiler = new StyleSheetCompiler($fileStorage = new FileStorage($this->resourceIndex, new RootDirectory(__DIR__), new StorageDirectory(__DIR__ . '/public')), $this->tempDirectory);
 
 			$resourceList = new ResourceList();
 			$resourceList->addResource(new FileResource(__DIR__ . '/assets/css/font-awesome.css'));
@@ -110,14 +110,8 @@
 					"'",
 				], null, $url);
 				self::assertFileExists(__DIR__ . '/' . $url);
-				self::assertTrue($this->resourceIndex->query()
-					->urlLike('%' . $url)
-					->hasResource(), sprintf('Missing resource [%s] in the resource index.', $url));
 			}
 			self::assertEquals(5, $count);
-			$styleSheet = $fileStorage->getResource($resource);
-			self::assertFileExists($styleSheet->getUrl()
-				->getAbsoluteUrl());
 		}
 
 		protected function tearDown() {

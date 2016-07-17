@@ -1,5 +1,5 @@
 <?php
-	namespace Edde\Runtime\Upgrade;
+	namespace Edde\Module\Upgrade;
 
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Control\AbstractControl;

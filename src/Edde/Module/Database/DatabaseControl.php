@@ -1,5 +1,5 @@
 <?php
-	namespace Edde\Runtime\Database;
+	namespace Edde\Module\Database;
 
 	use Edde\Common\Control\AbstractControl;
 

@@ -71,11 +71,22 @@
 		public function getAttribute($name, $default = null);
 
 		/**
+		 * replace current attribute list by the given one
+		 *
 		 * @param array $attributeList
 		 *
 		 * @return $this
 		 */
 		public function setAttributeList(array $attributeList);
+
+		/**
+		 * add the given attribute list to the current one (overriding same keys)
+		 *
+		 * @param array $attributeList
+		 *
+		 * @return $this
+		 */
+		public function addAttributeList(array $attributeList);
 
 		/**
 		 * @return array
@@ -88,6 +99,13 @@
 		 * @return $this
 		 */
 		public function setMetaList(array $metaList);
+
+		/**
+		 * @param array $metaList
+		 *
+		 * @return $this
+		 */
+		public function addMetaList(array $metaList);
 
 		/**
 		 * @param string $name

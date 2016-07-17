@@ -38,6 +38,12 @@
 			return $this->node->getAttribute('attribute-list', []);
 		}
 
+		public function setAttributeList(array $attributeList) {
+			$this->usse();
+			$this->node->setAttribute('attribute-list', $attributeList);
+			return $this;
+		}
+
 		public function hasAttribute($attribute) {
 			$attributeList = $this->getAttributeList();
 			return empty($attributeList[$attribute]) === false;
@@ -68,7 +74,7 @@
 
 		public function render() {
 			$this->usse();
- 			/** @var $control IHtmlControl */
+			/** @var $control IHtmlControl */
 			if (($tag = $this->getTag()) === null) {
 				foreach ($this->getControlList() as $control) {
 					$control->render();

@@ -95,6 +95,11 @@
 		}
 
 		public function setAttributeList(array $attributeList) {
+			$this->attributeList = $attributeList;
+			return $this;
+		}
+
+		public function addAttributeList(array $attributeList) {
 			foreach ($attributeList as $name => $value) {
 				$this->setAttribute($name, $value);
 			}
@@ -103,11 +108,6 @@
 
 		public function setAttribute($name, $value) {
 			$this->attributeList[$name] = $value;
-			return $this;
-		}
-
-		public function setMeta($name, $value) {
-			$this->metaList[$name] = $value;
 			return $this;
 		}
 
@@ -125,6 +125,18 @@
 
 		public function setMetaList(array $metaList) {
 			$this->metaList = $metaList;
+			return $this;
+		}
+
+		public function addMetaList(array $metaList) {
+			foreach ($metaList as $name => $value) {
+				$this->setMeta($name, $value);
+			}
+			return $this;
+		}
+
+		public function setMeta($name, $value) {
+			$this->metaList[$name] = $value;
 			return $this;
 		}
 
