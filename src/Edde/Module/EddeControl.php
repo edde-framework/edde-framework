@@ -6,10 +6,10 @@
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Container\LazyInjectTrait;
-	use Edde\Common\Control\Html\HtmlPresenter;
+	use Edde\Common\Control\Html\HtmlControl;
 	use Edde\Common\Resource\FileResource;
 
-	class EddePresenter extends HtmlPresenter {
+	class EddeControl extends HtmlControl {
 		use LazyInjectTrait;
 		/**
 		 * @var IUpgradeManager

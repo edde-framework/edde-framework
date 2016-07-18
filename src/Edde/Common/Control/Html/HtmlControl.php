@@ -13,7 +13,7 @@
 	/**
 	 * Formal root control for displaying page.
 	 */
-	class HtmlPresenter extends DocumentControl {
+	class HtmlControl extends DocumentControl {
 		use LazyInjectTrait;
 		use ControlTrait;
 
