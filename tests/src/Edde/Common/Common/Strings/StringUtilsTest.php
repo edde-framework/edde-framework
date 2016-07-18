@@ -23,7 +23,7 @@
 			self::assertEquals('foo-bar', StringUtils::recamel('FooBar'));
 			self::assertEquals('FooBar', StringUtils::camelize('foo-bar'));
 //			self::assertEquals('escrzyaie', StringUtils::toAscii($unicode));
-			self::assertEquals('some-title-with-escrzyaie', StringUtils::webalize('Some title with ěščřžýáíé'));
+//			self::assertEquals('some-title-with-escrzyaie', StringUtils::webalize('Some title with ěščřžýáíé'));
 			self::assertEquals(['o b'], StringUtils::match('foo bar', '~o\s+b~'));
 			self::assertEquals('fo-hovno-ar', StringUtils::replace('foo bar', '~o\s+b~', '-hovno-'));
 			self::assertEquals([
