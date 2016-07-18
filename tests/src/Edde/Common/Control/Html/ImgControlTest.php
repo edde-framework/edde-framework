@@ -8,9 +8,7 @@
 		public function testCommon() {
 			$imgControl = new ImgControl();
 			$imgControl->setSrc('/img/some-image.png');
-			ob_start();
-			$imgControl->render();
-			self::assertEquals("<img src=\"/img/some-image.png\">\n", ob_get_clean());
+			self::assertEquals("<img src=\"/img/some-image.png\">\n", $imgControl->render());
 		}
 
 		public function testImgTreeException() {

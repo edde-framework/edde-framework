@@ -7,18 +7,14 @@
 	class DivControlTest extends TestCase {
 		public function testCommon() {
 			$divControl = new DivControl();
-			ob_start();
-			$divControl->render();
-			self::assertEquals("<div></div>\n", ob_get_clean());
+			self::assertEquals("<div></div>\n", $divControl->render());
 		}
 
 		public function testDivClassList() {
 			$divControl = new DivControl();
 			$divControl->addClass('foo');
 			$divControl->addClass('bar');
-			ob_start();
-			$divControl->render();
-			self::assertEquals("<div class=\"foo bar\"></div>\n", ob_get_clean());
+			self::assertEquals("<div class=\"foo bar\"></div>\n", $divControl->render());
 		}
 
 		public function testDivException() {
@@ -33,11 +29,9 @@
 			$divControl->addClass('foo');
 			$divControl->addClass('bar');
 			$divControl->addControl((new DivControl())->addClass('one'));
-			ob_start();
-			$divControl->render();
 			self::assertEquals('<div class="foo bar">
 	<div class="one"></div>
 </div>
-', ob_get_clean());
+', $divControl->render());
 		}
 	}

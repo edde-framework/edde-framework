@@ -8,8 +8,6 @@
 			$document = new DocumentControl();
 			$document->getHead()
 				->setTitle('some meaningfull title');
-			ob_start();
-			$document->render();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -18,7 +16,7 @@
 	</head>
 	<body></body>
 </html>
-', ob_get_clean());
+', $document->render());
 		}
 
 		public function testDocumentStyleJavascript() {
@@ -29,8 +27,6 @@
 			$head->addStyleSheet('/style.css');
 			$head->addStyleSheet('/stylish-style.css');
 			$head->setTitle('some meaningfull title');
-			ob_start();
-			$document->render();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -43,6 +39,6 @@
 	</head>
 	<body></body>
 </html>
-', ob_get_clean());
+', $document->render());
 		}
 	}
