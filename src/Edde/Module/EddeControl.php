@@ -53,6 +53,8 @@
 			$this->addControl($this->message);
 			try {
 				$this->upgradeManager->upgrade();
+				$this->message->addClass('success')
+					->setText('application has been upgraded');
 			} catch (EddeException $e) {
 				$this->message->addClass('error')
 					->setText($e->getMessage());
@@ -65,6 +67,8 @@
 			$this->addControl($this->message);
 			try {
 				$this->resourceIndex->update();
+				$this->message->addClass('success')
+					->setText('resource index has been updated');
 			} catch (EddeException $e) {
 				$this->message->addClass('error')
 					->setText($e->getMessage());

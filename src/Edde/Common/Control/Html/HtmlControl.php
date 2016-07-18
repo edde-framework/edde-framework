@@ -16,7 +16,10 @@
 	class HtmlControl extends DocumentControl {
 		use LazyInjectTrait;
 		use ControlTrait;
-
+		/**
+		 * @var HtmlResponse
+		 */
+		protected $htmlResponse;
 		/**
 		 * @var IStyleSheetCompiler
 		 */
@@ -33,6 +36,10 @@
 		 * @var IResourceList
 		 */
 		protected $javaScriptList;
+
+		final public function lazyHtmlResponse(HtmlResponse $htmlResponse) {
+			$this->htmlResponse = $htmlResponse;
+		}
 
 		final public function lazyStyleSheetCompiler(IStyleSheetCompiler $styleSheetCompiler) {
 			$this->styleSheetCompiler = $styleSheetCompiler;
@@ -73,9 +80,8 @@
 		 * @return $this
 		 */
 		public function response() {
-			$htmlResponse = new HtmlResponse();
-			$htmlResponse->setControlList($this->body->getControlList());
-			$htmlResponse->send();
+			$this->htmlResponse->setControlList($this->body->getControlList());
+			$this->htmlResponse->send();
 			return $this;
 		}
 
