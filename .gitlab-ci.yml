@@ -6,8 +6,8 @@ variables:
 image: php:5.6
 
 before_script:
-    - apt-get update -yqq
-    - apt-get install git php5-xdebug libssl-dev -yqq
+    - apt-get -yqq update
+    - apt-get -yqq install git php5-xdebug
 
 stages:
     - test
