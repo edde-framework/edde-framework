@@ -67,10 +67,14 @@
 		}
 
 		public function render() {
-			$this->head->addStyleSheet($this->styleSheetCompiler->compile($this->styleSheetList)
-				->getRelativePath());
-			$this->head->addJavaScript($this->javaScriptCompiler->compile($this->javaScriptList)
-				->getRelativePath());
+			if ($this->styleSheetList->isEmpty() === false) {
+				$this->head->addStyleSheet($this->styleSheetCompiler->compile($this->styleSheetList)
+					->getRelativePath());
+			}
+			if ($this->javaScriptList->isEmpty() === false) {
+				$this->head->addJavaScript($this->javaScriptCompiler->compile($this->javaScriptList)
+					->getRelativePath());
+			}
 			return parent::render();
 		}
 

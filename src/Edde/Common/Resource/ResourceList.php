@@ -25,4 +25,8 @@
 		public function getResourceList() {
 			return new ArrayIterator($this->resourceList);
 		}
+
+		public function isEmpty() {
+			return empty($this->resourceList);
+		}
 	}

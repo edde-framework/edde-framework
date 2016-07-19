@@ -27,4 +27,9 @@
 		 * @return IResource[]|Iterator
 		 */
 		public function getResourceList();
+
+		/**
+		 * @return bool
+		 */
+		public function isEmpty();
 	}
