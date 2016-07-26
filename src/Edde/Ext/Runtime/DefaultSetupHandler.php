@@ -30,11 +30,16 @@
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Container\Factory\FactoryFactory;
+	use Edde\Common\Control\Html\BodyControl;
 	use Edde\Common\Control\Html\ButtonControl;
 	use Edde\Common\Control\Html\DivControl;
+	use Edde\Common\Control\Html\HeadControl;
+	use Edde\Common\Control\Html\JavaScriptControl;
 	use Edde\Common\Control\Html\MetaControl;
 	use Edde\Common\Control\Html\PasswordInputControl;
+	use Edde\Common\Control\Html\StyleSheetControl;
 	use Edde\Common\Control\Html\TextInputControl;
+	use Edde\Common\Control\Html\TitleControl;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
@@ -54,6 +59,7 @@
 	use Edde\Ext\Resource\Scanner\FilesystemScanner;
 	use Edde\Ext\Router\CliRouter;
 	use Edde\Ext\Router\SimpleRouter;
+	use Edde\Module\EddeControl;
 
 	class DefaultSetupHandler extends SetupHandler {
 		static public function create(ICacheFactory $cacheFactory = null, array $factoryList = []) {
@@ -118,9 +124,16 @@
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
 
+				EddeControl::class => EddeControl::class,
+
 				/**
 				 * Default set of controls
 				 */
+				HeadControl::class => FactoryFactory::create(HeadControl::class, HeadControl::class, false),
+				TitleControl::class => FactoryFactory::create(TitleControl::class, TitleControl::class, false),
+				StyleSheetControl::class => FactoryFactory::create(StyleSheetControl::class, StyleSheetControl::class, false),
+				JavaScriptControl::class => FactoryFactory::create(JavaScriptControl::class, JavaScriptControl::class, false),
+				BodyControl::class => FactoryFactory::create(BodyControl::class, BodyControl::class, false),
 				MetaControl::class => FactoryFactory::create(MetaControl::class, MetaControl::class, false),
 				DivControl::class => FactoryFactory::create(DivControl::class, DivControl::class, false),
 				TextInputControl::class => FactoryFactory::create(TextInputControl::class, TextInputControl::class, false),

@@ -62,7 +62,4 @@
 			$this->addClass('button edde-clickable');
 			$this->node->setValue($this->title);
 		}
-
-		protected function onPrepare() {
-		}
 	}

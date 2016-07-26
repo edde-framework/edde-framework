@@ -6,9 +6,12 @@
 	use Edde\Api\Schema\IProperty;
 	use Edde\Common\Control\Html\ButtonControl;
 	use Edde\Common\Control\Html\DivControl;
+	use Edde\Common\Control\Html\JavaScriptControl;
 	use Edde\Common\Control\Html\MetaControl;
 	use Edde\Common\Control\Html\PasswordInputControl;
+	use Edde\Common\Control\Html\StyleSheetControl;
 	use Edde\Common\Control\Html\TextInputControl;
+	use Edde\Common\Control\Html\TitleControl;
 
 	/**
 	 * This is helper trait for integration of a factory methods of Edde's control set.
@@ -39,6 +42,27 @@
 		public function createControl($control, ...$parameterList) {
 			$this->addControl($control = $this->container->create($control, ...$parameterList));
 			return $control;
+		}
+
+		/**
+		 * @return TitleControl
+		 */
+		public function createTitleControl() {
+			return $this->createControl(TitleControl::class);
+		}
+
+		/**
+		 * @return JavaScriptControl
+		 */
+		public function createJavaScriptControl() {
+			return $this->createControl(JavaScriptControl::class);
+		}
+
+		/**
+		 * @return StyleSheetControl
+		 */
+		public function createStyleSheetControl() {
+			return $this->createControl(StyleSheetControl::class);
 		}
 
 		/**

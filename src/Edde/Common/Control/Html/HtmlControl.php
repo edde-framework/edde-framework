@@ -52,6 +52,7 @@
 		public function setTitle($title) {
 			$this->getHead()
 				->setTitle($title);
+			return $this;
 		}
 
 		public function addStyleSheet(IResource $resource) {
@@ -93,10 +94,10 @@
 			parent::prepare();
 			$this->styleSheetList = new ResourceList();
 			$this->javaScriptList = new ResourceList();
-			$this->head->addControl($this->createMetaControl()
+			$this->head->createMetaControl()
 				->setAttributeList([
 					'name' => 'viewport',
 					'content' => 'width=device-width, initial-scale=1',
-				]));
+				]);
 		}
 	}

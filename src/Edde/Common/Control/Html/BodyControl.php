@@ -9,7 +9,4 @@
 		public function isPair() {
 			return true;
 		}
-
-		protected function onPrepare() {
-		}
 	}

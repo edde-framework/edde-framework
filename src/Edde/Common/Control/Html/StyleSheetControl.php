@@ -7,8 +7,9 @@
 			return $this;
 		}
 
-		protected function onPrepare() {
-			$this->setAttribute('rel', 'stylesheet');
-			$this->setAttribute('media', 'all');
+		protected function prepare() {
+			parent::prepare();
+			$this->setAttribute('rel', 'stylesheet')
+				->setAttribute('media', 'all');
 		}
 	}

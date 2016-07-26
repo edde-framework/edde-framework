@@ -8,7 +8,4 @@
 				$control->render();
 			}
 		}
-
-		protected function onPrepare() {
-		}
 	}

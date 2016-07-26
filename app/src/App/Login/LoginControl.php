@@ -41,7 +41,8 @@
 		public function handleOnLogin(LoginCrate $loginCrate) {
 		}
 
-		protected function onPrepare() {
+		protected function prepare() {
+			parent::prepare();
 			$this->loginCrateSchema = $this->schemaManager->getSchema(LoginCrate::class);
 		}
 	}

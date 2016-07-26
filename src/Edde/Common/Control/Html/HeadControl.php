@@ -28,7 +28,8 @@
 		 */
 		public function addJavaScript($src) {
 			$this->usse();
-			$this->addControl((new JavaScriptControl())->setSrc($src));
+			$this->createJavaScriptControl()
+				->setSrc($src);
 			return $this;
 		}
 
@@ -41,7 +42,8 @@
 		 */
 		public function addStyleSheet($href) {
 			$this->usse();
-			$this->addControl((new StyleSheetControl())->setHref($href));
+			$this->createStyleSheetControl()
+				->setHref($href);
 			return $this;
 		}
 
@@ -53,8 +55,10 @@
 			return $abstractNode instanceof MetaControl || $abstractNode instanceof LinkControl || $abstractNode instanceof TitleControl || $abstractNode instanceof JavaScriptControl;
 		}
 
-		protected function onPrepare() {
-			$this->addControl((new MetaControl())->setAttribute('charset', 'utf-8'));
-			$this->addControl($this->title = new TitleControl());
+		protected function prepare() {
+			parent::prepare();
+			$this->createMetaControl()
+				->setAttribute('charset', 'utf-8');
+			$this->title = $this->createTitleControl();
 		}
 	}

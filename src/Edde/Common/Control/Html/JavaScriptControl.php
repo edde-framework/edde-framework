@@ -14,7 +14,4 @@
 			$this->setAttribute('src', $src);
 			return $this;
 		}
-
-		protected function onPrepare() {
-		}
 	}

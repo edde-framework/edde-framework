@@ -45,7 +45,6 @@
 
 		public function handleOnUpgrade() {
 			$this->usse();
-			$this->addControl($this->message);
 			try {
 				$this->upgradeManager->upgrade();
 				$this->message->addClass('success')
@@ -59,7 +58,6 @@
 
 		public function handleOnUpdateIndex() {
 			$this->usse();
-			$this->addControl($this->message);
 			try {
 				$this->resourceIndex->update();
 				$this->message->addClass('success')
@@ -71,7 +69,8 @@
 			$this->response();
 		}
 
-		protected function onPrepare() {
+		protected function prepare() {
+			parent::prepare();
 			$this->message = $this->createDivControl()
 				->addClass('alert')
 				->setId('global-message');
