@@ -7,7 +7,7 @@
 	abstract class AbstractHtmlControl extends AbstractControl implements IHtmlControl {
 		public function setTag($tag, $pair = true) {
 			$this->usse();
-			$this->node->setAttributeList([
+			$this->node->addAttributeList([
 				'tag' => $tag,
 				'pair' => $pair,
 			]);

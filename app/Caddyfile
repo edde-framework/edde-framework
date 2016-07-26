@@ -20,9 +20,11 @@ errors {
 fastcgi / 127.0.0.1:9080 {
 	index /index.php
 }
+
 rewrite / {
 	to {path} /index.php
 }
+
 mime {
 	.css    text/css
 	.js     application/x-javascript
@@ -33,4 +35,16 @@ mime {
 	.png    image/png
 	.jpeg   image/jpeg
 	.gif    image/gif
+}
+
+header / {
+	# Enable HTTP Strict Transport Security (HSTS) to force clients to always
+	# connect via HTTPS (not recommended if only experimenting with HTTPS)
+	Strict-Transport-Security  "max-age=31536000;"
+	# Enable cross-site filter (XSS) and tell browser to block detected attacks
+	X-XSS-Protection "1; mode=block"
+	# Prevent some browsers from MIME-sniffing a response away from the declared Content-Type
+	X-Content-Type-Options "nosniff"
+	# Disallow the site to be rendered within a frame (clickjacking protection)
+	X-Frame-Options "DENY"
 }
