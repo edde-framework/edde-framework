@@ -1,26 +1,12 @@
 <?php
 	namespace Edde\Common\Node;
 
-	use Edde\Api\Node\IAbstractNode;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
 	use phpunit\framework\TestCase;
 
-	/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
-	class AlphaNode extends Node {
-		public function accept(IAbstractNode $abstractNode) {
-			return $abstractNode instanceof AlphaNode;
-		}
-	}
+	require_once(__DIR__ . '/assets.php');
 
-	/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
-	class BetaNode extends Node {
-		public function accept(IAbstractNode $abstractNode) {
-			return $abstractNode instanceof BetaNode;
-		}
-	}
-
-	/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 	class NodeTest extends TestCase {
 		public function testQuery() {
 			$queryList = [
@@ -673,5 +659,23 @@
 				$i++;
 			}
 			self::assertEquals(2, $i);
+		}
+
+		public function testMove() {
+			$node = new Node();
+			$alphaNode = new Node();
+			$betaNode = new Node();
+			$alphaNode->addNode($node);
+			self::assertEquals(1, $alphaNode->getNodeCount());
+			self::assertSame($node->getParent(), $alphaNode);
+			self::assertEmpty($betaNode->getNodeList());
+			$betaNode->addNode($node, true);
+			self::assertEquals(1, $betaNode->getNodeCount());
+			self::assertSame($node->getParent(), $betaNode);
+			self::assertEmpty($alphaNode->getNodeList());
+			$alphaNode->addNode($node, true);
+			self::assertEquals(1, $alphaNode->getNodeCount());
+			self::assertSame($node->getParent(), $alphaNode);
+			self::assertEmpty($betaNode->getNodeList());
 		}
 	}

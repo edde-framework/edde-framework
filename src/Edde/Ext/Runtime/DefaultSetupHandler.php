@@ -6,7 +6,6 @@
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Control\IControlFactory;
-	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crypt\ICrypt;
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\File\IRootDirectory;
@@ -33,7 +32,6 @@
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Control\ControlFactory;
-	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Crypt\Crypt;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
@@ -109,7 +107,6 @@
 					throw new RuntimeException(sprintf('If you want to use DatabaseStorage (or [%s]), you must register it to the container at first!', IDriver::class));
 				},
 				IStorage::class => DatabaseStorage::class,
-				ICrateFactory::class => CrateFactory::class,
 				ResourceStorable::class => function (IResourceIndex $resourceIndex) {
 					return $resourceIndex->createResourceStorable();
 				},

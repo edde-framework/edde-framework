@@ -1,6 +1,9 @@
 <?php
 	namespace Edde\Common\Control\Html;
 
+	use Edde\Api\Control\ControlException;
+	use Edde\Api\Control\Html\IHtmlControl;
+
 	class ButtonControl extends AbstractHtmlControl {
 		/**
 		 * @var string
@@ -30,6 +33,22 @@
 			$this->control = $control;
 			$this->action = $action;
 			$this->hint = $hint;
+		}
+
+		/**
+		 * bind action to the specific control; all data from that control will be sent to the action
+		 *
+		 * @param IHtmlControl $htmlControl
+		 *
+		 * @return $this
+		 * @throws ControlException
+		 */
+		public function bind(IHtmlControl $htmlControl) {
+			if (($id = $htmlControl->getId()) === null) {
+				throw new ControlException(sprintf('Cannot bind [%s] to [%s] because target id is empty.', static::class, get_class($htmlControl)));
+			}
+			$this->setAttribute('data-bind', $id);
+			return $this;
 		}
 
 		protected function prepare() {

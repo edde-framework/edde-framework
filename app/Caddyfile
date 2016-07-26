@@ -1,4 +1,4 @@
-:4080
+:80
 gzip
 
 log logs/caddy-access.log {

@@ -1,7 +1,6 @@
 <?php
 	namespace Edde\Common\Resource;
 
-	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crypt\ICrypt;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceIndex;
@@ -17,10 +16,6 @@
 	use Edde\Common\Usable\AbstractUsable;
 
 	class ResourceIndex extends AbstractUsable implements IResourceIndex {
-		/**
-		 * @var ICrateFactory
-		 */
-		protected $crateFactory;
 		/**
 		 * @var ISchemaManager
 		 */
@@ -43,14 +38,12 @@
 		protected $resourceSchema;
 
 		/**
-		 * @param ICrateFactory $crateFactory
 		 * @param ISchemaManager $schemaManager
 		 * @param IStorage $storage
 		 * @param IScanner $scanner
 		 * @param ICrypt $crypt
 		 */
-		public function __construct(ICrateFactory $crateFactory, ISchemaManager $schemaManager, IStorage $storage, IScanner $scanner, ICrypt $crypt) {
-			$this->crateFactory = $crateFactory;
+		public function __construct(ISchemaManager $schemaManager, IStorage $storage, IScanner $scanner, ICrypt $crypt) {
 			$this->schemaManager = $schemaManager;
 			$this->storage = $storage;
 			$this->scanner = $scanner;
@@ -87,7 +80,7 @@
 
 		public function createResourceStorable() {
 			$this->usse();
-			$this->crateFactory->fill($resourceStorable = new ResourceStorable($this->resourceSchema));
+			$resourceStorable = new ResourceStorable($this->resourceSchema);
 			$resourceStorable->set('guid', $this->crypt->guid());
 			return $resourceStorable;
 		}
