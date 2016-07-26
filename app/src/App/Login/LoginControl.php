@@ -23,10 +23,14 @@
 			$this->schemaManager = $schemaManager;
 		}
 
+		final public function lazyCryptEngine(ICryptEngine $cryptEngine) {
+			$this->cryptEngine = $cryptEngine;
+		}
+
 		public function actionLogin() {
 			$this->setTitle('Login');
 			$divControl = $this->createDivControl();
-			$divControl->setId('foo');
+			$divControl->setId($this->cryptEngine->guid());
 			$divControl->createTextInputControl($this->loginCrateSchema->getLoginProperty());
 			$divControl->createPasswordInputControl($this->loginCrateSchema->getPasswordProperty());
 			$divControl->createButtonControl('login', static::class, 'OnLogin')
