@@ -6,7 +6,7 @@
 	/**
 	 * Interface for encapsulating encryption, decryption and other related stuff.
 	 */
-	interface ICrypt extends IUsable {
+	interface ICryptEngine extends IUsable {
 		/**
 		 * generate stream of bytes in given length
 		 *

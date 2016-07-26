@@ -11,7 +11,7 @@
 	use Edde\Common\Container\DependencyFactory;
 	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Container\FactoryManager;
-	use Edde\Common\Crypt\Crypt;
+	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\Directory;
 	use Edde\Common\File\FileUtils;
@@ -71,7 +71,7 @@
 			$this->schemaManager = new SchemaManager();
 			$this->schemaManager->addSchema(new ResourceSchema());
 			$this->upgradeManager = new UpgradeManager();
-			$this->resourceIndex = new ResourceIndex($this->schemaManager, $this->storage, new FilesystemScanner(new Directory(__DIR__ . '/assets')), new Crypt());
+			$this->resourceIndex = new ResourceIndex($this->schemaManager, $this->storage, new FilesystemScanner(new Directory(__DIR__ . '/assets')), new CryptEngine());
 			$factoryManager->registerFactory(ResourceStorable::class, FactoryFactory::create(ResourceStorable::class, [
 				$this->resourceIndex,
 				'createResourceStorable',

@@ -2,10 +2,10 @@
 	namespace Edde\Common\Crypt;
 
 	use Edde\Api\Crypt\CryptException;
-	use Edde\Api\Crypt\ICrypt;
+	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Common\Usable\AbstractUsable;
 
-	class Crypt extends AbstractUsable implements ICrypt {
+	class CryptEngine extends AbstractUsable implements ICryptEngine {
 		public function generate($length = 10, $charlist = '0-9a-z') {
 			$this->usse();
 			$charlist = str_shuffle(preg_replace_callback('#.-.#', function ($m) {

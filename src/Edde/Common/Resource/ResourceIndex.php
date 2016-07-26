@@ -1,7 +1,7 @@
 <?php
 	namespace Edde\Common\Resource;
 
-	use Edde\Api\Crypt\ICrypt;
+	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Resource\IResourceQuery;
@@ -29,9 +29,9 @@
 		 */
 		protected $scanner;
 		/**
-		 * @var ICrypt
+		 * @var ICryptEngine
 		 */
-		protected $crypt;
+		protected $cryptEngine;
 		/**
 		 * @var ISchema
 		 */
@@ -41,13 +41,13 @@
 		 * @param ISchemaManager $schemaManager
 		 * @param IStorage $storage
 		 * @param IScanner $scanner
-		 * @param ICrypt $crypt
+		 * @param ICryptEngine $cryptcryptEngine
 		 */
-		public function __construct(ISchemaManager $schemaManager, IStorage $storage, IScanner $scanner, ICrypt $crypt) {
+		public function __construct(ISchemaManager $schemaManager, IStorage $storage, IScanner $scanner, ICryptEngine $cryptcryptEngine) {
 			$this->schemaManager = $schemaManager;
 			$this->storage = $storage;
 			$this->scanner = $scanner;
-			$this->crypt = $crypt;
+			$this->cryptEngine = $cryptcryptEngine;
 		}
 
 		public function update() {
@@ -81,7 +81,7 @@
 		public function createResourceStorable() {
 			$this->usse();
 			$resourceStorable = new ResourceStorable($this->resourceSchema);
-			$resourceStorable->set('guid', $this->crypt->guid());
+			$resourceStorable->set('guid', $this->cryptEngine->guid());
 			return $resourceStorable;
 		}
 

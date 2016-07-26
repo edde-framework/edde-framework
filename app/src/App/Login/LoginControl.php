@@ -1,6 +1,7 @@
 <?php
 	namespace App\Login;
 
+	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Common\Control\Html\EddeHtmlControl;
 
@@ -13,6 +14,10 @@
 		 * @var LoginCrateSchema
 		 */
 		protected $loginCrateSchema;
+		/**
+		 * @var ICryptEngine
+		 */
+		protected $cryptEngine;
 
 		final public function lazySchemaManager(ISchemaManager $schemaManager) {
 			$this->schemaManager = $schemaManager;

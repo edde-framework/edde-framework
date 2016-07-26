@@ -5,7 +5,7 @@
 	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Crypt\ICrypt;
+	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\File\ITempDirectory;
@@ -35,7 +35,7 @@
 	use Edde\Common\Control\Html\MetaControl;
 	use Edde\Common\Control\Html\PasswordInputControl;
 	use Edde\Common\Control\Html\TextInputControl;
-	use Edde\Common\Crypt\Crypt;
+	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Http\HttpRequestFactory;
@@ -98,7 +98,7 @@
 				IStorageDirectory::class => function (IRootDirectory $rootDirectory) {
 					return new StorageDirectory($rootDirectory->getDirectory() . '/.storage');
 				},
-				ICrypt::class => Crypt::class,
+				ICryptEngine::class => CryptEngine::class,
 				IScanner::class => function (IRootDirectory $rootDirectory) {
 					return new FilesystemScanner($rootDirectory);
 				},
