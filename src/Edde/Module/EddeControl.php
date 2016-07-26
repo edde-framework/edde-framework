@@ -6,10 +6,9 @@
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Container\LazyInjectTrait;
-	use Edde\Common\Control\Html\HtmlControl;
-	use Edde\Common\Resource\FileResource;
+	use Edde\Common\Control\Html\EddeHtmlControl;
 
-	class EddeControl extends HtmlControl {
+	class EddeControl extends EddeHtmlControl {
 		use LazyInjectTrait;
 		/**
 		 * @var IUpgradeManager
@@ -35,16 +34,12 @@
 		public function actionSetup() {
 			$this->usse();
 			$this->setTitle('Edde Control');
-			$this->addStyleSheet(new FileResource(__DIR__ . '/assets/css/kube.css'));
-			$this->addJavaScript(new FileResource(__DIR__ . '/assets/js/jquery-3.1.0.js'));
-			$this->addJavaScript(new FileResource(__DIR__ . '/assets/js/edde-framework.js'));
-			$this->addControl($this->message);
-			$this->addControl($content = $this->createDivControl());
+			$content = $this->createDivControl();
 			$content->addClass('row centered');
-			$content->addControl($column = $this->createDivControl());
+			$column = $content->createDivControl();
 			$column->addClass('col col-4');
-			$column->addControl($this->createButtonControl('Upgrade', static::class, 'OnUpgrade', 'run upgrades registered to this application'));
-			$column->addControl($this->createButtonControl('Update Resource Index', static::class, 'OnUpdateIndex', 'update resource index; this function needs storage already setup'));
+			$column->createButtonControl('Upgrade', static::class, 'OnUpgrade', 'run upgrades registered to this application');
+			$column->createButtonControl('Update Resource Index', static::class, 'OnUpdateIndex', 'update resource index; this function needs storage already setup');
 			$this->send();
 		}
 

@@ -16,14 +16,34 @@ var Edde = {
 				});
 			}
 		});
+	},
+	bind: function () {
+		$('.edde-text-input').each(function () {
+			this.getValue = function () {
+				return $(this).val();
+			};
+		});
+	},
+	crate: function (id) {
+		var crate = {};
+		if (id) {
+			$('#' + id).find('.edde-value').each(function () {
+				var $this = $(this);
+				var dataClass = $this.data('class');
+				crate[dataClass] = crate[dataClass] ? crate[dataClass] : {};
+				crate[dataClass][$this.data('property')] = this.getValue();
+			});
+		}
+		return crate;
 	}
 };
 
 $(document).ready(function () {
+	Edde.bind();
 	$(document).on('click', '.edde-clickable:not(.disabled)', function () {
 		var $this = $(this);
 		$this.addClass('disabled');
-		Edde.execute($this.data('control'), $this.data('action')).always(function () {
+		Edde.execute($this.data('control'), $this.data('action'), Edde.crate($this.data('bind'))).always(function () {
 			$this.removeClass('disabled');
 		});
 	});

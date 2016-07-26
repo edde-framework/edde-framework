@@ -28,6 +28,9 @@
 			return $this;
 		}
 
+		/**
+		 * @return array
+		 */
 		public function getAttributeList() {
 			$this->usse();
 			return $this->node->getAttribute('attribute-list', []);
@@ -46,6 +49,12 @@
 		public function setText($text) {
 			$this->usse();
 			$this->node->setValue($text);
+			return $this;
+		}
+
+		public function addAttributeList(array $attributeList) {
+			$this->usse();
+			$this->setAttributeList(array_merge($this->getAttributeList(), $attributeList));
 			return $this;
 		}
 

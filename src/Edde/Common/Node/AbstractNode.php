@@ -73,7 +73,11 @@
 			if ($this->accept($abstractNode) === false) {
 				throw new NodeException(sprintf("Current node [%s] doesn't accept given node [%s].", static::class, get_class($abstractNode)));
 			}
-			if ($move || $abstractNode->getParent() === null) {
+			$parent = $abstractNode->getParent();
+			if ($move || $parent === null) {
+				if ($parent) {
+					$parent->removeNode($abstractNode);
+				}
 				$abstractNode->setParent($this);
 			}
 			$this->nodeList[] = $abstractNode;

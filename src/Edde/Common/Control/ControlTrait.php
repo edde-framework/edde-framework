@@ -3,9 +3,12 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Control\IControl;
+	use Edde\Api\Schema\IProperty;
 	use Edde\Common\Control\Html\ButtonControl;
 	use Edde\Common\Control\Html\DivControl;
 	use Edde\Common\Control\Html\MetaControl;
+	use Edde\Common\Control\Html\PasswordInputControl;
+	use Edde\Common\Control\Html\TextInputControl;
 
 	/**
 	 * This is helper trait for integration of a factory methods of Edde's control set.
@@ -16,7 +19,7 @@
 		 */
 		protected $container;
 
-		final public function injectContainer(IContainer $container) {
+		public function injectContainer(IContainer $container) {
 			$this->container = $container;
 		}
 
@@ -34,7 +37,8 @@
 		 * @return IControl
 		 */
 		public function createControl($control, ...$parameterList) {
-			return $this->container->create($control, ...$parameterList);
+			$this->addControl($control = $this->container->create($control, ...$parameterList));
+			return $control;
 		}
 
 		/**
@@ -54,5 +58,23 @@
 		 */
 		public function createButtonControl($title, $control, $action, $hint = null) {
 			return $this->createControl(ButtonControl::class, $title, $control, $action, $hint);
+		}
+
+		/**
+		 * @param IProperty $property
+		 *
+		 * @return TextInputControl
+		 */
+		public function createTextInputControl(IProperty $property = null) {
+			return $this->createControl(TextInputControl::class, $property);
+		}
+
+		/**
+		 * @param IProperty $property
+		 *
+		 * @return PasswordInputControl
+		 */
+		public function createPasswordInputControl(IProperty $property = null) {
+			return $this->createControl(TextInputControl::class, $property);
 		}
 	}

@@ -5,9 +5,9 @@
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\IValue;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Usable\AbstractUsable;
 
-	class Crate extends AbstractObject implements ICrate {
+	class Crate extends AbstractUsable implements ICrate {
 		/**
 		 * @var ISchema
 		 */
@@ -16,6 +16,9 @@
 		 * @var IValue[]
 		 */
 		protected $valueList = [];
+		/**
+		 * @var IValue[]
+		 */
 		protected $identifierList;
 
 		/**
@@ -30,10 +33,12 @@
 		}
 
 		public function getValueList() {
+			$this->usse();
 			return $this->valueList;
 		}
 
 		public function getIdentifierList() {
+			$this->usse();
 			if ($this->identifierList === null) {
 				$this->identifierList = [];
 				foreach ($this->valueList as $value) {
@@ -46,16 +51,8 @@
 			return $this->identifierList;
 		}
 
-		public function addValue(IValue $value, $force = false) {
-			$property = $value->getProperty();
-			if (isset($this->valueList[$propertyName = $property->getName()]) && $force === false) {
-				throw new CrateException(sprintf('Value [%s] is already present in value set [%s].', $propertyName, $this->schema->getSchemaName()));
-			}
-			$this->valueList[$propertyName] = $value;
-			return $this;
-		}
-
 		public function put(array $put, $strict = true) {
+			$this->usse();
 			if ($strict && ($diff = array_diff(array_keys($put), array_keys($this->valueList))) !== []) {
 				throw new CrateException(sprintf('Setting unknown values [%s] to the value set [%s].', implode(', ', $diff), $this->schema->getSchemaName()));
 			}
@@ -69,12 +66,14 @@
 		}
 
 		public function set($name, $value) {
+			$this->usse();
 			$this->getValue($name)
 				->set($value);
 			return $this;
 		}
 
 		public function getValue($name) {
+			$this->usse();
 			if ($this->hasValue($name) === false) {
 				throw new CrateException(sprintf('Unknown value [%s] in value set [%s].', $name, $this->schema->getSchemaName()));
 			}
@@ -82,10 +81,12 @@
 		}
 
 		public function hasValue($name) {
+			$this->usse();
 			return isset($this->valueList[$name]);
 		}
 
 		public function push(array $push, $strict = true) {
+			$this->usse();
 			if ($strict && ($diff = array_diff(array_keys($push), array_keys($this->valueList))) !== []) {
 				throw new CrateException(sprintf('Setting unknown values [%s] to the value set [%s].', implode(', ', $diff), $this->schema->getSchemaName()));
 			}
@@ -100,11 +101,13 @@
 		}
 
 		public function get($name, $default = null) {
+			$this->usse();
 			return $this->getValue($name)
 				->get($default);
 		}
 
 		public function getDirtyList() {
+			$this->usse();
 			if ($this->isDirty() === false) {
 				return [];
 			}
@@ -120,11 +123,27 @@
 		}
 
 		public function isDirty() {
+			$this->usse();
 			foreach ($this->valueList as $value) {
 				if ($value->isDirty()) {
 					return true;
 				}
 			}
 			return false;
+		}
+
+		protected function prepare() {
+			foreach ($this->schema->getPropertyList() as $property) {
+				$this->addValue(new Value($property));
+			}
+		}
+
+		public function addValue(IValue $value, $force = false) {
+			$property = $value->getProperty();
+			if (isset($this->valueList[$propertyName = $property->getName()]) && $force === false) {
+				throw new CrateException(sprintf('Value [%s] is already present in value set [%s].', $propertyName, $this->schema->getSchemaName()));
+			}
+			$this->valueList[$propertyName] = $value;
+			return $this;
 		}
 	}

@@ -7,6 +7,7 @@
 	use Edde\Common\Usable\AbstractUsable;
 
 	abstract class AbstractControl extends AbstractUsable implements IControl {
+		use ControlTrait;
 		/**
 		 * @var INode
 		 */
@@ -17,9 +18,21 @@
 			return $this->node;
 		}
 
+		/**
+		 * @param IControl[] $controlList
+		 *
+		 * @return $this
+		 */
+		public function addControlList(array $controlList) {
+			foreach ($controlList as $control) {
+				$this->addControl($control);
+			}
+			return $this;
+		}
+
 		public function addControl(IControl $control) {
 			$this->usse();
-			$this->node->addNode($control->getNode());
+			$this->node->addNode($control->getNode(), true);
 			return $this;
 		}
 

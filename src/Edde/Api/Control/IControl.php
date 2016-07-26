@@ -26,6 +26,13 @@
 		public function addControl(IControl $control);
 
 		/**
+		 * @param IControl[] $controlList
+		 *
+		 * @return $this
+		 */
+		public function addControlList(array $controlList);
+
+		/**
 		 * return first level of controls (the same result as self::getNodeList())
 		 *
 		 * @return IControl[]

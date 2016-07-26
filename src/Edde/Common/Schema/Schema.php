@@ -31,6 +31,14 @@
 		public function __construct($name, $namespace = null) {
 			$this->name = $name;
 			$this->namespace = $namespace;
+			if ($namespace === null) {
+				$nameList = explode('\\', $name);
+				$this->name = end($nameList);
+				array_pop($nameList);
+				if (empty($nameList) === false) {
+					$this->namespace = implode('\\', $nameList);
+				}
+			}
 		}
 
 		public function getName() {
