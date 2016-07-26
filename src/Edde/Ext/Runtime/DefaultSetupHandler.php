@@ -30,16 +30,6 @@
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Container\Factory\FactoryFactory;
-	use Edde\Common\Control\Html\BodyControl;
-	use Edde\Common\Control\Html\ButtonControl;
-	use Edde\Common\Control\Html\DivControl;
-	use Edde\Common\Control\Html\HeadControl;
-	use Edde\Common\Control\Html\JavaScriptControl;
-	use Edde\Common\Control\Html\MetaControl;
-	use Edde\Common\Control\Html\PasswordInputControl;
-	use Edde\Common\Control\Html\StyleSheetControl;
-	use Edde\Common\Control\Html\TextInputControl;
-	use Edde\Common\Control\Html\TitleControl;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
@@ -59,7 +49,6 @@
 	use Edde\Ext\Resource\Scanner\FilesystemScanner;
 	use Edde\Ext\Router\CliRouter;
 	use Edde\Ext\Router\SimpleRouter;
-	use Edde\Module\EddeControl;
 
 	class DefaultSetupHandler extends SetupHandler {
 		static public function create(ICacheFactory $cacheFactory = null, array $factoryList = []) {
@@ -77,10 +66,7 @@
 				},
 				CliRouter::class => CliRouter::class,
 				SimpleRouter::class => SimpleRouter::class,
-				IRouter::class => $setupHandler->factory(RouterList::class, function (IContainer $container, RouterList $routerList) {
-					$routerList->registerRouter($container->create(CliRouter::class));
-					$routerList->registerRouter($container->create(SimpleRouter::class));
-				}),
+				IRouter::class => RouterList::class,
 				/**
 				 * Http request support
 				 */
@@ -123,25 +109,13 @@
 				}, false),
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
-
-				EddeControl::class => EddeControl::class,
-
-				/**
-				 * Default set of controls
-				 */
-				HeadControl::class => FactoryFactory::create(HeadControl::class, HeadControl::class, false),
-				TitleControl::class => FactoryFactory::create(TitleControl::class, TitleControl::class, false),
-				StyleSheetControl::class => FactoryFactory::create(StyleSheetControl::class, StyleSheetControl::class, false),
-				JavaScriptControl::class => FactoryFactory::create(JavaScriptControl::class, JavaScriptControl::class, false),
-				BodyControl::class => FactoryFactory::create(BodyControl::class, BodyControl::class, false),
-				MetaControl::class => FactoryFactory::create(MetaControl::class, MetaControl::class, false),
-				DivControl::class => FactoryFactory::create(DivControl::class, DivControl::class, false),
-				TextInputControl::class => FactoryFactory::create(TextInputControl::class, TextInputControl::class, false),
-				PasswordInputControl::class => FactoryFactory::create(PasswordInputControl::class, PasswordInputControl::class, false),
-				ButtonControl::class => FactoryFactory::create(ButtonControl::class, ButtonControl::class, false),
 			], $factoryList));
 			$setupHandler->onSetup(ISchemaManager::class, function (ISchemaManager $schemaManager) {
 				$schemaManager->addSchema(new ResourceSchema());
+			});
+			$setupHandler->onSetup(IRouter::class, function (IContainer $container, RouterList $routerList) {
+				$routerList->registerRouter($container->create(CliRouter::class));
+				$routerList->registerRouter($container->create(SimpleRouter::class));
 			});
 			return $setupHandler;
 		}
