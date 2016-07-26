@@ -5,7 +5,6 @@
 	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Control\IControlFactory;
 	use Edde\Api\Crypt\ICrypt;
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\File\IRootDirectory;
@@ -31,7 +30,11 @@
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Container\Factory\FactoryFactory;
-	use Edde\Common\Control\ControlFactory;
+	use Edde\Common\Control\Html\ButtonControl;
+	use Edde\Common\Control\Html\DivControl;
+	use Edde\Common\Control\Html\MetaControl;
+	use Edde\Common\Control\Html\PasswordInputControl;
+	use Edde\Common\Control\Html\TextInputControl;
 	use Edde\Common\Crypt\Crypt;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
@@ -60,7 +63,6 @@
 				 * Application and presentation layer
 				 */
 				IApplication::class => Application::class,
-				IControlFactory::class => ControlFactory::class,
 				IRoute::class => function (IRouter $router) {
 					if (($route = $router->route()) === null) {
 						throw new RouterException(sprintf('Cannot find route for current application request.'));
@@ -83,9 +85,7 @@
 				IHttpResponse::class => function () {
 					throw new RuntimeException(sprintf('Do not request [%s] from the global space (container) as it is bad practice.', IHttpResponse::class));
 				},
-				ISchemaManager::class => $setupHandler->factory(SchemaManager::class, function (SchemaManager $schemaManager) {
-					$schemaManager->addSchema(new ResourceSchema());
-				}),
+				ISchemaManager::class => SchemaManager::class,
 				IRootDirectory::class => function () {
 					throw new RuntimeException(sprintf('If you want use root directory [%s], you must register it to the container!', IRootDirectory::class));
 				},
@@ -117,7 +117,19 @@
 				}, false),
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
+
+				/**
+				 * Default set of controls
+				 */
+				MetaControl::class => FactoryFactory::create(MetaControl::class, MetaControl::class, false),
+				DivControl::class => FactoryFactory::create(DivControl::class, DivControl::class, false),
+				TextInputControl::class => FactoryFactory::create(TextInputControl::class, TextInputControl::class, false),
+				PasswordInputControl::class => FactoryFactory::create(PasswordInputControl::class, PasswordInputControl::class, false),
+				ButtonControl::class => FactoryFactory::create(ButtonControl::class, ButtonControl::class, false),
 			], $factoryList));
+			$setupHandler->onSetup(ISchemaManager::class, function (ISchemaManager $schemaManager) {
+				$schemaManager->addSchema(new ResourceSchema());
+			});
 			return $setupHandler;
 		}
 	}

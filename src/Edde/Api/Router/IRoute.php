@@ -30,7 +30,7 @@
 		public function getParameterList();
 
 		/**
-		 * @return ICrate|null
+		 * @return ICrate[]
 		 */
-		public function getCrate();
+		public function getCrateList();
 	}

@@ -1,16 +1,21 @@
 <?php
 	namespace App\Login;
 
+	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Common\Control\Html\EddeHtmlControl;
 
 	class LoginControl extends EddeHtmlControl {
+		/**
+		 * @var ISchemaManager
+		 */
+		protected $schemaManager;
 		/**
 		 * @var LoginCrateSchema
 		 */
 		protected $loginCrateSchema;
 
-		final public function lazyLoginCrateSchema(LoginCrateSchema $loginCrateSchema) {
-			$this->loginCrateSchema = $loginCrateSchema;
+		final public function lazySchemaManager(ISchemaManager $schemaManager) {
+			$this->schemaManager = $schemaManager;
 		}
 
 		public function actionLogin() {
@@ -24,9 +29,10 @@
 			$this->send();
 		}
 
-		public function handleOnLogin() {
+		public function handleOnLogin(LoginCrate $loginCrate) {
 		}
 
 		protected function onPrepare() {
+			$this->loginCrateSchema = $this->schemaManager->getSchema(LoginCrate::class);
 		}
 	}

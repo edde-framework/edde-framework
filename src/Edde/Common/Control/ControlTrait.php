@@ -75,6 +75,6 @@
 		 * @return PasswordInputControl
 		 */
 		public function createPasswordInputControl(IProperty $property = null) {
-			return $this->createControl(TextInputControl::class, $property);
+			return $this->createControl(PasswordInputControl::class, $property);
 		}
 	}

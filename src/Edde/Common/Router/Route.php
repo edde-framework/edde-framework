@@ -19,21 +19,21 @@
 		 */
 		private $parameterList;
 		/**
-		 * @var ICrate
+		 * @var ICrate[]
 		 */
-		private $crate;
+		private $crateList;
 
 		/**
 		 * @param string $class
 		 * @param string $method
 		 * @param array $parameterList
-		 * @param ICrate $crate
+		 * @param array $crateList
 		 */
-		public function __construct($class, $method, array $parameterList = [], ICrate $crate = null) {
+		public function __construct($class, $method, array $parameterList = [], array $crateList = []) {
 			$this->class = $class;
 			$this->method = $method;
 			$this->parameterList = $parameterList;
-			$this->crate = $crate;
+			$this->crateList = $crateList;
 		}
 
 		public function getClass() {
@@ -48,7 +48,7 @@
 			return $this->parameterList;
 		}
 
-		public function getCrate() {
-			return $this->crate;
+		public function getCrateList() {
+			return $this->crateList;
 		}
 	}

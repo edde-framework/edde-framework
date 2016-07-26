@@ -8,7 +8,6 @@
 	use Edde\Api\Runtime\RuntimeException;
 	use Edde\Common\Container\Container;
 	use Edde\Common\Container\DependencyFactory;
-	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Container\FactoryManager;
 
 	class SetupHandler extends AbstractSetupHandler {
@@ -31,7 +30,6 @@
 		static public function create(ICacheFactory $cacheFactory, array $factoryList = []) {
 			$setupHandler = new self($cacheFactory);
 			$setupHandler->registerFactoryList($factoryList);
-			$setupHandler->registerFactoryFallback(FactoryFactory::createFallback());
 			return $setupHandler;
 		}
 
