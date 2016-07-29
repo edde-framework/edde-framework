@@ -1,12 +1,10 @@
 <?php
 	namespace Edde\Api\Container;
 
-	use Edde\Api\Usable\IUsable;
-
 	/**
 	 * General purpose factory management; used byt an Container and a DependencyFactory.
 	 */
-	interface IFactoryManager extends IUsable {
+	interface IFactoryManager {
 		/**
 		 * register given factory
 		 *
