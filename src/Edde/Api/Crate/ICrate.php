@@ -2,12 +2,22 @@
 	namespace Edde\Api\Crate;
 
 	use Edde\Api\Schema\ISchema;
+	use Edde\Api\Usable\IUsable;
 
 	/**
 	 * General object which is used to describe relations between objects (not necesarilly database objects) and
 	 * theirs hierarchy.
 	 */
-	interface ICrate {
+	interface ICrate extends IUsable {
+		/**
+		 * schema can be set before crate is used (prepared)
+		 *
+		 * @param ISchema $schema
+		 *
+		 * @return $this
+		 */
+		public function setSchema(ISchema $schema);
+
 		/**
 		 * @return ISchema
 		 */
@@ -110,4 +120,13 @@
 		 * @return IValue[]
 		 */
 		public function getDirtyList();
+
+		/**
+		 * return collection of the given name
+		 *
+		 * @param string $name
+		 *
+		 * @return ICollection
+		 */
+		public function collection($name);
 	}

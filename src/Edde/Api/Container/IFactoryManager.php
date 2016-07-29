@@ -20,7 +20,7 @@
 		 *
 		 * @return $this
 		 */
-		public function registerFactoryList($factoryList);
+		public function registerFactoryList(array $factoryList);
 
 		/**
 		 * @param callable $callback

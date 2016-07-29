@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Common\Schema;
 
+	use Edde\Api\Schema\ILink;
 	use Edde\Api\Schema\IProperty;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\SchemaException;
@@ -23,6 +24,10 @@
 		 * @var IProperty[]
 		 */
 		protected $propertyList = [];
+		/**
+		 * @var ILink[]
+		 */
+		protected $linkList = [];
 
 		/**
 		 * @param string $name
@@ -74,13 +79,6 @@
 			return $this->schemaName;
 		}
 
-		/**
-		 * @param IProperty[] $propertyList
-		 *
-		 * @return $this
-		 *
-		 * @throws SchemaException
-		 */
 		public function addPropertyList(array $propertyList) {
 			foreach ($propertyList as $property) {
 				$this->addProperty($property);
@@ -88,14 +86,6 @@
 			return $this;
 		}
 
-		/**
-		 * @param IProperty $property
-		 * @param bool $force
-		 *
-		 * @return $this
-		 *
-		 * @throws SchemaException
-		 */
 		public function addProperty(IProperty $property, $force = false) {
 			$propertyName = $property->getName();
 			if ($property->getSchema() !== $this) {
@@ -106,6 +96,29 @@
 			}
 			$this->propertyList[$propertyName] = $property;
 			return $this;
+		}
+
+		public function addLink(ILink $link, $force = false) {
+			if (isset($this->linkList[$name = $link->getName()]) && $force === false) {
+				throw new SchemaException(sprintf('Schema [%s] already contains link named [%s]', $this->getSchemaName(), $name));
+			}
+			$this->linkList[$name] = $link;
+			return $this;
+		}
+
+		public function hasLink($name) {
+			return isset($this->linkList[$name]);
+		}
+
+		public function getLink($name) {
+			if (isset($this->linkList[$name]) === false) {
+				throw new SchemaException(sprintf('Requested unknown link [%s] in schema [%s].', $name, $this->getSchemaName()));
+			}
+			return $this->linkList[$name];
+		}
+
+		public function getLinkList() {
+			return $this->linkList;
 		}
 
 		protected function prepare() {

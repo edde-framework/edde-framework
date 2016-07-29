@@ -11,10 +11,6 @@
 		/**
 		 * @var string
 		 */
-		protected $postfix;
-		/**
-		 * @var string
-		 */
 		protected $parent;
 
 		public function generate(ISchema $schema) {
@@ -26,7 +22,7 @@
 			}
 			$source[] = sprintf("use %s;\n", $this->parent);
 			$parent = explode('\\', $this->parent);
-			$source[] = sprintf("class %s%s extends %s {\n", $schema->getName(), $this->postfix, end($parent));
+			$source[] = sprintf("class %s extends %s {\n", $schema->getName(), end($parent));
 			foreach ($schema->getPropertyList() as $property) {
 				$source[] = $this->generateProperty($property);
 			}
@@ -61,7 +57,6 @@
 		}
 
 		protected function prepare() {
-			$this->postfix = 'Crate';
 			$this->parent = Crate::class;
 		}
 	}

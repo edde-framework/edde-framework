@@ -1,6 +1,10 @@
 <?php
 	namespace Edde\Ext\Container;
 
+	use Edde\Api\Cache\ICacheFactory;
+	use Edde\Api\Container\IContainer;
+	use Edde\Api\Container\IDependencyFactory;
+	use Edde\Api\Container\IFactoryManager;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Container\Container;
@@ -17,6 +21,13 @@
 			$factoryManager = new FactoryManager();
 			$factoryManager->registerFactoryFallback(FactoryFactory::createFallback());
 			$factoryManager->registerFactoryList($factoryList);
-			return new Container($factoryManager, new DependencyFactory($factoryManager, $cacheFactory = new CacheFactory(__NAMESPACE__, new DevNullCacheStorage())), $cacheFactory);
+			$container = new Container($factoryManager, $dependencyFactory = new DependencyFactory($factoryManager, $cacheFactory = new CacheFactory(__NAMESPACE__, new DevNullCacheStorage())), $cacheFactory);
+			$factoryManager->registerFactoryList([
+				IContainer::class => $container,
+				IFactoryManager::class => $factoryManager,
+				IDependencyFactory::class => $dependencyFactory,
+				ICacheFactory::class => $cacheFactory,
+			]);
+			return $container;
 		}
 	}

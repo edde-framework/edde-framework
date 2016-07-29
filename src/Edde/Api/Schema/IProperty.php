@@ -53,6 +53,8 @@
 		public function isUnique();
 
 		/**
+		 * add a new link to this property
+		 *
 		 * @param IProperty $property
 		 * @param string|null $name when null, property name should be used
 		 *
@@ -61,16 +63,16 @@
 		public function link(IProperty $property, $name = null);
 
 		/**
-		 * is this property link to another property?
+		 * has this property any links?
 		 *
 		 * @return bool
 		 */
 		public function isLink();
 
 		/**
-		 * return link of this property; throws exception if this property has no link
+		 * return all links (to or from) of this property
 		 *
-		 * @return ILink
+		 * @return ILink[]
 		 */
-		public function getLink();
+		public function getLinkList();
 	}

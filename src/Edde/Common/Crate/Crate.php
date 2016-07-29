@@ -1,13 +1,20 @@
 <?php
 	namespace Edde\Common\Crate;
 
+	use Edde\Api\Container\IContainer;
 	use Edde\Api\Crate\CrateException;
+	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\IValue;
 	use Edde\Api\Schema\ISchema;
+	use Edde\Common\Schema\Schema;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class Crate extends AbstractUsable implements ICrate {
+		/**
+		 * @var IContainer
+		 */
+		protected $container;
 		/**
 		 * @var ISchema
 		 */
@@ -20,16 +27,31 @@
 		 * @var IValue[]
 		 */
 		protected $identifierList;
+		/**
+		 * @var ICollection[]
+		 */
+		protected $collectionList = [];
 
 		/**
-		 * @param ISchema $schema
+		 * @param IContainer $container
 		 */
-		public function __construct(ISchema $schema) {
-			$this->schema = $schema;
+		public function __construct(IContainer $container) {
+			$this->container = $container;
 		}
 
 		public function getSchema() {
+			if ($this->schema === null) {
+				throw new CrateException(sprintf('Cannot get schema from anonymous crate [%s].', static::class));
+			}
 			return $this->schema;
+		}
+
+		public function setSchema(ISchema $schema) {
+			if ($this->isUsed()) {
+				throw new CrateException(sprintf('Cannot set schema [%s] to already prepared crate [%s].', $schema->getSchemaName(), static::class));
+			}
+			$this->schema = $schema;
+			return $this;
 		}
 
 		public function getValueList() {
@@ -132,13 +154,35 @@
 			return false;
 		}
 
+		public function collection($name) {
+			if ($this->schema->hasLink($name) === false) {
+				throw new CrateException(sprintf('Crate [%s] has no link [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
+			}
+			if (isset($this->collectionList[$name]) === false) {
+				$link = $this->schema->getLink($name);
+				$this->collectionList[$name] = $this->container->create(Collection::class, $link->getTarget()
+					->getSchema());
+			}
+			return $this->collectionList[$name];
+		}
+
+		public function __clone() {
+			if ($this->isUsed()) {
+				throw new CrateException(sprintf('Cannot clone used crate [%s].', $this->schema->getSchemaName()));
+			}
+		}
+
 		protected function prepare() {
+			if ($this->schema === null) {
+				$this->schema = new Schema('anonymous-crate');
+			}
 			foreach ($this->schema->getPropertyList() as $property) {
 				$this->addValue(new Value($property));
 			}
 		}
 
 		public function addValue(IValue $value, $force = false) {
+			$this->usse();
 			$property = $value->getProperty();
 			if (isset($this->valueList[$propertyName = $property->getName()]) && $force === false) {
 				throw new CrateException(sprintf('Value [%s] is already present in value set [%s].', $propertyName, $this->schema->getSchemaName()));

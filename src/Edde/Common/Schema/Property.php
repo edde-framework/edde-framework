@@ -4,7 +4,6 @@
 	use Edde\Api\Schema\ILink;
 	use Edde\Api\Schema\IProperty;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Schema\PropertyException;
 	use Edde\Common\AbstractObject;
 
 	class Property extends AbstractObject implements IProperty {
@@ -33,9 +32,9 @@
 		 */
 		protected $identifier;
 		/**
-		 * @var ILink
+		 * @var ILink[]
 		 */
-		protected $link;
+		protected $linkList = [];
 
 		/**
 		 * @param ISchema $schema
@@ -83,18 +82,19 @@
 		}
 
 		public function link(IProperty $property, $name = null) {
-			$this->link = new Link($name ?: $this->name, $this, $property);
+			/**
+			 * first try if a schema will accept a new link with the given name
+			 */
+			$this->schema->addLink($link = new Link($name ?: $this->name, $this, $property));
+			$this->linkList[] = $link;
 			return $this;
 		}
 
-		public function getLink() {
-			if ($this->isLink() === false) {
-				throw new PropertyException(sprintf('Property definition [%s] is not a link.', $this));
-			}
-			return $this->link;
+		public function getLinkList() {
+			return $this->linkList;
 		}
 
 		public function isLink() {
-			return $this->link !== null;
+			return empty($this->linkList) === false;
 		}
 	}
