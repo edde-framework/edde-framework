@@ -53,6 +53,14 @@
 		public function isUnique();
 
 		/**
+		 * @param IProperty $property
+		 * @param string|null $name when null, property name should be used
+		 *
+		 * @return $this
+		 */
+		public function link(IProperty $property, $name = null);
+
+		/**
 		 * is this property link to another property?
 		 *
 		 * @return bool

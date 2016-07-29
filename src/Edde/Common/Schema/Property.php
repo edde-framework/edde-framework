@@ -44,16 +44,14 @@
 		 * @param bool $required
 		 * @param bool $unique
 		 * @param bool $identifier
-		 * @param ILink $link
 		 */
-		public function __construct(ISchema $schema, $name, $type = null, $required = true, $unique = false, $identifier = false, ILink $link = null) {
+		public function __construct(ISchema $schema, $name, $type = null, $required = true, $unique = false, $identifier = false) {
 			$this->schema = $schema;
 			$this->name = $name;
 			$this->type = $type;
 			$this->required = $required;
 			$this->unique = $unique;
 			$this->identifier = $identifier;
-			$this->link = $link;
 		}
 
 		public function getSchema() {
@@ -82,6 +80,11 @@
 
 		public function isUnique() {
 			return $this->unique;
+		}
+
+		public function link(IProperty $property, $name = null) {
+			$this->link = new Link($name ?: $this->name, $this, $property);
+			return $this;
 		}
 
 		public function getLink() {
