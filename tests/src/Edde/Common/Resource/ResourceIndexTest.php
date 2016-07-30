@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Common\Resource;
 
+	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Schema\ISchemaManager;
@@ -14,7 +15,6 @@
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\Directory;
-	use Edde\Common\File\FileUtils;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Query\Select\SelectQuery;
 	use Edde\Common\Schema\SchemaManager;
@@ -46,10 +46,14 @@
 		 * @var SqliteDriver
 		 */
 		protected $sqliteDriver;
+		/**
+		 * @var ITempDirectory
+		 */
+		protected $tempDirectory;
 
 		public function setUp() {
-			$tempDirectory = new TempDirectory(__DIR__ . '/temp');
-			$tempDirectory->purge();
+			$this->tempDirectory = new TempDirectory(__DIR__ . '/temp');
+			$this->tempDirectory->purge();
 			$cacheFactory = $cacheFactory = new CacheFactory(__DIR__, new DevNullCacheStorage());
 			$factoryManager = new FactoryManager();
 			$factoryManager->registerFactoryFallback(FactoryFactory::createFallback());
@@ -58,7 +62,7 @@
 			$this->schemaManager = new SchemaManager();
 			$this->schemaManager->addSchema(new ResourceSchema());
 			$this->upgradeManager = new UpgradeManager();
-			$this->resourceIndex = new ResourceIndex($this->schemaManager, $this->storage, new FilesystemScanner(new Directory(__DIR__ . '/assets')), new CryptEngine());
+			$this->resourceIndex = new ResourceIndex($container, $this->schemaManager, $this->storage, new FilesystemScanner(new Directory(__DIR__ . '/assets')), new CryptEngine());
 			$factoryManager->registerFactory(ResourceStorable::class, FactoryFactory::create(ResourceStorable::class, [
 				$this->resourceIndex,
 				'createResourceStorable',
@@ -68,7 +72,7 @@
 		}
 
 		protected function getDatabaseFileName() {
-			return __DIR__ . '/temp/resource-test-' . sha1(microtime() . mt_rand(0, 99999)) . '.sqlite';
+			return $this->tempDirectory->getDirectory() . '/resource-test-' . sha1(microtime() . mt_rand(0, 99999)) . '.sqlite';
 		}
 
 		public function testUpdate() {
@@ -100,6 +104,6 @@
 			if ($this->sqliteDriver) {
 				$this->sqliteDriver->close();
 			}
-			FileUtils::delete(__DIR__ . '/temp');
+			$this->tempDirectory->delete();
 		}
 	}

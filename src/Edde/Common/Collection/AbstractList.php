@@ -31,6 +31,10 @@
 			return isset($this->list[$name]) || array_key_exists($this->list, $name);
 		}
 
+		public function getList() {
+			return $this->list;
+		}
+
 		public function remove($name) {
 			unset($this->list[$name]);
 			return $this;

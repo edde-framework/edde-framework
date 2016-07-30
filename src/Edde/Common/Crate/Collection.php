@@ -42,6 +42,9 @@
 			return $this->schema;
 		}
 
+		/**
+		 * @return ICrate
+		 */
 		public function createCrate() {
 			$this->usse();
 			return $this->container->create($this->crate)
@@ -62,9 +65,8 @@
 		}
 
 		protected function prepare() {
-			$this->crate = Crate::class;
-			if ($this->container->has($schemaName = $this->schema->getSchemaName())) {
-				$this->crate = $schemaName;
+			if ($this->container->has($this->crate = $this->schema->getSchemaName()) === false) {
+				$this->crate = Crate::class;
 			}
 		}
 	}

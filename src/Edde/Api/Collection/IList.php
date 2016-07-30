@@ -33,6 +33,11 @@
 		public function get($name, $default = null);
 
 		/**
+		 * @return array
+		 */
+		public function getList();
+
+		/**
 		 * @param string $name
 		 *
 		 * @return $this

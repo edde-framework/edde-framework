@@ -2,6 +2,8 @@
 	namespace Edde\Common\Crate;
 
 	use Edde\Api\Crate\ICrateGenerator;
+	use Edde\Api\File\ITempDirectory;
+	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Schema\Property;
 	use Edde\Common\Schema\Schema;
 	use phpunit\framework\TestCase;
@@ -11,6 +13,10 @@
 		 * @var ICrateGenerator
 		 */
 		protected $crateGenerator;
+		/**
+		 * @var ITempDirectory
+		 */
+		protected $tempDirectory;
 
 		public function testSimpleCrate() {
 			$schema = new Schema('Foo\\Bar\\FooBar');
@@ -21,11 +27,17 @@
 			]);
 			$crateList = $this->crateGenerator->generate($schema);
 			foreach ($crateList as $name => $source) {
-				file_put_contents(sha1($name) . '.php', $source);
+				$this->tempDirectory->file(sha1($name) . '.php', $source);
 			}
 		}
 
 		protected function setUp() {
 			$this->crateGenerator = new CrateGenerator();
+			$this->tempDirectory = new TempDirectory(__DIR__ . '/temp');
+			$this->tempDirectory->purge();
+		}
+
+		protected function tearDown() {
+			$this->tempDirectory->delete();
 		}
 	}

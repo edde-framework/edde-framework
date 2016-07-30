@@ -1,8 +1,7 @@
 <?php
 	namespace Edde\Ext\Router;
 
-	use Edde\Api\Container\IContainer;
-	use Edde\Api\Crate\ICrate;
+	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Common\Container\LazyInjectTrait;
@@ -22,9 +21,9 @@
 		 */
 		protected $runtime;
 		/**
-		 * @var IContainer
+		 * @var ICrateFactory
 		 */
-		protected $container;
+		protected $crateFactory;
 		/**
 		 * @var IHttpRequest
 		 */
@@ -32,11 +31,13 @@
 
 		/**
 		 * @param IRuntime $runtime
-		 * @param IContainer $container
 		 */
-		public function __construct(IRuntime $runtime, IContainer $container) {
+		public function __construct(IRuntime $runtime) {
 			$this->runtime = $runtime;
-			$this->container = $container;
+		}
+
+		final public function lazyCrateFactory(ICrateFactory $crateFactory) {
+			$this->crateFactory = $crateFactory;
 		}
 
 		final public function lazyHttpRequest(IHttpRequest $httpRequest) {
@@ -66,12 +67,8 @@
 			$crateList = [];
 			if ($this->httpRequest->isMethod('POST')) {
 				$method = 'handle' . $action;
-				foreach ($this->httpRequest->getPostList() as $name => $post) {
-					/** @var $crate ICrate */
-					$crate = $this->container->create($name);
-					$crate->push($post);
-					$crateList[] = $crate;
-				}
+				$crateList = $this->crateFactory->build($this->httpRequest->getPostList()
+					->getList());
 			}
 			$parameterList = $url->getQuery();
 			unset($parameterList['control'], $parameterList['action']);

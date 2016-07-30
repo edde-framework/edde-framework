@@ -11,9 +11,9 @@
 	class AppSetupHandler extends DefaultSetupHandler {
 		static public function create(ICacheFactory $cacheFactory = null, array $factoryList = []) {
 			return parent::create($cacheFactory, array_merge([
-				LoginControl::class => LoginControl::class,
-				LoginCrate::class => LoginCrate::class,
-				LoginCrateSchema::class => LoginCrateSchema::class,
+				LoginControl::class,
+				LoginCrate::class,
+				LoginCrateSchema::class,
 			], $factoryList))
 				->onSetup(ISchemaManager::class, function (ISchemaManager $schemaManager) {
 					$schemaManager->addSchema(new LoginCrateSchema());

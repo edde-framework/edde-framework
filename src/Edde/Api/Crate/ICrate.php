@@ -126,7 +126,7 @@
 		 *
 		 * @param string $name
 		 *
-		 * @return ICollection
+		 * @return ICollection|ICrate[]
 		 */
 		public function collection($name);
 	}

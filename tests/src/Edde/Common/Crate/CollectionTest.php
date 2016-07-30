@@ -47,7 +47,8 @@
 
 		protected function setUp() {
 			$this->container = ContainerFactory::create([
-				FooBarBar::class => FooBarBar::class,
+				Crate::class,
+				FooBarBar::class,
 			]);
 		}
 	}

@@ -56,6 +56,11 @@
 			return $this;
 		}
 
+		public function delete() {
+			$this->usse();
+			FileUtils::delete($this->directory);
+		}
+
 		public function exists() {
 			return is_dir($this->directory);
 		}

@@ -44,6 +44,13 @@
 		public function purge();
 
 		/**
+		 * physically remove the directory
+		 *
+		 * @return $this
+		 */
+		public function delete();
+
+		/**
 		 * @return bool
 		 */
 		public function exists();

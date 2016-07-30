@@ -109,10 +109,24 @@
 
 		public function push(array $push, $strict = true) {
 			$this->usse();
-			if ($strict && ($diff = array_diff(array_keys($push), array_keys($this->valueList))) !== []) {
+			$diff = array_diff(array_keys($push), array_merge(array_keys($this->valueList), array_keys($this->schema->getLinkList())));
+			if ($strict && ($diff) !== []) {
 				throw new CrateException(sprintf('Setting unknown values [%s] to the value set [%s].', implode(', ', $diff), $this->schema->getSchemaName()));
 			}
 			foreach ($push as $property => $value) {
+				if ($this->schema->hasLink($property)) {
+					$collection = $this->collection($property);
+					/** @var $value array */
+					foreach ($value as $collectionValue) {
+						$crate = $collection->createCrate();
+						if (is_array($collectionValue) === false) {
+							throw new CrateException(sprintf('Cannot push source value into the crate [%s]; value [%s] is not an array (collection).', $this->schema->getSchemaName(), $property));
+						}
+						$crate->push($collectionValue);
+						$collection->addCrate($crate);
+					}
+					continue;
+				}
 				if (isset($this->valueList[$property]) === false) {
 					continue;
 				}
@@ -120,6 +134,18 @@
 					->push($value);
 			}
 			return $this;
+		}
+
+		public function collection($name) {
+			if ($this->schema->hasLink($name) === false) {
+				throw new CrateException(sprintf('Crate [%s] has no link [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
+			}
+			if (isset($this->collectionList[$name]) === false) {
+				$link = $this->schema->getLink($name);
+				$this->collectionList[$name] = $this->container->create(Collection::class, $link->getTarget()
+					->getSchema());
+			}
+			return $this->collectionList[$name];
 		}
 
 		public function get($name, $default = null) {
@@ -152,18 +178,6 @@
 				}
 			}
 			return false;
-		}
-
-		public function collection($name) {
-			if ($this->schema->hasLink($name) === false) {
-				throw new CrateException(sprintf('Crate [%s] has no link [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
-			}
-			if (isset($this->collectionList[$name]) === false) {
-				$link = $this->schema->getLink($name);
-				$this->collectionList[$name] = $this->container->create(Collection::class, $link->getTarget()
-					->getSchema());
-			}
-			return $this->collectionList[$name];
 		}
 
 		public function __clone() {
