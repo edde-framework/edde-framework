@@ -1,11 +1,11 @@
 <?php
 	namespace Edde\Common\Crate;
 
-	use Edde\Api\Crate\IValue;
+	use Edde\Api\Crate\IProperty;
 	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Common\AbstractObject;
 
-	class Value extends AbstractObject implements IValue {
+	class Property extends AbstractObject implements IProperty {
 		/**
 		 * property definition of this value
 		 *

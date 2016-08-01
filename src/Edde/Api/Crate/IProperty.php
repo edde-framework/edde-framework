@@ -6,7 +6,7 @@
 	/**
 	 * The physical value of the crate.
 	 */
-	interface IValue {
+	interface IProperty {
 		/**
 		 * return value's properties (property definition)
 		 *

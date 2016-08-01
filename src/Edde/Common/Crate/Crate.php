@@ -5,7 +5,7 @@
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrate;
-	use Edde\Api\Crate\IValue;
+	use Edde\Api\Crate\IProperty;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Common\Schema\Schema;
 	use Edde\Common\Usable\AbstractUsable;
@@ -20,11 +20,11 @@
 		 */
 		protected $schema;
 		/**
-		 * @var IValue[]
+		 * @var IProperty[]
 		 */
 		protected $valueList = [];
 		/**
-		 * @var IValue[]
+		 * @var IProperty[]
 		 */
 		protected $identifierList;
 		/**
@@ -191,15 +191,15 @@
 				$this->schema = new Schema('anonymous-crate');
 			}
 			foreach ($this->schema->getPropertyList() as $property) {
-				$this->addValue(new Value($property));
+				$this->addValue(new Property($property));
 			}
 		}
 
-		public function addValue(IValue $value, $force = false) {
+		public function addValue(IProperty $value, $force = false) {
 			$this->usse();
 			$property = $value->getSchemaProperty();
 			if (isset($this->valueList[$propertyName = $property->getName()]) && $force === false) {
-				throw new CrateException(sprintf('Value [%s] is already present in value set [%s].', $propertyName, $this->schema->getSchemaName()));
+				throw new CrateException(sprintf('Property [%s] is already present in value set [%s].', $propertyName, $this->schema->getSchemaName()));
 			}
 			$this->valueList[$propertyName] = $value;
 			return $this;
