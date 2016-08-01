@@ -11,3 +11,6 @@
 
 	class Row extends Crate {
 	}
+
+	class Item extends Crate {
+	}

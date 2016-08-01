@@ -10,6 +10,7 @@
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Ext\Container\ContainerFactory;
 	use Foo\Bar\Header;
+	use Foo\Bar\Item;
 	use Foo\Bar\Row;
 	use phpunit\framework\TestCase;
 
@@ -76,25 +77,61 @@
 			$this->crateFactory->build($source);
 		}
 
+		public function testSingleMultiLink() {
+			$source = [
+				Header::class => [
+					'guid' => 'header-guid',
+					'name' => 'header name',
+					'rowCollection' => [
+						[
+							'guid' => 'first guid',
+							'name' => 'first name',
+							'value' => 'first value',
+							'item' => [
+								'name' => 'whohooo!',
+							],
+						],
+						[
+							'guid' => 'second guid',
+							'name' => 'second name',
+							'value' => 'second value',
+							'item' => [
+								'name' => 'another whohooo!',
+							],
+						],
+					],
+				],
+			];
+			$headerCrate = $this->crateFactory->build($source);
+		}
+
 		protected function setUp() {
 			$this->schemaManager = new SchemaManager();
 
 			$headerSchema = new Schema(Header::class);
 			$headerSchema->addPropertyList([
-				$headerGuid = new Property($headerSchema, 'guid', null, true, true, true),
+				$headerGuidProperty = new Property($headerSchema, 'guid', null, true, true, true),
 				new Property($headerSchema, 'name'),
 			]);
 			$rowSchema = new Schema(Row::class);
 			$rowSchema->addPropertyList([
 				new Property($rowSchema, 'guid', null, true, true, true),
-				$headerLink = new Property($rowSchema, 'header', null, true, false, false),
+				$rowHeaderProperty = new Property($rowSchema, 'header', null, true, false, false),
+				$rowItemProperty = new Property($rowSchema, 'item', null, false, false, false),
 				new Property($rowSchema, 'name'),
 				new Property($rowSchema, 'value'),
 			]);
-			$headerGuid->link($headerLink, 'rowCollection');
+			$itemSchema = new Schema(Item::class);
+			$itemSchema->addPropertyList([
+				$itemGuidProperty = new Property($itemSchema, 'guid', null, true, true, true),
+				new Property($itemSchema, 'name'),
+			]);
+			$headerGuidProperty->link($rowHeaderProperty, 'rowCollection');
+			$rowItemProperty->link($itemGuidProperty, 'item', false);
 
 			$this->schemaManager->addSchema($headerSchema);
 			$this->schemaManager->addSchema($rowSchema);
+			$this->schemaManager->addSchema($itemSchema);
 
 			$this->container = ContainerFactory::create([
 				Crate::class,

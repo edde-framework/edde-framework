@@ -115,16 +115,23 @@
 			}
 			foreach ($push as $property => $value) {
 				if ($this->schema->hasLink($property)) {
+					$link = $this->schema->getLink($property);
 					$collection = $this->collection($property);
-					/** @var $value array */
-					foreach ($value as $collectionValue) {
-						$crate = $collection->createCrate();
-						if (is_array($collectionValue) === false) {
-							throw new CrateException(sprintf('Cannot push source value into the crate [%s]; value [%s] is not an array (collection).', $this->schema->getSchemaName(), $property));
+					if ($link->isMultiLink()) {
+						/** @var $value array */
+						foreach ($value as $collectionValue) {
+							if (is_array($collectionValue) === false) {
+								throw new CrateException(sprintf('Cannot push source value into the crate [%s]; value [%s] is not an array (collection).', $this->schema->getSchemaName(), $property));
+							}
+							$crate = $collection->createCrate();
+							$crate->push($collectionValue);
+							$collection->addCrate($crate);
 						}
-						$crate->push($collectionValue);
-						$collection->addCrate($crate);
+						continue;
 					}
+					$crate = $collection->createCrate();
+					$crate->push($value);
+					$collection->addCrate($crate);
 					continue;
 				}
 				if (isset($this->valueList[$property]) === false) {
