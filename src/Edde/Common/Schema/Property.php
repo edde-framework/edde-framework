@@ -81,11 +81,11 @@
 			return $this->unique;
 		}
 
-		public function link(IProperty $property, $name = null) {
+		public function link(IProperty $property, $name = null, $multiLink = true) {
 			/**
 			 * first try if a schema will accept a new link with the given name
 			 */
-			$this->schema->addLink($link = new Link($name ?: $this->name, $this, $property));
+			$this->schema->addLink($link = new Link($name ?: $this->name, $this, $property, $multiLink === false));
 			$this->linkList[] = $link;
 			return $this;
 		}
