@@ -3,8 +3,8 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Crate\ICrate;
-	use Edde\Common\Schema\Property;
 	use Edde\Common\Schema\Schema;
+	use Edde\Common\Schema\SchemaProperty;
 	use Edde\Ext\Container\ContainerFactory;
 	use Foo\Bar\Header;
 	use Foo\Bar\Row;
@@ -21,15 +21,15 @@
 		public function testLinks() {
 			$headerSchema = new Schema('Foo\\Bar\\Header');
 			$headerSchema->addPropertyList([
-				$headerGuid = new Property($headerSchema, 'guid', null, true, true, true),
-				new Property($headerSchema, 'name'),
+				$headerGuid = new SchemaProperty($headerSchema, 'guid', null, true, true, true),
+				new SchemaProperty($headerSchema, 'name'),
 			]);
 			$rowSchema = new Schema('Foo\\Bar\\Row');
 			$rowSchema->addPropertyList([
-				new Property($rowSchema, 'guid', null, true, true, true),
-				$headerLink = new Property($rowSchema, 'header', null, true, false, false),
-				new Property($rowSchema, 'name'),
-				new Property($rowSchema, 'value'),
+				new SchemaProperty($rowSchema, 'guid', null, true, true, true),
+				$headerLink = new SchemaProperty($rowSchema, 'header', null, true, false, false),
+				new SchemaProperty($rowSchema, 'name'),
+				new SchemaProperty($rowSchema, 'value'),
 			]);
 			$headerGuid->link($headerLink, 'rowCollection');
 			self::assertTrue($headerGuid->isLink());

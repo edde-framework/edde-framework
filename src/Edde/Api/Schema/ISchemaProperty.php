@@ -4,7 +4,7 @@
 	/**
 	 * Definition of a schema property.
 	 */
-	interface IProperty {
+	interface ISchemaProperty {
 		/**
 		 * return schema to which this property belongs
 		 *
@@ -55,12 +55,12 @@
 		/**
 		 * add a new link to this property
 		 *
-		 * @param IProperty $property
+		 * @param ISchemaProperty $schemaProperty
 		 * @param string|null $name when null, property name should be used
 		 *
 		 * @return $this
 		 */
-		public function link(IProperty $property, $name = null);
+		public function link(ISchemaProperty $schemaProperty, $name = null);
 
 		/**
 		 * has this property any links?
@@ -72,7 +72,7 @@
 		/**
 		 * return all links (to or from) of this property
 		 *
-		 * @return ILink[]
+		 * @return ISchemaLink[]
 		 */
 		public function getLinkList();
 	}

@@ -83,12 +83,12 @@
 			$schema = $storable->getSchema();
 			$selectQuery = new SelectQuery();
 			foreach ($storable->getIdentifierList() as $value) {
-				$property = $value->getProperty();
+				$schemaProperty = $value->getSchemaProperty();
 				$selectQuery->select()
-					->count($property->getName(), null)
+					->count($schemaProperty->getName(), null)
 					->where()
 					->eq()
-					->property($property->getName())
+					->property($schemaProperty->getName())
 					->parameter($value->get());
 			}
 			$selectQuery->from()
@@ -102,8 +102,8 @@
 			}
 			$source = [];
 			foreach ($storable->getDirtyList() as $value) {
-				$property = $value->getProperty();
-				$source[$property->getName()] = $value->get();
+				$schemaProperty = $value->getSchemaProperty();
+				$source[$schemaProperty->getName()] = $value->get();
 			}
 			$this->execute(new $name($schema, $source));
 			return $this;

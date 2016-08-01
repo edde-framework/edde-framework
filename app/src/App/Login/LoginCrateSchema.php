@@ -1,8 +1,8 @@
 <?php
 	namespace App\Login;
 
-	use Edde\Common\Schema\Property;
 	use Edde\Common\Schema\Schema;
+	use Edde\Common\Schema\SchemaProperty;
 
 	class LoginCrateSchema extends Schema {
 		public function __construct() {
@@ -19,8 +19,8 @@
 
 		protected function prepare() {
 			$this->addPropertyList([
-				new Property($this, 'login'),
-				new Property($this, 'password'),
+				new SchemaProperty($this, 'login'),
+				new SchemaProperty($this, 'password'),
 			]);
 		}
 	}

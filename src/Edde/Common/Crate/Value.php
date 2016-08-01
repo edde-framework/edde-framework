@@ -2,16 +2,16 @@
 	namespace Edde\Common\Crate;
 
 	use Edde\Api\Crate\IValue;
-	use Edde\Api\Schema\IProperty;
+	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Common\AbstractObject;
 
 	class Value extends AbstractObject implements IValue {
 		/**
 		 * property definition of this value
 		 *
-		 * @var IProperty
+		 * @var ISchemaProperty
 		 */
-		protected $property;
+		protected $schemaProperty;
 		/**
 		 * the original value of this property
 		 *
@@ -32,17 +32,17 @@
 		protected $dirty;
 
 		/**
-		 * @param IProperty $property
+		 * @param ISchemaProperty $schemaProperty
 		 * @param mixed|null $value
 		 */
-		public function __construct(IProperty $property, $value = null) {
-			$this->property = $property;
+		public function __construct(ISchemaProperty $schemaProperty, $value = null) {
+			$this->schemaProperty = $schemaProperty;
 			$this->value = $value;
 			$this->dirty = false;
 		}
 
-		public function getProperty() {
-			return $this->property;
+		public function getSchemaProperty() {
+			return $this->schemaProperty;
 		}
 
 		public function push($value) {

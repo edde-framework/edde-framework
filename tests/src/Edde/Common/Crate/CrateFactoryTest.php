@@ -5,9 +5,9 @@
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Schema\ISchemaManager;
-	use Edde\Common\Schema\Property;
 	use Edde\Common\Schema\Schema;
 	use Edde\Common\Schema\SchemaManager;
+	use Edde\Common\Schema\SchemaProperty;
 	use Edde\Ext\Container\ContainerFactory;
 	use Foo\Bar\Header;
 	use Foo\Bar\Item;
@@ -110,24 +110,24 @@
 
 			$headerSchema = new Schema(Header::class);
 			$headerSchema->addPropertyList([
-				$headerGuidProperty = new Property($headerSchema, 'guid', null, true, true, true),
-				new Property($headerSchema, 'name'),
+				$headerGuidProperty = new SchemaProperty($headerSchema, 'guid', null, true, true, true),
+				new SchemaProperty($headerSchema, 'name'),
 			]);
 			$rowSchema = new Schema(Row::class);
 			$rowSchema->addPropertyList([
-				new Property($rowSchema, 'guid', null, true, true, true),
-				$rowHeaderProperty = new Property($rowSchema, 'header', null, true, false, false),
-				$rowItemProperty = new Property($rowSchema, 'item', null, false, false, false),
-				new Property($rowSchema, 'name'),
-				new Property($rowSchema, 'value'),
+				new SchemaProperty($rowSchema, 'guid', null, true, true, true),
+				$rowHeaderProperty = new SchemaProperty($rowSchema, 'header', null, true, false, false),
+				$rowItemProperty = new SchemaProperty($rowSchema, 'item', null, false, false, false),
+				new SchemaProperty($rowSchema, 'name'),
+				new SchemaProperty($rowSchema, 'value'),
 			]);
 			$itemSchema = new Schema(Item::class);
 			$itemSchema->addPropertyList([
-				$itemGuidProperty = new Property($itemSchema, 'guid', null, true, true, true),
-				new Property($itemSchema, 'name'),
+				$itemGuidProperty = new SchemaProperty($itemSchema, 'guid', null, true, true, true),
+				new SchemaProperty($itemSchema, 'name'),
 			]);
 			$headerGuidProperty->link($rowHeaderProperty, 'rowCollection');
-			$rowItemProperty->link($itemGuidProperty, 'item', false);
+			$rowItemProperty->link($itemGuidProperty, 'item');
 
 			$this->schemaManager->addSchema($headerSchema);
 			$this->schemaManager->addSchema($rowSchema);

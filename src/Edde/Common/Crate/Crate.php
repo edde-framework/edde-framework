@@ -64,8 +64,8 @@
 			if ($this->identifierList === null) {
 				$this->identifierList = [];
 				foreach ($this->valueList as $value) {
-					$property = $value->getProperty();
-					if ($property->isIdentifier()) {
+					$schemaProperty = $value->getSchemaProperty();
+					if ($schemaProperty->isIdentifier()) {
 						$this->identifierList[] = $value;
 					}
 				}
@@ -115,23 +115,16 @@
 			}
 			foreach ($push as $property => $value) {
 				if ($this->schema->hasLink($property)) {
-					$link = $this->schema->getLink($property);
 					$collection = $this->collection($property);
-					if ($link->isMultiLink()) {
-						/** @var $value array */
-						foreach ($value as $collectionValue) {
-							if (is_array($collectionValue) === false) {
-								throw new CrateException(sprintf('Cannot push source value into the crate [%s]; value [%s] is not an array (collection).', $this->schema->getSchemaName(), $property));
-							}
-							$crate = $collection->createCrate();
-							$crate->push($collectionValue);
-							$collection->addCrate($crate);
+					/** @var $value array */
+					foreach ($value as $collectionValue) {
+						if (is_array($collectionValue) === false) {
+							throw new CrateException(sprintf('Cannot push source value into the crate [%s]; value [%s] is not an array (collection).', $this->schema->getSchemaName(), $property));
 						}
-						continue;
+						$crate = $collection->createCrate();
+						$crate->push($collectionValue);
+						$collection->addCrate($crate);
 					}
-					$crate = $collection->createCrate();
-					$crate->push($value);
-					$collection->addCrate($crate);
 					continue;
 				}
 				if (isset($this->valueList[$property]) === false) {
@@ -166,15 +159,15 @@
 			if ($this->isDirty() === false) {
 				return [];
 			}
-			$propertyList = [];
+			$valueList = [];
 			foreach ($this->valueList as $value) {
 				if ($value->isDirty() === false) {
 					continue;
 				}
-				$property = $value->getProperty();
-				$propertyList[$property->getName()] = $value;
+				$property = $value->getSchemaProperty();
+				$valueList[$property->getName()] = $value;
 			}
-			return $propertyList;
+			return $valueList;
 		}
 
 		public function isDirty() {
@@ -204,7 +197,7 @@
 
 		public function addValue(IValue $value, $force = false) {
 			$this->usse();
-			$property = $value->getProperty();
+			$property = $value->getSchemaProperty();
 			if (isset($this->valueList[$propertyName = $property->getName()]) && $force === false) {
 				throw new CrateException(sprintf('Value [%s] is already present in value set [%s].', $propertyName, $this->schema->getSchemaName()));
 			}

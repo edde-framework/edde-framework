@@ -1,9 +1,9 @@
 <?php
 	namespace Edde\Common\Schema;
 
-	use Edde\Api\Schema\ILink;
-	use Edde\Api\Schema\IProperty;
 	use Edde\Api\Schema\ISchema;
+	use Edde\Api\Schema\ISchemaLink;
+	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Api\Schema\SchemaException;
 	use Edde\Common\Usable\AbstractUsable;
 
@@ -21,11 +21,11 @@
 		 */
 		protected $schemaName;
 		/**
-		 * @var IProperty[]
+		 * @var ISchemaProperty[]
 		 */
 		protected $propertyList = [];
 		/**
-		 * @var ILink[]
+		 * @var ISchemaLink[]
 		 */
 		protected $linkList = [];
 
@@ -79,26 +79,26 @@
 			return $this->schemaName;
 		}
 
-		public function addPropertyList(array $propertyList) {
-			foreach ($propertyList as $property) {
-				$this->addProperty($property);
+		public function addPropertyList(array $schemaPropertyList) {
+			foreach ($schemaPropertyList as $schemaProperty) {
+				$this->addProperty($schemaProperty);
 			}
 			return $this;
 		}
 
-		public function addProperty(IProperty $property, $force = false) {
-			$propertyName = $property->getName();
-			if ($property->getSchema() !== $this) {
+		public function addProperty(ISchemaProperty $schemaProperty, $force = false) {
+			$propertyName = $schemaProperty->getName();
+			if ($schemaProperty->getSchema() !== $this) {
 				throw new SchemaException(sprintf('Cannot add foreign property [%s] to schema [%s].', $propertyName, $this->getSchemaName()));
 			}
 			if ($force === false && isset($this->propertyList[$propertyName])) {
-				throw new SchemaException(sprintf('Property with name [%s] already exists in schema [%s].', $propertyName, $this->getSchemaName()));
+				throw new SchemaException(sprintf('SchemaProperty with name [%s] already exists in schema [%s].', $propertyName, $this->getSchemaName()));
 			}
-			$this->propertyList[$propertyName] = $property;
+			$this->propertyList[$propertyName] = $schemaProperty;
 			return $this;
 		}
 
-		public function addLink(ILink $link, $force = false) {
+		public function addLink(ISchemaLink $link, $force = false) {
 			if (isset($this->linkList[$name = $link->getName()]) && $force === false) {
 				throw new SchemaException(sprintf('Schema [%s] already contains link named [%s]', $this->getSchemaName(), $name));
 			}

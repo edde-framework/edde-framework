@@ -26,7 +26,7 @@
 		/**
 		 * return set of properties of this Schema
 		 *
-		 * @return IProperty[]
+		 * @return ISchemaProperty[]
 		 */
 		public function getPropertyList();
 
@@ -44,7 +44,7 @@
 		 *
 		 * @param string $name
 		 *
-		 * @return IProperty
+		 * @return ISchemaProperty
 		 *
 		 * @throws SchemaException
 		 */
@@ -53,12 +53,12 @@
 		/**
 		 * register link to a schema; if the link name is present, exception should be thrown
 		 *
-		 * @param ILink $link
+		 * @param ISchemaLink $link
 		 * @param bool $force === true add a new link regardless of it's presence
 		 *
 		 * @return $this
 		 */
-		public function addLink(ILink $link, $force = false);
+		public function addLink(ISchemaLink $link, $force = false);
 
 		/**
 		 * is there link with the given name?
@@ -74,14 +74,14 @@
 		 *
 		 * @param string $name
 		 *
-		 * @return ILink
+		 * @return ISchemaLink
 		 */
 		public function getLink($name);
 
 		/**
 		 * return all known links in this schema
 		 *
-		 * @return ILink[]
+		 * @return ISchemaLink[]
 		 */
 		public function getLinkList();
 	}

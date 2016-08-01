@@ -3,7 +3,7 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Control\IControl;
-	use Edde\Api\Schema\IProperty;
+	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Common\Control\Html\ButtonControl;
 	use Edde\Common\Control\Html\DivControl;
 	use Edde\Common\Control\Html\JavaScriptControl;
@@ -85,20 +85,20 @@
 		}
 
 		/**
-		 * @param IProperty $property
+		 * @param ISchemaProperty $schemaProperty
 		 *
 		 * @return TextInputControl
 		 */
-		public function createTextInputControl(IProperty $property = null) {
-			return $this->createControl(TextInputControl::class, $property);
+		public function createTextInputControl(ISchemaProperty $schemaProperty = null) {
+			return $this->createControl(TextInputControl::class, $schemaProperty);
 		}
 
 		/**
-		 * @param IProperty $property
+		 * @param ISchemaProperty $schemaProperty
 		 *
 		 * @return PasswordInputControl
 		 */
-		public function createPasswordInputControl(IProperty $property = null) {
-			return $this->createControl(PasswordInputControl::class, $property);
+		public function createPasswordInputControl(ISchemaProperty $schemaProperty = null) {
+			return $this->createControl(PasswordInputControl::class, $schemaProperty);
 		}
 	}

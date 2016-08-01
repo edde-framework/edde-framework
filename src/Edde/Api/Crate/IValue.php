@@ -1,7 +1,7 @@
 <?php
 	namespace Edde\Api\Crate;
 
-	use Edde\Api\Schema\IProperty;
+	use Edde\Api\Schema\ISchemaProperty;
 
 	/**
 	 * The physical value of the crate.
@@ -10,9 +10,9 @@
 		/**
 		 * return value's properties (property definition)
 		 *
-		 * @return IProperty
+		 * @return ISchemaProperty
 		 */
-		public function getProperty();
+		public function getSchemaProperty();
 
 		/**
 		 * set value to this property; the original value is preserved

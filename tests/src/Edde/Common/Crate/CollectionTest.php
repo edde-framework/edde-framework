@@ -2,8 +2,8 @@
 	namespace Edde\Common\Crate;
 
 	use Edde\Api\Container\IContainer;
-	use Edde\Common\Schema\Property;
 	use Edde\Common\Schema\Schema;
+	use Edde\Common\Schema\SchemaProperty;
 	use Edde\Ext\Container\ContainerFactory;
 	use Foo\Bar\FooBarBar;
 	use phpunit\framework\TestCase;
@@ -18,9 +18,9 @@
 
 		public function testCommon() {
 			$schema = new Schema('Foo\\Bar\\FooBar');
-			$schema->addProperty(new Property($schema, 'guid'));
-			$schema->addProperty(new Property($schema, 'name'));
-			$schema->addProperty(new Property($schema, 'long-name'));
+			$schema->addProperty(new SchemaProperty($schema, 'guid'));
+			$schema->addProperty(new SchemaProperty($schema, 'name'));
+			$schema->addProperty(new SchemaProperty($schema, 'long-name'));
 
 			$collection = new Collection($this->container, $schema);
 			self::assertEmpty(iterator_to_array($collection));
@@ -36,9 +36,9 @@
 
 		public function testInstanceCrate() {
 			$schema = new Schema('Foo\\Bar\\FooBarBar');
-			$schema->addProperty(new Property($schema, 'guid'));
-			$schema->addProperty(new Property($schema, 'name'));
-			$schema->addProperty(new Property($schema, 'long-name'));
+			$schema->addProperty(new SchemaProperty($schema, 'guid'));
+			$schema->addProperty(new SchemaProperty($schema, 'name'));
+			$schema->addProperty(new SchemaProperty($schema, 'long-name'));
 
 			$collection = new Collection($this->container, $schema);
 			$crate = $collection->createCrate();

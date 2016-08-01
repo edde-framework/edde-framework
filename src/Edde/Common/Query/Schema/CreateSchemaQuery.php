@@ -20,13 +20,13 @@
 
 		protected function prepare() {
 			$this->node = new Node('create-schema-query', $this->schema->getSchemaName());
-			foreach ($this->schema->getPropertyList() as $property) {
-				$this->node->addNode($propertyNode = new Node($property->getName()));
+			foreach ($this->schema->getPropertyList() as $schemaProperty) {
+				$this->node->addNode($propertyNode = new Node($schemaProperty->getName()));
 				$propertyNode->setAttributeList([
-					'type' => $property->getType(),
-					'required' => $property->isRequired(),
-					'identifier' => $property->isIdentifier(),
-					'unique' => $property->isUnique(),
+					'type' => $schemaProperty->getType(),
+					'required' => $schemaProperty->isRequired(),
+					'identifier' => $schemaProperty->isIdentifier(),
+					'unique' => $schemaProperty->isUnique(),
 				]);
 			}
 		}

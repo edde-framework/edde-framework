@@ -1,12 +1,12 @@
 <?php
 	namespace Edde\Common\Schema;
 
-	use Edde\Api\Schema\ILink;
-	use Edde\Api\Schema\IProperty;
 	use Edde\Api\Schema\ISchema;
+	use Edde\Api\Schema\ISchemaLink;
+	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Common\AbstractObject;
 
-	class Property extends AbstractObject implements IProperty {
+	class SchemaProperty extends AbstractObject implements ISchemaProperty {
 		/**
 		 * @var ISchema
 		 */
@@ -32,7 +32,7 @@
 		 */
 		protected $identifier;
 		/**
-		 * @var ILink[]
+		 * @var ISchemaLink[]
 		 */
 		protected $linkList = [];
 
@@ -81,11 +81,11 @@
 			return $this->unique;
 		}
 
-		public function link(IProperty $property, $name = null, $multiLink = true) {
+		public function link(ISchemaProperty $schemaProperty, $name = null) {
 			/**
 			 * first try if a schema will accept a new link with the given name
 			 */
-			$this->schema->addLink($link = new Link($name ?: $this->name, $this, $property, $multiLink === false));
+			$this->schema->addLink($link = new SchemaLink($name ?: $this->name, $this, $schemaProperty));
 			$this->linkList[] = $link;
 			return $this;
 		}
