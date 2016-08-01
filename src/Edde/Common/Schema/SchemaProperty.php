@@ -2,7 +2,6 @@
 	namespace Edde\Common\Schema;
 
 	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Schema\ISchemaLink;
 	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Common\AbstractObject;
 
@@ -15,6 +14,10 @@
 		 * @var string
 		 */
 		protected $name;
+		/**
+		 * @var string
+		 */
+		protected $propertyName;
 		/**
 		 * @var string
 		 */
@@ -31,10 +34,6 @@
 		 * @var bool
 		 */
 		protected $identifier;
-		/**
-		 * @var ISchemaLink[]
-		 */
-		protected $linkList = [];
 
 		/**
 		 * @param ISchema $schema
@@ -62,7 +61,10 @@
 		}
 
 		public function getPropertyName() {
-			return $this->schema->getSchemaName() . '::' . $this->name;
+			if ($this->propertyName === null) {
+				$this->propertyName = $this->schema->getSchemaName() . '::' . $this->name;
+			}
+			return $this->propertyName;
 		}
 
 		public function isIdentifier() {
@@ -79,22 +81,5 @@
 
 		public function isUnique() {
 			return $this->unique;
-		}
-
-		public function link(ISchemaProperty $schemaProperty, $name = null) {
-			/**
-			 * first try if a schema will accept a new link with the given name
-			 */
-			$this->schema->addLink($link = new SchemaLink($name ?: $this->name, $this, $schemaProperty));
-			$this->linkList[] = $link;
-			return $this;
-		}
-
-		public function getLinkList() {
-			return $this->linkList;
-		}
-
-		public function isLink() {
-			return empty($this->linkList) === false;
 		}
 	}

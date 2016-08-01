@@ -54,11 +54,6 @@
 			return $this->namespace;
 		}
 
-		public function getPropertyList() {
-			$this->usse();
-			return $this->propertyList;
-		}
-
 		public function getProperty($name) {
 			$this->usse();
 			if ($this->hasProperty($name) === false) {
@@ -77,6 +72,11 @@
 				$this->schemaName = (($namespace = $this->namespace) !== null ? $namespace . '\\' : null) . $this->name;
 			}
 			return $this->schemaName;
+		}
+
+		public function getPropertyList() {
+			$this->usse();
+			return $this->propertyList;
 		}
 
 		public function addPropertyList(array $schemaPropertyList) {
@@ -98,11 +98,14 @@
 			return $this;
 		}
 
-		public function addLink(ISchemaLink $link, $force = false) {
-			if (isset($this->linkList[$name = $link->getName()]) && $force === false) {
+		public function addLink(ISchemaLink $schemaLink, $force = false) {
+			if (isset($this->linkList[$name = $schemaLink->getName()]) && $force === false) {
 				throw new SchemaException(sprintf('Schema [%s] already contains link named [%s]', $this->getSchemaName(), $name));
 			}
-			$this->linkList[$name] = $link;
+			if (isset($this->propertyList[$name]) === false) {
+				throw new SchemaException(sprintf('Schema [%s] does not contain link property [%s].', $this->getSchemaName(), $name));
+			}
+			$this->linkList[$name] = $schemaLink;
 			return $this;
 		}
 

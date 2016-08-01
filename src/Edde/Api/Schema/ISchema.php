@@ -24,13 +24,6 @@
 		public function getSchemaName();
 
 		/**
-		 * return set of properties of this Schema
-		 *
-		 * @return ISchemaProperty[]
-		 */
-		public function getPropertyList();
-
-		/**
 		 * tells if given property name is known in this schema
 		 *
 		 * @param string $name
@@ -51,14 +44,21 @@
 		public function getProperty($name);
 
 		/**
-		 * register link to a schema; if the link name is present, exception should be thrown
+		 * return set of properties of this Schema
 		 *
-		 * @param ISchemaLink $link
+		 * @return ISchemaProperty[]
+		 */
+		public function getPropertyList();
+
+		/**
+		 * register link to a schema; if the link name is present, exception should be thrown; link name must be present in property list
+		 *
+		 * @param ISchemaLink $schemaLink
 		 * @param bool $force === true add a new link regardless of it's presence
 		 *
 		 * @return $this
 		 */
-		public function addLink(ISchemaLink $link, $force = false);
+		public function addLink(ISchemaLink $schemaLink, $force = false);
 
 		/**
 		 * is there link with the given name?

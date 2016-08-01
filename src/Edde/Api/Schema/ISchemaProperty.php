@@ -51,28 +51,4 @@
 		 * @return bool
 		 */
 		public function isUnique();
-
-		/**
-		 * add a new link to this property
-		 *
-		 * @param ISchemaProperty $schemaProperty
-		 * @param string|null $name when null, property name should be used
-		 *
-		 * @return $this
-		 */
-		public function link(ISchemaProperty $schemaProperty, $name = null);
-
-		/**
-		 * has this property any links?
-		 *
-		 * @return bool
-		 */
-		public function isLink();
-
-		/**
-		 * return all links (to or from) of this property
-		 *
-		 * @return ISchemaLink[]
-		 */
-		public function getLinkList();
 	}
