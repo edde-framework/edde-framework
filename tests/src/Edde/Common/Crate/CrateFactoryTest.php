@@ -110,14 +110,18 @@
 
 			$headerSchema = new Schema(Header::class);
 			$headerSchema->addPropertyList([
-				$headerGuidProperty = new SchemaProperty($headerSchema, 'guid', null, true, true, true),
+				$headerGuidProperty = (new SchemaProperty($headerSchema, 'guid'))->unique()
+					->identifier()
+					->required(),
 				new SchemaProperty($headerSchema, 'name'),
 			]);
 			$rowSchema = new Schema(Row::class);
 			$rowSchema->addPropertyList([
-				new SchemaProperty($rowSchema, 'guid', null, true, true, true),
-				$rowHeaderProperty = new SchemaProperty($rowSchema, 'header', null, true, false, false),
-				$rowItemProperty = new SchemaProperty($rowSchema, 'item', null, false, false, false),
+				(new SchemaProperty($rowSchema, 'guid'))->unique()
+					->identifier()
+					->required(),
+				$rowHeaderProperty = (new SchemaProperty($rowSchema, 'header'))->required(),
+				$rowItemProperty = new SchemaProperty($rowSchema, 'item'),
 				new SchemaProperty($rowSchema, 'name'),
 				new SchemaProperty($rowSchema, 'value'),
 			]);
@@ -126,8 +130,6 @@
 				$itemGuidProperty = new SchemaProperty($itemSchema, 'guid', null, true, true, true),
 				new SchemaProperty($itemSchema, 'name'),
 			]);
-			$headerGuidProperty->link($rowHeaderProperty, 'rowCollection');
-			$rowItemProperty->link($itemGuidProperty, 'item');
 
 			$this->schemaManager->addSchema($headerSchema);
 			$this->schemaManager->addSchema($rowSchema);

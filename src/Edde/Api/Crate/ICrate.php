@@ -24,26 +24,26 @@
 		public function getSchema();
 
 		/**
-		 * @return IValue[]
+		 * @return IProperty[]
 		 */
 		public function getValueList();
 
 		/**
 		 * return list of identity values
 		 *
-		 * @return IValue[]
+		 * @return IProperty[]
 		 */
 		public function getIdentifierList();
 
 		/**
 		 * add the given value to this property set
 		 *
-		 * @param IValue $value
+		 * @param IProperty $value
 		 * @param bool $force
 		 *
 		 * @return $this
 		 */
-		public function addValue(IValue $value, $force = false);
+		public function addValue(IProperty $value, $force = false);
 
 		/**
 		 * has this property set property with the given name?
@@ -59,7 +59,7 @@
 		 *
 		 * @param string $name
 		 *
-		 * @return IValue
+		 * @return IProperty
 		 */
 		public function getValue($name);
 
@@ -117,7 +117,7 @@
 		/**
 		 * return array of dirty values
 		 *
-		 * @return IValue[]
+		 * @return IProperty[]
 		 */
 		public function getDirtyList();
 

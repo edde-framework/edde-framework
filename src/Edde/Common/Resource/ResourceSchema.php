@@ -11,12 +11,16 @@
 
 		protected function prepare() {
 			$this->addPropertyList([
-				new SchemaProperty($this, 'guid', 'string', true, true, true, null),
-				new SchemaProperty($this, 'name', 'string', true, false, false, null),
-				new SchemaProperty($this, 'url', 'string', true, true, false, null),
-				new SchemaProperty($this, 'base', 'string', false, false, false, null),
-				new SchemaProperty($this, 'extension', 'string', false, false, false, null),
-				new SchemaProperty($this, 'mime', 'string', false, false, false, null),
+				(new SchemaProperty($this, 'guid'))->unique()
+					->identifier()
+					->required(),
+				(new SchemaProperty($this, 'name'))->unique()
+					->required(),
+				(new SchemaProperty($this, 'url'))->unique()
+					->required(),
+				new SchemaProperty($this, 'base'),
+				new SchemaProperty($this, 'extension'),
+				new SchemaProperty($this, 'mime'),
 			]);
 		}
 	}

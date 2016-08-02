@@ -21,7 +21,9 @@
 		public function testSimpleCrate() {
 			$schema = new Schema('Foo\\Bar\\FooBar');
 			$schema->addPropertyList([
-				new SchemaProperty($schema, 'guid', null, true, true, true),
+				(new SchemaProperty($schema, 'guid'))->required()
+					->unique()
+					->identifier(),
 				new SchemaProperty($schema, 'name'),
 				new SchemaProperty($schema, 'some-long-named-property'),
 			]);
