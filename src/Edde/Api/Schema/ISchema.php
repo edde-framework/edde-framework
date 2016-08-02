@@ -51,14 +51,16 @@
 		public function getPropertyList();
 
 		/**
-		 * register link to a schema; if the link name is present, exception should be thrown; link name must be present in property list
+		 * make a link between the given source and destination property (1:1); if the name is present and force === false, exception should be thrown
 		 *
-		 * @param ISchemaLink $schemaLink
-		 * @param bool $force === true add a new link regardless of it's presence
+		 * @param string $name
+		 * @param ISchemaProperty $source
+		 * @param ISchemaProperty $target
+		 * @param bool $force
 		 *
 		 * @return $this
 		 */
-		public function addLink(ISchemaLink $schemaLink, $force = false);
+		public function link($name, ISchemaProperty $source, ISchemaProperty $target, $force = false);
 
 		/**
 		 * is there link with the given name?
@@ -84,4 +86,35 @@
 		 * @return ISchemaLink[]
 		 */
 		public function getLinkList();
+
+		/**
+		 * connect the given source property to the target property as 1:n collection
+		 *
+		 * @param string $name
+		 * @param ISchemaProperty $source
+		 * @param ISchemaProperty $target
+		 * @param bool $force
+		 *
+		 * @return $this
+		 */
+		public function collection($name, ISchemaProperty $source, ISchemaProperty $target, $force = false);
+
+		/**
+		 * @param string $name
+		 *
+		 * @return bool
+		 */
+		public function hasCollection($name);
+
+		/**
+		 * @param string $name
+		 *
+		 * @return ISchemaCollection
+		 */
+		public function getCollection($name);
+
+		/**
+		 * @return ISchemaCollection[]
+		 */
+		public function getCollectionList();
 	}

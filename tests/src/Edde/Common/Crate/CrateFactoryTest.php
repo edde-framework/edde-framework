@@ -127,7 +127,9 @@
 			]);
 			$itemSchema = new Schema(Item::class);
 			$itemSchema->addPropertyList([
-				$itemGuidProperty = new SchemaProperty($itemSchema, 'guid', null, true, true, true),
+				$itemGuidProperty = (new SchemaProperty($itemSchema, 'guid'))->identifier()
+					->unique()
+					->required(),
 				new SchemaProperty($itemSchema, 'name'),
 			]);
 

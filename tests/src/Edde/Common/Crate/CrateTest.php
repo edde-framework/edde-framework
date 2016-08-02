@@ -19,22 +19,22 @@
 		protected $container;
 
 		public function testLinks() {
-			$headerSchema = new Schema('Foo\\Bar\\Header');
+			$headerSchema = new Schema(Header::class);
 			$headerSchema->addPropertyList([
-				$headerGuid = new SchemaProperty($headerSchema, 'guid', null, true, true, true),
+				$headerGuid = (new SchemaProperty($headerSchema, 'guid'))->unique()
+					->required()
+					->identifier(),
 				new SchemaProperty($headerSchema, 'name'),
 			]);
-			$rowSchema = new Schema('Foo\\Bar\\Row');
+			$rowSchema = new Schema(Row::class);
 			$rowSchema->addPropertyList([
-				new SchemaProperty($rowSchema, 'guid', null, true, true, true),
-				$headerLink = new SchemaProperty($rowSchema, 'header', null, true, false, false),
+				(new SchemaProperty($rowSchema, 'guid'))->unique()
+					->identifier()
+					->required(),
+				$headerLink = (new SchemaProperty($rowSchema, 'header'))->required(),
 				new SchemaProperty($rowSchema, 'name'),
 				new SchemaProperty($rowSchema, 'value'),
 			]);
-			$headerGuid->link($headerLink, 'rowCollection');
-			self::assertTrue($headerGuid->isLink());
-			self::assertFalse($headerLink->isLink());
-			self::assertNotEmpty($headerSchema->getLinkList());
 			/** @var $headerCrate ICrate */
 			$headerCrate = $this->container->create(Header::class);
 			self::assertInstanceOf(Header::class, $headerCrate);
