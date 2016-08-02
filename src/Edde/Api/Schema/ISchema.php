@@ -117,4 +117,16 @@
 		 * @return ISchemaCollection[]
 		 */
 		public function getCollectionList();
+
+		/**
+		 * link the given source property to the given target property in both directions (link + collection in reverse); this is only shorthand for link(source, target) + collection(target, source)
+		 *
+		 * @param string $link
+		 * @param string $collection
+		 * @param ISchemaProperty $source
+		 * @param ISchemaProperty $target
+		 *
+		 * @return $this
+		 */
+		public function linkTo($link, $collection, ISchemaProperty $source, ISchemaProperty $target);
 	}

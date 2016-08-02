@@ -35,6 +35,12 @@
 				new SchemaProperty($rowSchema, 'name'),
 				new SchemaProperty($rowSchema, 'value'),
 			]);
+
+			$rowSchema->linkTo('header', 'rowCollection', $headerLink, $headerGuid);
+
+			self::assertTrue($rowSchema->hasLink('header'));
+			self::assertTrue($headerSchema->hasCollection('rowCollection'));
+
 			/** @var $headerCrate ICrate */
 			$headerCrate = $this->container->create(Header::class);
 			self::assertInstanceOf(Header::class, $headerCrate);

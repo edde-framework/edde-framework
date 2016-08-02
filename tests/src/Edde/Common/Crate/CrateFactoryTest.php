@@ -133,6 +133,9 @@
 				new SchemaProperty($itemSchema, 'name'),
 			]);
 
+			$rowSchema->linkTo('header', 'rowCollection', $rowHeaderProperty, $headerGuidProperty);
+			$rowSchema->linkTo('item', 'rowItemCollection', $rowItemProperty, $itemGuidProperty);
+
 			$this->schemaManager->addSchema($headerSchema);
 			$this->schemaManager->addSchema($rowSchema);
 			$this->schemaManager->addSchema($itemSchema);

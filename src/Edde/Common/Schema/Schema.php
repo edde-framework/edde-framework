@@ -103,14 +103,6 @@
 			return $this;
 		}
 
-		public function link($name, ISchemaProperty $source, ISchemaProperty $target, $force = false) {
-			if (isset($this->linkList[$name]) && $force === false) {
-				throw new SchemaException(sprintf('Schema [%s] already contains link named [%s].', $this->getSchemaName(), $name));
-			}
-			$this->linkList[$name] = new SchemaLink($name, $source, $target);
-			return $this;
-		}
-
 		public function hasLink($name) {
 			return isset($this->linkList[$name]);
 		}
@@ -147,6 +139,21 @@
 
 		public function getCollectionList() {
 			return $this->collectionList;
+		}
+
+		public function linkTo($link, $collection, ISchemaProperty $source, ISchemaProperty $target) {
+			$this->link($link, $source, $target);
+			$target->getSchema()
+				->collection($collection, $target, $source);
+			return $this;
+		}
+
+		public function link($name, ISchemaProperty $source, ISchemaProperty $target, $force = false) {
+			if (isset($this->linkList[$name]) && $force === false) {
+				throw new SchemaException(sprintf('Schema [%s] already contains link named [%s].', $this->getSchemaName(), $name));
+			}
+			$this->linkList[$name] = new SchemaLink($name, $source, $target);
+			return $this;
 		}
 
 		protected function prepare() {

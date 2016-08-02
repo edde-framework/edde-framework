@@ -26,7 +26,7 @@
 		/**
 		 * @return IProperty[]
 		 */
-		public function getValueList();
+		public function getPropertyList();
 
 		/**
 		 * return list of identity values
