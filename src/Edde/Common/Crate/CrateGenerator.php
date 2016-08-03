@@ -18,15 +18,15 @@
 			$sourceList = [];
 			$source[] = "<?php\n";
 			if (($namespace = $schema->getNamespace()) !== null) {
-				$source[] = "namespace $namespace;\n";
+				$source[] = "\tnamespace $namespace;\n\n";
 			}
-			$source[] = sprintf("use %s;\n", $this->parent);
+			$source[] = sprintf("\tuse %s;\n\n", $this->parent);
 			$parent = explode('\\', $this->parent);
-			$source[] = sprintf("class %s extends %s {\n", $schema->getName(), end($parent));
+			$source[] = sprintf("\tclass %s extends %s {\n", $schema->getName(), end($parent));
 			foreach ($schema->getPropertyList() as $schemaProperty) {
 				$source[] = $this->generateSchemaProperty($schemaProperty);
 			}
-			$source[] = "}\n";
+			$source[] = "\t}\n";
 			$sourceList[$schema->getSchemaName()] = implode('', $source);
 			return $sourceList;
 		}
@@ -34,25 +34,31 @@
 		protected function generateSchemaProperty(ISchemaProperty $schemaProperty) {
 			$source[] = $this->generateGetter($schemaProperty);
 			$source[] = $this->generateSetter($schemaProperty);
+			$source[] = '';
 			return implode("\n", $source);
 		}
 
 		protected function generateGetter(ISchemaProperty $schemaProperty) {
-			$source[] = sprintf("public function get%s() {\n", StringUtils::camelize($schemaProperty->getName()));
-			$source[] = sprintf("return \$this->get('%s');\n", $schemaProperty->getName());
-			$source[] = "}\n";
+			$source[] = "\t\t/**\n";
+			$source[] = sprintf("\t\t * @return %s\n", $schemaProperty->getType());
+			$source[] = "\t\t */\n";
+			$source[] = sprintf("\t\tpublic function get%s() {\n", StringUtils::camelize($schemaProperty->getName()));
+			$source[] = sprintf("\t\t\treturn \$this->get('%s');\n", $schemaProperty->getName());
+			$source[] = "\t\t}\n";
 			return implode('', $source);
 		}
 
 		protected function generateSetter(ISchemaProperty $schemaProperty) {
 			$parameter = StringUtils::firstLower($camelized = StringUtils::camelize($schemaProperty->getName()));
-			$source[] = "/**\n";
-			$source[] = " * @return \$this\n";
-			$source[] = " */\n";
-			$source[] = sprintf("public function set%s(\$%s) {\n", $camelized, $parameter);
-			$source[] = sprintf("\$this->set('%s', \$%s);\n", $schemaProperty->getName(), $parameter);
-			$source[] = "return \$this;\n";
-			$source[] = "}\n";
+			$source[] = "\t\t/**\n";
+			$source[] = sprintf("\t\t * @param %s $%s\n", $schemaProperty->getType(), $parameter);
+			$source[] = "\t\t * \n";
+			$source[] = "\t\t * @return \$this\n";
+			$source[] = "\t\t */\n";
+			$source[] = sprintf("\t\tpublic function set%s(\$%s) {\n", $camelized, $parameter);
+			$source[] = sprintf("\t\t\t\$this->set('%s', \$%s);\n", $schemaProperty->getName(), $parameter);
+			$source[] = "\t\t\treturn \$this;\n";
+			$source[] = "\t\t}\n";
 			return implode('', $source);
 		}
 

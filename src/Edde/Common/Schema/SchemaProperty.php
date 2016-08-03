@@ -42,6 +42,7 @@
 		public function __construct(ISchema $schema, $name) {
 			$this->schema = $schema;
 			$this->name = $name;
+			$this->type = 'string';
 		}
 
 		public function getSchema() {

@@ -40,6 +40,6 @@
 		}
 
 		protected function tearDown() {
-			$this->tempDirectory->delete();
+//			$this->tempDirectory->delete();
 		}
 	}
