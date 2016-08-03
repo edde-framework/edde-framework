@@ -14,7 +14,7 @@ stages:
 
 before_script:
         - echo "[Date]" > /usr/local/etc/php/conf.d/date.ini
-        - echo "date.timezone = Prague/Europe" > /usr/local/etc/php/conf.d/date.ini
+        - echo "date.timezone = Europe/Prague" > /usr/local/etc/php/conf.d/date.ini
 
 test:
     stage: test
