@@ -1,7 +1,9 @@
 <?php
 	namespace Edde\Api\Schema;
 
-	interface ISchema {
+	use Edde\Api\Usable\IUsable;
+
+	interface ISchema extends IUsable {
 		/**
 		 * return only the name of this schema without namespace
 		 *
@@ -129,4 +131,13 @@
 		 * @return $this
 		 */
 		public function linkTo($link, $collection, ISchemaProperty $source, ISchemaProperty $target);
+
+		/**
+		 * when schema is used, all dependencies are prepared too
+		 *
+		 * @param ISchema $schema
+		 *
+		 * @return $this
+		 */
+		public function addDependency(ISchema $schema);
 	}

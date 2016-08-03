@@ -5,13 +5,14 @@
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Schema\ISchemaManager;
-	use Edde\Common\Schema\Schema;
 	use Edde\Common\Schema\SchemaManager;
-	use Edde\Common\Schema\SchemaProperty;
 	use Edde\Ext\Container\ContainerFactory;
 	use Foo\Bar\Header;
+	use Foo\Bar\HeaderSchema;
 	use Foo\Bar\Item;
+	use Foo\Bar\ItemSchema;
 	use Foo\Bar\Row;
+	use Foo\Bar\RowSchema;
 	use phpunit\framework\TestCase;
 
 	require_once(__DIR__ . '/assets.php');
@@ -133,33 +134,7 @@
 		protected function setUp() {
 			$this->schemaManager = new SchemaManager();
 
-			$headerSchema = new Schema(Header::class);
-			$headerSchema->addPropertyList([
-				$headerGuidProperty = (new SchemaProperty($headerSchema, 'guid'))->unique()
-					->identifier()
-					->required(),
-				new SchemaProperty($headerSchema, 'name'),
-			]);
-			$rowSchema = new Schema(Row::class);
-			$rowSchema->addPropertyList([
-				(new SchemaProperty($rowSchema, 'guid'))->unique()
-					->identifier()
-					->required(),
-				$rowHeaderProperty = (new SchemaProperty($rowSchema, 'header'))->required(),
-				$rowItemProperty = new SchemaProperty($rowSchema, 'item'),
-				new SchemaProperty($rowSchema, 'name'),
-				new SchemaProperty($rowSchema, 'value'),
-			]);
-			$itemSchema = new Schema(Item::class);
-			$itemSchema->addPropertyList([
-				$itemGuidProperty = (new SchemaProperty($itemSchema, 'guid'))->identifier()
-					->unique()
-					->required(),
-				new SchemaProperty($itemSchema, 'name'),
-			]);
-
-			$rowSchema->linkTo('header', 'rowCollection', $rowHeaderProperty, $headerGuidProperty);
-			$rowSchema->linkTo('item', 'rowItemCollection', $rowItemProperty, $itemGuidProperty);
+			$rowSchema = new RowSchema($headerSchema = new HeaderSchema(), $itemSchema = new ItemSchema());
 
 			$this->schemaManager->addSchema($headerSchema);
 			$this->schemaManager->addSchema($rowSchema);

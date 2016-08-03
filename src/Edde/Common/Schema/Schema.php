@@ -33,6 +33,10 @@
 		 * @var ISchemaCollection[]
 		 */
 		protected $collectionList = [];
+		/**
+		 * @var ISchema[]
+		 */
+		protected $dependencyList = [];
 
 		/**
 		 * @param string $name
@@ -142,9 +146,13 @@
 		}
 
 		public function linkTo($link, $collection, ISchemaProperty $source, ISchemaProperty $target) {
+			if ($source->getSchema() !== $this) {
+				throw new SchemaException(sprintf('Source property [%s] is not part of the current schema [%s].', $source->getPropertyName(), $this->getSchemaName()));
+			}
 			$this->link($link, $source, $target);
-			$target->getSchema()
-				->collection($collection, $target, $source);
+			$targetSchema = $target->getSchema();
+			$targetSchema->addDependency($this);
+			$targetSchema->collection($collection, $target, $source);
 			return $this;
 		}
 
@@ -156,6 +164,21 @@
 			return $this;
 		}
 
+		public function addDependency(ISchema $schema) {
+			$this->dependencyList[$schema->getSchemaName()] = $schema;
+			return $this;
+		}
+
 		protected function prepare() {
+			$this->prepareDependencyList();
+		}
+
+		/**
+		 * call use on all dependencies
+		 */
+		protected function prepareDependencyList() {
+			foreach ($this->dependencyList as $schema) {
+				$schema->usse();
+			}
 		}
 	}
