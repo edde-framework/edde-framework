@@ -6,9 +6,7 @@ variables:
 image: php:5.6
 
 before_script:
-    - apt-get -yqq update
-#    - apt-get -yqq install apt-utils
-#    - docker-php-ext-install zip
+    - apt-get -yqq update && apt-get -yqq upgrade && apt-get -yqq install apt-utils
 
 stages:
     - test
@@ -42,6 +40,8 @@ compile:
 doc:
     stage: doc
     script:
+        - apt-get -yqq install zlib1g-dev
+        - docker-php-ext-install zip
         - php bin/apigen.phar generate
     artifacts:
         name: $PROJECT-$CI_BUILD_REF_NAME.doc
