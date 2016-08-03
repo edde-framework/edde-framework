@@ -64,8 +64,8 @@
 					}
 					return $route;
 				},
-				CliRouter::class => CliRouter::class,
-				SimpleRouter::class => SimpleRouter::class,
+				CliRouter::class,
+				SimpleRouter::class,
 				IRouter::class => RouterList::class,
 				/**
 				 * Http request support

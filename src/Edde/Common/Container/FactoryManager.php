@@ -18,7 +18,7 @@
 		private $factoryFallback;
 
 		public function registerFactoryList(array $factoryList) {
-			foreach (FactoryFactory::createList($factoryList, true) as $name => $factory) {
+			foreach (FactoryFactory::createList($factoryList) as $name => $factory) {
 				$this->registerFactory($name, $factory);
 			}
 			return $this;
