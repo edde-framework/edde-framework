@@ -206,8 +206,8 @@
 				if ($property->isDirty() === false) {
 					continue;
 				}
-				$property = $property->getSchemaProperty();
-				$propertyList[$property->getName()] = $property;
+				$schemaProperty = $property->getSchemaProperty();
+				$propertyList[$schemaProperty->getName()] = $property;
 			}
 			return $propertyList;
 		}

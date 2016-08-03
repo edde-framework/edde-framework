@@ -71,7 +71,7 @@
 			$this->schemaManager = new SchemaManager();
 			$this->schemaManager->addSchema(new ResourceSchema());
 			$this->upgradeManager = new UpgradeManager();
-			$this->resourceIndex = new ResourceIndex($this->schemaManager, $this->storage, new FilesystemScanner(new Directory(__DIR__ . '/assets')), new CryptEngine());
+			$this->resourceIndex = new ResourceIndex($container, $this->schemaManager, $this->storage, new FilesystemScanner(new Directory(__DIR__ . '/assets')), new CryptEngine());
 			$factoryManager->registerFactory(ResourceStorable::class, FactoryFactory::create(ResourceStorable::class, [
 				$this->resourceIndex,
 				'createResourceStorable',

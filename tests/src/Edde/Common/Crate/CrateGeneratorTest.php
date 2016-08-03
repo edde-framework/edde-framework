@@ -3,10 +3,10 @@
 
 	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\File\ITempDirectory;
-	use Edde\Api\Resource\IResource;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Schema\SchemaManager;
+	use Edde\Common\Strings\StringUtils;
 	use Foo\Bar\HeaderSchema;
 	use Foo\Bar\ItemSchema;
 	use Foo\Bar\RowSchema;
@@ -32,10 +32,12 @@
 			foreach ($this->schemaManager->getSchemaList() as $schema) {
 				$crateList = $this->crateGenerator->generate($schema);
 				foreach ($crateList as $name => $source) {
-					call_user_func(function (IResource $resource) {
-						require_once($resource->getUrl());
-					}, $this->tempDirectory->file(sha1($name) . '.php', $source));
-					self::assertTrue(class_exists($name));
+					$source = $this->tempDirectory->file(sha1($name) . '.php', $source)
+						->get();
+					/**
+					 * this is a bit unhappy solution, but for simplicity it is not possible to include created file...
+					 */
+					self::assertContains('class ' . StringUtils::extract($name, '\\', -1), $source);
 				}
 			}
 		}

@@ -43,6 +43,9 @@
 			$this->schema = $schema;
 			$this->name = $name;
 			$this->type = 'string';
+			$this->required = false;
+			$this->unique = false;
+			$this->identifier = false;
 		}
 
 		public function getSchema() {

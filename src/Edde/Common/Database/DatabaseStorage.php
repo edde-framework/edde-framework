@@ -82,14 +82,14 @@
 			}
 			$schema = $storable->getSchema();
 			$selectQuery = new SelectQuery();
-			foreach ($storable->getIdentifierList() as $value) {
-				$schemaProperty = $value->getSchemaProperty();
+			foreach ($storable->getIdentifierList() as $property) {
+				$schemaProperty = $property->getSchemaProperty();
 				$selectQuery->select()
 					->count($schemaProperty->getName(), null)
 					->where()
 					->eq()
 					->property($schemaProperty->getName())
-					->parameter($value->get());
+					->parameter($property->get());
 			}
 			$selectQuery->from()
 				->source($schema->getSchemaName());
@@ -101,9 +101,9 @@
 				$name = UpdateQuery::class;
 			}
 			$source = [];
-			foreach ($storable->getDirtyList() as $value) {
-				$schemaProperty = $value->getSchemaProperty();
-				$source[$schemaProperty->getName()] = $value->get();
+			foreach ($storable->getDirtyList() as $property) {
+				$schemaProperty = $property->getSchemaProperty();
+				$source[$schemaProperty->getName()] = $property->get();
 			}
 			$this->execute(new $name($schema, $source));
 			return $this;

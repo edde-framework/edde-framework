@@ -10,7 +10,6 @@
 	use Edde\Api\Resource\Scanner\IScanner;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaManager;
-	use Edde\Api\Storage\IStorable;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Storage\StorageException;
 	use Edde\Common\Query\Delete\DeleteQuery;
@@ -88,8 +87,7 @@
 
 		public function createResourceStorable() {
 			$this->usse();
-			/** @var $resourceStorable IStorable */
-			$resourceStorable = $this->container->create(ResourceStorable::class);
+			$resourceStorable = new ResourceStorable($this->container);
 			$resourceStorable->setSchema($this->resourceSchema);
 			$resourceStorable->set('guid', $this->cryptEngine->guid());
 			return $resourceStorable;
