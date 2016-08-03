@@ -13,7 +13,4 @@
 		public function setTitle($title) {
 			return $this->node->setValue($title);
 		}
-
-		protected function onPrepare() {
-		}
 	}

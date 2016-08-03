@@ -1,7 +1,8 @@
 <?php
 	namespace Edde\Common\Resource;
 
-	use Edde\Api\Crypt\ICrypt;
+	use Edde\Api\Container\IContainer;
+	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Resource\IResourceQuery;
@@ -17,6 +18,10 @@
 
 	class ResourceIndex extends AbstractUsable implements IResourceIndex {
 		/**
+		 * @var IContainer
+		 */
+		protected $container;
+		/**
 		 * @var ISchemaManager
 		 */
 		protected $schemaManager;
@@ -29,25 +34,27 @@
 		 */
 		protected $scanner;
 		/**
-		 * @var ICrypt
+		 * @var ICryptEngine
 		 */
-		protected $crypt;
+		protected $cryptEngine;
 		/**
 		 * @var ISchema
 		 */
 		protected $resourceSchema;
 
 		/**
+		 * @param IContainer $container
 		 * @param ISchemaManager $schemaManager
 		 * @param IStorage $storage
 		 * @param IScanner $scanner
-		 * @param ICrypt $crypt
+		 * @param ICryptEngine $cryptcryptEngine
 		 */
-		public function __construct(ISchemaManager $schemaManager, IStorage $storage, IScanner $scanner, ICrypt $crypt) {
+		public function __construct(IContainer $container, ISchemaManager $schemaManager, IStorage $storage, IScanner $scanner, ICryptEngine $cryptcryptEngine) {
+			$this->container = $container;
 			$this->schemaManager = $schemaManager;
 			$this->storage = $storage;
 			$this->scanner = $scanner;
-			$this->crypt = $crypt;
+			$this->cryptEngine = $cryptcryptEngine;
 		}
 
 		public function update() {
@@ -80,8 +87,9 @@
 
 		public function createResourceStorable() {
 			$this->usse();
-			$resourceStorable = new ResourceStorable($this->resourceSchema);
-			$resourceStorable->set('guid', $this->crypt->guid());
+			$resourceStorable = new ResourceStorable($this->container);
+			$resourceStorable->setSchema($this->resourceSchema);
+			$resourceStorable->set('guid', $this->cryptEngine->guid());
 			return $resourceStorable;
 		}
 

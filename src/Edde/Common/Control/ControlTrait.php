@@ -3,12 +3,15 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Control\IControl;
-	use Edde\Api\Schema\IProperty;
+	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Common\Control\Html\ButtonControl;
 	use Edde\Common\Control\Html\DivControl;
+	use Edde\Common\Control\Html\JavaScriptControl;
 	use Edde\Common\Control\Html\MetaControl;
 	use Edde\Common\Control\Html\PasswordInputControl;
+	use Edde\Common\Control\Html\StyleSheetControl;
 	use Edde\Common\Control\Html\TextInputControl;
+	use Edde\Common\Control\Html\TitleControl;
 
 	/**
 	 * This is helper trait for integration of a factory methods of Edde's control set.
@@ -42,6 +45,27 @@
 		}
 
 		/**
+		 * @return TitleControl
+		 */
+		public function createTitleControl() {
+			return $this->createControl(TitleControl::class);
+		}
+
+		/**
+		 * @return JavaScriptControl
+		 */
+		public function createJavaScriptControl() {
+			return $this->createControl(JavaScriptControl::class);
+		}
+
+		/**
+		 * @return StyleSheetControl
+		 */
+		public function createStyleSheetControl() {
+			return $this->createControl(StyleSheetControl::class);
+		}
+
+		/**
 		 * @return DivControl
 		 */
 		public function createDivControl() {
@@ -61,20 +85,20 @@
 		}
 
 		/**
-		 * @param IProperty $property
+		 * @param ISchemaProperty $schemaProperty
 		 *
 		 * @return TextInputControl
 		 */
-		public function createTextInputControl(IProperty $property = null) {
-			return $this->createControl(TextInputControl::class, $property);
+		public function createTextInputControl(ISchemaProperty $schemaProperty = null) {
+			return $this->createControl(TextInputControl::class, $schemaProperty);
 		}
 
 		/**
-		 * @param IProperty $property
+		 * @param ISchemaProperty $schemaProperty
 		 *
 		 * @return PasswordInputControl
 		 */
-		public function createPasswordInputControl(IProperty $property = null) {
-			return $this->createControl(TextInputControl::class, $property);
+		public function createPasswordInputControl(ISchemaProperty $schemaProperty = null) {
+			return $this->createControl(PasswordInputControl::class, $schemaProperty);
 		}
 	}

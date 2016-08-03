@@ -45,8 +45,5 @@
 		protected function prepare() {
 			$this->node = new Node();
 			$this->node->setMeta('control', $this);
-			$this->onPrepare();
 		}
-
-		abstract protected function onPrepare();
 	}

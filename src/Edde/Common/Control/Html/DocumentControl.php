@@ -60,10 +60,7 @@
 
 		protected function prepare() {
 			parent::prepare();
-			parent::addControl($this->head = new HeadControl());
-			parent::addControl($this->body = new BodyControl());
-		}
-
-		protected function onPrepare() {
+			parent::addControl($this->head = $this->container->create(HeadControl::class));
+			parent::addControl($this->body = $this->container->create(BodyControl::class));
 		}
 	}

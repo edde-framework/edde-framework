@@ -2,29 +2,29 @@
 	namespace Edde\Common\Control\Html;
 
 	use Edde\Api\Control\Html\IHtmlValueControl;
-	use Edde\Api\Schema\IProperty;
+	use Edde\Api\Schema\ISchemaProperty;
 
 	abstract class AbstractHtmlValueControl extends AbstractHtmlControl implements IHtmlValueControl {
 		/**
-		 * @var IProperty
+		 * @var ISchemaProperty
 		 */
-		protected $property;
+		protected $schemaProperty;
 
 		/**
-		 * @param IProperty $property
+		 * @param ISchemaProperty $schemaProperty
 		 */
-		public function __construct(IProperty $property = null) {
-			$this->property = $property;
+		public function __construct(ISchemaProperty $schemaProperty = null) {
+			$this->schemaProperty = $schemaProperty;
 		}
 
 		protected function prepare() {
 			parent::prepare();
 			$this->addClass('edde-value');
-			if ($this->property !== null) {
+			if ($this->schemaProperty !== null) {
 				$this->addAttributeList([
-					'data-class' => $this->property->getSchema()
+					'data-class' => $this->schemaProperty->getSchema()
 						->getSchemaName(),
-					'data-property' => $this->property->getName(),
+					'data-property' => $this->schemaProperty->getName(),
 				]);
 			}
 		}

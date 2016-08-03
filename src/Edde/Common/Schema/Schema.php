@@ -1,8 +1,10 @@
 <?php
 	namespace Edde\Common\Schema;
 
-	use Edde\Api\Schema\IProperty;
 	use Edde\Api\Schema\ISchema;
+	use Edde\Api\Schema\ISchemaCollection;
+	use Edde\Api\Schema\ISchemaLink;
+	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Api\Schema\SchemaException;
 	use Edde\Common\Usable\AbstractUsable;
 
@@ -20,9 +22,21 @@
 		 */
 		protected $schemaName;
 		/**
-		 * @var IProperty[]
+		 * @var ISchemaProperty[]
 		 */
 		protected $propertyList = [];
+		/**
+		 * @var ISchemaLink[]
+		 */
+		protected $linkList = [];
+		/**
+		 * @var ISchemaCollection[]
+		 */
+		protected $collectionList = [];
+		/**
+		 * @var ISchema[]
+		 */
+		protected $dependencyList = [];
 
 		/**
 		 * @param string $name
@@ -49,11 +63,6 @@
 			return $this->namespace;
 		}
 
-		public function getPropertyList() {
-			$this->usse();
-			return $this->propertyList;
-		}
-
 		public function getProperty($name) {
 			$this->usse();
 			if ($this->hasProperty($name) === false) {
@@ -74,40 +83,102 @@
 			return $this->schemaName;
 		}
 
-		/**
-		 * @param IProperty[] $propertyList
-		 *
-		 * @return $this
-		 *
-		 * @throws SchemaException
-		 */
-		public function addPropertyList(array $propertyList) {
-			foreach ($propertyList as $property) {
-				$this->addProperty($property);
+		public function getPropertyList() {
+			$this->usse();
+			return $this->propertyList;
+		}
+
+		public function addPropertyList(array $schemaPropertyList) {
+			foreach ($schemaPropertyList as $schemaProperty) {
+				$this->addProperty($schemaProperty);
 			}
 			return $this;
 		}
 
-		/**
-		 * @param IProperty $property
-		 * @param bool $force
-		 *
-		 * @return $this
-		 *
-		 * @throws SchemaException
-		 */
-		public function addProperty(IProperty $property, $force = false) {
-			$propertyName = $property->getName();
-			if ($property->getSchema() !== $this) {
+		public function addProperty(ISchemaProperty $schemaProperty, $force = false) {
+			$propertyName = $schemaProperty->getName();
+			if ($schemaProperty->getSchema() !== $this) {
 				throw new SchemaException(sprintf('Cannot add foreign property [%s] to schema [%s].', $propertyName, $this->getSchemaName()));
 			}
 			if ($force === false && isset($this->propertyList[$propertyName])) {
 				throw new SchemaException(sprintf('Property with name [%s] already exists in schema [%s].', $propertyName, $this->getSchemaName()));
 			}
-			$this->propertyList[$propertyName] = $property;
+			$this->propertyList[$propertyName] = $schemaProperty;
+			return $this;
+		}
+
+		public function hasLink($name) {
+			return isset($this->linkList[$name]);
+		}
+
+		public function getLink($name) {
+			if (isset($this->linkList[$name]) === false) {
+				throw new SchemaException(sprintf('Requested unknown link [%s] in schema [%s].', $name, $this->getSchemaName()));
+			}
+			return $this->linkList[$name];
+		}
+
+		public function getLinkList() {
+			return $this->linkList;
+		}
+
+		public function collection($name, ISchemaProperty $source, ISchemaProperty $target, $force = false) {
+			if (isset($this->collectionList[$name]) && $force === false) {
+				throw new SchemaException(sprintf('Schema [%s] already has collection named [%s].', $this->getSchemaName(), $name));
+			}
+			$this->collectionList[$name] = new SchemaCollection($name, $source, $target);
+			return $this;
+		}
+
+		public function hasCollection($name) {
+			return isset($this->collectionList[$name]);
+		}
+
+		public function getCollection($name) {
+			if (isset($this->collectionList[$name]) === false) {
+				throw new SchemaException(sprintf('Requested unknown collection [%s] in schema [%s].', $name, $this->getSchemaName()));
+			}
+			return $this->collectionList[$name];
+		}
+
+		public function getCollectionList() {
+			return $this->collectionList;
+		}
+
+		public function linkTo($link, $collection, ISchemaProperty $source, ISchemaProperty $target) {
+			if ($source->getSchema() !== $this) {
+				throw new SchemaException(sprintf('Source property [%s] is not part of the current schema [%s].', $source->getPropertyName(), $this->getSchemaName()));
+			}
+			$this->link($link, $source, $target);
+			$targetSchema = $target->getSchema();
+			$targetSchema->addDependency($this);
+			$targetSchema->collection($collection, $target, $source);
+			return $this;
+		}
+
+		public function link($name, ISchemaProperty $source, ISchemaProperty $target, $force = false) {
+			if (isset($this->linkList[$name]) && $force === false) {
+				throw new SchemaException(sprintf('Schema [%s] already contains link named [%s].', $this->getSchemaName(), $name));
+			}
+			$this->linkList[$name] = new SchemaLink($name, $source, $target);
+			return $this;
+		}
+
+		public function addDependency(ISchema $schema) {
+			$this->dependencyList[$schema->getSchemaName()] = $schema;
 			return $this;
 		}
 
 		protected function prepare() {
+			$this->prepareDependencyList();
+		}
+
+		/**
+		 * call use on all dependencies
+		 */
+		protected function prepareDependencyList() {
+			foreach ($this->dependencyList as $schema) {
+				$schema->usse();
+			}
 		}
 	}

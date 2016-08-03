@@ -8,17 +8,23 @@
 	class FactoryFactory extends AbstractObject {
 		/**
 		 * @param array $factoryList
+		 * @param bool $enableClassName === true, it is possible to add only class name without key
 		 *
 		 * @return IFactory[]
 		 * @throws FactoryException
 		 */
-		static public function createList(array $factoryList) {
+		static public function createList(array $factoryList, $enableClassName = false) {
 			$factories = [];
+			$singleton = true;
 			foreach ($factoryList as $name => $factory) {
 				if (is_string($name) === false) {
-					throw new FactoryException(sprintf('Factory list [%s, ...] has an item without a name.', substr(implode(', ', array_keys($factoryList)), 0, 32)));
+					if ($enableClassName === false) {
+						throw new FactoryException(sprintf('Factory list [%s, ...] has an item without a name.', substr(implode(', ', array_keys($factoryList)), 0, 32)));
+					}
+					$name = $factory;
+					$singleton = false;
 				}
-				$factories[$name] = self::create($name, $factory);
+				$factories[$name] = self::create($name, $factory, $singleton);
 			}
 			return $factories;
 		}

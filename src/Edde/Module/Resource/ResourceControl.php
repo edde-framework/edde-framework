@@ -18,7 +18,4 @@
 			$this->resourceIndex->update();
 			printf("Resources updated.\n");
 		}
-
-		protected function onPrepare() {
-		}
 	}

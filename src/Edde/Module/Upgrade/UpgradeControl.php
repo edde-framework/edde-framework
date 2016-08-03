@@ -18,7 +18,4 @@
 			$upgrade = $this->upgradeManager->upgradeTo($version);
 			printf("Upgraded to [%s]\n", $upgrade->getVersion());
 		}
-
-		protected function onPrepare() {
-		}
 	}

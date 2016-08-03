@@ -9,7 +9,4 @@
 		 */
 		public function actionPrepare() {
 		}
-
-		protected function onPrepare() {
-		}
 	}

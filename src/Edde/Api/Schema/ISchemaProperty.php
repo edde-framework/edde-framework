@@ -4,7 +4,7 @@
 	/**
 	 * Definition of a schema property.
 	 */
-	interface IProperty {
+	interface ISchemaProperty {
 		/**
 		 * return schema to which this property belongs
 		 *
@@ -51,18 +51,4 @@
 		 * @return bool
 		 */
 		public function isUnique();
-
-		/**
-		 * is this property link to another property?
-		 *
-		 * @return bool
-		 */
-		public function isLink();
-
-		/**
-		 * return link of this property; throws exception if this property has no link
-		 *
-		 * @return ILink
-		 */
-		public function getLink();
 	}

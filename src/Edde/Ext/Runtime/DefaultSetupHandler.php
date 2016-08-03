@@ -5,8 +5,7 @@
 	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Control\IControlFactory;
-	use Edde\Api\Crypt\ICrypt;
+	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\File\ITempDirectory;
@@ -31,8 +30,7 @@
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Container\Factory\FactoryFactory;
-	use Edde\Common\Control\ControlFactory;
-	use Edde\Common\Crypt\Crypt;
+	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Http\HttpRequestFactory;
@@ -60,7 +58,6 @@
 				 * Application and presentation layer
 				 */
 				IApplication::class => Application::class,
-				IControlFactory::class => ControlFactory::class,
 				IRoute::class => function (IRouter $router) {
 					if (($route = $router->route()) === null) {
 						throw new RouterException(sprintf('Cannot find route for current application request.'));
@@ -69,10 +66,7 @@
 				},
 				CliRouter::class => CliRouter::class,
 				SimpleRouter::class => SimpleRouter::class,
-				IRouter::class => $setupHandler->factory(RouterList::class, function (IContainer $container, RouterList $routerList) {
-					$routerList->registerRouter($container->create(CliRouter::class));
-					$routerList->registerRouter($container->create(SimpleRouter::class));
-				}),
+				IRouter::class => RouterList::class,
 				/**
 				 * Http request support
 				 */
@@ -83,9 +77,7 @@
 				IHttpResponse::class => function () {
 					throw new RuntimeException(sprintf('Do not request [%s] from the global space (container) as it is bad practice.', IHttpResponse::class));
 				},
-				ISchemaManager::class => $setupHandler->factory(SchemaManager::class, function (SchemaManager $schemaManager) {
-					$schemaManager->addSchema(new ResourceSchema());
-				}),
+				ISchemaManager::class => SchemaManager::class,
 				IRootDirectory::class => function () {
 					throw new RuntimeException(sprintf('If you want use root directory [%s], you must register it to the container!', IRootDirectory::class));
 				},
@@ -98,7 +90,7 @@
 				IStorageDirectory::class => function (IRootDirectory $rootDirectory) {
 					return new StorageDirectory($rootDirectory->getDirectory() . '/.storage');
 				},
-				ICrypt::class => Crypt::class,
+				ICryptEngine::class => CryptEngine::class,
 				IScanner::class => function (IRootDirectory $rootDirectory) {
 					return new FilesystemScanner($rootDirectory);
 				},
@@ -118,6 +110,13 @@
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
 			], $factoryList));
+			$setupHandler->onSetup(ISchemaManager::class, function (ISchemaManager $schemaManager) {
+				$schemaManager->addSchema(new ResourceSchema());
+			});
+			$setupHandler->onSetup(IRouter::class, function (IContainer $container, RouterList $routerList) {
+				$routerList->registerRouter($container->create(CliRouter::class));
+				$routerList->registerRouter($container->create(SimpleRouter::class));
+			});
 			return $setupHandler;
 		}
 	}

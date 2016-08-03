@@ -20,7 +20,4 @@
 			parent::prepare();
 			parent::setTag('div');
 		}
-
-		protected function onPrepare() {
-		}
 	}

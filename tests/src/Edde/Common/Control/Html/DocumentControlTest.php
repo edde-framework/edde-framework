@@ -1,12 +1,17 @@
 <?php
 	namespace Edde\Common\Control\Html;
 
+	use Edde\Ext\Container\ContainerFactory;
 	use phpunit\framework\TestCase;
 
 	class DocumentControlTest extends TestCase {
+		/**
+		 * @var DocumentControl
+		 */
+		protected $documentControl;
+
 		public function testCommon() {
-			$document = new DocumentControl();
-			$document->getHead()
+			$this->documentControl->getHead()
 				->setTitle('some meaningfull title');
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -16,12 +21,11 @@
 	</head>
 	<body></body>
 </html>
-', $document->render());
+', $this->documentControl->render());
 		}
 
 		public function testDocumentStyleJavascript() {
-			$document = new DocumentControl();
-			$head = $document->getHead();
+			$head = $this->documentControl->getHead();
 			$head->addJavaScript('/some/javascript/file.js');
 			$head->addJavaScript('/another/javascript-file.js');
 			$head->addStyleSheet('/style.css');
@@ -39,6 +43,11 @@
 	</head>
 	<body></body>
 </html>
-', $document->render());
+', $this->documentControl->render());
+		}
+
+		protected function setUp() {
+			$this->documentControl = new DocumentControl();
+			$this->documentControl->injectContainer(ContainerFactory::create());
 		}
 	}

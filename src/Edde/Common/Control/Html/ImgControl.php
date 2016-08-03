@@ -21,7 +21,4 @@
 		public function addControl(IControl $control) {
 			throw new HtmlException(sprintf('Cannot add control to an image control [%s].', static::class));
 		}
-
-		protected function onPrepare() {
-		}
 	}

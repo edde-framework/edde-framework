@@ -8,6 +8,15 @@
 	 */
 	interface IContainer extends IUsable {
 		/**
+		 * check if the given name is available (known) in a container
+		 *
+		 * @param string $name
+		 *
+		 * @return bool
+		 */
+		public function has($name);
+
+		/**
 		 * create the dependency by it's identifier (name)
 		 *
 		 * @param string $name

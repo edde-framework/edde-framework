@@ -43,4 +43,11 @@
 			self::assertNotEquals("\xEF\xBB\xBFstring", StringUtils::checkUnicode("\xEF\xBB\xBFstring"));
 			self::assertEquals("string", StringUtils::checkUnicode("\xEF\xBB\xBFstring"));
 		}
+
+		public function testExtract() {
+			$source = static::class;
+			self::assertEquals('StringUtilsTest', StringUtils::extract($source));
+			self::assertEquals('Edde', StringUtils::extract($source, '\\', 0));
+			self::assertEquals('Common', StringUtils::extract($source, '\\', 1));
+		}
 	}

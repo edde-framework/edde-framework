@@ -6,6 +6,7 @@
 	use Edde\Api\Runtime\ISetupHandler;
 	use Edde\Api\Usable\IUsable;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Container\Factory\FactoryFactory;
 
 	abstract class AbstractSetupHandler extends AbstractObject implements ISetupHandler {
 		/**
@@ -18,7 +19,7 @@
 		protected $factoryFallback;
 
 		public function registerFactoryList(array $fatoryList) {
-			$this->factoryList = array_merge($this->factoryList, $fatoryList);
+			$this->factoryList = FactoryFactory::createList(array_merge($this->factoryList, $fatoryList));
 			return $this;
 		}
 
@@ -27,19 +28,31 @@
 			return $this;
 		}
 
+		public function onSetup($name, callable $onSetup) {
+			if (isset($this->factoryList[$name]) === false) {
+				return $this;
+			}
+			$this->onFactorySetup($this->factoryList[$name], $onSetup);
+			return $this;
+		}
+
+		private function onFactorySetup(IFactory $factory, callable $callback) {
+			$factory->onSetup(function (IContainer $container, $instance) use ($callback) {
+				if ($instance instanceof IUsable) {
+					$instance->onSetup(function () use ($container, $callback, $instance) {
+						return $container->call($callback, $instance);
+					});
+					return;
+				}
+				$container->call($callback);
+			});
+		}
+
 		protected function factory($class, callable $onSetup) {
 			return [
 				$class,
 				function (IFactory $factory) use ($onSetup) {
-					$factory->onSetup(function (IContainer $container, $instance) use ($onSetup) {
-						if ($instance instanceof IUsable) {
-							$instance->onSetup(function () use ($container, $onSetup, $instance) {
-								return $container->call($onSetup, $instance);
-							});
-							return;
-						}
-						$container->call($onSetup);
-					});
+					$this->onFactorySetup($factory, $onSetup);
 				},
 			];
 		}

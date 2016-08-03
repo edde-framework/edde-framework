@@ -39,6 +39,10 @@
 			$this->cacheFactory = $cacheFactory;
 		}
 
+		public function has($name) {
+			return $this->factoryManager->hasFactory($name);
+		}
+
 		public function inject($instance) {
 			$this->usse();
 			if (($reflection = $this->cache->load($cacheId = ('reflection/' . get_class($instance)))) === null) {
