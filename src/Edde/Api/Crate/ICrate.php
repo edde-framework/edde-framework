@@ -38,12 +38,12 @@
 		/**
 		 * add the given value to this property set
 		 *
-		 * @param IProperty $value
+		 * @param IProperty $property
 		 * @param bool $force
 		 *
 		 * @return $this
 		 */
-		public function addValue(IProperty $value, $force = false);
+		public function addProperty(IProperty $property, $force = false);
 
 		/**
 		 * has this property set property with the given name?
@@ -52,7 +52,7 @@
 		 *
 		 * @return bool
 		 */
-		public function hasValue($name);
+		public function hasProperty($name);
 
 		/**
 		 * return value of the given name
@@ -61,7 +61,7 @@
 		 *
 		 * @return IProperty
 		 */
-		public function getValue($name);
+		public function getProperty($name);
 
 		/**
 		 * set value of the given property; if does not exists exception is thrown
@@ -131,6 +131,16 @@
 		public function collection($name);
 
 		/**
+		 * explicitly set a new collection
+		 *
+		 * @param string $name
+		 * @param ICollection $collection
+		 *
+		 * @return $this
+		 */
+		public function setCollection($name, ICollection $collection);
+
+		/**
 		 * return crate based on a predefined link
 		 *
 		 * @param string $name
@@ -138,4 +148,14 @@
 		 * @return ICrate
 		 */
 		public function link($name);
+
+		/**
+		 * explicitly set a new link
+		 *
+		 * @param string $name
+		 * @param ICrate $crate
+		 *
+		 * @return $this
+		 */
+		public function setLink($name, ICrate $crate);
 	}

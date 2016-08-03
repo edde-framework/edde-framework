@@ -434,4 +434,18 @@
 				"\r",
 			], "\n", $string);
 		}
+
+		/**
+		 * extract particular string from another simply formatted string (for example class name from namespace, ...)
+		 *
+		 * @param string $source
+		 * @param string $separator
+		 * @param int $index
+		 *
+		 * @return string
+		 */
+		static public function extract($source, $separator = '\\', $index = -1) {
+			$sourceList = explode($separator, $source);
+			return isset($sourceList[$index = $index < 0 ? count($sourceList) + $index : $index]) ? $sourceList[$index] : '';
+		}
 	}

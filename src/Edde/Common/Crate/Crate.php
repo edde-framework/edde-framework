@@ -71,10 +71,10 @@
 			$this->usse();
 			if ($this->identifierList === null) {
 				$this->identifierList = [];
-				foreach ($this->propertyList as $value) {
-					$schemaProperty = $value->getSchemaProperty();
+				foreach ($this->propertyList as $property) {
+					$schemaProperty = $property->getSchemaProperty();
 					if ($schemaProperty->isIdentifier()) {
-						$this->identifierList[] = $value;
+						$this->identifierList[] = $property;
 					}
 				}
 			}
@@ -84,7 +84,7 @@
 		public function put(array $put, $strict = true) {
 			$this->usse();
 			if ($strict && ($diff = array_diff(array_keys($put), $this->propertyNameList)) !== []) {
-				throw new CrateException(sprintf('Setting unknown values [%s] to the value set [%s].', implode(', ', $diff), $this->schema->getSchemaName()));
+				throw new CrateException(sprintf('Setting unknown values [%s] to the crate [%s].', implode(', ', $diff), $this->schema->getSchemaName()));
 			}
 			foreach ($put as $property => $value) {
 				if (isset($this->propertyList[$property]) === false) {
@@ -97,20 +97,20 @@
 
 		public function set($name, $value) {
 			$this->usse();
-			$this->getValue($name)
+			$this->getProperty($name)
 				->set($value);
 			return $this;
 		}
 
-		public function getValue($name) {
+		public function getProperty($name) {
 			$this->usse();
-			if ($this->hasValue($name) === false) {
-				throw new CrateException(sprintf('Unknown value [%s] in value set [%s].', $name, $this->schema->getSchemaName()));
+			if ($this->hasProperty($name) === false) {
+				throw new CrateException(sprintf('Unknown value [%s] in crate [%s].', $name, $this->schema->getSchemaName()));
 			}
 			return $this->propertyList[$name];
 		}
 
-		public function hasValue($name) {
+		public function hasProperty($name) {
 			$this->usse();
 			return isset($this->propertyList[$name]);
 		}
@@ -118,7 +118,7 @@
 		public function push(array $push, $strict = true) {
 			$this->usse();
 			if ($strict && ($diff = array_diff(array_keys($push), $this->propertyNameList)) !== []) {
-				throw new CrateException(sprintf('Setting unknown values [%s] to the value set [%s].', implode(', ', $diff), $this->schema->getSchemaName()));
+				throw new CrateException(sprintf('Setting unknown values [%s] to the crate [%s].', implode(', ', $diff), $this->schema->getSchemaName()));
 			}
 			foreach ($push as $property => $value) {
 				if ($this->schema->hasCollection($property)) {
@@ -141,7 +141,7 @@
 				if (isset($this->propertyList[$property]) === false) {
 					continue;
 				}
-				$this->getValue($property)
+				$this->getProperty($property)
 					->push($value);
 			}
 			return $this;
@@ -174,9 +174,25 @@
 			return $this->linkList[$name];
 		}
 
+		public function setCollection($name, ICollection $collection) {
+			if ($this->schema->hasCollection($name) === false) {
+				throw new CrateException(sprintf('Crate [%s] has no collection [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
+			}
+			$this->collectionList[$name] = $collection;
+			return $this;
+		}
+
+		public function setLink($name, ICrate $crate) {
+			if ($this->schema->hasLink($name) === false) {
+				throw new CrateException(sprintf('Crate [%s] has no link [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
+			}
+			$this->linkList[$name] = $crate;
+			return $this;
+		}
+
 		public function get($name, $default = null) {
 			$this->usse();
-			return $this->getValue($name)
+			return $this->getProperty($name)
 				->get($default);
 		}
 
@@ -185,21 +201,21 @@
 			if ($this->isDirty() === false) {
 				return [];
 			}
-			$valueList = [];
-			foreach ($this->propertyList as $value) {
-				if ($value->isDirty() === false) {
+			$propertyList = [];
+			foreach ($this->propertyList as $property) {
+				if ($property->isDirty() === false) {
 					continue;
 				}
-				$property = $value->getSchemaProperty();
-				$valueList[$property->getName()] = $value;
+				$property = $property->getSchemaProperty();
+				$propertyList[$property->getName()] = $property;
 			}
-			return $valueList;
+			return $propertyList;
 		}
 
 		public function isDirty() {
 			$this->usse();
-			foreach ($this->propertyList as $value) {
-				if ($value->isDirty()) {
+			foreach ($this->propertyList as $property) {
+				if ($property->isDirty()) {
 					return true;
 				}
 			}
@@ -217,18 +233,18 @@
 				$this->schema = new Schema('anonymous-crate');
 			}
 			foreach ($this->schema->getPropertyList() as $property) {
-				$this->addValue(new Property($property));
+				$this->addProperty(new Property($property));
 			}
 			$this->propertyNameList = array_merge(array_keys($this->propertyList), array_keys($this->schema->getLinkList()), array_keys($this->schema->getCollectionList()));
 		}
 
-		public function addValue(IProperty $value, $force = false) {
+		public function addProperty(IProperty $property, $force = false) {
 			$this->usse();
-			$property = $value->getSchemaProperty();
-			if (isset($this->propertyList[$propertyName = $property->getName()]) && $force === false) {
-				throw new CrateException(sprintf('Property [%s] is already present in value set [%s].', $propertyName, $this->schema->getSchemaName()));
+			$schemaProperty = $property->getSchemaProperty();
+			if (isset($this->propertyList[$propertyName = $schemaProperty->getName()]) && $force === false) {
+				throw new CrateException(sprintf('Property [%s] is already present in crate [%s].', $propertyName, $this->schema->getSchemaName()));
 			}
-			$this->propertyList[$propertyName] = $value;
+			$this->propertyList[$propertyName] = $property;
 			return $this;
 		}
 	}
