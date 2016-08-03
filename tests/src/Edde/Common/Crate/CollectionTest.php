@@ -8,7 +8,7 @@
 	use Foo\Bar\FooBarBar;
 	use phpunit\framework\TestCase;
 
-	require_once(__DIR__ . '/assets.php');
+	require_once(__DIR__ . '/assets/assets.php');
 
 	class CollectionTest extends TestCase {
 		/**

@@ -15,7 +15,7 @@
 	use Foo\Bar\RowSchema;
 	use phpunit\framework\TestCase;
 
-	require_once(__DIR__ . '/assets.php');
+	require_once(__DIR__ . '/assets/assets.php');
 
 	class CrateFactoryTest extends TestCase {
 		/**

@@ -1,15 +1,8 @@
 <?php
 	namespace Foo\Bar;
 
-	use Edde\Common\Crate\Crate;
 	use Edde\Common\Schema\Schema;
 	use Edde\Common\Schema\SchemaProperty;
-
-	class FooBarBar extends Crate {
-	}
-
-	class Header extends Crate {
-	}
 
 	class HeaderSchema extends Schema {
 		public function __construct() {
@@ -24,9 +17,6 @@
 				new SchemaProperty($this, 'name'),
 			]);
 		}
-	}
-
-	class Row extends Crate {
 	}
 
 	class RowSchema extends Schema {
@@ -64,9 +54,6 @@
 		}
 	}
 
-	class Item extends Crate {
-	}
-
 	class ItemSchema extends Schema {
 		public function __construct() {
 			parent::__construct(Item::class);
@@ -81,3 +68,4 @@
 			]);
 		}
 	}
+
