@@ -5,9 +5,6 @@ variables:
 
 image: php:5.6
 
-before_script:
-    - apt-get -yqq update && apt-get -yqq upgrade && apt-get -yqq install apt-utils
-
 stages:
     - test
     - compile
@@ -18,7 +15,7 @@ stages:
 test:
     stage: test
     script:
-        - apt-get -yqq install php5-xdebug
+        - pecl install xdebug
         - php bin/phpunit.phar --coverage-text --colors=never
     artifacts:
         name: $PROJECT-$CI_BUILD_REF_NAME-failed
@@ -40,7 +37,7 @@ compile:
 doc:
     stage: doc
     script:
-        - apt-get -yqq install zlib1g-dev
+        - apt-get -yqq update && apt-get -yqq upgrade && apt-get -yqq install zlib1g-dev
         - docker-php-ext-install zip
         - php bin/apigen.phar generate
     artifacts:
