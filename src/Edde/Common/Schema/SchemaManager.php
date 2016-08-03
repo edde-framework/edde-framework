@@ -13,9 +13,6 @@
 		protected $schemaList = [];
 
 		public function addSchema(ISchema $schema) {
-			if ($this->isUsed()) {
-				throw new SchemaException(sprintf('Cannot add schema [%s] to already used schema manager.', $schema->getSchemaName()));
-			}
 			$this->schemaList[$schema->getSchemaName()] = $schema;
 			return $this;
 		}

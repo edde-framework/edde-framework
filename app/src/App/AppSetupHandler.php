@@ -5,8 +5,11 @@
 	use App\Login\LoginCrate;
 	use App\Login\LoginCrateSchema;
 	use Edde\Api\Cache\ICacheFactory;
+	use Edde\Api\Container\IContainer;
 	use Edde\Api\Schema\ISchemaManager;
+	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Ext\Runtime\DefaultSetupHandler;
+	use Edde\Ext\Upgrade\InitialStorageUpgrade;
 
 	class AppSetupHandler extends DefaultSetupHandler {
 		static public function create(ICacheFactory $cacheFactory = null, array $factoryList = []) {
@@ -17,6 +20,9 @@
 			], $factoryList))
 				->onSetup(ISchemaManager::class, function (ISchemaManager $schemaManager) {
 					$schemaManager->addSchema(new LoginCrateSchema());
+				})
+				->onSetup(IUpgradeManager::class, function (IContainer $container, IUpgradeManager $upgradeManager) {
+					$upgradeManager->registerUpgrade($container->create(InitialStorageUpgrade::class, '1.0'));
 				});
 		}
 	}

@@ -5,6 +5,7 @@
 	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\File\IRootDirectory;
@@ -30,6 +31,7 @@
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Container\Factory\FactoryFactory;
+	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
@@ -49,6 +51,7 @@
 	use Edde\Ext\Resource\Scanner\FilesystemScanner;
 	use Edde\Ext\Router\CliRouter;
 	use Edde\Ext\Router\SimpleRouter;
+	use Edde\Ext\Upgrade\InitialStorageUpgrade;
 
 	class DefaultSetupHandler extends SetupHandler {
 		static public function create(ICacheFactory $cacheFactory = null, array $factoryList = []) {
@@ -98,6 +101,7 @@
 				IDriver::class => function () {
 					throw new RuntimeException(sprintf('If you want to use DatabaseStorage (or [%s]), you must register it to the container at first!', IDriver::class));
 				},
+				ICrateFactory::class => CrateFactory::class,
 				IStorage::class => DatabaseStorage::class,
 				ResourceStorable::class => function (IResourceIndex $resourceIndex) {
 					return $resourceIndex->createResourceStorable();
@@ -109,6 +113,8 @@
 				}, false),
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
+
+				InitialStorageUpgrade::class,
 			], $factoryList));
 			$setupHandler->onSetup(ISchemaManager::class, function (ISchemaManager $schemaManager) {
 				$schemaManager->addSchema(new ResourceSchema());

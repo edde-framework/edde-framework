@@ -3,6 +3,7 @@
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\Resource\Storage\IStorageDirectory;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\Runtime\Runtime;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
@@ -17,8 +18,8 @@
 
 	$factoryList = [
 		IRootDirectory::class => new RootDirectory(__DIR__),
-		IDriver::class => function (IRootDirectory $rootDirectory) {
-			return new SqliteDriver('sqlite:' . $rootDirectory->getDirectory() . '/application.sqlite');
+		IDriver::class => function (IStorageDirectory $storageDirectory) {
+			return new SqliteDriver('sqlite:' . $storageDirectory->filename('application.sqlite'));
 		},
 	];
 //	$cacheFactory = new CacheFactory(__DIR__, new FileCacheStorage(new CacheDirectory(__DIR__ . '/temp/cache')));

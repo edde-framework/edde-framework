@@ -14,8 +14,7 @@
 				(new SchemaProperty($this, 'guid'))->unique()
 					->identifier()
 					->required(),
-				(new SchemaProperty($this, 'name'))->unique()
-					->required(),
+				(new SchemaProperty($this, 'name'))->required(),
 				(new SchemaProperty($this, 'url'))->unique()
 					->required(),
 				new SchemaProperty($this, 'base'),

@@ -7,6 +7,7 @@
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Control\Html\EddeHtmlControl;
+	use Tracy\Debugger;
 
 	class EddeControl extends EddeHtmlControl {
 		use LazyInjectTrait;
@@ -46,10 +47,11 @@
 		public function handleOnUpgrade() {
 			$this->usse();
 			try {
-				$this->upgradeManager->upgrade();
+				$upgrade = $this->upgradeManager->upgrade();
 				$this->message->addClass('success')
-					->setText('application has been upgraded');
+					->setText(sprintf('application has been upgraded to version [%s]', $upgrade->getVersion()));
 			} catch (EddeException $e) {
+				Debugger::log($e);
 				$this->message->addClass('error')
 					->setText($e->getMessage());
 			}
@@ -63,6 +65,7 @@
 				$this->message->addClass('success')
 					->setText('resource index has been updated');
 			} catch (EddeException $e) {
+				Debugger::log($e);
 				$this->message->addClass('error')
 					->setText($e->getMessage());
 			}
