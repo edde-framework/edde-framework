@@ -129,4 +129,13 @@
 		 * @return ICollection|ICrate[]
 		 */
 		public function collection($name);
+
+		/**
+		 * return crate based on a predefined link
+		 *
+		 * @param string $name
+		 *
+		 * @return ICrate
+		 */
+		public function link($name);
 	}

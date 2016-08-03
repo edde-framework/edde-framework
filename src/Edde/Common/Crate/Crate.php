@@ -32,6 +32,10 @@
 		 */
 		protected $collectionList = [];
 		/**
+		 * @var ICrate[]
+		 */
+		protected $linkList = [];
+		/**
 		 * @var string[]
 		 */
 		protected $propertyNameList = [];
@@ -129,6 +133,10 @@
 						$collection->addCrate($crate);
 					}
 					continue;
+				} else if ($this->schema->hasLink($property)) {
+					$link = $this->link($property);
+					$link->push($value);
+					continue;
 				}
 				if (isset($this->propertyList[$property]) === false) {
 					continue;
@@ -149,6 +157,21 @@
 					->getSchema());
 			}
 			return $this->collectionList[$name];
+		}
+
+		public function link($name) {
+			if ($this->schema->hasLink($name) === false) {
+				throw new CrateException(sprintf('Crate [%s] has no link [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
+			}
+			if (isset($this->linkList[$name]) === false) {
+				$link = $this->schema->getLink($name);
+				$targetSchema = $link->getTarget()
+					->getSchema();
+				/** @var $crate ICrate */
+				$this->linkList[$name] = $crate = $this->container->create($targetSchema->getSchemaName());
+				$crate->setSchema($targetSchema);
+			}
+			return $this->linkList[$name];
 		}
 
 		public function get($name, $default = null) {
