@@ -7,8 +7,8 @@ image: php:5.6
 
 before_script:
     - apt-get -yqq update
-    - apt-get -yqq install git php5-xdebug zlib1g-dev
-    - docker-php-ext-install zip
+#    - apt-get -yqq install apt-utils
+#    - docker-php-ext-install zip
 
 stages:
     - test
@@ -20,6 +20,7 @@ stages:
 test:
     stage: test
     script:
+        - apt-get -yqq install php5-xdebug
         - php bin/phpunit.phar --coverage-text --colors=never
     artifacts:
         name: $PROJECT-$CI_BUILD_REF_NAME-failed
