@@ -72,7 +72,7 @@
 		}
 
 		protected function getDatabaseFileName() {
-			return $this->tempDirectory->getDirectory() . '/resource-test-' . sha1(microtime() . mt_rand(0, 99999)) . '.sqlite';
+			return $this->tempDirectory->filename('resource-test-' . sha1(microtime() . mt_rand(0, 99999)) . '.sqlite');
 		}
 
 		public function testUpdate() {

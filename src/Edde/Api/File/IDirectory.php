@@ -30,6 +30,15 @@
 		public function file($name, $content);
 
 		/**
+		 * create filename (shortcut for $this->getDirectory.'\\'.$file)
+		 *
+		 * @param string $file
+		 *
+		 * @return string
+		 */
+		public function filename($file);
+
+		/**
 		 * create all directories until the current one
 		 *
 		 * @return $this
