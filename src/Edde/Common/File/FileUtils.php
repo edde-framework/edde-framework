@@ -17,9 +17,9 @@
 		 *
 		 * @return string
 		 */
-		static public function humanSize($size, $decimals = 2) {
+		static public function humanSize(int $size, int $decimals = 2): string {
 			$sizeList = 'BKMGTP';
-			$factor = floor((strlen($size) - 1) / 3);
+			$factor = floor((strlen((string)$size) - 1) / 3);
 			return sprintf("%.{$decimals}f", $size / pow(1024, $factor)) . @$sizeList[(int)$factor];
 		}
 
