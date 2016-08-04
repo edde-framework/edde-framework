@@ -76,7 +76,7 @@ deploy:
         - curl -X POST -F token=$COMPOSER_TOKEN -F ref=master $COMPOSER_TRIGGER
     dependencies:
         - compile
-        - doc
+#        - doc
     only:
         - master
         - tags
