@@ -88,7 +88,7 @@
 			$this->usse();
 			$sourceList = [];
 			$source[] = "<?php\n";
-			if (($namespace = $schema->getNamespace()) !== null) {
+			if (($namespace = $schema->getNamespace()) !== '') {
 				$source[] = "\tnamespace $namespace;\n\n";
 			}
 			$source[] = sprintf("\tuse %s;\n", ICollection::class);

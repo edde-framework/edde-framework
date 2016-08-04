@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Api\Schema;
 
 	use Edde\Api\Usable\IUsable;
@@ -9,21 +11,21 @@
 		 *
 		 * @return string
 		 */
-		public function getName();
+		public function getName(): string;
 
 		/**
 		 * return schema's namespace; this can be null
 		 *
-		 * @return string|null
+		 * @return string
 		 */
-		public function getNamespace();
+		public function getNamespace(): string;
 
 		/**
 		 * return full name of this schema (including namespace, ...)
 		 *
 		 * @return string
 		 */
-		public function getSchemaName();
+		public function getSchemaName(): string;
 
 		/**
 		 * tells if given property name is known in this schema
@@ -32,7 +34,7 @@
 		 *
 		 * @return bool
 		 */
-		public function hasProperty($name);
+		public function hasProperty(string $name): bool;
 
 		/**
 		 * retrieve the given property; throws exception if the property is not known for this schema
@@ -43,14 +45,14 @@
 		 *
 		 * @throws SchemaException
 		 */
-		public function getProperty($name);
+		public function getProperty(string $name): ISchemaProperty;
 
 		/**
 		 * return set of properties of this Schema
 		 *
 		 * @return ISchemaProperty[]
 		 */
-		public function getPropertyList();
+		public function getPropertyList(): array;
 
 		/**
 		 * make a link between the given source and destination property (1:1); if the name is present and force === false, exception should be thrown
@@ -60,9 +62,9 @@
 		 * @param ISchemaProperty $target
 		 * @param bool $force
 		 *
-		 * @return $this
+		 * @return ISchema
 		 */
-		public function link($name, ISchemaProperty $source, ISchemaProperty $target, $force = false);
+		public function link(string $name, ISchemaProperty $source, ISchemaProperty $target, bool $force = false): ISchema;
 
 		/**
 		 * is there link with the given name?
@@ -71,7 +73,7 @@
 		 *
 		 * @return bool
 		 */
-		public function hasLink($name);
+		public function hasLink(string $name): bool;
 
 		/**
 		 * return a link with the given name
@@ -80,14 +82,14 @@
 		 *
 		 * @return ISchemaLink
 		 */
-		public function getLink($name);
+		public function getLink(string $name): ISchemaLink;
 
 		/**
 		 * return all known links in this schema
 		 *
 		 * @return ISchemaLink[]
 		 */
-		public function getLinkList();
+		public function getLinkList(): array;
 
 		/**
 		 * connect the given source property to the target property as 1:n collection
@@ -97,28 +99,28 @@
 		 * @param ISchemaProperty $target
 		 * @param bool $force
 		 *
-		 * @return $this
+		 * @return ISchema
 		 */
-		public function collection($name, ISchemaProperty $source, ISchemaProperty $target, $force = false);
+		public function collection(string $name, ISchemaProperty $source, ISchemaProperty $target, bool $force = false): ISchema;
 
 		/**
 		 * @param string $name
 		 *
 		 * @return bool
 		 */
-		public function hasCollection($name);
+		public function hasCollection(string $name): bool;
 
 		/**
 		 * @param string $name
 		 *
 		 * @return ISchemaCollection
 		 */
-		public function getCollection($name);
+		public function getCollection(string $name): ISchemaCollection;
 
 		/**
 		 * @return ISchemaCollection[]
 		 */
-		public function getCollectionList();
+		public function getCollectionList(): array;
 
 		/**
 		 * link the given source property to the given target property in both directions (link + collection in reverse); this is only shorthand for link(source, target) + collection(target, source)
@@ -128,7 +130,7 @@
 		 * @param ISchemaProperty $source
 		 * @param ISchemaProperty $target
 		 *
-		 * @return $this
+		 * @return ISchema
 		 */
-		public function linkTo($link, $collection, ISchemaProperty $source, ISchemaProperty $target);
+		public function linkTo(string $link, string $collection, ISchemaProperty $source, ISchemaProperty $target): ISchema;
 	}
