@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Strings;
 
 	use Edde\Common\AbstractObject;
@@ -24,7 +26,7 @@
 		 *
 		 * @return string
 		 */
-		static public function capitalize($string) {
+		static public function capitalize(string $string): string {
 			return mb_convert_case($string, MB_CASE_TITLE, 'UTF-8');
 		}
 
@@ -37,7 +39,7 @@
 		 *
 		 * @return bool
 		 */
-		static public function compare($left, $right, $length = null) {
+		static public function compare(string $left, string $right, int $length = null): bool {
 			if ($length !== null) {
 				$left = self::substring($left, 0, $length);
 				$right = self::substring($right, 0, $length);
@@ -54,7 +56,7 @@
 		 *
 		 * @return string
 		 */
-		static public function substring($string, $start, $length = null) {
+		static public function substring(string $string, int $start, int $length = null): string {
 			return mb_substr($string, $start, $length, 'UTF-8');
 		}
 
@@ -63,7 +65,7 @@
 		 *
 		 * @return string
 		 */
-		static public function lower($string) {
+		static public function lower(string $string): string {
 			return mb_strtolower($string, 'UTF-8');
 		}
 
@@ -75,7 +77,7 @@
 		 * @return string
 		 * @throws StringException
 		 */
-		static public function checkUnicode($string) {
+		static public function checkUnicode(string $string): string {
 			if (strpos($string, "\xEF\xBB\xBF", 0) !== false) {
 				$string = substr($string, 3);
 			}
@@ -91,7 +93,7 @@
 		 * @return string
 		 * @throws StringException
 		 */
-		static public function chr($code) {
+		static public function chr(int $code): string {
 			if ($code < 0 || ($code >= 0xD800 && $code <= 0xDFFF) || $code > 0x10FFFF) {
 				throw new StringException('Code point must be in range 0x0 to 0xD7FF or 0xE000 to 0x10FFFF.');
 			}
@@ -105,7 +107,7 @@
 		 *
 		 * @return bool
 		 */
-		static public function isEncoding($string) {
+		static public function isEncoding(string $string): bool {
 			return $string === self::fixEncoding($string);
 		}
 
@@ -116,7 +118,7 @@
 		 *
 		 * @return string
 		 */
-		static public function fixEncoding($string) {
+		static public function fixEncoding(string $string): string {
 			return htmlspecialchars_decode(htmlspecialchars($string, ENT_NOQUOTES | ENT_IGNORE, 'UTF-8'), ENT_NOQUOTES);
 		}
 
@@ -128,7 +130,7 @@
 		 *
 		 * @return string
 		 */
-		static public function toHumanSize($size, $decimal = 2) {
+		static public function toHumanSize(int $size, int $decimal = 2): string {
 			static $sizeList = [
 				'B',
 				'kB',
@@ -153,7 +155,7 @@
 		 *
 		 * @return string
 		 */
-		static public function recamel($string, $glue = '-', $index = 0) {
+		static public function recamel(string $string, string $glue = '-', int $index = 0): string {
 			$camel = self::camel($string, $index);
 			return mb_strtolower(implode($glue, $camel));
 		}
@@ -166,7 +168,7 @@
 		 *
 		 * @return array
 		 */
-		static public function camel($string, $index = 0) {
+		static public function camel(string $string, int $index = 0): array {
 			$camel = preg_split('~(?=[A-Z])~', $string, -1, PREG_SPLIT_NO_EMPTY);
 			if ($index > 0) {
 				return array_slice($camel, $index);
@@ -182,11 +184,20 @@
 		 *
 		 * @return string
 		 */
-		static public function camelize($string, $separator = null) {
+		static public function camelize(string $string, string $separator = null): string {
 			return str_replace('~', null, mb_convert_case(str_replace($separator ?: self::$SEPARATOR_LIST, '~', mb_strtolower(implode('~', preg_split('~(?=[A-Z])~', $string, -1, PREG_SPLIT_NO_EMPTY)))), MB_CASE_TITLE, 'UTF-8'));
 		}
 
-		static public function webalize($string, $charlist = null, $lower = true) {
+		/**
+		 * remove invalid character from an "url" string
+		 *
+		 * @param string $string
+		 * @param string|null $charlist
+		 * @param bool $lower
+		 *
+		 * @return string
+		 */
+		static public function webalize(string $string, string $charlist = null, bool $lower = true): string {
 			$string = self::toAscii($string);
 			if ($lower) {
 				$string = strtolower($string);
@@ -196,7 +207,7 @@
 			return $string;
 		}
 
-		static public function toAscii($string) {
+		static public function toAscii(string $string): string {
 			$string = preg_replace('~[^\x09\x0A\x0D\x20-\x7E\xA0-\x{2FF}\x{370}-\x{10FFFF}]~u', '', $string);
 			$string = strtr($string, '`\'"^~?', "\x01\x02\x03\x04\x05\x06");
 			$string = str_replace([
@@ -238,7 +249,7 @@
 		 *
 		 * @return array|null
 		 */
-		static public function match($string, $pattern, $named = false, $trim = false) {
+		static public function match(string $string, string $pattern, bool $named = false, bool $trim = false): array {
 			$match = null;
 			$match = self::pcre('preg_match', [
 				$pattern,
@@ -287,14 +298,14 @@
 		}
 
 		/**
-		 * @param $string
-		 * @param $pattern
+		 * @param string $string
+		 * @param string $pattern
 		 * @param bool|false $named return only named parameters from token
 		 * @param array|bool|false $trim if array is provided, its used for named parameters defaults
 		 *
 		 * @return array|null
 		 */
-		static public function matchAll($string, $pattern, $named = false, $trim = false) {
+		static public function matchAll(string $string, string $pattern, bool $named = false, $trim = false): array {
 			$match = null;
 			$match = self::pcre('preg_match_all', [
 				$pattern,
@@ -328,7 +339,7 @@
 		 * @return string
 		 * @throws StringException
 		 */
-		static public function replace($subject, $pattern, $replacement = null, $limit = -1) {
+		static public function replace(string $subject, string $pattern, string $replacement = null, int $limit = -1): string {
 			return self::pcre('preg_replace', [
 				$pattern,
 				$replacement,
@@ -347,7 +358,7 @@
 		 * @return array
 		 * @throws StringException
 		 */
-		static public function split($subject, $pattern, $flags = 0) {
+		static public function split(string $subject, string $pattern, int $flags = 0): array {
 			return self::pcre('preg_split', [
 				$pattern,
 				$subject,
@@ -363,7 +374,7 @@
 		 *
 		 * @return string
 		 */
-		static public function firstUpper($string) {
+		static public function firstUpper(string $string): string {
 			return self::upper(self::substring($string, 0, 1)) . self::substring($string, 1);
 		}
 
@@ -374,7 +385,7 @@
 		 *
 		 * @return string
 		 */
-		static public function upper($string) {
+		static public function upper(string $string): string {
 			return mb_strtoupper($string, 'UTF-8');
 		}
 
@@ -385,7 +396,7 @@
 		 *
 		 * @return string
 		 */
-		static public function firstLower($string) {
+		static public function firstLower(string $string): string {
 			return self::lower(self::substring($string, 0, 1)) . self::substring($string, 1);
 		}
 
@@ -396,7 +407,7 @@
 		 *
 		 * @return \Generator
 		 */
-		static public function createIterator($string) {
+		static public function createIterator(string $string): \Generator {
 			$strlen = mb_strlen(self::normalize($string));
 			while ($strlen) {
 				yield mb_substr($string, 0, 1);
@@ -413,7 +424,7 @@
 		 *
 		 * @return string
 		 */
-		static public function normalize($string) {
+		static public function normalize(string $string): string {
 			$string = self::normalizeNewLines($string);
 			$string = preg_replace('~[\x00-\x08\x0B-\x1F\x7F-\x9F]+~u', '', $string);
 			$string = preg_replace('~[\t ]+$~m', '', $string);
@@ -428,7 +439,7 @@
 		 *
 		 * @return string
 		 */
-		static public function normalizeNewLines($string) {
+		static public function normalizeNewLines(string $string): string {
 			return str_replace([
 				"\r\n",
 				"\r",
@@ -444,7 +455,7 @@
 		 *
 		 * @return string
 		 */
-		static public function extract($source, $separator = '\\', $index = -1) {
+		static public function extract(string $source, string $separator = '\\', int $index = -1): string {
 			$sourceList = explode($separator, $source);
 			return isset($sourceList[$index = $index < 0 ? count($sourceList) + $index : $index]) ? $sourceList[$index] : '';
 		}
