@@ -3,7 +3,7 @@ variables:
     PAGE_TRIGGER: https://gitlab.com/api/v3/projects/1386646/trigger/builds
     COMPOSER_TRIGGER: https://gitlab.com/api/v3/projects/1351549/trigger/builds
 
-image: php:5.6
+image: php:7.0
 
 stages:
     - test
