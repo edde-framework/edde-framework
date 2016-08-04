@@ -74,6 +74,15 @@
 		public function exists();
 
 		/**
+		 * return directory based on a current path
+		 *
+		 * @param string $directory
+		 *
+		 * @return IDirectory
+		 */
+		public function directory($directory);
+
+		/**
 		 * @return IResource[]
 		 */
 		public function getIterator();

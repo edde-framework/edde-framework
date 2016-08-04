@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace App\Login;
 
 	use Edde\Api\Crypt\ICryptEngine;
@@ -39,6 +41,7 @@
 		}
 
 		public function handleOnLogin(LoginCrate $loginCrate) {
+			echo $loginCrate->getLogin();
 		}
 
 		protected function prepare() {

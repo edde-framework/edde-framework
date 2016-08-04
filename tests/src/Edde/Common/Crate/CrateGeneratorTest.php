@@ -1,13 +1,17 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Crate;
 
 	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Schema\ISchemaManager;
-	use Edde\Common\File\TempDirectory;
+	use Edde\Common\Cache\CacheFactory;
+	use Edde\Common\Container\FactoryManager;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
+	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Foo\Bar\Header2Schema;
 	use Foo\Bar\Item2Schema;
 	use Foo\Bar\Row2Schema;
@@ -27,15 +31,15 @@
 		/**
 		 * @var ITempDirectory
 		 */
-		protected $tempDirectory;
+		protected $crateDirectory;
 
 		public function testSimpleCrate() {
 			foreach ($this->schemaManager->getSchemaList() as $schema) {
-				$crateList = $this->crateGenerator->generate($schema);
+				$crateList = $this->crateGenerator->compile($schema);
 				foreach ($crateList as $name => $source) {
 					call_user_func(function (IResource $resource) {
 						require_once($resource->getUrl());
-					}, $this->tempDirectory->save(sha1($name) . '.php', $source));
+					}, $this->crateDirectory->save(sha1($name) . '.php', $source));
 					self::assertTrue(class_exists($name));
 				}
 			}
@@ -46,12 +50,12 @@
 			$this->schemaManager->addSchema($header = new Header2Schema());
 			$this->schemaManager->addSchema($item = new Item2Schema());
 			$this->schemaManager->addSchema(new Row2Schema($header, $item));
-			$this->crateGenerator = new CrateGenerator();
-			$this->tempDirectory = new TempDirectory(__DIR__ . '/temp');
-			$this->tempDirectory->purge();
+			$this->crateDirectory = new CrateDirectory(__DIR__ . '/temp');
+			$this->crateDirectory->purge();
+			$this->crateGenerator = new CrateGenerator($this->schemaManager, $this->crateDirectory, new CacheFactory(__NAMESPACE__, new InMemoryCacheStorage()), new FactoryManager());
 		}
 
 		protected function tearDown() {
-			$this->tempDirectory->delete();
+			$this->crateDirectory->delete();
 		}
 	}

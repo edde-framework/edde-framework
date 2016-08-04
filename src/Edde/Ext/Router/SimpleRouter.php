@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Ext\Router;
 
 	use Edde\Api\Crate\ICrateFactory;

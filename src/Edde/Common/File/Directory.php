@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\File;
 
 	use Edde\Api\File\DirectoryException;
@@ -71,6 +73,10 @@
 
 		public function exists() {
 			return is_dir($this->directory);
+		}
+
+		public function directory($directory) {
+			return new Directory($this->getDirectory() . '/' . $directory);
 		}
 
 		public function getIterator() {

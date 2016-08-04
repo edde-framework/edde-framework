@@ -1,7 +1,11 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Module;
 
+	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Control\Html\IHtmlControl;
+	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\EddeException;
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Upgrade\IUpgradeManager;
@@ -20,6 +24,14 @@
 		 */
 		protected $resourceIndex;
 		/**
+		 * @var ICrateGenerator
+		 */
+		protected $crateGenerator;
+		/**
+		 * @var ICacheStorage
+		 */
+		protected $cacheStorage;
+		/**
 		 * @var IHtmlControl
 		 */
 		protected $message;
@@ -32,15 +44,25 @@
 			$this->resourceIndex = $resourceIndex;
 		}
 
+		final public function lazyCrateGenerator(ICrateGenerator $crateGenerator) {
+			$this->crateGenerator = $crateGenerator;
+		}
+
+		final public function lazyCacheStorage(ICacheStorage $cacheStorage) {
+			$this->cacheStorage = $cacheStorage;
+		}
+
 		public function actionSetup() {
 			$this->usse();
 			$this->setTitle('Edde Control');
 			$content = $this->createDivControl();
 			$content->addClass('row centered');
 			$column = $content->createDivControl();
-			$column->addClass('col col-4');
+			$column->addClass('col col-5');
 			$column->createButtonControl('Upgrade', static::class, 'OnUpgrade', 'run upgrades registered to this application');
 			$column->createButtonControl('Update Resource Index', static::class, 'OnUpdateIndex', 'update resource index; this function needs storage already setup');
+			$column->createButtonControl('Rebuild crates', static::class, 'OnRebuildCrates', 'update automagically generated crates');
+			$column->createButtonControl('Clear cache', static::class, 'OnClearCache', 'clear current cache');
 			$this->send();
 		}
 
@@ -64,6 +86,34 @@
 				$this->resourceIndex->update();
 				$this->message->addClass('success')
 					->setText('resource index has been updated');
+			} catch (EddeException $e) {
+				Debugger::log($e);
+				$this->message->addClass('error')
+					->setText($e->getMessage());
+			}
+			$this->response();
+		}
+
+		public function handleOnRebuildCrates() {
+			$this->usse();
+			try {
+				$this->crateGenerator->generate();
+				$this->message->addClass('success')
+					->setText('crates has been rebuilt');
+			} catch (EddeException $e) {
+				Debugger::log($e);
+				$this->message->addClass('error')
+					->setText($e->getMessage());
+			}
+			$this->response();
+		}
+
+		public function handleOnClearCache() {
+			$this->usse();
+			try {
+				$this->cacheStorage->invalidate();
+				$this->message->addClass('success')
+					->setText('cache has been wiped out');
 			} catch (EddeException $e) {
 				Debugger::log($e);
 				$this->message->addClass('error')

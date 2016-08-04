@@ -1,22 +1,90 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Crate;
 
+	use Edde\Api\Cache\ICache;
+	use Edde\Api\Cache\ICacheFactory;
+	use Edde\Api\Container\IFactoryManager;
 	use Edde\Api\Crate\ICollection;
+	use Edde\Api\Crate\ICrateDirectory;
 	use Edde\Api\Crate\ICrateGenerator;
+	use Edde\Api\Resource\IResource;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaCollection;
 	use Edde\Api\Schema\ISchemaLink;
+	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Schema\ISchemaProperty;
+	use Edde\Common\File\FileUtils;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class CrateGenerator extends AbstractUsable implements ICrateGenerator {
 		/**
+		 * @var ISchemaManager
+		 */
+		protected $schemaManager;
+		/**
+		 * @var ICrateDirectory
+		 */
+		protected $crateDirectory;
+		/**
+		 * @var ICacheFactory
+		 */
+		protected $cacheFactory;
+		/**
+		 * @var IFactoryManager
+		 */
+		protected $factoryManager;
+		/**
+		 * @var ICache
+		 */
+		protected $cache;
+		/**
 		 * @var string
 		 */
 		protected $parent;
 
-		public function generate(ISchema $schema) {
+		/**
+		 * @param ISchemaManager $schemaManager
+		 * @param ICrateDirectory $crateDirectory
+		 * @param ICacheFactory $cacheFactory
+		 * @param IFactoryManager $factoryManager
+		 */
+		public function __construct(ISchemaManager $schemaManager, ICrateDirectory $crateDirectory, ICacheFactory $cacheFactory, IFactoryManager $factoryManager) {
+			$this->schemaManager = $schemaManager;
+			$this->crateDirectory = $crateDirectory;
+			$this->cacheFactory = $cacheFactory;
+			$this->factoryManager = $factoryManager;
+		}
+
+		public function generate() {
+			$this->usse();
+			if (($crateList = $this->cache->load('crate-list', [])) === []) {
+				$this->crateDirectory->purge();
+				foreach ($this->schemaManager->getSchemaList() as $schema) {
+					$crateList[] = $schemaName = $schema->getSchemaName();
+					if (class_exists($schemaName)) {
+						continue;
+					}
+					foreach ($this->compile($schema) as $name => $source) {
+						FileUtils::createDir($path = FileUtils::normalize(($this->crateDirectory->getDirectory() . '/' . $schema->getNamespace())));
+						file_put_contents($path . '/' . $schema->getName() . '.php', $source);
+					}
+				}
+				$this->cache->save('crate-list', $crateList);
+			}
+			$loader = $this->crateDirectory->save('loader.php', "<?php
+				Edde\\Common\\Autoloader::register(null, __DIR__, false);	
+			");
+			(function (IResource $resource) {
+				require_once($resource->getUrl());
+			})($loader);
+			$this->factoryManager->registerFactoryList($crateList);
+			return $this;
+		}
+
+		public function compile(ISchema $schema) {
 			$this->usse();
 			$sourceList = [];
 			$source[] = "<?php\n";
@@ -105,6 +173,8 @@
 		}
 
 		protected function prepare() {
+			$this->crateDirectory->make();
+			$this->cache = $this->cacheFactory->factory(__NAMESPACE__);
 			$this->parent = Crate::class;
 		}
 	}

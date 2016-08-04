@@ -1,11 +1,15 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Ext\Runtime;
 
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Crate\ICrateDirectory;
 	use Edde\Api\Crate\ICrateFactory;
+	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\File\IRootDirectory;
@@ -32,7 +36,9 @@
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Container\Factory\FactoryFactory;
+	use Edde\Common\Crate\CrateDirectory;
 	use Edde\Common\Crate\CrateFactory;
+	use Edde\Common\Crate\CrateGenerator;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
@@ -104,11 +110,12 @@
 				IDriver::class => function () {
 					throw new RuntimeException(sprintf('If you want to use DatabaseStorage (or [%s]), you must register it to the container at first!', IDriver::class));
 				},
+				ICrateGenerator::class => CrateGenerator::class,
 				ICrateFactory::class => CrateFactory::class,
-				IStorage::class => DatabaseStorage::class,
-				ResourceStorable::class => function (IResourceIndex $resourceIndex) {
-					return $resourceIndex->createResourceStorable();
+				ICrateDirectory::class => function (IStorageDirectory $storageDirectory) {
+					return new CrateDirectory($storageDirectory->getDirectory() . '/crate');
 				},
+				IStorage::class => DatabaseStorage::class,
 				IResourceIndex::class => ResourceIndex::class,
 				IUpgradeManager::class => UpgradeManager::class,
 				IResourceStorable::class => FactoryFactory::create(ResourceStorable::class, function (IResourceIndex $resourceIndex) {
@@ -125,6 +132,9 @@
 			$setupHandler->onSetup(IRouter::class, function (IContainer $container, RouterList $routerList) {
 				$routerList->registerRouter($container->create(CliRouter::class));
 				$routerList->registerRouter($container->create(SimpleRouter::class));
+			});
+			$setupHandler->onSetup(IApplication::class, function (ICrateGenerator $crateGenerator, IApplication $application) {
+				$crateGenerator->generate();
 			});
 			return $setupHandler;
 		}
