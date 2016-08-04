@@ -142,7 +142,7 @@
 				'ZB',
 				'YB',
 			];
-			$factor = (int)floor((strlen($size) - 1) / 3);
+			$factor = (int)floor((strlen((string)$size) - 1) / 3);
 			return sprintf('%.' . $decimal . 'f %s', $size / pow(1024, $factor), @$sizeList[$factor]);
 		}
 
@@ -313,7 +313,7 @@
 				&$match,
 			]) ? $match : null;
 			if ($match === null) {
-				return null;
+				return [];
 			}
 			if ($named) {
 				foreach ($match as $k => $v) {
