@@ -8,7 +8,6 @@
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Container\LazyInjectTrait;
-	use Edde\Common\Control\ControlTrait;
 	use Edde\Common\Html\Document\DocumentControl;
 	use Edde\Common\Html\Document\MetaControl;
 	use Edde\Common\Resource\ResourceList;
@@ -19,7 +18,6 @@
 	 */
 	class PageControl extends DocumentControl {
 		use LazyInjectTrait;
-		use ControlTrait;
 		/**
 		 * @var HtmlResponse
 		 */
@@ -98,7 +96,7 @@
 			parent::prepare();
 			$this->styleSheetList = new ResourceList();
 			$this->javaScriptList = new ResourceList();
-			$this->head->addControl($this->container->create(MetaControl::class)
+			$this->head->addControl($this->createControl(MetaControl::class)
 				->setAttributeList([
 					'name' => 'viewport',
 					'content' => 'width=device-width, initial-scale=1',
