@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Control\Html;
+	namespace Edde\Common\Html;
 
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceList;

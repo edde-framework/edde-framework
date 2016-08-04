@@ -10,7 +10,7 @@
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Container\LazyInjectTrait;
-	use Edde\Common\Control\Html\EddeHtmlControl;
+	use Edde\Common\Html\EddeHtmlControl;
 	use Tracy\Debugger;
 
 	class EddeControl extends EddeHtmlControl {

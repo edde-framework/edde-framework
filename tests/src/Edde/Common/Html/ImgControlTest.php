@@ -1,5 +1,7 @@
 <?php
-	namespace Edde\Common\Control\Html;
+	declare(strict_types = 1);
+
+	namespace Edde\Common\Html;
 
 	use Edde\Api\Control\Html\HtmlException;
 	use phpunit\framework\TestCase;

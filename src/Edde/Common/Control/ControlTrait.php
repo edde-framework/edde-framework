@@ -6,14 +6,14 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Schema\ISchemaProperty;
-	use Edde\Common\Control\Html\ButtonControl;
-	use Edde\Common\Control\Html\DivControl;
-	use Edde\Common\Control\Html\JavaScriptControl;
-	use Edde\Common\Control\Html\MetaControl;
-	use Edde\Common\Control\Html\PasswordInputControl;
-	use Edde\Common\Control\Html\StyleSheetControl;
-	use Edde\Common\Control\Html\TextInputControl;
-	use Edde\Common\Control\Html\TitleControl;
+	use Edde\Common\Html\ButtonControl;
+	use Edde\Common\Html\DivControl;
+	use Edde\Common\Html\JavaScriptControl;
+	use Edde\Common\Html\MetaControl;
+	use Edde\Common\Html\PasswordInputControl;
+	use Edde\Common\Html\StyleSheetControl;
+	use Edde\Common\Html\TextInputControl;
+	use Edde\Common\Html\TitleControl;
 
 	/**
 	 * This is helper trait for integration of a factory methods of Edde's control set.

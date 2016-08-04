@@ -5,7 +5,7 @@
 
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Schema\ISchemaManager;
-	use Edde\Common\Control\Html\EddeHtmlControl;
+	use Edde\Common\Html\EddeHtmlControl;
 
 	class LoginControl extends EddeHtmlControl {
 		/**
