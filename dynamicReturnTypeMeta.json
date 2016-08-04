@@ -1,0 +1,9 @@
+{
+	"methodCalls": [
+		{
+			"class": "\\Edde\\Common\\Html\\AbstractHtmlControl",
+			"method": "createControl",
+			"position": 0
+		}
+	]
+}

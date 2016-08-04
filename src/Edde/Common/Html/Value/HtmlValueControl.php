@@ -1,12 +1,13 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Html;
+	namespace Edde\Common\Html\Value;
 
 	use Edde\Api\Control\Html\IHtmlValueControl;
 	use Edde\Api\Schema\ISchemaProperty;
+	use Edde\Common\Html\AbstractHtmlControl;
 
-	abstract class AbstractHtmlValueControl extends AbstractHtmlControl implements IHtmlValueControl {
+	abstract class HtmlValueControl extends AbstractHtmlControl implements IHtmlValueControl {
 		/**
 		 * @var ISchemaProperty
 		 */

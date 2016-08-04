@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Html;
 
+	use Edde\Common\Html\Document\DocumentControl;
 	use Edde\Ext\Container\ContainerFactory;
 	use phpunit\framework\TestCase;
 

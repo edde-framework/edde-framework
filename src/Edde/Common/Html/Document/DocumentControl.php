@@ -1,9 +1,10 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Html;
+	namespace Edde\Common\Html\Document;
 
 	use Edde\Api\Control\IControl;
+	use Edde\Common\Html\AbstractHtmlControl;
 
 	/**
 	 * General control describing whole html document; this is some sort of representation of a DOM tree.
@@ -62,7 +63,7 @@
 
 		protected function prepare() {
 			parent::prepare();
-			parent::addControl($this->head = $this->container->create(HeadControl::class));
-			parent::addControl($this->body = $this->container->create(BodyControl::class));
+			parent::addControl($this->head = $this->createControl(HeadControl::class));
+			parent::addControl($this->body = $this->createControl(BodyControl::class));
 		}
 	}

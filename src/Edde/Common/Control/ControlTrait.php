@@ -8,12 +8,12 @@
 	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Common\Html\ButtonControl;
 	use Edde\Common\Html\DivControl;
-	use Edde\Common\Html\JavaScriptControl;
-	use Edde\Common\Html\MetaControl;
-	use Edde\Common\Html\PasswordInputControl;
-	use Edde\Common\Html\StyleSheetControl;
-	use Edde\Common\Html\TextInputControl;
-	use Edde\Common\Html\TitleControl;
+	use Edde\Common\Html\Document\JavaScriptControl;
+	use Edde\Common\Html\Document\MetaControl;
+	use Edde\Common\Html\Document\StyleSheetControl;
+	use Edde\Common\Html\Document\TitleControl;
+	use Edde\Common\Html\Value\PasswordInputControl;
+	use Edde\Common\Html\Value\TextInputControl;
 
 	/**
 	 * This is helper trait for integration of a factory methods of Edde's control set.
@@ -47,7 +47,7 @@
 		}
 
 		/**
-		 * @return TitleControl
+		 * @return \Edde\Common\Html\Document\TitleControl
 		 */
 		public function createTitleControl() {
 			return $this->createControl(TitleControl::class);
@@ -61,7 +61,7 @@
 		}
 
 		/**
-		 * @return StyleSheetControl
+		 * @return \Edde\Common\Html\Document\StyleSheetControl
 		 */
 		public function createStyleSheetControl() {
 			return $this->createControl(StyleSheetControl::class);
@@ -89,7 +89,7 @@
 		/**
 		 * @param ISchemaProperty $schemaProperty
 		 *
-		 * @return TextInputControl
+		 * @return \Edde\Common\Html\Value\TextInputControl
 		 */
 		public function createTextInputControl(ISchemaProperty $schemaProperty = null) {
 			return $this->createControl(TextInputControl::class, $schemaProperty);
@@ -98,7 +98,7 @@
 		/**
 		 * @param ISchemaProperty $schemaProperty
 		 *
-		 * @return PasswordInputControl
+		 * @return \Edde\Common\Html\Value\PasswordInputControl
 		 */
 		public function createPasswordInputControl(ISchemaProperty $schemaProperty = null) {
 			return $this->createControl(PasswordInputControl::class, $schemaProperty);

@@ -1,15 +1,15 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Html;
+	namespace Edde\Common\Html\Document;
 
-	use Edde\Api\Node\IAbstractNode;
+	use Edde\Common\Html\AbstractHtmlControl;
 
 	class HeadControl extends AbstractHtmlControl {
 		/**
 		 * @var TitleControl
 		 */
-		private $title;
+		protected $title;
 
 		/**
 		 * set the title of this head control
@@ -30,8 +30,8 @@
 		 */
 		public function addJavaScript($src) {
 			$this->usse();
-			$this->createJavaScriptControl()
-				->setSrc($src);
+			$this->addControl($this->createControl(JavaScriptControl::class)
+				->setSrc($src));
 			return $this;
 		}
 
@@ -44,8 +44,8 @@
 		 */
 		public function addStyleSheet($href) {
 			$this->usse();
-			$this->createStyleSheetControl()
-				->setHref($href);
+			$this->addControl($this->createControl(StyleSheetControl::class)
+				->setHref($href));
 			return $this;
 		}
 
@@ -53,14 +53,10 @@
 			return 'head';
 		}
 
-		public function accept(IAbstractNode $abstractNode) {
-			return $abstractNode instanceof MetaControl || $abstractNode instanceof LinkControl || $abstractNode instanceof TitleControl || $abstractNode instanceof JavaScriptControl;
-		}
-
 		protected function prepare() {
 			parent::prepare();
-			$this->createMetaControl()
-				->setAttribute('charset', 'utf-8');
-			$this->title = $this->createTitleControl();
+			$this->addControl($this->createControl(MetaControl::class)
+				->setAttribute('charset', 'utf-8'));
+			$this->addControl($this->title = $this->createControl(TitleControl::class));
 		}
 	}

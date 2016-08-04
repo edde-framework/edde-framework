@@ -3,10 +3,20 @@
 
 	namespace Edde\Common\Html;
 
+	use Edde\Api\Container\IContainer;
 	use Edde\Api\Control\Html\IHtmlControl;
 	use Edde\Common\Control\AbstractControl;
 
 	abstract class AbstractHtmlControl extends AbstractControl implements IHtmlControl {
+		/**
+		 * @var IContainer
+		 */
+		protected $container;
+
+		final public function injectContainer(IContainer $container) {
+			$this->container = $container;
+		}
+
 		public function setTag(string $tag, bool $pair = true) {
 			$this->usse();
 			$this->node->addAttributeList([
@@ -144,5 +154,15 @@
 		public function isPair() {
 			$this->usse();
 			return $this->node->getAttribute('pair', true);
+		}
+
+		/**
+		 * @param string $control
+		 * @param array ...$parameterList
+		 *
+		 * @return IHtmlControl
+		 */
+		protected function createControl($control, ...$parameterList) {
+			return $this->container->create($control, ...$parameterList);
 		}
 	}

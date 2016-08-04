@@ -9,7 +9,6 @@
 	use Edde\Common\Usable\AbstractUsable;
 
 	abstract class AbstractControl extends AbstractUsable implements IControl {
-		use ControlTrait;
 		/**
 		 * @var INode
 		 */
