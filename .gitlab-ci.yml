@@ -58,7 +58,7 @@ package:
     script: /bin/true
     dependencies:
         - compile
-        - doc
+#        - doc
     artifacts:
         name: $PROJECT-$CI_BUILD_REF_NAME.package
         paths:
