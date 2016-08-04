@@ -27,7 +27,16 @@
 		 *
 		 * @return IResource
 		 */
-		public function file($name, $content);
+		public function save($name, $content);
+
+		/**
+		 * get contents of a given file (in this directory)
+		 *
+		 * @param string $file
+		 *
+		 * @return string
+		 */
+		public function get($file);
 
 		/**
 		 * create filename (shortcut for $this->getDirectory.'\\'.$file)

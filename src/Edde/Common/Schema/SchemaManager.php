@@ -2,19 +2,26 @@
 	namespace Edde\Common\Schema;
 
 	use Edde\Api\Schema\ISchema;
+	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Schema\SchemaException;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class SchemaManager extends AbstractUsable implements ISchemaManager {
 		/**
+		 * @var ISchemaFactory
+		 */
+		protected $schemaFactory;
+		/**
 		 * @var ISchema[]
 		 */
 		protected $schemaList = [];
 
-		public function addSchema(ISchema $schema) {
-			$this->schemaList[$schema->getSchemaName()] = $schema;
-			return $this;
+		/**
+		 * @param ISchemaFactory $schemaFactory
+		 */
+		public function __construct(ISchemaFactory $schemaFactory) {
+			$this->schemaFactory = $schemaFactory;
 		}
 
 		public function hasSchema($schema) {
@@ -36,8 +43,13 @@
 		}
 
 		protected function prepare() {
-			foreach ($this->schemaList as $schema) {
-				$schema->usse();
+			foreach ($this->schemaFactory->create() as $schema) {
+				$this->addSchema($schema);
 			}
+		}
+
+		public function addSchema(ISchema $schema) {
+			$this->schemaList[$schema->getSchemaName()] = $schema;
+			return $this;
 		}
 	}

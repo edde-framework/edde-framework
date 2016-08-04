@@ -17,6 +17,7 @@
 	use Edde\Common\File\Directory;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Query\Select\SelectQuery;
+	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Ext\Cache\DevNullCacheStorage;
@@ -59,7 +60,7 @@
 			$factoryManager->registerFactoryFallback(FactoryFactory::createFallback());
 			$container = new Container($factoryManager, new DependencyFactory($factoryManager, $cacheFactory), $cacheFactory);
 			$this->storage = new DatabaseStorage($container, $this->sqliteDriver = new SqliteDriver('sqlite:' . $this->getDatabaseFileName()), $cacheFactory);
-			$this->schemaManager = new SchemaManager();
+			$this->schemaManager = new SchemaManager(new SchemaFactory());
 			$this->schemaManager->addSchema(new ResourceSchema());
 			$this->upgradeManager = new UpgradeManager();
 			$this->resourceIndex = new ResourceIndex($container, $this->schemaManager, $this->storage, new FilesystemScanner(new Directory(__DIR__ . '/assets')), new CryptEngine());

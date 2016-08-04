@@ -31,10 +31,14 @@
 			}
 		}
 
-		public function file($name, $content) {
+		public function save($name, $content) {
 			$this->usse();
 			file_put_contents($file = ($this->directory . '/' . $name), $content);
 			return new FileResource(FileUtils::url($file));
+		}
+
+		public function get($file) {
+			return file_get_contents(FileUtils::realpath($this->filename($file)));
 		}
 
 		public function filename($file) {

@@ -3,13 +3,14 @@
 
 	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\File\ITempDirectory;
+	use Edde\Api\Resource\IResource;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Common\File\TempDirectory;
+	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
-	use Edde\Common\Strings\StringUtils;
-	use Foo\Bar\HeaderSchema;
-	use Foo\Bar\ItemSchema;
-	use Foo\Bar\RowSchema;
+	use Foo\Bar\Header2Schema;
+	use Foo\Bar\Item2Schema;
+	use Foo\Bar\Row2Schema;
 	use phpunit\framework\TestCase;
 
 	require_once(__DIR__ . '/assets/schema.php');
@@ -32,21 +33,19 @@
 			foreach ($this->schemaManager->getSchemaList() as $schema) {
 				$crateList = $this->crateGenerator->generate($schema);
 				foreach ($crateList as $name => $source) {
-					$source = $this->tempDirectory->file(sha1($name) . '.php', $source)
-						->get();
-					/**
-					 * this is a bit unhappy solution, but for simplicity it is not possible to include created file...
-					 */
-					self::assertContains('class ' . StringUtils::extract($name, '\\', -1), $source);
+					call_user_func(function (IResource $resource) {
+						require_once($resource->getUrl());
+					}, $this->tempDirectory->save(sha1($name) . '.php', $source));
+					self::assertTrue(class_exists($name));
 				}
 			}
 		}
 
 		protected function setUp() {
-			$this->schemaManager = new SchemaManager();
-			$this->schemaManager->addSchema($header = new HeaderSchema());
-			$this->schemaManager->addSchema($item = new ItemSchema());
-			$this->schemaManager->addSchema(new RowSchema($header, $item));
+			$this->schemaManager = new SchemaManager(new SchemaFactory());
+			$this->schemaManager->addSchema($header = new Header2Schema());
+			$this->schemaManager->addSchema($item = new Item2Schema());
+			$this->schemaManager->addSchema(new Row2Schema($header, $item));
 			$this->crateGenerator = new CrateGenerator();
 			$this->tempDirectory = new TempDirectory(__DIR__ . '/temp');
 			$this->tempDirectory->purge();

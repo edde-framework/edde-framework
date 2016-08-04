@@ -1,0 +1,43 @@
+[
+	{
+		"name": "Header",
+		"namespace": "Foo\\Bar",
+		"property-list": [
+			{
+				"name": "guid",
+				"unique": "true",
+				"identifier": "true",
+				"required": "true"
+			},
+			{
+				"name": "name",
+				"required": "true"
+			}
+		]
+	},
+	{
+		"name": "Row",
+		"namespace": "Foo\\Bar",
+		"property-list": [
+			{
+				"name": "guid",
+				"unique": "true",
+				"identifier": "true",
+				"required": "true"
+			},
+			{
+				"name": "header",
+				"required": "true"
+			}
+		],
+		"link": [
+			{
+				"name": "header",
+				"target": {
+					"schema": "Foo\\Bar\\Header",
+					"property": "guid"
+				}
+			}
+		]
+	}
+]

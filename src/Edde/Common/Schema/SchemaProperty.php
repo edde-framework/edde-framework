@@ -38,14 +38,17 @@
 		/**
 		 * @param ISchema $schema
 		 * @param string $name
+		 * @param bool $required
+		 * @param bool $unique
+		 * @param bool $identifier
 		 */
-		public function __construct(ISchema $schema, $name) {
+		public function __construct(ISchema $schema, $name, $required = false, $unique = false, $identifier = false) {
 			$this->schema = $schema;
 			$this->name = $name;
 			$this->type = 'string';
-			$this->required = false;
-			$this->unique = false;
-			$this->identifier = false;
+			$this->required = $required;
+			$this->unique = $unique;
+			$this->identifier = $identifier;
 		}
 
 		public function getSchema() {

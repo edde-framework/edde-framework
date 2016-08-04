@@ -57,6 +57,6 @@
 				}
 				$content[] = $current;
 			}
-			return $this->fileStorage->store($this->tempDirectory->file($resourceList->getResourceName() . '.css', implode("\n", $content)));
+			return $this->fileStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.css', implode("\n", $content)));
 		}
 	}

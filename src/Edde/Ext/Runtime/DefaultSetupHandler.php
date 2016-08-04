@@ -22,6 +22,7 @@
 	use Edde\Api\Router\IRouter;
 	use Edde\Api\Router\RouterException;
 	use Edde\Api\Runtime\RuntimeException;
+	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Upgrade\IUpgradeManager;
@@ -43,6 +44,7 @@
 	use Edde\Common\Resource\Storage\StorageDirectory;
 	use Edde\Common\Router\RouterList;
 	use Edde\Common\Runtime\SetupHandler;
+	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Common\Web\JavaScriptCompiler;
@@ -80,6 +82,7 @@
 				IHttpResponse::class => function () {
 					throw new RuntimeException(sprintf('Do not request [%s] from the global space (container) as it is bad practice.', IHttpResponse::class));
 				},
+				ISchemaFactory::class => SchemaFactory::class,
 				ISchemaManager::class => SchemaManager::class,
 				IRootDirectory::class => function () {
 					throw new RuntimeException(sprintf('If you want use root directory [%s], you must register it to the container!', IRootDirectory::class));

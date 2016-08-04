@@ -131,13 +131,4 @@
 		 * @return $this
 		 */
 		public function linkTo($link, $collection, ISchemaProperty $source, ISchemaProperty $target);
-
-		/**
-		 * when schema is used, all dependencies are prepared too
-		 *
-		 * @param ISchema $schema
-		 *
-		 * @return $this
-		 */
-		public function addDependency(ISchema $schema);
 	}

@@ -1,12 +1,10 @@
 <?php
 	namespace Edde\Api\Schema;
 
-	use Edde\Api\Usable\IUsable;
-
 	/**
 	 * General way how to handle schemas.
 	 */
-	interface ISchemaManager extends IUsable {
+	interface ISchemaManager {
 		/**
 		 * register a new schema to this manager; if there is schema with schema name, it is silently replaced
 		 *

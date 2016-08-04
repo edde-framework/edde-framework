@@ -5,6 +5,7 @@
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Schema\ISchemaManager;
+	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Ext\Container\ContainerFactory;
 	use Foo\Bar\Header;
@@ -132,13 +133,16 @@
 		}
 
 		protected function setUp() {
-			$this->schemaManager = new SchemaManager();
+			$this->schemaManager = new SchemaManager(new SchemaFactory());
 
 			$rowSchema = new RowSchema($headerSchema = new HeaderSchema(), $itemSchema = new ItemSchema());
 
 			$this->schemaManager->addSchema($headerSchema);
 			$this->schemaManager->addSchema($rowSchema);
 			$this->schemaManager->addSchema($itemSchema);
+			$headerSchema->usse();
+			$rowSchema->usse();
+			$itemSchema->usse();
 
 			$this->container = ContainerFactory::create([
 				Crate::class,

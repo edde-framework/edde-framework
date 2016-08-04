@@ -32,6 +32,6 @@
 				$current = $resource->get();
 				$content[] = $current;
 			}
-			return $this->fileStorage->store($this->tempDirectory->file($resourceList->getResourceName() . '.js', implode(";\n", $content)));
+			return $this->fileStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.js', implode(";\n", $content)));
 		}
 	}
