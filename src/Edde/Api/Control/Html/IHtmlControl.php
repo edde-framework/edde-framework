@@ -56,7 +56,7 @@
 		 *
 		 * @return string
 		 */
-		public function getId();
+		public function getId(): string;
 
 		/**
 		 * set single html attribute
@@ -67,6 +67,16 @@
 		 * @return $this
 		 */
 		public function setAttribute($attribute, $value);
+
+		/**
+		 * return attribute by the given namw
+		 *
+		 * @param string $name
+		 * @param string $default
+		 *
+		 * @return string
+		 */
+		public function getAttribute(string $name, string $default = ''): string;
 
 		/**
 		 * add single html attribute to an array (for example class)
@@ -92,7 +102,7 @@
 		 *
 		 * @return string[]
 		 */
-		public function getAttributeList();
+		public function getAttributeList(): array;
 
 		/**
 		 * set the given css class

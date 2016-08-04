@@ -46,7 +46,7 @@
 		 * @throws ControlException
 		 */
 		public function bind(IHtmlControl $htmlControl) {
-			if (($id = $htmlControl->getId()) === null) {
+			if (($id = $htmlControl->getId()) === '') {
 				throw new ControlException(sprintf('Cannot bind [%s] to [%s] because target id is empty.', static::class, get_class($htmlControl)));
 			}
 			$this->setAttribute('data-bind', $id);

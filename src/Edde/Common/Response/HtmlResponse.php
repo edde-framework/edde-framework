@@ -25,7 +25,7 @@
 			return $this;
 		}
 
-		public function setControlList($controlList) {
+		public function setControlList(array $controlList) {
 			$this->controlList = [];
 			foreach ($controlList as $selector => $control) {
 				$this->addControl($control, is_string($selector) ? $selector : null);

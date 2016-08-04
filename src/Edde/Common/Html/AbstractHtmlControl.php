@@ -30,20 +30,17 @@
 			return $this;
 		}
 
-		/**
-		 * @return array
-		 */
-		public function getAttributeList() {
+		public function getAttributeList(): array {
 			$this->usse();
 			return $this->node->getAttribute('attribute-list', []);
 		}
 
-		public function getId() {
+		public function getId(): string {
 			$this->usse();
-			return $this->getAttribute('id');
+			return $this->getAttribute('id', '');
 		}
 
-		public function getAttribute($name, $default = null) {
+		public function getAttribute(string $name, string $default = ''): string {
 			$attributeList = $this->node->getAttribute('attribute-list', []);
 			return isset($attributeList[$name]) || array_key_exists($name, $attributeList) ? $attributeList[$name] : $default;
 		}
