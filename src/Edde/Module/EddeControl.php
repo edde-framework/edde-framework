@@ -125,7 +125,7 @@
 		protected function prepare() {
 			parent::prepare();
 			$this->message = $this->createDivControl()
-				->addClass('alert')
+				->addClass('alert edde-hide-on-click')
 				->setId('global-message');
 		}
 	}

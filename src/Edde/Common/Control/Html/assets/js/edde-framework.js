@@ -11,10 +11,12 @@ var Edde = {
 					switch (value.action) {
 						case 'replace':
 							$(selector).replaceWith(value.source);
+							$(selector).show();
 							break;
 					}
 				});
 			}
+			Edde.bind();
 		});
 	},
 	bind: function () {
@@ -22,6 +24,9 @@ var Edde = {
 			this.getValue = function () {
 				return $(this).val();
 			};
+		});
+		$('.edde-hide-on-click').on('click', function () {
+			$(this).hide();
 		});
 	},
 	crate: function (id) {

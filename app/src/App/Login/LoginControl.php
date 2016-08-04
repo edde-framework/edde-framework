@@ -41,7 +41,6 @@
 		}
 
 		public function handleOnLogin(LoginCrate $loginCrate) {
-			echo $loginCrate->getLogin();
 		}
 
 		protected function prepare() {

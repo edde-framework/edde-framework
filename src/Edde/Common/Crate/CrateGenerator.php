@@ -75,8 +75,8 @@
 				$this->cache->save('crate-list', $crateList);
 			}
 			$loader = $this->crateDirectory->save('loader.php', "<?php
-				Edde\\Common\\Autoloader::register(null, __DIR__, false);	
-			");
+	Edde\\Common\\Autoloader::register(null, __DIR__, false);	
+");
 			(function (IResource $resource) {
 				require_once($resource->getUrl());
 			})($loader);
