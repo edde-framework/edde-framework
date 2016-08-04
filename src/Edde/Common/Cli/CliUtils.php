@@ -29,7 +29,7 @@
 							$value = $argv[$i + 1];
 							$i++;
 						} else {
-							$value = isset($argumentList[$key]) ? $argumentList[$key] : true;
+							$value = $argumentList[$key] ?? true;
 						}
 						$argumentList[$key] = $value;
 					} else {
@@ -46,7 +46,7 @@
 						$chars = str_split(substr($arg, 1));
 						foreach ($chars as $char) {
 							$key = $char;
-							$value = isset($argumentList[$key]) ? $argumentList[$key] : true;
+							$value = $argumentList[$key] ?? true;
 							$argumentList[$key] = $value;
 						}
 						if ($i + 1 < $j && $argv[$i + 1][0] !== '-') {

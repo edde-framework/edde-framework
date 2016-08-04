@@ -7,7 +7,7 @@
 	use Edde\Common\Control\AbstractControl;
 
 	abstract class AbstractHtmlControl extends AbstractControl implements IHtmlControl {
-		public function setTag($tag, $pair = true) {
+		public function setTag(string $tag, bool $pair = true) {
 			$this->usse();
 			$this->node->addAttributeList([
 				'tag' => $tag,
@@ -16,7 +16,7 @@
 			return $this;
 		}
 
-		public function setId($id) {
+		public function setId(string $id) {
 			$this->usse();
 			$this->setAttribute('id', $id);
 			return $this;
@@ -48,7 +48,7 @@
 			return isset($attributeList[$name]) || array_key_exists($name, $attributeList) ? $attributeList[$name] : $default;
 		}
 
-		public function setText($text) {
+		public function setText(string $text) {
 			$this->usse();
 			$this->node->setValue($text);
 			return $this;
@@ -91,7 +91,7 @@
 
 		public function getClassList() {
 			$attributeList = $this->getAttributeList();
-			return isset($attributeList['class']) ? $attributeList['class'] : [];
+			return $attributeList['class'] ?? [];
 		}
 
 		public function send() {

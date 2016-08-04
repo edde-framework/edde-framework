@@ -89,7 +89,7 @@
 		}
 
 		public function getAttribute($name, $default = null) {
-			return isset($this->attributeList[$name]) ? $this->attributeList[$name] : $default;
+			return $this->attributeList[$name] ?? $default;
 		}
 
 		public function getAttributeList() {
@@ -118,7 +118,7 @@
 		}
 
 		public function getMeta($name, $default = null) {
-			return isset($this->metaList[$name]) ? $this->metaList[$name] : $default;
+			return $this->metaList[$name] ?? $default;
 		}
 
 		public function getMetaList() {

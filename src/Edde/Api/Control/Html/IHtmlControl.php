@@ -17,7 +17,7 @@
 		 *
 		 * @return $this
 		 */
-		public function setTag($tag, $pair = true);
+		public function setTag(string $tag, bool $pair = true);
 
 		/**
 		 * return name of tag for this control; it can be null if only children of this control should be rendered
@@ -27,14 +27,16 @@
 		public function getTag();
 
 		/**
+		 * set text value of this control (for example <span>$text</span>)
+		 *
 		 * @param string $text
 		 *
 		 * @return $this
 		 */
-		public function setText($text);
+		public function setText(string $text);
 
 		/**
-		 * tells if this control is paired tag
+		 * tells if this control is a paired tag
 		 *
 		 * @return bool
 		 */
@@ -47,7 +49,7 @@
 		 *
 		 * @return $this
 		 */
-		public function setId($id);
+		public function setId(string $id);
 
 		/**
 		 * retrieve current html id of this control

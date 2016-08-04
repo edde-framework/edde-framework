@@ -292,7 +292,7 @@
 						'preg_replace',
 					], true) === false)
 			) {
-				throw new StringException((isset($messages[$code]) ? $messages[$code] : 'Unknown error') . ' (pattern: ' . implode(' or ', (array)$args[0]) . ')', $code);
+				throw new StringException(($messages[$code] ?? 'Unknown error') . ' (pattern: ' . implode(' or ', (array)$args[0]) . ')', $code);
 			}
 			return $res;
 		}
