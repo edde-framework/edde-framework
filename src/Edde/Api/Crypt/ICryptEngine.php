@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Api\Crypt;
 
 	use Edde\Api\Usable\IUsable;
@@ -14,7 +16,7 @@
 		 *
 		 * @return string
 		 */
-		public function bytes($length);
+		public function bytes(int $length): string;
 
 		/**
 		 * generate random string with given character set (e.g. password)
@@ -24,7 +26,7 @@
 		 *
 		 * @return string
 		 */
-		public function generate($length = 10, $charlist = '0-9a-z');
+		public function generate(int $length = 10, string $charlist = '0-9a-z'): string;
 
 		/**
 		 * generate standard GUID
@@ -33,5 +35,5 @@
 		 *
 		 * @return string
 		 */
-		public function guid($seed = null);
+		public function guid(string $seed = null): string;
 	}

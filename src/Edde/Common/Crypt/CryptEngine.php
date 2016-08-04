@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Crypt;
 
 	use Edde\Api\Crypt\CryptException;
@@ -6,7 +8,7 @@
 	use Edde\Common\Usable\AbstractUsable;
 
 	class CryptEngine extends AbstractUsable implements ICryptEngine {
-		public function generate($length = 10, $charlist = '0-9a-z') {
+		public function generate(int $length = 10, string $charlist = '0-9a-z'): string {
 			$this->usse();
 			$charlist = str_shuffle(preg_replace_callback('#.-.#', function ($m) {
 				return implode('', range($m[0][0], $m[0][2]));
@@ -28,7 +30,7 @@
 			return $string;
 		}
 
-		public function bytes($length) {
+		public function bytes(int $length): string {
 			$this->usse();
 			if (function_exists('random_bytes')) {
 				return random_bytes($length);
@@ -42,7 +44,7 @@
 			throw new CryptException('There is no available source of random numbers!');
 		}
 
-		public function guid($seed = null) {
+		public function guid(string $seed = null): string {
 			$this->usse();
 			$data = $seed ? substr(hash('sha512', $seed), 0, 16) : $this->bytes(16);
 			$data[6] = chr(ord($data[6]) & 0x0f | 0x40);
