@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Callback;
 
 	use Closure;
@@ -42,7 +44,7 @@
 				$reflectionFunction = new ReflectionFunction($callback);
 				if (substr($reflectionFunction->getName(), -1) === '}') {
 					$vars = $reflectionFunction->getStaticVariables();
-					$callback = isset($vars['_callable_']) ? $vars['_callable_'] : $callback;
+					$callback = $vars['_callable_'] ?? $callback;
 				} else if ($obj = $reflectionFunction->getClosureThis()) {
 					$callback = [
 						$obj,

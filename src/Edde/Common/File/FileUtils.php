@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\File;
 
 	use Edde\Api\File\FileException;
@@ -82,7 +84,7 @@
 		 * @return int
 		 */
 		static public function getPermission($path) {
-			clearstatcache(null, $path);
+			clearstatcache(true, $path);
 			return octdec(substr(decoct(fileperms($path)), 1));
 		}
 
@@ -101,7 +103,7 @@
 				}
 			} else if (is_dir($path)) {
 				foreach (new \FilesystemIterator($path) as $item) {
-					static::delete($item);
+					static::delete($item->getRealPath());
 				}
 				if (@rmdir($path) === false) {
 					throw new FileException("Unable to delete directory [$path].");
@@ -132,7 +134,7 @@
 		 *
 		 * @throws FileException
 		 */
-		static public function copy($source, $dest, $overwrite = true) {
+		static public function copy(string $source, string $dest, bool $overwrite = true) {
 			if (stream_is_local($source) && file_exists($source) === false) {
 				throw new FileException ("File or directory [$source] not found.");
 			} else if ($overwrite === false && file_exists($dest)) {

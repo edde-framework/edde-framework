@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Runtime;
 
 	use Edde\Api\Container\IContainer;

@@ -37,9 +37,9 @@
 			foreach ($this->schemaManager->getSchemaList() as $schema) {
 				$crateList = $this->crateGenerator->compile($schema);
 				foreach ($crateList as $name => $source) {
-					call_user_func(function (IResource $resource) {
+					(function (IResource $resource) {
 						require_once($resource->getUrl());
-					}, $this->crateDirectory->save(sha1($name) . '.php', $source));
+					})($this->crateDirectory->save(sha1($name) . '.php', $source));
 					self::assertTrue(class_exists($name));
 				}
 			}

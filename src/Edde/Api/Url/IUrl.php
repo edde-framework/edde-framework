@@ -74,7 +74,7 @@
 		/**
 		 * @return string
 		 */
-		public function getAbsoluteUrl();
+		public function getAbsoluteUrl(): string;
 
 		/**
 		 * @param string $url

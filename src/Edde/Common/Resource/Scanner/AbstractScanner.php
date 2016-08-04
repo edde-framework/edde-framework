@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Resource\Scanner;
 
 	use Edde\Api\Resource\Scanner\IScanner;

@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Http;
 
 	use Edde\Api\Http\ICookieList;
@@ -39,12 +41,16 @@
 			};
 		}
 
+		public function getCode() {
+			return $this->code;
+		}
+
 		public function setCode($code) {
 			$this->code = $code;
 		}
 
-		public function getCode() {
-			return $this->code;
+		public function getHeaderList() {
+			return $this->headerList;
 		}
 
 		public function setHeaderList(IHeaderList $headerList) {
@@ -52,17 +58,13 @@
 			return $this;
 		}
 
-		public function getHeaderList() {
-			return $this->headerList;
+		public function getCookieList() {
+			return $this->cookieList;
 		}
 
 		public function setCookieList(ICookieList $cookieList) {
 			$this->cookieList = $cookieList;
 			return $this;
-		}
-
-		public function getCookieList() {
-			return $this->cookieList;
 		}
 
 		public function setRenderCallback(callable $callback) {

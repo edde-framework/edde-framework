@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Url;
 
 	use Edde\Api\Url\UrlException;

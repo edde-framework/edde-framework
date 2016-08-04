@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Query\Delete;
 
 	use Edde\Common\Node\Node;

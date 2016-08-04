@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Url;
 
 	use Edde\Api\Url\IUrl;
@@ -9,19 +11,19 @@
 		/**
 		 * @var string
 		 */
-		private $scheme;
+		private $scheme = '';
 		/**
 		 * @var string
 		 */
-		private $user;
+		private $user = '';
 		/**
 		 * @var string
 		 */
-		private $password;
+		private $password = '';
 		/**
 		 * @var string
 		 */
-		private $host;
+		private $host = '';
 		/**
 		 * @var int
 		 */
@@ -29,7 +31,7 @@
 		/**
 		 * @var string
 		 */
-		private $path;
+		private $path = '';
 		/**
 		 * @var array
 		 */
@@ -37,7 +39,7 @@
 		/**
 		 * @var string
 		 */
-		private $fragment;
+		private $fragment = '';
 
 		static public function create($url = null) {
 			$self = new self();
@@ -103,21 +105,21 @@
 			return $this->getAbsoluteUrl();
 		}
 
-		public function getAbsoluteUrl() {
+		public function getAbsoluteUrl(): string {
 			$scheme = $this->getScheme();
-			$url = null;
-			if ($scheme !== null) {
+			$url = '';
+			if ($scheme !== '') {
 				$url = $scheme . '://';
 			}
-			if (($user = $this->getUser()) !== null) {
+			if (($user = $this->getUser()) !== '') {
 				$url .= $user;
-				if (($password = $this->getPassword()) !== null) {
+				if (($password = $this->getPassword()) !== '') {
 					$url .= ':' . $password;
 				}
 				$url .= '@';
 			}
 			$url .= ($host = $this->getHost());
-			if ($host !== null && ($port = $this->getPort()) !== null) {
+			if ($host !== '' && ($port = $this->getPort()) !== null) {
 				$url .= ':' . $port;
 			}
 			$url .= '/' . ltrim($this->getPath(), '/');
@@ -125,7 +127,7 @@
 			if (empty($query) === false) {
 				$url .= '?' . http_build_query($this->getQuery());
 			}
-			if (($fragment = $this->getFragment()) !== null) {
+			if (($fragment = $this->getFragment()) !== '') {
 				$url .= '#' . $fragment;
 			}
 			return $url;

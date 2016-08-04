@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Resource\Storage;
 
 	use Edde\Api\Crate\CrateException;
@@ -86,7 +88,7 @@
 			} catch (DirectoryException $e) {
 				throw new ResourceException(sprintf('Cannot create store folder [%s] for the resource [%s].', $directory, $url), 0, $e);
 			}
-			FileUtils::copy($url, $file = $directory->getDirectory() . '/' . $url->getResourceName());
+			FileUtils::copy($url->getAbsoluteUrl(), $file = $directory->filename($url->getResourceName()));
 			return new FileResource($file, dirname($this->storageDirectory->getDirectory()));
 		}
 

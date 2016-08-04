@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Ext\Upgrade;
 
 	use Edde\Api\Schema\ISchemaManager;
