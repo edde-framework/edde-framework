@@ -8,6 +8,7 @@ image: php:7.0
 stages:
     - test
     - compile
+#    - doc
     - package
     - deploy
 
@@ -38,19 +39,19 @@ compile:
         - master
         - tags
 
-doc:
-    stage: doc
-    script:
-        - apt-get -yqq update && apt-get -yqq upgrade && apt-get -yqq install zlib1g-dev
-        - docker-php-ext-install zip
-        - php bin/apigen.phar generate
-    artifacts:
-        name: $PROJECT-$CI_BUILD_REF_NAME.doc
-        paths:
-            - doc/
-    only:
-        - master
-        - tags
+#doc:
+#    stage: doc
+#    script:
+#        - apt-get -yqq update && apt-get -yqq upgrade && apt-get -yqq install zlib1g-dev
+#        - docker-php-ext-install zip
+#        - php bin/apigen.phar generate
+#    artifacts:
+#        name: $PROJECT-$CI_BUILD_REF_NAME.doc
+#        paths:
+#            - doc/
+#    only:
+#        - master
+#        - tags
 
 package:
     stage: package
