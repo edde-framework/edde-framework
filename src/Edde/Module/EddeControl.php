@@ -58,8 +58,8 @@
 			$this->usse();
 			$this->setTitle('Edde Control');
 			$this->addControl($content = $this->createControl(DivControl::class));
-			$content->addClass('row');
-			$this->addControl($column = $this->createControl(DivControl::class));
+			$content->addClass('row centered');
+			$content->addControl($column = $this->createControl(DivControl::class));
 			$column->addClass('col col-5');
 			$column->addControl($this->createControl(ButtonControl::class, 'Upgrade', static::class, 'OnUpgrade', 'run upgrades registered to this application'));
 			$column->addControl($this->createControl(ButtonControl::class, 'Update Resource Index', static::class, 'OnUpdateIndex', 'update resource index; this function needs storage already setup'));
