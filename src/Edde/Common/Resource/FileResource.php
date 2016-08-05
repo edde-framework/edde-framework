@@ -24,11 +24,4 @@
 			}
 			return $this->name;
 		}
-
-		public function getMime() {
-			if ($this->mime === null) {
-				$this->mime = FileUtils::mime($this->url->getAbsoluteUrl());
-			}
-			return $this->mime;
-		}
 	}

@@ -7,6 +7,7 @@
 	use Edde\Api\Resource\ResourceException;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\File\FileUtils;
 
 	class Resource extends AbstractObject implements IResource {
 		/**
@@ -64,6 +65,9 @@
 		}
 
 		public function getMime() {
+			if ($this->mime === null) {
+				$this->mime = FileUtils::mime($this->url->getAbsoluteUrl());
+			}
 			return $this->mime;
 		}
 

@@ -9,6 +9,10 @@
 	use Edde\Common\Url\Url;
 
 	class FileUtils extends AbstractObject {
+		static protected $mimeTypeList = [
+			'xml' => 'text/xml',
+		];
+
 		/**
 		 * convert size to human readable size
 		 *
@@ -31,9 +35,13 @@
 		 * @return string
 		 * @throws FileException
 		 */
-		static public function mime($file) {
+		static public function mime(string $file) {
 			if (is_file($file) === false) {
 				throw new FileException(sprintf('The given file [%s] is not a file.', $file));
+			}
+			$url = Url::create($file);
+			if (isset(self::$mimeTypeList[$type = $url->getExtension()])) {
+				return self::$mimeTypeList[$type];
 			}
 			$info = @getimagesize($file); // @ - files smaller than 12 bytes causes read error
 			if (isset($info['mime'])) {

@@ -5,6 +5,7 @@
 
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Resource\FileResource;
+	use Edde\Common\Resource\ResourceManager;
 	use phpunit\framework\TestCase;
 
 	require_once(__DIR__ . '/assets/assets.php');
@@ -77,7 +78,7 @@
 					[],
 				],
 				[
-					'item',
+					'item2',
 					['koo' => 'poo'],
 				],
 				[
@@ -88,7 +89,35 @@
 					'hidden-tag',
 					[],
 				],
+				[
+					'tag-with-value',
+					[],
+				],
 			], $handler->getTagList());
+		}
+
+		public function testMimeType() {
+			$file = new FileResource(__DIR__ . '/assets/simple.xml');
+			self::assertEquals('text/xml', $file->getMime());
+		}
+
+		public function testParserNode() {
+			$resourceManager = new ResourceManager();
+			$resourceManager->registerResourceHandler($xmlResourceHandlder = new XmlResourceHandler($this->xmlParser));
+			$node = $resourceManager->file(__DIR__ . '/assets/a-bit-less-simple.xml');
+			self::assertEquals('root', $node->getName());
+			self::assertEquals(['r' => 'oot'], $node->getAttributeList());
+			self::assertCount(3, $node->getNodeList());
+			$nodeIterator = new \ArrayIterator($node->getNodeList());
+			$nodeIterator->rewind();
+			self::assertEquals('item', $nodeIterator->current()
+				->getName());
+			$nodeIterator->next();
+			self::assertEquals('item2', $nodeIterator->current()
+				->getName());
+			$nodeIterator->next();
+			self::assertEquals('internal', $nodeIterator->current()
+				->getName());
 		}
 
 		protected function setUp() {

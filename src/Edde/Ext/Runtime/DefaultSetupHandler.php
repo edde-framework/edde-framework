@@ -18,6 +18,7 @@
 	use Edde\Api\Http\IHttpRequestFactory;
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Resource\IResourceIndex;
+	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\IResourceStorable;
 	use Edde\Api\Resource\Scanner\IScanner;
 	use Edde\Api\Resource\Storage\IFileStorage;
@@ -45,6 +46,7 @@
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Http\HttpRequestFactory;
 	use Edde\Common\Resource\ResourceIndex;
+	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Resource\ResourceSchema;
 	use Edde\Common\Resource\ResourceStorable;
 	use Edde\Common\Resource\Storage\FileStorage;
@@ -57,6 +59,7 @@
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
 	use Edde\Common\Xml\XmlParser;
+	use Edde\Common\Xml\XmlResourceHandler;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Resource\Scanner\FilesystemScanner;
@@ -120,6 +123,7 @@
 				},
 				IStorage::class => DatabaseStorage::class,
 				IResourceIndex::class => ResourceIndex::class,
+				IResourceManager::class => ResourceManager::class,
 				IUpgradeManager::class => UpgradeManager::class,
 				IResourceStorable::class => FactoryFactory::create(ResourceStorable::class, function (IResourceIndex $resourceIndex) {
 					return $resourceIndex->createResourceStorable();
@@ -139,6 +143,9 @@
 			});
 			$setupHandler->onSetup(IApplication::class, function (ICrateGenerator $crateGenerator, IApplication $application) {
 				$crateGenerator->generate();
+			});
+			$setupHandler->onSetup(IResourceManager::class, function (IContainer $container, IResourceManager $resourceManager) {
+				$resourceManager->registerResourceHandler($container->create(XmlResourceHandler::class));
 			});
 			return $setupHandler;
 		}
