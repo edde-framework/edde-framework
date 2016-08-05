@@ -38,9 +38,11 @@
 		}
 
 		public function getControlList() {
+			$controlList = [];
 			foreach ($this->node->getNodeList() as $node) {
-				yield $node->getMeta('control');
+				$controlList[] = $node->getMeta('control');
 			}
+			return $controlList;
 		}
 
 		protected function prepare() {

@@ -10,6 +10,8 @@
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Container\LazyInjectTrait;
+	use Edde\Common\Html\ButtonControl;
+	use Edde\Common\Html\DivControl;
 	use Edde\Ext\Html\EddePageControl;
 	use Tracy\Debugger;
 
@@ -55,14 +57,14 @@
 		public function actionSetup() {
 			$this->usse();
 			$this->setTitle('Edde Control');
-			$content = $this->createDivControl();
-			$content->addClass('row centered');
-			$column = $content->createDivControl();
+			$this->addControl($content = $this->createControl(DivControl::class));
+			$content->addClass('row');
+			$this->addControl($column = $this->createControl(DivControl::class));
 			$column->addClass('col col-5');
-			$column->createButtonControl('Upgrade', static::class, 'OnUpgrade', 'run upgrades registered to this application');
-			$column->createButtonControl('Update Resource Index', static::class, 'OnUpdateIndex', 'update resource index; this function needs storage already setup');
-			$column->createButtonControl('Rebuild crates', static::class, 'OnRebuildCrates', 'update automagically generated crates');
-			$column->createButtonControl('Clear cache', static::class, 'OnClearCache', 'clear current cache');
+			$column->addControl($this->createControl(ButtonControl::class, 'Upgrade', static::class, 'OnUpgrade', 'run upgrades registered to this application'));
+			$column->addControl($this->createControl(ButtonControl::class, 'Update Resource Index', static::class, 'OnUpdateIndex', 'update resource index; this function needs storage already setup'));
+			$column->addControl($this->createControl(ButtonControl::class, 'Rebuild crates', static::class, 'OnRebuildCrates', 'update automagically generated crates'));
+			$column->addControl($this->createControl(ButtonControl::class, 'Clear cache', static::class, 'OnClearCache', 'clear current cache'));
 			$this->send();
 		}
 
@@ -124,8 +126,8 @@
 
 		protected function prepare() {
 			parent::prepare();
-			$this->message = $this->createDivControl()
-				->addClass('alert edde-hide-on-click')
-				->setId('global-message');
+			$this->addControl($this->message = $this->createControl(DivControl::class)
+				->addClass('alert')
+				->setId('global-message'));
 		}
 	}
