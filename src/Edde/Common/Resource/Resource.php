@@ -74,4 +74,12 @@
 		public function get() {
 			return file_get_contents($this->url->getAbsoluteUrl());
 		}
+
+		public function getIterator() {
+			$handle = fopen($this->url->getAbsoluteUrl(), 'r');
+			while ($line = fgets($handle)) {
+				yield $line;
+			}
+			fclose($handle);
+		}
 	}

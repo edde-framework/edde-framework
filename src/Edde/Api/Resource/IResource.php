@@ -4,11 +4,12 @@
 	namespace Edde\Api\Resource;
 
 	use Edde\Api\Url\IUrl;
+	use IteratorAggregate;
 
 	/**
 	 * General interface describing resource "somewhere"; it can be file, url, any resource.
 	 */
-	interface IResource {
+	interface IResource extends IteratorAggregate {
 		/**
 		 * return resource's location; it can even be on local filesystem
 		 *
