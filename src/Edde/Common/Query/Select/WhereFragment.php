@@ -11,11 +11,11 @@
 		/**
 		 * @var WhereExpressionFragment
 		 */
-		private $whereExpressionFragment;
+		protected $whereExpressionFragment;
 		/**
 		 * @var SelectQuery
 		 */
-		private $selectQuery;
+		protected $selectQuery;
 
 		/**
 		 * @param INode $whereNode

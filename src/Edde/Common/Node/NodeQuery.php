@@ -6,15 +6,14 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\INodeQuery;
 	use Edde\Common\AbstractObject;
-	use Generator;
 	use Iterator;
 
 	class NodeQuery extends AbstractObject implements INodeQuery {
 		/**
 		 * @var string
 		 */
-		private $query;
-		private $filter;
+		protected $query;
+		protected $filter;
 
 		/**
 		 * @param string $query
@@ -26,29 +25,61 @@
 		/**
 		 * return first result of a query or null
 		 *
-		 * @param INode $node
+		 * @param INode $root
 		 * @param string $query
 		 * @param mixed|callable|null $default
 		 *
 		 * @return INode|null|mixed
 		 */
-		static public function first(INode $node, $query, $default = null) {
-			$n = null;
-			foreach (self::node($node, $query) as $n) {
+		static public function first(INode $root, $query, $default = null) {
+			$node = null;
+			foreach (self::node($root, $query) as $node) {
 				break;
 			}
-			return $n ?: (is_callable($default) ? call_user_func($default) : $default);
+			return $node ?: (is_callable($default) ? call_user_func($default) : $default);
 		}
 
 		/**
 		 * @param INode $node
 		 * @param string $query
 		 *
-		 * @return self|INode[]
+		 * @return INode[]
 		 */
 		static public function node(INode $node, $query) {
 			return self::create($query)
 				->filter($node);
+		}
+
+		/**
+		 * @param string $query
+		 *
+		 * @return INodeQuery|INode[]
+		 */
+		static public function create($query) {
+			return new self($query);
+		}
+
+		/**
+		 * return last result of a query or null
+		 *
+		 * @param INode $node
+		 * @param string $query
+		 * @param mixed|callable|null $default
+		 *
+		 * @return INode|null|mixed
+		 */
+		static public function last(INode $node, $query, $default = null) {
+			$n = null;
+			foreach (self::node($node, $query) as $n) {
+				;
+			}
+			return $n ?: (is_callable($default) ? call_user_func($default) : $default);
+		}
+
+		public function isEmpty(INode $node) {
+			$iterator = $this->filter($node);
+			$iterator->rewind();
+			return $iterator->valid() === false;
 		}
 
 		public function filter(INode $node) {
@@ -83,7 +114,7 @@
 		 *
 		 * @param string $query
 		 *
-		 * @return Generator
+		 * @return \stdClass
 		 */
 		protected function parse($query) {
 			$query = '/' . trim($query, '/') . '/';
@@ -133,37 +164,5 @@
 			$filter->preg = '~^/' . rtrim($preg, '/') . '$~';
 
 			return $filter;
-		}
-
-		/**
-		 * @param string $query
-		 *
-		 * @return self|INode[]
-		 */
-		static public function create($query) {
-			return new self($query);
-		}
-
-		/**
-		 * return last result of a query or null
-		 *
-		 * @param INode $node
-		 * @param string $query
-		 * @param mixed|callable|null $default
-		 *
-		 * @return INode|null|mixed
-		 */
-		static public function last(INode $node, $query, $default = null) {
-			$n = null;
-			foreach (self::node($node, $query) as $n) {
-				;
-			}
-			return $n ?: (is_callable($default) ? call_user_func($default) : $default);
-		}
-
-		public function isEmpty(INode $node) {
-			$iterator = $this->filter($node);
-			$iterator->rewind();
-			return $iterator->valid() === false;
 		}
 	}

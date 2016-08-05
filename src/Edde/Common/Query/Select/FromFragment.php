@@ -13,11 +13,11 @@
 		/**
 		 * @var SelectQuery
 		 */
-		private $selectQuery;
+		protected $selectQuery;
 		/**
 		 * @var JoinFragment
 		 */
-		private $joinFragment;
+		protected $joinFragment;
 
 		public function __construct(INode $node, SelectQuery $selectQuery) {
 			parent::__construct($node);

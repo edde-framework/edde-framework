@@ -13,11 +13,11 @@
 		/**
 		 * @var IFactory[]
 		 */
-		private $factoryList = [];
+		protected $factoryList = [];
 		/**
 		 * @var callable
 		 */
-		private $factoryFallback;
+		protected $factoryFallback;
 
 		public function registerFactoryList(array $factoryList) {
 			foreach (FactoryFactory::createList($factoryList) as $name => $factory) {

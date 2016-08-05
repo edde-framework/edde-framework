@@ -7,7 +7,7 @@
 	use Edde\Api\Container\IContainer;
 
 	trait LazyInjectTrait {
-		private $lazyInjectList = [];
+		protected $lazyInjectList = [];
 
 		public function lazy(IContainer $container) {
 			call_user_func(\Closure::bind(function (IContainer $container) {

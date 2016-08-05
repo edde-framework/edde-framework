@@ -16,41 +16,41 @@
 		/**
 		 * @var IUrl
 		 */
-		private $url;
+		protected $url;
 		/**
 		 * @var string
 		 */
-		private $method;
+		protected $method;
 		/**
 		 * @var IPostList
 		 */
-		private $postList;
+		protected $postList;
 		/**
 		 * @var IHeaderList
 		 */
-		private $headerList;
+		protected $headerList;
 		/**
 		 * @var ICookieList
 		 */
-		private $cookieList;
+		protected $cookieList;
 		/**
 		 * @var string|null
 		 */
-		private $remoteAddress;
+		protected $remoteAddress;
 		/**
 		 * @var string|null
 		 */
-		private $remoteHost;
-		private $body;
-		private $hasBody = false;
+		protected $remoteHost;
+		protected $body;
+		protected $hasBody = false;
 		/**
 		 * @var IHttpResponse
 		 */
-		private $response;
+		protected $response;
 		/**
 		 * @var IUrl
 		 */
-		private $referer;
+		protected $referer;
 
 		/**
 		 * @param IPostList $postList

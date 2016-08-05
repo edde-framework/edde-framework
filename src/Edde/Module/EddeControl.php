@@ -36,19 +36,19 @@
 		 */
 		protected $message;
 
-		final public function lazyUpgradeManager(IUpgradeManager $upgradeManager) {
+		public function lazyUpgradeManager(IUpgradeManager $upgradeManager) {
 			$this->upgradeManager = $upgradeManager;
 		}
 
-		final public function lazyResourceIndex(IResourceIndex $resourceIndex) {
+		public function lazyResourceIndex(IResourceIndex $resourceIndex) {
 			$this->resourceIndex = $resourceIndex;
 		}
 
-		final public function lazyCrateGenerator(ICrateGenerator $crateGenerator) {
+		public function lazyCrateGenerator(ICrateGenerator $crateGenerator) {
 			$this->crateGenerator = $crateGenerator;
 		}
 
-		final public function lazyCacheStorage(ICacheStorage $cacheStorage) {
+		public function lazyCacheStorage(ICacheStorage $cacheStorage) {
 			$this->cacheStorage = $cacheStorage;
 		}
 

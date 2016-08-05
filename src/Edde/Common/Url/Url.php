@@ -11,35 +11,35 @@
 		/**
 		 * @var string
 		 */
-		private $scheme = '';
+		protected $scheme = '';
 		/**
 		 * @var string
 		 */
-		private $user = '';
+		protected $user = '';
 		/**
 		 * @var string
 		 */
-		private $password = '';
+		protected $password = '';
 		/**
 		 * @var string
 		 */
-		private $host = '';
+		protected $host = '';
 		/**
 		 * @var int
 		 */
-		private $port;
+		protected $port;
 		/**
 		 * @var string
 		 */
-		private $path = '';
+		protected $path = '';
 		/**
 		 * @var array
 		 */
-		private $query = [];
+		protected $query = [];
 		/**
 		 * @var string
 		 */
-		private $fragment = '';
+		protected $fragment = '';
 
 		static public function create($url = null) {
 			$self = new self();

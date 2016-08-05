@@ -10,11 +10,11 @@
 		/**
 		 * @var mixed
 		 */
-		private $query;
+		protected $query;
 		/**
 		 * @var array
 		 */
-		private $parameterList;
+		protected $parameterList;
 
 		/**
 		 * @param mixed $query

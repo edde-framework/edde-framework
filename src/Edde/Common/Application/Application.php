@@ -20,11 +20,11 @@
 		 */
 		protected $container;
 
-		final public function lazyRoute(IRoute $route) {
+		public function lazyRoute(IRoute $route) {
 			$this->route = $route;
 		}
 
-		final public function lazyContainer(IContainer $container) {
+		public function lazyContainer(IContainer $container) {
 			$this->container = $container;
 		}
 

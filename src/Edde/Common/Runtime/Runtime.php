@@ -12,11 +12,11 @@
 		/**
 		 * @var ISetupHandler
 		 */
-		private $setupHandler;
+		protected $setupHandler;
 		/**
 		 * @var IContainer
 		 */
-		private $container;
+		protected $container;
 
 		/**
 		 * @param ISetupHandler $setupHandler

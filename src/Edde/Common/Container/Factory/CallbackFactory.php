@@ -11,11 +11,11 @@
 		/**
 		 * @var callable
 		 */
-		private $callback;
+		protected $callback;
 		/**
 		 * @var IParameter[]
 		 */
-		private $parameterList;
+		protected $parameterList;
 
 		/**
 		 * @param string $name

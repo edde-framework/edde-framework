@@ -38,11 +38,11 @@
 			$this->runtime = $runtime;
 		}
 
-		final public function lazyCrateFactory(ICrateFactory $crateFactory) {
+		public function lazyCrateFactory(ICrateFactory $crateFactory) {
 			$this->crateFactory = $crateFactory;
 		}
 
-		final public function lazyHttpRequest(IHttpRequest $httpRequest) {
+		public function lazyHttpRequest(IHttpRequest $httpRequest) {
 			$this->httpRequest = $httpRequest;
 		}
 

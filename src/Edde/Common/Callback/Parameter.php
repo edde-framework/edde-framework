@@ -10,15 +10,15 @@
 		/**
 		 * @var string
 		 */
-		private $name;
+		protected $name;
 		/**
 		 * @var string
 		 */
-		private $class;
+		protected $class;
 		/**
 		 * @var bool
 		 */
-		private $optional;
+		protected $optional;
 
 		/**
 		 * @param string $name

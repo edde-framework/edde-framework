@@ -9,14 +9,15 @@
 
 	class FileCacheStorage extends AbstractCacheStorage {
 		/**
-		 * defaults to system temp dir
-		 *
+		 * @var ICacheDirectory
+		 */
+		protected $cacheDirectory;
+		/**
 		 * @var string
 		 */
-		private $cacheDirectory;
-		private $namespace;
+		protected $namespace;
 
-		public function __construct(ICacheDirectory $cacheDirectory, $namespace = null) {
+		public function __construct(ICacheDirectory $cacheDirectory, string $namespace = '') {
 			$this->cacheDirectory = $cacheDirectory;
 			$this->namespace = $namespace;
 		}
@@ -40,7 +41,7 @@
 		}
 
 		protected function file($id) {
-			return sprintf('%s/%s', $this->cacheDirectory, sha1($id));
+			return sprintf('%s/%s', $this->cacheDirectory, sha1($this->namespace . $id));
 		}
 
 		public function load($id) {

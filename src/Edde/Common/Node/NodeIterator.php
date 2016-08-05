@@ -13,11 +13,11 @@
 		/**
 		 * @var IAbstractNode
 		 */
-		private $node;
+		protected $node;
 		/**
 		 * @var \Iterator
 		 */
-		private $iterator;
+		protected $iterator;
 
 		public function __construct(IAbstractNode $node) {
 			$this->node = $node;

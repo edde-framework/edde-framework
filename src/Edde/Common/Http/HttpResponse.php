@@ -12,19 +12,19 @@
 		/**
 		 * @var int
 		 */
-		private $code;
+		protected $code;
 		/**
 		 * @var IHeaderList
 		 */
-		private $headerList;
+		protected $headerList;
 		/**
 		 * @var ICookieList
 		 */
-		private $cookieList;
+		protected $cookieList;
 		/**
 		 * @var callable
 		 */
-		private $renderCallback;
+		protected $renderCallback;
 
 		public function __construct() {
 			$this->code = 200;

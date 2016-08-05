@@ -16,19 +16,19 @@
 		/**
 		 * @var IFactoryManager
 		 */
-		private $factoryManager;
+		protected $factoryManager;
 		/**
 		 * @var IDependencyFactory
 		 */
-		private $dependencyFactory;
+		protected $dependencyFactory;
 		/**
 		 * @var ICacheFactory
 		 */
-		private $cacheFactory;
+		protected $cacheFactory;
 		/**
 		 * @var ICache
 		 */
-		private $cache;
+		protected $cache;
 
 		/**
 		 * @param IFactoryManager $factoryManager

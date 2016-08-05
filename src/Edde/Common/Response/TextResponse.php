@@ -7,7 +7,7 @@
 		/**
 		 * @var string|callable
 		 */
-		private $text;
+		protected $text;
 
 		/**
 		 * @param string|callable $text can be callback

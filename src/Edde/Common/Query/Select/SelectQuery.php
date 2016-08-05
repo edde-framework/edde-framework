@@ -12,19 +12,19 @@
 		/**
 		 * @var INode
 		 */
-		private $selectNode;
+		protected $selectNode;
 		/**
 		 * @var SelectFragment
 		 */
-		private $selectPropertyFragment;
+		protected $selectPropertyFragment;
 		/**
 		 * @var FromFragment
 		 */
-		private $fromPropertyFragment;
+		protected $fromPropertyFragment;
 		/**
 		 * @var WhereExpressionFragment
 		 */
-		private $whereExpressionFragment;
+		protected $whereExpressionFragment;
 
 		/**
 		 * @return SelectFragment

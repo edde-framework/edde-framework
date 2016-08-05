@@ -7,7 +7,7 @@
 		/**
 		 * @var mixed
 		 */
-		private $json;
+		protected $json;
 
 		/**
 		 * @param mixed $json must be jsonable argument

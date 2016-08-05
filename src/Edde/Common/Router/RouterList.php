@@ -10,7 +10,7 @@
 		/**
 		 * @var IRouter[]
 		 */
-		private $routerList = [];
+		protected $routerList = [];
 
 		public function registerRouter(IRouter $router) {
 			$this->routerList[] = $router;

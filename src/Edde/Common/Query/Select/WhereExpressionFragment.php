@@ -11,8 +11,8 @@
 		/**
 		 * @var SelectQuery
 		 */
-		private $selectQuery;
-		private $relation = 'and';
+		protected $selectQuery;
+		protected $relation = 'and';
 
 		/**
 		 * @param INode $whereNode

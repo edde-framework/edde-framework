@@ -13,18 +13,18 @@
 		/**
 		 * @var string
 		 */
-		private $name;
-		private $attributeList = [];
+		protected $name;
+		protected $attributeList = [];
 		/**
 		 * @var mixed
 		 */
-		private $value;
+		protected $value;
 		/**
 		 * abstract metadata
 		 *
 		 * @var array
 		 */
-		private $metaList = [];
+		protected $metaList = [];
 
 		/**
 		 * @param string $name

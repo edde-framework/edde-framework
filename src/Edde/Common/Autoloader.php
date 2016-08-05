@@ -7,12 +7,12 @@
 		/**
 		 * @var string
 		 */
-		private $namespace;
+		protected $namespace;
 		/**
 		 * @var string
 		 */
-		private $path;
-		private $root;
+		protected $path;
+		protected $root;
 
 		/**
 		 * @param string $namespace

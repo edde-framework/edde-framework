@@ -16,11 +16,11 @@
 		/**
 		 * @var ICacheStorage
 		 */
-		private $cacheStorage;
+		protected $cacheStorage;
 		/**
 		 * @var string
 		 */
-		private $namespace;
+		protected $namespace;
 
 		/**
 		 * @param ICacheStorage $cacheStorage

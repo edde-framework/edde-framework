@@ -11,7 +11,7 @@
 		/**
 		 * @var callable
 		 */
-		private $callback;
+		protected $callback;
 
 		/**
 		 * @param callable $callback

@@ -9,7 +9,7 @@
 	 * Simple in-memory cache (per-request).
 	 */
 	class InMemoryCacheStorage extends AbstractCacheStorage {
-		private $storage;
+		protected $storage;
 
 		public function save($id, $save) {
 			$this->usse();

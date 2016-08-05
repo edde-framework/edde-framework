@@ -39,15 +39,15 @@
 		 */
 		protected $javaScriptList;
 
-		final public function lazyHtmlResponse(HtmlResponse $htmlResponse) {
+		public function lazyHtmlResponse(HtmlResponse $htmlResponse) {
 			$this->htmlResponse = $htmlResponse;
 		}
 
-		final public function lazyStyleSheetCompiler(IStyleSheetCompiler $styleSheetCompiler) {
+		public function lazyStyleSheetCompiler(IStyleSheetCompiler $styleSheetCompiler) {
 			$this->styleSheetCompiler = $styleSheetCompiler;
 		}
 
-		final public function lazyJavaScriptCompiler(IJavaScriptCompiler $javaScriptCompiler) {
+		public function lazyJavaScriptCompiler(IJavaScriptCompiler $javaScriptCompiler) {
 			$this->javaScriptCompiler = $javaScriptCompiler;
 		}
 

@@ -13,7 +13,7 @@
 		 */
 		protected $container;
 
-		final public function injectContainer(IContainer $container) {
+		public function injectContainer(IContainer $container) {
 			$this->container = $container;
 		}
 

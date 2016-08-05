@@ -3,26 +3,19 @@
 
 	namespace Edde\Common\Container;
 
-	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IDependencyFactory;
 	use Edde\Api\Container\IFactoryManager;
+	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class DependencyFactory extends AbstractUsable implements IDependencyFactory {
+		use CacheTrait;
 		/**
 		 * @var IFactoryManager
 		 */
-		private $factoryManager;
-		/**
-		 * @var ICacheFactory
-		 */
-		private $cacheFactory;
-		/**
-		 * @var ICache
-		 */
-		private $cache;
+		protected $factoryManager;
 
 		/**
 		 * @param IFactoryManager $factoryManager
@@ -54,9 +47,5 @@
 				$root->addNode($node = new Dependency($parameter->getClass(), true, $parameter->isOptional()));
 				$this->build($parameter->getClass(), $node);
 			}
-		}
-
-		protected function prepare() {
-			$this->cache = $this->cacheFactory->factory(self::class);
 		}
 	}

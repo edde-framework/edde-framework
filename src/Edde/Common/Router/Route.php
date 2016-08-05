@@ -11,19 +11,19 @@
 		/**
 		 * @var string
 		 */
-		private $class;
+		protected $class;
 		/**
 		 * @var string
 		 */
-		private $method;
+		protected $method;
 		/**
 		 * @var array
 		 */
-		private $parameterList;
+		protected $parameterList;
 		/**
 		 * @var ICrate[]
 		 */
-		private $crateList;
+		protected $crateList;
 
 		/**
 		 * @param string $class

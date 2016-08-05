@@ -11,7 +11,7 @@
 		/**
 		 * @var SelectQuery
 		 */
-		private $selectQuery;
+		protected $selectQuery;
 
 		public function __construct(INode $node, SelectQuery $selectQuery) {
 			parent::__construct($node);

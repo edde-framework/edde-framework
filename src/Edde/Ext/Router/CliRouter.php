@@ -11,7 +11,7 @@
 		/**
 		 * @var IRuntime
 		 */
-		private $runtime;
+		protected $runtime;
 
 		/**
 		 * @param IRuntime $runtime

@@ -15,11 +15,11 @@
 		/**
 		 * @var string
 		 */
-		private $class;
+		protected $class;
 		/**
 		 * @var IParameter[]
 		 */
-		private $parameterList;
+		protected $parameterList;
 
 		/**
 		 * @param string $name

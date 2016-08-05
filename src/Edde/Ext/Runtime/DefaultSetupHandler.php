@@ -56,6 +56,7 @@
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
+	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Resource\Scanner\FilesystemScanner;
 	use Edde\Ext\Router\CliRouter;
 	use Edde\Ext\Router\SimpleRouter;
@@ -96,8 +97,8 @@
 				ITempDirectory::class => function (IRootDirectory $rootDirectory) {
 					return new TempDirectory($rootDirectory->getDirectory() . '/temp');
 				},
-				ICacheDirectory::class => function (IRootDirectory $rootDirectory) {
-					return new CacheDirectory($rootDirectory->getDirectory() . '/temp/cache');
+				ICacheDirectory::class => function (ITempDirectory $tempDirectory) {
+					return new CacheDirectory($tempDirectory->getDirectory() . '/cache');
 				},
 				IStorageDirectory::class => function (IRootDirectory $rootDirectory) {
 					return new StorageDirectory($rootDirectory->getDirectory() . '/.storage');
@@ -107,8 +108,8 @@
 					return new FilesystemScanner($rootDirectory);
 				},
 				IFileStorage::class => FileStorage::class,
-				IDriver::class => function () {
-					throw new RuntimeException(sprintf('If you want to use DatabaseStorage (or [%s]), you must register it to the container at first!', IDriver::class));
+				IDriver::class => function (IStorageDirectory $storageDirectory) {
+					return new SqliteDriver('sqlite:' . $storageDirectory->filename('storage.sqlite'));
 				},
 				ICrateGenerator::class => CrateGenerator::class,
 				ICrateFactory::class => CrateFactory::class,

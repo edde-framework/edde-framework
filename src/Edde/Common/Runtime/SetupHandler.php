@@ -17,11 +17,11 @@
 		/**
 		 * @var ICacheFactory
 		 */
-		private $cacheFactory;
+		protected $cacheFactory;
 		/**
 		 * @var IContainer
 		 */
-		private $container;
+		protected $container;
 
 		/**
 		 * @param ICacheFactory $cacheFactory

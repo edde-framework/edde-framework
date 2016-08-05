@@ -10,31 +10,31 @@
 		/**
 		 * @var string
 		 */
-		private $name;
+		protected $name;
 		/**
 		 * @var string
 		 */
-		private $value;
+		protected $value;
 		/**
 		 * @var int
 		 */
-		private $expire;
+		protected $expire;
 		/**
 		 * @var string
 		 */
-		private $path;
+		protected $path;
 		/**
 		 * @var string
 		 */
-		private $domain;
+		protected $domain;
 		/**
 		 * @var bool
 		 */
-		private $secure;
+		protected $secure;
 		/**
 		 * @var bool
 		 */
-		private $httpOnly;
+		protected $httpOnly;
 
 		/**
 		 * @param string $name
