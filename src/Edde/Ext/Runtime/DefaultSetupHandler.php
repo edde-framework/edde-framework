@@ -32,6 +32,7 @@
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
+	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Application\Application;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
@@ -55,6 +56,7 @@
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
+	use Edde\Common\Xml\XmlParser;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Resource\Scanner\FilesystemScanner;
@@ -124,6 +126,7 @@
 				}, false),
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
+				IXmlParser::class => XmlParser::class,
 
 				InitialStorageUpgrade::class,
 			], $factoryList));
