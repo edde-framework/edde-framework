@@ -11,6 +11,7 @@
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Html\DivControl;
+	use Edde\Common\Resource\FileResource;
 	use Edde\Ext\Html\EddeViewControl;
 	use Tracy\Debugger;
 
@@ -118,6 +119,7 @@
 
 		protected function prepare() {
 			parent::prepare();
+			$this->addStyleSheet(new FileResource(__DIR__ . '/assets/css/kube.css'));
 			$this->addControl($this->message = $this->createControl(DivControl::class)
 				->addClass('alert')
 				->setId('global-message'));
