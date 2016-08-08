@@ -47,19 +47,19 @@
 				$schemaList[$schema->getSchemaName()] = $schema;
 			}
 			foreach ($this->schemaNodeList as $schemaNode) {
+				$sourceSchema = $schemaList[$this->getSchemaName($schemaNode)];
 				foreach ($this->collectionNodeQuery->filter($schemaNode) as $collectionNode) {
 					if (isset($schemaList[$schemaName = $collectionNode->getAttribute('schema')]) === false) {
 						throw new SchemaFactoryException(sprintf('Cannot use collection to an unknown schema [%s].', $schemaName));
 					}
-					$sourceSchema = $schemaList[$this->getSchemaName($schemaNode)];
 					$targetSchema = $schemaList[$schemaName];
 					$sourceSchema->collection($collectionNode->getName(), $sourceSchema->getProperty($collectionNode->getValue()), $targetSchema->getProperty($collectionNode->getAttribute('property')));
 				}
+				$sourceSchema = $schemaList[$this->getSchemaName($schemaNode)];
 				foreach ($this->linkNodeQuery->filter($schemaNode) as $linkNode) {
 					if (isset($schemaList[$schemaName = $linkNode->getAttribute('schema')]) === false) {
 						throw new SchemaFactoryException(sprintf('Cannot use link to an unknown schema [%s].', $schemaName));
 					}
-					$sourceSchema = $schemaList[$this->getSchemaName($schemaNode)];
 					$targetSchema = $schemaList[$schemaName];
 					$sourceSchema->link($linkNode->getName(), $sourceSchema->getProperty($linkNode->getValue($linkNode->getName())), $targetSchema->getProperty($linkNode->getAttribute('property')));
 				}
