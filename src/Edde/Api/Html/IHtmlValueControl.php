@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Api\Control\Html;
+	namespace Edde\Api\Html;
 
 	interface IHtmlValueControl extends IHtmlControl {
 	}

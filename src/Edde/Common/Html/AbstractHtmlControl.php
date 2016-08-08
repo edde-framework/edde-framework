@@ -4,7 +4,7 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Control\Html\IHtmlControl;
+	use Edde\Api\Html\IHtmlControl;
 	use Edde\Common\Control\AbstractControl;
 
 	abstract class AbstractHtmlControl extends AbstractControl implements IHtmlControl {

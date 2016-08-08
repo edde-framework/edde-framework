@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Response;
 
-	use Edde\Api\Control\Html\IHtmlControl;
+	use Edde\Api\Html\IHtmlControl;
 	use Edde\Common\Http\HttpResponse;
 
 	/**

@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Html;
 
-	use Edde\Api\Control\Html\HtmlException;
+	use Edde\Api\Html\HtmlException;
 
 	class DivControl extends AbstractHtmlControl {
 		public function setTag(string $tag, bool $pair = true) {

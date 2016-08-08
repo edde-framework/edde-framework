@@ -4,7 +4,7 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Control\ControlException;
-	use Edde\Api\Control\Html\IHtmlControl;
+	use Edde\Api\Html\IHtmlControl;
 
 	class ButtonControl extends AbstractHtmlControl {
 		/**

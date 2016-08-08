@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Html;
 
-	use Edde\Api\Control\Html\HtmlException;
+	use Edde\Api\Html\HtmlException;
 	use phpunit\framework\TestCase;
 
 	class DivControlTest extends TestCase {

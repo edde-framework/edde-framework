@@ -3,8 +3,8 @@
 
 	namespace Edde\Common\Html;
 
-	use Edde\Api\Control\Html\HtmlException;
 	use Edde\Api\Control\IControl;
+	use Edde\Api\Html\HtmlException;
 
 	class ImgControl extends AbstractHtmlControl {
 		public function getTag() {

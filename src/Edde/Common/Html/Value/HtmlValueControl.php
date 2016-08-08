@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Html\Value;
 
-	use Edde\Api\Control\Html\IHtmlValueControl;
+	use Edde\Api\Html\IHtmlValueControl;
 	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Common\Html\AbstractHtmlControl;
 

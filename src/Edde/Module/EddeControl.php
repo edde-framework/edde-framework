@@ -4,9 +4,9 @@
 	namespace Edde\Module;
 
 	use Edde\Api\Cache\ICacheStorage;
-	use Edde\Api\Control\Html\IHtmlControl;
 	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\EddeException;
+	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Container\LazyInjectTrait;
