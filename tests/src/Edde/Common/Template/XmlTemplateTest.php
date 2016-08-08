@@ -86,7 +86,7 @@
 		}
 
 		protected function setUp() {
-			$this->template = new XmlTemplate($this->container = ContainerFactory::create(), $resourceManager = new ResourceManager(), $schemaManager = new SchemaManager(new SchemaFactory()));
+			$this->template = new XmlTemplate($this->container = ContainerFactory::create(), $resourceManager = new ResourceManager(), $schemaManager = new SchemaManager(new SchemaFactory(new ResourceManager())));
 			$resourceManager->registerResourceHandler(new XmlResourceHandler(new XmlParser()));
 			$schemaManager->addSchema(new LoginSchema(LoginSchema::class));
 			$this->documentControl = new DocumentControl();

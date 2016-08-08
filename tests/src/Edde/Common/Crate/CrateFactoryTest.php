@@ -1,10 +1,13 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Crate;
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Schema\ISchemaManager;
+	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Ext\Container\ContainerFactory;
@@ -133,7 +136,7 @@
 		}
 
 		protected function setUp() {
-			$this->schemaManager = new SchemaManager(new SchemaFactory());
+			$this->schemaManager = new SchemaManager(new SchemaFactory(new ResourceManager()));
 
 			$rowSchema = new RowSchema($headerSchema = new HeaderSchema(), $itemSchema = new ItemSchema());
 

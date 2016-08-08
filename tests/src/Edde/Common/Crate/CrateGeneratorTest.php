@@ -9,6 +9,7 @@
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Container\FactoryManager;
+	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
@@ -46,7 +47,7 @@
 		}
 
 		protected function setUp() {
-			$this->schemaManager = new SchemaManager(new SchemaFactory());
+			$this->schemaManager = new SchemaManager(new SchemaFactory(new ResourceManager()));
 			$this->schemaManager->addSchema($header = new Header2Schema());
 			$this->schemaManager->addSchema($item = new Item2Schema());
 			$this->schemaManager->addSchema(new Row2Schema($header, $item));

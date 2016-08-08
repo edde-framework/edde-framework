@@ -22,6 +22,7 @@
 	use Edde\Common\Resource\FileResource;
 	use Edde\Common\Resource\ResourceIndex;
 	use Edde\Common\Resource\ResourceList;
+	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Resource\ResourceSchema;
 	use Edde\Common\Resource\ResourceStorable;
 	use Edde\Common\Resource\Storage\FileStorage;
@@ -71,7 +72,7 @@
 			$factoryManager->registerFactoryFallback(FactoryFactory::createFallback());
 			$container = new Container($factoryManager, new DependencyFactory($factoryManager, $cacheFactory), $cacheFactory);
 			$this->storage = new DatabaseStorage($container, $this->sqliteDriver = new SqliteDriver('sqlite:' . $this->getDatabaseFileName()), $cacheFactory);
-			$this->schemaManager = new SchemaManager(new SchemaFactory());
+			$this->schemaManager = new SchemaManager(new SchemaFactory(new ResourceManager()));
 			$this->schemaManager->addSchema(new ResourceSchema());
 			$this->upgradeManager = new UpgradeManager();
 			$this->resourceIndex = new ResourceIndex($container, $this->schemaManager, $this->storage, new FilesystemScanner(new Directory(__DIR__ . '/assets')), new CryptEngine());
