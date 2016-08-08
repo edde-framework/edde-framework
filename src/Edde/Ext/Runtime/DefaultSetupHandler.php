@@ -64,6 +64,7 @@
 	use Edde\Common\Xml\XmlResourceHandler;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
+	use Edde\Ext\Resource\JsonResourceHandler;
 	use Edde\Ext\Resource\Scanner\FilesystemScanner;
 	use Edde\Ext\Router\CliRouter;
 	use Edde\Ext\Router\SimpleRouter;
@@ -136,6 +137,8 @@
 				XmlResourceHandler::class,
 				ITemplate::class => XmlTemplate::class,
 
+				JsonResourceHandler::class,
+
 				InitialStorageUpgrade::class,
 			], $factoryList));
 			$setupHandler->onSetup(ISchemaManager::class, function (ISchemaManager $schemaManager) {
@@ -150,6 +153,7 @@
 			});
 			$setupHandler->onSetup(IResourceManager::class, function (IContainer $container, IResourceManager $resourceManager) {
 				$resourceManager->registerResourceHandler($container->create(XmlResourceHandler::class));
+				$resourceManager->registerResourceHandler($container->create(JsonResourceHandler::class));
 			});
 			return $setupHandler;
 		}

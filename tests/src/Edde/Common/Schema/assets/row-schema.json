@@ -1,5 +1,5 @@
 {
-	"name": "Header",
+	"name": "Row",
 	"namespace": "Foo\\Bar",
 	"property-list": [
 		{
@@ -9,17 +9,16 @@
 			"required": "true"
 		},
 		{
-			"name": "name",
+			"name": "header",
 			"required": "true"
 		}
 	],
-	"collection": [
+	"link": [
 		{
-			"name": "rowCollection",
-			"value": "guid",
+			"name": "header",
 			"attribute-list": {
-				"schema": "Foo\\Bar\\Row",
-				"property": "header"
+				"schema": "Foo\\Bar\\Header",
+				"property": "guid"
 			}
 		}
 	]

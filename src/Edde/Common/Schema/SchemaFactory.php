@@ -5,6 +5,7 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\INodeQuery;
+	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\SchemaFactoryException;
@@ -12,6 +13,10 @@
 	use Edde\Common\Usable\AbstractUsable;
 
 	class SchemaFactory extends AbstractUsable implements ISchemaFactory {
+		/**
+		 * @var IResourceManager
+		 */
+		protected $resourceManager;
 		/**
 		 * @var INode[]
 		 */
@@ -28,6 +33,18 @@
 		 * @var INodeQuery
 		 */
 		protected $linkNodeQuery;
+
+		/**
+		 * @param IResourceManager $resourceManager
+		 */
+		public function __construct(IResourceManager $resourceManager) {
+			$this->resourceManager = $resourceManager;
+		}
+
+		public function load(string $file): INode {
+			$this->addSchemaNode($node = $this->resourceManager->file($file));
+			return $node;
+		}
 
 		public function addSchemaNode(INode $node) {
 			$this->schemaNodeList[$this->getSchemaName($node)] = $node;
@@ -55,7 +72,6 @@
 					$targetSchema = $schemaList[$schemaName];
 					$sourceSchema->collection($collectionNode->getName(), $sourceSchema->getProperty($collectionNode->getValue()), $targetSchema->getProperty($collectionNode->getAttribute('property')));
 				}
-				$sourceSchema = $schemaList[$this->getSchemaName($schemaNode)];
 				foreach ($this->linkNodeQuery->filter($schemaNode) as $linkNode) {
 					if (isset($schemaList[$schemaName = $linkNode->getAttribute('schema')]) === false) {
 						throw new SchemaFactoryException(sprintf('Cannot use link to an unknown schema [%s].', $schemaName));

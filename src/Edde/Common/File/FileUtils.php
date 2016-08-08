@@ -11,6 +11,7 @@
 	class FileUtils extends AbstractObject {
 		static protected $mimeTypeList = [
 			'xml' => 'text/xml',
+			'json' => 'application/json',
 		];
 
 		/**

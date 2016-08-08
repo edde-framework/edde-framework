@@ -20,6 +20,15 @@
 		public function addSchemaNode(INode $node);
 
 		/**
+		 * load the specific file as INode and add it to this factory
+		 *
+		 * @param string $file
+		 *
+		 * @return INode
+		 */
+		public function load(string $file): INode;
+
+		/**
 		 * create list of schemas based on a given schema nodes
 		 *
 		 * @return ISchema[]

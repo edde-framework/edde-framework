@@ -1,8 +1,14 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Schema;
 
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Common\Node\Node;
+	use Edde\Common\Resource\ResourceManager;
+	use Edde\Common\Xml\XmlParser;
+	use Edde\Common\Xml\XmlResourceHandler;
+	use Edde\Ext\Resource\JsonResourceHandler;
 	use phpunit\framework\TestCase;
 
 	class SchemaFactoryTest extends TestCase {
@@ -72,7 +78,31 @@
 			], array_keys($rowSchema->getPropertyList()));
 		}
 
+		public function testResourceManager() {
+			$this->schemaFactory->load(__DIR__ . '/assets/header-schema.json');
+			$this->schemaFactory->load(__DIR__ . '/assets/row-schema.json');
+			$schemaList = $this->schemaFactory->create();
+			self::assertArrayHasKey('Foo\\Bar\\Header', $schemaList);
+			self::assertArrayHasKey('Foo\\Bar\\Row', $schemaList);
+			$headerSchema = $schemaList['Foo\\Bar\\Header'];
+			self::assertTrue($headerSchema->hasCollection('rowCollection'));
+			self::assertEquals([
+				'guid',
+				'name',
+			], array_keys($headerSchema->getPropertyList()));
+
+			$rowSchema = $schemaList['Foo\\Bar\\Row'];
+			self::assertTrue($rowSchema->hasLink('header'));
+			self::assertEquals([
+				'guid',
+				'header',
+			], array_keys($rowSchema->getPropertyList()));
+		}
+
 		protected function setUp() {
-			$this->schemaFactory = new SchemaFactory();
+			$resourceManager = new ResourceManager();
+			$resourceManager->registerResourceHandler(new XmlResourceHandler(new XmlParser()));
+			$resourceManager->registerResourceHandler(new JsonResourceHandler());
+			$this->schemaFactory = new SchemaFactory($resourceManager);
 		}
 	}
