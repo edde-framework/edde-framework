@@ -95,7 +95,7 @@
 			}
 		}
 
-		protected function nodeUse(INode $root, IControl $parent) {
+		protected function nodeUse(INode $root) {
 			$this->nodeList[$root->getAttribute('name')] = function (INode $node, IControl $parent) use ($root) {
 				/** @var $control IControl */
 				$parent->addControl($control = $this->container->create($root->getAttribute('control')));
@@ -120,7 +120,7 @@
 			};
 		}
 
-		protected function nodeSchema(INode $root, IControl $parent) {
+		protected function nodeSchema(INode $root) {
 			$this->schemaList[$root->getAttribute('name')] = $this->schemaManager->getSchema($root->getAttribute('schema'));
 		}
 
