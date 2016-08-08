@@ -34,7 +34,7 @@ var Edde = {
 		if (id) {
 			$('#' + id).find('.edde-value').each(function () {
 				var $this = $(this);
-				var dataClass = $this.data('class');
+				var dataClass = $this.data('schema');
 				crate[dataClass] = crate[dataClass] ? crate[dataClass] : {};
 				crate[dataClass][$this.data('property')] = this.getValue();
 			});
