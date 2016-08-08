@@ -15,6 +15,7 @@
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\Filter\ActionAttributeFilter;
 	use Edde\Common\Template\Filter\ClassAttributeFilter;
+	use Edde\Common\Template\Filter\PropertyAttributeFilter;
 	use Edde\Common\Template\Filter\ValueAttributeFilter;
 	use Edde\Common\Usable\AbstractUsable;
 	use ReflectionClass;
@@ -81,6 +82,13 @@
 			$this->nodeList[$nodeName]($node, $control);
 		}
 
+		public function getSchema($name) {
+			if (isset($this->schemaList[$name]) === false) {
+				throw new TemplateException(sprintf('Unknown schema [%s]; did you used "schema" node?', $name));
+			}
+			return $this->schemaList[$name];
+		}
+
 		protected function nodeTemplate(INode $root, IControl $control) {
 			foreach ($root->getNodeList() as $node) {
 				$this->control($node, $control);
@@ -132,6 +140,7 @@
 				'class' => new ClassAttributeFilter(),
 				'action' => new ActionAttributeFilter(),
 				'value' => new ValueAttributeFilter(),
+				'property' => new PropertyAttributeFilter($this),
 			];
 		}
 	}

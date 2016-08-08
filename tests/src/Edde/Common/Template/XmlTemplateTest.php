@@ -77,7 +77,10 @@
 		<meta charset="utf-8">
 		<title></title>
 	</head>
-	<body></body>
+	<body>
+		<input class="edde-value edde-text-input" type="text" value="" data-schema="Foo\Bar\LoginSchema" data-property="login">
+		<input class="edde-value edde-text-input" type="password" data-schema="Foo\Bar\LoginSchema" data-property="password">
+	</body>
 </html>
 ', $this->documentControl->render());
 		}

@@ -76,10 +76,15 @@
 
 		public function addAttribute($attribute, $value) {
 			$this->usse();
-			$attributeList = $this->getAttribute('class');
-			$attributeList[] = $value;
-			$this->node->setAttribute('class', $attributeList);
+			$attributeList = $this->getAttributeList();
+			$attributeList[$attribute][] = $value;
+			$this->node->setAttributeList($attributeList);
 			return $this;
+		}
+
+		public function getAttributeList(): array {
+			$this->usse();
+			return $this->node->getAttributeList();
 		}
 
 		public function hasClass($class) {
@@ -139,11 +144,6 @@
 		public function getTag() {
 			$this->usse();
 			return $this->node->getMeta('tag');
-		}
-
-		public function getAttributeList(): array {
-			$this->usse();
-			return $this->node->getAttributeList();
 		}
 
 		public function isPair() {

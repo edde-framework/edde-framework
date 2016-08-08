@@ -3,6 +3,6 @@
 	<use name="password" control="Edde\Common\Html\Value\PasswordInputControl"/>
 	<schema name="login" schema="Foo\Bar\LoginSchema"/>
 
-	<text schema="login" property="login"/>
-	<password schema="login" property="password"/>
+	<text property="login::login"/>
+	<password property="login::password"/>
 </template>
