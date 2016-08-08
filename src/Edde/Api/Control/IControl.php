@@ -19,6 +19,20 @@
 		public function getNode();
 
 		/**
+		 * return root control
+		 *
+		 * @return IControl
+		 */
+		public function getRoot();
+
+		/**
+		 * return parent or null of this control is root
+		 *
+		 * @return IControl|null
+		 */
+		public function getParent();
+
+		/**
 		 * add the new control to hierarchy of this control
 		 *
 		 * @param IControl $control

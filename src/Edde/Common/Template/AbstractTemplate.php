@@ -11,6 +11,9 @@
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\TemplateException;
 	use Edde\Common\Strings\StringUtils;
+	use Edde\Common\Template\Filter\ActionAttributeFilter;
+	use Edde\Common\Template\Filter\ClassAttributeFilter;
+	use Edde\Common\Template\Filter\ValueAttributeFilter;
 	use Edde\Common\Usable\AbstractUsable;
 	use ReflectionClass;
 	use ReflectionMethod;
@@ -59,12 +62,6 @@
 			return $this;
 		}
 
-		protected function nodeTemplate(INode $root, IControl $control) {
-			foreach ($root->getNodeList() as $node) {
-				$this->control($node, $control);
-			}
-		}
-
 		protected function control(INode $node, IControl $control) {
 			if (isset($this->nodeList[$nodeName = $node->getName()]) === false) {
 				throw new TemplateException(sprintf('Unknon node [%s]; did you used "use" node?', $nodeName));
@@ -72,10 +69,17 @@
 			$this->nodeList[$nodeName]($node, $control);
 		}
 
+		protected function nodeTemplate(INode $root, IControl $control) {
+			foreach ($root->getNodeList() as $node) {
+				$this->control($node, $control);
+			}
+		}
+
 		protected function nodeUse(INode $root, IControl $parent) {
 			$this->nodeList[$root->getAttribute('name')] = function (INode $node, IControl $parent) use ($root) {
 				/** @var $control IControl */
 				$control = $this->container->create($root->getAttribute('control'));
+				$parent->addControl($control);
 				$controlNode = $control->getNode();
 				$metaList = $controlNode->getMetaList();
 				$attributeList = $controlNode->getAttributeList();
@@ -91,7 +95,6 @@
 				 */
 				$node->addAttributeList($attributeList);
 				$node->addMetaList($metaList);
-				$parent->addControl($control);
 				foreach ($node->getNodeList() as $child) {
 					$this->control($child, $control);
 				}
@@ -112,6 +115,8 @@
 			}
 			$this->filterList = [
 				'class' => new ClassAttributeFilter(),
+				'action' => new ActionAttributeFilter(),
+				'value' => new ValueAttributeFilter(),
 			];
 		}
 	}

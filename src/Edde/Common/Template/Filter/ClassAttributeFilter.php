@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Template;
+	namespace Edde\Common\Template\Filter;
 
 	use Edde\Common\Filter\AbstractFilter;
 

@@ -19,6 +19,18 @@
 			return $this->node;
 		}
 
+		public function getRoot() {
+			$this->usse();
+			return $this->node->getRoot()
+				->getMeta('control');
+		}
+
+		public function getParent() {
+			$this->usse();
+			$parent = $this->node->getParent();
+			return $parent ? $parent->getMeta('control') : null;
+		}
+
 		/**
 		 * @param IControl[] $controlList
 		 *

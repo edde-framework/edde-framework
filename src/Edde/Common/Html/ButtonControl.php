@@ -44,7 +44,7 @@
 
 		protected function prepare() {
 			parent::prepare();
-			$this->setTag('button', true);
+			$this->setTag('div', true);
 			$this->addClass('button edde-clickable');
 		}
 	}

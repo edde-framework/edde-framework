@@ -21,6 +21,11 @@
 		public function getName();
 
 		/**
+		 * @return INode
+		 */
+		public function getRoot();
+
+		/**
 		 * generate materialized path from node names
 		 *
 		 * @return INode

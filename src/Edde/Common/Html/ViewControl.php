@@ -5,6 +5,7 @@
 
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceList;
+	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Container\LazyInjectTrait;
@@ -16,7 +17,7 @@
 	/**
 	 * Formal root control for displaying page with some shorthands.
 	 */
-	class PageControl extends DocumentControl {
+	class ViewControl extends DocumentControl {
 		use LazyInjectTrait;
 		/**
 		 * @var HtmlResponse
@@ -30,6 +31,10 @@
 		 * @var IJavaScriptCompiler
 		 */
 		protected $javaScriptCompiler;
+		/**
+		 * @var ITemplate
+		 */
+		protected $template;
 		/**
 		 * @var IResourceList
 		 */
@@ -51,6 +56,10 @@
 			$this->javaScriptCompiler = $javaScriptCompiler;
 		}
 
+		public function lazyTemplate(ITemplate $template) {
+			$this->template = $template;
+		}
+
 		public function setTitle($title) {
 			$this->getHead()
 				->setTitle($title);
@@ -66,6 +75,11 @@
 		public function addJavaScript(IResource $resource) {
 			$this->usse();
 			$this->javaScriptList->addResource($resource);
+			return $this;
+		}
+
+		public function template(string $file) {
+			$this->template->build($file, $this->getBody());
 			return $this;
 		}
 

@@ -37,6 +37,7 @@
 		}
 
 		public function getHandler(IResource $resource, string $mime = null): IResourceHandler {
+			$this->usse();
 			if (isset($this->handlerList[$mime = $mime ?: $resource->getMime()]) === false) {
 				throw new ResourceManagerException(sprintf('Requested unknown handler for a mime type [%s] of resource [%s].', $mime, (string)$resource->getUrl()));
 			}

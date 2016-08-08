@@ -11,6 +11,6 @@
 			return call_user_func_array([
 				$this,
 				'input',
-			], $parameterList);
+			], array_merge([$value], $parameterList));
 		}
 	}

@@ -10,12 +10,11 @@
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Container\LazyInjectTrait;
-	use Edde\Common\Html\ButtonControl;
 	use Edde\Common\Html\DivControl;
-	use Edde\Ext\Html\EddePageControl;
+	use Edde\Ext\Html\EddeViewControl;
 	use Tracy\Debugger;
 
-	class EddeControl extends EddePageControl {
+	class EddeControl extends EddeViewControl {
 		use LazyInjectTrait;
 		/**
 		 * @var IUpgradeManager
@@ -57,14 +56,7 @@
 		public function actionSetup() {
 			$this->usse();
 			$this->setTitle('Edde Control');
-			$this->addControl($content = $this->createControl(DivControl::class));
-			$content->addClass('row centered');
-			$content->addControl($column = $this->createControl(DivControl::class));
-			$column->addClass('col col-5');
-			$column->addControl($this->createControl(ButtonControl::class, 'Upgrade', static::class, 'OnUpgrade', 'run upgrades registered to this application'));
-			$column->addControl($this->createControl(ButtonControl::class, 'Update Resource Index', static::class, 'OnUpdateIndex', 'update resource index; this function needs storage already setup'));
-			$column->addControl($this->createControl(ButtonControl::class, 'Rebuild crates', static::class, 'OnRebuildCrates', 'update automagically generated crates'));
-			$column->addControl($this->createControl(ButtonControl::class, 'Clear cache', static::class, 'OnClearCache', 'clear current cache'));
+			$this->template(__DIR__ . '/template/action-setup.xml');
 			$this->send();
 		}
 

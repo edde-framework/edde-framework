@@ -3,13 +3,13 @@
 
 	namespace Edde\Ext\Html;
 
-	use Edde\Common\Html\PageControl;
+	use Edde\Common\Html\ViewControl;
 	use Edde\Common\Resource\FileResource;
 
 	/**
 	 * Same as AbstractHtmlControl extended by default set of javascript, styles and other stuff.
 	 */
-	class EddePageControl extends PageControl {
+	class EddeViewControl extends ViewControl {
 		protected function prepare() {
 			parent::prepare();
 			$this->addStyleSheet(new FileResource(__DIR__ . '/assets/css/kube.css'));

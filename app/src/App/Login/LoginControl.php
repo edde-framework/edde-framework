@@ -5,9 +5,9 @@
 
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Schema\ISchemaManager;
-	use Edde\Ext\Html\EddePageControl;
+	use Edde\Ext\Html\EddeViewControl;
 
-	class LoginControl extends EddePageControl {
+	class LoginControl extends EddeViewControl {
 		/**
 		 * @var ISchemaManager
 		 */

@@ -133,6 +133,7 @@
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
 				IXmlParser::class => XmlParser::class,
+				XmlResourceHandler::class,
 				ITemplate::class => XmlTemplate::class,
 
 				InitialStorageUpgrade::class,

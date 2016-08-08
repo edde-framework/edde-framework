@@ -1,0 +1,13 @@
+<template>
+	<use name="div" control="Edde\Common\Html\DivControl"/>
+	<use name="button" control="Edde\Common\Html\ButtonControl"/>
+
+	<div class="row centered">
+		<div class="col col-5">
+			<button value="Upgrade" action="OnUpgrade" title="run upgrades registered to this application"/>
+			<button value="Update Resource Index" action="OnUpdateIndex" title="update resource index; this function needs storage already setup"/>
+			<button value="Rebuild crates" action="OnRebuildCrates" title="update automagically generated crates"/>
+			<button value="Clear cache" action="OnClearCache" title="clear current cache"/>
+		</div>
+	</div>
+</template>
