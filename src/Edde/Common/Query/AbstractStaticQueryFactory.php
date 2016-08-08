@@ -47,7 +47,7 @@
 			if (isset($this->factoryList[$node->getName()]) === false) {
 				throw new StaticQueryException(sprintf('Unsuported fragment type [%s].', $node->getName()));
 			}
-			return call_user_func($this->factoryList[$node->getName()], $node);
+			return $this->factoryList[$node->getName()]($node);
 		}
 
 		protected function prepare() {

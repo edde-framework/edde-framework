@@ -74,9 +74,9 @@
 		 * @param string $name
 		 * @param string $default
 		 *
-		 * @return string
+		 * @return mixed
 		 */
-		public function getAttribute(string $name, string $default = ''): string;
+		public function getAttribute(string $name, string $default = '');
 
 		/**
 		 * add single html attribute to an array (for example class)

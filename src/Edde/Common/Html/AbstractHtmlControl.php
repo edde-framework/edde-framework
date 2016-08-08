@@ -19,7 +19,7 @@
 
 		public function setTag(string $tag, bool $pair = true) {
 			$this->usse();
-			$this->node->addAttributeList([
+			$this->node->addMetaList([
 				'tag' => $tag,
 				'pair' => $pair,
 			]);
@@ -34,15 +34,8 @@
 
 		public function setAttribute($attribute, $value) {
 			$this->usse();
-			$attributeList = $this->getAttributeList();
-			$attributeList[$attribute] = $value;
-			$this->node->setAttribute('attribute-list', $attributeList);
+			$this->node->setAttribute($attribute, $value);
 			return $this;
-		}
-
-		public function getAttributeList(): array {
-			$this->usse();
-			return $this->node->getAttribute('attribute-list', []);
 		}
 
 		public function getId(): string {
@@ -50,9 +43,8 @@
 			return $this->getAttribute('id', '');
 		}
 
-		public function getAttribute(string $name, string $default = ''): string {
-			$attributeList = $this->node->getAttribute('attribute-list', []);
-			return isset($attributeList[$name]) || array_key_exists($name, $attributeList) ? $attributeList[$name] : $default;
+		public function getAttribute(string $name, string $default = '') {
+			return $this->node->getAttribute($name, $default);
 		}
 
 		public function setText(string $text) {
@@ -63,19 +55,18 @@
 
 		public function addAttributeList(array $attributeList) {
 			$this->usse();
-			$this->setAttributeList(array_merge($this->getAttributeList(), $attributeList));
+			$this->node->addAttributeList($attributeList);
 			return $this;
 		}
 
 		public function setAttributeList(array $attributeList) {
 			$this->usse();
-			$this->node->setAttribute('attribute-list', $attributeList);
+			$this->node->setAttributeList($attributeList);
 			return $this;
 		}
 
 		public function hasAttribute($attribute) {
-			$attributeList = $this->getAttributeList();
-			return empty($attributeList[$attribute]) === false;
+			return $this->node->hasAttribute($attribute);
 		}
 
 		public function addClass($class) {
@@ -85,9 +76,9 @@
 
 		public function addAttribute($attribute, $value) {
 			$this->usse();
-			$attributeList = $this->getAttributeList();
-			$attributeList[$attribute][] = $value;
-			$this->node->setAttribute('attribute-list', $attributeList);
+			$attributeList = $this->getAttribute('class');
+			$attributeList[] = $value;
+			$this->node->setAttribute('class', $attributeList);
 			return $this;
 		}
 
@@ -97,8 +88,7 @@
 		}
 
 		public function getClassList() {
-			$attributeList = $this->getAttributeList();
-			return $attributeList['class'] ?? [];
+			return $this->getAttribute('class');
 		}
 
 		public function send() {
@@ -148,12 +138,17 @@
 
 		public function getTag() {
 			$this->usse();
-			return $this->node->getAttribute('tag');
+			return $this->node->getMeta('tag');
+		}
+
+		public function getAttributeList(): array {
+			$this->usse();
+			return $this->node->getAttributeList();
 		}
 
 		public function isPair() {
 			$this->usse();
-			return $this->node->getAttribute('pair', true);
+			return $this->node->getMeta('pair', true);
 		}
 
 		/**

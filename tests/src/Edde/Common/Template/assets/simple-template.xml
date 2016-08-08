@@ -1,0 +1,4 @@
+<template>
+	<use name="div" control="Edde\Common\Html\DivControl"/>
+	<div class="foo bar"/>
+</template>
