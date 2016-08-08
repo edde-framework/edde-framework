@@ -7,10 +7,15 @@
 	use Edde\Api\Template\ITemplate;
 	use Edde\Common\Html\Document\DocumentControl;
 	use Edde\Common\Resource\ResourceManager;
+	use Edde\Common\Schema\SchemaFactory;
+	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Common\Xml\XmlResourceHandler;
 	use Edde\Ext\Container\ContainerFactory;
+	use Foo\Bar\LoginSchema;
 	use phpunit\framework\TestCase;
+
+	require_once(__DIR__ . '/assets/schema.php');
 
 	class XmlTemplateTest extends TestCase {
 		/**
@@ -21,11 +26,13 @@
 		 * @var IContainer
 		 */
 		protected $container;
+		/**
+		 * @var DocumentControl
+		 */
+		protected $documentControl;
 
 		public function testSimpleTemplate() {
-			$control = new DocumentControl();
-			$control->injectContainer($this->container);
-			$this->template->build(__DIR__ . '/assets/simple-template.xml', $control->getBody());
+			$this->template->build(__DIR__ . '/assets/simple-template.xml', $this->documentControl->getBody());
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -36,13 +43,11 @@
 		<div class="foo bar"></div>
 	</body>
 </html>
-', $control->render());
+', $this->documentControl->render());
 		}
 
 		public function testLessSimpleTemplate() {
-			$control = new DocumentControl();
-			$control->injectContainer($this->container);
-			$this->template->build(__DIR__ . '/assets/less-simple-template.xml', $control->getBody());
+			$this->template->build(__DIR__ . '/assets/less-simple-template.xml', $this->documentControl->getBody());
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -61,11 +66,27 @@
 		</div>
 	</body>
 </html>
-', $control->render());
+', $this->documentControl->render());
+		}
+
+		public function testInput() {
+			$this->template->build(__DIR__ . '/assets/input.xml', $this->documentControl->getBody());
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body></body>
+</html>
+', $this->documentControl->render());
 		}
 
 		protected function setUp() {
-			$this->template = new XmlTemplate($this->container = ContainerFactory::create(), $resourceManager = new ResourceManager());
+			$this->template = new XmlTemplate($this->container = ContainerFactory::create(), $resourceManager = new ResourceManager(), $schemaManager = new SchemaManager(new SchemaFactory()));
 			$resourceManager->registerResourceHandler(new XmlResourceHandler(new XmlParser()));
+			$schemaManager->addSchema(new LoginSchema(LoginSchema::class));
+			$this->documentControl = new DocumentControl();
+			$this->documentControl->injectContainer($this->container);
 		}
 	}

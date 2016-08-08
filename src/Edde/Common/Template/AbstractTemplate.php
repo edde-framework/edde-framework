@@ -8,6 +8,8 @@
 	use Edde\Api\Filter\IFilter;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResourceManager;
+	use Edde\Api\Schema\ISchema;
+	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\TemplateException;
 	use Edde\Common\Strings\StringUtils;
@@ -28,9 +30,17 @@
 		 */
 		protected $resourceManager;
 		/**
+		 * @var ISchemaManager
+		 */
+		protected $schemaManager;
+		/**
 		 * @var string[]
 		 */
 		protected $nodeList = [];
+		/**
+		 * @var ISchema[]
+		 */
+		protected $schemaList = [];
 		/**
 		 * node attribute/meta filters
 		 *
@@ -41,10 +51,12 @@
 		/**
 		 * @param IContainer $container
 		 * @param IResourceManager $resourceManager
+		 * @param ISchemaManager $schemaManager
 		 */
-		public function __construct(IContainer $container, IResourceManager $resourceManager) {
+		public function __construct(IContainer $container, IResourceManager $resourceManager, ISchemaManager $schemaManager) {
 			$this->container = $container;
 			$this->resourceManager = $resourceManager;
+			$this->schemaManager = $schemaManager;
 		}
 
 		public function registerFilter(string $name, IFilter $filter): ITemplate {
@@ -78,8 +90,7 @@
 		protected function nodeUse(INode $root, IControl $parent) {
 			$this->nodeList[$root->getAttribute('name')] = function (INode $node, IControl $parent) use ($root) {
 				/** @var $control IControl */
-				$control = $this->container->create($root->getAttribute('control'));
-				$parent->addControl($control);
+				$parent->addControl($control = $this->container->create($root->getAttribute('control')));
 				$controlNode = $control->getNode();
 				$metaList = $controlNode->getMetaList();
 				$attributeList = $controlNode->getAttributeList();
@@ -99,6 +110,10 @@
 					$this->control($child, $control);
 				}
 			};
+		}
+
+		protected function nodeSchema(INode $root, IControl $parent) {
+			$this->schemaList[$root->getAttribute('name')] = $this->schemaManager->getSchema($root->getAttribute('schema'));
 		}
 
 		protected function prepare() {

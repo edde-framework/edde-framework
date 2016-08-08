@@ -1,0 +1,8 @@
+<template>
+	<use name="text" control="Edde\Common\Html\Value\TextInputControl"/>
+	<use name="password" control="Edde\Common\Html\Value\PasswordInputControl"/>
+	<schema name="login" schema="Foo\Bar\LoginSchema"/>
+
+	<text schema="login" property="login"/>
+	<password schema="login" property="password"/>
+</template>
