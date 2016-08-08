@@ -9,6 +9,6 @@
 			<div class="less-tasty-poo"/>
 			<div class="big-poo"/>
 		</div>
-		<button value="button title" class="small-cute-button" title="click me!" action="onClick" bind="some-group-of-data"/>
+		<button value="button title" class="small-cute-button" title="click me!" action="onClick" data-bind="some-group-of-data"/>
 	</div>
 </template>
