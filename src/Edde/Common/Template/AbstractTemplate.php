@@ -101,19 +101,19 @@
 				$parent->addControl($control = $this->container->create($root->getAttribute('control')));
 				$controlNode = $control->getNode();
 				$metaList = $controlNode->getMetaList();
-				$attributeList = $controlNode->getAttributeList();
 				$controlNode->addMetaList($node->getMetaList());
+				$attributes = [];
 				foreach ($node->getAttributeList() as $name => $value) {
 					if (isset($this->filterList[$name]) && ($value = $this->filterList[$name]->filter($value, $control, $node)) === false) {
 						continue;
 					}
-					$controlNode->setAttribute($name, $value);
+					$attributes[$name] = $value;
 				}
 				/**
 				 * it's important to keep the original values which cannot be changed
 				 */
-				$node->addAttributeList($attributeList);
-				$node->addMetaList($metaList);
+				$controlNode->setAttributeList(array_merge_recursive($controlNode->getAttributeList(), $attributes));
+				$controlNode->addMetaList($metaList);
 				foreach ($node->getNodeList() as $child) {
 					$this->control($child, $control);
 				}

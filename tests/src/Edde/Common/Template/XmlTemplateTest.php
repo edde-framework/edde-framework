@@ -62,7 +62,7 @@
 				<div class="less-tasty-poo"></div>
 				<div class="big-poo"></div>
 			</div>
-			<div class="small-cute-button" title="click me!" data-control="Edde\Common\Html\Document\DocumentControl" data-action="onClick" data-bind="some-group-of-data">button title</div>
+			<div class="button edde-clickable small-cute-button" data-control="Edde\Common\Html\Document\DocumentControl" data-action="onClick" title="click me!" data-bind="some-group-of-data">button title</div>
 		</div>
 	</body>
 </html>
