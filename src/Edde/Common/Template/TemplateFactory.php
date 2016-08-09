@@ -10,6 +10,7 @@
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaManager;
+	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\ITemplateFactory;
 	use Edde\Api\Template\TemplateException;
 	use Edde\Common\Strings\StringUtils;
@@ -66,21 +67,21 @@
 			return $this;
 		}
 
-		public function build(string $file, IControl $control): ITemplateFactory {
+		public function build(ITemplate $template): ITemplateFactory {
 			$this->usse();
-			$root = $this->resourceManager->file($file);
+			$root = $this->resourceManager->file($file = $template->getFile());
 			if ($root->getName() !== 'template') {
 				throw new TemplateException(sprintf('Template [%s] contains unknown root node [%s].', $file, $root->getName()));
 			}
-			$this->control($root, $control);
+			$this->node($root, $template->getControl(), $template);
 			return $this;
 		}
 
-		protected function control(INode $node, IControl $control) {
+		protected function node(INode $node, IControl $control, ITemplate $template) {
 			if (isset($this->nodeList[$nodeName = $node->getName()]) === false) {
 				throw new TemplateException(sprintf('Unknon node [%s]; did you used "use" node?', $nodeName));
 			}
-			$this->nodeList[$nodeName]($node, $control);
+			$this->nodeList[$nodeName]($node, $control, $template);
 		}
 
 		public function getSchema($name) {
@@ -90,14 +91,14 @@
 			return $this->schemaList[$name];
 		}
 
-		protected function nodeTemplate(INode $root, IControl $control) {
+		protected function nodeTemplate(INode $root, IControl $control, ITemplate $template) {
 			foreach ($root->getNodeList() as $node) {
-				$this->control($node, $control);
+				$this->node($node, $control, $template);
 			}
 		}
 
 		protected function nodeUse(INode $root) {
-			$this->nodeList[$root->getAttribute('name')] = function (INode $node, IControl $parent) use ($root) {
+			$this->nodeList[$root->getAttribute('name')] = function (INode $node, IControl $parent, ITemplate $template) use ($root) {
 				/** @var $control IControl */
 				$parent->addControl($control = $this->container->create($root->getAttribute('control')));
 				$controlNode = $control->getNode();
@@ -116,7 +117,7 @@
 				$controlNode->setAttributeList(array_merge_recursive($controlNode->getAttributeList(), $attributes));
 				$controlNode->addMetaList($metaList);
 				foreach ($node->getNodeList() as $child) {
-					$this->control($child, $control);
+					$this->node($child, $control, $template);
 				}
 			};
 		}

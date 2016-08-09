@@ -3,7 +3,6 @@
 
 	namespace Edde\Api\Template;
 
-	use Edde\Api\Control\IControl;
 	use Edde\Api\Filter\IFilter;
 	use Edde\Api\Usable\IUsable;
 
@@ -22,12 +21,9 @@
 		public function registerFilter(string $name, IFilter $filter): ITemplateFactory;
 
 		/**
-		 * build the target control
-		 *
-		 * @param string $file resource url (for example template xml file)
-		 * @param IControl $control
+		 * @param ITemplate $template
 		 *
 		 * @return ITemplateFactory
 		 */
-		public function build(string $file, IControl $control): ITemplateFactory;
+		public function build(ITemplate $template): ITemplateFactory;
 	}
