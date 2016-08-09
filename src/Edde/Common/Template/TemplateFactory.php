@@ -10,7 +10,7 @@
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaManager;
-	use Edde\Api\Template\ITemplate;
+	use Edde\Api\Template\ITemplateFactory;
 	use Edde\Api\Template\TemplateException;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\Filter\ActionAttributeFilter;
@@ -22,7 +22,7 @@
 	use ReflectionClass;
 	use ReflectionMethod;
 
-	abstract class AbstractTemplate extends AbstractUsable implements ITemplate {
+	class TemplateFactory extends AbstractUsable implements ITemplateFactory {
 		/**
 		 * @var IContainer
 		 */
@@ -61,18 +61,13 @@
 			$this->schemaManager = $schemaManager;
 		}
 
-		public function registerFilter(string $name, IFilter $filter): ITemplate {
+		public function registerFilter(string $name, IFilter $filter): ITemplateFactory {
 			$this->filterList[$name] = $filter;
 			return $this;
 		}
 
-		public function build(string $file, IControl $control): ITemplate {
+		public function build(string $file, IControl $control): ITemplateFactory {
 			$this->usse();
-			/**
-			 * this should be cleaned up between usages
-			 */
-			$this->schemaList = [];
-			$this->nodeList = [];
 			$root = $this->resourceManager->file($file);
 			if ($root->getName() !== 'template') {
 				throw new TemplateException(sprintf('Template [%s] contains unknown root node [%s].', $file, $root->getName()));

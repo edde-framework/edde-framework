@@ -4,7 +4,7 @@
 	namespace Edde\Common\Template;
 
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Template\ITemplate;
+	use Edde\Api\Template\ITemplateFactory;
 	use Edde\Common\Html\Document\DocumentControl;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Schema\SchemaFactory;
@@ -19,9 +19,9 @@
 
 	class XmlTemplateTest extends TestCase {
 		/**
-		 * @var ITemplate
+		 * @var ITemplateFactory
 		 */
-		protected $template;
+		protected $templateFactory;
 		/**
 		 * @var IContainer
 		 */
@@ -32,7 +32,7 @@
 		protected $documentControl;
 
 		public function testSimpleTemplate() {
-			$this->template->build(__DIR__ . '/assets/simple-template.xml', $this->documentControl->getBody());
+			$this->templateFactory->build(__DIR__ . '/assets/simple-template.xml', $this->documentControl->getBody());
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -47,7 +47,7 @@
 		}
 
 		public function testLessSimpleTemplate() {
-			$this->template->build(__DIR__ . '/assets/less-simple-template.xml', $this->documentControl->getBody());
+			$this->templateFactory->build(__DIR__ . '/assets/less-simple-template.xml', $this->documentControl->getBody());
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -70,7 +70,7 @@
 		}
 
 		public function testInput() {
-			$this->template->build(__DIR__ . '/assets/input.xml', $this->documentControl->getBody());
+			$this->templateFactory->build(__DIR__ . '/assets/input.xml', $this->documentControl->getBody());
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -86,7 +86,7 @@
 		}
 
 		protected function setUp() {
-			$this->template = new XmlTemplate($this->container = ContainerFactory::create(), $resourceManager = new ResourceManager(), $schemaManager = new SchemaManager(new SchemaFactory(new ResourceManager())));
+			$this->templateFactory = new TemplateFactory($this->container = ContainerFactory::create(), $resourceManager = new ResourceManager(), $schemaManager = new SchemaManager(new SchemaFactory(new ResourceManager())));
 			$resourceManager->registerResourceHandler(new XmlResourceHandler(new XmlParser()));
 			$schemaManager->addSchema(new LoginSchema(LoginSchema::class));
 			$this->documentControl = new DocumentControl();

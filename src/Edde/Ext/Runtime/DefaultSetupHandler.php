@@ -30,7 +30,7 @@
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
-	use Edde\Api\Template\ITemplate;
+	use Edde\Api\Template\ITemplateFactory;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
@@ -56,7 +56,7 @@
 	use Edde\Common\Runtime\SetupHandler;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
-	use Edde\Common\Template\XmlTemplate;
+	use Edde\Common\Template\TemplateFactory;
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
@@ -135,7 +135,7 @@
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
 				IXmlParser::class => XmlParser::class,
 				XmlResourceHandler::class,
-				ITemplate::class => XmlTemplate::class,
+				ITemplateFactory::class => TemplateFactory::class,
 
 				JsonResourceHandler::class,
 

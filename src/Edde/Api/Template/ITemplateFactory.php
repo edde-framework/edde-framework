@@ -10,16 +10,16 @@
 	/**
 	 * Control template will fill target control with predefined controls (some sort of factory).
 	 */
-	interface ITemplate extends IUsable {
+	interface ITemplateFactory extends IUsable {
 		/**
 		 * register filter; the required name is intentional (to keep filters independent)
 		 *
 		 * @param string $name
 		 * @param IFilter $filter
 		 *
-		 * @return ITemplate
+		 * @return ITemplateFactory
 		 */
-		public function registerFilter(string $name, IFilter $filter): ITemplate;
+		public function registerFilter(string $name, IFilter $filter): ITemplateFactory;
 
 		/**
 		 * build the target control
@@ -27,7 +27,7 @@
 		 * @param string $file resource url (for example template xml file)
 		 * @param IControl $control
 		 *
-		 * @return ITemplate
+		 * @return ITemplateFactory
 		 */
-		public function build(string $file, IControl $control): ITemplate;
+		public function build(string $file, IControl $control): ITemplateFactory;
 	}
