@@ -15,6 +15,7 @@
 	use Edde\Common\Template\Filter\ActionAttributeFilter;
 	use Edde\Common\Template\Filter\BindAttributeFilter;
 	use Edde\Common\Template\Filter\ClassAttributeFilter;
+	use Edde\Common\Template\Filter\IncludeAttributeFilter;
 	use Edde\Common\Template\Filter\PropertyAttributeFilter;
 	use Edde\Common\Template\Filter\ValueAttributeFilter;
 	use Edde\Common\Template\Macro\ControlMacro;
@@ -59,6 +60,7 @@
 				'value' => new ValueAttributeFilter(),
 				'property' => new PropertyAttributeFilter($schemaMacro),
 				'bind' => new BindAttributeFilter(),
+				'include' => new IncludeAttributeFilter($this->resourceManager),
 			]);
 			return $template;
 		}

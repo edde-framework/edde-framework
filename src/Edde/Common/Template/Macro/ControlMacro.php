@@ -53,7 +53,7 @@
 			$node->addMetaList($root->getMetaList());
 			$attributes = [];
 			foreach ($root->getAttributeList() as $name => $value) {
-				if (isset($this->filterList[$name]) && ($value = $this->filterList[$name]->filter($value, $control, $root)) === false) {
+				if (isset($this->filterList[$name]) && ($value = $this->filterList[$name]->filter($value, $control, $root, $template)) === false) {
 					continue;
 				}
 				$attributes[$name] = $value;

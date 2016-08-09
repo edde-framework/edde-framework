@@ -124,6 +124,25 @@
 ', $this->documentControl->render());
 		}
 
+		public function testIncludeAttribute() {
+			$this->template->setVariable('file', __DIR__ . '/assets/snippet-beta.xml');
+			$this->template->macro($this->resourceManager->file(__DIR__ . '/assets/include-attribute.xml'), $this->documentControl);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="static-one"></div>
+		<div class="foo">
+			<div class="beta"></div>
+		</div>
+	</body>
+</html>
+', $this->documentControl->render());
+		}
+
 		protected function setUp() {
 			$this->resourceManager = new ResourceManager();
 			$this->resourceManager->registerResourceHandler(new XmlResourceHandler(new XmlParser()));
