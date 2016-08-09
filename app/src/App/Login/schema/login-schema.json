@@ -1,0 +1,12 @@
+{
+	"name": "LoginCrate",
+	"namespace": "App\\Login",
+	"property-list": [
+		{
+			"name": "login"
+		},
+		{
+			"name": "password"
+		}
+	]
+}

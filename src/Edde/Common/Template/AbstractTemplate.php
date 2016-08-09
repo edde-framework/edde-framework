@@ -14,6 +14,7 @@
 	use Edde\Api\Template\TemplateException;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\Filter\ActionAttributeFilter;
+	use Edde\Common\Template\Filter\BindAttributeFilter;
 	use Edde\Common\Template\Filter\ClassAttributeFilter;
 	use Edde\Common\Template\Filter\PropertyAttributeFilter;
 	use Edde\Common\Template\Filter\ValueAttributeFilter;
@@ -141,6 +142,7 @@
 				'action' => new ActionAttributeFilter(),
 				'value' => new ValueAttributeFilter(),
 				'property' => new PropertyAttributeFilter($this),
+				'bind' => new BindAttributeFilter(),
 			];
 		}
 	}

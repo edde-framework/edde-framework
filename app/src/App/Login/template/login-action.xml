@@ -1,0 +1,13 @@
+<template>
+	<use name="div" control="Edde\Common\Html\DivControl"/>
+	<use name="text" control="Edde\Common\Html\Value\TextInputControl"/>
+	<use name="password" control="Edde\Common\Html\Value\PasswordInputControl"/>
+	<use name="button" control="Edde\Common\Html\ButtonControl"/>
+	<schema name="login" schema="App\Login\LoginCrate"/>
+
+	<div id="login">
+		<text property="login::login"/>
+		<password property="login::password"/>
+		<button value="login" bind="login" action="OnLogin"/>
+	</div>
+</template>
