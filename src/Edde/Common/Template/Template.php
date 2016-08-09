@@ -3,34 +3,54 @@
 
 	namespace Edde\Common\Template;
 
-	use Edde\Api\Html\IHtmlControl;
+	use Edde\Api\Node\INode;
+	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\ITemplate;
-	use Edde\Common\AbstractObject;
+	use Edde\Api\Template\TemplateException;
+	use Edde\Common\Usable\AbstractUsable;
 
-	class Template extends AbstractObject implements ITemplate {
+	class Template extends AbstractUsable implements ITemplate {
 		/**
-		 * @var IHtmlControl
+		 * @var IMacro[]
 		 */
-		protected $htmlControl;
+		protected $macroList = [];
 		/**
-		 * @var string
+		 * @var array
 		 */
-		protected $file;
+		protected $variableList = [];
 
-		/**
-		 * @param IHtmlControl $htmlControl
-		 * @param string $file
-		 */
-		public function __construct(IHtmlControl $htmlControl, string $file) {
-			$this->htmlControl = $htmlControl;
-			$this->file = $file;
+		public function registerMacro(IMacro $macro): ITemplate {
+			$this->macroList[] = $macro;
+			return $this;
 		}
 
-		public function getControl(): IHtmlControl {
-			return $this->htmlControl;
+		public function macro(INode $root, ...$parameterList) {
+			$this->usse();
+			if (isset($this->macroList[$nodeName = $root->getName()]) === false) {
+				throw new TemplateException(sprintf('Unknown node [%s]; did you registered macro for it?', $nodeName));
+			}
+			return $this->macroList[$nodeName]->run($this, $root, ...$parameterList);
 		}
 
-		public function getFile(): string {
-			return $this->file;
+		public function setVariable(string $name, $value): ITemplate {
+			$this->variableList[$name] = $value;
+			return $this;
+		}
+
+		public function getVariable(string $name) {
+			if (isset($this->variableList[$name]) === false) {
+				throw new TemplateException(sprintf('Unknown variable [%s].', $name));
+			}
+			return $this->variableList[$name];
+		}
+
+		protected function prepare() {
+			$macroList = $this->macroList;
+			$this->macroList = [];
+			foreach ($macroList as $macro) {
+				foreach ($macro->getMacroList() as $name) {
+					$this->macroList[$name] = $macro;
+				}
+			}
 		}
 	}

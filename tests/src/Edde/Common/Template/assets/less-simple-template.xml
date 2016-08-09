@@ -1,7 +1,4 @@
-<template>
-	<use name="div" control="Edde\Common\Html\DivControl"/>
-	<use name="button" control="Edde\Common\Html\ButtonControl"/>
-
+<html>
 	<div class="foo bar"/>
 	<div id="some-group-of-data" class="foo-bar">
 		<div class="poo">
@@ -9,6 +6,6 @@
 			<div class="less-tasty-poo"/>
 			<div class="big-poo"/>
 		</div>
-		<button value="button title" class="small-cute-button" title="click me!" action="onClick" data-bind="some-group-of-data"/>
+		<button value="button title" class="small-cute-button" title="click me!" action="onClick" bind="some-group-of-data"/>
 	</div>
-</template>
+</html>

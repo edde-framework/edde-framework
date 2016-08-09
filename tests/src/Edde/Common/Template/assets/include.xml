@@ -1,0 +1,4 @@
+<html>
+	<div class="static-one"/>
+	<include file="$variable"/>
+</html>

@@ -7,19 +7,16 @@
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlValueControl;
 	use Edde\Common\Filter\AbstractFilter;
-	use Edde\Common\Template\TemplateFactory;
+	use Edde\Common\Template\Macro\SchemaMacro;
 
 	class PropertyAttributeFilter extends AbstractFilter {
 		/**
-		 * @var TemplateFactory
+		 * @var SchemaMacro
 		 */
-		protected $templateFactory;
+		protected $schemaMacro;
 
-		/**
-		 * @param TemplateFactory $abstractTemplate
-		 */
-		public function __construct(TemplateFactory $abstractTemplate) {
-			$this->templateFactory = $abstractTemplate;
+		public function __construct(SchemaMacro $schemaMacro) {
+			$this->schemaMacro = $schemaMacro;
 		}
 
 		public function input($value, IHtmlControl $htmlControl) {
@@ -27,10 +24,9 @@
 				throw new FilterException(sprintf('Control must be instance of [%s].', IHtmlValueControl::class));
 			}
 			$value = explode('::', $value);
-			$schema = $this->templateFactory->getSchema($value[0]);
-			$htmlControl->setAttribute('data-schema', $schema->getSchemaName());
-			$htmlControl->setAttribute('data-property', $schema->getProperty($value[1])
-				->getName());
+			$schema = $this->schemaMacro->getSchema($value[0]);
+			$htmlControl->setAttribute('data-schema', $schema);
+			$htmlControl->setAttribute('data-property', $value[1]);
 			return false;
 		}
 	}
