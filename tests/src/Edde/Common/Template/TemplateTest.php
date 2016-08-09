@@ -6,21 +6,9 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\ITemplate;
-	use Edde\Common\Html\ButtonControl;
-	use Edde\Common\Html\DivControl;
+	use Edde\Api\Template\ITemplateFactory;
 	use Edde\Common\Html\Document\DocumentControl;
-	use Edde\Common\Html\Value\PasswordInputControl;
-	use Edde\Common\Html\Value\TextInputControl;
 	use Edde\Common\Resource\ResourceManager;
-	use Edde\Common\Template\Filter\ActionAttributeFilter;
-	use Edde\Common\Template\Filter\BindAttributeFilter;
-	use Edde\Common\Template\Filter\ClassAttributeFilter;
-	use Edde\Common\Template\Filter\PropertyAttributeFilter;
-	use Edde\Common\Template\Filter\ValueAttributeFilter;
-	use Edde\Common\Template\Macro\ControlMacro;
-	use Edde\Common\Template\Macro\HtmlMacro;
-	use Edde\Common\Template\Macro\IncludeMacro;
-	use Edde\Common\Template\Macro\SchemaMacro;
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Common\Xml\XmlResourceHandler;
 	use Edde\Ext\Container\ContainerFactory;
@@ -39,6 +27,10 @@
 		 * @var DocumentControl
 		 */
 		protected $documentControl;
+		/**
+		 * @var ITemplateFactory
+		 */
+		protected $templateFactory;
 		/**
 		 * @var ITemplate
 		 */
@@ -138,24 +130,8 @@
 			$this->container = ContainerFactory::create();
 			$this->documentControl = new DocumentControl();
 			$this->documentControl->injectContainer($this->container);
-			$this->template = $template = new Template();
-			$template->registerMacro(new HtmlMacro());
-			$template->registerMacro($schemaMacro = new SchemaMacro());
-			$template->registerMacro(new IncludeMacro($this->resourceManager));
-			$template->registerMacro($controlMacro = new ControlMacro($this->container));
-			$controlMacro->registerControlList([
-				'div' => DivControl::class,
-				'button' => ButtonControl::class,
-				'text' => TextInputControl::class,
-				'password' => PasswordInputControl::class,
-			]);
-			$controlMacro->registerFilterList([
-				'class' => new ClassAttributeFilter(),
-				'action' => new ActionAttributeFilter(),
-				'value' => new ValueAttributeFilter(),
-				'property' => new PropertyAttributeFilter($schemaMacro),
-				'bind' => new BindAttributeFilter(),
-			]);
+			$this->templateFactory = new TemplateFactory($this->resourceManager, $this->container);
+			$this->template = $this->templateFactory->create();
 		}
 	}
 

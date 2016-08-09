@@ -4,12 +4,17 @@
 	namespace Edde\Common\Template;
 
 	use Edde\Api\Node\INode;
+	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\TemplateException;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class Template extends AbstractUsable implements ITemplate {
+		/**
+		 * @var IResourceManager
+		 */
+		protected $resourceManager;
 		/**
 		 * @var IMacro[]
 		 */
@@ -19,8 +24,20 @@
 		 */
 		protected $variableList = [];
 
+		/**
+		 * @param IResourceManager $resourceManager
+		 */
+		public function __construct(IResourceManager $resourceManager) {
+			$this->resourceManager = $resourceManager;
+		}
+
 		public function registerMacro(IMacro $macro): ITemplate {
 			$this->macroList[] = $macro;
+			return $this;
+		}
+
+		public function load(string $file, ...$parameterList) {
+			$this->macro($this->resourceManager->file($file), ...$parameterList);
 			return $this;
 		}
 
@@ -34,6 +51,11 @@
 
 		public function setVariable(string $name, $value): ITemplate {
 			$this->variableList[$name] = $value;
+			return $this;
+		}
+
+		public function setVariableList(array $variableList): ITemplate {
+			$this->variableList = $variableList;
 			return $this;
 		}
 

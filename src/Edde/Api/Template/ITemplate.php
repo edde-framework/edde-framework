@@ -26,12 +26,27 @@
 		public function macro(INode $root, ...$parameterList);
 
 		/**
+		 * @param string $file
+		 * @param array $parameterList
+		 *
+		 * @return $this
+		 */
+		public function load(string $file, ...$parameterList);
+
+		/**
 		 * @param string $name
 		 * @param mixed $value
 		 *
 		 * @return ITemplate
 		 */
 		public function setVariable(string $name, $value): ITemplate;
+
+		/**
+		 * @param array $variableList
+		 *
+		 * @return ITemplate
+		 */
+		public function setVariableList(array $variableList): ITemplate;
 
 		/**
 		 * @param string $name

@@ -7,6 +7,7 @@
 	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Container\IFactory;
 	use Edde\Api\Crate\ICrateDirectory;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crate\ICrateGenerator;
@@ -30,6 +31,8 @@
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
+	use Edde\Api\Template\ITemplate;
+	use Edde\Api\Template\ITemplateFactory;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
@@ -55,6 +58,7 @@
 	use Edde\Common\Runtime\SetupHandler;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
+	use Edde\Common\Template\TemplateFactory;
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
@@ -129,6 +133,15 @@
 				IResourceStorable::class => FactoryFactory::create(ResourceStorable::class, function (IResourceIndex $resourceIndex) {
 					return $resourceIndex->createResourceStorable();
 				}, false),
+				ITemplateFactory::class => TemplateFactory::class,
+				ITemplate::class => [
+					function (ITemplateFactory $templateFactory) {
+						return $templateFactory->create();
+					},
+					function (IFactory $factory) {
+						$factory->setSingleton(false);
+					},
+				],
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
 				IXmlParser::class => XmlParser::class,
