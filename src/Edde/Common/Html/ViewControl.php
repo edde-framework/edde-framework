@@ -83,11 +83,25 @@
 		}
 
 		/**
+		 * send redirect response to the client
+		 *
+		 * @param string $redirect
+		 *
+		 * @return $this
+		 */
+		public function redirect(string $redirect) {
+			$this->htmlResponse->redirect($redirect);
+			$this->htmlResponse->send();
+			return $this;
+		}
+
+		/**
 		 * method specific for this "presenter"; this will sent a HtmlResponse with controls currently set to the body
 		 *
 		 * @return $this
 		 */
 		public function response() {
+			$this->usse();
 			$this->htmlResponse->setControlList($this->body->getControlList());
 			$this->htmlResponse->send();
 			return $this;
