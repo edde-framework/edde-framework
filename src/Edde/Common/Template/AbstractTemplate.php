@@ -68,6 +68,11 @@
 
 		public function build(string $file, IControl $control): ITemplate {
 			$this->usse();
+			/**
+			 * this should be cleaned up between usages
+			 */
+			$this->schemaList = [];
+			$this->nodeList = [];
 			$root = $this->resourceManager->file($file);
 			if ($root->getName() !== 'template') {
 				throw new TemplateException(sprintf('Template [%s] contains unknown root node [%s].', $file, $root->getName()));
