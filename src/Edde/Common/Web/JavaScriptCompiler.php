@@ -7,9 +7,9 @@
 	use Edde\Api\Resource\IResourceList;
 	use Edde\Api\Resource\Storage\IFileStorage;
 	use Edde\Api\Web\IJavaScriptCompiler;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Resource\ResourceList;
 
-	class JavaScriptCompiler extends AbstractObject implements IJavaScriptCompiler {
+	class JavaScriptCompiler extends ResourceList implements IJavaScriptCompiler {
 		/**
 		 * @var IFileStorage
 		 */
@@ -30,7 +30,7 @@
 
 		public function compile(IResourceList $resourceList) {
 			$content = [];
-			foreach ($resourceList->getResourceList() as $resource) {
+			foreach ($resourceList as $resource) {
 				$current = $resource->get();
 				$content[] = $current;
 			}

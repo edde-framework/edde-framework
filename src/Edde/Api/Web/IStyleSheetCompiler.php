@@ -6,7 +6,7 @@
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceList;
 
-	interface IStyleSheetCompiler {
+	interface IStyleSheetCompiler extends IResourceList {
 		/**
 		 * compile the given list into single resource
 		 *

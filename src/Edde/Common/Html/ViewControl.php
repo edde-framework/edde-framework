@@ -10,7 +10,6 @@
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Html\Document\DocumentControl;
 	use Edde\Common\Html\Document\MetaControl;
-	use Edde\Common\Resource\ResourceList;
 	use Edde\Common\Response\HtmlResponse;
 
 	/**
@@ -109,8 +108,8 @@
 
 		protected function prepare() {
 			parent::prepare();
-			$this->styleSheetList = new ResourceList();
-			$this->javaScriptList = new ResourceList();
+			$this->styleSheetList = $this->styleSheetCompiler;
+			$this->javaScriptList = $this->javaScriptCompiler;
 			$this->head->addControl($this->createControl(MetaControl::class)
 				->setAttributeList([
 					'name' => 'viewport',

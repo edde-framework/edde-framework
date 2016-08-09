@@ -8,13 +8,13 @@
 	use Edde\Api\Resource\Storage\IFileStorage;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Web\WebException;
-	use Edde\Common\AbstractObject;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\Resource\FileResource;
+	use Edde\Common\Resource\ResourceList;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Url\Url;
 
-	class StyleSheetCompiler extends AbstractObject implements IStyleSheetCompiler {
+	class StyleSheetCompiler extends ResourceList implements IStyleSheetCompiler {
 		/**
 		 * @var IFileStorage
 		 */
@@ -36,7 +36,7 @@
 		public function compile(IResourceList $resourceList) {
 			$content = [];
 			$pathList = [];
-			foreach ($resourceList->getResourceList() as $resource) {
+			foreach ($resourceList as $resource) {
 				$current = $resource->get();
 				$urlList = StringUtils::matchAll($current, "~url\\((?<url>.*?)\\)~", true);
 				$resourcePath = $source = $resource->getUrl()

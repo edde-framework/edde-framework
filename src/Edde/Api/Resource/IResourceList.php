@@ -34,4 +34,9 @@
 		 * @return bool
 		 */
 		public function isEmpty();
+
+		/**
+		 * @return IResource[]
+		 */
+		public function getIterator();
 	}
