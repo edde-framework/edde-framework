@@ -14,5 +14,5 @@
 		 *
 		 * @return IResource
 		 */
-		public function compile(IResourceList $resourceList);
+		public function compile(IResourceList $resourceList): IResource;
 	}

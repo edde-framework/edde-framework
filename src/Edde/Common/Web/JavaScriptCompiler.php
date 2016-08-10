@@ -7,9 +7,16 @@
 	use Edde\Api\Resource\IResourceList;
 	use Edde\Api\Resource\Storage\IFileStorage;
 	use Edde\Api\Web\IJavaScriptCompiler;
+	use Edde\Common\Cache\CacheTrait;
+	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Resource\ResourceList;
+	use Edde\Common\Usable\UsableTrait;
 
 	class JavaScriptCompiler extends ResourceList implements IJavaScriptCompiler {
+		use LazyInjectTrait;
+		use UsableTrait;
+		use CacheTrait;
+
 		/**
 		 * @var IFileStorage
 		 */
@@ -19,21 +26,24 @@
 		 */
 		protected $tempDirectory;
 
-		/**
-		 * @param IFileStorage $fileStorage
-		 * @param ITempDirectory $tempDirectory
-		 */
-		public function __construct(IFileStorage $fileStorage, ITempDirectory $tempDirectory) {
+		public function lazyFileStorage(IFileStorage $fileStorage) {
 			$this->fileStorage = $fileStorage;
+		}
+
+		public function lazyTempDirectory(ITempDirectory $tempDirectory) {
 			$this->tempDirectory = $tempDirectory;
 		}
 
 		public function compile(IResourceList $resourceList) {
+			$this->usse();
 			$content = [];
-			foreach ($resourceList as $resource) {
-				$current = $resource->get();
-				$content[] = $current;
+			if (($resource = $this->cache->load($cacheId = $resourceList->getResourceName())) === null) {
+				foreach ($resourceList as $resource) {
+					$current = $resource->get();
+					$content[] = $current;
+				}
+				$this->cache->save($cacheId, $resource = $this->fileStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.js', implode(";\n", $content))));
 			}
-			return $this->fileStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.js', implode(";\n", $content)));
+			return $resource;
 		}
 	}

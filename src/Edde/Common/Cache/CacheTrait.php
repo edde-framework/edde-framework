@@ -6,14 +6,11 @@
 	use Edde\Api\Cache\CacheException;
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheFactory;
-	use Edde\Common\Usable\UsableTrait;
 
 	/**
 	 * This trait is shorthand for creating cache to a supported class (it must be created through container).
 	 */
 	trait CacheTrait {
-		use UsableTrait;
-
 		/**
 		 * @var ICacheFactory
 		 */

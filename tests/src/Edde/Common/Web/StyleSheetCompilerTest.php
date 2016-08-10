@@ -8,6 +8,7 @@
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Upgrade\IUpgradeManager;
+	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Container\Container;
 	use Edde\Common\Container\DependencyFactory;
@@ -32,6 +33,7 @@
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Ext\Cache\DevNullCacheStorage;
+	use Edde\Ext\Cache\FileCacheStorage;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Resource\Scanner\FilesystemScanner;
 	use Edde\Ext\Upgrade\InitialStorageUpgrade;
@@ -90,7 +92,10 @@
 		}
 
 		public function testCommon() {
-			$styleSheetCompiler = new StyleSheetCompiler($fileStorage = new FileStorage($this->resourceIndex, new RootDirectory(__DIR__), new StorageDirectory(__DIR__ . '/public')), $this->tempDirectory);
+			$styleSheetCompiler = new StyleSheetCompiler();
+			$styleSheetCompiler->lazyFileStorage($fileStorage = new FileStorage($this->resourceIndex, new RootDirectory(__DIR__), new StorageDirectory(__DIR__ . '/public')));
+			$styleSheetCompiler->lazyTempDirectory($this->tempDirectory);
+			$styleSheetCompiler->injectCacheFactory(new CacheFactory(__DIR__, new FileCacheStorage(new CacheDirectory(__DIR__ . '/temp'))));
 
 			$resourceList = new ResourceList();
 			$resourceList->addResource(new FileResource(__DIR__ . '/assets/css/font-awesome.css'));
