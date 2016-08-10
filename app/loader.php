@@ -8,6 +8,7 @@
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\Runtime\Runtime;
+	use Edde\Ext\Cache\MemcacheCacheStorage;
 	use Tracy\Debugger;
 
 	require_once(__DIR__ . '/vendor/autoload.php');
@@ -20,8 +21,6 @@
 	$factoryList = [
 		IRootDirectory::class => new RootDirectory(__DIR__),
 	];
-	$cacheFactory = new CacheFactory(__DIR__, $factoryList[ICacheStorage::class] = new MemcacheCacheStorage());
-	$cacheFactory = null;
-	Runtime::execute(AppSetupHandler::create($cacheFactory, $factoryList), function (IApplication $application) {
+	Runtime::execute(AppSetupHandler::create(new CacheFactory(__DIR__, $factoryList[ICacheStorage::class] = (new MemcacheCacheStorage())->addServer('127.0.0.1')), $factoryList), function (IApplication $application) {
 		$application->run();
 	});
