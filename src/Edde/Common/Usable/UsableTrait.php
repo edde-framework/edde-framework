@@ -42,7 +42,7 @@
 
 		public function onLoaded(callable $callback) {
 			if ($this->isUsed()) {
-				call_user_func($callback, $this);
+				$callback($this);
 				return $this;
 			}
 			$this->onUseList[] = $callback;
@@ -53,11 +53,11 @@
 			if ($this->used === false) {
 				$this->used = true;
 				foreach ($this->onSetupList as $callback) {
-					call_user_func($callback, $this);
+					$callback($this);
 				}
 				$this->prepare();
 				foreach ($this->onUseList as $callback) {
-					call_user_func($callback, $this);
+					$callback($this);
 				}
 			}
 			return $this;
