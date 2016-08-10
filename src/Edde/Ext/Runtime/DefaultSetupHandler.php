@@ -19,6 +19,8 @@
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpRequestFactory;
 	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Link\IHostUrl;
+	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\IResourceStorable;
@@ -49,6 +51,7 @@
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Http\HttpRequestFactory;
+	use Edde\Common\Link\LinkFactory;
 	use Edde\Common\Resource\ResourceIndex;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Resource\ResourceSchema;
@@ -147,21 +150,26 @@
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
 				IXmlParser::class => XmlParser::class,
-				XmlResourceHandler::class,
 
+				XmlResourceHandler::class,
 				JsonResourceHandler::class,
+
+				IHostUrl::class => function () {
+					throw new RuntimeException(sprintf('Please define [%s] for usage in setup handler.', IHostUrl::class));
+				},
+				ILinkFactory::class => LinkFactory::class,
 
 				InitialStorageUpgrade::class,
 			], $factoryList));
-			$setupHandler->onSetup(ISchemaManager::class, function (ISchemaManager $schemaManager) {
-				$schemaManager->addSchema(new ResourceSchema());
-			});
 			$setupHandler->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
 				$routerService->registerRouter($container->create(CliRouter::class));
 				$routerService->registerRouter($container->create(SimpleRouter::class));
 			});
 			$setupHandler->onSetup(IApplication::class, function (ICrateGenerator $crateGenerator, IApplication $application) {
 				$crateGenerator->generate();
+			});
+			$setupHandler->onSetup(ISchemaManager::class, function (ISchemaManager $schemaManager) {
+				$schemaManager->addSchema(new ResourceSchema());
 			});
 			$setupHandler->onSetup(IResourceManager::class, function (IContainer $container, IResourceManager $resourceManager) {
 				$resourceManager->registerResourceHandler($container->create(XmlResourceHandler::class));

@@ -3,29 +3,17 @@
 
 	namespace Edde\Api\Link;
 
-	use Edde\Api\Url\IUrl;
-
 	/**
-	 * Proprietary link generator with tight relation to the edde-application package.
+	 * Abstract tool for generating links from arbitrary input (strings, other classes, ...). This is useful for
+	 * abstracting application from url's.
 	 */
-	interface ILinkFactory extends ILinkGenerator {
+	interface ILinkFactory extends ILingGenerator {
 		/**
-		 * generate uri from the given string
+		 * register link a generator
 		 *
-		 * @param string $link
+		 * @param ILingGenerator $lingGenerator
 		 *
-		 * @return IUrl
+		 * @return ILinkFactory
 		 */
-		public function link($link);
-
-		/**
-		 * generate link to the given class (for example to a Presenter or so)
-		 *
-		 * @param mixed $class
-		 * @param string $method
-		 * @param array $parameterList
-		 *
-		 * @return IUrl
-		 */
-		public function linkTo($class, $method, array $parameterList = []);
+		public function registerLinkGenerator(ILingGenerator $lingGenerator): ILinkFactory;
 	}

@@ -3,33 +3,40 @@
 
 	namespace Edde\Common\Link;
 
+	use Edde\Api\Link\IHostUrl;
+	use Edde\Api\Link\ILingGenerator;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Link\LinkException;
 	use Edde\Common\AbstractObject;
-	use Edde\Common\Strings\StringUtils;
-	use Edde\Common\Url\Url;
 
 	class LinkFactory extends AbstractObject implements ILinkFactory {
-		public function linkTo($class, $method, array $parameterList = []) {
-			$className = [];
-			foreach (explode('\\', is_object($class) ? get_class($class) : $class) as $part) {
-				$className[] = StringUtils::recamel($part);
-			}
-			return Url::create('/' . implode('/', $className) . '/' . StringUtils::recamel($method))
-				->setQuery($parameterList);
+		/**
+		 * @var IHostUrl
+		 */
+		protected $hostUrl;
+		/**
+		 * @var ILingGenerator[]
+		 */
+		protected $linkGeneratorList = [];
+
+		/**
+		 * @param IHostUrl $hostUrl
+		 */
+		public function __construct(IHostUrl $hostUrl) {
+			$this->hostUrl = $hostUrl;
 		}
 
-		public function generate($generate) {
-			$uri = null;
-			if (is_string($generate)) {
-				return $this->link($generate);
-			}
-			if ($uri === null) {
-				throw new LinkException(sprintf('Unknown input argument [%s] for the link generator [%s].', gettype($generate), static::class));
-			}
-			return $uri;
+		public function registerLinkGenerator(ILingGenerator $lingGenerator): ILinkFactory {
+			$this->linkGeneratorList[] = $lingGenerator;
+			return $this;
 		}
 
-		public function link($link) {
+		public function generate($generate, ...$parameterList) {
+			foreach ($this->linkGeneratorList as $lingGenerator) {
+				if (($url = $lingGenerator->generate($generate, ...$parameterList)) !== null) {
+					return $url;
+				}
+			}
+			throw new LinkException(sprintf('Cannot generate link from the given input.'));
 		}
 	}
