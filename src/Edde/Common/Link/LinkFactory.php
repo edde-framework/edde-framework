@@ -7,9 +7,9 @@
 	use Edde\Api\Link\ILingGenerator;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Link\LinkException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Usable\AbstractUsable;
 
-	class LinkFactory extends AbstractObject implements ILinkFactory {
+	class LinkFactory extends AbstractUsable implements ILinkFactory {
 		/**
 		 * @var IHostUrl
 		 */
@@ -38,5 +38,8 @@
 				}
 			}
 			throw new LinkException(sprintf('Cannot generate link from the given input.'));
+		}
+
+		protected function prepare() {
 		}
 	}
