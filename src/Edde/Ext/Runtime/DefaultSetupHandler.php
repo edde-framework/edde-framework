@@ -24,8 +24,8 @@
 	use Edde\Api\Resource\Scanner\IScanner;
 	use Edde\Api\Resource\Storage\IFileStorage;
 	use Edde\Api\Resource\Storage\IStorageDirectory;
-	use Edde\Api\Router\IRoute;
 	use Edde\Api\Router\IRouter;
+	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Router\RouterException;
 	use Edde\Api\Runtime\RuntimeException;
 	use Edde\Api\Schema\ISchemaFactory;
@@ -80,8 +80,8 @@
 				 * Application and presentation layer
 				 */
 				IApplication::class => Application::class,
-				IRoute::class => function (IRouter $router) {
-					if (($route = $router->route()) === null) {
+				IRouterService::class => function (IRouterService $routerService) {
+					if (($route = $routerService->route()) === null) {
 						throw new RouterException(sprintf('Cannot find route for current application request.'));
 					}
 					return $route;
@@ -154,9 +154,9 @@
 			$setupHandler->onSetup(ISchemaManager::class, function (ISchemaManager $schemaManager) {
 				$schemaManager->addSchema(new ResourceSchema());
 			});
-			$setupHandler->onSetup(IRouter::class, function (IContainer $container, RouterList $routerList) {
-				$routerList->registerRouter($container->create(CliRouter::class));
-				$routerList->registerRouter($container->create(SimpleRouter::class));
+			$setupHandler->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
+				$routerService->registerRouter($container->create(CliRouter::class));
+				$routerService->registerRouter($container->create(SimpleRouter::class));
 			});
 			$setupHandler->onSetup(IApplication::class, function (ICrateGenerator $crateGenerator, IApplication $application) {
 				$crateGenerator->generate();
