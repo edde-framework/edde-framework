@@ -40,6 +40,10 @@
 		}
 
 		public function factory(array $parameterList, IContainer $container) {
-			return (new ReflectionClass($this->class))->newInstanceArgs($parameterList);
+			$reflactionClass = new ReflectionClass($this->class);
+			if (empty($parameterList)) {
+				return $reflactionClass->newInstance();
+			}
+			return $reflactionClass->newInstanceArgs($parameterList);
 		}
 	}
