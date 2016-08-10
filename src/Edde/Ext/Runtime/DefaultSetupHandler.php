@@ -6,6 +6,7 @@
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheFactory;
+	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Crate\ICrateDirectory;
@@ -24,7 +25,7 @@
 	use Edde\Api\Resource\Scanner\IScanner;
 	use Edde\Api\Resource\Storage\IFileStorage;
 	use Edde\Api\Resource\Storage\IStorageDirectory;
-	use Edde\Api\Router\IRouter;
+	use Edde\Api\Router\IRoute;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Router\RouterException;
 	use Edde\Api\Runtime\RuntimeException;
@@ -54,7 +55,7 @@
 	use Edde\Common\Resource\ResourceStorable;
 	use Edde\Common\Resource\Storage\FileStorage;
 	use Edde\Common\Resource\Storage\StorageDirectory;
-	use Edde\Common\Router\RouterList;
+	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\SetupHandler;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
@@ -76,11 +77,13 @@
 		static public function create(ICacheFactory $cacheFactory = null, array $factoryList = []) {
 			$setupHandler = parent::create($cacheFactory ?: new CacheFactory(__DIR__, new InMemoryCacheStorage()));
 			$setupHandler->registerFactoryList(array_merge([
+				ICacheStorage::class => InMemoryCacheStorage::class,
 				/**
 				 * Application and presentation layer
 				 */
 				IApplication::class => Application::class,
-				IRouterService::class => function (IRouterService $routerService) {
+				IRouterService::class => RouterService::class,
+				IRoute::class => function (IRouterService $routerService) {
 					if (($route = $routerService->route()) === null) {
 						throw new RouterException(sprintf('Cannot find route for current application request.'));
 					}
@@ -88,7 +91,6 @@
 				},
 				CliRouter::class,
 				SimpleRouter::class,
-				IRouter::class => RouterList::class,
 				/**
 				 * Http request support
 				 */

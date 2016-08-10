@@ -1,7 +1,4 @@
-<template>
-	<use name="div" control="Edde\Common\Html\DivControl"/>
-	<use name="button" control="Edde\Common\Html\ButtonControl"/>
-
+<html>
 	<div class="row centered">
 		<div class="col col-5">
 			<button value="Upgrade" action="OnUpgrade" title="run upgrades registered to this application"/>
@@ -10,4 +7,4 @@
 			<button value="Clear cache" action="OnClearCache" title="clear current cache"/>
 		</div>
 	</div>
-</template>
+</html>

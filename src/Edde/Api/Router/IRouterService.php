@@ -11,5 +11,5 @@
 		 *
 		 * @return IRouterService
 		 */
-		public function registerRouter(IRouter $router): IRouterService;
+		public function registerRouter(IRouter $router);
 	}
