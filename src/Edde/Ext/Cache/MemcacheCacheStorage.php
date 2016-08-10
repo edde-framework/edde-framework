@@ -31,7 +31,7 @@
 
 		public function load($id) {
 			$this->usse();
-			return $this->memcache->get($id);
+			return ($item = $this->memcache->get($id)) === false ? null : $item;
 		}
 
 		public function invalidate() {
