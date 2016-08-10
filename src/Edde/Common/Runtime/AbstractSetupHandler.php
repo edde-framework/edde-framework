@@ -6,6 +6,7 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Runtime\ISetupHandler;
+	use Edde\Api\Runtime\RuntimeException;
 	use Edde\Api\Usable\IUsable;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Container\Factory\FactoryFactory;
@@ -40,13 +41,13 @@
 
 		private function onFactorySetup(IFactory $factory, callable $callback) {
 			$factory->onSetup(function (IContainer $container, $instance) use ($callback) {
-				if ($instance instanceof IUsable) {
-					$instance->onSetup(function () use ($container, $callback, $instance) {
-						return $container->call($callback, $instance);
-					});
-					return;
+				if (($instance instanceof IUsable) === false) {
+					throw new RuntimeException(sprintf('Deffered class must implement [%s] interface.', IUsable::class));
 				}
-				$container->call($callback);
+				/** @var $instance IUsable */
+				$instance->onSetup(function () use ($container, $callback, $instance) {
+					return $container->call($callback, $instance);
+				});
 			});
 		}
 
