@@ -3,7 +3,9 @@
 
 	use App\AppSetupHandler;
 	use Edde\Api\Application\IApplication;
+	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\File\IRootDirectory;
+	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\Runtime\Runtime;
 	use Tracy\Debugger;
@@ -18,7 +20,7 @@
 	$factoryList = [
 		IRootDirectory::class => new RootDirectory(__DIR__),
 	];
-//	$cacheFactory = new CacheFactory(__DIR__, $factoryList[ICacheStorage::class] = new FileCacheStorage(new CacheDirectory(__DIR__ . '/temp/cache')));
+	$cacheFactory = new CacheFactory(__DIR__, $factoryList[ICacheStorage::class] = new MemcacheCacheStorage());
 	$cacheFactory = null;
 	Runtime::execute(AppSetupHandler::create($cacheFactory, $factoryList), function (IApplication $application) {
 		$application->run();
