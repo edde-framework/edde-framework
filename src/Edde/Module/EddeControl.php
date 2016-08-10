@@ -91,7 +91,7 @@
 		public function handleOnRebuildCrates() {
 			$this->usse();
 			try {
-				$this->crateGenerator->generate();
+				$this->crateGenerator->generate(true);
 				$this->message->addClass('success')
 					->setText('crates has been rebuilt');
 			} catch (EddeException $e) {

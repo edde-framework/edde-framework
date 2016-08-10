@@ -32,7 +32,11 @@
 		}
 
 		public function handle(string $url, string $mime = null): INode {
-			return $this->getHandler($resource = new Resource(Url::create($url)), $mime)
+			return $this->resource($resource = new Resource(Url::create($url)), $mime);
+		}
+
+		public function resource(IResource $resource, string $mime = null): INode {
+			return $this->getHandler($resource, $mime)
 				->handle($resource);
 		}
 

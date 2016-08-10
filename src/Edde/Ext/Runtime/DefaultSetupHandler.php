@@ -44,6 +44,7 @@
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Container\Factory\FactoryFactory;
+	use Edde\Common\Crate\Crate;
 	use Edde\Common\Crate\CrateDirectory;
 	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Crate\CrateGenerator;
@@ -160,6 +161,8 @@
 				ILinkFactory::class => LinkFactory::class,
 
 				InitialStorageUpgrade::class,
+
+				Crate::class,
 			], $factoryList));
 			$setupHandler->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
 				$routerService->registerRouter($container->create(CliRouter::class));

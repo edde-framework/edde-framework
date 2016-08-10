@@ -13,10 +13,12 @@
 		 *
 		 * @return string[] array of crates with dependencies (key is crate FQN)
 		 */
-		public function compile(ISchema $schema);
+		public function compile(ISchema $schema): array;
 
 		/**
-		 * @return $this
+		 * @param bool $force
+		 *
+		 * @return ICrateGenerator
 		 */
-		public function generate();
+		public function generate(bool $force = false): ICrateGenerator;
 	}

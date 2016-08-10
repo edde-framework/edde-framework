@@ -42,4 +42,12 @@
 		 * @return INode
 		 */
 		public function file(string $file, string $mime = null): INode;
+
+		/**
+		 * @param IResource $resource
+		 * @param string|null $mime
+		 *
+		 * @return INode
+		 */
+		public function resource(IResource $resource, string $mime = null): INode;
 	}

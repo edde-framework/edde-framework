@@ -12,6 +12,7 @@
 		static protected $mimeTypeList = [
 			'xml' => 'text/xml',
 			'json' => 'application/json',
+			'csv' => 'text/csv',
 		];
 
 		/**

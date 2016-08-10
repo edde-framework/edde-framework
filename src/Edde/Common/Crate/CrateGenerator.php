@@ -58,9 +58,9 @@
 			$this->factoryManager = $factoryManager;
 		}
 
-		public function generate() {
+		public function generate(bool $force = false): ICrateGenerator {
 			$this->usse();
-			if (($crateList = $this->cache->load('crate-list', [])) === []) {
+			if (($crateList = $this->cache->load('crate-list', [])) === [] || $force === true) {
 				$this->crateDirectory->purge();
 				foreach ($this->schemaManager->getSchemaList() as $schema) {
 					$crateList[] = $schemaName = $schema->getSchemaName();
@@ -84,10 +84,11 @@
 			return $this;
 		}
 
-		public function compile(ISchema $schema) {
+		public function compile(ISchema $schema): array {
 			$this->usse();
 			$sourceList = [];
 			$source[] = "<?php\n";
+			$source[] = "\tdeclare(strict_types = 1);\n\n";
 			if (($namespace = $schema->getNamespace()) !== '') {
 				$source[] = "\tnamespace $namespace;\n\n";
 			}

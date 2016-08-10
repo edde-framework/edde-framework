@@ -65,6 +65,7 @@
 					return null;
 				}
 			}
+			$action = StringUtils::camelize($action);
 			$method = 'action' . $action;
 			$crateList = [];
 			if ($this->httpRequest->isMethod('POST')) {

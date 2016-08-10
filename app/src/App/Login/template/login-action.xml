@@ -1,9 +1,0 @@
-<html>
-	<schema name="login" schema="App\Login\LoginCrate"/>
-
-	<div id="login">
-		<text property="login::login"/>
-		<password property="login::password"/>
-		<button value="login" bind="login" action="OnLogin"/>
-	</div>
-</html>
