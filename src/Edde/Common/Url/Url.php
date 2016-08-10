@@ -42,7 +42,7 @@
 		protected $fragment = '';
 
 		static public function create($url = null) {
-			$self = new self();
+			$self = new static();
 			if ($url !== null) {
 				$self->build($url);
 			}
