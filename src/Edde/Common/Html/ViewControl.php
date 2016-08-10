@@ -10,6 +10,7 @@
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Html\Document\DocumentControl;
 	use Edde\Common\Html\Document\MetaControl;
+	use Edde\Common\Resource\FileResource;
 	use Edde\Common\Response\HtmlResponse;
 
 	/**
@@ -57,13 +58,25 @@
 			return $this;
 		}
 
-		public function addStyleSheet(IResource $resource) {
+		public function addStyleSheet(string $file) {
+			$this->usse();
+			$this->styleSheetList->addResource(new FileResource($file));
+			return $this;
+		}
+
+		public function addStyleSheetResource(IResource $resource) {
 			$this->usse();
 			$this->styleSheetList->addResource($resource);
 			return $this;
 		}
 
-		public function addJavaScript(IResource $resource) {
+		public function addJavaScript(string $file) {
+			$this->usse();
+			$this->javaScriptList->addResource(new FileResource($file));
+			return $this;
+		}
+
+		public function addJavaScriptResource(IResource $resource) {
 			$this->usse();
 			$this->javaScriptList->addResource($resource);
 			return $this;
