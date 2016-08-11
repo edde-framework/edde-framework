@@ -28,18 +28,27 @@
 			$this->schemaManager = $schemaManager;
 		}
 
+		public function createList(array $sourceList, string $name): array {
+			$crateList = [];
+			foreach ($sourceList as $source) {
+				$crateList[] = $this->crate($source, $name);
+			}
+			return $crateList;
+		}
+
+		public function crate(array $source, string $name): ICrate {
+			$schema = $this->schemaManager->getSchema($name);
+			/** @var $crate ICrate */
+			$crate = $this->container->create($schema->getSchemaName());
+			$crate->setSchema($schema);
+			$crate->push($source);
+			return $crate;
+		}
+
 		public function build(array $crateList) {
 			$crates = [];
 			foreach ($crateList as $schema => $source) {
-				$schema = $this->schemaManager->getSchema($schema);
-				if ($this->container->has($class = $schema->getSchemaName()) === false) {
-					$class = Crate::class;
-				}
-				/** @var $crate ICrate */
-				$crate = $this->container->create($class);
-				$crate->setSchema($schema);
-				$crate->push($source);
-				$crates[] = $crate;
+				$crates[] = $this->crate($source, $schema);
 			}
 			return $crates;
 		}
