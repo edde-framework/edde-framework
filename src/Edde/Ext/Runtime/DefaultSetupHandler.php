@@ -174,6 +174,9 @@
 			$setupHandler->onSetup(ISchemaManager::class, function (ISchemaManager $schemaManager) {
 				$schemaManager->addSchema(new ResourceSchema());
 			});
+			$setupHandler->onSetup(ICrateGenerator::class, function (ISchemaManager $schemaManager, ICrateGenerator $crateGenerator) {
+				$crateGenerator->excludeSchema($schemaManager->getSchema(ResourceStorable::class));
+			});
 			$setupHandler->onSetup(IResourceManager::class, function (IContainer $container, IResourceManager $resourceManager) {
 				$resourceManager->registerResourceHandler($container->create(XmlResourceHandler::class));
 				$resourceManager->registerResourceHandler($container->create(JsonResourceHandler::class));
