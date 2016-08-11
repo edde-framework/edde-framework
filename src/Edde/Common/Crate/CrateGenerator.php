@@ -67,8 +67,8 @@
 					if (class_exists($schemaName)) {
 						continue;
 					}
+					FileUtils::createDir($path = FileUtils::normalize($this->crateDirectory->getDirectory() . '/' . $schema->getNamespace()));
 					foreach ($this->compile($schema) as $name => $source) {
-						FileUtils::createDir($path = FileUtils::normalize(($this->crateDirectory->getDirectory() . '/' . $schema->getNamespace())));
 						file_put_contents($path . '/' . $schema->getName() . '.php', $source);
 					}
 				}
