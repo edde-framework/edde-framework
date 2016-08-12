@@ -80,10 +80,6 @@
 		}
 
 		public function getIterator() {
-			$handle = fopen($this->url->getAbsoluteUrl(), 'r');
-			while ($line = fgets($handle)) {
-				yield $line;
-			}
-			fclose($handle);
+			throw new ResourceException(sprintf('Iterator is not supported on raw [%s].', static::class));
 		}
 	}

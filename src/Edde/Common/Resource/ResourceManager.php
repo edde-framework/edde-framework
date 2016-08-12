@@ -8,6 +8,7 @@
 	use Edde\Api\Resource\IResourceHandler;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\ResourceManagerException;
+	use Edde\Common\File\File;
 	use Edde\Common\Url\Url;
 	use Edde\Common\Usable\AbstractUsable;
 
@@ -28,11 +29,7 @@
 		}
 
 		public function file(string $file, string $mime = null): INode {
-			return $this->handle("file:///$file", $mime);
-		}
-
-		public function handle(string $url, string $mime = null): INode {
-			return $this->resource($resource = new Resource(Url::create($url)), $mime);
+			return $this->resource(new File($file), $mime);
 		}
 
 		public function resource(IResource $resource, string $mime = null): INode {
@@ -46,6 +43,10 @@
 				throw new ResourceManagerException(sprintf('Requested unknown handler for a mime type [%s] of resource [%s].', $mime, (string)$resource->getUrl()));
 			}
 			return $this->handlerList[$mime];
+		}
+
+		public function handle(string $url, string $mime = null): INode {
+			return $this->resource($resource = new Resource(Url::create($url)), $mime);
 		}
 
 		protected function prepare() {

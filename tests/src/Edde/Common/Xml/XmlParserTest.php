@@ -4,7 +4,7 @@
 	namespace Edde\Common\Xml;
 
 	use Edde\Api\Xml\IXmlParser;
-	use Edde\Common\Resource\FileResource;
+	use Edde\Common\File\File;
 	use Edde\Common\Resource\ResourceManager;
 	use phpunit\framework\TestCase;
 
@@ -111,7 +111,7 @@
 		}
 
 		public function testMimeType() {
-			$file = new FileResource(__DIR__ . '/assets/simple.xml');
+			$file = new File(__DIR__ . '/assets/simple.xml');
 			self::assertEquals('text/xml', $file->getMime());
 		}
 

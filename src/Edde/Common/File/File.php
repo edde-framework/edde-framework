@@ -10,6 +10,15 @@
 
 	class File extends Resource implements IFile {
 		/**
+		 * @var bool
+		 */
+		private $autoClose = true;
+		/**
+		 * @var resource
+		 */
+		private $handle;
+
+		/**
 		 * @param string|IUrl $file
 		 * @param string|null $base
 		 *
@@ -24,5 +33,105 @@
 				$this->name = $this->url->getResourceName();
 			}
 			return $this->name;
+		}
+
+		public function setAutoClose(bool $autoClose = true): IFile {
+			$this->autoClose = $autoClose;
+			return $this;
+		}
+
+		public function openForAppend(): IFile {
+			$this->open('a');
+			return $this;
+		}
+
+		public function open(string $mode): IFile {
+			if ($this->isOpen()) {
+				throw new FileException(sprintf('Current file [%s] is already opened.', $this->url));
+			}
+			if (($this->handle = fopen($this->url->getPath(), $mode)) === false) {
+				throw new FileException(sprintf('Cannot open file [%s (%s)].', $this->url->getPath(), $mode));
+			}
+			return $this;
+		}
+
+		public function isOpen(): bool {
+			return $this->handle !== null;
+		}
+
+		public function write($write): IFile {
+			if ($this->isOpen() === false) {
+				$this->openForWrite();
+			}
+			$written = fwrite($this->getHandle(), $write);
+			if ($written !== ($lengh = strlen($write))) {
+				throw new FileException(sprintf('Failed to write into file [%s]: expected %d bytes, %d has been written.', $this->url->getPath(), $lengh, $written));
+			}
+			return $this;
+		}
+
+		public function openForWrite(): IFile {
+			FileUtils::createDir(dirname($this->url->getPath()));
+			$this->open('w+');
+			return $this;
+		}
+
+		public function getHandle() {
+			if ($this->isOpen() === false) {
+				throw new FileException(sprintf('Current file [%s] is not opened or has been already closed.', $this->url->getPath()));
+			}
+			return $this->handle;
+		}
+
+		public function delete(): IFile {
+			if ($this->isOpen()) {
+				$this->close();
+			}
+			FileUtils::delete($this->url->getPath());
+			return $this;
+		}
+
+		public function close(): IFile {
+			fflush($handle = $this->getHandle());
+			fclose($handle);
+			$this->handle = null;
+			return $this;
+		}
+
+		public function rename(string $rename): IFile {
+			FileUtils::rename($this->url->getPath(), $rename);
+			return $this;
+		}
+
+		public function getIterator() {
+			if ($this->isOpen() === false) {
+				$this->openForRead();
+			}
+			$this->rewind();
+			$count = 0;
+			while ($line = $this->read()) {
+				yield $count++ => $line;
+			}
+		}
+
+		public function openForRead(): IFile {
+			$this->open('r+');
+			return $this;
+		}
+
+		public function rewind(): IFile {
+			rewind($this->getHandle());
+			return $this;
+		}
+
+		public function read() {
+			if (($line = fgets($this->getHandle())) === false && $this->isAutoClose()) {
+				$this->close();
+			}
+			return $line;
+		}
+
+		public function isAutoClose(): bool {
+			return $this->autoClose;
 		}
 	}
