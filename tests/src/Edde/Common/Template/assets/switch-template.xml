@@ -1,0 +1,3 @@
+<control attribute="choo">
+	<div switch="switch-me()" include="include-switch.xml"/>
+</control>

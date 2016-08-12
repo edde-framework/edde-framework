@@ -1,0 +1,4 @@
+<control>
+	<div t:case="foo"/>
+	<div t:case="bar"/>
+</control>

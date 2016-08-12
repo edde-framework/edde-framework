@@ -1,13 +1,14 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Resource;
+	namespace Edde\Common\File;
 
 	use Edde\Api\File\FileException;
+	use Edde\Api\File\IFile;
 	use Edde\Api\Url\IUrl;
-	use Edde\Common\File\FileUtils;
+	use Edde\Common\Resource\Resource;
 
-	class FileResource extends Resource {
+	class File extends Resource implements IFile {
 		/**
 		 * @param string|IUrl $file
 		 * @param string|null $base

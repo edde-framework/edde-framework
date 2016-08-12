@@ -14,8 +14,8 @@
 	use Edde\Api\Resource\Storage\IStorageDirectory;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\File\Directory;
+	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
-	use Edde\Common\Resource\FileResource;
 	use Edde\Common\Usable\AbstractUsable;
 
 	/**
@@ -89,7 +89,7 @@
 				throw new ResourceException(sprintf('Cannot create store folder [%s] for the resource [%s].', $directory, $url), 0, $e);
 			}
 			FileUtils::copy($url->getAbsoluteUrl(), $file = $directory->filename($url->getResourceName()));
-			return new FileResource($file, dirname($this->storageDirectory->getDirectory()));
+			return new File($file, dirname($this->storageDirectory->getDirectory()));
 		}
 
 		protected function prepare() {

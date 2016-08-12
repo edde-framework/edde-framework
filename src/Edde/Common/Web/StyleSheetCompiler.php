@@ -11,8 +11,8 @@
 	use Edde\Api\Web\WebException;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Container\LazyInjectTrait;
+	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
-	use Edde\Common\Resource\FileResource;
 	use Edde\Common\Resource\ResourceList;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Url\Url;
@@ -63,7 +63,7 @@
 						if (($file = FileUtils::realpath($resourcePath . '/' . $path)) === false) {
 							throw new WebException(sprintf('Cannot locate css [%s] resource [%s] on the filesystem.', $source, $urlList));
 						}
-						$resource = $this->fileStorage->store(new FileResource($file));
+						$resource = $this->fileStorage->store(new File($file));
 						$current = str_replace($item, '"' . ($pathList[$path] = $resource->getRelativePath()) . '"', $current);
 					}
 					$content[] = $current;

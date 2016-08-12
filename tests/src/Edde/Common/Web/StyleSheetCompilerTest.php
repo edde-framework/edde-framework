@@ -17,10 +17,10 @@
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\Directory;
+	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\File\TempDirectory;
-	use Edde\Common\Resource\FileResource;
 	use Edde\Common\Resource\ResourceIndex;
 	use Edde\Common\Resource\ResourceList;
 	use Edde\Common\Resource\ResourceManager;
@@ -98,9 +98,9 @@
 			$styleSheetCompiler->injectCacheFactory(new CacheFactory(__DIR__, new FileCacheStorage(new CacheDirectory(__DIR__ . '/temp'))));
 
 			$resourceList = new ResourceList();
-			$resourceList->addResource(new FileResource(__DIR__ . '/assets/css/font-awesome.css'));
-			$resourceList->addResource(new FileResource(__DIR__ . '/assets/css/font-awesome.min.css'));
-			$resourceList->addResource(new FileResource(__DIR__ . '/assets/css/simple-css.css'));
+			$resourceList->addResource(new File(__DIR__ . '/assets/css/font-awesome.css'));
+			$resourceList->addResource(new File(__DIR__ . '/assets/css/font-awesome.min.css'));
+			$resourceList->addResource(new File(__DIR__ . '/assets/css/simple-css.css'));
 
 			$resource = $styleSheetCompiler->compile($resourceList);
 

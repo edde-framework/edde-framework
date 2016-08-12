@@ -1,4 +1,0 @@
-<html>
-	<div class="static-one"/>
-	<div class="foo" include="$file"/>
-</html>

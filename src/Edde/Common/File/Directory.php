@@ -5,7 +5,6 @@
 
 	use Edde\Api\File\DirectoryException;
 	use Edde\Api\File\IDirectory;
-	use Edde\Common\Resource\FileResource;
 	use Edde\Common\Usable\AbstractUsable;
 	use RecursiveDirectoryIterator;
 	use RecursiveIteratorIterator;
@@ -36,7 +35,7 @@
 		public function save($name, $content) {
 			$this->usse();
 			file_put_contents($file = ($this->directory . '/' . $name), $content);
-			return new FileResource(FileUtils::url($file));
+			return new File(FileUtils::url($file));
 		}
 
 		public function get($file) {
@@ -82,7 +81,7 @@
 		public function getIterator() {
 			$this->usse();
 			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->directory, RecursiveDirectoryIterator::SKIP_DOTS)) as $splFileInfo) {
-				yield new FileResource((string)$splFileInfo);
+				yield new File((string)$splFileInfo);
 			}
 		}
 

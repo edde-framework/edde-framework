@@ -9,8 +9,8 @@
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Api\Xml\XmlParserException;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\File\File;
 	use Edde\Common\Iterator\Iterator;
-	use Edde\Common\Resource\FileResource;
 	use Edde\Common\Strings\StringUtils;
 
 	class XmlParser extends AbstractObject implements IXmlParser {
@@ -25,7 +25,7 @@
 		const XML_TYPE_CLOSE_COMMENT = 128;
 
 		public function file(string $file, IXmlHandler $xmlHandler): IXmlParser {
-			return $this->parse(new FileResource($file), $xmlHandler);
+			return $this->parse(new File($file), $xmlHandler);
 		}
 
 		public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParser {

@@ -8,9 +8,9 @@
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Container\LazyInjectTrait;
+	use Edde\Common\File\File;
 	use Edde\Common\Html\Document\DocumentControl;
 	use Edde\Common\Html\Document\MetaControl;
-	use Edde\Common\Resource\FileResource;
 	use Edde\Common\Response\HtmlResponse;
 
 	/**
@@ -60,7 +60,7 @@
 
 		public function addStyleSheet(string $file) {
 			$this->usse();
-			$this->styleSheetList->addResource(new FileResource($file));
+			$this->styleSheetList->addResource(new File($file));
 			return $this;
 		}
 
@@ -72,7 +72,7 @@
 
 		public function addJavaScript(string $file) {
 			$this->usse();
-			$this->javaScriptList->addResource(new FileResource($file));
+			$this->javaScriptList->addResource(new File($file));
 			return $this;
 		}
 

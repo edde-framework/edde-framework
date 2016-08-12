@@ -4,7 +4,6 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\IMacro;
-	use Edde\Api\Template\ITemplate;
 	use Edde\Common\AbstractObject;
 
 	abstract class AbstractMacro extends AbstractObject implements IMacro {
@@ -24,12 +23,11 @@
 			return $this->macroList;
 		}
 
-		public function run(ITemplate $template, INode $root, ...$parameterList) {
+		public function run(INode $root, ...$parameterList) {
 			return call_user_func_array([
 				$this,
 				'execute',
 			], array_merge([
-				$template,
 				$root,
 			], $parameterList));
 		}

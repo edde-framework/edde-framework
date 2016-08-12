@@ -1,6 +1,0 @@
-<html>
-	<schema name="login" schema="Foo\Bar\LoginSchema"/>
-
-	<text property="login::login"/>
-	<password property="login::password"/>
-</html>
