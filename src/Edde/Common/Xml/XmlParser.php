@@ -10,6 +10,7 @@
 	use Edde\Api\Xml\XmlParserException;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Iterator\Iterator;
+	use Edde\Common\Resource\FileResource;
 	use Edde\Common\Strings\StringUtils;
 
 	class XmlParser extends AbstractObject implements IXmlParser {
@@ -19,6 +20,13 @@
 		const XML_TYPE_SHORTTAG = 4;
 		const XML_TYPE_DOCTYPE = 8;
 		const XML_TYPE_CDATA = 16;
+		const XML_TYPE_COMMENT = 32;
+		const XML_TYPE_OPEN_COMMENT = 64;
+		const XML_TYPE_CLOSE_COMMENT = 128;
+
+		public function file(string $file, IXmlHandler $xmlHandler): IXmlParser {
+			return $this->parse(new FileResource($file), $xmlHandler);
+		}
 
 		public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParser {
 			$value = '';
@@ -58,6 +66,20 @@
 						$type = self::XML_TYPE_DOCTYPE;
 						$name .= $char;
 						break;
+					case '-':
+						switch ($type) {
+							case self::XML_TYPE_DOCTYPE:
+								$type = self::XML_TYPE_OPEN_COMMENT;
+								break;
+							case self::XML_TYPE_OPEN_COMMENT:
+								$iterator->next();
+								$this->parseComment($iterator->setContinue());
+								$name = null;
+								break;
+							default:
+								$name .= $char;
+						}
+						break;
 					case '/':
 						$type = ($last !== '<' ? self::XML_TYPE_SHORTTAG : self::XML_TYPE_CLOSETAG);
 						break;
@@ -88,6 +110,33 @@
 						$name .= $char;
 				}
 				$last = $char;
+			}
+		}
+
+		protected function parseComment(IIterator $iterator) {
+			$type = self::XML_TYPE_COMMENT;
+			$close = false;
+			foreach ($iterator as $char) {
+				switch ($char) {
+					case '-':
+						switch ($type) {
+							case self::XML_TYPE_COMMENT:
+								$type = self::XML_TYPE_CLOSE_COMMENT;
+								break;
+							case self::XML_TYPE_CLOSE_COMMENT:
+								$close = true;
+								break;
+						}
+						break;
+					case '>':
+						if ($close) {
+							return;
+						}
+						break;
+					default:
+						$close = false;
+						$type = self::XML_TYPE_COMMENT;
+				}
 			}
 		}
 

@@ -17,7 +17,7 @@
 		protected $xmlParser;
 
 		public function testSimple() {
-			$this->xmlParser->parse(new FileResource(__DIR__ . '/assets/simple.xml'), $handler = new \TestXmlHandler());
+			$this->xmlParser->file(__DIR__ . '/assets/simple.xml', $handler = new \TestXmlHandler());
 			self::assertEquals([
 				[
 					'root',
@@ -27,7 +27,7 @@
 		}
 
 		public function testSimpleShort() {
-			$this->xmlParser->parse(new FileResource(__DIR__ . '/assets/simple-short.xml'), $handler = new \TestXmlHandler());
+			$this->xmlParser->file(__DIR__ . '/assets/simple-short.xml', $handler = new \TestXmlHandler());
 			self::assertEquals([
 				[
 					'root',
@@ -37,7 +37,7 @@
 		}
 
 		public function testSimpleAttribute() {
-			$this->xmlParser->parse(new FileResource(__DIR__ . '/assets/simple-attribute.xml'), $handler = new \TestXmlHandler());
+			$this->xmlParser->file(__DIR__ . '/assets/simple-attribute.xml', $handler = new \TestXmlHandler());
 			self::assertEquals([
 				[
 					'root',
@@ -51,7 +51,7 @@
 		}
 
 		public function testSimpleShortAttribute() {
-			$this->xmlParser->parse(new FileResource(__DIR__ . '/assets/simple-short-attribute.xml'), $handler = new \TestXmlHandler());
+			$this->xmlParser->file(__DIR__ . '/assets/simple-short-attribute.xml', $handler = new \TestXmlHandler());
 			self::assertEquals([
 				[
 					'root',
@@ -65,7 +65,7 @@
 		}
 
 		public function testBitLessSimple() {
-			$this->xmlParser->parse(new FileResource(__DIR__ . '/assets/a-bit-less-simple.xml'), $handler = new \TestXmlHandler());
+			$this->xmlParser->file(__DIR__ . '/assets/a-bit-less-simple.xml', $handler = new \TestXmlHandler());
 			self::assertEquals([
 				[
 					'root',
@@ -91,6 +91,20 @@
 				],
 				[
 					'tag-with-value',
+					[],
+				],
+			], $handler->getTagList());
+		}
+
+		public function testComment() {
+			$this->xmlParser->file(__DIR__ . '/assets/comment-test.xml', $handler = new \TestXmlHandler());
+			self::assertEquals([
+				[
+					'node',
+					[],
+				],
+				[
+					'poo',
 					[],
 				],
 			], $handler->getTagList());
