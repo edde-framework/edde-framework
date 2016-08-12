@@ -16,6 +16,11 @@
 		public function setAutoClose(bool $autoClose = true): IFile;
 
 		/**
+		 * @return string
+		 */
+		public function getPath(): string;
+
+		/**
 		 * @return bool
 		 */
 		public function isAutoClose(): bool;

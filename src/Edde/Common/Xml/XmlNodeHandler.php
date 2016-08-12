@@ -20,6 +20,13 @@
 		 */
 		protected $current;
 
+		/**
+		 * @param INode $node
+		 */
+		public function __construct(INode $node = null) {
+			$this->current = $this->node = $node;
+		}
+
 		public function onTextEvent(string $text) {
 			$this->current->setValue($text);
 		}

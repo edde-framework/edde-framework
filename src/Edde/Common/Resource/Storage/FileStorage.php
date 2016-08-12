@@ -84,7 +84,7 @@
 			$url = $resource->getUrl();
 			$directory = new Directory($this->storageDirectory->getDirectory() . '/' . sha1(dirname($url->getPath())));
 			try {
-				$directory->make();
+				$directory->create();
 			} catch (DirectoryException $e) {
 				throw new ResourceException(sprintf('Cannot create store folder [%s] for the resource [%s].', $directory, $url), 0, $e);
 			}
@@ -93,7 +93,7 @@
 		}
 
 		protected function prepare() {
-			$this->storageDirectory->make();
+			$this->storageDirectory->create();
 			if (strpos($this->storageDirectory->getDirectory(), $this->rootDirectory->getDirectory()) === false) {
 				throw new ResourceException(sprintf('Storage path [%s] is not in the given root [%s].', $this->storageDirectory, $this->rootDirectory));
 			}

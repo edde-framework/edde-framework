@@ -83,6 +83,12 @@
 			return explode('/', ltrim($this->path, '/'));
 		}
 
+		public function getBasePath(): string {
+			$pathList = $this->getPathList();
+			array_pop($pathList);
+			return implode('/', $pathList);
+		}
+
 		public function getExtension() {
 			$path = $this->getPath();
 			$subpath = substr($path, strrpos($path, '/'));

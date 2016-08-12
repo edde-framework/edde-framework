@@ -50,11 +50,20 @@
 		public function filename($file);
 
 		/**
+		 * return a File object
+		 *
+		 * @param string $file
+		 *
+		 * @return IFile
+		 */
+		public function file(string $file): IFile;
+
+		/**
 		 * create all directories until the current one
 		 *
 		 * @return $this
 		 */
-		public function make();
+		public function create();
 
 		/**
 		 * recreate directory in place effectively clean all it's contents

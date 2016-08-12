@@ -5,6 +5,7 @@
 
 	use Edde\Api\File\DirectoryException;
 	use Edde\Api\File\IDirectory;
+	use Edde\Api\File\IFile;
 	use Edde\Common\Usable\AbstractUsable;
 	use RecursiveDirectoryIterator;
 	use RecursiveIteratorIterator;
@@ -51,7 +52,11 @@
 			return $this->directory;
 		}
 
-		public function make() {
+		public function file(string $file): IFile {
+			return new File($this->filename($file));
+		}
+
+		public function create() {
 			if (is_dir($this->directory) === false && @mkdir($this->directory, 0777, true) && is_dir($this->directory) === false) {
 				throw new DirectoryException(sprintf('Cannot create directory [%s].', $this->directory));
 			}

@@ -69,6 +69,15 @@
 		public function setAttribute($attribute, $value);
 
 		/**
+		 * set list of attributes
+		 *
+		 * @param array $attributeList
+		 *
+		 * @return IHtmlControl
+		 */
+		public function setAttributeList(array $attributeList): IHtmlControl;
+
+		/**
 		 * return attribute by the given namw
 		 *
 		 * @param string $name

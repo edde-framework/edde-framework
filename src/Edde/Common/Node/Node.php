@@ -15,6 +15,7 @@
 		 */
 		protected $name;
 		protected $attributeList = [];
+		protected $attributeNamespaceList = [];
 		/**
 		 * @var mixed
 		 */
@@ -92,16 +93,33 @@
 			return $this->attributeList[$name] ?? $default;
 		}
 
-		public function getAttributeList() {
-			return $this->attributeList;
+		public function hasAttributeList(string $namespace): bool {
+			$this->getAttributeList($namespace);
+			return empty($this->attributeNamespaceList[$namespace]) === false;
+		}
+
+		public function getAttributeList(string $namespace = null): array {
+			if (isset($this->attributeNamespaceList[$namespace]) === false) {
+				$key = $namespace ? "$namespace:" : '';
+				$this->attributeNamespaceList[$namespace] = [];
+				foreach ($this->attributeList as $name => $value) {
+					if ($key !== '' && strpos($name, $key) === false) {
+						continue;
+					}
+					$this->attributeNamespaceList[$namespace][str_replace($key, '', $name)] = $value;
+				}
+			}
+			return $this->attributeNamespaceList[$namespace];
 		}
 
 		public function setAttributeList(array $attributeList) {
+			$this->attributeNamespaceList = [];
 			$this->attributeList = $attributeList;
 			return $this;
 		}
 
 		public function addAttributeList(array $attributeList) {
+			$this->attributeNamespaceList = [];
 			foreach ($attributeList as $name => $value) {
 				$this->setAttribute($name, $value);
 			}
@@ -109,6 +127,7 @@
 		}
 
 		public function setAttribute($name, $value) {
+			$this->attributeNamespaceList = [];
 			$this->attributeList[$name] = $value;
 			return $this;
 		}

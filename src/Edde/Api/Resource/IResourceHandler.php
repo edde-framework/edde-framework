@@ -17,8 +17,9 @@
 		 * handle the given resource; output should be always INode; for example loaded image can have name as file name and value as opened handler
 		 *
 		 * @param IResource $resource
+		 * @param INode $root
 		 *
 		 * @return INode
 		 */
-		public function handle(IResource $resource): INode;
+		public function handle(IResource $resource, INode $root = null): INode;
 	}

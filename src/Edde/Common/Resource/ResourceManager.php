@@ -28,13 +28,13 @@
 			return $this;
 		}
 
-		public function file(string $file, string $mime = null): INode {
-			return $this->resource(new File($file), $mime);
+		public function file(string $file, string $mime = null, INode $root = null): INode {
+			return $this->resource(new File($file), $mime, $root);
 		}
 
-		public function resource(IResource $resource, string $mime = null): INode {
+		public function resource(IResource $resource, string $mime = null, INode $root = null): INode {
 			return $this->getHandler($resource, $mime)
-				->handle($resource);
+				->handle($resource, $root);
 		}
 
 		public function getHandler(IResource $resource, string $mime = null): IResourceHandler {
@@ -45,8 +45,8 @@
 			return $this->handlerList[$mime];
 		}
 
-		public function handle(string $url, string $mime = null): INode {
-			return $this->resource($resource = new Resource(Url::create($url)), $mime);
+		public function handle(string $url, string $mime = null, INode $root = null): INode {
+			return $this->resource($resource = new Resource(Url::create($url)), $mime, $root);
 		}
 
 		protected function prepare() {

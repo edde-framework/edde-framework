@@ -30,8 +30,8 @@
 			];
 		}
 
-		public function handle(IResource $resource): INode {
-			$this->xmlParser->parse($resource, $handler = new XmlNodeHandler());
+		public function handle(IResource $resource, INode $root = null): INode {
+			$this->xmlParser->parse($resource, $handler = new XmlNodeHandler($root));
 			return $handler->getNode();
 		}
 	}

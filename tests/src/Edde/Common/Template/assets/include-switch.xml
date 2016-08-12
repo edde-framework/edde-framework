@@ -1,4 +1,8 @@
 <control>
-	<div t:case="foo"/>
-	<div t:case="bar"/>
+	<div m:case="foo" class="the-one"/>
+	<div m:case="bar" class="the-second-bar"/>
+	<div class="dummy-div">
+		<div m:case="bar" class="the-second"/>
+		<div m:case="foo" class="the-one-foo"/>
+	</div>
 </control>

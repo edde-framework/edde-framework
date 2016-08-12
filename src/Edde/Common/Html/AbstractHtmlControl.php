@@ -59,7 +59,7 @@
 			return $this;
 		}
 
-		public function setAttributeList(array $attributeList) {
+		public function setAttributeList(array $attributeList): IHtmlControl {
 			$this->usse();
 			$this->node->setAttributeList($attributeList);
 			return $this;

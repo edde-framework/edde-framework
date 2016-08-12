@@ -60,6 +60,6 @@
 		}
 
 		protected function prepare() {
-			$this->cacheDirectory->make();
+			$this->cacheDirectory->create();
 		}
 	}

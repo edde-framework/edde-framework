@@ -3,6 +3,7 @@
 
 	namespace Edde\Api\Template;
 
+	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Usable\IUsable;
 
@@ -20,6 +21,16 @@
 		 * @return ITemplateManager
 		 */
 		public function registerMacroList(array $macroList): ITemplateManager;
+
+		/**
+		 * @param INode $root
+		 * @param ITemplate $template
+		 * @param IResource $resource
+		 * @param array $parameterList
+		 *
+		 * @return mixed
+		 */
+		public function macro(INode $root, ITemplate $template, IResource $resource, ...$parameterList);
 
 		/**
 		 * @param IResource $resource

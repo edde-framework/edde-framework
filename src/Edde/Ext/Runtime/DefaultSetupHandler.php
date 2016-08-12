@@ -35,6 +35,7 @@
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Template\ITemplate;
+	use Edde\Api\Template\ITemplateDirectory;
 	use Edde\Api\Template\ITemplateFactory;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
@@ -63,6 +64,7 @@
 	use Edde\Common\Runtime\SetupHandler;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
+	use Edde\Common\Template\TemplateDirectory;
 	use Edde\Common\Template\TemplateFactory;
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Common\Web\JavaScriptCompiler;
@@ -118,6 +120,9 @@
 				},
 				IStorageDirectory::class => function (IRootDirectory $rootDirectory) {
 					return new StorageDirectory($rootDirectory->getDirectory() . '/.storage');
+				},
+				ITemplateDirectory::class => functioN (IStorageDirectory $storageDirectory) {
+					return new TemplateDirectory($storageDirectory->getDirectory() . '/template');
 				},
 				ICryptEngine::class => CryptEngine::class,
 				IScanner::class => function (IRootDirectory $rootDirectory) {

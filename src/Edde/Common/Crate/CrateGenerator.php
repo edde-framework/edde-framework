@@ -183,7 +183,7 @@
 		}
 
 		protected function prepare() {
-			$this->crateDirectory->make();
+			$this->crateDirectory->create();
 			$this->cache = $this->cacheFactory->factory(__NAMESPACE__);
 			$this->parent = Crate::class;
 		}

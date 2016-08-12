@@ -96,9 +96,20 @@
 		public function addAttributeList(array $attributeList);
 
 		/**
+		 * has this node attributes with a given namespace
+		 *
+		 * @param string $namespace
+		 *
+		 * @return bool
+		 */
+		public function hasAttributeList(string $namespace): bool;
+
+		/**
+		 * @param string $namespace
+		 *
 		 * @return array
 		 */
-		public function getAttributeList();
+		public function getAttributeList(string $namespace = null): array;
 
 		/**
 		 * @param array $metaList

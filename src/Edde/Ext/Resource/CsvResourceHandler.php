@@ -15,7 +15,7 @@
 			];
 		}
 
-		public function handle(IResource $resource): INode {
+		public function handle(IResource $resource, INode $root = null): INode {
 			$root = new Node();
 //			$handler = fopen($resource->getUrl()
 //				->getAbsoluteUrl(), 'r');

@@ -8,6 +8,7 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IDependencyFactory;
+	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\IFactoryManager;
 	use Edde\Common\Callback\Callback;
 	use Edde\Common\Usable\AbstractUsable;
@@ -39,6 +40,11 @@
 			$this->factoryManager = $factoryManager;
 			$this->dependencyFactory = $dependencyFactory;
 			$this->cacheFactory = $cacheFactory;
+		}
+
+		public function registerFactory(string $name, IFactory $factory): IContainer {
+			$this->factoryManager->registerFactory($name, $factory);
+			return $this;
 		}
 
 		public function has($name) {

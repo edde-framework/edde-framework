@@ -680,4 +680,29 @@
 			self::assertSame($node->getParent(), $alphaNode);
 			self::assertEmpty($betaNode->getNodeList());
 		}
+
+		public function testAttributeNamespace() {
+			$node = new Node(null, null, [
+				'foo' => 'bar',
+				'a:foo' => 'bar',
+				'a:too' => 'oot',
+				'b:foo' => 'foo',
+			]);
+			self::assertEquals([
+				'foo' => 'bar',
+				'too' => 'oot',
+			], $node->getAttributeList('a'));
+			self::assertEquals([
+				'foo' => 'foo',
+			], $node->getAttributeList('b'));
+			self::assertEquals([
+				'foo' => 'bar',
+				'a:foo' => 'bar',
+				'a:too' => 'oot',
+				'b:foo' => 'foo',
+			], $node->getAttributeList());
+			self::assertTrue($node->hasAttributeList('a'));
+			self::assertTrue($node->hasAttributeList('b'));
+			self::assertFalse($node->hasAttributeList('poo'));
+		}
 	}

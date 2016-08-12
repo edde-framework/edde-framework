@@ -4,6 +4,7 @@
 	namespace Edde\Api\Template;
 
 	use Edde\Api\Node\INode;
+	use Edde\Api\Resource\IResource;
 
 	interface IMacro {
 		/**
@@ -14,10 +15,13 @@
 		public function getMacroList(): array;
 
 		/**
+		 * @param ITemplateManager $templateManager
+		 * @param ITemplate $template access to current template
 		 * @param INode $root current node to process
+		 * @param IResource $resource
 		 * @param array $parameterList
 		 *
 		 * @return mixed
 		 */
-		public function run(INode $root, ...$parameterList);
+		public function run(ITemplateManager $templateManager, ITemplate $template, INode $root, IResource $resource, ...$parameterList);
 	}

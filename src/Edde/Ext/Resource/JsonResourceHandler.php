@@ -15,8 +15,8 @@
 			];
 		}
 
-		public function handle(IResource $resource): INode {
-			return $this->node($node = new Node(), json_decode($resource->get()));
+		public function handle(IResource $resource, INode $root = null): INode {
+			return $this->node($root ?: new Node(), json_decode($resource->get()));
 		}
 
 		protected function node(INode $root, $source) {

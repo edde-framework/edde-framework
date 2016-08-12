@@ -35,6 +35,10 @@
 			return $this->name;
 		}
 
+		public function getPath(): string {
+			return $this->url->getPath();
+		}
+
 		public function setAutoClose(bool $autoClose = true): IFile {
 			$this->autoClose = $autoClose;
 			return $this;

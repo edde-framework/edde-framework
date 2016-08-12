@@ -10,6 +10,16 @@
 	 */
 	interface IContainer extends IUsable {
 		/**
+		 * quickhand to IFactoryManager
+		 *
+		 * @param string $name
+		 * @param IFactory $factory
+		 *
+		 * @return IContainer
+		 */
+		public function registerFactory(string $name, IFactory $factory): IContainer;
+
+		/**
 		 * check if the given name is available (known) in a container
 		 *
 		 * @param string $name

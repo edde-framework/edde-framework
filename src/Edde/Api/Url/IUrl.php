@@ -40,6 +40,13 @@
 		public function getPathList();
 
 		/**
+		 * return path without filename (simply throw away last part of url)
+		 *
+		 * @return string
+		 */
+		public function getBasePath(): string;
+
+		/**
 		 * return last part of path, if available, as resource name (commonly filename)
 		 *
 		 * @return string
