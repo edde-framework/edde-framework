@@ -16,7 +16,6 @@
 
 		public function run(ITemplateManager $templateManager, ITemplate $template, INode $root, IFile $file, ...$parameterList) {
 			$templateFile = $template->getFile();
-			$templateFile->write(sprintf("\t\t\t\$this->styleSheetCompiler->addFile('%s');\n", $file->getDirectory()
-				->filename($root->getAttribute('src'))));
+			$templateFile->write(sprintf("\t\t\t\$this->styleSheetCompiler->addFile('%s');\n", $this->file($root->getAttribute('src'), $file)));
 		}
 	}
