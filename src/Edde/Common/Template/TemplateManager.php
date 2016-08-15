@@ -80,6 +80,10 @@
 			if ($root->hasAttributeList('m')) {
 				$attributeList = $root->getAttributeList();
 				foreach ($root->getAttributeList('m') as $attribute => $value) {
+					$macroAttributeList = $root->getAttributeList('m');
+					if (isset($macroAttributeList[$attribute]) === false) {
+						continue;
+					}
 					unset($attributeList['m:' . $attribute]);
 					$root->setAttributeList($attributeList);
 					$this->macro((new Node('m:' . $attribute, $value))->addNode($root), $template, $file);

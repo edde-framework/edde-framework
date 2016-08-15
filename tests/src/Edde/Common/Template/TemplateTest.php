@@ -20,6 +20,7 @@
 	use Edde\Common\Template\Macro\DivNodeMacro;
 	use Edde\Common\Template\Macro\IncludeNodeMacro;
 	use Edde\Common\Template\Macro\JsNodeMacro;
+	use Edde\Common\Template\Macro\SchemaNodeMacro;
 	use Edde\Common\Template\Macro\SwitchNodeMacro;
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
@@ -104,7 +105,7 @@
 		<title></title>
 	</head>
 	<body>
-		<div id="blabla"></div>
+		<div id="blabla" data-schema="Foo\Bar\Schema" data-property="bar"></div>
 		<div class="button edde-clickable" data-bind="blabla" data-control="TestDocument" data-action="Foo"></div>
 	</body>
 </html>
@@ -123,6 +124,7 @@
 				IncludeNodeMacro::class,
 				SwitchNodeMacro::class,
 				BindIdAttributeMacro::class,
+				SchemaNodeMacro::class,
 				ICryptEngine::class => CryptEngine::class,
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
@@ -137,6 +139,7 @@
 				$templateManager->registerMacro($container->create(SwitchNodeMacro::class));
 				$templateManager->registerMacro($container->create(IncludeNodeMacro::class));
 				$templateManager->registerMacro($container->create(BindIdAttributeMacro::class));
+				$templateManager->registerMacro($container->create(SchemaNodeMacro::class));
 			});
 			$this->control = $this->container->create(\TestDocument::class);
 		}

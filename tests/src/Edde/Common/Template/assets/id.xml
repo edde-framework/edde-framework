@@ -1,4 +1,5 @@
 <control>
-	<div id="blabla" m:id="foo"/>
+	<schema name="foo" schema="Foo\Bar\Schema"/>
+	<div id="blabla" m:id="foo" m:schema="foo.bar"/>
 	<button action="foo" m:bind="foo"/>
 </control>
