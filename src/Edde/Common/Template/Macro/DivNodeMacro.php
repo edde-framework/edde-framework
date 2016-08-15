@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Template\Macro;
 
+	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Template\ITemplate;
@@ -17,14 +18,14 @@
 			]);
 		}
 
-		public function run(ITemplateManager $templateManager, ITemplate $template, INode $root, IResource $resource, ...$parameterList) {
+		public function run(ITemplateManager $templateManager, ITemplate $template, INode $root, IFile $file, ...$parameterList) {
 			$file = $template->getFile();
 			$file->write(sprintf("\t\t\t\$parent = \$this->stack->top();\n", DivControl::class));
 			$file->write(sprintf("\t\t\t\$parent->addControl(\$control = \$this->container->create('%s'));\n", DivControl::class));
 			if (($attributeList = $root->getAttributeList()) !== []) {
 				$file->write(sprintf("\t\t\t\$control->setAttributeList(%s);\n", var_export($attributeList, true)));
 			}
-			$this->macro($root, $templateManager, $template, $resource);
+			$this->macro($root, $templateManager, $template, $file);
 		}
 
 		protected function macro(INode $root, ITemplateManager $templateManager, ITemplate $template, IResource $resource, ...$parameterList) {

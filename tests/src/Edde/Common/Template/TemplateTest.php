@@ -9,12 +9,18 @@
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\ITemplateDirectory;
 	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Web\IJavaScriptCompiler;
+	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Template\Macro\ControlMacro;
+	use Edde\Common\Template\Macro\CssNodeMacro;
 	use Edde\Common\Template\Macro\DivNodeMacro;
 	use Edde\Common\Template\Macro\IncludeMacro;
+	use Edde\Common\Template\Macro\JsNodeMacro;
 	use Edde\Common\Template\Macro\SwitchMacro;
+	use Edde\Common\Web\JavaScriptCompiler;
+	use Edde\Common\Web\StyleSheetCompiler;
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Common\Xml\XmlResourceHandler;
 	use Edde\Ext\Container\ContainerFactory;
@@ -76,11 +82,15 @@
 				IncludeMacro::class,
 				SwitchMacro::class,
 				ICryptEngine::class => CryptEngine::class,
+				IStyleSheetCompiler::class => StyleSheetCompiler::class,
+				IJavaScriptCompiler::class => JavaScriptCompiler::class,
 			]);
 			$this->templateManager = $this->container->create(TemplateManager::class);
 			$this->templateManager->onSetup(function (ITemplateManager $templateManager) use ($container) {
 				$templateManager->registerMacro(new ControlMacro());
 				$templateManager->registerMacro(new DivNodeMacro());
+				$templateManager->registerMacro(new CssNodeMacro());
+				$templateManager->registerMacro(new JsNodeMacro());
 				$templateManager->registerMacro($container->create(SwitchMacro::class));
 				$templateManager->registerMacro($container->create(IncludeMacro::class));
 			});

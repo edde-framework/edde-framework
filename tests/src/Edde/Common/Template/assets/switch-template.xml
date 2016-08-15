@@ -1,3 +1,6 @@
 <control attribute="choo" title="poo">
+	<css src="css/style.css"/>
+	<js src="js/some.js"/>
+
 	<div m:include="include-switch.xml" m:switch="switch-me()"/>
 </control>

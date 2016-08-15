@@ -3,8 +3,8 @@
 
 	namespace Edde\Common\Template;
 
+	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\ITemplate;
@@ -53,39 +53,40 @@
 			return $this->compile(new File($file));
 		}
 
-		public function compile(IResource $resource): ITemplate {
+		public function compile(IFile $file): ITemplate {
 			$this->usse();
-			if ((($root = $this->resourceManager->resource($resource)) instanceof INode) === false) {
-				throw new TemplateException(sprintf('Resource handler for [%s] must return [%s].', (string)$resource->getUrl(), INode::class));
+			if ((($root = $this->resourceManager->resource($file)) instanceof INode) === false) {
+				throw new TemplateException(sprintf('Resource handler for [%s] must return [%s].', (string)$file->getUrl(), INode::class));
 			}
-			$template = new Template($file = $this->templateDirectory->file(($name = ('Template' . sha1((string)$resource->getUrl()))) . '.php'));
-			$file->write("<?php\n");
-			$file->write("\tdeclare(strict_types = 1);\n\n");
-			$file->write(sprintf("\tclass %s {\n", $name));
+			$template = new Template($templateFile = $this->templateDirectory->file(($name = ('Template' . sha1((string)$file->getUrl()))) . '.php'));
+			$templateFile->enableWriteCache(3);
+			$templateFile->write("<?php\n");
+			$templateFile->write("\tdeclare(strict_types = 1);\n\n");
+			$templateFile->write(sprintf("\tclass %s {\n", $name));
 			try {
-				$this->macro($root, $template, $resource);
+				$this->macro($root, $template, $file);
 			} catch (TemplateException $e) {
-				throw new TemplateException(sprintf('Compilation of template [%s] failed: %s', (string)$resource->getUrl(), $e->getMessage()), 0, $e);
+				throw new TemplateException(sprintf('Compilation of template [%s] failed: %s', (string)$file->getUrl(), $e->getMessage()), 0, $e);
 			}
-			$file->write("\t}\n");
-			$file->close();
+			$templateFile->write("\t}\n");
+			$templateFile->close();
 			return $template;
 		}
 
-		public function macro(INode $node, ITemplate $template, IResource $resource, ...$parameterList) {
-			if (isset($this->macroList[$name = $node->getName()]) === false) {
-				throw new TemplateException(sprintf('Unknown macro [%s].', $node->getPath()));
+		public function macro(INode $root, ITemplate $template, IFile $file, ...$parameterList) {
+			if (isset($this->macroList[$name = $root->getName()]) === false) {
+				throw new TemplateException(sprintf('Unknown macro [%s].', $root->getPath()));
 			}
-			if ($node->hasAttributeList('m')) {
-				$attributeList = $node->getAttributeList();
-				foreach ($node->getAttributeList('m') as $attribute => $value) {
+			if ($root->hasAttributeList('m')) {
+				$attributeList = $root->getAttributeList();
+				foreach ($root->getAttributeList('m') as $attribute => $value) {
 					unset($attributeList['m:' . $attribute]);
-					$node->setAttributeList($attributeList);
-					$this->macro((new Node('m:' . $attribute, $value))->addNode($node), $template, $resource);
+					$root->setAttributeList($attributeList);
+					$this->macro((new Node('m:' . $attribute, $value))->addNode($root), $template, $file);
 				}
 				return;
 			}
-			$this->macroList[$name]->run($this, $template, $node, $resource, ...$parameterList);
+			$this->macroList[$name]->run($this, $template, $root, $file, ...$parameterList);
 		}
 
 		protected function prepare() {

@@ -4,11 +4,22 @@
 	namespace Edde\Common\File;
 
 	use Edde\Api\File\FileException;
+	use Edde\Api\File\IDirectory;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\Resource\Resource;
 
 	class File extends Resource implements IFile {
+		/**
+		 * @var int
+		 */
+		protected $writeCache = 0;
+		protected $writeCacheData = [];
+		protected $writeCacheIndex = 0;
+		/**
+		 * @var IDirectory
+		 */
+		protected $directory;
 		/**
 		 * @var bool
 		 */
@@ -33,6 +44,13 @@
 				$this->name = $this->url->getResourceName();
 			}
 			return $this->name;
+		}
+
+		public function getDirectory(): IDirectory {
+			if ($this->directory === null) {
+				$this->directory = new Directory(dirname($this->getPath()));
+			}
+			return $this->directory;
 		}
 
 		public function getPath(): string {
@@ -63,9 +81,44 @@
 			return $this->handle !== null;
 		}
 
+		public function enableWriteCache($count = 8): IFile {
+			$this->writeCache = $count;
+			$this->writeCacheIndex = 0;
+			return $this;
+		}
+
+		public function delete(): IFile {
+			if ($this->isOpen()) {
+				$this->close();
+			}
+			FileUtils::delete($this->url->getPath());
+			return $this;
+		}
+
+		public function close(): IFile {
+			$writeCache = $this->writeCache;
+			$this->writeCacheIndex = 2;
+			$this->writeCache = 1;
+			$this->write('');
+			$this->writeCache = $writeCache;
+			fflush($handle = $this->getHandle());
+			fclose($handle);
+			$this->handle = null;
+			return $this;
+		}
+
 		public function write($write): IFile {
 			if ($this->isOpen() === false) {
 				$this->openForWrite();
+			}
+			if ($this->writeCache > 0) {
+				$this->writeCacheData[] = $write;
+				if ($this->writeCacheIndex++ < $this->writeCache) {
+					return $this;
+				}
+				$write = implode('', $this->writeCacheData);
+				$this->writeCacheData = [];
+				$this->writeCacheIndex = 0;
 			}
 			$written = fwrite($this->getHandle(), $write);
 			if ($written !== ($lengh = strlen($write))) {
@@ -85,21 +138,6 @@
 				throw new FileException(sprintf('Current file [%s] is not opened or has been already closed.', $this->url->getPath()));
 			}
 			return $this->handle;
-		}
-
-		public function delete(): IFile {
-			if ($this->isOpen()) {
-				$this->close();
-			}
-			FileUtils::delete($this->url->getPath());
-			return $this;
-		}
-
-		public function close(): IFile {
-			fflush($handle = $this->getHandle());
-			fclose($handle);
-			$this->handle = null;
-			return $this;
 		}
 
 		public function rename(string $rename): IFile {

@@ -3,8 +3,8 @@
 
 	namespace Edde\Api\Template;
 
+	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Resource\IResource;
 	use Edde\Api\Usable\IUsable;
 
 	interface ITemplateManager extends IUsable {
@@ -25,19 +25,22 @@
 		/**
 		 * @param INode $root
 		 * @param ITemplate $template
-		 * @param IResource $resource
+		 * @param IFile $file
 		 * @param array $parameterList
 		 *
 		 * @return mixed
+		 * @internal param IResource $resource
 		 */
-		public function macro(INode $root, ITemplate $template, IResource $resource, ...$parameterList);
+		public function macro(INode $root, ITemplate $template, IFile $file, ...$parameterList);
 
 		/**
-		 * @param IResource $resource
+		 * @param IFile $file
 		 *
 		 * @return ITemplate
+		 * @internal param IResource $resource
+		 *
 		 */
-		public function compile(IResource $resource): ITemplate;
+		public function compile(IFile $file): ITemplate;
 
 		/**
 		 * shorthand for compile

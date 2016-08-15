@@ -3,8 +3,8 @@
 
 	namespace Edde\Common\Template\Macro;
 
+	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\ITemplateManager;
@@ -24,11 +24,11 @@
 			$this->resourceManager = $resourceManager;
 		}
 
-		public function run(ITemplateManager $templateManager, ITemplate $template, INode $root, IResource $resource, ...$parameterList) {
+		public function run(ITemplateManager $templateManager, ITemplate $template, INode $root, IFile $file, ...$parameterList) {
 			$include = $root->getValue();
 			if ($include[0] !== '/') {
-				$include = $resource->getUrl()
-						->getBasePath() . '/' . $include;
+				$include = $file->getDirectory()
+					->filename($include);
 			}
 			$root->getNodeList()[0]->setNodeList($this->resourceManager->file($include)
 				->getNodeList(), true);

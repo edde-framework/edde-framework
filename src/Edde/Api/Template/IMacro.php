@@ -3,8 +3,8 @@
 
 	namespace Edde\Api\Template;
 
+	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Resource\IResource;
 
 	interface IMacro {
 		/**
@@ -18,10 +18,11 @@
 		 * @param ITemplateManager $templateManager
 		 * @param ITemplate $template access to current template
 		 * @param INode $root current node to process
-		 * @param IResource $resource
+		 * @param IFile $file
 		 * @param array $parameterList
 		 *
 		 * @return mixed
+		 * @internal param IResource $resource
 		 */
-		public function run(ITemplateManager $templateManager, ITemplate $template, INode $root, IResource $resource, ...$parameterList);
+		public function run(ITemplateManager $templateManager, ITemplate $template, INode $root, IFile $file, ...$parameterList);
 	}

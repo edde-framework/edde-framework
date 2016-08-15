@@ -17,6 +17,13 @@
 		public function addResource(IResource $resource);
 
 		/**
+		 * @param string $file
+		 *
+		 * @return IResourceList
+		 */
+		public function addFile(string $file): IResourceList;
+
+		/**
 		 * return hash (name) based on the resources (for example based on a urls)
 		 *
 		 * @return string

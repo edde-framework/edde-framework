@@ -7,9 +7,15 @@
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceList;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\File\File;
 
 	class ResourceList extends AbstractObject implements IResourceList {
 		protected $resourceList = [];
+
+		public function addFile(string $file): IResourceList {
+			$this->addResource(new File($file));
+			return $this;
+		}
 
 		public function addResource(IResource $resource) {
 			$this->resourceList[(string)$resource->getUrl()] = $resource;

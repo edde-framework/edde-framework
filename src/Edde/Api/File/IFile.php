@@ -21,6 +21,13 @@
 		public function getPath(): string;
 
 		/**
+		 * return directory of this file
+		 *
+		 * @return IDirectory
+		 */
+		public function getDirectory(): IDirectory;
+
+		/**
 		 * @return bool
 		 */
 		public function isAutoClose(): bool;
@@ -92,6 +99,15 @@
 		 * @return IFile
 		 */
 		public function write($write): IFile;
+
+		/**
+		 * enable write cache; write is performed after number of calls or on file close; disabled (=== 0) by default
+		 *
+		 * @param int $count
+		 *
+		 * @return IFile
+		 */
+		public function enableWriteCache($count = 8): IFile;
 
 		/**
 		 * @return IFile
