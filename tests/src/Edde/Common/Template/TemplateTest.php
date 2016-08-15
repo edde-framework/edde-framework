@@ -4,10 +4,12 @@
 	namespace Edde\Common\Template;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\ITemplateDirectory;
 	use Edde\Api\Template\ITemplateManager;
+	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Template\Macro\ControlMacro;
 	use Edde\Common\Template\Macro\DivNodeMacro;
@@ -72,12 +74,14 @@
 				},
 				\TestDocument::class,
 				IncludeMacro::class,
+				SwitchMacro::class,
+				ICryptEngine::class => CryptEngine::class,
 			]);
 			$this->templateManager = $this->container->create(TemplateManager::class);
 			$this->templateManager->onSetup(function (ITemplateManager $templateManager) use ($container) {
 				$templateManager->registerMacro(new ControlMacro());
 				$templateManager->registerMacro(new DivNodeMacro());
-				$templateManager->registerMacro(new SwitchMacro());
+				$templateManager->registerMacro($container->create(SwitchMacro::class));
 				$templateManager->registerMacro($container->create(IncludeMacro::class));
 			});
 			$this->control = $this->container->create(\TestDocument::class);
