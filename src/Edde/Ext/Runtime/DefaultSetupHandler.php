@@ -62,6 +62,7 @@
 	use Edde\Common\Runtime\SetupHandler;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
+	use Edde\Common\Template\Macro\BindIdAttributeMacro;
 	use Edde\Common\Template\Macro\ButtonNodeMacro;
 	use Edde\Common\Template\Macro\ControlMacro;
 	use Edde\Common\Template\Macro\CssNodeMacro;
@@ -166,8 +167,14 @@
 
 				Crate::class,
 
+				ControlMacro::class,
+				DivNodeMacro::class,
+				CssNodeMacro::class,
+				JsNodeMacro::class,
+				ButtonNodeMacro::class,
 				SwitchNodeMacro::class,
 				IncludeNodeMacro::class,
+				BindIdAttributeMacro::class,
 			], $factoryList));
 			$setupHandler->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
 				$routerService->registerRouter($container->create(CliRouter::class));
@@ -187,13 +194,14 @@
 				$resourceManager->registerResourceHandler($container->create(JsonResourceHandler::class));
 			});
 			$setupHandler->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
-				$templateManager->registerMacro(new ControlMacro());
-				$templateManager->registerMacro(new DivNodeMacro());
-				$templateManager->registerMacro(new CssNodeMacro());
-				$templateManager->registerMacro(new JsNodeMacro());
-				$templateManager->registerMacro(new ButtonNodeMacro());
+				$templateManager->registerMacro($container->create(ControlMacro::class));
+				$templateManager->registerMacro($container->create(DivNodeMacro::class));
+				$templateManager->registerMacro($container->create(CssNodeMacro::class));
+				$templateManager->registerMacro($container->create(JsNodeMacro::class));
+				$templateManager->registerMacro($container->create(ButtonNodeMacro::class));
 				$templateManager->registerMacro($container->create(SwitchNodeMacro::class));
 				$templateManager->registerMacro($container->create(IncludeNodeMacro::class));
+				$templateManager->registerMacro($container->create(BindIdAttributeMacro::class));
 			});
 			return $setupHandler;
 		}

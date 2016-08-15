@@ -129,11 +129,11 @@
 			]);
 			$this->templateManager = $this->container->create(TemplateManager::class);
 			$this->templateManager->onSetup(function (ITemplateManager $templateManager) use ($container) {
-				$templateManager->registerMacro(new ControlMacro());
-				$templateManager->registerMacro(new DivNodeMacro());
-				$templateManager->registerMacro(new CssNodeMacro());
-				$templateManager->registerMacro(new JsNodeMacro());
-				$templateManager->registerMacro(new ButtonNodeMacro());
+				$templateManager->registerMacro($container->create(ControlMacro::class));
+				$templateManager->registerMacro($container->create(DivNodeMacro::class));
+				$templateManager->registerMacro($container->create(CssNodeMacro::class));
+				$templateManager->registerMacro($container->create(JsNodeMacro::class));
+				$templateManager->registerMacro($container->create(ButtonNodeMacro::class));
 				$templateManager->registerMacro($container->create(SwitchNodeMacro::class));
 				$templateManager->registerMacro($container->create(IncludeNodeMacro::class));
 				$templateManager->registerMacro($container->create(BindIdAttributeMacro::class));
