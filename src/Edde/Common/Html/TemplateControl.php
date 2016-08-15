@@ -12,17 +12,9 @@
 			return $this;
 		}
 
-		public function setVariable($name, $value) {
-			$this->usse();
-			$variableList = $this->node->getMeta('variable-list');
-			$variableList[$name] = $value;
-			$this->node->setMeta('variable-list', $variableList);
-			return $this;
-		}
-
 		public function render() {
 			$this->usse();
-			$this->template($this->node->getMeta('template'), $this->node->getMeta('variable-list'));
+			$this->template($this->node->getMeta('template'));
 			parent::render();
 		}
 	}

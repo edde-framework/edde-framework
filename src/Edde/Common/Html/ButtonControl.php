@@ -3,34 +3,33 @@
 
 	namespace Edde\Common\Html;
 
-	use Edde\Api\Control\ControlException;
-	use Edde\Api\Html\IHtmlControl;
-
 	class ButtonControl extends AbstractHtmlControl {
-		/**
-		 * bind action to the specific control; all data from that control will be sent to the action
-		 *
-		 * @param IHtmlControl $htmlControl
-		 *
-		 * @return $this
-		 * @throws ControlException
-		 */
-		public function bind(IHtmlControl $htmlControl) {
-			if (($id = $htmlControl->getId()) === '') {
-				throw new ControlException(sprintf('Cannot bind [%s] to [%s] because target id is empty.', static::class, get_class($htmlControl)));
-			}
-			$this->setAttribute('data-bind', $id);
+		public function setTitle($title) {
+			$this->usse();
+			$this->setAttribute('title', $title);
 			return $this;
 		}
 
-		public function setTitle($title) {
+		public function setAttribute($attribute, $value) {
 			$this->usse();
-			$this->node->setValue($title);
+			switch ($attribute) {
+				case 'value':
+					$this->node->setValue($value);
+					break;
+				case 'title':
+					$this->node->setAttribute('title', $value);
+					break;
+				case 'bind':
+					$this->node->setAttribute('data-bind', $value);
+					break;
+				default:
+					parent::setAttribute($attribute, $value);
+			}
 			return $this;
 		}
 
 		public function setHint($hint) {
-			$this->setAttribute('title', $hint);
+			$this->setAttribute('hint', $hint);
 			return $this;
 		}
 

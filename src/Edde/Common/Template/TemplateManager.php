@@ -58,7 +58,7 @@
 			if ((($root = $this->resourceManager->resource($file)) instanceof INode) === false) {
 				throw new TemplateException(sprintf('Resource handler for [%s] must return [%s].', (string)$file->getUrl(), INode::class));
 			}
-			$template = new Template($templateFile = $this->templateDirectory->file(($name = ('Template' . sha1((string)$file->getUrl()))) . '.php'));
+			$template = new Template($templateFile = $this->templateDirectory->file(($name = ('Template_' . sha1((string)$file->getUrl()))) . '.php'));
 			$templateFile->enableWriteCache(3);
 			$templateFile->write("<?php\n");
 			$templateFile->write("\tdeclare(strict_types = 1);\n\n");

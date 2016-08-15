@@ -10,7 +10,7 @@
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Common\Template\AbstractMacro;
 
-	class IncludeMacro extends AbstractMacro {
+	class IncludeNodeMacro extends AbstractMacro {
 		/**
 		 * @var IResourceManager
 		 */

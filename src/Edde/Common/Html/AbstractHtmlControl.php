@@ -61,7 +61,12 @@
 
 		public function setAttributeList(array $attributeList): IHtmlControl {
 			$this->usse();
-			$this->node->setAttributeList($attributeList);
+			/**
+			 * intentional loop, because control can simply alter attributes
+			 */
+			foreach ($attributeList as $name => $value) {
+				$this->setAttribute($name, $value);
+			}
 			return $this;
 		}
 

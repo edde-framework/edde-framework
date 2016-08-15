@@ -1,13 +1,15 @@
 <?php
 	declare(strict_types = 1);
+
 	namespace Edde\Common\Template;
 
+	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Resource\IResource;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Strings\StringUtils;
 
 	abstract class AbstractMacro extends AbstractObject implements IMacro {
 		/**
@@ -26,9 +28,16 @@
 			return $this->macroList;
 		}
 
-		protected function macro(INode $root, ITemplateManager $templateManager, ITemplate $template, IResource $resource, ...$parameterList) {
+		protected function macro(INode $root, ITemplateManager $templateManager, ITemplate $template, IFile $file, ...$parameterList) {
 			foreach ($root->getNodeList() as $node) {
-				$templateManager->macro($node, $template, $resource, ...$parameterList);
+				$templateManager->macro($node, $template, $file, ...$parameterList);
 			}
+		}
+
+		protected function value($value) {
+			if (strpos($value, '()') !== false) {
+				return '$this->' . StringUtils::firstLower(StringUtils::camelize($value));
+			}
+			return "'$value'";
 		}
 	}

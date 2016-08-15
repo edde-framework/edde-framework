@@ -4,7 +4,7 @@
 	namespace Edde\Common\Xml;
 
 	use Edde\Api\Node\INode;
-	use Edde\Api\Xml\XmlException;
+	use Edde\Api\Xml\XmlParserException;
 	use Edde\Common\Node\Node;
 
 	/**
@@ -58,7 +58,7 @@
 
 		public function getNode(): INode {
 			if ($this->node === null) {
-				throw new XmlException('Nothing has been parsed. One cute kitten will be killed because of you!');
+				throw new XmlParserException('Nothing has been parsed. One cute kitten will be killed because of you!');
 			}
 			return $this->node;
 		}

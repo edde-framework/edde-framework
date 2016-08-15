@@ -21,8 +21,7 @@
 		 * @param IFile $file
 		 * @param array $parameterList
 		 *
-		 * @return mixed
-		 * @internal param IResource $resource
+		 * @return IMacro
 		 */
 		public function run(ITemplateManager $templateManager, ITemplate $template, INode $root, IFile $file, ...$parameterList);
 	}

@@ -1,0 +1,4 @@
+<control>
+	<div id="blabla" m:id="foo"/>
+	<button action="foo" m:bind="foo"/>
+</control>

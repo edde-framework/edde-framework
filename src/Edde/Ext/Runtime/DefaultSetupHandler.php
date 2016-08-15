@@ -8,7 +8,6 @@
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IFactory;
 	use Edde\Api\Crate\ICrateDirectory;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crate\ICrateGenerator;
@@ -34,9 +33,8 @@
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
-	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\ITemplateDirectory;
-	use Edde\Api\Template\ITemplateFactory;
+	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
@@ -64,8 +62,15 @@
 	use Edde\Common\Runtime\SetupHandler;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
+	use Edde\Common\Template\Macro\ButtonNodeMacro;
+	use Edde\Common\Template\Macro\ControlMacro;
+	use Edde\Common\Template\Macro\CssNodeMacro;
+	use Edde\Common\Template\Macro\DivNodeMacro;
+	use Edde\Common\Template\Macro\IncludeNodeMacro;
+	use Edde\Common\Template\Macro\JsNodeMacro;
+	use Edde\Common\Template\Macro\SwitchNodeMacro;
 	use Edde\Common\Template\TemplateDirectory;
-	use Edde\Common\Template\TemplateFactory;
+	use Edde\Common\Template\TemplateManager;
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
@@ -144,15 +149,7 @@
 				IResourceStorable::class => FactoryFactory::create(ResourceStorable::class, function (IResourceIndex $resourceIndex) {
 					return $resourceIndex->createResourceStorable();
 				}, false),
-				ITemplateFactory::class => TemplateFactory::class,
-				ITemplate::class => [
-					function (ITemplateFactory $templateFactory) {
-						return $templateFactory->create();
-					},
-					function (IFactory $factory) {
-						$factory->setSingleton(false);
-					},
-				],
+				ITemplateManager::class => TemplateManager::class,
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
 				IXmlParser::class => XmlParser::class,
@@ -168,6 +165,9 @@
 				InitialStorageUpgrade::class,
 
 				Crate::class,
+
+				SwitchNodeMacro::class,
+				IncludeNodeMacro::class,
 			], $factoryList));
 			$setupHandler->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
 				$routerService->registerRouter($container->create(CliRouter::class));
@@ -185,6 +185,15 @@
 			$setupHandler->onSetup(IResourceManager::class, function (IContainer $container, IResourceManager $resourceManager) {
 				$resourceManager->registerResourceHandler($container->create(XmlResourceHandler::class));
 				$resourceManager->registerResourceHandler($container->create(JsonResourceHandler::class));
+			});
+			$setupHandler->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
+				$templateManager->registerMacro(new ControlMacro());
+				$templateManager->registerMacro(new DivNodeMacro());
+				$templateManager->registerMacro(new CssNodeMacro());
+				$templateManager->registerMacro(new JsNodeMacro());
+				$templateManager->registerMacro(new ButtonNodeMacro());
+				$templateManager->registerMacro($container->create(SwitchNodeMacro::class));
+				$templateManager->registerMacro($container->create(IncludeNodeMacro::class));
 			});
 			return $setupHandler;
 		}

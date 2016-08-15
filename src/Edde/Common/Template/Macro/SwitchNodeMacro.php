@@ -11,7 +11,7 @@
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\AbstractMacro;
 
-	class SwitchMacro extends AbstractMacro {
+	class SwitchNodeMacro extends AbstractMacro {
 		/**
 		 * @var ICryptEngine
 		 */
@@ -44,12 +44,5 @@
 					$file->write("\t\t\t}\n");
 					break;
 			}
-		}
-
-		protected function value($value) {
-			if (strpos($value, '()') !== false) {
-				return '$this->' . StringUtils::firstLower(StringUtils::camelize($value));
-			}
-			return "'$value'";
 		}
 	}
