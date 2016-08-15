@@ -25,12 +25,7 @@
 		}
 
 		public function run(ITemplateManager $templateManager, ITemplate $template, INode $root, IFile $file, ...$parameterList) {
-			$include = $root->getValue();
-			if ($include[0] !== '/') {
-				$include = $file->getDirectory()
-					->filename($include);
-			}
-			$root->getNodeList()[0]->setNodeList($this->resourceManager->file($include)
+			$root->getNodeList()[0]->setNodeList($this->resourceManager->file($this->file($root->getValue(), $file))
 				->getNodeList(), true);
 		}
 	}

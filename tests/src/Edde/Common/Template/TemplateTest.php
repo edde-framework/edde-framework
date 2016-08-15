@@ -13,11 +13,11 @@
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Resource\ResourceManager;
+	use Edde\Common\Template\Macro\BindIdAttributeMacro;
 	use Edde\Common\Template\Macro\ButtonNodeMacro;
 	use Edde\Common\Template\Macro\ControlMacro;
 	use Edde\Common\Template\Macro\CssNodeMacro;
 	use Edde\Common\Template\Macro\DivNodeMacro;
-	use Edde\Common\Template\Macro\IdAttributeMacro;
 	use Edde\Common\Template\Macro\IncludeNodeMacro;
 	use Edde\Common\Template\Macro\JsNodeMacro;
 	use Edde\Common\Template\Macro\SwitchNodeMacro;
@@ -122,7 +122,7 @@
 				\TestDocument::class,
 				IncludeNodeMacro::class,
 				SwitchNodeMacro::class,
-				IdAttributeMacro::class,
+				BindIdAttributeMacro::class,
 				ICryptEngine::class => CryptEngine::class,
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
@@ -136,7 +136,7 @@
 				$templateManager->registerMacro(new ButtonNodeMacro());
 				$templateManager->registerMacro($container->create(SwitchNodeMacro::class));
 				$templateManager->registerMacro($container->create(IncludeNodeMacro::class));
-				$templateManager->registerMacro($container->create(IdAttributeMacro::class));
+				$templateManager->registerMacro($container->create(BindIdAttributeMacro::class));
 			});
 			$this->control = $this->container->create(\TestDocument::class);
 		}

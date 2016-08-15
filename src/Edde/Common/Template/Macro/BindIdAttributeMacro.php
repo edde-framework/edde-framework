@@ -11,7 +11,7 @@
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Template\AbstractMacro;
 
-	class IdAttributeMacro extends AbstractMacro {
+	class BindIdAttributeMacro extends AbstractMacro {
 		/**
 		 * @var ICryptEngine
 		 */
