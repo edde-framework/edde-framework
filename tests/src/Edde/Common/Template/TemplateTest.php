@@ -21,6 +21,7 @@
 	use Edde\Common\Template\Macro\Control\JsNodeMacro;
 	use Edde\Common\Template\Macro\Control\PasswordNodeMacro;
 	use Edde\Common\Template\Macro\Control\SchemaNodeMacro;
+	use Edde\Common\Template\Macro\Control\SpanNodeMacro;
 	use Edde\Common\Template\Macro\Control\TextNodeMacro;
 	use Edde\Common\Template\Macro\IncludeNodeMacro;
 	use Edde\Common\Template\Macro\SwitchNodeMacro;
@@ -65,9 +66,9 @@
 	</head>
 	<body>
 		<div>
-			<div class="the-second-bar"></div>
+			<div class="the-second-bar">lorem ipsum</div>
 			<div class="dummy-div">
-				<div class="the-second"></div>
+				<div class="the-second">bar content</div>
 			</div>
 		</div>
 	</body>
@@ -134,6 +135,27 @@
 ', $this->control->render());
 		}
 
+		public function testSpan() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/span.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="foo">
+			<span data-cheat="yep we will cheat!">some spanish span here</span>
+		</div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
 		protected function setUp() {
 			$this->resourceManager = new ResourceManager();
 			$this->resourceManager->registerResourceHandler(new XmlResourceHandler(new XmlParser()));
@@ -157,6 +179,7 @@
 			$this->templateManager->onSetup(function (ITemplateManager $templateManager) use ($container) {
 				$templateManager->registerMacro($container->create(ControlMacro::class));
 				$templateManager->registerMacro($container->create(DivNodeMacro::class));
+				$templateManager->registerMacro($container->create(SpanNodeMacro::class));
 				$templateManager->registerMacro($container->create(CssNodeMacro::class));
 				$templateManager->registerMacro($container->create(JsNodeMacro::class));
 				$templateManager->registerMacro($container->create(ButtonNodeMacro::class));

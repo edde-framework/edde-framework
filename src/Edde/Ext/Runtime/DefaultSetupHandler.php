@@ -70,6 +70,7 @@
 	use Edde\Common\Template\Macro\Control\JsNodeMacro;
 	use Edde\Common\Template\Macro\Control\PasswordNodeMacro;
 	use Edde\Common\Template\Macro\Control\SchemaNodeMacro;
+	use Edde\Common\Template\Macro\Control\SpanNodeMacro;
 	use Edde\Common\Template\Macro\Control\TextNodeMacro;
 	use Edde\Common\Template\Macro\IncludeNodeMacro;
 	use Edde\Common\Template\Macro\SwitchNodeMacro;
@@ -172,6 +173,7 @@
 
 				ControlMacro::class,
 				DivNodeMacro::class,
+				SpanNodeMacro::class,
 				CssNodeMacro::class,
 				JsNodeMacro::class,
 				ButtonNodeMacro::class,
@@ -202,6 +204,7 @@
 			$setupHandler->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
 				$templateManager->registerMacro($container->create(ControlMacro::class));
 				$templateManager->registerMacro($container->create(DivNodeMacro::class));
+				$templateManager->registerMacro($container->create(SpanNodeMacro::class));
 				$templateManager->registerMacro($container->create(CssNodeMacro::class));
 				$templateManager->registerMacro($container->create(JsNodeMacro::class));
 				$templateManager->registerMacro($container->create(ButtonNodeMacro::class));

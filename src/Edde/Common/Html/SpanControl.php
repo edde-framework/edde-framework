@@ -5,9 +5,9 @@
 
 	use Edde\Api\Html\HtmlException;
 
-	class DivControl extends AbstractHtmlControl {
+	class SpanControl extends AbstractHtmlControl {
 		public function setTag(string $tag, bool $pair = true) {
-			throw new HtmlException(sprintf('Cannot set tag [%s] to a div control.', $tag));
+			throw new HtmlException(sprintf('Cannot set tag [%s] to a span control.', $tag));
 		}
 
 		public function isPair() {
@@ -16,6 +16,6 @@
 
 		protected function prepare() {
 			parent::prepare();
-			parent::setTag('div');
+			parent::setTag('span');
 		}
 	}

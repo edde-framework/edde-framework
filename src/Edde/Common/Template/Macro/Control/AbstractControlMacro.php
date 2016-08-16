@@ -31,6 +31,9 @@
 			if (($attributeList = $this->getAttributeList($root)) !== []) {
 				$file->write(sprintf("\t\t\t\$control->setAttributeList(%s);\n", var_export($attributeList, true)));
 			}
+			if ($root->isLeaf() && ($text = $root->getValue()) !== null) {
+				$file->write(sprintf("\t\t\t\$control->setText('%s');\n", $text));
+			}
 			$this->macro($root, $templateManager, $template, $file);
 		}
 
