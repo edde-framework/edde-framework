@@ -209,6 +209,44 @@
 ', $this->control->render());
 		}
 
+		public function testLoop02() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/loop-02.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="looping">
+			<div class="looped-one">
+				<div class="simple-div">
+					<div>simply included</div>
+				</div>
+				<span class="another-included">span here</span>
+			</div>
+		</div>
+		<div class="looping">
+			<div class="another-looop">
+				<div class="simple-div">
+					<div>simply included</div>
+				</div>
+				<span class="another-included">span here</span>
+			</div>
+		</div>
+		<div class="another-kind-of-loop">
+			<div class="looping2" data-tribute="first">looped-one</div>
+			<div class="looping2" data-tribute="second">another-looop</div>
+		</div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
 		protected function setUp() {
 			$this->resourceManager = new ResourceManager();
 			$this->resourceManager->registerResourceHandler(new XmlResourceHandler(new XmlParser()));
