@@ -28,11 +28,13 @@
 			$file = $template->getFile();
 			$file->write("\t\t\t\$parent = \$this->stack->top();\n");
 			$file->write(sprintf("\t\t\t\$parent->addControl(\$control = \$this->container->create('%s'));\n", $this->control));
-			if (($attributeList = $this->getAttributeList($root)) !== []) {
-				$file->write(sprintf("\t\t\t\$control->setAttributeList(%s);\n", var_export($attributeList, true)));
-			}
-			if ($root->isLeaf() && ($text = $root->getValue()) !== null) {
+			if ($root->isLeaf() && ($text = $root->getValue($root->getAttribute('value'))) !== null) {
 				$file->write(sprintf("\t\t\t\$control->setText('%s');\n", $text));
+			}
+			$attributeList = $this->getAttributeList($root);
+			unset($attributeList['value']);
+			if ($attributeList !== []) {
+				$file->write(sprintf("\t\t\t\$control->setAttributeList(%s);\n", var_export($attributeList, true)));
 			}
 			$this->macro($root, $templateManager, $template, $file);
 		}

@@ -1,6 +1,6 @@
 <control>
 	<div m:case="foo" class="the-one"/>
-	<div m:case="bar" class="the-second-bar">lorem ipsum</div>
+	<div m:case="bar" class="the-second-bar" value="lorem ipsum"/>
 	<div class="dummy-div">
 		<div m:case="bar" class="the-second">bar content</div>
 		<div m:case="foo" class="the-one-foo">foo content</div>
