@@ -85,14 +85,14 @@
 		}
 
 		/**
-		 * @return WhereExpressionFragment
+		 * @return WhereFragment
 		 */
 		public function isNull() {
 			return $this->whereExpressionFragment->isNull();
 		}
 
 		/**
-		 * @return WhereExpressionFragment
+		 * @return WhereFragment
 		 */
 		public function isNotNull() {
 			return $this->whereExpressionFragment->isNotNull();
@@ -101,15 +101,15 @@
 		/**
 		 * @return WhereExpressionFragment
 		 */
-		public function andd() {
-			return $this->whereExpressionFragment->andd();
+		public function and () {
+			return $this->whereExpressionFragment->and();
 		}
 
 		/**
 		 * @return WhereExpressionFragment
 		 */
-		public function orr() {
-			return $this->whereExpressionFragment->orr();
+		public function or () {
+			return $this->whereExpressionFragment->or();
 		}
 
 		/**

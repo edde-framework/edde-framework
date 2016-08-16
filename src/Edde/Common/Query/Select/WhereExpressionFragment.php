@@ -89,7 +89,7 @@
 		/**
 		 * @return WhereExpressionFragment
 		 */
-		public function andd() {
+		public function and () {
 			$this->relation = 'and';
 			return $this;
 		}
@@ -97,7 +97,7 @@
 		/**
 		 * @return WhereExpressionFragment
 		 */
-		public function orr() {
+		public function or () {
 			$this->relation = 'or';
 			return $this;
 		}
