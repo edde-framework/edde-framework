@@ -120,25 +120,19 @@
 		}
 
 		public function value(string $value): string {
-			if (strpos($value, '()') !== false) {
-				return '$this->' . StringUtils::firstLower(StringUtils::camelize($value));
-			}
 			foreach ($this->macroList as $macro) {
-				if (($item = $macro->variable($value)) !== null) {
+				if (($item = $macro->variable($value, $this)) !== null) {
 					return $item;
 				}
 			}
-			if ($value === ':$') {
-				return '$item';
+			if (strpos($value, '->', 0) !== false && strpos($value, '()') !== false) {
+				return '->' . StringUtils::firstLower(StringUtils::camelize(substr($value, 2)));
 			}
-			if ($value === ':#') {
-				return '$key';
-			}
-			if (strpos($value, ':$') !== false) {
-				return '$item->' . $this->value(str_replace(':$', '', $value));
+			if (strpos($value, '()') !== false) {
+				return '$this->' . StringUtils::firstLower(StringUtils::camelize($value));
 			}
 			if ($value[0] === '$') {
-				return substr($value, 1);
+				return $value;
 			}
 			return "'$value'";
 		}

@@ -297,6 +297,42 @@
 ', $this->control->render());
 		}
 
+		public function testLoop05() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/loop-05.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div>
+			<div>item-value whee</div>
+			<div class="first"></div>
+			<div class="second"></div>
+			<div>another-item-value whee</div>
+		</div>
+		<div>
+			<div>item-value foo</div>
+			<div class="first"></div>
+			<div class="second"></div>
+			<div>another-item-value foo</div>
+		</div>
+		<div>
+			<div>item-value poo</div>
+			<div class="first"></div>
+			<div class="second"></div>
+			<div>another-item-value poo</div>
+		</div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
 		protected function setUp() {
 			$this->resourceManager = new ResourceManager();
 			$this->resourceManager->registerResourceHandler(new XmlResourceHandler(new XmlParser()));

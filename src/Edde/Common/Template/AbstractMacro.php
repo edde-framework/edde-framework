@@ -25,7 +25,8 @@
 			return $this->macroList;
 		}
 
-		public function variable(string $string) {
+		public function variable(string $string, ICompiler $compiler) {
+			return null;
 		}
 
 		protected function getAttributeList(INode $node, ICompiler $compiler) {

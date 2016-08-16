@@ -21,7 +21,7 @@
 			$this->loopStack = new \SplStack();
 		}
 
-		public function variable(string $string) {
+		public function variable(string $string, ICompiler $compiler) {
 			switch ($string) {
 				case ':$':
 					$loop = $this->loopStack->top();
@@ -29,6 +29,10 @@
 				case ':#':
 					$loop = $this->loopStack->top();
 					return '$' . $loop[0];
+			}
+			if (strpos($string, ':$') !== false) {
+				$loop = $this->loopStack->top();
+				return '$' . $loop[1] . $compiler->value(str_replace(':$', '->', $string));
 			}
 			return null;
 		}

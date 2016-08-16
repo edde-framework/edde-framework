@@ -17,10 +17,11 @@
 		 * if the macro knows the given input value, it should convert it to the proper php snippet
 		 *
 		 * @param string $string
+		 * @param ICompiler $compiler
 		 *
-		 * @return string|null
+		 * @return null|string
 		 */
-		public function variable(string $string);
+		public function variable(string $string, ICompiler $compiler);
 
 		/**
 		 * @param INode $root
