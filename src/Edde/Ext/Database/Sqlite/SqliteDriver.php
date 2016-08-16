@@ -36,19 +36,19 @@
 		}
 
 		public function start($exclusive = false) {
-			$this->usse();
+			$this->use();
 			$this->pdo->beginTransaction();
 			return $this;
 		}
 
 		public function commit() {
-			$this->usse();
+			$this->use();
 			$this->pdo->commit();
 			return $this;
 		}
 
 		public function rollback() {
-			$this->usse();
+			$this->use();
 			$this->pdo->rollBack();
 			return $this;
 		}
@@ -58,12 +58,12 @@
 		}
 
 		public function quote($quote) {
-			$this->usse();
+			$this->use();
 			return $this->pdo->quote($quote);
 		}
 
 		public function type($type) {
-			$this->usse();
+			$this->use();
 			if (isset($this->typeList[$type]) === false) {
 				throw new DriverException(sprintf('Unknown type [%s] for driver [%s].', $type, static::class));
 			}
@@ -71,7 +71,7 @@
 		}
 
 		public function execute(IQuery $query) {
-			$this->usse();
+			$this->use();
 			$staticQuery = $this->staticQueryFactory->create($query);
 			if (isset($this->statementList[$sql = $staticQuery->getQuery()]) === false) {
 				$this->statementList[$sql] = $statement = $this->pdo->prepare($sql);

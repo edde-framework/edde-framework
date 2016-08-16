@@ -24,7 +24,7 @@
 		}
 
 		public function upgrade() {
-			$this->usse();
+			$this->use();
 			$this->onUpgrade();
 		}
 

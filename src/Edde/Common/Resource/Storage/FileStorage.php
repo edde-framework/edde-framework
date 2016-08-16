@@ -65,7 +65,7 @@
 		 * @throws ResourceException
 		 */
 		public function getResource(IResource $resource) {
-			$this->usse();
+			$this->use();
 			return $this->resourceIndex->query()
 				->url($resource->getUrl()
 					->getAbsoluteUrl())
@@ -73,14 +73,14 @@
 		}
 
 		public function hasResource(IUrl $url) {
-			$this->usse();
+			$this->use();
 			$resourceQuery = $this->resourceIndex->query();
 			$resourceQuery->name($url->getAbsoluteUrl());
 			return $this->resourceIndex->hasResource($resourceQuery);
 		}
 
 		public function store(IResource $resource) {
-			$this->usse();
+			$this->use();
 			$url = $resource->getUrl();
 			$directory = new Directory($this->storageDirectory->getDirectory() . '/' . sha1(dirname($url->getPath())));
 			try {

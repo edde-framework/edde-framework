@@ -62,7 +62,7 @@
 		}
 
 		public function getProperty(string $name): ISchemaProperty {
-			$this->usse();
+			$this->use();
 			if ($this->hasProperty($name) === false) {
 				throw new SchemaException(sprintf('Requested unknown property [%s] in schema [%s].', $name, $this->getSchemaName()));
 			}
@@ -70,7 +70,7 @@
 		}
 
 		public function hasProperty(string $name): bool {
-			$this->usse();
+			$this->use();
 			return isset($this->propertyList[$name]);
 		}
 
@@ -82,7 +82,7 @@
 		}
 
 		public function getPropertyList(): array {
-			$this->usse();
+			$this->use();
 			return $this->propertyList;
 		}
 

@@ -8,7 +8,7 @@
 	 */
 	interface IUsable {
 		/**
-		 * callback executed before {@see self::usse()}
+		 * callback executed before {@see self::use()}
 		 *
 		 * @param callable $callback
 		 *
@@ -17,7 +17,7 @@
 		public function onSetup(callable $callback);
 
 		/**
-		 * callback executed after {@see self::usse()}
+		 * callback executed after {@see self::use()}
 		 *
 		 * @param callable $callback
 		 *
@@ -39,7 +39,7 @@
 		 *
 		 * @return $this
 		 */
-		public function usse();
+		public function use ();
 
 		/**
 		 * is usable already used?

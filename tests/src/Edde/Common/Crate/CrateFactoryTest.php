@@ -143,9 +143,9 @@
 			$this->schemaManager->addSchema($headerSchema);
 			$this->schemaManager->addSchema($rowSchema);
 			$this->schemaManager->addSchema($itemSchema);
-			$headerSchema->usse();
-			$rowSchema->usse();
-			$itemSchema->usse();
+			$headerSchema->use();
+			$rowSchema->use();
+			$itemSchema->use();
 
 			$this->container = ContainerFactory::create([
 				Crate::class,

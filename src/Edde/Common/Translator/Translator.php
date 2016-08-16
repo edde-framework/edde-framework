@@ -19,7 +19,7 @@
 		protected $language;
 
 		public function translate(string $id): string {
-			$this->usse();
+			$this->use();
 			foreach ($this->dictionaryList as $dictionary) {
 				if (($string = $dictionary->translate($id, $this->language)) !== null) {
 					return $string;

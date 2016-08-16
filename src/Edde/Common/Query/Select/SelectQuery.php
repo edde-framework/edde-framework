@@ -30,7 +30,7 @@
 		 * @return SelectFragment
 		 */
 		public function select() {
-			$this->usse();
+			$this->use();
 			return $this->selectPropertyFragment;
 		}
 
@@ -38,7 +38,7 @@
 		 * @return FromFragment
 		 */
 		public function from() {
-			$this->usse();
+			$this->use();
 			return $this->fromPropertyFragment;
 		}
 
@@ -46,7 +46,7 @@
 		 * @return WhereExpressionFragment
 		 */
 		public function where() {
-			$this->usse();
+			$this->use();
 			return $this->whereExpressionFragment;
 		}
 

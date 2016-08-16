@@ -49,7 +49,7 @@
 			return $this;
 		}
 
-		public function usse() {
+		public function use () {
 			if ($this->used === false) {
 				$this->used = true;
 				foreach ($this->onSetupList as $callback) {

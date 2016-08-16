@@ -10,16 +10,16 @@
 	 */
 	class DevNullCacheStorage extends AbstractCacheStorage {
 		public function save($id, $save) {
-			$this->usse();
+			$this->use();
 			return $save;
 		}
 
 		public function load($id) {
-			$this->usse();
+			$this->use();
 		}
 
 		public function invalidate() {
-			$this->usse();
+			$this->use();
 			return $this;
 		}
 

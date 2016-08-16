@@ -27,12 +27,12 @@
 		}
 
 		public function hasSchema($schema) {
-			$this->usse();
+			$this->use();
 			return isset($this->schemaList[$schema]);
 		}
 
 		public function getSchema($schema) {
-			$this->usse();
+			$this->use();
 			if (isset($this->schemaList[$schema]) === false) {
 				throw new SchemaException(sprintf('Requested unknown schema [%s].', $schema));
 			}
@@ -40,7 +40,7 @@
 		}
 
 		public function getSchemaList() {
-			$this->usse();
+			$this->use();
 			return $this->schemaList;
 		}
 

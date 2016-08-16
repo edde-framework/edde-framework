@@ -15,18 +15,18 @@
 		protected $node;
 
 		public function getNode() {
-			$this->usse();
+			$this->use();
 			return $this->node;
 		}
 
 		public function getRoot() {
-			$this->usse();
+			$this->use();
 			return $this->node->getRoot()
 				->getMeta('control');
 		}
 
 		public function getParent() {
-			$this->usse();
+			$this->use();
 			$parent = $this->node->getParent();
 			return $parent ? $parent->getMeta('control') : null;
 		}
@@ -44,7 +44,7 @@
 		}
 
 		public function addControl(IControl $control) {
-			$this->usse();
+			$this->use();
 			$this->node->addNode($control->getNode(), true);
 			return $this;
 		}

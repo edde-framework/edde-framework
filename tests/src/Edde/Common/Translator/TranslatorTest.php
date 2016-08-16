@@ -20,7 +20,7 @@
 		public function testUseException() {
 			$this->expectException(TranslatorException::class);
 			$this->expectExceptionMessage('Cannot use translator without set language.');
-			$this->translator->usse();
+			$this->translator->use();
 		}
 
 		public function testWithoutDictionaryException() {
@@ -29,7 +29,7 @@
 			$this->translator->onSetup(function (ITranslator $translator) {
 				$translator->setLanguage('en');
 			});
-			$this->translator->usse();
+			$this->translator->use();
 		}
 
 		public function testEmptyDictionaryException() {

@@ -39,12 +39,12 @@
 		}
 
 		public function getQuery() {
-			$this->usse();
+			$this->use();
 			return $this->selectQuery;
 		}
 
 		public function name($name) {
-			$this->usse();
+			$this->use();
 			$this->selectQuery->where()
 				->eq()
 				->property('name')
@@ -53,7 +53,7 @@
 		}
 
 		public function nameLike($name) {
-			$this->usse();
+			$this->use();
 			$this->selectQuery->where()
 				->like()
 				->property('name')
@@ -62,7 +62,7 @@
 		}
 
 		public function url($url) {
-			$this->usse();
+			$this->use();
 			$this->selectQuery->where()
 				->eq()
 				->property('url')
@@ -71,7 +71,7 @@
 		}
 
 		public function urlLike($url) {
-			$this->usse();
+			$this->use();
 			$this->selectQuery->where()
 				->like()
 				->property('url')

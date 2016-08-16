@@ -25,7 +25,7 @@
 		 * @return HeadControl
 		 */
 		public function getHead() {
-			$this->usse();
+			$this->use();
 			return $this->head;
 		}
 
@@ -35,7 +35,7 @@
 		 * @return BodyControl
 		 */
 		public function getBody() {
-			$this->usse();
+			$this->use();
 			return $this->body;
 		}
 
@@ -44,7 +44,7 @@
 		}
 
 		public function render() {
-			$this->usse();
+			$this->use();
 			return "<!DOCTYPE html>\n" . parent::render();
 		}
 
@@ -56,7 +56,7 @@
 		 * @return $this
 		 */
 		public function addControl(IControl $control) {
-			$this->usse();
+			$this->use();
 			$this->body->addControl($control);
 			return $this;
 		}

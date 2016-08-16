@@ -24,7 +24,7 @@
 		}
 
 		public function getUpgradeList() {
-			$this->usse();
+			$this->use();
 			return $this->upgradeList;
 		}
 
@@ -33,7 +33,7 @@
 		}
 
 		public function upgradeTo($version = null) {
-			$this->usse();
+			$this->use();
 			if ($version === null) {
 				end($this->upgradeList);
 				$version = key($this->upgradeList);

@@ -29,7 +29,7 @@
 		}
 
 		public function run() {
-			$this->usse();
+			$this->use();
 			if (method_exists($control = $this->container->create($this->route->getClass()), $actionMethod = $this->route->getMethod()) === false) {
 				throw new ApplicationException(sprintf('Missing method [%s::%s()] in the control.', get_class($control), $actionMethod));
 			}

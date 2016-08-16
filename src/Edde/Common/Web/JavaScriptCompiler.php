@@ -35,7 +35,7 @@
 		}
 
 		public function compile(IResourceList $resourceList) {
-			$this->usse();
+			$this->use();
 			$content = [];
 			if (($resource = $this->cache->load($cacheId = $resourceList->getResourceName())) === null) {
 				foreach ($resourceList as $resource) {

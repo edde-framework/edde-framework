@@ -18,7 +18,7 @@
 		}
 
 		public function setTag(string $tag, bool $pair = true) {
-			$this->usse();
+			$this->use();
 			$this->node->addMetaList([
 				'tag' => $tag,
 				'pair' => $pair,
@@ -27,13 +27,13 @@
 		}
 
 		public function setId(string $id) {
-			$this->usse();
+			$this->use();
 			$this->setAttribute('id', $id);
 			return $this;
 		}
 
 		public function setAttribute($attribute, $value) {
-			$this->usse();
+			$this->use();
 			switch ($attribute) {
 				case 'class':
 					$this->addAttribute($attribute, $value);
@@ -45,7 +45,7 @@
 		}
 
 		public function addAttribute($attribute, $value) {
-			$this->usse();
+			$this->use();
 			$attributeList = $this->getAttributeList();
 			$attributeList[$attribute][] = $value;
 			$this->node->setAttributeList($attributeList);
@@ -53,12 +53,12 @@
 		}
 
 		public function getAttributeList(): array {
-			$this->usse();
+			$this->use();
 			return $this->node->getAttributeList();
 		}
 
 		public function getId(): string {
-			$this->usse();
+			$this->use();
 			return $this->getAttribute('id', '');
 		}
 
@@ -67,19 +67,19 @@
 		}
 
 		public function setText(string $text) {
-			$this->usse();
+			$this->use();
 			$this->node->setValue($text);
 			return $this;
 		}
 
 		public function addAttributeList(array $attributeList) {
-			$this->usse();
+			$this->use();
 			$this->node->addAttributeList($attributeList);
 			return $this;
 		}
 
 		public function setAttributeList(array $attributeList): IHtmlControl {
-			$this->usse();
+			$this->use();
 			/**
 			 * intentional loop, because control can simply alter attributes
 			 */
@@ -112,7 +112,7 @@
 		}
 
 		public function render() {
-			$this->usse();
+			$this->use();
 			$content = [];
 			/** @var $control IHtmlControl */
 			if (($tag = $this->getTag()) === null) {
@@ -153,12 +153,12 @@
 		}
 
 		public function getTag() {
-			$this->usse();
+			$this->use();
 			return $this->node->getMeta('tag');
 		}
 
 		public function isPair() {
-			$this->usse();
+			$this->use();
 			return $this->node->getMeta('pair', true);
 		}
 

@@ -43,7 +43,7 @@
 		}
 
 		public function run(callable $callback) {
-			$this->usse();
+			$this->use();
 			return $this->container->call($callback);
 		}
 

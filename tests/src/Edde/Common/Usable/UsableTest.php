@@ -9,7 +9,7 @@
 		public $prepared = false;
 
 		public function takeAction() {
-			$this->usse();
+			$this->use();
 		}
 
 		protected function prepare() {
@@ -24,7 +24,7 @@
 		public $prepared = false;
 
 		public function takeAction() {
-			$this->usse();
+			$this->use();
 		}
 
 		protected function prepare() {

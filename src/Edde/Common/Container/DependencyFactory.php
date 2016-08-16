@@ -27,7 +27,7 @@
 		}
 
 		public function create($name) {
-			$this->usse();
+			$this->use();
 			if ($dependency = $this->cache->load($cacheId = ('dependency-list/' . $name))) {
 				return $dependency;
 			}

@@ -48,6 +48,7 @@
 					]),
 					new Node('name', null, [
 						'required' => true,
+						'type' => 'string[]',
 					]),
 				]),
 				(new Node('link'))->addNodeList([
@@ -76,6 +77,9 @@
 				'header',
 				'name',
 			], array_keys($rowSchema->getPropertyList()));
+			$nameProperty = $rowSchema->getProperty('name');
+			self::assertTrue($nameProperty->isArray());
+			self::assertEquals('string', $nameProperty->getType());
 		}
 
 		public function testResourceManager() {

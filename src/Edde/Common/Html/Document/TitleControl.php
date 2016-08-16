@@ -15,7 +15,7 @@
 		}
 
 		public function setTitle($title) {
-			$this->usse();
+			$this->use();
 			return $this->node->setValue($title);
 		}
 	}

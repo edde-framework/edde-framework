@@ -47,7 +47,7 @@
 		}
 
 		public function route() {
-			$this->usse();
+			$this->use();
 			if ($this->runtime->isConsoleMode()) {
 				return null;
 			}

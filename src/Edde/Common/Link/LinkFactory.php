@@ -32,7 +32,7 @@
 		}
 
 		public function generate($generate, ...$parameterList) {
-			$this->usse();
+			$this->use();
 			foreach ($this->linkGeneratorList as $lingGenerator) {
 				if (($url = $lingGenerator->generate($generate, ...$parameterList)) !== null) {
 					return $url;

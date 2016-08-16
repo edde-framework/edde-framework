@@ -41,7 +41,7 @@
 		}
 
 		public function compile(IResourceList $resourceList): IResource {
-			$this->usse();
+			$this->use();
 			$content = [];
 			$pathList = [];
 			if (($resource = $this->cache->load($cacheId = $resourceList->getResourceName())) === null) {

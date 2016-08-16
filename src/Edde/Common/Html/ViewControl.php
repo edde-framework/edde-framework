@@ -70,25 +70,25 @@
 		}
 
 		public function addStyleSheet(string $file) {
-			$this->usse();
+			$this->use();
 			$this->styleSheetList->addResource(new File($file));
 			return $this;
 		}
 
 		public function addStyleSheetResource(IResource $resource) {
-			$this->usse();
+			$this->use();
 			$this->styleSheetList->addResource($resource);
 			return $this;
 		}
 
 		public function addJavaScript(string $file) {
-			$this->usse();
+			$this->use();
 			$this->javaScriptList->addResource(new File($file));
 			return $this;
 		}
 
 		public function addJavaScriptResource(IResource $resource) {
-			$this->usse();
+			$this->use();
 			$this->javaScriptList->addResource($resource);
 			return $this;
 		}
@@ -124,7 +124,7 @@
 		 * @return $this
 		 */
 		public function response() {
-			$this->usse();
+			$this->use();
 			$this->htmlResponse->setControlList($this->body->getControlList());
 			$this->htmlResponse->send();
 			return $this;

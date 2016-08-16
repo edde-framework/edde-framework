@@ -68,7 +68,7 @@
 		}
 
 		public function generate(bool $force = false): ICrateGenerator {
-			$this->usse();
+			$this->use();
 			if (($crateList = $this->cache->load('crate-list', [])) === [] || $force === true) {
 				$this->crateDirectory->purge();
 				foreach ($this->schemaManager->getSchemaList() as $schema) {
@@ -94,7 +94,7 @@
 		}
 
 		public function compile(ISchema $schema): array {
-			$this->usse();
+			$this->use();
 			$sourceList = [];
 			$source[] = "<?php\n";
 			$source[] = "\tdeclare(strict_types = 1);\n\n";
@@ -123,15 +123,19 @@
 		protected function generateSchemaProperty(ISchemaProperty $schemaProperty) {
 			$source[] = $this->generateGetter($schemaProperty);
 			$source[] = $this->generateSetter($schemaProperty);
+			if ($schemaProperty->isArray()) {
+				$source[] = $this->generateArray($schemaProperty);
+			}
 			$source[] = '';
 			return implode("\n", $source);
 		}
 
 		protected function generateGetter(ISchemaProperty $schemaProperty) {
 			$source[] = "\t\t/**\n";
-			$source[] = sprintf("\t\t * @return %s\n", $schemaProperty->getType());
+			$type = $schemaProperty->isArray() ? 'array' : $schemaProperty->getType();
+			$source[] = sprintf("\t\t * @return %s\n", $type);
 			$source[] = "\t\t */\n";
-			$source[] = sprintf("\t\tpublic function get%s()%s {\n", StringUtils::camelize($schemaProperty->getName()), $schemaProperty->isRequired() ? (': ' . $schemaProperty->getType()) : '');
+			$source[] = sprintf("\t\tpublic function get%s()%s {\n", StringUtils::camelize($schemaProperty->getName()), $schemaProperty->isRequired() ? (': ' . $type) : '');
 			$source[] = sprintf("\t\t\treturn \$this->get('%s');\n", $schemaProperty->getName());
 			$source[] = "\t\t}\n";
 			return implode('', $source);
@@ -140,12 +144,27 @@
 		protected function generateSetter(ISchemaProperty $schemaProperty) {
 			$parameter = StringUtils::firstLower($camelized = StringUtils::camelize($propertyName = $schemaProperty->getName()));
 			$source[] = "\t\t/**\n";
+			$type = $schemaProperty->isArray() ? 'array' : $schemaProperty->getType();
+			$source[] = sprintf("\t\t * @param %s $%s\n", $type, $parameter);
+			$source[] = "\t\t * \n";
+			$source[] = "\t\t * @return \$this\n";
+			$source[] = "\t\t */\n";
+			$source[] = sprintf("\t\tpublic function set%s(%s \$%s%s) {\n", $camelized, $type, $parameter, $schemaProperty->isRequired() ? '' : ($schemaProperty->isArray() ? ' = []' : ' = null'));
+			$source[] = sprintf("\t\t\t\$this->set('%s', \$%s);\n", $propertyName, $parameter);
+			$source[] = "\t\t\treturn \$this;\n";
+			$source[] = "\t\t}\n";
+			return implode('', $source);
+		}
+
+		protected function generateArray(ISchemaProperty $schemaProperty) {
+			$parameter = StringUtils::firstLower($camelized = StringUtils::camelize($propertyName = $schemaProperty->getName()));
+			$source[] = "\t\t/**\n";
 			$source[] = sprintf("\t\t * @param %s $%s\n", $schemaProperty->getType(), $parameter);
 			$source[] = "\t\t * \n";
 			$source[] = "\t\t * @return \$this\n";
 			$source[] = "\t\t */\n";
-			$source[] = sprintf("\t\tpublic function set%s(%s \$%s%s) {\n", $camelized, $schemaProperty->getType(), $parameter, $schemaProperty->isRequired() ? '' : ' = null');
-			$source[] = sprintf("\t\t\t\$this->set('%s', \$%s);\n", $propertyName, $parameter);
+			$source[] = sprintf("\t\tpublic function add%s(%s \$%s, \$key = null) {\n", $camelized, $schemaProperty->getType(), $parameter);
+			$source[] = sprintf("\t\t\t\$this->add('%s', \$%s, \$key);\n", $propertyName, $parameter);
 			$source[] = "\t\t\treturn \$this;\n";
 			$source[] = "\t\t}\n";
 			return implode('', $source);

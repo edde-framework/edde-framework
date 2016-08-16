@@ -60,7 +60,7 @@
 		}
 
 		public function update() {
-			$this->usse();
+			$this->use();
 			$this->storage->start();
 			try {
 				$this->storage->execute(new DeleteQuery($this->resourceSchema->getSchemaName()));
@@ -88,7 +88,7 @@
 		}
 
 		public function createResourceStorable() {
-			$this->usse();
+			$this->use();
 			$resourceStorable = new ResourceStorable($this->container);
 			$resourceStorable->setSchema($this->resourceSchema);
 			$resourceStorable->set('guid', $this->cryptEngine->guid());
@@ -101,14 +101,14 @@
 		}
 
 		public function getResourceCollection(IResourceQuery $resourceQuery) {
-			$this->usse();
+			$this->use();
 			foreach ($this->storage->collection($this->resourceSchema, $resourceQuery->getQuery()) as $storable) {
 				yield new Resource(Url::create($storable->get('url')), $storable->get('base'), $storable->get('name'), $storable->get('mime'));
 			}
 		}
 
 		public function hasResource(IResourceQuery $resourceQuery) {
-			$this->usse();
+			$this->use();
 			try {
 				$this->getResource($resourceQuery);
 				return true;
@@ -118,13 +118,13 @@
 		}
 
 		public function getResource(IResourceQuery $resourceQuery) {
-			$this->usse();
+			$this->use();
 			$storable = $this->storage->storable($this->resourceSchema, $resourceQuery->getQuery());
 			return new Resource(Url::create($storable->get('url')), $storable->get('base'), $storable->get('name'), $storable->get('mime'));
 		}
 
 		public function query() {
-			$this->usse();
+			$this->use();
 			return new ResourceQuery($this, $this->resourceSchema);
 		}
 

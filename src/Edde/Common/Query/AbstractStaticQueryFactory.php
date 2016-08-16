@@ -38,12 +38,12 @@
 		protected $createSchemaNodeQuery;
 
 		public function create(IQuery $query) {
-			$this->usse();
+			$this->use();
 			return $this->fragment($query->getNode());
 		}
 
 		public function fragment(INode $node) {
-			$this->usse();
+			$this->use();
 			if (isset($this->factoryList[$node->getName()]) === false) {
 				throw new StaticQueryException(sprintf('Unsuported fragment type [%s].', $node->getName()));
 			}
@@ -70,7 +70,7 @@
 		}
 
 		protected function formatDeleteQuery(INode $node) {
-			$this->usse();
+			$this->use();
 			$sql = 'DELETE FROM ' . $this->delimite($node->getValue());
 			return new StaticQuery($sql, []);
 		}
@@ -78,7 +78,7 @@
 		abstract protected function delimite($delimite);
 
 		protected function formatInsertQuery(INode $node) {
-			$this->usse();
+			$this->use();
 			$parameterList = [];
 			$nameList = [];
 			$columnList = [];
@@ -94,7 +94,7 @@
 		}
 
 		protected function formatCreateSchemaQuery(INode $node) {
-			$this->usse();
+			$this->use();
 			$sql = 'CREATE TABLE IF NOT EXISTS ' . $this->delimite($node->getValue()) . ' (';
 			$columnList = [];
 			foreach ($this->createSchemaNodeQuery->filter($node) as $propertyNode) {
@@ -115,7 +115,7 @@
 		abstract protected function type($type);
 
 		protected function formatSelectQuery(INode $node) {
-			$this->usse();
+			$this->use();
 			$selectList = $this->formatSelect($node);
 			$parameterList = [];
 			$selectQuery[] = 'SELECT';

@@ -9,7 +9,7 @@
 
 	class CryptEngine extends AbstractUsable implements ICryptEngine {
 		public function generate(int $length = 10, string $charlist = '0-9a-z'): string {
-			$this->usse();
+			$this->use();
 			$charlist = str_shuffle(preg_replace_callback('#.-.#', function ($m) {
 				return implode('', range($m[0][0], $m[0][2]));
 			}, $charlist));
@@ -31,7 +31,7 @@
 		}
 
 		public function bytes(int $length): string {
-			$this->usse();
+			$this->use();
 			if (function_exists('random_bytes')) {
 				return random_bytes($length);
 			} else if (function_exists('openssl_random_pseudo_bytes')) {
@@ -45,7 +45,7 @@
 		}
 
 		public function guid(string $seed = null): string {
-			$this->usse();
+			$this->use();
 			$data = $seed ? substr(hash('sha512', $seed), 0, 16) : $this->bytes(16);
 			$data[6] = chr(ord($data[6]) & 0x0f | 0x40);
 			$data[8] = chr(ord($data[8]) & 0x3f | 0x80);

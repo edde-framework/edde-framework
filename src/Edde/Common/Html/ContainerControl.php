@@ -5,7 +5,7 @@
 
 	class ContainerControl extends AbstractHtmlControl {
 		public function render() {
-			$this->usse();
+			$this->use();
 			foreach ($this->getControlList() as $control) {
 				$control->render();
 			}

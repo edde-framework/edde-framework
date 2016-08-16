@@ -48,7 +48,7 @@
 		 * @return ICrate
 		 */
 		public function createCrate() {
-			$this->usse();
+			$this->use();
 			return $this->container->create($this->crate)
 				->setSchema($this->schema);
 		}

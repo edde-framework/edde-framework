@@ -24,18 +24,18 @@
 		}
 
 		public function save($id, $save) {
-			$this->usse();
+			$this->use();
 			$this->memcache->set($id, $save);
 			return $this;
 		}
 
 		public function load($id) {
-			$this->usse();
+			$this->use();
 			return ($item = $this->memcache->get($id)) === false ? null : $item;
 		}
 
 		public function invalidate() {
-			$this->usse();
+			$this->use();
 			$this->memcache->flush();
 		}
 

@@ -130,6 +130,7 @@
 					->unique()
 					->required(),
 				new SchemaProperty($this, 'name'),
+				new SchemaProperty($this, 'things', 'string', false, false, false, true),
 			]);
 		}
 	}

@@ -23,7 +23,7 @@
 		}
 
 		public function save($id, $save) {
-			$this->usse();
+			$this->use();
 			$file = $this->file($id);
 			if ($save === null) {
 				if (@unlink($file) === false) {
@@ -45,7 +45,7 @@
 		}
 
 		public function load($id) {
-			$this->usse();
+			$this->use();
 			if (($handle = @fopen($this->file($id), 'r+b')) === false) {
 				return null;
 			}
@@ -55,7 +55,7 @@
 		}
 
 		public function invalidate() {
-			$this->usse();
+			$this->use();
 			$this->cacheDirectory->purge();
 		}
 

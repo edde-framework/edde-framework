@@ -7,13 +7,13 @@
 		use TemplateTrait;
 
 		public function setTemplate($template) {
-			$this->usse();
+			$this->use();
 			$this->node->setMeta('template', $template);
 			return $this;
 		}
 
 		public function render() {
-			$this->usse();
+			$this->use();
 			$this->template($this->node->getMeta('template'));
 			parent::render();
 		}

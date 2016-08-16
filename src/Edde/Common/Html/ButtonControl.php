@@ -5,13 +5,13 @@
 
 	class ButtonControl extends AbstractHtmlControl {
 		public function setTitle($title) {
-			$this->usse();
+			$this->use();
 			$this->setAttribute('title', $title);
 			return $this;
 		}
 
 		public function setAttribute($attribute, $value) {
-			$this->usse();
+			$this->use();
 			switch ($attribute) {
 				case 'value':
 					$this->node->setValue($value);

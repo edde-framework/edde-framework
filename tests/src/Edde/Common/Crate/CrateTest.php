@@ -1,7 +1,10 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Crate;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Common\Schema\Schema;
 	use Edde\Common\Schema\SchemaProperty;
@@ -47,6 +50,29 @@
 			$headerCrate->setSchema($headerSchema);
 			$rowCollection = $headerCrate->collection('rowCollection');
 			self::assertInstanceOf(Row::class, $rowCrate = $rowCollection->createCrate());
+		}
+
+		public function testArraysException() {
+			$this->expectException(CrateException::class);
+			$this->expectExceptionMessage('Property [schema::hello] is not array; cannot add value.');
+			$crate = new Crate($this->container);
+			$schema = new Schema('schema');
+			$crate->addProperty(new Property(new SchemaProperty($schema, 'hello')));
+			$crate->add('hello', false);
+		}
+
+		public function testArrays() {
+			$crate = new Crate($this->container);
+			$schema = new Schema('schema');
+			$crate->addProperty(new Property(new SchemaProperty($schema, 'hello', 'string', false, false, false, true)));
+			$crate->add('hello', 'hello');
+			$crate->add('hello', 'bello');
+			$crate->add('hello', 'whepee!', 'key');
+			self::assertEquals([
+				0 => 'hello',
+				1 => 'bello',
+				'key' => 'whepee!',
+			], $crate->get('hello'));
 		}
 
 		protected function setUp() {

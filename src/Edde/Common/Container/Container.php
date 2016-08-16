@@ -52,7 +52,7 @@
 		}
 
 		public function inject($instance) {
-			$this->usse();
+			$this->use();
 			if (($reflection = $this->cache->load($cacheId = ('reflection/' . get_class($instance)))) === null) {
 				$reflectionClass = new \ReflectionClass($instance);
 				$methodList = [];
@@ -88,7 +88,7 @@
 		}
 
 		public function call(callable $callable, ...$parameterList) {
-			$this->usse();
+			$this->use();
 			$callback = new Callback($callable);
 			$dependencies = [];
 			$grab = count($dependencyList = $callback->getParameterList()) - count($parameterList);
@@ -102,7 +102,7 @@
 		}
 
 		public function create($name, ...$parameterList) {
-			$this->usse();
+			$this->use();
 			return $this->factory($this->dependencyFactory->create($name), $parameterList);
 		}
 

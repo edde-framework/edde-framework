@@ -27,14 +27,14 @@
 		}
 
 		public function getFileList() {
-			$this->usse();
+			$this->use();
 			foreach (new \RecursiveDirectoryIterator($this->directory, \RecursiveDirectoryIterator::SKIP_DOTS) as $path) {
 				yield $path;
 			}
 		}
 
 		public function save($name, $content) {
-			$this->usse();
+			$this->use();
 			file_put_contents($file = ($this->directory . '/' . $name), $content);
 			return new File(FileUtils::url($file));
 		}
@@ -48,7 +48,7 @@
 		}
 
 		public function getDirectory() {
-			$this->usse();
+			$this->use();
 			return $this->directory;
 		}
 
@@ -71,7 +71,7 @@
 		}
 
 		public function delete() {
-			$this->usse();
+			$this->use();
 			FileUtils::delete($this->directory);
 		}
 
@@ -84,7 +84,7 @@
 		}
 
 		public function getIterator() {
-			$this->usse();
+			$this->use();
 			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->directory, RecursiveDirectoryIterator::SKIP_DOTS)) as $splFileInfo) {
 				yield new File((string)$splFileInfo);
 			}

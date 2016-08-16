@@ -56,7 +56,7 @@
 		}
 
 		public function compile(IFile $file, bool $force = false): ITemplate {
-			$this->usse();
+			$this->use();
 			if (($templateFile = $this->cache->load($cacheId = $file->getPath(), false)) !== false && $force === false) {
 				return new Template(new File($templateFile));
 			}

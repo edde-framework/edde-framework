@@ -54,14 +54,14 @@
 		}
 
 		public function actionSetup() {
-			$this->usse();
+			$this->use();
 			$this->setTitle('Edde Control');
 			$this->template(__DIR__ . '/template/action-setup.xml');
 			$this->send();
 		}
 
 		public function handleOnUpgrade() {
-			$this->usse();
+			$this->use();
 			try {
 				$upgrade = $this->upgradeManager->upgrade();
 				$this->message->addClass('success')
@@ -75,7 +75,7 @@
 		}
 
 		public function handleOnUpdateIndex() {
-			$this->usse();
+			$this->use();
 			try {
 				$this->resourceIndex->update();
 				$this->message->addClass('success')
@@ -89,7 +89,7 @@
 		}
 
 		public function handleOnRebuildCrates() {
-			$this->usse();
+			$this->use();
 			try {
 				$this->crateGenerator->generate(true);
 				$this->message->addClass('success')
@@ -103,7 +103,7 @@
 		}
 
 		public function handleOnClearCache() {
-			$this->usse();
+			$this->use();
 			try {
 				$this->cacheStorage->invalidate();
 				$this->message->addClass('success')

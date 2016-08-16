@@ -55,7 +55,7 @@
 		}
 
 		public function start($exclusive = false) {
-			$this->usse();
+			$this->use();
 			if ($this->transaction && $exclusive) {
 				throw new StorageException('Cannot start exclusive transaction, there is already running another one.');
 			}
@@ -64,21 +64,21 @@
 		}
 
 		public function commit() {
-			$this->usse();
+			$this->use();
 			$this->transaction = false;
 			$this->driver->commit();
 			return $this;
 		}
 
 		public function rollback() {
-			$this->usse();
+			$this->use();
 			$this->transaction = false;
 			$this->driver->rollback();
 			return $this;
 		}
 
 		public function store(IStorable $storable) {
-			$this->usse();
+			$this->use();
 			if ($storable->isDirty() === false) {
 				return $this;
 			}
@@ -112,7 +112,7 @@
 		}
 
 		public function execute(IQuery $query) {
-			$this->usse();
+			$this->use();
 			try {
 				return $this->driver->execute($query);
 			} catch (PDOException $e) {
