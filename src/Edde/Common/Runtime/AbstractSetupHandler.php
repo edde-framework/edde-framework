@@ -31,7 +31,7 @@
 			return $this;
 		}
 
-		public function onSetup($name, callable $onSetup) {
+		public function onSetup($name, callable $onSetup): AbstractSetupHandler {
 			if (isset($this->factoryList[$name]) === false) {
 				return $this;
 			}

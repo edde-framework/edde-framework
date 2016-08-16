@@ -97,6 +97,8 @@
 
 			$rowSchema = $schemaList['Foo\\Bar\\Row'];
 			self::assertTrue($rowSchema->hasLink('header'));
+			self::assertTrue($rowSchema->hasMeta('some'));
+			self::assertEquals($rowSchema->getMeta('some'), 'meta-data');
 			self::assertEquals([
 				'guid',
 				'header',

@@ -133,4 +133,30 @@
 		 * @return ISchema
 		 */
 		public function linkTo(string $link, string $collection, ISchemaProperty $source, ISchemaProperty $target): ISchema;
+
+		/**
+		 * retrieve named metadata
+		 *
+		 * @param string $name
+		 * @param mixed|null $default
+		 *
+		 * @return mixed
+		 */
+		public function getMeta(string $name, $default = null);
+
+		/**
+		 * return current set of metadata
+		 *
+		 * @return array
+		 */
+		public function getMetaList(): array;
+
+		/**
+		 * is the given meta key set?
+		 *
+		 * @param string $name
+		 *
+		 * @return bool
+		 */
+		public function hasMeta(string $name): bool;
 	}

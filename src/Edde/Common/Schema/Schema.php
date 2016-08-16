@@ -35,6 +35,12 @@
 		 * @var ISchemaCollection[]
 		 */
 		protected $collectionList = [];
+		/**
+		 * meta-data
+		 *
+		 * @var array
+		 */
+		protected $metaList = [];
 
 		/**
 		 * @param string $name
@@ -159,6 +165,23 @@
 			}
 			$this->linkList[$name] = new SchemaLink($name, $source, $target);
 			return $this;
+		}
+
+		public function getMeta(string $name, $default = null) {
+			return $this->metaList[$name] ?? $default;
+		}
+
+		public function getMetaList(): array {
+			return $this->metaList;
+		}
+
+		public function setMetaList(array $metaList) {
+			$this->metaList = $metaList;
+			return $this;
+		}
+
+		public function hasMeta(string $name): bool {
+			return isset($this->metaList[$name]) || array_key_exists($name, $this->metaList);
 		}
 
 		protected function prepare() {

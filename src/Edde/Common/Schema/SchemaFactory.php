@@ -85,6 +85,7 @@
 
 		protected function createSchema(INode $schemaNode) {
 			$schema = new Schema($schemaNode->getName(), $schemaNode->getAttribute('namespace'));
+			$schema->setMetaList($schemaNode->getMetaList());
 			foreach ($this->propertyListNodeQuery->filter($schemaNode) as $propertyNode) {
 				$schema->addProperty($property = new SchemaProperty($schema, $propertyNode->getName(), filter_var($propertyNode->getAttribute('required'), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('unique'), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('identifier'), FILTER_VALIDATE_BOOLEAN)));
 				$property->array(strpos($type = $propertyNode->getAttribute('type', 'string'), '[]') !== false);

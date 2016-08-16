@@ -94,7 +94,7 @@
 		public function directory($directory);
 
 		/**
-		 * @return IResource[]
+		 * @return IFile[]
 		 */
 		public function getIterator();
 	}

@@ -57,6 +57,10 @@
 			return $this->url->getPath();
 		}
 
+		public function getExtension(): string {
+			return $this->url->getExtension();
+		}
+
 		public function setAutoClose(bool $autoClose = true): IFile {
 			$this->autoClose = $autoClose;
 			return $this;

@@ -21,6 +21,11 @@
 		public function getPath(): string;
 
 		/**
+		 * @return string
+		 */
+		public function getExtension(): string;
+
+		/**
 		 * return directory of this file
 		 *
 		 * @return IDirectory
