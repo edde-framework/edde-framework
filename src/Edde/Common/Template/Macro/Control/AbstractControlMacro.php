@@ -3,10 +3,8 @@
 
 	namespace Edde\Common\Template\Macro\Control;
 
-	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Template\ITemplate;
-	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Common\Template\AbstractMacro;
 
 	abstract class AbstractControlMacro extends AbstractMacro {
@@ -24,8 +22,8 @@
 			$this->control = $control;
 		}
 
-		public function run(ITemplateManager $templateManager, ITemplate $template, INode $root, IFile $file, ...$parameterList) {
-			$file = $template->getFile();
+		public function run(INode $root, ICompiler $compiler) {
+			$file = $compiler->getDestination();
 			$file->write("\t\t\t\$parent = \$this->stack->top();\n");
 			$file->write(sprintf("\t\t\t\$parent->addControl(\$control = \$this->container->create('%s'));\n", $this->control));
 			if ($root->isLeaf() && ($text = $root->getValue($root->getAttribute('value'))) !== null) {
@@ -36,21 +34,21 @@
 			if ($attributeList !== []) {
 				$file->write(sprintf("\t\t\t\$control->setAttributeList(%s);\n", var_export($attributeList, true)));
 			}
-			$this->macro($root, $templateManager, $template, $file);
+			$this->macro($root, $compiler);
 		}
 
 		protected function getAttributeList(INode $node) {
 			return $node->getAttributeList();
 		}
 
-		protected function macro(INode $root, ITemplateManager $templateManager, ITemplate $template, IFile $file, ...$parameterList) {
-			$templateFile = $template->getFile();
+		protected function macro(INode $root, ICompiler $compiler) {
+			$destination = $compiler->getDestination();
 			if ($root->isLeaf()) {
-				parent::macro($root, $templateManager, $template, $file);
+				parent::macro($root, $compiler);
 				return;
 			}
-			$templateFile->write("\t\t\t\$this->stack->push(\$control);\n");
-			parent::macro($root, $templateManager, $template, $file);
-			$templateFile->write("\t\t\t\$this->stack->pop();\n");
+			$destination->write("\t\t\t\$this->stack->push(\$control);\n");
+			parent::macro($root, $compiler);
+			$destination->write("\t\t\t\$this->stack->pop();\n");
 		}
 	}

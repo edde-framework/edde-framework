@@ -3,10 +3,8 @@
 
 	namespace Edde\Common\Template\Macro;
 
-	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Template\ITemplate;
-	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Common\Template\AbstractMacro;
 
 	class LoopMacro extends AbstractMacro {
@@ -23,16 +21,16 @@
 			$this->variableStack = new \SplStack();
 		}
 
-		public function run(ITemplateManager $templateManager, ITemplate $template, INode $root, IFile $file, ...$parameterList) {
-			$templateFile = $template->getFile();
+		public function run(INode $root, ICompiler $compiler) {
+			$destination = $compiler->getDestination();
 			switch ($root->getName()) {
 				case 'loop':
 					$this->variableStack->push([
 
 					]);
-					$templateFile->write(sprintf("\t\t\tforeach(%s as $%s => $%s) {\n", $this->value($root->getAttribute('src')), 'a', 'b'));
-					$this->macro($root, $templateManager, $template, $file);
-					$templateFile->write("\t\t\t}\n");
+					$destination->write(sprintf("\t\t\tforeach(%s as $%s => $%s) {\n", $compiler->value($root->getAttribute('src')), 'a', 'b'));
+					$this->macro($root, $compiler);
+					$destination->write("\t\t\t}\n");
 					break;
 				case 'm:loop':
 					break;

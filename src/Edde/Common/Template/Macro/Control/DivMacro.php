@@ -3,12 +3,12 @@
 
 	namespace Edde\Common\Template\Macro\Control;
 
-	use Edde\Common\Html\SpanControl;
+	use Edde\Common\Html\DivControl;
 
-	class SpanNodeMacro extends AbstractControlMacro {
+	class DivMacro extends AbstractControlMacro {
 		public function __construct() {
 			parent::__construct([
-				'span',
-			], SpanControl::class);
+				'div',
+			], DivControl::class);
 		}
 	}

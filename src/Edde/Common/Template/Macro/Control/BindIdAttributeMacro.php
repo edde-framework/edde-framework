@@ -4,10 +4,8 @@
 	namespace Edde\Common\Template\Macro\Control;
 
 	use Edde\Api\Crypt\ICryptEngine;
-	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Template\ITemplate;
-	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Template\AbstractMacro;
 
@@ -29,7 +27,7 @@
 			$this->cryptEngine = $cryptEngine;
 		}
 
-		public function run(ITemplateManager $templateManager, ITemplate $template, INode $root, IFile $file, ...$parameterList) {
+		public function run(INode $root, ICompiler $compiler) {
 			if ($root->isLeaf()) {
 				throw new MacroException(sprintf('Node [%s] must have children.', $root->getPath()));
 			}
@@ -45,6 +43,6 @@
 					$node->setAttribute('bind', $this->idList[$id]);
 					break;
 			}
-			$this->macro($root, $templateManager, $template, $file, ...$parameterList);
+			$this->macro($root, $compiler);
 		}
 	}

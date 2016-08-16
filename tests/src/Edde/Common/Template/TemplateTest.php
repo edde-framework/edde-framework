@@ -5,6 +5,7 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Crypt\ICryptEngine;
+	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\ITemplateDirectory;
@@ -12,16 +13,17 @@
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Crypt\CryptEngine;
+	use Edde\Common\File\RootDirectory;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Template\Macro\Control\BindIdAttributeMacro;
-	use Edde\Common\Template\Macro\Control\ButtonNodeMacro;
+	use Edde\Common\Template\Macro\Control\ButtonMacro;
 	use Edde\Common\Template\Macro\Control\ControlMacro;
-	use Edde\Common\Template\Macro\Control\CssNodeMacro;
-	use Edde\Common\Template\Macro\Control\DivNodeMacro;
-	use Edde\Common\Template\Macro\Control\JsNodeMacro;
+	use Edde\Common\Template\Macro\Control\CssMacro;
+	use Edde\Common\Template\Macro\Control\DivMacro;
+	use Edde\Common\Template\Macro\Control\JsMacro;
 	use Edde\Common\Template\Macro\Control\PasswordMacro;
-	use Edde\Common\Template\Macro\Control\SchemaNodeMacro;
-	use Edde\Common\Template\Macro\Control\SpanNodeMacro;
+	use Edde\Common\Template\Macro\Control\SchemaMacro;
+	use Edde\Common\Template\Macro\Control\SpanMacro;
 	use Edde\Common\Template\Macro\Control\TextMacro;
 	use Edde\Common\Template\Macro\IncludeMacro;
 	use Edde\Common\Template\Macro\LoopMacro;
@@ -209,11 +211,14 @@
 				ITemplateDirectory::class => function () {
 					return new TemplateDirectory(__DIR__ . '/temp');
 				},
+				IRootDirectory::class => function () {
+					return new RootDirectory(__DIR__);
+				},
 				\TestDocument::class,
 				IncludeMacro::class,
 				SwitchMacro::class,
 				BindIdAttributeMacro::class,
-				SchemaNodeMacro::class,
+				SchemaMacro::class,
 				ICryptEngine::class => CryptEngine::class,
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
@@ -222,19 +227,21 @@
 			]);
 			$this->templateManager = $this->container->create(TemplateManager::class);
 			$this->templateManager->onSetup(function (ITemplateManager $templateManager) use ($container) {
-				$templateManager->registerMacro($container->create(ControlMacro::class));
-				$templateManager->registerMacro($container->create(DivNodeMacro::class));
-				$templateManager->registerMacro($container->create(SpanNodeMacro::class));
-				$templateManager->registerMacro($container->create(CssNodeMacro::class));
-				$templateManager->registerMacro($container->create(JsNodeMacro::class));
-				$templateManager->registerMacro($container->create(ButtonNodeMacro::class));
-				$templateManager->registerMacro($container->create(SwitchMacro::class));
-				$templateManager->registerMacro($container->create(IncludeMacro::class));
-				$templateManager->registerMacro($container->create(BindIdAttributeMacro::class));
-				$templateManager->registerMacro($container->create(SchemaNodeMacro::class));
-				$templateManager->registerMacro($container->create(TextMacro::class));
-				$templateManager->registerMacro($container->create(PasswordMacro::class));
-				$templateManager->registerMacro($container->create(LoopMacro::class));
+				$templateManager->registerMacroList([
+					new ControlMacro(),
+					new DivMacro(),
+					new SpanMacro(),
+					new TextMacro(),
+					new PasswordMacro(),
+					new LoopMacro(),
+					new CssMacro(),
+					new JsMacro(),
+					new ButtonMacro(),
+					new SchemaMacro(),
+					$container->create(SwitchMacro::class),
+					$container->create(IncludeMacro::class),
+					$container->create(BindIdAttributeMacro::class),
+				]);
 			});
 			$this->control = $this->container->create(\TestDocument::class);
 		}

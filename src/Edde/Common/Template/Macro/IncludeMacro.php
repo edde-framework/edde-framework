@@ -3,11 +3,9 @@
 
 	namespace Edde\Common\Template\Macro;
 
-	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResourceManager;
-	use Edde\Api\Template\ITemplate;
-	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Template\AbstractMacro;
 
@@ -28,18 +26,18 @@
 			$this->resourceManager = $resourceManager;
 		}
 
-		public function run(ITemplateManager $templateManager, ITemplate $template, INode $root, IFile $file, ...$parameterList) {
+		public function run(INode $root, ICompiler $compiler) {
 			switch ($root->getName()) {
 				case 'include':
 					$node = new Node();
-					$node->setNodeList($this->resourceManager->file($this->file($root->getAttribute('src'), $file))
+					$node->setNodeList($this->resourceManager->file($compiler->file($root->getAttribute('src')))
 						->getNodeList(), true);
-					$this->macro($node, $templateManager, $template, $file, ...$parameterList);
+					$this->macro($node, $compiler);
 					break;
 				case 'm:include':
-					$root->getNodeList()[0]->setNodeList($this->resourceManager->file($this->file($root->getValue(), $file))
+					$root->getNodeList()[0]->setNodeList($this->resourceManager->file($compiler->file($root->getValue()))
 						->getNodeList(), true);
-					$this->macro($root, $templateManager, $template, $file, ...$parameterList);
+					$this->macro($root, $compiler);
 					break;
 			}
 		}

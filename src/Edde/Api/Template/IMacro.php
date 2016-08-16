@@ -3,7 +3,6 @@
 
 	namespace Edde\Api\Template;
 
-	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 
 	interface IMacro {
@@ -15,13 +14,10 @@
 		public function getMacroList(): array;
 
 		/**
-		 * @param ITemplateManager $templateManager
-		 * @param ITemplate $template access to current template
-		 * @param INode $root current node to process
-		 * @param IFile $file
-		 * @param array $parameterList
+		 * @param INode $root
+		 * @param ICompiler $compiler
 		 *
 		 * @return IMacro
 		 */
-		public function run(ITemplateManager $templateManager, ITemplate $template, INode $root, IFile $file, ...$parameterList);
+		public function run(INode $root, ICompiler $compiler);
 	}

@@ -3,14 +3,12 @@
 
 	namespace Edde\Common\Template\Macro\Control;
 
-	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Template\ITemplate;
-	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Template\AbstractMacro;
 
-	class SchemaNodeMacro extends AbstractMacro {
+	class SchemaMacro extends AbstractMacro {
 		/**
 		 * @var array
 		 */
@@ -23,7 +21,7 @@
 			]);
 		}
 
-		public function run(ITemplateManager $templateManager, ITemplate $template, INode $root, IFile $file, ...$parameterList) {
+		public function run(INode $root, ICompiler $compiler) {
 			switch ($root->getName()) {
 				case 'schema':
 					$this->schemaList[$root->getAttribute('name')] = $root->getAttribute('schema');
@@ -36,7 +34,7 @@
 					$node = $root->getNodeList()[0];
 					$node->setAttribute('data-schema', $this->schemaList[$attribute[0]]);
 					$node->setAttribute('data-property', $attribute[1]);
-					$this->macro($root, $templateManager, $template, $file, ...$parameterList);
+					$this->macro($root, $compiler);
 					break;
 			}
 		}

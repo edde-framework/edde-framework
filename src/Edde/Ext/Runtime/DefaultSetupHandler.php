@@ -63,14 +63,14 @@
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Template\Macro\Control\BindIdAttributeMacro;
-	use Edde\Common\Template\Macro\Control\ButtonNodeMacro;
+	use Edde\Common\Template\Macro\Control\ButtonMacro;
 	use Edde\Common\Template\Macro\Control\ControlMacro;
-	use Edde\Common\Template\Macro\Control\CssNodeMacro;
-	use Edde\Common\Template\Macro\Control\DivNodeMacro;
-	use Edde\Common\Template\Macro\Control\JsNodeMacro;
+	use Edde\Common\Template\Macro\Control\CssMacro;
+	use Edde\Common\Template\Macro\Control\DivMacro;
+	use Edde\Common\Template\Macro\Control\JsMacro;
 	use Edde\Common\Template\Macro\Control\PasswordMacro;
-	use Edde\Common\Template\Macro\Control\SchemaNodeMacro;
-	use Edde\Common\Template\Macro\Control\SpanNodeMacro;
+	use Edde\Common\Template\Macro\Control\SchemaMacro;
+	use Edde\Common\Template\Macro\Control\SpanMacro;
 	use Edde\Common\Template\Macro\Control\TextMacro;
 	use Edde\Common\Template\Macro\IncludeMacro;
 	use Edde\Common\Template\Macro\LoopMacro;
@@ -173,15 +173,15 @@
 				Crate::class,
 
 				ControlMacro::class,
-				DivNodeMacro::class,
-				SpanNodeMacro::class,
-				CssNodeMacro::class,
-				JsNodeMacro::class,
-				ButtonNodeMacro::class,
+				DivMacro::class,
+				SpanMacro::class,
+				CssMacro::class,
+				JsMacro::class,
+				ButtonMacro::class,
 				SwitchMacro::class,
 				IncludeMacro::class,
 				BindIdAttributeMacro::class,
-				SchemaNodeMacro::class,
+				SchemaMacro::class,
 				TextMacro::class,
 				PasswordMacro::class,
 				LoopMacro::class,
@@ -205,15 +205,15 @@
 			});
 			$setupHandler->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
 				$templateManager->registerMacro($container->create(ControlMacro::class));
-				$templateManager->registerMacro($container->create(DivNodeMacro::class));
-				$templateManager->registerMacro($container->create(SpanNodeMacro::class));
-				$templateManager->registerMacro($container->create(CssNodeMacro::class));
-				$templateManager->registerMacro($container->create(JsNodeMacro::class));
-				$templateManager->registerMacro($container->create(ButtonNodeMacro::class));
+				$templateManager->registerMacro($container->create(DivMacro::class));
+				$templateManager->registerMacro($container->create(SpanMacro::class));
+				$templateManager->registerMacro($container->create(CssMacro::class));
+				$templateManager->registerMacro($container->create(JsMacro::class));
+				$templateManager->registerMacro($container->create(ButtonMacro::class));
 				$templateManager->registerMacro($container->create(SwitchMacro::class));
 				$templateManager->registerMacro($container->create(IncludeMacro::class));
 				$templateManager->registerMacro($container->create(BindIdAttributeMacro::class));
-				$templateManager->registerMacro($container->create(SchemaNodeMacro::class));
+				$templateManager->registerMacro($container->create(SchemaMacro::class));
 				$templateManager->registerMacro($container->create(TextMacro::class));
 				$templateManager->registerMacro($container->create(PasswordMacro::class));
 				$templateManager->registerMacro($container->create(LoopMacro::class));
