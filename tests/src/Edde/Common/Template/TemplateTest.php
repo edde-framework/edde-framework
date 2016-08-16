@@ -13,14 +13,16 @@
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Resource\ResourceManager;
-	use Edde\Common\Template\Macro\BindIdAttributeMacro;
-	use Edde\Common\Template\Macro\ButtonNodeMacro;
-	use Edde\Common\Template\Macro\ControlMacro;
-	use Edde\Common\Template\Macro\CssNodeMacro;
-	use Edde\Common\Template\Macro\DivNodeMacro;
+	use Edde\Common\Template\Macro\Control\BindIdAttributeMacro;
+	use Edde\Common\Template\Macro\Control\ButtonNodeMacro;
+	use Edde\Common\Template\Macro\Control\ControlMacro;
+	use Edde\Common\Template\Macro\Control\CssNodeMacro;
+	use Edde\Common\Template\Macro\Control\DivNodeMacro;
+	use Edde\Common\Template\Macro\Control\JsNodeMacro;
+	use Edde\Common\Template\Macro\Control\PasswordNodeMacro;
+	use Edde\Common\Template\Macro\Control\SchemaNodeMacro;
+	use Edde\Common\Template\Macro\Control\TextNodeMacro;
 	use Edde\Common\Template\Macro\IncludeNodeMacro;
-	use Edde\Common\Template\Macro\JsNodeMacro;
-	use Edde\Common\Template\Macro\SchemaNodeMacro;
 	use Edde\Common\Template\Macro\SwitchNodeMacro;
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
@@ -50,7 +52,7 @@
 		protected $control;
 
 		public function testSwitchTemplate() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/switch-template.xml');
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/switch-template.xml');
 			$file = $template->getFile();
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
@@ -74,7 +76,7 @@
 		}
 
 		public function testButton() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/button.xml');
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/button.xml');
 			$file = $template->getFile();
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
@@ -93,7 +95,7 @@
 		}
 
 		public function testIdBind() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/id.xml');
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/id.xml');
 			$file = $template->getFile();
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
@@ -107,6 +109,26 @@
 	<body>
 		<div id="blabla" data-schema="Foo\Bar\Schema" data-property="bar"></div>
 		<div class="button edde-clickable" data-bind="blabla" data-control="TestDocument" data-action="Foo"></div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
+		public function testInput() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/input.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<input class="edde-value edde-text-input" type="text" value="" data-schema="poo" data-property="text">
+		<input class="edde-value edde-text-input" type="password" data-schema="poo" data-property="password">
 	</body>
 </html>
 ', $this->control->render());
@@ -128,6 +150,8 @@
 				ICryptEngine::class => CryptEngine::class,
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
+				TextNodeMacro::class,
+				PasswordNodeMacro::class,
 			]);
 			$this->templateManager = $this->container->create(TemplateManager::class);
 			$this->templateManager->onSetup(function (ITemplateManager $templateManager) use ($container) {
@@ -140,6 +164,8 @@
 				$templateManager->registerMacro($container->create(IncludeNodeMacro::class));
 				$templateManager->registerMacro($container->create(BindIdAttributeMacro::class));
 				$templateManager->registerMacro($container->create(SchemaNodeMacro::class));
+				$templateManager->registerMacro($container->create(TextNodeMacro::class));
+				$templateManager->registerMacro($container->create(PasswordNodeMacro::class));
 			});
 			$this->control = $this->container->create(\TestDocument::class);
 		}

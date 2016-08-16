@@ -62,14 +62,16 @@
 	use Edde\Common\Runtime\SetupHandler;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
-	use Edde\Common\Template\Macro\BindIdAttributeMacro;
-	use Edde\Common\Template\Macro\ButtonNodeMacro;
-	use Edde\Common\Template\Macro\ControlMacro;
-	use Edde\Common\Template\Macro\CssNodeMacro;
-	use Edde\Common\Template\Macro\DivNodeMacro;
+	use Edde\Common\Template\Macro\Control\BindIdAttributeMacro;
+	use Edde\Common\Template\Macro\Control\ButtonNodeMacro;
+	use Edde\Common\Template\Macro\Control\ControlMacro;
+	use Edde\Common\Template\Macro\Control\CssNodeMacro;
+	use Edde\Common\Template\Macro\Control\DivNodeMacro;
+	use Edde\Common\Template\Macro\Control\JsNodeMacro;
+	use Edde\Common\Template\Macro\Control\PasswordNodeMacro;
+	use Edde\Common\Template\Macro\Control\SchemaNodeMacro;
+	use Edde\Common\Template\Macro\Control\TextNodeMacro;
 	use Edde\Common\Template\Macro\IncludeNodeMacro;
-	use Edde\Common\Template\Macro\JsNodeMacro;
-	use Edde\Common\Template\Macro\SchemaNodeMacro;
 	use Edde\Common\Template\Macro\SwitchNodeMacro;
 	use Edde\Common\Template\TemplateDirectory;
 	use Edde\Common\Template\TemplateManager;
@@ -177,6 +179,8 @@
 				IncludeNodeMacro::class,
 				BindIdAttributeMacro::class,
 				SchemaNodeMacro::class,
+				TextNodeMacro::class,
+				PasswordNodeMacro::class,
 			], $factoryList));
 			$setupHandler->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
 				$routerService->registerRouter($container->create(CliRouter::class));
@@ -205,6 +209,8 @@
 				$templateManager->registerMacro($container->create(IncludeNodeMacro::class));
 				$templateManager->registerMacro($container->create(BindIdAttributeMacro::class));
 				$templateManager->registerMacro($container->create(SchemaNodeMacro::class));
+				$templateManager->registerMacro($container->create(TextNodeMacro::class));
+				$templateManager->registerMacro($container->create(PasswordNodeMacro::class));
 			});
 			return $setupHandler;
 		}
