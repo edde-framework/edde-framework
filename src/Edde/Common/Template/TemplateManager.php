@@ -86,6 +86,9 @@
 			if ($root->hasAttributeList('m')) {
 				$attributeList = $root->getAttributeList();
 				foreach ($root->getAttributeList('m') as $attribute => $value) {
+					/**
+					 * m attributes can be changed in $this->macro calls, so it's important to check them every loop
+					 */
 					$macroAttributeList = $root->getAttributeList('m');
 					if (isset($macroAttributeList[$attribute]) === false) {
 						continue;
