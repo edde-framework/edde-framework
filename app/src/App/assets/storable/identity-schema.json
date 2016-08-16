@@ -1,0 +1,15 @@
+{
+	"name": "IdentityStorable",
+	"namespace": "App",
+	"property-list": [
+		{
+			"name": "guid",
+			"primary": true,
+			"unique": true
+		},
+		{
+			"name": "name",
+			"unique": true
+		}
+	]
+}
