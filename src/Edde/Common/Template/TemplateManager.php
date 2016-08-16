@@ -59,10 +59,11 @@
 		}
 
 		public function compile(IFile $file, bool $force = false): ITemplate {
-			$this->use();
+			$this->cache();
 			if (($templateFile = $this->cache->load($cacheId = $file->getPath(), false)) !== false && $force === false) {
 				return new Template(new File($templateFile));
 			}
+			$this->use();
 			if ((($root = $this->resourceManager->resource($file)) instanceof INode) === false) {
 				throw new TemplateException(sprintf('Resource handler for [%s] must return [%s].', (string)$file->getUrl(), INode::class));
 			}
@@ -73,7 +74,6 @@
 		}
 
 		protected function prepare() {
-			$this->cache();
 			$this->templateDirectory->create();
 		}
 	}

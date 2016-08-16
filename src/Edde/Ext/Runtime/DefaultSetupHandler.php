@@ -172,18 +172,10 @@
 
 				Crate::class,
 
-				ControlMacro::class,
-				DivMacro::class,
-				SpanMacro::class,
-				CssMacro::class,
-				JsMacro::class,
-				ButtonMacro::class,
 				SwitchMacro::class,
 				IncludeMacro::class,
 				BindIdAttributeMacro::class,
 				SchemaMacro::class,
-				TextMacro::class,
-				PasswordMacro::class,
 				LoopMacro::class,
 			], $factoryList));
 			$setupHandler->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
@@ -204,19 +196,21 @@
 				$resourceManager->registerResourceHandler($container->create(JsonResourceHandler::class));
 			});
 			$setupHandler->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
-				$templateManager->registerMacro($container->create(ControlMacro::class));
-				$templateManager->registerMacro($container->create(DivMacro::class));
-				$templateManager->registerMacro($container->create(SpanMacro::class));
-				$templateManager->registerMacro($container->create(CssMacro::class));
-				$templateManager->registerMacro($container->create(JsMacro::class));
-				$templateManager->registerMacro($container->create(ButtonMacro::class));
-				$templateManager->registerMacro($container->create(SwitchMacro::class));
-				$templateManager->registerMacro($container->create(IncludeMacro::class));
-				$templateManager->registerMacro($container->create(BindIdAttributeMacro::class));
-				$templateManager->registerMacro($container->create(SchemaMacro::class));
-				$templateManager->registerMacro($container->create(TextMacro::class));
-				$templateManager->registerMacro($container->create(PasswordMacro::class));
-				$templateManager->registerMacro($container->create(LoopMacro::class));
+				$templateManager->registerMacroList([
+					new ControlMacro(),
+					new DivMacro(),
+					new SpanMacro(),
+					new CssMacro(),
+					new JsMacro(),
+					new ButtonMacro(),
+					new TextMacro(),
+					new PasswordMacro(),
+					$container->create(IncludeMacro::class),
+					$container->create(SwitchMacro::class),
+					$container->create(BindIdAttributeMacro::class),
+					$container->create(SchemaMacro::class),
+					$container->create(LoopMacro::class),
+				]);
 			});
 			return $setupHandler;
 		}
