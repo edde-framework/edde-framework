@@ -2,5 +2,5 @@
 	<schema name="foo" schema="poo"/>
 
 	<text m:schema="foo.text"/>
-	<password m:schema="foo.password"/>
+	<password class="class-here" m:schema="foo.password"/>
 </control>

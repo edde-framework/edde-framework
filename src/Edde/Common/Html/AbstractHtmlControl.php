@@ -34,8 +34,27 @@
 
 		public function setAttribute($attribute, $value) {
 			$this->usse();
-			$this->node->setAttribute($attribute, $value);
+			switch ($attribute) {
+				case 'class':
+					$this->addAttribute($attribute, $value);
+					break;
+				default:
+					$this->node->setAttribute($attribute, $value);
+			}
 			return $this;
+		}
+
+		public function addAttribute($attribute, $value) {
+			$this->usse();
+			$attributeList = $this->getAttributeList();
+			$attributeList[$attribute][] = $value;
+			$this->node->setAttributeList($attributeList);
+			return $this;
+		}
+
+		public function getAttributeList(): array {
+			$this->usse();
+			return $this->node->getAttributeList();
 		}
 
 		public function getId(): string {
@@ -77,19 +96,6 @@
 		public function addClass($class) {
 			$this->addAttribute('class', $class);
 			return $this;
-		}
-
-		public function addAttribute($attribute, $value) {
-			$this->usse();
-			$attributeList = $this->getAttributeList();
-			$attributeList[$attribute][] = $value;
-			$this->node->setAttributeList($attributeList);
-			return $this;
-		}
-
-		public function getAttributeList(): array {
-			$this->usse();
-			return $this->node->getAttributeList();
 		}
 
 		public function hasClass($class) {

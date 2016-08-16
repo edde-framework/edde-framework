@@ -129,7 +129,7 @@
 	</head>
 	<body>
 		<input class="edde-value edde-text-input" type="text" value="" data-schema="poo" data-property="text">
-		<input class="edde-value edde-text-input" type="password" data-schema="poo" data-property="password">
+		<input class="edde-value edde-text-input class-here" type="password" data-schema="poo" data-property="password">
 	</body>
 </html>
 ', $this->control->render());

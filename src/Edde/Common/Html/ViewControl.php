@@ -52,6 +52,17 @@
 			$this->javaScriptCompiler = $javaScriptCompiler;
 		}
 
+		public function setAttribute($attribute, $value) {
+			switch ($attribute) {
+				case 'title':
+					$this->setTitle($value);
+					break;
+				default:
+					parent::setAttribute($attribute, $value);
+			}
+			return $this;
+		}
+
 		public function setTitle($title) {
 			$this->getHead()
 				->setTitle($title);
