@@ -1,0 +1,4 @@
+<control>
+	<div class="simple-div" m:include="simple-include.xml"/>
+	<include src="another-include.xml"/>
+</control>

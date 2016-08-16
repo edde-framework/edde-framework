@@ -156,6 +156,28 @@
 ', $this->control->render());
 		}
 
+		public function testInclude() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/include.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="simple-div">
+			<div>simply included</div>
+		</div>
+		<span class="another-included">span here</span>
+	</body>
+</html>
+', $this->control->render());
+		}
+
 		protected function setUp() {
 			$this->resourceManager = new ResourceManager();
 			$this->resourceManager->registerResourceHandler(new XmlResourceHandler(new XmlParser()));
