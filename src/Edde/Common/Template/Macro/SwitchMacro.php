@@ -43,4 +43,8 @@
 					break;
 			}
 		}
+
+		public function __clone() {
+			$this->stack = new \SplStack();
+		}
 	}

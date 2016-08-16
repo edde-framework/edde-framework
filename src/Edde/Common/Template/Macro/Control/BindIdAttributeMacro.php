@@ -45,4 +45,8 @@
 			}
 			$this->macro($root, $compiler);
 		}
+
+		public function __clone() {
+			$this->idList = [];
+		}
 	}

@@ -38,4 +38,8 @@
 					break;
 			}
 		}
+
+		public function __clone() {
+			$this->schemaList = [];
+		}
 	}

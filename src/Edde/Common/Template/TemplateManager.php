@@ -68,7 +68,11 @@
 				throw new TemplateException(sprintf('Resource handler for [%s] must return [%s].', (string)$file->getUrl(), INode::class));
 			}
 			$compiler = new Compiler($root, $this->rootDirectory, $file, $templateFile = $this->templateDirectory->file(($name = ('Template_' . sha1((string)$file->getUrl()))) . '.php'), $name);
-			$compiler->registerMacroList($this->macroList);
+			$macroList = [];
+			foreach ($this->macroList as $macro) {
+				$macroList[] = clone $macro;
+			}
+			$compiler->registerMacroList($macroList);
 			$this->cache->save($cacheId, $templateFile->getPath());
 			return $compiler->compile();
 		}

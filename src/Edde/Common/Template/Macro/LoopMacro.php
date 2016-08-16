@@ -58,4 +58,8 @@
 					break;
 			}
 		}
+
+		public function __clone() {
+			$this->loopStack = new \SplStack();
+		}
 	}
