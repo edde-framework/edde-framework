@@ -86,7 +86,6 @@
 	use Edde\Ext\Resource\JsonResourceHandler;
 	use Edde\Ext\Resource\Scanner\FilesystemScanner;
 	use Edde\Ext\Router\CliRouter;
-	use Edde\Ext\Router\RestRouter;
 	use Edde\Ext\Router\SimpleRouter;
 	use Edde\Ext\Upgrade\InitialStorageUpgrade;
 
@@ -188,7 +187,6 @@
 			$setupHandler->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
 				$routerService->registerRouter($container->create(CliRouter::class));
 				$routerService->registerRouter($container->create(SimpleRouter::class));
-				$routerService->registerRouter($container->create(RestRouter::class));
 			});
 			$setupHandler->onSetup(IApplication::class, function (ICrateGenerator $crateGenerator, IApplication $application) {
 				$crateGenerator->generate();
