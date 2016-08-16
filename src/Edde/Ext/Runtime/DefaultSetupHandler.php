@@ -69,6 +69,7 @@
 	use Edde\Common\Template\Macro\DivNodeMacro;
 	use Edde\Common\Template\Macro\IncludeNodeMacro;
 	use Edde\Common\Template\Macro\JsNodeMacro;
+	use Edde\Common\Template\Macro\SchemaNodeMacro;
 	use Edde\Common\Template\Macro\SwitchNodeMacro;
 	use Edde\Common\Template\TemplateDirectory;
 	use Edde\Common\Template\TemplateManager;
@@ -175,6 +176,7 @@
 				SwitchNodeMacro::class,
 				IncludeNodeMacro::class,
 				BindIdAttributeMacro::class,
+				SchemaNodeMacro::class,
 			], $factoryList));
 			$setupHandler->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
 				$routerService->registerRouter($container->create(CliRouter::class));
@@ -202,6 +204,7 @@
 				$templateManager->registerMacro($container->create(SwitchNodeMacro::class));
 				$templateManager->registerMacro($container->create(IncludeNodeMacro::class));
 				$templateManager->registerMacro($container->create(BindIdAttributeMacro::class));
+				$templateManager->registerMacro($container->create(SchemaNodeMacro::class));
 			});
 			return $setupHandler;
 		}
