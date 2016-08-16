@@ -92,7 +92,7 @@
 		<title></title>
 	</head>
 	<body>
-		<div class="button edde-clickable" data-control="TestDocument" data-action="OnUpdate">foo</div>
+		<div class="button edde-clickable" data-control="TestDocument" data-action="on-update">foo</div>
 	</body>
 </html>
 ', $this->control->render());
@@ -112,7 +112,7 @@
 	</head>
 	<body>
 		<div id="blabla" data-schema="Foo\Bar\Schema" data-property="bar"></div>
-		<div class="button edde-clickable" data-bind="blabla" data-control="TestDocument" data-action="Foo"></div>
+		<div class="button edde-clickable" data-bind="blabla" data-control="TestDocument" data-action="foo"></div>
 	</body>
 </html>
 ', $this->control->render());
@@ -242,6 +242,26 @@
 			<div class="looping2" data-tribute="first">looped-one</div>
 			<div class="looping2" data-tribute="second">another-looop</div>
 		</div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
+		public function testLoop03() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/loop-03.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="button edde-clickable looped-one" data-control="TestDocument" data-action="first"></div>
+		<div class="button edde-clickable another-looop" data-control="TestDocument" data-action="second"></div>
 	</body>
 </html>
 ', $this->control->render());

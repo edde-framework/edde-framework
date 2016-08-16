@@ -7,7 +7,6 @@
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Html\ButtonControl;
-	use Edde\Common\Strings\StringUtils;
 
 	class ButtonMacro extends AbstractControlMacro {
 		public function __construct() {
@@ -32,7 +31,7 @@
 					}
 					$destination->write(sprintf("\t\t\t\$control->setAttributeList([%s]);\n", implode(",\n", $export)));
 				}
-				$destination->write(sprintf("\t\t\t\$control->setAction(get_class(\$this->proxy), %s);\n", $compiler->value(StringUtils::camelize($action))));
+				$destination->write(sprintf("\t\t\t\$control->setAction(get_class(\$this->proxy), %s);\n", $compiler->value($action)));
 			}
 			$this->macro($root, $compiler);
 		}
