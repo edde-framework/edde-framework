@@ -46,4 +46,8 @@
 			}
 			return $resource;
 		}
+
+		protected function prepare() {
+			$this->cache();
+		}
 	}

@@ -48,4 +48,8 @@
 				$this->build($parameter->getClass(), $node);
 			}
 		}
+
+		protected function prepare() {
+			$this->cache();
+		}
 	}

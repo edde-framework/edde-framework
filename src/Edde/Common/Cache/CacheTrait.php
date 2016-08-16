@@ -24,7 +24,7 @@
 			$this->cacheFactory = $cacheFactory;
 		}
 
-		protected function prepare() {
+		protected function cache() {
 			if ($this->cacheFactory === null) {
 				throw new CacheException(sprintf('Cache factory has not been injected into class [%s]; cannot use cache.', static::class));
 			}

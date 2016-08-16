@@ -29,25 +29,26 @@
 		 * @param array $parameterList
 		 *
 		 * @return mixed
-		 * @internal param IResource $resource
 		 */
 		public function macro(INode $root, ITemplate $template, IFile $file, ...$parameterList);
 
 		/**
+		 * compiles the given template file; if force is true, template is regenerated
+		 *
 		 * @param IFile $file
+		 * @param bool $force
 		 *
 		 * @return ITemplate
-		 * @internal param IResource $resource
-		 *
 		 */
-		public function compile(IFile $file): ITemplate;
+		public function compile(IFile $file, bool $force = false): ITemplate;
 
 		/**
 		 * shorthand for compile
 		 *
 		 * @param string $file
+		 * @param bool $force
 		 *
 		 * @return ITemplate
 		 */
-		public function template(string $file): ITemplate;
+		public function template(string $file, bool $force = false): ITemplate;
 	}

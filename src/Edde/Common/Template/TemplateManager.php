@@ -11,6 +11,7 @@
 	use Edde\Api\Template\ITemplateDirectory;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Template\TemplateException;
+	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\File\File;
 	use Edde\Common\Node\Node;
@@ -18,6 +19,7 @@
 
 	class TemplateManager extends AbstractUsable implements ITemplateManager {
 		use LazyInjectTrait;
+		use CacheTrait;
 		/**
 		 * @var ITemplateDirectory
 		 */
@@ -49,12 +51,15 @@
 			return $this;
 		}
 
-		public function template(string $file): ITemplate {
-			return $this->compile(new File($file));
+		public function template(string $file, bool $force = false): ITemplate {
+			return $this->compile(new File($file), $force);
 		}
 
-		public function compile(IFile $file): ITemplate {
+		public function compile(IFile $file, bool $force = false): ITemplate {
 			$this->usse();
+			if (($templateFile = $this->cache->load($cacheId = $file->getPath(), false)) !== false) {
+				return new Template(new File($templateFile));
+			}
 			if ((($root = $this->resourceManager->resource($file)) instanceof INode) === false) {
 				throw new TemplateException(sprintf('Resource handler for [%s] must return [%s].', (string)$file->getUrl(), INode::class));
 			}
@@ -70,6 +75,7 @@
 			}
 			$templateFile->write("\t}\n");
 			$templateFile->close();
+			$this->cache->save($cacheId, $templateFile->getPath());
 			return $template;
 		}
 
@@ -94,6 +100,7 @@
 		}
 
 		protected function prepare() {
+			$this->cache();
 			$this->templateDirectory->create();
 			$macroList = $this->macroList;
 			$this->macroList = [];
