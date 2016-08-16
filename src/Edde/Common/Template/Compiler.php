@@ -123,6 +123,11 @@
 			if (strpos($value, '()') !== false) {
 				return '$this->' . StringUtils::firstLower(StringUtils::camelize($value));
 			}
+			foreach ($this->macroList as $macro) {
+				if (($item = $macro->variable($value)) !== null) {
+					return $item;
+				}
+			}
 			if ($value === ':$') {
 				return '$item';
 			}

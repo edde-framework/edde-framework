@@ -1,0 +1,7 @@
+<control>
+	<div m:loop="get-item-list()">
+		<div value=":$"/>
+		<div class=":#" m:loop="get-item-list()"/>
+		<div value=":$"/>
+	</div>
+</control>

@@ -25,6 +25,9 @@
 			return $this->macroList;
 		}
 
+		public function variable(string $string) {
+		}
+
 		protected function getAttributeList(INode $node, ICompiler $compiler) {
 			$attributeList = [];
 			foreach ($node->getAttributeList() as $name => $value) {
