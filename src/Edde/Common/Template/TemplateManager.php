@@ -57,7 +57,7 @@
 
 		public function compile(IFile $file, bool $force = false): ITemplate {
 			$this->usse();
-			if (($templateFile = $this->cache->load($cacheId = $file->getPath(), false)) !== false) {
+			if (($templateFile = $this->cache->load($cacheId = $file->getPath(), false)) !== false && $force === false) {
 				return new Template(new File($templateFile));
 			}
 			if ((($root = $this->resourceManager->resource($file)) instanceof INode) === false) {
