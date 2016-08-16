@@ -131,7 +131,7 @@
 			$source[] = "\t\t/**\n";
 			$source[] = sprintf("\t\t * @return %s\n", $schemaProperty->getType());
 			$source[] = "\t\t */\n";
-			$source[] = sprintf("\t\tpublic function get%s(): %s {\n", StringUtils::camelize($schemaProperty->getName()), $schemaProperty->getType());
+			$source[] = sprintf("\t\tpublic function get%s()%s {\n", StringUtils::camelize($schemaProperty->getName()), $schemaProperty->isRequired() ? (': ' . $schemaProperty->getType()) : '');
 			$source[] = sprintf("\t\t\treturn \$this->get('%s');\n", $schemaProperty->getName());
 			$source[] = "\t\t}\n";
 			return implode('', $source);
@@ -144,7 +144,7 @@
 			$source[] = "\t\t * \n";
 			$source[] = "\t\t * @return \$this\n";
 			$source[] = "\t\t */\n";
-			$source[] = sprintf("\t\tpublic function set%s(%s \$%s) {\n", $camelized, $schemaProperty->getType(), $parameter);
+			$source[] = sprintf("\t\tpublic function set%s(%s \$%s%s) {\n", $camelized, $schemaProperty->getType(), $parameter, $schemaProperty->isRequired() ? '' : ' = null');
 			$source[] = sprintf("\t\t\t\$this->set('%s', \$%s);\n", $propertyName, $parameter);
 			$source[] = "\t\t\treturn \$this;\n";
 			$source[] = "\t\t}\n";
