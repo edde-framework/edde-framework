@@ -72,7 +72,10 @@
 			if (($crateList = $this->cache->load('crate-list', [])) === [] || $force === true) {
 				$this->crateDirectory->purge();
 				foreach ($this->schemaManager->getSchemaList() as $schema) {
-					$crateList[] = $schemaName = $schema->getSchemaName();
+					if (strpos($schemaName = $schema->getSchemaName(), 'Crate') === false) {
+						continue;
+					}
+					$crateList[] = $schemaName;
 					if (isset($this->excludeSchemaList[$schemaName])) {
 						continue;
 					}
