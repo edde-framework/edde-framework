@@ -7,9 +7,7 @@
 
 	class LoginView extends EddeViewControl {
 		public function actionLogin() {
-			$this->setTitle('Login');
-			$this->addStyleSheet(__DIR__ . '/../assets/css/kube.css');
-			$this->template(__DIR__ . '/template/action-login.xml');
+			$this->template();
 			$this->send();
 		}
 

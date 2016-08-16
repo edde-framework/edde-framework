@@ -1,11 +1,13 @@
-<html>
+<control title="Login">
+	<css src="/src/App/assets/css/kube.css"/>
+
 	<schema name="login" schema="App\Login\LoginCrate"/>
 
-	<div id="login" class="row centered">
+	<div m:id="login" class="row centered">
 		<div class="col col-4">
-			<text property="login::login"/>
-			<password property="login::password"/>
-			<button value="login" bind="login" action="on-login"/>
+			<text m:schema="login.login"/>
+			<password m:schema="login.password"/>
+			<button value="login" m:bind="login" action="on-login"/>
 		</div>
 	</div>
-</html>
+</control>

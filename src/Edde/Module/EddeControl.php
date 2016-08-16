@@ -55,8 +55,7 @@
 
 		public function actionSetup() {
 			$this->use();
-			$this->setTitle('Edde Control');
-			$this->template(__DIR__ . '/template/action-setup.xml');
+			$this->template();
 			$this->send();
 		}
 

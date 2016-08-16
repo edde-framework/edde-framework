@@ -1,4 +1,4 @@
-<control>
+<control title="Edde Setup">
 	<div class="row centered">
 		<div class="col col-5">
 			<button value="Upgrade" action="on-upgrade" title="run upgrades registered to this application"/>
