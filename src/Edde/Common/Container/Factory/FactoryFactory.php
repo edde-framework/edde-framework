@@ -23,6 +23,7 @@
 					$singleton = false;
 				}
 				$factories[$name] = self::create($name, $factory, $singleton);
+				$singleton = true;
 			}
 			return $factories;
 		}
@@ -46,7 +47,7 @@
 			} else if (is_object($factory)) {
 				return new InstanceFactory($name, $factory);
 			} else if (is_array($factory)) {
-				call_user_func($factory[1], $instance = self::create($name, $factory[0], $singleton, $cloneable));
+				$factory[1]($instance = self::create($name, $factory[0], $singleton, $cloneable));
 				return $instance;
 			}
 			throw new FactoryException(sprintf('Cannot handle [%s] factory, unknown $factory type.', $name));
