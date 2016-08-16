@@ -36,7 +36,7 @@
 		public function getDestination(): IFile;
 
 		/**
-		 * process value (evaluates function call/variable/...)
+		 * process php value (evaluates function call/variable/...)
 		 *
 		 * @param string $value
 		 *

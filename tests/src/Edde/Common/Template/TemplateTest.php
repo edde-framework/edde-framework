@@ -194,10 +194,16 @@
 		<title></title>
 	</head>
 	<body>
-		<div class="simple-div">
-			<div>simply included</div>
+		<div class="looping">
+			<div>looped-one</div>
 		</div>
-		<span class="another-included">span here</span>
+		<div class="looping">
+			<div>another-looop</div>
+		</div>
+		<div class="another-kind-of-loop">
+			<div class="looping2" data-tribute="first">looped-one</div>
+			<div class="looping2" data-tribute="second">another-looop</div>
+		</div>
 	</body>
 </html>
 ', $this->control->render());

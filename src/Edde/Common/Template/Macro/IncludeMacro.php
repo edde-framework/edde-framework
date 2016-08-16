@@ -30,14 +30,24 @@
 			switch ($root->getName()) {
 				case 'include':
 					$node = new Node();
-					$node->setNodeList($this->resourceManager->file($compiler->file($root->getAttribute('src')))
+					$include = $compiler->file($root->getAttribute('src'));
+					$compiler->getDestination()
+						->write(sprintf("\t\t\t/** include %s */\n", $include));
+					$node->setNodeList($this->resourceManager->file($include)
 						->getNodeList(), true);
 					$this->macro($node, $compiler);
+					$compiler->getDestination()
+						->write(sprintf("\t\t\t/** done %s */\n", $include));
 					break;
 				case 'm:include':
-					$root->getNodeList()[0]->setNodeList($this->resourceManager->file($compiler->file($root->getValue()))
+					$include = $compiler->file($root->getValue());
+					$compiler->getDestination()
+						->write(sprintf("\t\t\t/** include %s */\n", $include));
+					$root->getNodeList()[0]->setNodeList($this->resourceManager->file($include)
 						->getNodeList(), true);
 					$this->macro($root, $compiler);
+					$compiler->getDestination()
+						->write(sprintf("\t\t\t/** done %s */\n", $include));
 					break;
 			}
 		}

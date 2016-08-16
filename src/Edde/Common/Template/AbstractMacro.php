@@ -25,6 +25,14 @@
 			return $this->macroList;
 		}
 
+		protected function getAttributeList(INode $node, ICompiler $compiler) {
+			$attributeList = [];
+			foreach ($node->getAttributeList() as $name => $value) {
+				$attributeList[$name] = $compiler->value($value);
+			}
+			return $attributeList;
+		}
+
 		protected function macro(INode $root, ICompiler $compiler) {
 			foreach ($root->getNodeList() as $node) {
 				$compiler->macro($node, $compiler);

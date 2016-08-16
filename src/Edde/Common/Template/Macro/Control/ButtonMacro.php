@@ -18,17 +18,21 @@
 			$destination = $compiler->getDestination();
 			$destination->write("\t\t\t\$parent = \$this->stack->top();\n");
 			$destination->write(sprintf("\t\t\t\$parent->addControl(\$control = \$this->container->create('%s'));\n", $this->control));
-			$attributeList = $this->getAttributeList($root);
+			$attributeList = $this->getAttributeList($root, $compiler);
 			if (isset($attributeList['action']) === false) {
 				throw new MacroException(sprintf('Missing mandatory attribute "action" in [%s].', $root->getPath()));
 			}
 			if ($attributeList !== []) {
-				$action = $attributeList['action'];
+				$action = $root->getAttribute('action');
 				unset($attributeList['action']);
 				if ($attributeList !== []) {
-					$destination->write(sprintf("\t\t\t\$control->setAttributeList(%s);\n", var_export($attributeList, true)));
+					$export = [];
+					foreach ($attributeList as $name => $value) {
+						$export[] = "'" . $name . "' => " . $value;
+					}
+					$destination->write(sprintf("\t\t\t\$control->setAttributeList([%s]);\n", implode(",\n", $export)));
 				}
-				$destination->write(sprintf("\t\t\t\$control->setAction(get_class(\$this->proxy), '%s');\n", StringUtils::camelize($action)));
+				$destination->write(sprintf("\t\t\t\$control->setAction(get_class(\$this->proxy), %s);\n", $compiler->value(StringUtils::camelize($action))));
 			}
 			$this->macro($root, $compiler);
 		}

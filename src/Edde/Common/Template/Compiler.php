@@ -84,6 +84,7 @@
 			$this->destination->enableWriteCache(3);
 			$this->destination->write("<?php\n");
 			$this->destination->write("\tdeclare(strict_types = 1);\n\n");
+			$this->destination->write(sprintf("\t/** source = %s */\n\n", $this->source->getPath()));
 			$this->destination->write(sprintf("\tclass %s {\n", $this->name));
 			try {
 				$this->macro($this->root, $this);
@@ -121,6 +122,18 @@
 		public function value(string $value): string {
 			if (strpos($value, '()') !== false) {
 				return '$this->' . StringUtils::firstLower(StringUtils::camelize($value));
+			}
+			if ($value === ':$') {
+				return '$item';
+			}
+			if ($value === ':#') {
+				return '$key';
+			}
+			if (strpos($value, ':$') !== false) {
+				return '$item->' . $this->value(str_replace(':$', '', $value));
+			}
+			if ($value[0] === '$') {
+				return substr($value, 1);
 			}
 			return "'$value'";
 		}

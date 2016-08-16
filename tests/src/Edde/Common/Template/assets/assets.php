@@ -8,7 +8,8 @@
 
 		public function getItemList() {
 			return [
-				'item',
+				'first' => 'looped-one',
+				'second' => 'another-looop',
 			];
 		}
 	}

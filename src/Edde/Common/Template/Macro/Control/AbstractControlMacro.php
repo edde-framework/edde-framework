@@ -23,22 +23,22 @@
 		}
 
 		public function run(INode $root, ICompiler $compiler) {
-			$file = $compiler->getDestination();
-			$file->write("\t\t\t\$parent = \$this->stack->top();\n");
-			$file->write(sprintf("\t\t\t\$parent->addControl(\$control = \$this->container->create('%s'));\n", $this->control));
+			$destination = $compiler->getDestination();
+			$destination->write("\t\t\t\$parent = \$this->stack->top();\n");
+			$destination->write(sprintf("\t\t\t\$parent->addControl(\$control = \$this->container->create('%s'));\n", $this->control));
 			if ($root->isLeaf() && ($text = $root->getValue($root->getAttribute('value'))) !== null) {
-				$file->write(sprintf("\t\t\t\$control->setText('%s');\n", $text));
+				$destination->write(sprintf("\t\t\t\$control->setText(%s);\n", $compiler->value($text)));
 			}
-			$attributeList = $this->getAttributeList($root);
+			$attributeList = $this->getAttributeList($root, $compiler);
 			unset($attributeList['value']);
 			if ($attributeList !== []) {
-				$file->write(sprintf("\t\t\t\$control->setAttributeList(%s);\n", var_export($attributeList, true)));
+				$export = [];
+				foreach ($attributeList as $name => $value) {
+					$export[] = "'" . $name . "' => " . $value;
+				}
+				$destination->write(sprintf("\t\t\t\$control->setAttributeList([%s]);\n", implode(",\n", $export)));
 			}
 			$this->macro($root, $compiler);
-		}
-
-		protected function getAttributeList(INode $node) {
-			return $node->getAttributeList();
 		}
 
 		protected function macro(INode $root, ICompiler $compiler) {
