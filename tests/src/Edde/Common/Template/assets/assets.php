@@ -5,4 +5,10 @@
 		public function switchMe() {
 			return 'bar';
 		}
+
+		public function getItemList() {
+			return [
+				'item',
+			];
+		}
 	}

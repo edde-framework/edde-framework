@@ -1,0 +1,10 @@
+<control>
+	<loop src="get-item-list()">
+		<div class="looping">
+			<div value=":$"/>
+		</div>
+	</loop>
+	<div class="another-kind-of-loop">
+		<div class="looping2" n:loop="get-item-list()" value=":$value"/>
+	</div>
+</control>

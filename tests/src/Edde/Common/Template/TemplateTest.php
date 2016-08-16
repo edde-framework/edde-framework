@@ -19,12 +19,13 @@
 	use Edde\Common\Template\Macro\Control\CssNodeMacro;
 	use Edde\Common\Template\Macro\Control\DivNodeMacro;
 	use Edde\Common\Template\Macro\Control\JsNodeMacro;
-	use Edde\Common\Template\Macro\Control\PasswordNodeMacro;
+	use Edde\Common\Template\Macro\Control\PasswordMacro;
 	use Edde\Common\Template\Macro\Control\SchemaNodeMacro;
 	use Edde\Common\Template\Macro\Control\SpanNodeMacro;
-	use Edde\Common\Template\Macro\Control\TextNodeMacro;
-	use Edde\Common\Template\Macro\IncludeNodeMacro;
-	use Edde\Common\Template\Macro\SwitchNodeMacro;
+	use Edde\Common\Template\Macro\Control\TextMacro;
+	use Edde\Common\Template\Macro\IncludeMacro;
+	use Edde\Common\Template\Macro\LoopMacro;
+	use Edde\Common\Template\Macro\SwitchMacro;
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
 	use Edde\Common\Xml\XmlParser;
@@ -178,6 +179,28 @@
 ', $this->control->render());
 		}
 
+		public function testLoop01() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/loop-01.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="simple-div">
+			<div>simply included</div>
+		</div>
+		<span class="another-included">span here</span>
+	</body>
+</html>
+', $this->control->render());
+		}
+
 		protected function setUp() {
 			$this->resourceManager = new ResourceManager();
 			$this->resourceManager->registerResourceHandler(new XmlResourceHandler(new XmlParser()));
@@ -187,15 +210,15 @@
 					return new TemplateDirectory(__DIR__ . '/temp');
 				},
 				\TestDocument::class,
-				IncludeNodeMacro::class,
-				SwitchNodeMacro::class,
+				IncludeMacro::class,
+				SwitchMacro::class,
 				BindIdAttributeMacro::class,
 				SchemaNodeMacro::class,
 				ICryptEngine::class => CryptEngine::class,
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
-				TextNodeMacro::class,
-				PasswordNodeMacro::class,
+				TextMacro::class,
+				PasswordMacro::class,
 			]);
 			$this->templateManager = $this->container->create(TemplateManager::class);
 			$this->templateManager->onSetup(function (ITemplateManager $templateManager) use ($container) {
@@ -205,12 +228,13 @@
 				$templateManager->registerMacro($container->create(CssNodeMacro::class));
 				$templateManager->registerMacro($container->create(JsNodeMacro::class));
 				$templateManager->registerMacro($container->create(ButtonNodeMacro::class));
-				$templateManager->registerMacro($container->create(SwitchNodeMacro::class));
-				$templateManager->registerMacro($container->create(IncludeNodeMacro::class));
+				$templateManager->registerMacro($container->create(SwitchMacro::class));
+				$templateManager->registerMacro($container->create(IncludeMacro::class));
 				$templateManager->registerMacro($container->create(BindIdAttributeMacro::class));
 				$templateManager->registerMacro($container->create(SchemaNodeMacro::class));
-				$templateManager->registerMacro($container->create(TextNodeMacro::class));
-				$templateManager->registerMacro($container->create(PasswordNodeMacro::class));
+				$templateManager->registerMacro($container->create(TextMacro::class));
+				$templateManager->registerMacro($container->create(PasswordMacro::class));
+				$templateManager->registerMacro($container->create(LoopMacro::class));
 			});
 			$this->control = $this->container->create(\TestDocument::class);
 		}

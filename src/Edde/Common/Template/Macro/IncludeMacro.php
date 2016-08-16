@@ -11,7 +11,7 @@
 	use Edde\Common\Node\Node;
 	use Edde\Common\Template\AbstractMacro;
 
-	class IncludeNodeMacro extends AbstractMacro {
+	class IncludeMacro extends AbstractMacro {
 		/**
 		 * @var IResourceManager
 		 */

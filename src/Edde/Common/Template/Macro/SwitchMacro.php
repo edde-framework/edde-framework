@@ -11,7 +11,7 @@
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\AbstractMacro;
 
-	class SwitchNodeMacro extends AbstractMacro {
+	class SwitchMacro extends AbstractMacro {
 		/**
 		 * @var ICryptEngine
 		 */

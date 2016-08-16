@@ -5,7 +5,7 @@
 
 	use Edde\Common\Html\Value\PasswordInputControl;
 
-	class PasswordNodeMacro extends AbstractControlMacro {
+	class PasswordMacro extends AbstractControlMacro {
 		public function __construct() {
 			parent::__construct(['password'], PasswordInputControl::class);
 		}

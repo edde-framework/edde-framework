@@ -5,7 +5,7 @@
 
 	use Edde\Common\Html\Value\TextInputControl;
 
-	class TextNodeMacro extends AbstractControlMacro {
+	class TextMacro extends AbstractControlMacro {
 		public function __construct() {
 			parent::__construct(['text'], TextInputControl::class);
 		}

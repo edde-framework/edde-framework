@@ -68,12 +68,13 @@
 	use Edde\Common\Template\Macro\Control\CssNodeMacro;
 	use Edde\Common\Template\Macro\Control\DivNodeMacro;
 	use Edde\Common\Template\Macro\Control\JsNodeMacro;
-	use Edde\Common\Template\Macro\Control\PasswordNodeMacro;
+	use Edde\Common\Template\Macro\Control\PasswordMacro;
 	use Edde\Common\Template\Macro\Control\SchemaNodeMacro;
 	use Edde\Common\Template\Macro\Control\SpanNodeMacro;
-	use Edde\Common\Template\Macro\Control\TextNodeMacro;
-	use Edde\Common\Template\Macro\IncludeNodeMacro;
-	use Edde\Common\Template\Macro\SwitchNodeMacro;
+	use Edde\Common\Template\Macro\Control\TextMacro;
+	use Edde\Common\Template\Macro\IncludeMacro;
+	use Edde\Common\Template\Macro\LoopMacro;
+	use Edde\Common\Template\Macro\SwitchMacro;
 	use Edde\Common\Template\TemplateDirectory;
 	use Edde\Common\Template\TemplateManager;
 	use Edde\Common\Upgrade\UpgradeManager;
@@ -177,12 +178,13 @@
 				CssNodeMacro::class,
 				JsNodeMacro::class,
 				ButtonNodeMacro::class,
-				SwitchNodeMacro::class,
-				IncludeNodeMacro::class,
+				SwitchMacro::class,
+				IncludeMacro::class,
 				BindIdAttributeMacro::class,
 				SchemaNodeMacro::class,
-				TextNodeMacro::class,
-				PasswordNodeMacro::class,
+				TextMacro::class,
+				PasswordMacro::class,
+				LoopMacro::class,
 			], $factoryList));
 			$setupHandler->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
 				$routerService->registerRouter($container->create(CliRouter::class));
@@ -208,12 +210,13 @@
 				$templateManager->registerMacro($container->create(CssNodeMacro::class));
 				$templateManager->registerMacro($container->create(JsNodeMacro::class));
 				$templateManager->registerMacro($container->create(ButtonNodeMacro::class));
-				$templateManager->registerMacro($container->create(SwitchNodeMacro::class));
-				$templateManager->registerMacro($container->create(IncludeNodeMacro::class));
+				$templateManager->registerMacro($container->create(SwitchMacro::class));
+				$templateManager->registerMacro($container->create(IncludeMacro::class));
 				$templateManager->registerMacro($container->create(BindIdAttributeMacro::class));
 				$templateManager->registerMacro($container->create(SchemaNodeMacro::class));
-				$templateManager->registerMacro($container->create(TextNodeMacro::class));
-				$templateManager->registerMacro($container->create(PasswordNodeMacro::class));
+				$templateManager->registerMacro($container->create(TextMacro::class));
+				$templateManager->registerMacro($container->create(PasswordMacro::class));
+				$templateManager->registerMacro($container->create(LoopMacro::class));
 			});
 			return $setupHandler;
 		}
