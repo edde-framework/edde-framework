@@ -24,16 +24,16 @@
 				switch ($key) {
 					case 'name':
 						$root->setName($value);
-						break;
+						continue 2;
 					case 'value':
 						$root->setValue($value);
-						break;
+						continue 2;
 					case 'attribute-list':
 						$root->setAttributeList((array)$value);
-						break;
+						continue 2;
 					case 'meta-list':
 						$root->setMetaList((array)$value);
-						break;
+						continue 2;
 				}
 				if (is_object($value)) {
 					$value = [
