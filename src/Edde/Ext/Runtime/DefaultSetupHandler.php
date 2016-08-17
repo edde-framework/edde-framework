@@ -67,6 +67,7 @@
 	use Edde\Common\Template\Macro\Control\ControlMacro;
 	use Edde\Common\Template\Macro\Control\CssMacro;
 	use Edde\Common\Template\Macro\Control\DivMacro;
+	use Edde\Common\Template\Macro\Control\HeaderMacro;
 	use Edde\Common\Template\Macro\Control\JsMacro;
 	use Edde\Common\Template\Macro\Control\PasswordMacro;
 	use Edde\Common\Template\Macro\Control\SchemaMacro;
@@ -205,6 +206,7 @@
 					new ButtonMacro(),
 					new TextMacro(),
 					new PasswordMacro(),
+					new HeaderMacro(),
 					$container->create(IncludeMacro::class),
 					$container->create(SwitchMacro::class),
 					$container->create(BindIdAttributeMacro::class),
