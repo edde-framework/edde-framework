@@ -49,21 +49,26 @@
 			array_shift($pathList);
 			$id = count($pathList) === 3 ? array_pop($pathList) : null;
 			$namespace = StringUtils::camelize($pathList[1]);
-			$namespace = $this->namespace . '\\' . ($pathList[0] . '\\' . $namespace . '\\' . $namespace . 'Api');
-			if (class_exists($namespace) === false) {
-				return null;
-			}
-			$parameterList = $url->getQuery();
-			$parameterList['id'] = $id;
+			$classList = [
+				$this->namespace . '\\' . ($pathList[0] . '\\' . $namespace . '\\' . $namespace . 'Api'),
+				$this->namespace . '\\' . ($namespace . '\\' . $namespace . 'Api'),
+			];
+			foreach ($classList as $api) {
+				if (class_exists($api)) {
+					$parameterList = $url->getQuery();
+					$parameterList['id'] = $id;
 
-			$reflectionClass = new \ReflectionClass($namespace);
-			$reflectionMethod = $reflectionClass->getMethod($method = 'handle' . StringUtils::camelize($this->httpRequest->getMethod()));
-			$crateList = [];
-			if ($reflectionMethod->getNumberOfParameters() > 0 && ($crateName = $reflectionMethod->getParameters()[0]->getClass()) !== null) {
-				$crateList[] = $this->crateFactory->crate(json_decode($this->httpRequest->getBody(), true), $crateName->getName());
-			}
+					$reflectionClass = new \ReflectionClass($api);
+					$reflectionMethod = $reflectionClass->getMethod($method = 'handle' . StringUtils::camelize($this->httpRequest->getMethod()));
+					$crateList = [];
+					if ($reflectionMethod->getNumberOfParameters() > 0 && ($crateName = $reflectionMethod->getParameters()[0]->getClass()) !== null) {
+						$crateList[] = $this->crateFactory->crate(json_decode($this->httpRequest->getBody(), true), $crateName->getName());
+					}
 
-			return new Route($namespace, $method, $parameterList, $crateList);
+					return new Route($api, $method, $parameterList, $crateList);
+				}
+			}
+			return null;
 		}
 
 		protected function prepare() {
