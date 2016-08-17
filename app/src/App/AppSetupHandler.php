@@ -4,6 +4,7 @@
 	namespace App;
 
 	use App\Login\LoginView;
+	use App\Upgrade\InitialUpgrade;
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\File\IRootDirectory;
@@ -34,7 +35,8 @@
 					}
 				})
 				->onSetup(IUpgradeManager::class, function (IContainer $container, IUpgradeManager $upgradeManager) {
-					$upgradeManager->registerUpgrade($container->create(InitialStorageUpgrade::class, '1.0'));
+					$upgradeManager->registerUpgrade($container->create(InitialStorageUpgrade::class, '0.0'));
+					$upgradeManager->registerUpgrade($container->create(InitialUpgrade::class, '1.0'));
 				});
 		}
 	}

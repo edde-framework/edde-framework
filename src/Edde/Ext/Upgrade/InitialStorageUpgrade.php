@@ -36,9 +36,6 @@
 			$this->storage->start();
 			try {
 				foreach ($this->schemaManager->getSchemaList() as $schema) {
-					if (strpos($schema->getName(), 'Storable') === false) {
-						continue;
-					}
 					$this->storage->execute(new CreateSchemaQuery($schema));
 				}
 				$this->storage->commit();
