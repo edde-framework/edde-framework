@@ -108,7 +108,10 @@
 			$source[] = sprintf("\tuse %s;\n", $this->parent);
 			$source[] = "\n";
 			$parent = explode('\\', $this->parent);
-			$source[] = sprintf("\tclass %s extends %s {\n", $schema->getName(), end($parent));
+			if (($implements = $schema->getMeta('implements', '')) !== '') {
+				$implements = ' implements \\' . implode(', \\', is_array($implements) ? $implements : [$implements]);
+			}
+			$source[] = sprintf("\tclass %s extends %s%s {\n", $schema->getName(), end($parent), $implements);
 			foreach ($schema->getPropertyList() as $schemaProperty) {
 				$source[] = $this->generateSchemaProperty($schemaProperty);
 			}
@@ -135,11 +138,12 @@
 
 		protected function generateGetter(ISchemaProperty $schemaProperty) {
 			$source[] = "\t\t/**\n";
-			$type = $schemaProperty->isArray() ? 'array' : $schemaProperty->getType();
+			$type = $schemaProperty->isArray() ? 'array
+				' : $schemaProperty->getType();
 			$source[] = sprintf("\t\t * @return %s\n", $type);
 			$source[] = "\t\t */\n";
 			$source[] = sprintf("\t\tpublic function get%s()%s {\n", StringUtils::camelize($schemaProperty->getName()), $schemaProperty->isRequired() ? (': ' . $type) : '');
-			$source[] = sprintf("\t\t\treturn \$this->get('%s');\n", $schemaProperty->getName());
+			$source[] = sprintf("\t\t\treturn \$this->get(' % s');\n", $schemaProperty->getName());
 			$source[] = "\t\t}\n";
 			return implode('', $source);
 		}
@@ -147,13 +151,14 @@
 		protected function generateSetter(ISchemaProperty $schemaProperty) {
 			$parameter = StringUtils::firstLower($camelized = StringUtils::camelize($propertyName = $schemaProperty->getName()));
 			$source[] = "\t\t/**\n";
-			$type = $schemaProperty->isArray() ? 'array' : $schemaProperty->getType();
+			$type = $schemaProperty->isArray() ? 'array
+				' : $schemaProperty->getType();
 			$source[] = sprintf("\t\t * @param %s $%s\n", $type, $parameter);
 			$source[] = "\t\t * \n";
 			$source[] = "\t\t * @return \$this\n";
 			$source[] = "\t\t */\n";
 			$source[] = sprintf("\t\tpublic function set%s(%s \$%s%s) {\n", $camelized, $type, $parameter, $schemaProperty->isRequired() ? '' : ($schemaProperty->isArray() ? ' = []' : ' = null'));
-			$source[] = sprintf("\t\t\t\$this->set('%s', \$%s);\n", $propertyName, $parameter);
+			$source[] = sprintf("\t\t\t\$this->set(' % s', \$%s);\n", $propertyName, $parameter);
 			$source[] = "\t\t\treturn \$this;\n";
 			$source[] = "\t\t}\n";
 			return implode('', $source);
@@ -167,7 +172,7 @@
 			$source[] = "\t\t * @return \$this\n";
 			$source[] = "\t\t */\n";
 			$source[] = sprintf("\t\tpublic function add%s(%s \$%s, \$key = null) {\n", $camelized, $schemaProperty->getType(), $parameter);
-			$source[] = sprintf("\t\t\t\$this->add('%s', \$%s, \$key);\n", $propertyName, $parameter);
+			$source[] = sprintf("\t\t\t\$this->add(' % s', \$%s, \$key);\n", $propertyName, $parameter);
 			$source[] = "\t\t\treturn \$this;\n";
 			$source[] = "\t\t}\n";
 			return implode('', $source);
@@ -180,7 +185,7 @@
 			$source[] = sprintf("\t\t * @return %s\n", StringUtils::extract(ICollection::class, '\\', -1));
 			$source[] = "\t\t */\n";
 			$source[] = sprintf("\t\tpublic function collection%s() {\n", StringUtils::camelize($collectionName = $schemaCollection->getName()));
-			$source[] = sprintf("\t\t\treturn \$this->collection('%s');\n", $collectionName);
+			$source[] = sprintf("\t\t\treturn \$this->collection(' % s');\n", $collectionName);
 			$source[] = "\t\t}\n";
 			return implode('', $source);
 		}
@@ -194,11 +199,11 @@
 			$source[] = sprintf("\t\t * @return \\%s\n", $targetSchemaName);
 			$source[] = "\t\t */\n";
 			$source[] = sprintf("\t\tpublic function link%s() {\n", StringUtils::camelize($linkName = $schemaLink->getName()));
-			$source[] = sprintf("\t\t\treturn \$this->link('%s');\n", $linkName);
+			$source[] = sprintf("\t\t\treturn \$this->link(' % s');\n", $linkName);
 			$source[] = "\t\t}\n";
 			$source[] = "\n";
 			$source[] = sprintf("\t\tpublic function set%sLink(\\%s \$%s) {\n", StringUtils::camelize($linkName = $schemaLink->getName()), $targetSchemaName, $linkName);
-			$source[] = sprintf("\t\t\t\$this->setLink('%s', \$%s);\n", $linkName, $linkName);
+			$source[] = sprintf("\t\t\t\$this->setLink(' % s', \$%s);\n", $linkName, $linkName);
 			$source[] = sprintf("\t\t\treturn \$this;\n");
 			$source[] = "\t\t}\n";
 			return implode('', $source);

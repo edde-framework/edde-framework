@@ -168,10 +168,12 @@
 		}
 
 		public function getMeta(string $name, $default = null) {
+			$this->use();
 			return $this->metaList[$name] ?? $default;
 		}
 
 		public function getMetaList(): array {
+			$this->use();
 			return $this->metaList;
 		}
 
@@ -181,6 +183,7 @@
 		}
 
 		public function hasMeta(string $name): bool {
+			$this->use();
 			return isset($this->metaList[$name]) || array_key_exists($name, $this->metaList);
 		}
 
