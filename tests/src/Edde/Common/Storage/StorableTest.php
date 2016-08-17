@@ -7,6 +7,7 @@
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Common\Cache\CacheFactory;
+	use Edde\Common\Crate\Crate;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Query\Schema\CreateSchemaQuery;
@@ -33,20 +34,24 @@
 		 * @var IStorage
 		 */
 		protected $storage;
+		/**
+		 * @var SqliteDriver
+		 */
+		protected $sqliteDriver;
 
 		public function testSimpleStorable() {
-			$storable = new Storable($this->container);
-			$storable->setSchema($schema = $this->schemaManager->getSchema('Foo\\Bar\\SimpleStorable'));
+			$crate = new Crate($this->container);
+			$crate->setSchema($schema = $this->schemaManager->getSchema('Foo\\Bar\\SimpleStorable'));
 			$this->storage->start();
 			$this->storage->execute(new CreateSchemaQuery($schema));
 
-			$storable->set('guid', $guid = sha1(random_bytes(64)));
-			$storable->set('value', 'foobar');
-			$this->storage->store($storable);
+			$crate->set('guid', $guid = sha1(random_bytes(64)));
+			$crate->set('value', 'foobar');
+			$this->storage->store($crate);
 
-			$storable->set('guid', sha1(random_bytes(64)));
-			$storable->set('value', 'barfoo');
-			$this->storage->store($storable);
+			$crate->set('guid', sha1(random_bytes(64)));
+			$crate->set('value', 'barfoo');
+			$this->storage->store($crate);
 
 			$this->storage->commit();
 
@@ -60,11 +65,11 @@
 				->property('guid')
 				->parameter($guid);
 
-			$storable = $this->storage->storable($schema, $query);
-			self::assertEquals($guid, $storable->get('guid'));
-			self::assertEquals('foobar', $storable->get('value'));
+			$crate = $this->storage->load($schema, $query);
+			self::assertEquals($guid, $crate->get('guid'));
+			self::assertEquals('foobar', $crate->get('value'));
 			$count = 0;
-			foreach ($this->storage->collection($schema) as $storable) {
+			foreach ($this->storage->collection($schema) as $crate) {
 				$count++;
 			}
 			self::assertEquals(2, $count);
@@ -80,7 +85,7 @@
 			$this->storage->execute(new CreateSchemaQuery($identitySchema));
 			$this->storage->execute(new CreateSchemaQuery($identityGroupSchema));
 
-			$rootGroup = new Storable($this->container);
+			$rootGroup = new Crate($this->container);
 			$rootGroup->setSchema($groupSchema);
 			$rootGroup->put([
 				'guid' => sha1(random_bytes(64)),
@@ -88,7 +93,7 @@
 			]);
 			$this->storage->store($rootGroup);
 
-			$guestGroup = new Storable($this->container);
+			$guestGroup = new Crate($this->container);
 			$guestGroup->setSchema($groupSchema);
 			$guestGroup->put([
 				'guid' => sha1(random_bytes(64)),
@@ -96,7 +101,7 @@
 			]);
 			$this->storage->store($guestGroup);
 
-			$godIdentity = new Storable($this->container);
+			$godIdentity = new Crate($this->container);
 			$godIdentity->setSchema($identitySchema);
 			$godIdentity->put([
 				'guid' => sha1(random_bytes(64)),
@@ -104,7 +109,7 @@
 			]);
 			$this->storage->store($godIdentity);
 
-			$guestIdentity = new Storable($this->container);
+			$guestIdentity = new Crate($this->container);
 			$guestIdentity->setSchema($identitySchema);
 			$guestIdentity->put([
 				'guid' => sha1(random_bytes(64)),
@@ -112,7 +117,7 @@
 			]);
 			$this->storage->store($guestIdentity);
 
-			$identityGroup = new Storable($this->container);
+			$identityGroup = new Crate($this->container);
 			$identityGroup->setSchema($identityGroupSchema);
 			$identityGroup->put([
 				'guid' => sha1(random_bytes(64)),
@@ -121,7 +126,7 @@
 			]);
 			$this->storage->store($identityGroup);
 
-			$identityGroup = new Storable($this->container);
+			$identityGroup = new Crate($this->container);
 			$identityGroup->setSchema($identityGroupSchema);
 			$identityGroup->put([
 				'guid' => sha1(random_bytes(64)),
@@ -130,7 +135,7 @@
 			]);
 			$this->storage->store($identityGroup);
 
-			$identityGroup = new Storable($this->container);
+			$identityGroup = new Crate($this->container);
 			$identityGroup->setSchema($identityGroupSchema);
 			$identityGroup->put([
 				'guid' => sha1(random_bytes(64)),
@@ -138,8 +143,6 @@
 				'group' => $guestGroup->get('guid'),
 			]);
 			$this->storage->store($identityGroup);
-
-			$this->storage->commit();
 
 			$groupList = [];
 			foreach ($this->storage->collectionTo($godIdentity, $identityGroupSchema, 'identity', 'group') as $storable) {
@@ -149,6 +152,8 @@
 				'root',
 				'guest',
 			], $groupList);
+
+			$this->storage->commit();
 		}
 
 		protected function setUp() {
@@ -161,10 +166,16 @@
 			$schemaFactory->load(__DIR__ . '/assets/identity-group-storable.json');
 			$this->schemaManager = new SchemaManager($schemaFactory);
 			$this->container = ContainerFactory::create([
-				Storable::class,
+				Crate::class,
 			]);
 			$tempDirectory = new TempDirectory(__DIR__ . '/temp');
 			$tempDirectory->purge();
-			$this->storage = new DatabaseStorage($this->container, new SqliteDriver('sqlite:' . $tempDirectory->filename('storage.sqlite')), new CacheFactory(__DIR__, new DevNullCacheStorage()));
+			$this->storage = new DatabaseStorage($this->container, $this->sqliteDriver = new SqliteDriver('sqlite:' . $tempDirectory->filename('storage.sqlite')), new CacheFactory(__DIR__, new DevNullCacheStorage()));
+		}
+
+		protected function tearDown() {
+			$this->sqliteDriver->close();
+			$tempDirectory = new TempDirectory(__DIR__ . '/temp');
+			$tempDirectory->purge();
 		}
 	}

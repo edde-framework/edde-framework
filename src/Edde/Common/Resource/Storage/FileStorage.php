@@ -3,16 +3,12 @@
 
 	namespace Edde\Common\Resource\Storage;
 
-	use Edde\Api\Crate\CrateException;
 	use Edde\Api\File\DirectoryException;
-	use Edde\Api\File\FileException;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Resource\IResource;
-	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Resource\ResourceException;
 	use Edde\Api\Resource\Storage\IFileStorage;
 	use Edde\Api\Resource\Storage\IStorageDirectory;
-	use Edde\Api\Url\IUrl;
 	use Edde\Common\File\Directory;
 	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
@@ -22,10 +18,6 @@
 	 * Simple and uniform way how to handle file storing.
 	 */
 	class FileStorage extends AbstractUsable implements IFileStorage {
-		/**
-		 * @var IResourceIndex
-		 */
-		protected $resourceIndex;
 		/**
 		 * application root directory; it is used for relative path computation
 		 *
@@ -40,43 +32,12 @@
 		protected $storageDirectory;
 
 		/**
-		 * @param IResourceIndex $resourceIndex
 		 * @param IRootDirectory $rootDirectory
 		 * @param IStorageDirectory $storageDirectory
 		 */
-		public function __construct(IResourceIndex $resourceIndex, IRootDirectory $rootDirectory, IStorageDirectory $storageDirectory) {
-			$this->resourceIndex = $resourceIndex;
+		public function __construct(IRootDirectory $rootDirectory, IStorageDirectory $storageDirectory) {
 			$this->rootDirectory = $rootDirectory;
 			$this->storageDirectory = $storageDirectory;
-		}
-
-		public function getPath(IResource $resource) {
-			return str_replace($this->rootDirectory, null, $this->getResource($resource)
-				->getUrl()
-				->getPath());
-		}
-
-		/**
-		 * @param IResource $resource
-		 *
-		 * @return IResource
-		 * @throws FileException
-		 * @throws CrateException
-		 * @throws ResourceException
-		 */
-		public function getResource(IResource $resource) {
-			$this->use();
-			return $this->resourceIndex->query()
-				->url($resource->getUrl()
-					->getAbsoluteUrl())
-				->resource();
-		}
-
-		public function hasResource(IUrl $url) {
-			$this->use();
-			$resourceQuery = $this->resourceIndex->query();
-			$resourceQuery->name($url->getAbsoluteUrl());
-			return $this->resourceIndex->hasResource($resourceQuery);
 		}
 
 		public function store(IResource $resource) {

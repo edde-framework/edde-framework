@@ -4,10 +4,10 @@
 	namespace Edde\Common\Storage;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Storage\ICollection;
-	use Edde\Api\Storage\IStorable;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Storage\StorageException;
 	use Edde\Common\Query\Select\SelectQuery;
@@ -26,11 +26,11 @@
 			$this->container = $container;
 		}
 
-		public function storable(ISchema $schema, IQuery $query) {
-			foreach ($this->collection($schema, $query) as $storable) {
-				return $storable;
+		public function load(ISchema $schema, IQuery $query) {
+			foreach ($this->collection($schema, $query) as $crate) {
+				return $crate;
 			}
-			throw new StorageException(sprintf('Cannot retrieve any storable [%s] by the given query.', $schema->getSchemaName()));
+			throw new StorageException(sprintf('Cannot retrieve any crate [%s] by the given query.', $schema->getSchemaName()));
 		}
 
 		public function collection(ISchema $schema, IQuery $query = null): ICollection {
@@ -44,7 +44,7 @@
 			return new Collection($schema, $this, $this->container, $query);
 		}
 
-		public function collectionTo(IStorable $storable, ISchema $relation, string $source, string $target): ICollection {
+		public function collectionTo(ICrate $crate, ISchema $relation, string $source, string $target): ICollection {
 			$sourceLink = $relation->getLink($source);
 			$targetLink = $relation->getLink($target);
 			$targetSchema = $targetLink->getTarget()
@@ -63,7 +63,7 @@
 				->eq()
 				->property($sourceLink->getSource()
 					->getName(), $relationAlias)
-				->parameter($storable->get($sourceLink->getTarget()
+				->parameter($crate->get($sourceLink->getTarget()
 					->getName()))
 				->and()
 				->eq()

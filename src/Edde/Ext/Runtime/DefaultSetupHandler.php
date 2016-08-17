@@ -20,10 +20,7 @@
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Link\IHostUrl;
 	use Edde\Api\Link\ILinkFactory;
-	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Resource\IResourceManager;
-	use Edde\Api\Resource\IResourceStorable;
-	use Edde\Api\Resource\Scanner\IScanner;
 	use Edde\Api\Resource\Storage\IFileStorage;
 	use Edde\Api\Resource\Storage\IStorageDirectory;
 	use Edde\Api\Router\IRoute;
@@ -42,7 +39,6 @@
 	use Edde\Common\Application\Application;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
-	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Crate\Crate;
 	use Edde\Common\Crate\CrateDirectory;
 	use Edde\Common\Crate\CrateFactory;
@@ -52,17 +48,13 @@
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Http\HttpRequestFactory;
 	use Edde\Common\Link\LinkFactory;
-	use Edde\Common\Resource\ResourceIndex;
 	use Edde\Common\Resource\ResourceManager;
-	use Edde\Common\Resource\ResourceSchema;
-	use Edde\Common\Resource\ResourceStorable;
 	use Edde\Common\Resource\Storage\FileStorage;
 	use Edde\Common\Resource\Storage\StorageDirectory;
 	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\SetupHandler;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
-	use Edde\Common\Storage\Storable;
 	use Edde\Common\Template\Macro\Control\BindIdAttributeMacro;
 	use Edde\Common\Template\Macro\Control\ButtonMacro;
 	use Edde\Common\Template\Macro\Control\ControlMacro;
@@ -88,7 +80,6 @@
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Resource\JsonResourceHandler;
-	use Edde\Ext\Resource\Scanner\FilesystemScanner;
 	use Edde\Ext\Router\CliRouter;
 	use Edde\Ext\Router\SimpleRouter;
 	use Edde\Ext\Upgrade\InitialStorageUpgrade;
@@ -139,9 +130,6 @@
 					return new TemplateDirectory($storageDirectory->getDirectory() . '/template');
 				},
 				ICryptEngine::class => CryptEngine::class,
-				IScanner::class => function (IRootDirectory $rootDirectory) {
-					return new FilesystemScanner($rootDirectory);
-				},
 				IFileStorage::class => FileStorage::class,
 				IDriver::class => function (IStorageDirectory $storageDirectory) {
 					return new SqliteDriver('sqlite:' . $storageDirectory->filename('storage.sqlite'));
@@ -152,12 +140,8 @@
 					return new CrateDirectory($storageDirectory->getDirectory() . '/crate');
 				},
 				IStorage::class => DatabaseStorage::class,
-				IResourceIndex::class => ResourceIndex::class,
 				IResourceManager::class => ResourceManager::class,
 				IUpgradeManager::class => UpgradeManager::class,
-				IResourceStorable::class => FactoryFactory::create(ResourceStorable::class, function (IResourceIndex $resourceIndex) {
-					return $resourceIndex->createResourceStorable();
-				}, false),
 				ITemplateManager::class => TemplateManager::class,
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
@@ -174,7 +158,6 @@
 				InitialStorageUpgrade::class,
 
 				Crate::class,
-				Storable::class,
 
 				SwitchMacro::class,
 				IncludeMacro::class,
@@ -188,12 +171,6 @@
 			});
 			$setupHandler->onSetup(IApplication::class, function (ICrateGenerator $crateGenerator, IApplication $application) {
 				$crateGenerator->generate();
-			});
-			$setupHandler->onSetup(ISchemaManager::class, function (ISchemaManager $schemaManager) {
-				$schemaManager->addSchema(new ResourceSchema());
-			});
-			$setupHandler->onSetup(ICrateGenerator::class, function (ISchemaManager $schemaManager, ICrateGenerator $crateGenerator) {
-				$crateGenerator->excludeSchema($schemaManager->getSchema(ResourceStorable::class));
 			});
 			$setupHandler->onSetup(IResourceManager::class, function (IContainer $container, IResourceManager $resourceManager) {
 				$resourceManager->registerResourceHandler($container->create(XmlResourceHandler::class));

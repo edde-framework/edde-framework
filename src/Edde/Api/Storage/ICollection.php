@@ -7,7 +7,7 @@
 	use IteratorAggregate;
 
 	/**
-	 * Collection of IStorable is the result of a query.
+	 * Collection of ICrate is the result of a query.
 	 */
 	interface ICollection extends IteratorAggregate {
 		/**
