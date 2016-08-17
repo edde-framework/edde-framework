@@ -8,9 +8,14 @@
 
 		public function __call($name, $arguments) {
 			if (strpos($name, 'action', 0) === false) {
+				$this->action();
 				return parent::__call($name, $arguments);
 			}
 			$this->template();
 			$this->send();
+			return $this;
+		}
+
+		protected function action() {
 		}
 	}
