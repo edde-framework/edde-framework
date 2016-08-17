@@ -13,7 +13,7 @@
 			parent::__construct(['button'], ButtonControl::class);
 		}
 
-		public function run(INode $root, ICompiler $compiler) {
+		public function run(INode $root, ICompiler $compiler, callable $callback = null) {
 			$destination = $compiler->getDestination();
 			$destination->write("\t\t\t\$parent = \$this->stack->top();\n");
 			$destination->write(sprintf("\t\t\t\$parent->addControl(\$control = \$this->container->create('%s'));\n", $this->control));
@@ -25,6 +25,6 @@
 			unset($attributeList['action']);
 			$destination->write(sprintf("\t\t\t\$control->setAction(get_class(\$this->proxy), %s);\n", $compiler->value($action)));
 			$this->writeAttributeList($attributeList, $destination);
-			$this->macro($root, $compiler);
+			$this->macro($root, $compiler, $callback);
 		}
 	}

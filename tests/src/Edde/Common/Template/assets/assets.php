@@ -1,4 +1,5 @@
 <?php
+	use Edde\Common\Html\ButtonControl;
 	use Edde\Common\Html\DivControl;
 	use Edde\Common\Html\Document\DocumentControl;
 	use Edde\Common\Html\SpanControl;
@@ -29,6 +30,10 @@
 
 		public function specialSpan(SpanControl $control) {
 			$control->addClass('special-span-class');
+		}
+
+		public function specialButton(ButtonControl $control) {
+			$control->addClass('special-button-class');
 		}
 	}
 

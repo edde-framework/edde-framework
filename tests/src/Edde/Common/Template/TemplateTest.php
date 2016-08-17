@@ -382,6 +382,11 @@
 			<span class="second special-span-class"></span>
 			<span class="third special-span-class"></span>
 		</div>
+		<div class="child-pass">
+			<div class="button edde-clickable first special-button-class" data-control="TestDocument" data-action="foo"></div>
+			<div class="button edde-clickable second special-button-class" data-control="TestDocument" data-action="foo"></div>
+			<div class="button edde-clickable third special-button-class" data-control="TestDocument" data-action="foo"></div>
+		</div>
 	</body>
 </html>
 ', $this->control->render());
