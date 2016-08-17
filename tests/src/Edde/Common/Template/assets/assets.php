@@ -1,4 +1,5 @@
 <?php
+	use Edde\Common\Html\DivControl;
 	use Edde\Common\Html\Document\DocumentControl;
 
 	class TestDocument extends DocumentControl {
@@ -19,6 +20,10 @@
 				'foo' => new SomeItem('foo'),
 				'poo' => new SomeItem('poo'),
 			];
+		}
+
+		public function specialDiv(DivControl $divControl) {
+			$divControl->addClass('special-class');
 		}
 	}
 

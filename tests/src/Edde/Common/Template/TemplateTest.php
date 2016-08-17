@@ -22,6 +22,7 @@
 	use Edde\Common\Template\Macro\Control\DivMacro;
 	use Edde\Common\Template\Macro\Control\HeaderMacro;
 	use Edde\Common\Template\Macro\Control\JsMacro;
+	use Edde\Common\Template\Macro\Control\PassMacro;
 	use Edde\Common\Template\Macro\Control\PasswordMacro;
 	use Edde\Common\Template\Macro\Control\SchemaMacro;
 	use Edde\Common\Template\Macro\Control\SpanMacro;
@@ -360,6 +361,27 @@
 ', $this->control->render());
 		}
 
+		public function testPass() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/pass.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="pass-me special-class">
+			<span class="foo bar">some span here</span>
+		</div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
 		protected function setUp() {
 			$this->resourceManager = new ResourceManager();
 			$this->resourceManager->registerResourceHandler(new XmlResourceHandler(new XmlParser()));
@@ -396,6 +418,7 @@
 					new ButtonMacro(),
 					new SchemaMacro(),
 					new HeaderMacro(),
+					new PassMacro(),
 					$container->create(SwitchMacro::class),
 					$container->create(IncludeMacro::class),
 					$container->create(BindIdAttributeMacro::class),

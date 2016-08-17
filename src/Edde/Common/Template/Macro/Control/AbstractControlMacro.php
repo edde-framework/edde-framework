@@ -58,6 +58,6 @@
 			}
 			$destination->write("\t\t\t\$this->stack->push(\$control);\n");
 			parent::macro($root, $compiler);
-			$destination->write("\t\t\t\$this->stack->pop();\n");
+			$destination->write("\t\t\t\$control = \$this->stack->pop();\n");
 		}
 	}

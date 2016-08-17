@@ -69,6 +69,7 @@
 	use Edde\Common\Template\Macro\Control\DivMacro;
 	use Edde\Common\Template\Macro\Control\HeaderMacro;
 	use Edde\Common\Template\Macro\Control\JsMacro;
+	use Edde\Common\Template\Macro\Control\PassMacro;
 	use Edde\Common\Template\Macro\Control\PasswordMacro;
 	use Edde\Common\Template\Macro\Control\SchemaMacro;
 	use Edde\Common\Template\Macro\Control\SpanMacro;
@@ -207,6 +208,7 @@
 					new TextMacro(),
 					new PasswordMacro(),
 					new HeaderMacro(),
+					new PassMacro(),
 					$container->create(IncludeMacro::class),
 					$container->create(SwitchMacro::class),
 					$container->create(BindIdAttributeMacro::class),
