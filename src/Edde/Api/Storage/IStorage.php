@@ -3,6 +3,7 @@
 
 	namespace Edde\Api\Storage;
 
+	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Usable\IUsable;
@@ -44,31 +45,43 @@
 		public function execute(IQuery $query);
 
 		/**
-		 * try to store the given storable
+		 * try to store the given crate
 		 *
-		 * @param IStorable $storable
+		 * @param ICrate $crate
 		 *
 		 * @return $this
 		 */
-		public function store(IStorable $storable);
+		public function store(ICrate $crate);
 
 		/**
 		 * return collection based on the input query; if storage doesn't understand the queery, exception should be thrown
 		 *
-		 * @param ISchema $schema of Storables
+		 * @param ISchema $schema of Crate
 		 * @param IQuery $query
 		 *
-		 * @return ICollection|IStorable[]
+		 * @return ICollection|ICrate[]
 		 */
-		public function collection(ISchema $schema, IQuery $query);
+		public function collection(ISchema $schema, IQuery $query = null): ICollection;
 
 		/**
-		 * retrieve storable by the given query; it should formally go through a collection method; if there is no such storable, exception should be thrown
+		 * helper method for a m:n crate collection
 		 *
-		 * @param ISchema $schema of requested storable
+		 * @param ICrate $crate
+		 * @param ISchema $relation
+		 * @param string $source
+		 * @param string $target
+		 *
+		 * @return ICollection|ICrate[]
+		 */
+		public function collectionTo(ICrate $crate, ISchema $relation, string $source, string $target): ICollection;
+
+		/**
+		 * retrieve crate by the given query; it should formally go through a collection method; if there is no such crate, exception should be thrown
+		 *
+		 * @param ISchema $schema of requested crate
 		 * @param IQuery $query
 		 *
-		 * @return IStorable
+		 * @return ICrate
 		 */
-		public function storable(ISchema $schema, IQuery $query);
+		public function load(ISchema $schema, IQuery $query);
 	}

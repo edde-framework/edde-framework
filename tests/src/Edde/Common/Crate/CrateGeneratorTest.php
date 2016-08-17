@@ -42,6 +42,10 @@
 						require_once($resource->getUrl());
 					})($this->crateDirectory->save(sha1($name) . '.php', $source));
 					self::assertTrue(class_exists($name));
+					$reflectionClass = new \ReflectionClass($name);
+					foreach ($schema->getMeta('implements', []) as $meta) {
+						self::assertContains($meta, $reflectionClass->getInterfaceNames());
+					}
 				}
 			}
 		}

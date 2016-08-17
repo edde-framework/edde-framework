@@ -7,7 +7,6 @@
 	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\EddeException;
 	use Edde\Api\Html\IHtmlControl;
-	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Html\DivControl;
@@ -20,10 +19,6 @@
 		 * @var IUpgradeManager
 		 */
 		protected $upgradeManager;
-		/**
-		 * @var IResourceIndex
-		 */
-		protected $resourceIndex;
 		/**
 		 * @var ICrateGenerator
 		 */
@@ -39,10 +34,6 @@
 
 		public function lazyUpgradeManager(IUpgradeManager $upgradeManager) {
 			$this->upgradeManager = $upgradeManager;
-		}
-
-		public function lazyResourceIndex(IResourceIndex $resourceIndex) {
-			$this->resourceIndex = $resourceIndex;
 		}
 
 		public function lazyCrateGenerator(ICrateGenerator $crateGenerator) {
@@ -65,20 +56,6 @@
 				$upgrade = $this->upgradeManager->upgrade();
 				$this->message->addClass('success')
 					->setText(sprintf('application has been upgraded to version [%s]', $upgrade->getVersion()));
-			} catch (EddeException $e) {
-				Debugger::log($e);
-				$this->message->addClass('error')
-					->setText($e->getMessage());
-			}
-			$this->response();
-		}
-
-		public function handleOnUpdateIndex() {
-			$this->use();
-			try {
-				$this->resourceIndex->update();
-				$this->message->addClass('success')
-					->setText('resource index has been updated');
 			} catch (EddeException $e) {
 				Debugger::log($e);
 				$this->message->addClass('error')

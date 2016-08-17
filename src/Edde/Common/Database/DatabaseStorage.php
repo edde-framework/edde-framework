@@ -6,12 +6,12 @@
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Database\IDatabaseStorage;
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\Node\INodeQuery;
 	use Edde\Api\Query\IQuery;
-	use Edde\Api\Storage\IStorable;
 	use Edde\Api\Storage\StorageException;
 	use Edde\Common\Node\NodeQuery;
 	use Edde\Common\Query\Insert\InsertQuery;
@@ -77,14 +77,14 @@
 			return $this;
 		}
 
-		public function store(IStorable $storable) {
+		public function store(ICrate $crate) {
 			$this->use();
-			if ($storable->isDirty() === false) {
+			if ($crate->isDirty() === false) {
 				return $this;
 			}
-			$schema = $storable->getSchema();
+			$schema = $crate->getSchema();
 			$selectQuery = new SelectQuery();
-			foreach ($storable->getIdentifierList() as $property) {
+			foreach ($crate->getIdentifierList() as $property) {
 				$schemaProperty = $property->getSchemaProperty();
 				$selectQuery->select()
 					->count($schemaProperty->getName(), null)
@@ -103,7 +103,7 @@
 				$name = UpdateQuery::class;
 			}
 			$source = [];
-			foreach ($storable->getDirtyList() as $property) {
+			foreach ($crate->getDirtyList() as $property) {
 				$schemaProperty = $property->getSchemaProperty();
 				$source[$schemaProperty->getName()] = $property->get();
 			}

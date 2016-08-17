@@ -20,7 +20,9 @@
 	use Edde\Common\Template\Macro\Control\ControlMacro;
 	use Edde\Common\Template\Macro\Control\CssMacro;
 	use Edde\Common\Template\Macro\Control\DivMacro;
+	use Edde\Common\Template\Macro\Control\HeaderMacro;
 	use Edde\Common\Template\Macro\Control\JsMacro;
+	use Edde\Common\Template\Macro\Control\PassMacro;
 	use Edde\Common\Template\Macro\Control\PasswordMacro;
 	use Edde\Common\Template\Macro\Control\SchemaMacro;
 	use Edde\Common\Template\Macro\Control\SpanMacro;
@@ -112,7 +114,7 @@
 	</head>
 	<body>
 		<div id="blabla" data-schema="Foo\Bar\Schema" data-property="bar"></div>
-		<div class="button edde-clickable" data-bind="blabla" data-control="TestDocument" data-action="foo"></div>
+		<div class="button edde-clickable" data-control="TestDocument" data-action="foo" data-bind="blabla"></div>
 	</body>
 </html>
 ', $this->control->render());
@@ -333,6 +335,63 @@
 ', $this->control->render());
 		}
 
+		public function testHeader() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/header.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<h1>foo</h1>
+		<h2>poo</h2>
+		<h3>woo</h3>
+		<h4>doo</h4>
+		<h5>goo</h5>
+		<h6>
+			<span>spanish header</span>
+		</h6>
+	</body>
+</html>
+', $this->control->render());
+		}
+
+		public function testPass() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/pass.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="pass-me special-class">
+			<span class="foo bar">some span here</span>
+		</div>
+		<div class="child-pass">
+			<span class="first special-span-class"></span>
+			<span class="second special-span-class"></span>
+			<span class="third special-span-class"></span>
+		</div>
+		<div class="child-pass">
+			<div class="button edde-clickable first special-button-class" data-control="TestDocument" data-action="foo"></div>
+			<div class="button edde-clickable second special-button-class" data-control="TestDocument" data-action="foo"></div>
+			<div class="button edde-clickable third special-button-class" data-control="TestDocument" data-action="foo"></div>
+		</div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
 		protected function setUp() {
 			$this->resourceManager = new ResourceManager();
 			$this->resourceManager->registerResourceHandler(new XmlResourceHandler(new XmlParser()));
@@ -368,6 +427,8 @@
 					new JsMacro(),
 					new ButtonMacro(),
 					new SchemaMacro(),
+					new HeaderMacro(),
+					new PassMacro(),
 					$container->create(SwitchMacro::class),
 					$container->create(IncludeMacro::class),
 					$container->create(BindIdAttributeMacro::class),

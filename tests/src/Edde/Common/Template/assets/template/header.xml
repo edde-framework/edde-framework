@@ -1,0 +1,10 @@
+<control>
+	<h1>foo</h1>
+	<h2>poo</h2>
+	<h3>woo</h3>
+	<h4>doo</h4>
+	<h5>goo</h5>
+	<h6>
+		<span>spanish header</span>
+	</h6>
+</control>

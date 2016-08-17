@@ -1,0 +1,15 @@
+<control>
+	<div class="pass-me" m:pass="special-div()">
+		<span class="foo bar">some span here</span>
+	</div>
+	<div class="child-pass" m:pass-child="special-span()">
+		<span class="first"/>
+		<span class="second"/>
+		<span class="third"/>
+	</div>
+	<div class="child-pass" m:pass-child="special-button()">
+		<button action="foo" class="first"/>
+		<button action="foo" class="second"/>
+		<button action="foo" class="third"/>
+	</div>
+</control>

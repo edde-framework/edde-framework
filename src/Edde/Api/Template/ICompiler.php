@@ -55,5 +55,5 @@
 
 		public function compile(): ITemplate;
 
-		public function macro(INode $root, ICompiler $compiler);
+		public function macro(INode $root, ICompiler $compiler, callable $callback = null);
 	}

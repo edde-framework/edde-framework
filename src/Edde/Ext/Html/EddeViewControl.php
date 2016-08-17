@@ -3,12 +3,12 @@
 
 	namespace Edde\Ext\Html;
 
-	use Edde\Common\Html\ViewControl;
+	use Edde\Common\Html\TemplateViewControl;
 
 	/**
 	 * Same as AbstractHtmlControl extended by default set of javascript, styles and other stuff.
 	 */
-	class EddeViewControl extends ViewControl {
+	class EddeViewControl extends TemplateViewControl {
 		protected function prepare() {
 			parent::prepare();
 			$this->addJavaScript(__DIR__ . '/assets/js/jquery-3.1.0.js');

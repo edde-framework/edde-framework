@@ -31,7 +31,10 @@
 		public function run() {
 			$this->use();
 			if (method_exists($control = $this->container->create($this->route->getClass()), $actionMethod = $this->route->getMethod()) === false) {
-				throw new ApplicationException(sprintf('Missing method [%s::%s()] in the control.', get_class($control), $actionMethod));
+				/**
+				 * ability to process __call methods; the only restriction is execution without parameters
+				 */
+				return $control->{$actionMethod}();
 			}
 			$callback = new Callback([
 				$control,

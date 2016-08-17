@@ -9,6 +9,7 @@
 	use Edde\Api\Storage\ICollection;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Crate\Crate;
 
 	abstract class AbstractCollection extends AbstractObject implements ICollection {
 		/**
@@ -41,12 +42,17 @@
 			$this->query = $query;
 		}
 
+		public function getQuery() {
+			return $this->query;
+		}
+
 		public function getIterator() {
-			$storableName = $this->schema->getSchemaName();
+			$crateName = $this->container->has($crateName = $this->schema->getSchemaName()) ? $crateName : Crate::class;
 			foreach ($this->storage->execute($this->query) as $item) {
-				$storable = $this->container->create($storableName);
-				$storable->push((array)$item);
-				yield $storable;
+				$crate = $this->container->create($crateName);
+				$crate->setSchema($this->schema);
+				$crate->push((array)$item);
+				yield $crate;
 			}
 		}
 	}

@@ -4,6 +4,9 @@
 	use Edde\Common\Schema\Schema;
 	use Edde\Common\Schema\SchemaProperty;
 
+	interface IHeader {
+	}
+
 	class HeaderSchema extends Schema {
 		public function __construct() {
 			parent::__construct(Header::class);
@@ -80,6 +83,9 @@
 					->identifier()
 					->required(),
 				new SchemaProperty($this, 'name'),
+			]);
+			$this->setMetaList([
+				'implements' => [IHeader::class],
 			]);
 		}
 	}

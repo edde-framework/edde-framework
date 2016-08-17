@@ -4,7 +4,6 @@
 	namespace Edde\Common\Web;
 
 	use Edde\Api\File\ITempDirectory;
-	use Edde\Api\Resource\IResourceIndex;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Upgrade\IUpgradeManager;
@@ -14,18 +13,13 @@
 	use Edde\Common\Container\DependencyFactory;
 	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Container\FactoryManager;
-	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
-	use Edde\Common\File\Directory;
 	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\File\TempDirectory;
-	use Edde\Common\Resource\ResourceIndex;
 	use Edde\Common\Resource\ResourceList;
 	use Edde\Common\Resource\ResourceManager;
-	use Edde\Common\Resource\ResourceSchema;
-	use Edde\Common\Resource\ResourceStorable;
 	use Edde\Common\Resource\Storage\FileStorage;
 	use Edde\Common\Resource\Storage\StorageDirectory;
 	use Edde\Common\Schema\SchemaFactory;
@@ -35,7 +29,6 @@
 	use Edde\Ext\Cache\DevNullCacheStorage;
 	use Edde\Ext\Cache\FileCacheStorage;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
-	use Edde\Ext\Resource\Scanner\FilesystemScanner;
 	use Edde\Ext\Upgrade\InitialStorageUpgrade;
 	use phpunit\framework\TestCase;
 
@@ -57,10 +50,6 @@
 		 */
 		protected $upgradeManager;
 		/**
-		 * @var IResourceIndex
-		 */
-		protected $resourceIndex;
-		/**
 		 * @var SqliteDriver
 		 */
 		protected $sqliteDriver;
@@ -75,16 +64,9 @@
 			$container = new Container($factoryManager, new DependencyFactory($factoryManager, $cacheFactory), $cacheFactory);
 			$this->storage = new DatabaseStorage($container, $this->sqliteDriver = new SqliteDriver('sqlite:' . $this->getDatabaseFileName()), $cacheFactory);
 			$this->schemaManager = new SchemaManager(new SchemaFactory(new ResourceManager()));
-			$this->schemaManager->addSchema(new ResourceSchema());
 			$this->upgradeManager = new UpgradeManager();
-			$this->resourceIndex = new ResourceIndex($container, $this->schemaManager, $this->storage, new FilesystemScanner(new Directory(__DIR__ . '/assets')), new CryptEngine());
-			$factoryManager->registerFactory(ResourceStorable::class, FactoryFactory::create(ResourceStorable::class, [
-				$this->resourceIndex,
-				'createResourceStorable',
-			], false));
 			$this->upgradeManager->registerUpgrade(new InitialStorageUpgrade($this->storage, $this->schemaManager, '1.0'));
 			$this->upgradeManager->upgrade();
-			$this->resourceIndex->update();
 		}
 
 		protected function getDatabaseFileName() {
@@ -93,7 +75,7 @@
 
 		public function testCommon() {
 			$styleSheetCompiler = new StyleSheetCompiler();
-			$styleSheetCompiler->lazyFileStorage($fileStorage = new FileStorage($this->resourceIndex, new RootDirectory(__DIR__), new StorageDirectory(__DIR__ . '/public')));
+			$styleSheetCompiler->lazyFileStorage($fileStorage = new FileStorage(new RootDirectory(__DIR__), new StorageDirectory(__DIR__ . '/public')));
 			$styleSheetCompiler->lazyTempDirectory($this->tempDirectory);
 			$styleSheetCompiler->injectCacheFactory(new CacheFactory(__DIR__, new FileCacheStorage(new CacheDirectory(__DIR__ . '/temp'))));
 

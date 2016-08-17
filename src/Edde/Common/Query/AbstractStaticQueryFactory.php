@@ -188,6 +188,10 @@
 			return new StaticQuery($where, $parameterList);
 		}
 
+		protected function formatAll(INode $node) {
+			return new StaticQuery('*');
+		}
+
 		protected function formatProperty(INode $node) {
 			$property = $this->delimite($node->getValue());
 			if (($prefix = $node->getAttribute('prefix')) !== null) {

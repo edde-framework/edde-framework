@@ -1,5 +1,8 @@
 <?php
+	use Edde\Common\Html\ButtonControl;
+	use Edde\Common\Html\DivControl;
 	use Edde\Common\Html\Document\DocumentControl;
+	use Edde\Common\Html\SpanControl;
 
 	class TestDocument extends DocumentControl {
 		public function switchMe() {
@@ -19,6 +22,18 @@
 				'foo' => new SomeItem('foo'),
 				'poo' => new SomeItem('poo'),
 			];
+		}
+
+		public function specialDiv(DivControl $divControl) {
+			$divControl->addClass('special-class');
+		}
+
+		public function specialSpan(SpanControl $control) {
+			$control->addClass('special-span-class');
+		}
+
+		public function specialButton(ButtonControl $control) {
+			$control->addClass('special-button-class');
 		}
 	}
 
