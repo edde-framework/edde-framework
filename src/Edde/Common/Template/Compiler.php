@@ -96,7 +96,7 @@
 			return $template;
 		}
 
-		public function macro(INode $root, ICompiler $compiler) {
+		public function macro(INode $root, ICompiler $compiler, callable $callback = null) {
 			if (isset($this->macroList[$name = $root->getName()]) === false) {
 				throw new CompilerException(sprintf('Unknown macro [%s].', $root->getPath()));
 			}
@@ -112,11 +112,11 @@
 					}
 					unset($attributeList['m:' . $attribute]);
 					$root->setAttributeList($attributeList);
-					$this->macro((new Node('m:' . $attribute, $value))->addNode($root), $this);
+					$this->macro((new Node('m:' . $attribute, $value))->addNode($root), $this, $callback);
 				}
 				return;
 			}
-			$this->macroList[$name]->run($root, $this);
+			$this->macroList[$name]->run($root, $this, $callback);
 		}
 
 		public function value(string $value): string {

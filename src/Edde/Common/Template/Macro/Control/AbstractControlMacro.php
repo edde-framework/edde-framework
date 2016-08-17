@@ -23,7 +23,7 @@
 			$this->control = $control;
 		}
 
-		public function run(INode $root, ICompiler $compiler) {
+		public function run(INode $root, ICompiler $compiler, callable $callback = null) {
 			$destination = $compiler->getDestination();
 			$destination->write("\t\t\t\$parent = \$this->stack->top();\n");
 			$destination->write(sprintf("\t\t\t\$parent->addControl(\$control = \$this->container->create('%s'));\n", $this->control));
@@ -31,7 +31,7 @@
 			$attributeList = $this->getAttributeList($root, $compiler);
 			unset($attributeList['value']);
 			$this->writeAttributeList($attributeList, $destination);
-			$this->macro($root, $compiler);
+			$this->macro($root, $compiler, $callback);
 		}
 
 		protected function writeTextValue(INode $root, IFile $destination, ICompiler $compiler) {
@@ -50,14 +50,17 @@
 			}
 		}
 
-		protected function macro(INode $root, ICompiler $compiler) {
+		protected function macro(INode $root, ICompiler $compiler, callable $callback = null) {
 			$destination = $compiler->getDestination();
 			if ($root->isLeaf()) {
-				parent::macro($root, $compiler);
+				parent::macro($root, $compiler, $callback);
+				if ($callback) {
+					$callback($compiler);
+				}
 				return;
 			}
 			$destination->write("\t\t\t\$this->stack->push(\$control);\n");
-			parent::macro($root, $compiler);
+			parent::macro($root, $compiler, $callback);
 			$destination->write("\t\t\t\$control = \$this->stack->pop();\n");
 		}
 	}

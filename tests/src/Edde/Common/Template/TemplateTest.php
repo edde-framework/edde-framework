@@ -377,6 +377,11 @@
 		<div class="pass-me special-class">
 			<span class="foo bar">some span here</span>
 		</div>
+		<div class="child-pass">
+			<span class="first special-span-class"></span>
+			<span class="second special-span-class"></span>
+			<span class="third special-span-class"></span>
+		</div>
 	</body>
 </html>
 ', $this->control->render());

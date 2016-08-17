@@ -37,9 +37,9 @@
 			return $attributeList;
 		}
 
-		protected function macro(INode $root, ICompiler $compiler) {
+		protected function macro(INode $root, ICompiler $compiler, callable $callback = null) {
 			foreach ($root->getNodeList() as $node) {
-				$compiler->macro($node, $compiler);
+				$compiler->macro($node, $compiler, $callback);
 			}
 		}
 	}

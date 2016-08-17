@@ -10,13 +10,28 @@
 
 	class PassMacro extends AbstractMacro {
 		public function __construct() {
-			parent::__construct(['m:pass']);
+			parent::__construct([
+				'm:pass',
+				'm:pass-child',
+			]);
 		}
 
 		public function run(INode $root, ICompiler $compiler) {
 			$destination = $compiler->getDestination();
-			$this->macro($root, $compiler);
 			$value = str_replace('()', '', $root->getValue());
-			$destination->write(sprintf("\t\t\t\$this->%s(\$control);\n", StringUtils::firstLower(StringUtils::camelize($value))));
+			switch ($root->getName()) {
+				case 'm:pass':
+					$this->macro($root, $compiler);
+					$destination->write(sprintf("\t\t\t\$this->%s(\$control);\n", StringUtils::firstLower(StringUtils::camelize($value))));
+					break;
+				case 'm:pass-child':
+					foreach ($root->getNodeList() as $node) {
+						$compiler->macro($node, $compiler, function (ICompiler $compiler) use ($value) {
+							$destination = $compiler->getDestination();
+							$destination->write(sprintf("\t\t\t\$this->%s(\$control);\n", StringUtils::firstLower(StringUtils::camelize($value))));
+						});
+					}
+					break;
+			}
 		}
 	}
