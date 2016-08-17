@@ -60,7 +60,7 @@
 		 *
 		 * @return ICollection|IStorable[]
 		 */
-		public function collection(ISchema $schema, IQuery $query);
+		public function collection(ISchema $schema, IQuery $query = null): ICollection;
 
 		/**
 		 * retrieve storable by the given query; it should formally go through a collection method; if there is no such storable, exception should be thrown

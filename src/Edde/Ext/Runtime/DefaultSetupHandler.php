@@ -62,6 +62,7 @@
 	use Edde\Common\Runtime\SetupHandler;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
+	use Edde\Common\Storage\Storable;
 	use Edde\Common\Template\Macro\Control\BindIdAttributeMacro;
 	use Edde\Common\Template\Macro\Control\ButtonMacro;
 	use Edde\Common\Template\Macro\Control\ControlMacro;
@@ -173,6 +174,7 @@
 				InitialStorageUpgrade::class,
 
 				Crate::class,
+				Storable::class,
 
 				SwitchMacro::class,
 				IncludeMacro::class,

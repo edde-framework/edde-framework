@@ -42,9 +42,10 @@
 		}
 
 		public function getIterator() {
-			$storableName = $this->schema->getSchemaName();
+			$storableName = $this->container->has($storableName = $this->schema->getSchemaName()) ? $storableName : Storable::class;
 			foreach ($this->storage->execute($this->query) as $item) {
 				$storable = $this->container->create($storableName);
+				$storable->setSchema($this->schema);
 				$storable->push((array)$item);
 				yield $storable;
 			}

@@ -35,6 +35,11 @@
 			return $this;
 		}
 
+		public function all() {
+			$this->node->addNode(new Node('all'));
+			return $this;
+		}
+
 		/**
 		 * select count of the given property
 		 *

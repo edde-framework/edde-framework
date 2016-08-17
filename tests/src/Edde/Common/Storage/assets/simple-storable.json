@@ -1,0 +1,14 @@
+{
+	"name": "SimpleStorable",
+	"namespace": "Foo\\Bar",
+	"property-list": [
+		{
+			"name": "guid",
+			"unique": true,
+			"identifier": true
+		},
+		{
+			"name": "value"
+		}
+	]
+}
