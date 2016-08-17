@@ -7,6 +7,7 @@
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Storage\ICollection;
+	use Edde\Api\Storage\IStorable;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Storage\StorageException;
 	use Edde\Common\Query\Select\SelectQuery;
@@ -41,5 +42,35 @@
 					->source($schema->getSchemaName());
 			}
 			return new Collection($schema, $this, $this->container, $query);
+		}
+
+		public function collectionTo(IStorable $storable, ISchema $relation, string $source, string $target): ICollection {
+			$sourceLink = $relation->getLink($source);
+			$targetLink = $relation->getLink($target);
+			$targetSchema = $targetLink->getTarget()
+				->getSchema();
+			$selectQuery = new SelectQuery();
+			$relationAlias = sha1(random_bytes(64));
+			$targetAlias = sha1(random_bytes(64));
+			foreach ($targetSchema->getPropertyList() as $schemaProperty) {
+				$selectQuery->select()
+					->property($schemaProperty->getName(), $targetAlias);
+			}
+			$selectQuery->from()
+				->source($relation->getSchemaName(), $relationAlias)
+				->source($targetSchema->getSchemaName(), $targetAlias)
+				->where()
+				->eq()
+				->property($sourceLink->getSource()
+					->getName(), $relationAlias)
+				->parameter($storable->get($sourceLink->getTarget()
+					->getName()))
+				->and()
+				->eq()
+				->property($targetLink->getSource()
+					->getName(), $relationAlias)
+				->property($targetLink->getTarget()
+					->getName(), $targetAlias);
+			return $this->collection($targetSchema, $selectQuery);
 		}
 	}

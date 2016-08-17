@@ -3,10 +3,17 @@
 
 	namespace Edde\Api\Storage;
 
+	use Edde\Api\Query\IQuery;
 	use IteratorAggregate;
 
 	/**
 	 * Collection of IStorable is the result of a query.
 	 */
 	interface ICollection extends IteratorAggregate {
+		/**
+		 * return collection query
+		 *
+		 * @return IQuery
+		 */
+		public function getQuery();
 	}

@@ -41,6 +41,10 @@
 			$this->query = $query;
 		}
 
+		public function getQuery() {
+			return $this->query;
+		}
+
 		public function getIterator() {
 			$storableName = $this->container->has($storableName = $this->schema->getSchemaName()) ? $storableName : Storable::class;
 			foreach ($this->storage->execute($this->query) as $item) {

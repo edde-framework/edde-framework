@@ -63,6 +63,18 @@
 		public function collection(ISchema $schema, IQuery $query = null): ICollection;
 
 		/**
+		 * helper method for a m:n storable collection
+		 *
+		 * @param IStorable $storable
+		 * @param ISchema $relation
+		 * @param string $source
+		 * @param string $target
+		 *
+		 * @return ICollection|IStorable[]
+		 */
+		public function collectionTo(IStorable $storable, ISchema $relation, string $source, string $target): ICollection;
+
+		/**
 		 * retrieve storable by the given query; it should formally go through a collection method; if there is no such storable, exception should be thrown
 		 *
 		 * @param ISchema $schema of requested storable
