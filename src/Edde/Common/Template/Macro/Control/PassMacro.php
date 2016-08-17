@@ -16,6 +16,7 @@
 		public function run(INode $root, ICompiler $compiler) {
 			$destination = $compiler->getDestination();
 			$this->macro($root, $compiler);
-			$destination->write(sprintf("\t\t\t\$this->%s(\$control);\n", StringUtils::firstLower(StringUtils::camelize($root->getValue()))));
+			$value = str_replace('()', '', $root->getValue());
+			$destination->write(sprintf("\t\t\t\$this->%s(\$control);\n", StringUtils::firstLower(StringUtils::camelize($value))));
 		}
 	}
