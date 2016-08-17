@@ -47,10 +47,11 @@
 				return null;
 			}
 			array_shift($pathList);
-			$id = count($pathList) === 3 ? array_pop($pathList) : null;
-			$namespace = StringUtils::camelize($pathList[1]);
+			$version = count($pathList) === 3 ? array_shift($pathList) : null;
+			$id = count($pathList) === 2 ? array_pop($pathList) : null;
+			$namespace = StringUtils::camelize(reset($pathList));
 			$classList = [
-				$this->namespace . '\\' . ($pathList[0] . '\\' . $namespace . '\\' . $namespace . 'Api'),
+				$this->namespace . '\\' . ($version . '\\' . $namespace . '\\' . $namespace . 'Api'),
 				$this->namespace . '\\' . ($namespace . '\\' . $namespace . 'Api'),
 			];
 			foreach ($classList as $api) {
