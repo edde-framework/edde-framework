@@ -21,18 +21,10 @@
 			if (isset($attributeList['action']) === false) {
 				throw new MacroException(sprintf('Missing mandatory attribute "action" in [%s].', $root->getPath()));
 			}
-			if ($attributeList !== []) {
-				$action = $root->getAttribute('action');
-				unset($attributeList['action']);
-				if ($attributeList !== []) {
-					$export = [];
-					foreach ($attributeList as $name => $value) {
-						$export[] = "'" . $name . "' => " . $value;
-					}
-					$destination->write(sprintf("\t\t\t\$control->setAttributeList([%s]);\n", implode(",\n", $export)));
-				}
-				$destination->write(sprintf("\t\t\t\$control->setAction(get_class(\$this->proxy), %s);\n", $compiler->value($action)));
-			}
+			$action = $root->getAttribute('action');
+			unset($attributeList['action']);
+			$destination->write(sprintf("\t\t\t\$control->setAction(get_class(\$this->proxy), %s);\n", $compiler->value($action)));
+			$this->writeAttributeList($attributeList, $destination);
 			$this->macro($root, $compiler);
 		}
 	}

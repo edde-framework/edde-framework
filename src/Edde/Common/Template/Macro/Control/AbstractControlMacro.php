@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Template\Macro\Control;
 
+	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Common\Template\AbstractMacro;
@@ -26,11 +27,20 @@
 			$destination = $compiler->getDestination();
 			$destination->write("\t\t\t\$parent = \$this->stack->top();\n");
 			$destination->write(sprintf("\t\t\t\$parent->addControl(\$control = \$this->container->create('%s'));\n", $this->control));
+			$this->writeTextValue($root, $destination, $compiler);
+			$attributeList = $this->getAttributeList($root, $compiler);
+			unset($attributeList['value']);
+			$this->writeAttributeList($attributeList, $destination);
+			$this->macro($root, $compiler);
+		}
+
+		protected function writeTextValue(INode $root, IFile $destination, ICompiler $compiler) {
 			if ($root->isLeaf() && ($text = $root->getValue($root->getAttribute('value'))) !== null) {
 				$destination->write(sprintf("\t\t\t\$control->setText(%s);\n", $compiler->value($text)));
 			}
-			$attributeList = $this->getAttributeList($root, $compiler);
-			unset($attributeList['value']);
+		}
+
+		protected function writeAttributeList(array $attributeList, IFile $destination) {
 			if ($attributeList !== []) {
 				$export = [];
 				foreach ($attributeList as $name => $value) {
@@ -38,7 +48,6 @@
 				}
 				$destination->write(sprintf("\t\t\t\$control->setAttributeList([%s]);\n", implode(",\n", $export)));
 			}
-			$this->macro($root, $compiler);
 		}
 
 		protected function macro(INode $root, ICompiler $compiler) {
