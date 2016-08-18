@@ -152,9 +152,7 @@
 						if (is_array($collectionValue) === false) {
 							throw new CrateException(sprintf('Cannot push source value into the crate [%s]; value [%s] is not an array (collection).', $this->schema->getSchemaName(), $property));
 						}
-						$crate = $collection->createCrate();
-						$crate->push($collectionValue);
-						$collection->addCrate($crate);
+						$collection->addCrate($collection->createCrate($collectionValue));
 					}
 					continue;
 				} else if ($this->schema->hasLink($property)) {

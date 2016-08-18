@@ -37,18 +37,15 @@
 			$this->crate = $crate;
 		}
 
-		public function getSchema() {
+		public function getSchema(): ISchema {
 			return $this->schema;
 		}
 
-		/**
-		 * @return ICrate
-		 */
-		public function createCrate() {
-			return $this->crateFactory->crate($this->crate ?: $this->schema, null, $this->schema);
+		public function createCrate(array $push = null): ICrate {
+			return $this->crateFactory->crate($this->crate ?: $this->schema, $push, $this->schema);
 		}
 
-		public function addCrate(ICrate $crate) {
+		public function addCrate(ICrate $crate): ICollection {
 			$schema = $crate->getSchema();
 			if ($schema->getSchemaName() !== $this->schema) {
 				throw new CrateException(sprintf('Cannot add crate with different schema [%s] to the collection [%s].', $crate->getSchema()

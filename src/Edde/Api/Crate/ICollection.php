@@ -15,21 +15,23 @@
 		 *
 		 * @return ISchema
 		 */
-		public function getSchema();
+		public function getSchema(): ISchema;
 
 		/**
 		 * create a new crate; the crate should not be added to a collection
 		 *
+		 * @param array $push
+		 *
 		 * @return ICrate
 		 */
-		public function createCrate();
+		public function createCrate(array $push = null): ICrate;
 
 		/**
 		 * add crate to this collection
 		 *
 		 * @param ICrate $crate
 		 *
-		 * @return $this
+		 * @return ICollection
 		 */
-		public function addCrate(ICrate $crate);
+		public function addCrate(ICrate $crate): ICollection;
 	}
