@@ -63,7 +63,7 @@
 					$reflectionMethod = $reflectionClass->getMethod($method = 'handle' . StringUtils::camelize($this->httpRequest->getMethod()));
 					$crateList = [];
 					if ($reflectionMethod->getNumberOfParameters() > 0 && ($crateName = $reflectionMethod->getParameters()[0]->getClass()) !== null) {
-						$crateList[] = $this->crateFactory->crate(json_decode($this->httpRequest->getBody(), true), $crateName->getName());
+						$crateList[] = $this->crateFactory->crate($crateName->getName(), json_decode($this->httpRequest->getBody(), true));
 					}
 
 					return new Route($api, $method, $parameterList, $crateList);

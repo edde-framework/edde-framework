@@ -8,24 +8,25 @@
 	 */
 	interface ICrateFactory {
 		/**
-		 * create single crate from input
+		 * create crate with a given class (should be through container) and with the given schema
 		 *
-		 * @param array $source
-		 * @param string $name
+		 * @param string $crate
+		 * @param array $push
+		 * @param string $schema
 		 *
 		 * @return ICrate
 		 */
-		public function crate(array $source, string $name): ICrate;
+		public function crate(string $crate, array $push = null, string $schema = null): ICrate;
 
 		/**
-		 * return list of same crates
+		 * create crate collection
 		 *
-		 * @param array $sourceList
-		 * @param string $name
+		 * @param string $schema
+		 * @param string $crate
 		 *
-		 * @return ICrate[]
+		 * @return ICollection
 		 */
-		public function createList(array $sourceList, string $name): array;
+		public function collection(string $schema, string $crate = null): ICollection;
 
 		/**
 		 * build crate list from the input array

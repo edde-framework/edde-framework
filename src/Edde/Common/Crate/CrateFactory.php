@@ -4,6 +4,7 @@
 	namespace Edde\Common\Crate;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Schema\ISchemaManager;
@@ -28,28 +29,25 @@
 			$this->schemaManager = $schemaManager;
 		}
 
-		public function createList(array $sourceList, string $name): array {
-			$crateList = [];
-			foreach ($sourceList as $source) {
-				$crateList[] = $this->crate($source, $name);
-			}
-			return $crateList;
-		}
-
-		public function crate(array $source, string $name): ICrate {
-			$schema = $this->schemaManager->getSchema($name);
-			/** @var $crate ICrate */
-			$crate = $this->container->create($schema->getSchemaName());
-			$crate->setSchema($schema);
-			$crate->push($source);
-			return $crate;
+		public function collection(string $schema, string $crate = null): ICollection {
+			return $this->container->create(Collection::class, $schema, $crate);
 		}
 
 		public function build(array $crateList) {
 			$crates = [];
 			foreach ($crateList as $schema => $source) {
-				$crates[] = $this->crate($source, $schema);
+				$crates[] = $this->crate($schema, $source);
 			}
 			return $crates;
+		}
+
+		public function crate(string $crate, array $push = null, string $schema = null): ICrate {
+			/** @var $crate ICrate */
+			$crate = $this->container->create($crate);
+			$crate->setSchema($this->schemaManager->getSchema($schema ?: get_class($crate)));
+			if ($push !== null) {
+				$crate->push($push);
+			}
+			return $crate;
 		}
 	}

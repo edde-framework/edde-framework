@@ -4,10 +4,13 @@
 	namespace Edde\Common\Storage;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Common\Cache\CacheFactory;
+	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Crate\Crate;
+	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Query\Schema\CreateSchemaQuery;
@@ -21,7 +24,7 @@
 	use Edde\Ext\Resource\JsonResourceHandler;
 	use phpunit\framework\TestCase;
 
-	class StorableTest extends TestCase {
+	class StorageTest extends TestCase {
 		/**
 		 * @var IContainer
 		 */
@@ -30,6 +33,10 @@
 		 * @var ISchemaManager
 		 */
 		protected $schemaManager;
+		/**
+		 * @var ICrateFactory
+		 */
+		protected $crateFactory;
 		/**
 		 * @var IStorage
 		 */
@@ -40,7 +47,7 @@
 		protected $sqliteDriver;
 
 		public function testSimpleStorable() {
-			$crate = new Crate($this->container);
+			$crate = new Crate($this->crateFactory);
 			$crate->setSchema($schema = $this->schemaManager->getSchema('Foo\\Bar\\SimpleStorable'));
 			$this->storage->start();
 			$this->storage->execute(new CreateSchemaQuery($schema));
@@ -85,7 +92,7 @@
 			$this->storage->execute(new CreateSchemaQuery($identitySchema));
 			$this->storage->execute(new CreateSchemaQuery($identityGroupSchema));
 
-			$rootGroup = new Crate($this->container);
+			$rootGroup = new Crate($this->crateFactory);
 			$rootGroup->setSchema($groupSchema);
 			$rootGroup->put([
 				'guid' => sha1(random_bytes(64)),
@@ -93,7 +100,7 @@
 			]);
 			$this->storage->store($rootGroup);
 
-			$guestGroup = new Crate($this->container);
+			$guestGroup = new Crate($this->crateFactory);
 			$guestGroup->setSchema($groupSchema);
 			$guestGroup->put([
 				'guid' => sha1(random_bytes(64)),
@@ -101,7 +108,7 @@
 			]);
 			$this->storage->store($guestGroup);
 
-			$godIdentity = new Crate($this->container);
+			$godIdentity = new Crate($this->crateFactory);
 			$godIdentity->setSchema($identitySchema);
 			$godIdentity->put([
 				'guid' => sha1(random_bytes(64)),
@@ -109,7 +116,7 @@
 			]);
 			$this->storage->store($godIdentity);
 
-			$guestIdentity = new Crate($this->container);
+			$guestIdentity = new Crate($this->crateFactory);
 			$guestIdentity->setSchema($identitySchema);
 			$guestIdentity->put([
 				'guid' => sha1(random_bytes(64)),
@@ -117,7 +124,7 @@
 			]);
 			$this->storage->store($guestIdentity);
 
-			$identityGroup = new Crate($this->container);
+			$identityGroup = new Crate($this->crateFactory);
 			$identityGroup->setSchema($identityGroupSchema);
 			$identityGroup->put([
 				'guid' => sha1(random_bytes(64)),
@@ -126,7 +133,7 @@
 			]);
 			$this->storage->store($identityGroup);
 
-			$identityGroup = new Crate($this->container);
+			$identityGroup = new Crate($this->crateFactory);
 			$identityGroup->setSchema($identityGroupSchema);
 			$identityGroup->put([
 				'guid' => sha1(random_bytes(64)),
@@ -135,7 +142,7 @@
 			]);
 			$this->storage->store($identityGroup);
 
-			$identityGroup = new Crate($this->container);
+			$identityGroup = new Crate($this->crateFactory);
 			$identityGroup->setSchema($identityGroupSchema);
 			$identityGroup->put([
 				'guid' => sha1(random_bytes(64)),
@@ -171,6 +178,7 @@
 			$tempDirectory = new TempDirectory(__DIR__ . '/temp');
 			$tempDirectory->purge();
 			$this->storage = new DatabaseStorage($this->container, $this->sqliteDriver = new SqliteDriver('sqlite:' . $tempDirectory->filename('storage.sqlite')), new CacheFactory(__DIR__, new DevNullCacheStorage()));
+			$this->container->registerFactory(ICrateFactory::class, FactoryFactory::create(ICrateFactory::class, $this->crateFactory = new CrateFactory($this->container, $this->schemaManager)));
 		}
 
 		protected function tearDown() {

@@ -4,27 +4,22 @@
 	namespace Edde\Common\Crate;
 
 	use ArrayIterator;
-	use Edde\Api\Container\IContainer;
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrate;
+	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\AbstractObject;
 
-	class Collection extends AbstractUsable implements ICollection {
+	class Collection extends AbstractObject implements ICollection {
 		/**
-		 * @var IContainer
+		 * @var ICrateFactory
 		 */
-		protected $container;
+		protected $crateFactory;
 		/**
 		 * @var ISchema
 		 */
 		protected $schema;
-		/**
-		 * crate class name (for a container)
-		 *
-		 * @var string
-		 */
 		protected $crate;
 		/**
 		 * @var ICrate[]
@@ -32,12 +27,14 @@
 		protected $crateList = [];
 
 		/**
-		 * @param IContainer $container
-		 * @param ISchema $schema
+		 * @param ICrateFactory $crateFactory
+		 * @param string $schema
+		 * @param string $crate
 		 */
-		public function __construct(IContainer $container, ISchema $schema) {
-			$this->container = $container;
+		public function __construct(ICrateFactory $crateFactory, string $schema, string $crate = null) {
+			$this->crateFactory = $crateFactory;
 			$this->schema = $schema;
+			$this->crate = $crate;
 		}
 
 		public function getSchema() {
@@ -48,15 +45,14 @@
 		 * @return ICrate
 		 */
 		public function createCrate() {
-			$this->use();
-			return $this->container->create($this->crate)
-				->setSchema($this->schema);
+			return $this->crateFactory->crate($this->crate ?: $this->schema, null, $this->schema);
 		}
 
 		public function addCrate(ICrate $crate) {
-			if ($crate->getSchema() !== $this->schema) {
+			$schema = $crate->getSchema();
+			if ($schema->getSchemaName() !== $this->schema) {
 				throw new CrateException(sprintf('Cannot add crate with different schema [%s] to the collection [%s].', $crate->getSchema()
-					->getSchemaName(), $this->schema->getSchemaName()));
+					->getSchemaName(), $this->schema));
 			}
 			$this->crateList[] = $crate;
 			return $this;
@@ -64,11 +60,5 @@
 
 		public function getIterator() {
 			return new ArrayIterator($this->crateList);
-		}
-
-		protected function prepare() {
-			if ($this->container->has($this->crate = $this->schema->getSchemaName()) === false) {
-				$this->crate = Crate::class;
-			}
 		}
 	}

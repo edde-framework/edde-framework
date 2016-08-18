@@ -1,8 +1,15 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Crate;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Crate\ICrateFactory;
+	use Edde\Common\Container\Factory\FactoryFactory;
+	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Schema\Schema;
+	use Edde\Common\Schema\SchemaFactory;
+	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Schema\SchemaProperty;
 	use Edde\Ext\Container\ContainerFactory;
 	use Foo\Bar\FooBarBar;
@@ -15,14 +22,13 @@
 		 * @var IContainer
 		 */
 		protected $container;
+		/**
+		 * @var ICrateFactory
+		 */
+		protected $crateFactory;
 
 		public function testCommon() {
-			$schema = new Schema('Foo\\Bar\\FooBar');
-			$schema->addProperty(new SchemaProperty($schema, 'guid'));
-			$schema->addProperty(new SchemaProperty($schema, 'name'));
-			$schema->addProperty(new SchemaProperty($schema, 'long-name'));
-
-			$collection = new Collection($this->container, $schema);
+			$collection = new Collection($this->crateFactory, 'Foo\\Bar\\FooBar', Crate::class);
 			self::assertEmpty(iterator_to_array($collection));
 			$crate = $collection->createCrate();
 			self::assertEmpty(iterator_to_array($collection));
@@ -35,12 +41,7 @@
 		}
 
 		public function testInstanceCrate() {
-			$schema = new Schema('Foo\\Bar\\FooBarBar');
-			$schema->addProperty(new SchemaProperty($schema, 'guid'));
-			$schema->addProperty(new SchemaProperty($schema, 'name'));
-			$schema->addProperty(new SchemaProperty($schema, 'long-name'));
-
-			$collection = new Collection($this->container, $schema);
+			$collection = new Collection($this->crateFactory, 'Foo\\Bar\\FooBarBar', FooBarBar::class);
 			$crate = $collection->createCrate();
 			self::assertInstanceOf(FooBarBar::class, $crate);
 		}
@@ -50,5 +51,16 @@
 				Crate::class,
 				FooBarBar::class,
 			]);
+			$this->container->registerFactory(ICrateFactory::class, FactoryFactory::create(ICrateFactory::class, $this->crateFactory = new CrateFactory($this->container, $schemaManager = new SchemaManager(new SchemaFactory(new ResourceManager())))));
+			$schema = new Schema('Foo\\Bar\\FooBar');
+			$schema->addProperty(new SchemaProperty($schema, 'guid'));
+			$schema->addProperty(new SchemaProperty($schema, 'name'));
+			$schema->addProperty(new SchemaProperty($schema, 'long-name'));
+			$schemaManager->addSchema($schema);
+			$schema = new Schema('Foo\\Bar\\FooBarBar');
+			$schema->addProperty(new SchemaProperty($schema, 'guid'));
+			$schema->addProperty(new SchemaProperty($schema, 'name'));
+			$schema->addProperty(new SchemaProperty($schema, 'long-name'));
+			$schemaManager->addSchema($schema);
 		}
 	}

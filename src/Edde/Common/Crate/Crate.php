@@ -3,10 +3,10 @@
 
 	namespace Edde\Common\Crate;
 
-	use Edde\Api\Container\IContainer;
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrate;
+	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crate\IProperty;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Common\Schema\Schema;
@@ -14,9 +14,9 @@
 
 	class Crate extends AbstractUsable implements ICrate {
 		/**
-		 * @var IContainer
+		 * @var ICrateFactory
 		 */
-		protected $container;
+		protected $crateFactory;
 		/**
 		 * @var ISchema
 		 */
@@ -43,10 +43,10 @@
 		protected $propertyNameList = [];
 
 		/**
-		 * @param IContainer $container
+		 * @param ICrateFactory $crateFactory
 		 */
-		public function __construct(IContainer $container) {
-			$this->container = $container;
+		public function __construct(ICrateFactory $crateFactory) {
+			$this->crateFactory = $crateFactory;
 		}
 
 		public function getSchema() {
@@ -167,10 +167,11 @@
 				}
 				$property = $this->getProperty($property);
 				$schemaProperty = $property->getSchemaProperty();
-				if ($schemaProperty->isArray() && is_array($value) === false) {
+				$isArray = is_array($value);
+				if ($isArray === false && $schemaProperty->isArray()) {
 					throw new CrateException(sprintf('Cannot push simple value [%s] to array.', $property->getSchemaProperty()));
 				}
-				if ($schemaProperty->isArray() === false && is_array($value)) {
+				if ($isArray && $schemaProperty->isArray() === false) {
 					throw new CrateException(sprintf('Cannot push array to simple value [%s].', $property->getSchemaProperty()));
 				}
 				$property->push($value);
@@ -184,8 +185,10 @@
 			}
 			if (isset($this->collectionList[$name]) === false) {
 				$collection = $this->schema->getCollection($name);
-				$this->collectionList[$name] = $this->container->create(Collection::class, $collection->getTarget()
-					->getSchema());
+				$targetSchemaName = $collection->getTarget()
+					->getSchema()
+					->getSchemaName();
+				$this->collectionList[$name] = $this->crateFactory->collection($targetSchemaName);
 			}
 			return $this->collectionList[$name];
 		}
@@ -198,8 +201,7 @@
 				$link = $this->schema->getLink($name);
 				$targetSchema = $link->getTarget()
 					->getSchema();
-				/** @var $crate ICrate */
-				$this->linkList[$name] = $crate = $this->container->create($targetSchema->getSchemaName());
+				$this->linkList[$name] = $crate = $this->crateFactory->crate($targetSchema->getSchemaName());
 				$crate->setSchema($targetSchema);
 			}
 			return $this->linkList[$name];

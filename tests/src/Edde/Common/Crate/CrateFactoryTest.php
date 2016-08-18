@@ -7,6 +7,7 @@
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Schema\ISchemaManager;
+	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
@@ -154,7 +155,6 @@
 				Item::class,
 				Collection::class,
 			]);
-
-			$this->crateFactory = new CrateFactory($this->container, $this->schemaManager);
+			$this->container->registerFactory(ICrateFactory::class, FactoryFactory::create(ICrateFactory::class, $this->crateFactory = new CrateFactory($this->container, $this->schemaManager)));
 		}
 	}
