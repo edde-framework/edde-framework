@@ -5,7 +5,6 @@
 
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Query\IQuery;
-	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Usable\IUsable;
 
 	/**
@@ -68,14 +67,14 @@
 		 * helper method for a m:n crate collection
 		 *
 		 * @param ICrate $crate
-		 * @param ISchema $relation
+		 * @param string $relation
 		 * @param string $source
 		 * @param string $target
 		 * @param string $crateTo optional target crate class
 		 *
 		 * @return \Edde\Api\Crate\ICrate[]|ICollection
 		 */
-		public function collectionTo(ICrate $crate, ISchema $relation, string $source, string $target, string $crateTo = null): ICollection;
+		public function collectionTo(ICrate $crate, string $relation, string $source, string $target, string $crateTo = null): ICollection;
 
 		/**
 		 * retrieve crate by the given query; it should formally go through a collection method; if there is no such crate, exception should be thrown

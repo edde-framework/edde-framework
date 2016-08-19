@@ -84,72 +84,53 @@
 		}
 
 		public function testComplexStorable() {
-			$groupSchema = $this->schemaManager->getSchema('Group');
-			$identitySchema = $this->schemaManager->getSchema('Identity');
-			$identityGroupSchema = $this->schemaManager->getSchema('IdentityGroup');
 
 			$this->storage->start();
-			$this->storage->execute(new CreateSchemaQuery($groupSchema));
-			$this->storage->execute(new CreateSchemaQuery($identitySchema));
-			$this->storage->execute(new CreateSchemaQuery($identityGroupSchema));
+			$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema('Group')));
+			$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema('Identity')));
+			$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema('IdentityGroup')));
 
-			$rootGroup = $this->crateFactory->crate(Crate::class, null, 'Group');
-			$rootGroup->put([
-				'guid' => sha1(random_bytes(64)),
-				'name' => 'root',
-			]);
-			$this->storage->store($rootGroup);
-
-			$guestGroup = $this->crateFactory->crate(Crate::class, null, 'Group');
-			$guestGroup->put([
-				'guid' => sha1(random_bytes(64)),
-				'name' => 'guest',
-			]);
-			$this->storage->store($guestGroup);
-
-			$godIdentity = $this->crateFactory->crate(Crate::class, null, 'Identity');
-			$godIdentity->put([
-				'guid' => sha1(random_bytes(64)),
-				'name' => 'The God',
-			]);
-			$this->storage->store($godIdentity);
-
-			$guestIdentity = $this->crateFactory->crate(Crate::class, null, 'Identity');
-			$guestIdentity->setSchema($identitySchema);
-			$guestIdentity->put([
-				'guid' => sha1(random_bytes(64)),
-				'name' => "The God's Guest",
-			]);
-			$this->storage->store($guestIdentity);
-
-			$identityGroup = $this->crateFactory->crate(Crate::class, null, 'IdentityGroup');
-			$identityGroup->put([
-				'guid' => sha1(random_bytes(64)),
-				'identity' => $godIdentity->get('guid'),
-				'group' => $rootGroup->get('guid'),
-			]);
-			$this->storage->store($identityGroup);
-
-			$identityGroup = $this->crateFactory->crate(Crate::class, null, 'IdentityGroup');
-			$identityGroup->setSchema($identityGroupSchema);
-			$identityGroup->put([
-				'guid' => sha1(random_bytes(64)),
-				'identity' => $godIdentity->get('guid'),
-				'group' => $guestGroup->get('guid'),
-			]);
-			$this->storage->store($identityGroup);
-
-			$identityGroup = $this->crateFactory->crate(Crate::class, null, 'IdentityGroup');
-			$identityGroup->setSchema($identityGroupSchema);
-			$identityGroup->put([
-				'guid' => sha1(random_bytes(64)),
-				'identity' => $guestIdentity->get('guid'),
-				'group' => $guestGroup->get('guid'),
-			]);
-			$this->storage->store($identityGroup);
+			$this->storage->store($rootGroup = $this->crateFactory->crate(Crate::class, null, 'Group')
+				->put([
+					'guid' => sha1(random_bytes(64)),
+					'name' => 'root',
+				]))
+				->store($guestGroup = $this->crateFactory->crate(Crate::class, null, 'Group')
+					->put([
+						'guid' => sha1(random_bytes(64)),
+						'name' => 'guest',
+					]))
+				->store($godIdentity = $this->crateFactory->crate(Crate::class, null, 'Identity')
+					->put([
+						'guid' => sha1(random_bytes(64)),
+						'name' => 'The God',
+					]))
+				->store($guestIdentity = $this->crateFactory->crate(Crate::class, null, 'Identity')
+					->put([
+						'guid' => sha1(random_bytes(64)),
+						'name' => "The God's Guest",
+					]))
+				->store($this->crateFactory->crate(Crate::class, null, 'IdentityGroup')
+					->put([
+						'guid' => sha1(random_bytes(64)),
+						'identity' => $godIdentity->get('guid'),
+						'group' => $rootGroup->get('guid'),
+					]))
+				->store($this->crateFactory->crate(Crate::class, null, 'IdentityGroup')
+					->put([
+						'guid' => sha1(random_bytes(64)),
+						'identity' => $godIdentity->get('guid'),
+						'group' => $guestGroup->get('guid'),
+					]))
+				->store($this->crateFactory->crate(Crate::class, null, 'IdentityGroup')
+					->put([
+						'guid' => sha1(random_bytes(64)),
+						'identity' => $guestIdentity->get('guid'),
+						'group' => $guestGroup->get('guid'),
+					]));
 
 			$groupList = [];
-			foreach ($this->storage->collectionTo($godIdentity, $identityGroupSchema, 'identity', 'group', Crate::class) as $storable) {
+			foreach ($this->storage->collectionTo($godIdentity, 'IdentityGroup', 'identity', 'group', Crate::class) as $storable) {
 				$groupList[] = $storable->get('name');
 			}
 			self::assertEquals([

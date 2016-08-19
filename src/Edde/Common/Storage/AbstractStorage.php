@@ -6,7 +6,6 @@
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Query\IQuery;
-	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\ICollection;
 	use Edde\Api\Storage\IStorage;
@@ -53,9 +52,10 @@
 			return new Collection($crate, $this, $this->crateFactory, $query, $schema);
 		}
 
-		public function collectionTo(ICrate $crate, ISchema $relation, string $source, string $target, string $crateTo = null): ICollection {
-			$sourceLink = $relation->getLink($source);
-			$targetLink = $relation->getLink($target);
+		public function collectionTo(ICrate $crate, string $relation, string $source, string $target, string $crateTo = null): ICollection {
+			$relationSchema = $this->schemaManager->getSchema($relation);
+			$sourceLink = $relationSchema->getLink($source);
+			$targetLink = $relationSchema->getLink($target);
 			$targetSchema = $targetLink->getTarget()
 				->getSchema();
 			$targetSchemaName = $targetSchema->getSchemaName();
@@ -67,7 +67,7 @@
 					->property($schemaProperty->getName(), $targetAlias);
 			}
 			$selectQuery->from()
-				->source($relation->getSchemaName(), $relationAlias)
+				->source($relationSchema->getSchemaName(), $relationAlias)
 				->source($targetSchemaName, $targetAlias)
 				->where()
 				->eq()
