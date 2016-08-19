@@ -16,6 +16,9 @@
 			return $this;
 		}
 
+		public function include (): ICrateGenerator {
+		}
+
 		protected function prepare() {
 		}
 	}

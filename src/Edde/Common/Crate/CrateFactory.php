@@ -41,7 +41,7 @@
 			return $this->container->create(Collection::class, $schema, $crate);
 		}
 
-		public function build(array $crateList) {
+		public function build(array $crateList): array {
 			$this->use();
 			$crates = [];
 			foreach ($crateList as $schema => $source) {
@@ -59,6 +59,11 @@
 				$crate->push($push);
 			}
 			return $crate;
+		}
+
+		public function include (): ICrateFactory {
+			$this->crateGenerator->include();
+			return $this;
 		}
 
 		protected function prepare() {

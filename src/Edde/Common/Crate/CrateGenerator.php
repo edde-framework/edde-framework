@@ -77,9 +77,7 @@
 			$loader = $this->crateDirectory->save('loader.php', "<?php
 	Edde\\Common\\Autoloader::register(null, __DIR__, false);	
 ");
-			(function (IResource $resource) {
-				require_once($resource->getUrl());
-			})($loader);
+			$this->include();
 			$this->factoryManager->registerFactoryList($crateList);
 			return $this;
 		}
@@ -195,6 +193,12 @@
 			$source[] = sprintf("\t\t\treturn \$this;\n");
 			$source[] = "\t\t}\n";
 			return implode('', $source);
+		}
+
+		public function include (): ICrateGenerator {
+			(function (IResource $resource) {
+				require_once($resource->getUrl());
+			})($this->crateDirectory->file('loader.php'));
 		}
 
 		protected function prepare() {

@@ -21,4 +21,11 @@
 		 * @return ICrateGenerator
 		 */
 		public function generate(bool $force = false): ICrateGenerator;
+
+		/**
+		 * include crate sources/it's autoloader
+		 *
+		 * @return ICrateGenerator
+		 */
+		public function include (): ICrateGenerator;
 	}

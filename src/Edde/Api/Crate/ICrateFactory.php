@@ -37,5 +37,12 @@
 		 *
 		 * @return ICrate[]
 		 */
-		public function build(array $crateList);
+		public function build(array $crateList): array;
+
+		/**
+		 * include crate sources (this may execute ICrateGenrator)
+		 *
+		 * @return ICrateFactory
+		 */
+		public function include (): ICrateFactory;
 	}
