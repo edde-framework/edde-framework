@@ -51,7 +51,6 @@
 		}
 
 		public function getSession(string $name): ISession {
-			$this->use();
 			return $this->sessionList[$name] ?? $this->sessionList[$name] = new Session($this, $name);
 		}
 
