@@ -27,6 +27,18 @@
 			$this->namespace = $namespace ?: 'edde';
 		}
 
+		public function getSession(string $name): ISession {
+			return $this->sessionList[$name] ?? $this->sessionList[$name] = new Session($this, $name);
+		}
+
+		public function &session(string $name): array {
+			$this->use();
+			$this->start();
+			$_SESSION[$this->namespace] = $_SESSION[$this->namespace] ?? [];
+			$_SESSION[$this->namespace][$name] = $_SESSION[$this->namespace][$name] ?? [];
+			return $_SESSION[$this->namespace][$name];
+		}
+
 		public function start(string $sessionId = null): ISessionManager {
 			if ($this->isSession()) {
 				return $this;
@@ -48,17 +60,6 @@
 		public function setSessionId(string $sessionId = null): ISessionManager {
 			$this->sessionId = $sessionId;
 			return $this;
-		}
-
-		public function getSession(string $name): ISession {
-			return $this->sessionList[$name] ?? $this->sessionList[$name] = new Session($this, $name);
-		}
-
-		public function &session(string $name): array {
-			$this->use();
-			$_SESSION[$this->namespace] = $_SESSION[$this->namespace] ?? [];
-			$_SESSION[$this->namespace][$name] = $_SESSION[$this->namespace][$name] ?? [];
-			return $_SESSION[$this->namespace][$name];
 		}
 
 		public function close(): ISessionManager {
