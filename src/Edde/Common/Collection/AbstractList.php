@@ -17,27 +17,31 @@
 		 */
 		protected $list = [];
 
-		public function set($name, $value) {
+		public function isEmpty(): bool {
+			return empty($this->list) === false;
+		}
+
+		public function set(string $name, $value): IList {
 			$this->list[$name] = $value;
 			return $this;
 		}
 
-		public function get($name, $default = null) {
+		public function get(string $name, $default = null) {
 			if ($this->has($name) === false) {
 				return is_callable($default) ? call_user_func($default) : $default;
 			}
 			return $this->list[$name];
 		}
 
-		public function has($name) {
+		public function has(string $name): bool {
 			return isset($this->list[$name]) || array_key_exists($this->list, $name);
 		}
 
-		public function getList() {
+		public function getList(): array {
 			return $this->list;
 		}
 
-		public function remove($name) {
+		public function remove(string $name): IList {
 			unset($this->list[$name]);
 			return $this;
 		}

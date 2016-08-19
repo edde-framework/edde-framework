@@ -51,7 +51,7 @@
 				Crate::class,
 				FooBarBar::class,
 			]);
-			$this->container->registerFactory(ICrateFactory::class, FactoryFactory::create(ICrateFactory::class, $this->crateFactory = new CrateFactory($this->container, $schemaManager = new SchemaManager(new SchemaFactory(new ResourceManager())))));
+			$this->container->registerFactory(ICrateFactory::class, FactoryFactory::create(ICrateFactory::class, $this->crateFactory = new CrateFactory($this->container, $schemaManager = new SchemaManager(new SchemaFactory(new ResourceManager())), new DummyCrateGenerator())));
 			$schema = new Schema('Foo\\Bar\\FooBar');
 			$schema->addProperty(new SchemaProperty($schema, 'guid'));
 			$schema->addProperty(new SchemaProperty($schema, 'name'));

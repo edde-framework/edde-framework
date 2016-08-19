@@ -7,15 +7,6 @@
 
 	interface ICrateGenerator {
 		/**
-		 * ability to exclude schema from a generator
-		 *
-		 * @param ISchema $schema
-		 *
-		 * @return ICrateGenerator
-		 */
-		public function excludeSchema(ISchema $schema): ICrateGenerator;
-
-		/**
 		 * generate source class (php source code) for the given schema
 		 *
 		 * @param ISchema $schema

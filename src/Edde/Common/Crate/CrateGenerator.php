@@ -37,10 +37,6 @@
 		 */
 		protected $factoryManager;
 		/**
-		 * @var ISchema[]
-		 */
-		protected $excludeSchemaList = [];
-		/**
 		 * @var ICache
 		 */
 		protected $cache;
@@ -62,20 +58,15 @@
 			$this->factoryManager = $factoryManager;
 		}
 
-		public function excludeSchema(ISchema $schema): ICrateGenerator {
-			$this->excludeSchemaList[$schema->getSchemaName()] = $schema;
-			return $this;
-		}
-
 		public function generate(bool $force = false): ICrateGenerator {
+			if ($this->isUsed()) {
+				return $this;
+			}
 			$this->use();
 			if (($crateList = $this->cache->load('crate-list', [])) === [] || $force === true) {
 				$this->crateDirectory->purge();
 				foreach ($this->schemaManager->getSchemaList() as $schema) {
 					$crateList[] = $schemaName = $schema->getSchemaName();
-					if (isset($this->excludeSchemaList[$schemaName])) {
-						continue;
-					}
 					FileUtils::createDir($path = FileUtils::normalize($this->crateDirectory->getDirectory() . '/' . $schema->getNamespace()));
 					foreach ($this->compile($schema) as $name => $source) {
 						file_put_contents($path . '/' . $schema->getName() . '.php', $source);

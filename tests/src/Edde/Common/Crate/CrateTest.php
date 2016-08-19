@@ -80,7 +80,7 @@
 				Row::class,
 				Collection::class,
 			]);
-			$this->container->registerFactory(ICrateFactory::class, FactoryFactory::create(ICrateFactory::class, $this->crateFactory = new CrateFactory($this->container, $this->schemaManager = $schemaManager = new SchemaManager(new SchemaFactory(new ResourceManager())))));
+			$this->container->registerFactory(ICrateFactory::class, FactoryFactory::create(ICrateFactory::class, $this->crateFactory = new CrateFactory($this->container, $this->schemaManager = $schemaManager = new SchemaManager(new SchemaFactory(new ResourceManager())), new DummyCrateGenerator())));
 			$headerSchema = new Schema(Header::class);
 			$headerSchema->addPropertyList([
 				$headerGuid = (new SchemaProperty($headerSchema, 'guid'))->unique()

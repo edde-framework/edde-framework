@@ -155,6 +155,6 @@
 				Item::class,
 				Collection::class,
 			]);
-			$this->container->registerFactory(ICrateFactory::class, FactoryFactory::create(ICrateFactory::class, $this->crateFactory = new CrateFactory($this->container, $this->schemaManager)));
+			$this->container->registerFactory(ICrateFactory::class, FactoryFactory::create(ICrateFactory::class, $this->crateFactory = new CrateFactory($this->container, $this->schemaManager, new DummyCrateGenerator())));
 		}
 	}

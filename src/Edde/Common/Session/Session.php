@@ -3,11 +3,14 @@
 
 	namespace Edde\Common\Session;
 
+	use Edde\Api\Collection\IList;
 	use Edde\Api\Session\ISession;
 	use Edde\Api\Session\ISessionManager;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\Collection\AbstractList;
+	use Edde\Common\Usable\UsableTrait;
 
-	class Session extends AbstractUsable implements ISession {
+	class Session extends AbstractList implements ISession {
+		use UsableTrait;
 		/**
 		 * @var ISessionManager
 		 */
@@ -30,27 +33,41 @@
 			$this->name = $name;
 		}
 
-		public function isset(string $name): bool {
+		public function isEmpty(): bool {
 			$this->use();
-			return isset($this->session[$name]);
+			return parent::isEmpty();
 		}
 
-		public function set(string $name, $value): ISession {
+		public function set(string $name, $value): IList {
 			$this->use();
-			$this->session[$name] = $value;
-			return $this;
+			return parent::set($name, $value);
 		}
 
-		public function get(string $name, $default = null): ISession {
+		public function get(string $name, $default = null) {
 			$this->use();
-			return $this->session[$name] ?? $default;
 		}
 
-		public function array(): array {
-			return $this->session;
+		public function has(string $name): bool {
+			$this->use();
+			return parent::has($name);
+		}
+
+		public function getList(): array {
+			$this->use();
+			return $this->list;
+		}
+
+		public function remove(string $name): IList {
+			$this->use();
+			return parent::remove($name);
+		}
+
+		public function getIterator() {
+			$this->use();
+			return parent::getIterator();
 		}
 
 		protected function prepare() {
-			$this->session = &$this->sessionManager->session($this->name);
+			$this->list = &$this->sessionManager->session($this->name);
 		}
 	}

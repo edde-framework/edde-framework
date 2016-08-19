@@ -10,12 +10,19 @@
 	 */
 	interface IList extends IteratorAggregate {
 		/**
+		 * is the list empty?
+		 *
+		 * @return bool
+		 */
+		public function isEmpty(): bool;
+
+		/**
 		 * @param string $name
 		 * @param string $value
 		 *
-		 * @return $this
+		 * @return IList
 		 */
-		public function set($name, $value);
+		public function set(string $name, $value): IList;
 
 		/**
 		 * return true if the given name is set (present) even with null value
@@ -24,7 +31,7 @@
 		 *
 		 * @return bool
 		 */
-		public function has($name);
+		public function has(string $name): bool;
 
 		/**
 		 * @param string $name
@@ -32,17 +39,17 @@
 		 *
 		 * @return string
 		 */
-		public function get($name, $default = null);
+		public function get(string $name, $default = null);
 
 		/**
 		 * @return array
 		 */
-		public function getList();
+		public function getList(): array;
 
 		/**
 		 * @param string $name
 		 *
-		 * @return $this
+		 * @return IList
 		 */
-		public function remove($name);
+		public function remove(string $name): IList;
 	}
