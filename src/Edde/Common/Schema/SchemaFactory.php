@@ -87,7 +87,7 @@
 			$schema = new Schema($schemaNode->getName(), $schemaNode->getAttribute('namespace'));
 			$schema->setMetaList($schemaNode->getMetaList());
 			foreach ($this->propertyListNodeQuery->filter($schemaNode) as $propertyNode) {
-				$schema->addProperty($property = new SchemaProperty($schema, $propertyNode->getName(), str_replace('[]', '', $type = $propertyNode->getAttribute('type', 'string')), filter_var($propertyNode->getAttribute('required'), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('unique'), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('identifier'), FILTER_VALIDATE_BOOLEAN), strpos($type, '[]') !== false));
+				$schema->addProperty($property = new SchemaProperty($schema, $propertyNode->getName(), str_replace('[]', '', $type = $propertyNode->getAttribute('type', 'string')), filter_var($propertyNode->getAttribute('required', true), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('unique'), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('identifier'), FILTER_VALIDATE_BOOLEAN), strpos($type, '[]') !== false));
 			}
 			return $schema;
 		}
