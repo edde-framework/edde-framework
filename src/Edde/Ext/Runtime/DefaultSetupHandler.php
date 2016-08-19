@@ -30,6 +30,7 @@
 	use Edde\Api\Runtime\RuntimeException;
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
+	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Template\ITemplateDirectory;
 	use Edde\Api\Template\ITemplateManager;
@@ -56,6 +57,7 @@
 	use Edde\Common\Runtime\SetupHandler;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
+	use Edde\Common\Session\SessionManager;
 	use Edde\Common\Template\Macro\Control\BindIdAttributeMacro;
 	use Edde\Common\Template\Macro\Control\ButtonMacro;
 	use Edde\Common\Template\Macro\Control\ControlMacro;
@@ -116,6 +118,7 @@
 				IHttpResponse::class => function () {
 					throw new RuntimeException(sprintf('Do not request [%s] from the global space (container) as it is bad practice.', IHttpResponse::class));
 				},
+				ISessionManager::class => SessionManager::class,
 				ISchemaFactory::class => SchemaFactory::class,
 				ISchemaManager::class => SchemaManager::class,
 				IRootDirectory::class => function () {
