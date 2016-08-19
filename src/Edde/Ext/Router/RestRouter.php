@@ -58,14 +58,12 @@
 				if (class_exists($api)) {
 					$parameterList = $url->getQuery();
 					$parameterList['id'] = $id;
-
 					$reflectionClass = new \ReflectionClass($api);
-					$reflectionMethod = $reflectionClass->getMethod($method = 'handle' . StringUtils::camelize($this->httpRequest->getMethod()));
+					$reflectionMethod = $reflectionClass->getMethod($method = 'handle' . StringUtils::camelize(strtolower($this->httpRequest->getMethod())));
 					$crateList = [];
 					if ($reflectionMethod->getNumberOfParameters() > 0 && ($crateName = $reflectionMethod->getParameters()[0]->getClass()) !== null) {
 						$crateList[] = $this->crateFactory->crate($crateName->getName(), json_decode($this->httpRequest->getBody(), true));
 					}
-
 					return new Route($api, $method, $parameterList, $crateList);
 				}
 			}
