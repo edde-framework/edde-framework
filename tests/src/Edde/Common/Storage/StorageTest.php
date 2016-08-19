@@ -93,31 +93,28 @@
 			$this->storage->execute(new CreateSchemaQuery($identitySchema));
 			$this->storage->execute(new CreateSchemaQuery($identityGroupSchema));
 
-			$rootGroup = new Crate($this->crateFactory);
-			$rootGroup->setSchema($groupSchema);
+			$rootGroup = $this->crateFactory->crate(Crate::class, null, 'Group');
 			$rootGroup->put([
 				'guid' => sha1(random_bytes(64)),
 				'name' => 'root',
 			]);
 			$this->storage->store($rootGroup);
 
-			$guestGroup = new Crate($this->crateFactory);
-			$guestGroup->setSchema($groupSchema);
+			$guestGroup = $this->crateFactory->crate(Crate::class, null, 'Group');
 			$guestGroup->put([
 				'guid' => sha1(random_bytes(64)),
 				'name' => 'guest',
 			]);
 			$this->storage->store($guestGroup);
 
-			$godIdentity = new Crate($this->crateFactory);
-			$godIdentity->setSchema($identitySchema);
+			$godIdentity = $this->crateFactory->crate(Crate::class, null, 'Identity');
 			$godIdentity->put([
 				'guid' => sha1(random_bytes(64)),
 				'name' => 'The God',
 			]);
 			$this->storage->store($godIdentity);
 
-			$guestIdentity = new Crate($this->crateFactory);
+			$guestIdentity = $this->crateFactory->crate(Crate::class, null, 'Identity');
 			$guestIdentity->setSchema($identitySchema);
 			$guestIdentity->put([
 				'guid' => sha1(random_bytes(64)),
@@ -125,8 +122,7 @@
 			]);
 			$this->storage->store($guestIdentity);
 
-			$identityGroup = new Crate($this->crateFactory);
-			$identityGroup->setSchema($identityGroupSchema);
+			$identityGroup = $this->crateFactory->crate(Crate::class, null, 'IdentityGroup');
 			$identityGroup->put([
 				'guid' => sha1(random_bytes(64)),
 				'identity' => $godIdentity->get('guid'),
@@ -134,7 +130,7 @@
 			]);
 			$this->storage->store($identityGroup);
 
-			$identityGroup = new Crate($this->crateFactory);
+			$identityGroup = $this->crateFactory->crate(Crate::class, null, 'IdentityGroup');
 			$identityGroup->setSchema($identityGroupSchema);
 			$identityGroup->put([
 				'guid' => sha1(random_bytes(64)),
@@ -143,7 +139,7 @@
 			]);
 			$this->storage->store($identityGroup);
 
-			$identityGroup = new Crate($this->crateFactory);
+			$identityGroup = $this->crateFactory->crate(Crate::class, null, 'IdentityGroup');
 			$identityGroup->setSchema($identityGroupSchema);
 			$identityGroup->put([
 				'guid' => sha1(random_bytes(64)),
