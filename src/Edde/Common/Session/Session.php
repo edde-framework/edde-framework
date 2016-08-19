@@ -19,10 +19,6 @@
 		 * @var string
 		 */
 		protected $name;
-		/**
-		 * @var array
-		 */
-		protected $session;
 
 		/**
 		 * @param ISessionManager $sessionManager
