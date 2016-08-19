@@ -195,13 +195,17 @@
 			if ($this->schema->hasLink($name) === false) {
 				throw new CrateException(sprintf('Crate [%s] has no link [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
 			}
-			if (isset($this->linkList[$name]) === false) {
-				$link = $this->schema->getLink($name);
-				$targetSchema = $link->getTarget()
-					->getSchema();
-				$this->linkList[$name] = $crate = $crate ?: $this->crateFactory->crate($targetSchema->getSchemaName());
+			$link = $this->schema->getLink($name);
+			$targetSchema = $link->getTarget()
+				->getSchema();
+			if (isset($this->linkList[$name]) === false || $crate !== null) {
+				$this->linkList[$name] = $crate ?: $this->crateFactory->crate($targetSchema->getSchemaName());
 			}
-			return $this->linkList[$name];
+			$crate = $this->linkList[$name];
+			$this->set($link->getSource()
+				->getName(), $crate->get($link->getTarget()
+				->getName()));
+			return $crate;
 		}
 
 		public function setCollection($name, ICollection $collection) {
