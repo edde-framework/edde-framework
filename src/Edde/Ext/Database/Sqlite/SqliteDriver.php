@@ -100,6 +100,7 @@
 			$this->setTypeList([
 				null => 'TEXT',
 				'int' => 'INTEGER',
+				'bool' => 'INTEGER',
 				'float' => 'FLOAT',
 				'long' => 'INTEGER',
 				'string' => 'TEXT',

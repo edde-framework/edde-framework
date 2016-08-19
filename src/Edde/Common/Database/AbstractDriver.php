@@ -19,6 +19,7 @@
 				null => null,
 				/** standard set of "scalar" types */
 				'int' => null,
+				'bool' => null,
 				'float' => null,
 				'long' => null,
 				'string' => null,
