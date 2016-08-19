@@ -45,6 +45,7 @@
 
 		public function get(string $name, $default = null) {
 			$this->use();
+			return parent::get($name, $default);
 		}
 
 		public function has(string $name): bool {
