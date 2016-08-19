@@ -66,17 +66,17 @@
 			$query->select()
 				->all()
 				->from()
-				->source($schema->getSchemaName())
+				->source($schemaName = $schema->getSchemaName())
 				->where()
 				->eq()
 				->property('guid')
 				->parameter($guid);
 
-			$crate = $this->storage->load($schema, $query);
+			$crate = $this->storage->load($schemaName, $query);
 			self::assertEquals($guid, $crate->get('guid'));
 			self::assertEquals('foobar', $crate->get('value'));
 			$count = 0;
-			foreach ($this->storage->collection($schema) as $crate) {
+			foreach ($this->storage->collection($schemaName) as $crate) {
 				$count++;
 			}
 			self::assertEquals(2, $count);
@@ -178,6 +178,7 @@
 			$tempDirectory = new TempDirectory(__DIR__ . '/temp');
 			$tempDirectory->purge();
 			$this->storage = new DatabaseStorage($this->container, $this->sqliteDriver = new SqliteDriver('sqlite:' . $tempDirectory->filename('storage.sqlite')), new CacheFactory(__DIR__, new DevNullCacheStorage()));
+			$this->storage->lazySchemaManager($this->schemaManager);
 			$this->container->registerFactory(ICrateFactory::class, FactoryFactory::create(ICrateFactory::class, $this->crateFactory = new CrateFactory($this->container, $this->schemaManager)));
 		}
 

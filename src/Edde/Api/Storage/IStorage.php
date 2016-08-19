@@ -56,12 +56,12 @@
 		/**
 		 * return collection based on the input query; if storage doesn't understand the queery, exception should be thrown
 		 *
-		 * @param ISchema $schema of Crate
+		 * @param string $schema of Crate
 		 * @param IQuery $query
 		 *
 		 * @return ICollection|ICrate[]
 		 */
-		public function collection(ISchema $schema, IQuery $query = null): ICollection;
+		public function collection(string $schema, IQuery $query = null): ICollection;
 
 		/**
 		 * helper method for a m:n crate collection
@@ -78,10 +78,10 @@
 		/**
 		 * retrieve crate by the given query; it should formally go through a collection method; if there is no such crate, exception should be thrown
 		 *
-		 * @param ISchema $schema of requested crate
+		 * @param string $schema of requested crate
 		 * @param IQuery $query
 		 *
 		 * @return ICrate
 		 */
-		public function load(ISchema $schema, IQuery $query);
+		public function load(string $schema, IQuery $query);
 	}
