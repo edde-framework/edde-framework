@@ -4,6 +4,7 @@
 	namespace Edde\Common\Application;
 
 	use Edde\Api\Application\ApplicationException;
+	use Edde\Api\Application\IErrorControl;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Router\IRoute;
 	use Edde\Common\Callback\Callback;
@@ -19,6 +20,10 @@
 		 * @var IContainer
 		 */
 		protected $container;
+		/**
+		 * @var IErrorControl
+		 */
+		protected $errorControl;
 
 		public function lazyRoute(IRoute $route) {
 			$this->route = $route;
@@ -28,33 +33,41 @@
 			$this->container = $container;
 		}
 
+		public function lazyErrorControl(IErrorControl $errorControl) {
+			$this->errorControl = $errorControl;
+		}
+
 		public function run() {
-			$this->use();
-			if (method_exists($control = $this->container->create($this->route->getClass()), $actionMethod = $this->route->getMethod()) === false) {
-				/**
-				 * ability to process __call methods; the only restriction is execution without parameters
-				 */
-				return $control->{$actionMethod}();
-			}
-			$callback = new Callback([
-				$control,
-				$actionMethod,
-			]);
-			$parameterList = $this->route->getParameterList();
-			$argumentCount = count($argumentList = $this->route->getCrateList());
-			foreach ($callback->getParameterList() as $parameter) {
-				if (--$argumentCount >= 0) {
-					continue;
+			try {
+				$this->use();
+				if (method_exists($control = $this->container->create($this->route->getClass()), $actionMethod = $this->route->getMethod()) === false) {
+					/**
+					 * ability to process __call methods; the only restriction is execution without parameters
+					 */
+					return $control->{$actionMethod}();
 				}
-				if (isset($parameterList[$parameter->getName()]) === false) {
-					if ($parameter->isOptional()) {
+				$callback = new Callback([
+					$control,
+					$actionMethod,
+				]);
+				$parameterList = $this->route->getParameterList();
+				$argumentCount = count($argumentList = $this->route->getCrateList());
+				foreach ($callback->getParameterList() as $parameter) {
+					if (--$argumentCount >= 0) {
 						continue;
 					}
-					throw new ApplicationException(sprintf('Missing action parameter [%s::%s(, ...$%s, ...)].', get_class($control), $actionMethod, $parameter->getName()));
+					if (isset($parameterList[$parameter->getName()]) === false) {
+						if ($parameter->isOptional()) {
+							continue;
+						}
+						throw new ApplicationException(sprintf('Missing action parameter [%s::%s(, ...$%s, ...)].', get_class($control), $actionMethod, $parameter->getName()));
+					}
+					$argumentList[] = $parameterList[$parameter->getName()];
 				}
-				$argumentList[] = $parameterList[$parameter->getName()];
+				return $callback->invoke(...$argumentList);
+			} catch (\Exception $e) {
+				return $this->errorControl->exception($e);
 			}
-			return $callback->invoke(...$argumentList);
 		}
 
 		protected function prepare() {

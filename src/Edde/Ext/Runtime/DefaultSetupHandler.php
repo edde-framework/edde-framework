@@ -4,6 +4,7 @@
 	namespace Edde\Ext\Runtime;
 
 	use Edde\Api\Application\IApplication;
+	use Edde\Api\Application\IErrorControl;
 	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Cache\ICacheStorage;
@@ -93,6 +94,9 @@
 				 * Application and presentation layer
 				 */
 				IApplication::class => Application::class,
+				IErrorControl::class => function () {
+					throw new RuntimeException(sprintf('Error control [%s] is not specified. This is really hard crash.', IErrorControl::class));
+				},
 				IRouterService::class => RouterService::class,
 				IRoute::class => function (IRouterService $routerService) {
 					if (($route = $routerService->route()) === null) {
