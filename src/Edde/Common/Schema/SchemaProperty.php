@@ -50,7 +50,7 @@
 		 * @param bool $identifier
 		 * @param bool $array
 		 */
-		public function __construct(ISchema $schema, string $name, string $type = 'string', bool $required = false, bool $unique = false, bool $identifier = false, bool $array = false) {
+		public function __construct(ISchema $schema, string $name, string $type = 'string', bool $required = true, bool $unique = false, bool $identifier = false, bool $array = false) {
 			$this->schema = $schema;
 			$this->name = $name;
 			$this->type = $type;
