@@ -34,7 +34,7 @@
 		}
 
 		public function has(string $name): bool {
-			return isset($this->list[$name]) || array_key_exists($this->list, $name);
+			return isset($this->list[$name]) || array_key_exists($name, $this->list);
 		}
 
 		public function array(): array {
