@@ -19,6 +19,7 @@
 			$session = $this->sessionManager->getSession('section');
 			$session->set('poo', 'blabla');
 			self::assertEquals($_SESSION['edde']['section']['poo'], 'blabla');
+			self::assertEquals('blabla', $session->get('poo'));
 		}
 
 		protected function setUp() {
