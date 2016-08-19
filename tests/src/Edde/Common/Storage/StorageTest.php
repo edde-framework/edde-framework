@@ -178,9 +178,10 @@
 			]);
 			$tempDirectory = new TempDirectory(__DIR__ . '/temp');
 			$tempDirectory->purge();
-			$this->storage = new DatabaseStorage($this->container, $this->sqliteDriver = new SqliteDriver('sqlite:' . $tempDirectory->filename('storage.sqlite')), new CacheFactory(__DIR__, new DevNullCacheStorage()));
+			$this->storage = new DatabaseStorage($this->sqliteDriver = new SqliteDriver('sqlite:' . $tempDirectory->filename('storage.sqlite')), new CacheFactory(__DIR__, new DevNullCacheStorage()));
 			$this->storage->lazySchemaManager($this->schemaManager);
 			$this->container->registerFactory(ICrateFactory::class, FactoryFactory::create(ICrateFactory::class, $this->crateFactory = new CrateFactory($this->container, $this->schemaManager, new DummyCrateGenerator())));
+			$this->storage->lazyCrateFactory($this->crateFactory);
 		}
 
 		protected function tearDown() {

@@ -5,7 +5,6 @@
 
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheFactory;
-	use Edde\Api\Container\IContainer;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Database\IDatabaseStorage;
@@ -43,12 +42,10 @@
 		protected $transaction;
 
 		/**
-		 * @param IContainer $container
 		 * @param IDriver $driver
 		 * @param ICacheFactory $cacheFactory
 		 */
-		public function __construct(IContainer $container, IDriver $driver, ICacheFactory $cacheFactory) {
-			parent::__construct($container);
+		public function __construct(IDriver $driver, ICacheFactory $cacheFactory) {
 			$this->driver = $driver;
 			$this->cacheFactory = $cacheFactory;
 			$this->transaction = false;

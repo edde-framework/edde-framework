@@ -3,8 +3,8 @@
 
 	namespace Edde\Common\Storage;
 
-	use Edde\Api\Container\IContainer;
 	use Edde\Api\Crate\ICrate;
+	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaManager;
@@ -18,33 +18,30 @@
 	abstract class AbstractStorage extends AbstractUsable implements IStorage {
 		use LazyInjectTrait;
 		/**
-		 * @var IContainer
-		 */
-		protected $container;
-		/**
 		 * @var ISchemaManager
 		 */
 		protected $schemaManager;
-
 		/**
-		 * @param IContainer $container
+		 * @var ICrateFactory
 		 */
-		public function __construct(IContainer $container) {
-			$this->container = $container;
-		}
+		protected $crateFactory;
 
 		public function lazySchemaManager(ISchemaManager $schemaManager) {
 			$this->schemaManager = $schemaManager;
 		}
 
-		public function load(string $schema, IQuery $query) {
-			foreach ($this->collection($schema, $query) as $crate) {
-				return $crate;
+		public function lazyCrateFactory(ICrateFactory $crateFactory) {
+			$this->crateFactory = $crateFactory;
+		}
+
+		public function load(string $schema, IQuery $query, string $crate = null) {
+			foreach ($this->collection($schema, $query, $crate) as $item) {
+				return $item;
 			}
 			throw new StorageException(sprintf('Cannot retrieve any crate [%s] by the given query.', $schema));
 		}
 
-		public function collection(string $schema, IQuery $query = null): ICollection {
+		public function collection(string $schema, IQuery $query = null, string $crate = null): ICollection {
 			if ($query === null) {
 				$query = new SelectQuery();
 				$query->select()
@@ -52,7 +49,7 @@
 					->from()
 					->source($schema);
 			}
-			return new Collection($this->schemaManager->getSchema($schema), $this, $this->container, $query);
+			return new Collection($schema, $this, $this->crateFactory, $query, $crate);
 		}
 
 		public function collectionTo(ICrate $crate, ISchema $relation, string $source, string $target): ICollection {

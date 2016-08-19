@@ -58,10 +58,11 @@
 		 *
 		 * @param string $schema of Crate
 		 * @param IQuery $query
+		 * @param string $crate
 		 *
-		 * @return ICollection|ICrate[]
+		 * @return ICrate[]|ICollection
 		 */
-		public function collection(string $schema, IQuery $query = null): ICollection;
+		public function collection(string $schema, IQuery $query = null, string $crate = null): ICollection;
 
 		/**
 		 * helper method for a m:n crate collection
@@ -80,8 +81,9 @@
 		 *
 		 * @param string $schema of requested crate
 		 * @param IQuery $query
+		 * @param string $crate
 		 *
 		 * @return ICrate
 		 */
-		public function load(string $schema, IQuery $query);
+		public function load(string $schema, IQuery $query, string $crate = null);
 	}
