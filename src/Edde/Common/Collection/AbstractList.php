@@ -18,7 +18,7 @@
 		protected $list = [];
 
 		public function isEmpty(): bool {
-			return empty($this->list) === false;
+			return empty($this->list);
 		}
 
 		public function set(string $name, $value): IList {
