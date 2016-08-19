@@ -153,6 +153,15 @@
 		public function link(string $name, ICrate $crate = null): ICrate;
 
 		/**
+		 * link array of links; return this crate
+		 *
+		 * @param array $linkTo
+		 *
+		 * @return ICrate
+		 */
+		public function linkTo(array $linkTo): ICrate;
+
+		/**
 		 * explicitly set a new link
 		 *
 		 * @param string $name

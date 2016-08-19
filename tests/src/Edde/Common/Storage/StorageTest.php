@@ -84,7 +84,6 @@
 		}
 
 		public function testComplexStorable() {
-
 			$this->storage->start();
 			$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema('Group')));
 			$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema('Identity')));
@@ -110,23 +109,29 @@
 						'guid' => sha1(random_bytes(64)),
 						'name' => "The God's Guest",
 					]))
-				->store($this->crateFactory->crate(Crate::class, null, 'IdentityGroup')
+				->store($rootGod = $this->crateFactory->crate(Crate::class, null, 'IdentityGroup')
 					->put([
 						'guid' => sha1(random_bytes(64)),
-						'identity' => $godIdentity->get('guid'),
-						'group' => $rootGroup->get('guid'),
+					])
+					->linkTo([
+						'identity' => $godIdentity,
+						'group' => $rootGroup,
 					]))
-				->store($this->crateFactory->crate(Crate::class, null, 'IdentityGroup')
+				->store($guestGod = $this->crateFactory->crate(Crate::class, null, 'IdentityGroup')
 					->put([
 						'guid' => sha1(random_bytes(64)),
-						'identity' => $godIdentity->get('guid'),
-						'group' => $guestGroup->get('guid'),
+					])
+					->linkTo([
+						'identity' => $godIdentity,
+						'group' => $guestGroup,
 					]))
-				->store($this->crateFactory->crate(Crate::class, null, 'IdentityGroup')
+				->store($guestGuest = $this->crateFactory->crate(Crate::class, null, 'IdentityGroup')
 					->put([
 						'guid' => sha1(random_bytes(64)),
-						'identity' => $guestIdentity->get('guid'),
-						'group' => $guestGroup->get('guid'),
+					])
+					->linkTo([
+						'identity' => $guestIdentity,
+						'group' => $guestGroup,
 					]));
 
 			$groupList = [];

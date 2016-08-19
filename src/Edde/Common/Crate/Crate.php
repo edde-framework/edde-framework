@@ -208,6 +208,13 @@
 			return $crate;
 		}
 
+		public function linkTo(array $linkTo): ICrate {
+			foreach ($linkTo as $name => $crate) {
+				$this->link($name, $crate);
+			}
+			return $this;
+		}
+
 		public function setCollection($name, ICollection $collection) {
 			if ($this->schema->hasCollection($name) === false) {
 				throw new CrateException(sprintf('Crate [%s] has no collection [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
