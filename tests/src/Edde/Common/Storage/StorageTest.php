@@ -73,11 +73,11 @@
 				->property('guid')
 				->parameter($guid);
 
-			$crate = $this->storage->load($schemaName, $query);
+			$crate = $this->storage->load(Crate::class, $query, $schemaName);
 			self::assertEquals($guid, $crate->get('guid'));
 			self::assertEquals('foobar', $crate->get('value'));
 			$count = 0;
-			foreach ($this->storage->collection($schemaName) as $crate) {
+			foreach ($this->storage->collection(Crate::class, null, $schemaName) as $crate) {
 				$count++;
 			}
 			self::assertEquals(2, $count);
@@ -153,7 +153,7 @@
 			$this->storage->store($identityGroup);
 
 			$groupList = [];
-			foreach ($this->storage->collectionTo($godIdentity, $identityGroupSchema, 'identity', 'group') as $storable) {
+			foreach ($this->storage->collectionTo($godIdentity, $identityGroupSchema, 'identity', 'group', Crate::class) as $storable) {
 				$groupList[] = $storable->get('name');
 			}
 			self::assertEquals([

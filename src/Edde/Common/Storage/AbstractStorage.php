@@ -34,14 +34,15 @@
 			$this->crateFactory = $crateFactory;
 		}
 
-		public function load(string $schema, IQuery $query, string $crate = null) {
-			foreach ($this->collection($schema, $query, $crate) as $item) {
+		public function load(string $crate, IQuery $query, string $schema = null) {
+			foreach ($this->collection($crate, $query, $schema) as $item) {
 				return $item;
 			}
-			throw new StorageException(sprintf('Cannot retrieve any crate [%s] by the given query.', $schema));
+			throw new StorageException(sprintf('Cannot retrieve any crate [%s] by the given query.', $crate));
 		}
 
-		public function collection(string $schema, IQuery $query = null, string $crate = null): ICollection {
+		public function collection(string $crate, IQuery $query = null, string $schema = null): ICollection {
+			$schema = $schema ?: $crate;
 			if ($query === null) {
 				$query = new SelectQuery();
 				$query->select()
@@ -49,10 +50,10 @@
 					->from()
 					->source($schema);
 			}
-			return new Collection($schema, $this, $this->crateFactory, $query, $crate);
+			return new Collection($crate, $this, $this->crateFactory, $query, $schema);
 		}
 
-		public function collectionTo(ICrate $crate, ISchema $relation, string $source, string $target): ICollection {
+		public function collectionTo(ICrate $crate, ISchema $relation, string $source, string $target, string $crateTo = null): ICollection {
 			$sourceLink = $relation->getLink($source);
 			$targetLink = $relation->getLink($target);
 			$targetSchema = $targetLink->getTarget()
@@ -80,6 +81,6 @@
 					->getName(), $relationAlias)
 				->property($targetLink->getTarget()
 					->getName(), $targetAlias);
-			return $this->collection($targetSchemaName, $selectQuery);
+			return $this->collection($crateTo ?: $targetSchemaName, $selectQuery, $targetSchemaName);
 		}
 	}

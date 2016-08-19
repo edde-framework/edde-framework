@@ -8,7 +8,6 @@
 	use Edde\Api\Storage\ICollection;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Common\AbstractObject;
-	use Edde\Common\Crate\Crate;
 
 	/**
 	 * Default implementation of collection.
@@ -17,7 +16,7 @@
 		/**
 		 * @var string
 		 */
-		protected $schema;
+		protected $crate;
 		/**
 		 * @var IStorage
 		 */
@@ -33,21 +32,21 @@
 		/**
 		 * @var string
 		 */
-		protected $crate;
+		protected $schema;
 
 		/**
-		 * @param string $schema
+		 * @param string $crate
 		 * @param IStorage $storage
 		 * @param ICrateFactory $crateFactory
 		 * @param IQuery $query
-		 * @param string $crate
+		 * @param string $schema
 		 */
-		public function __construct(string $schema, IStorage $storage, ICrateFactory $crateFactory, IQuery $query, string $crate = null) {
-			$this->schema = $schema;
+		public function __construct(string $crate, IStorage $storage, ICrateFactory $crateFactory, IQuery $query, string $schema = null) {
+			$this->crate = $crate;
 			$this->storage = $storage;
 			$this->crateFactory = $crateFactory;
 			$this->query = $query;
-			$this->crate = $crate ?: Crate::class;
+			$this->schema = $schema;
 		}
 
 		public function getQuery() {
