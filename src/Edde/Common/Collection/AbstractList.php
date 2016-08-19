@@ -37,7 +37,7 @@
 			return isset($this->list[$name]) || array_key_exists($this->list, $name);
 		}
 
-		public function getList(): array {
+		public function array(): array {
 			return $this->list;
 		}
 

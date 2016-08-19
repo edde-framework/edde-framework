@@ -70,8 +70,10 @@
 			$crateList = [];
 			if ($this->httpRequest->isMethod('POST')) {
 				$method = 'handle' . $action;
-				$crateList = $this->crateFactory->build($this->httpRequest->getPostList()
-					->getList());
+				$postList = $this->httpRequest->getPostList();
+				if ($postList->isEmpty() === false) {
+					$crateList = $this->crateFactory->build($postList->array());
+				}
 			}
 			$parameterList = $url->getQuery();
 			unset($parameterList['control'], $parameterList['action']);

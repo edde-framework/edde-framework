@@ -52,7 +52,7 @@
 			return parent::has($name);
 		}
 
-		public function getList(): array {
+		public function array(): array {
 			$this->use();
 			return $this->list;
 		}

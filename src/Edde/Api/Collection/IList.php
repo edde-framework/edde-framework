@@ -44,7 +44,7 @@
 		/**
 		 * @return array
 		 */
-		public function getList(): array;
+		public function array(): array;
 
 		/**
 		 * @param string $name
