@@ -43,7 +43,7 @@
 			if ($this->isSession()) {
 				return $this;
 			}
-			if ($this->sessionId !== null) {
+			if ($sessionId !== null) {
 				$this->setSessionId($sessionId);
 			}
 			if ($this->sessionId !== null) {
