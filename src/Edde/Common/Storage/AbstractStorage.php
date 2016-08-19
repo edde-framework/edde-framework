@@ -41,7 +41,7 @@
 			foreach ($this->collection($schema, $query) as $crate) {
 				return $crate;
 			}
-			throw new StorageException(sprintf('Cannot retrieve any crate [%s] by the given query.', $schema->getSchemaName()));
+			throw new StorageException(sprintf('Cannot retrieve any crate [%s] by the given query.', $schema));
 		}
 
 		public function collection(string $schema, IQuery $query = null): ICollection {
