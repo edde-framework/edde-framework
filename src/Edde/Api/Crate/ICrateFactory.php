@@ -3,10 +3,12 @@
 
 	namespace Edde\Api\Crate;
 
+	use Edde\Api\Usable\IUsable;
+
 	/**
 	 * This mechanism is inteded to use as conversion from an input data to crates.
 	 */
-	interface ICrateFactory {
+	interface ICrateFactory extends IUsable {
 		/**
 		 * create crate with a given class (should be through container) and with the given schema
 		 *

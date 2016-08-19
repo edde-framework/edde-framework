@@ -13,16 +13,16 @@
 		/**
 		 * @param IFactory[] $fatoryList
 		 *
-		 * @return $this
+		 * @return ISetupHandler
 		 */
-		public function registerFactoryList(array $fatoryList);
+		public function registerFactoryList(array $fatoryList): ISetupHandler;
 
 		/**
 		 * @param callable $callback
 		 *
-		 * @return $this
+		 * @return ISetupHandler
 		 */
-		public function registerFactoryFallback(callable $callback);
+		public function registerFactoryFallback(callable $callback): ISetupHandler;
 
 		/**
 		 * attach onSetup handler to a given class/identifier (it must be IUsable)
@@ -39,5 +39,5 @@
 		 *
 		 * @return IContainer
 		 */
-		public function createContainer();
+		public function createContainer(): IContainer;
 	}

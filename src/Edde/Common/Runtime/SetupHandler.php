@@ -37,7 +37,7 @@
 			return $setupHandler;
 		}
 
-		public function createContainer() {
+		public function createContainer(): IContainer {
 			if ($this->container) {
 				throw new RuntimeException(sprintf('Cannot run [%s()] multiple times; something is wrong!', __METHOD__));
 			}

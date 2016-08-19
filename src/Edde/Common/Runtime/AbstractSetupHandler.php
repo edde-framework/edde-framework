@@ -21,12 +21,12 @@
 		 */
 		protected $factoryFallback;
 
-		public function registerFactoryList(array $fatoryList) {
+		public function registerFactoryList(array $fatoryList): ISetupHandler {
 			$this->factoryList = FactoryFactory::createList(array_merge($this->factoryList, $fatoryList));
 			return $this;
 		}
 
-		public function registerFactoryFallback(callable $callback) {
+		public function registerFactoryFallback(callable $callback): ISetupHandler {
 			$this->factoryFallback = $callback;
 			return $this;
 		}

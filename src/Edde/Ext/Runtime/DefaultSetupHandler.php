@@ -89,119 +89,115 @@
 
 	class DefaultSetupHandler extends SetupHandler {
 		static public function create(ICacheFactory $cacheFactory = null, array $factoryList = []) {
-			$setupHandler = parent::create($cacheFactory ?: new CacheFactory(__DIR__, new InMemoryCacheStorage()));
-			$setupHandler->registerFactoryList(array_merge([
-				ICacheStorage::class => InMemoryCacheStorage::class,
-				/**
-				 * Application and presentation layer
-				 */
-				IApplication::class => Application::class,
-				IErrorControl::class => function () {
-					throw new RuntimeException(sprintf('Error control [%s] is not specified. This is really hard crash.', IErrorControl::class));
-				},
-				IRouterService::class => RouterService::class,
-				IRoute::class => function (IRouterService $routerService) {
-					if (($route = $routerService->route()) === null) {
-						throw new RouterException(sprintf('Cannot find route for current application request.'));
-					}
-					return $route;
-				},
-				CliRouter::class,
-				SimpleRouter::class,
-				/**
-				 * Http request support
-				 */
-				IHttpRequestFactory::class => HttpRequestFactory::class,
-				IHttpRequest::class => function (IHttpRequestFactory $httpRequestFactory) {
-					return $httpRequestFactory->create();
-				},
-				IHttpResponse::class => function () {
-					throw new RuntimeException(sprintf('Do not request [%s] from the global space (container) as it is bad practice.', IHttpResponse::class));
-				},
-				ISessionManager::class => SessionManager::class,
-				ISchemaFactory::class => SchemaFactory::class,
-				ISchemaManager::class => SchemaManager::class,
-				IRootDirectory::class => function () {
-					throw new RuntimeException(sprintf('If you want use root directory [%s], you must register it to the container!', IRootDirectory::class));
-				},
-				ITempDirectory::class => function (IRootDirectory $rootDirectory) {
-					return new TempDirectory($rootDirectory->getDirectory() . '/temp');
-				},
-				ICacheDirectory::class => function (ITempDirectory $tempDirectory) {
-					return new CacheDirectory($tempDirectory->getDirectory() . '/cache');
-				},
-				IStorageDirectory::class => function (IRootDirectory $rootDirectory) {
-					return new StorageDirectory($rootDirectory->getDirectory() . '/.storage');
-				},
-				ITemplateDirectory::class => functioN (IStorageDirectory $storageDirectory) {
-					return new TemplateDirectory($storageDirectory->getDirectory() . '/template');
-				},
-				ICryptEngine::class => CryptEngine::class,
-				IFileStorage::class => FileStorage::class,
-				IDriver::class => function (IStorageDirectory $storageDirectory) {
-					return new SqliteDriver('sqlite:' . $storageDirectory->filename('storage.sqlite'));
-				},
-				ICrateGenerator::class => CrateGenerator::class,
-				ICrateFactory::class => CrateFactory::class,
-				ICrateDirectory::class => function (IStorageDirectory $storageDirectory) {
-					return new CrateDirectory($storageDirectory->getDirectory() . '/crate');
-				},
-				IStorage::class => DatabaseStorage::class,
-				IResourceManager::class => ResourceManager::class,
-				IUpgradeManager::class => UpgradeManager::class,
-				ITemplateManager::class => TemplateManager::class,
-				IStyleSheetCompiler::class => StyleSheetCompiler::class,
-				IJavaScriptCompiler::class => JavaScriptCompiler::class,
-				IXmlParser::class => XmlParser::class,
+			return parent::create($cacheFactory ?: new CacheFactory(__DIR__, new InMemoryCacheStorage()))
+				->registerFactoryList(array_merge([
+					ICacheStorage::class => InMemoryCacheStorage::class,
+					/**
+					 * Application and presentation layer
+					 */
+					IApplication::class => Application::class,
+					IErrorControl::class => function () {
+						throw new RuntimeException(sprintf('Error control [%s] is not specified. This is really hard crash.', IErrorControl::class));
+					},
+					IRouterService::class => RouterService::class,
+					IRoute::class => function (IRouterService $routerService) {
+						if (($route = $routerService->route()) === null) {
+							throw new RouterException(sprintf('Cannot find route for current application request.'));
+						}
+						return $route;
+					},
+					CliRouter::class,
+					SimpleRouter::class,
+					/**
+					 * Http request support
+					 */
+					IHttpRequestFactory::class => HttpRequestFactory::class,
+					IHttpRequest::class => function (IHttpRequestFactory $httpRequestFactory) {
+						return $httpRequestFactory->create();
+					},
+					IHttpResponse::class => function () {
+						throw new RuntimeException(sprintf('Do not request [%s] from the global space (container) as it is bad practice.', IHttpResponse::class));
+					},
+					ISessionManager::class => SessionManager::class,
+					ISchemaFactory::class => SchemaFactory::class,
+					ISchemaManager::class => SchemaManager::class,
+					IRootDirectory::class => function () {
+						throw new RuntimeException(sprintf('If you want use root directory [%s], you must register it to the container!', IRootDirectory::class));
+					},
+					ITempDirectory::class => function (IRootDirectory $rootDirectory) {
+						return new TempDirectory($rootDirectory->getDirectory() . '/temp');
+					},
+					ICacheDirectory::class => function (ITempDirectory $tempDirectory) {
+						return new CacheDirectory($tempDirectory->getDirectory() . '/cache');
+					},
+					IStorageDirectory::class => function (IRootDirectory $rootDirectory) {
+						return new StorageDirectory($rootDirectory->getDirectory() . '/.storage');
+					},
+					ITemplateDirectory::class => functioN (IStorageDirectory $storageDirectory) {
+						return new TemplateDirectory($storageDirectory->getDirectory() . '/template');
+					},
+					ICryptEngine::class => CryptEngine::class,
+					IFileStorage::class => FileStorage::class,
+					IDriver::class => function (IStorageDirectory $storageDirectory) {
+						return new SqliteDriver('sqlite:' . $storageDirectory->filename('storage.sqlite'));
+					},
+					ICrateGenerator::class => CrateGenerator::class,
+					ICrateFactory::class => CrateFactory::class,
+					ICrateDirectory::class => function (IStorageDirectory $storageDirectory) {
+						return new CrateDirectory($storageDirectory->getDirectory() . '/crate');
+					},
+					IStorage::class => DatabaseStorage::class,
+					IResourceManager::class => ResourceManager::class,
+					IUpgradeManager::class => UpgradeManager::class,
+					ITemplateManager::class => TemplateManager::class,
+					IStyleSheetCompiler::class => StyleSheetCompiler::class,
+					IJavaScriptCompiler::class => JavaScriptCompiler::class,
+					IXmlParser::class => XmlParser::class,
 
-				XmlResourceHandler::class,
-				JsonResourceHandler::class,
+					XmlResourceHandler::class,
+					JsonResourceHandler::class,
 
-				IHostUrl::class => function () {
-					throw new RuntimeException(sprintf('Please define [%s] for usage in setup handler.', IHostUrl::class));
-				},
-				ILinkFactory::class => LinkFactory::class,
+					IHostUrl::class => function () {
+						throw new RuntimeException(sprintf('Please define [%s] for usage in setup handler.', IHostUrl::class));
+					},
+					ILinkFactory::class => LinkFactory::class,
 
-				InitialStorageUpgrade::class,
+					InitialStorageUpgrade::class,
 
-				Crate::class,
+					Crate::class,
 
-				SwitchMacro::class,
-				IncludeMacro::class,
-				BindIdAttributeMacro::class,
-				SchemaMacro::class,
-				LoopMacro::class,
-			], $factoryList));
-			$setupHandler->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
-				$routerService->registerRouter($container->create(CliRouter::class));
-				$routerService->registerRouter($container->create(SimpleRouter::class));
-			});
-			$setupHandler->onSetup(IApplication::class, function (ICrateGenerator $crateGenerator, IApplication $application) {
-				$crateGenerator->generate();
-			});
-			$setupHandler->onSetup(IResourceManager::class, function (IContainer $container, IResourceManager $resourceManager) {
-				$resourceManager->registerResourceHandler($container->create(XmlResourceHandler::class));
-				$resourceManager->registerResourceHandler($container->create(JsonResourceHandler::class));
-			});
-			$setupHandler->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
-				$templateManager->registerMacroList([
-					new ControlMacro(),
-					new DivMacro(),
-					new SpanMacro(),
-					new CssMacro(),
-					new JsMacro(),
-					new ButtonMacro(),
-					new TextMacro(),
-					new PasswordMacro(),
-					new HeaderMacro(),
-					new PassMacro(),
-					$container->create(IncludeMacro::class),
-					$container->create(SwitchMacro::class),
-					$container->create(BindIdAttributeMacro::class),
-					$container->create(SchemaMacro::class),
-					$container->create(LoopMacro::class),
-				]);
-			});
-			return $setupHandler;
+					SwitchMacro::class,
+					IncludeMacro::class,
+					BindIdAttributeMacro::class,
+					SchemaMacro::class,
+					LoopMacro::class,
+				], $factoryList))
+				->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
+					$routerService->registerRouter($container->create(CliRouter::class));
+					$routerService->registerRouter($container->create(SimpleRouter::class));
+				})
+				->onSetup(IResourceManager::class, function (IContainer $container, IResourceManager $resourceManager) {
+					$resourceManager->registerResourceHandler($container->create(XmlResourceHandler::class));
+					$resourceManager->registerResourceHandler($container->create(JsonResourceHandler::class));
+				})
+				->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
+					$templateManager->registerMacroList([
+						new ControlMacro(),
+						new DivMacro(),
+						new SpanMacro(),
+						new CssMacro(),
+						new JsMacro(),
+						new ButtonMacro(),
+						new TextMacro(),
+						new PasswordMacro(),
+						new HeaderMacro(),
+						new PassMacro(),
+						$container->create(IncludeMacro::class),
+						$container->create(SwitchMacro::class),
+						$container->create(BindIdAttributeMacro::class),
+						$container->create(SchemaMacro::class),
+						$container->create(LoopMacro::class),
+					]);
+				});
 		}
 	}

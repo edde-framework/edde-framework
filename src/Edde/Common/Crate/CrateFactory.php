@@ -7,10 +7,11 @@
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\ICrateFactory;
+	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\Schema\ISchemaManager;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Usable\AbstractUsable;
 
-	class CrateFactory extends AbstractObject implements ICrateFactory {
+	class CrateFactory extends AbstractUsable implements ICrateFactory {
 		/**
 		 * @var IContainer
 		 */
@@ -19,21 +20,29 @@
 		 * @var ISchemaManager
 		 */
 		protected $schemaManager;
+		/**
+		 * @var ICrateGenerator
+		 */
+		protected $crateGenerator;
 
 		/**
 		 * @param IContainer $container
 		 * @param ISchemaManager $schemaManager
+		 * @param ICrateGenerator $crateGenerator
 		 */
-		public function __construct(IContainer $container, ISchemaManager $schemaManager) {
+		public function __construct(IContainer $container, ISchemaManager $schemaManager, ICrateGenerator $crateGenerator) {
 			$this->container = $container;
 			$this->schemaManager = $schemaManager;
+			$this->crateGenerator = $crateGenerator;
 		}
 
 		public function collection(string $schema, string $crate = null): ICollection {
+			$this->use();
 			return $this->container->create(Collection::class, $schema, $crate);
 		}
 
 		public function build(array $crateList) {
+			$this->use();
 			$crates = [];
 			foreach ($crateList as $schema => $source) {
 				$crates[] = $this->crate($schema, $source);
@@ -42,6 +51,7 @@
 		}
 
 		public function crate(string $crate, array $push = null, string $schema = null): ICrate {
+			$this->use();
 			/** @var $crate ICrate */
 			$crate = $this->container->create($crate);
 			$crate->setSchema($this->schemaManager->getSchema($schema ?: get_class($crate)));
@@ -49,5 +59,9 @@
 				$crate->push($push);
 			}
 			return $crate;
+		}
+
+		protected function prepare() {
+			$this->crateGenerator->generate();
 		}
 	}
