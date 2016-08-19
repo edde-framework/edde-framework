@@ -199,6 +199,7 @@
 			(function (IResource $resource) {
 				require_once($resource->getUrl());
 			})($this->crateDirectory->file('loader.php'));
+			return $this;
 		}
 
 		protected function prepare() {
