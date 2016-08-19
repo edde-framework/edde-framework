@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Http;
 
+	use Edde\Api\Collection\IList;
 	use Edde\Api\Http\HttpException;
 	use Edde\Api\Http\ICookie;
 	use Edde\Api\Http\ICookieList;
@@ -22,7 +23,7 @@
 			return $this;
 		}
 
-		public function set($name, $value) {
+		public function set(string $name, $value): IList {
 			throw new HttpException(sprintf('Cannot directly set value [%s] to the cookie list; use [%s::addCookie()] instead.', $name, static::class));
 		}
 	}
