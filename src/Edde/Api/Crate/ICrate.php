@@ -146,10 +146,11 @@
 		 * return crate based on a predefined link
 		 *
 		 * @param string $name
+		 * @param ICrate $crate when specified this crate will be returned
 		 *
 		 * @return ICrate
 		 */
-		public function link($name);
+		public function link(string $name, ICrate $crate = null): ICrate;
 
 		/**
 		 * explicitly set a new link

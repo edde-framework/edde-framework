@@ -191,7 +191,7 @@
 			return $this->collectionList[$name];
 		}
 
-		public function link($name) {
+		public function link(string $name, ICrate $crate = null): ICrate {
 			if ($this->schema->hasLink($name) === false) {
 				throw new CrateException(sprintf('Crate [%s] has no link [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
 			}
@@ -199,8 +199,7 @@
 				$link = $this->schema->getLink($name);
 				$targetSchema = $link->getTarget()
 					->getSchema();
-				$this->linkList[$name] = $crate = $this->crateFactory->crate($targetSchema->getSchemaName());
-				$crate->setSchema($targetSchema);
+				$this->linkList[$name] = $crate = $crate ?: $this->crateFactory->crate($targetSchema->getSchemaName());
 			}
 			return $this->linkList[$name];
 		}
