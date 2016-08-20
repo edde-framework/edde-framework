@@ -48,7 +48,7 @@
 		protected $sqliteDriver;
 
 		public function testSimpleStorable() {
-			$crate = $this->crateFactory->crate(Crate::class, null, 'Foo\\Bar\\SimpleStorable');
+			$crate = $this->crateFactory->crate(Crate::class, 'Foo\\Bar\\SimpleStorable', null);
 			$schema = $this->schemaManager->getSchema('Foo\\Bar\\SimpleStorable');
 			$this->storage->start();
 			$this->storage->execute(new CreateSchemaQuery($schema));
@@ -89,27 +89,27 @@
 			$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema('Identity')));
 			$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema('IdentityGroup')));
 
-			$this->storage->store($rootGroup = $this->crateFactory->crate(Crate::class, null, 'Group')
+			$this->storage->store($rootGroup = $this->crateFactory->crate(Crate::class, 'Group', null)
 				->put([
 					'guid' => sha1(random_bytes(64)),
 					'name' => 'root',
 				]))
-				->store($guestGroup = $this->crateFactory->crate(Crate::class, null, 'Group')
+				->store($guestGroup = $this->crateFactory->crate(Crate::class, 'Group', null)
 					->put([
 						'guid' => sha1(random_bytes(64)),
 						'name' => 'guest',
 					]))
-				->store($godIdentity = $this->crateFactory->crate(Crate::class, null, 'Identity')
+				->store($godIdentity = $this->crateFactory->crate(Crate::class, 'Identity', null)
 					->put([
 						'guid' => sha1(random_bytes(64)),
 						'name' => 'The God',
 					]))
-				->store($guestIdentity = $this->crateFactory->crate(Crate::class, null, 'Identity')
+				->store($guestIdentity = $this->crateFactory->crate(Crate::class, 'Identity', null)
 					->put([
 						'guid' => sha1(random_bytes(64)),
 						'name' => "The God's Guest",
 					]))
-				->store($rootGod = $this->crateFactory->crate(Crate::class, null, 'IdentityGroup')
+				->store($rootGod = $this->crateFactory->crate(Crate::class, 'IdentityGroup', null)
 					->put([
 						'guid' => sha1(random_bytes(64)),
 					])
@@ -117,7 +117,7 @@
 						'identity' => $godIdentity,
 						'group' => $rootGroup,
 					]))
-				->store($guestGod = $this->crateFactory->crate(Crate::class, null, 'IdentityGroup')
+				->store($guestGod = $this->crateFactory->crate(Crate::class, 'IdentityGroup', null)
 					->put([
 						'guid' => sha1(random_bytes(64)),
 					])
@@ -125,7 +125,7 @@
 						'identity' => $godIdentity,
 						'group' => $guestGroup,
 					]))
-				->store($guestGuest = $this->crateFactory->crate(Crate::class, null, 'IdentityGroup')
+				->store($guestGuest = $this->crateFactory->crate(Crate::class, 'IdentityGroup', null)
 					->put([
 						'guid' => sha1(random_bytes(64)),
 					])

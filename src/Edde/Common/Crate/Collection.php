@@ -42,7 +42,7 @@
 		}
 
 		public function createCrate(array $push = null): ICrate {
-			return $this->crateFactory->crate($this->crate ?: $this->schema, $push, $this->schema);
+			return $this->crateFactory->crate($this->crate ?: $this->schema, $this->schema, $push);
 		}
 
 		public function addCrate(ICrate $crate): ICollection {

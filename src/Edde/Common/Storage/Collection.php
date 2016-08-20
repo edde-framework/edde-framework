@@ -55,7 +55,7 @@
 
 		public function getIterator() {
 			foreach ($this->storage->execute($this->query) as $item) {
-				yield $this->crateFactory->crate($this->crate, (array)$item, $this->schema);
+				yield $this->crateFactory->crate($this->crate, $this->schema, (array)$item);
 			}
 		}
 	}

@@ -13,12 +13,12 @@
 		 * create crate with a given class (should be through container) and with the given schema
 		 *
 		 * @param string $crate
-		 * @param array $push
 		 * @param string $schema
+		 * @param array $push
 		 *
 		 * @return ICrate
 		 */
-		public function crate(string $crate, array $push = null, string $schema = null): ICrate;
+		public function crate(string $crate, string $schema = null, array $push = null): ICrate;
 
 		/**
 		 * create crate collection
