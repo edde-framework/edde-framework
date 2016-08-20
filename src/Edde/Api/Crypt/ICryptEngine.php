@@ -3,12 +3,10 @@
 
 	namespace Edde\Api\Crypt;
 
-	use Edde\Api\Usable\IUsable;
-
 	/**
 	 * Interface for encapsulating encryption, decryption and other related stuff.
 	 */
-	interface ICryptEngine extends IUsable {
+	interface ICryptEngine {
 		/**
 		 * generate stream of bytes in given length
 		 *
