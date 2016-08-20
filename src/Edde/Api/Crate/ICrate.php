@@ -4,13 +4,12 @@
 	namespace Edde\Api\Crate;
 
 	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Usable\IUsable;
 
 	/**
 	 * General object which is used to describe relations between objects (not necesarilly database objects) and
 	 * theirs hierarchy.
 	 */
-	interface ICrate extends IUsable {
+	interface ICrate {
 		/**
 		 * schema can be set before crate is used (prepared)
 		 *

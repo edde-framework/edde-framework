@@ -61,7 +61,7 @@
 						if (is_array($collectionValue) === false) {
 							throw new CrateException(sprintf('Cannot push source value into the crate [%s]; value [%s] is not an array (collection).', $schema->getSchemaName(), $property));
 						}
-						$collection->addCrate($this->load($this->crate($targetCrate, null, $targetSchema), $collectionValue));
+						$collection->addCrate($this->crate($targetCrate, $collectionValue, $targetSchema));
 					}
 					unset($source[$property]);
 				} else if ($schema->hasLink($property)) {
@@ -70,7 +70,7 @@
 						->getSchema()
 						->getSchemaName();
 					$targetCrate = $this->container->has($targetSchema) ? $targetSchema : Crate::class;
-					$crate->link($property, $this->load($this->crate($targetCrate, null, $targetSchema), $value));
+					$crate->link($property, $this->crate($targetCrate, $value, $targetSchema));
 					unset($source[$property]);
 				}
 			}
@@ -87,9 +87,12 @@
 			$this->use();
 			/** @var $crate ICrate */
 			$crate = $this->container->create($crate);
-			$crate->setSchema($this->schemaManager->getSchema($schema ?: get_class($crate)));
+			$crate->setSchema($schema = $this->schemaManager->getSchema($schema ?: get_class($crate)));
+			foreach ($schema->getPropertyList() as $schemaProperty) {
+				$crate->addProperty(new Property($schemaProperty));
+			}
 			if ($push !== null) {
-				$crate->push($push);
+				$this->load($crate, $push);
 			}
 			return $crate;
 		}

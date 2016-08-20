@@ -51,14 +51,14 @@
 		public function testArraysException() {
 			$this->expectException(CrateException::class);
 			$this->expectExceptionMessage('Property [schema::hello] is not array; cannot add value.');
-			$crate = new Crate($this->crateFactory);
+			$crate = new Crate();
 			$schema = new Schema('schema');
 			$crate->addProperty(new Property(new SchemaProperty($schema, 'hello')));
 			$crate->add('hello', false);
 		}
 
 		public function testArrays() {
-			$crate = new Crate($this->crateFactory);
+			$crate = new Crate();
 			$schema = new Schema('schema');
 			$crate->addProperty(new Property(new SchemaProperty($schema, 'hello', 'string', false, false, false, true)));
 			$crate->add('hello', 'hello');

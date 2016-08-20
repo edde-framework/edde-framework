@@ -48,8 +48,8 @@
 		protected $sqliteDriver;
 
 		public function testSimpleStorable() {
-			$crate = new Crate($this->crateFactory);
-			$crate->setSchema($schema = $this->schemaManager->getSchema('Foo\\Bar\\SimpleStorable'));
+			$crate = $this->crateFactory->crate(Crate::class, null, 'Foo\\Bar\\SimpleStorable');
+			$schema = $this->schemaManager->getSchema('Foo\\Bar\\SimpleStorable');
 			$this->storage->start();
 			$this->storage->execute(new CreateSchemaQuery($schema));
 
