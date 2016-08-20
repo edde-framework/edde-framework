@@ -54,9 +54,9 @@
 			$header = reset($crateList);
 			self::assertInstanceOf(Header::class, $header);
 			self::assertEquals('header-guid', $header->get('guid'));
-			self::assertCount(1, iterator_to_array($header->collection('rowCollection')));
+			self::assertCount(1, iterator_to_array($header->getCollection('rowCollection')));
 			$crateList = [];
-			foreach ($header->collection('rowCollection') as $crate) {
+			foreach ($header->getCollection('rowCollection') as $crate) {
 				$crateList[] = $crate;
 			}
 			self::assertCount(1, $crateList);
@@ -114,9 +114,9 @@
 			self::assertInstanceOf(Header::class, $header);
 			self::assertEquals('header-guid', $header->get('guid'));
 			self::assertEquals('header name', $header->get('name'));
-			self::assertCount(2, iterator_to_array($header->collection('rowCollection')));
+			self::assertCount(2, iterator_to_array($header->getCollection('rowCollection')));
 			$crateList = [];
-			foreach ($header->collection('rowCollection') as $crate) {
+			foreach ($header->getCollection('rowCollection') as $crate) {
 				$crateList[] = $crate;
 			}
 			self::assertCount(2, $crateList);
@@ -126,13 +126,13 @@
 			self::assertInstanceOf(Row::class, $firstRow);
 			self::assertEquals('first guid', $firstRow->get('guid'));
 			self::assertEquals('first name', $firstRow->get('name'));
-			self::assertInstanceOf(Item::class, $firstItem = $firstRow->link('item'));
+			self::assertInstanceOf(Item::class, $firstItem = $firstRow->getLink('item'));
 			self::assertEquals('whohooo!', $firstItem->get('name'));
 
 			self::assertInstanceOf(Row::class, $secondRow);
 			self::assertEquals('second guid', $secondRow->get('guid'));
 			self::assertEquals('second name', $secondRow->get('name'));
-			self::assertInstanceOf(Item::class, $secondItem = $secondRow->link('item'));
+			self::assertInstanceOf(Item::class, $secondItem = $secondRow->getLink('item'));
 			self::assertEquals('another whohooo!', $secondItem->get('name'));
 		}
 

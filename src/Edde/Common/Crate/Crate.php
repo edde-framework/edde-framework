@@ -6,17 +6,12 @@
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrate;
-	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crate\IProperty;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Common\Schema\Schema;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class Crate extends AbstractUsable implements ICrate {
-		/**
-		 * @var ICrateFactory
-		 */
-		protected $crateFactory;
 		/**
 		 * @var ISchema
 		 */
@@ -42,21 +37,14 @@
 		 */
 		protected $propertyNameList = [];
 
-		/**
-		 * @param ICrateFactory $crateFactory
-		 */
-		public function __construct(ICrateFactory $crateFactory) {
-			$this->crateFactory = $crateFactory;
-		}
-
-		public function getSchema() {
+		public function getSchema(): ISchema {
 			if ($this->schema === null) {
 				throw new CrateException(sprintf('Cannot get schema from anonymous crate [%s].', static::class));
 			}
 			return $this->schema;
 		}
 
-		public function setSchema(ISchema $schema) {
+		public function setSchema(ISchema $schema): ICrate {
 			if ($this->isUsed()) {
 				throw new CrateException(sprintf('Cannot set schema [%s] to already prepared crate [%s].', $schema->getSchemaName(), static::class));
 			}
@@ -64,12 +52,12 @@
 			return $this;
 		}
 
-		public function getPropertyList() {
+		public function getPropertyList(): array {
 			$this->use();
 			return $this->propertyList;
 		}
 
-		public function getIdentifierList() {
+		public function getIdentifierList(): array {
 			$this->use();
 			if ($this->identifierList === null) {
 				$this->identifierList = [];
@@ -83,7 +71,7 @@
 			return $this->identifierList;
 		}
 
-		public function put(array $put, $strict = true) {
+		public function put(array $put, bool $strict = true): ICrate {
 			$this->use();
 			if ($strict && ($diff = array_diff(array_keys($put), $this->propertyNameList)) !== []) {
 				throw new CrateException(sprintf('Setting unknown values [%s] to the crate [%s].', implode(', ', $diff), $this->schema->getSchemaName()));
@@ -97,14 +85,14 @@
 			return $this;
 		}
 
-		public function set($name, $value) {
+		public function set(string $name, $value): ICrate {
 			$this->use();
 			$this->getProperty($name)
 				->set($value);
 			return $this;
 		}
 
-		public function getProperty($name) {
+		public function getProperty(string $name): IProperty {
 			$this->use();
 			if ($this->hasProperty($name) === false) {
 				throw new CrateException(sprintf('Unknown value [%s] in crate [%s].', $name, $this->schema->getSchemaName()));
@@ -112,12 +100,12 @@
 			return $this->propertyList[$name];
 		}
 
-		public function hasProperty($name) {
+		public function hasProperty(string $name): bool {
 			$this->use();
 			return isset($this->propertyList[$name]);
 		}
 
-		public function add($name, $value, $key = null) {
+		public function add(string $name, $value, $key = null): ICrate {
 			$property = $this->getProperty($name)
 				->getSchemaProperty();
 			if ($property->isArray() === false) {
@@ -133,40 +121,21 @@
 			return $this;
 		}
 
-		public function get($name, $default = null) {
+		public function get(string $name, $default = null) {
 			$this->use();
 			return $this->getProperty($name)
 				->get($default);
 		}
 
-		public function push(array $push, $strict = true) {
+		public function push(array $push, bool $strict = true): ICrate {
 			$this->use();
 			if ($strict && ($diff = array_diff(array_keys($push), $this->propertyNameList)) !== []) {
 				throw new CrateException(sprintf('Setting unknown values [%s] to the crate [%s].', implode(', ', $diff), $this->schema->getSchemaName()));
 			}
 			foreach ($push as $property => $value) {
-				if ($this->schema->hasCollection($property)) {
-					$collection = $this->collection($property);
-					/** @var $value array */
-					foreach ($value as $collectionValue) {
-						if (is_array($collectionValue) === false) {
-							throw new CrateException(sprintf('Cannot push source value into the crate [%s]; value [%s] is not an array (collection).', $this->schema->getSchemaName(), $property));
-						}
-						$collection->addCrate($collection->createCrate($collectionValue));
-					}
-					continue;
-				} else if ($this->schema->hasLink($property)) {
-					$link = $this->link($property);
-					$link->push($value);
-					continue;
-				}
-				if (isset($this->propertyList[$property]) === false) {
-					continue;
-				}
 				$property = $this->getProperty($property);
 				$schemaProperty = $property->getSchemaProperty();
-				$isArray = is_array($value);
-				if ($isArray === false && $schemaProperty->isArray()) {
+				if (($isArray = is_array($value)) === false && $schemaProperty->isArray()) {
 					throw new CrateException(sprintf('Cannot push simple value [%s] to array.', $property->getSchemaProperty()));
 				}
 				if ($isArray && $schemaProperty->isArray() === false) {
@@ -177,37 +146,6 @@
 			return $this;
 		}
 
-		public function collection($name) {
-			if ($this->schema->hasCollection($name) === false) {
-				throw new CrateException(sprintf('Crate [%s] has no collection [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
-			}
-			if (isset($this->collectionList[$name]) === false) {
-				$collection = $this->schema->getCollection($name);
-				$targetSchemaName = $collection->getTarget()
-					->getSchema()
-					->getSchemaName();
-				$this->collectionList[$name] = $this->crateFactory->collection($targetSchemaName);
-			}
-			return $this->collectionList[$name];
-		}
-
-		public function link(string $name, ICrate $crate = null): ICrate {
-			if ($this->schema->hasLink($name) === false) {
-				throw new CrateException(sprintf('Crate [%s] has no link [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
-			}
-			$link = $this->schema->getLink($name);
-			$targetSchema = $link->getTarget()
-				->getSchema();
-			if (isset($this->linkList[$name]) === false || $crate !== null) {
-				$this->linkList[$name] = $crate ?: $this->crateFactory->crate($targetSchema->getSchemaName());
-			}
-			$crate = $this->linkList[$name];
-			$this->set($link->getSource()
-				->getName(), $crate->get($link->getTarget()
-				->getName()));
-			return $crate;
-		}
-
 		public function linkTo(array $linkTo): ICrate {
 			foreach ($linkTo as $name => $crate) {
 				$this->link($name, $crate);
@@ -215,7 +153,30 @@
 			return $this;
 		}
 
-		public function setCollection($name, ICollection $collection) {
+		public function link(string $name, ICrate $crate): ICrate {
+			if ($this->schema->hasLink($name) === false) {
+				throw new CrateException(sprintf('Crate [%s] has no link [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
+			}
+			$link = $this->schema->getLink($name);
+			$this->linkList[$name] = $crate;
+			$this->set($link->getSource()
+				->getName(), $crate->get($link->getTarget()
+				->getName()));
+			return $this;
+		}
+
+		public function getLink(string $name) {
+			if ($this->hasLink($name) === false) {
+				throw new CrateException(sprintf('Requested unknown link [%s] on the crate [%s].', $name, $this->schema->getSchemaName()));
+			}
+			return $this->linkList[$name];
+		}
+
+		public function hasLink(string $name): bool {
+			return isset($this->linkList[$name]);
+		}
+
+		public function collection(string $name, ICollection $collection): ICrate {
 			if ($this->schema->hasCollection($name) === false) {
 				throw new CrateException(sprintf('Crate [%s] has no collection [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
 			}
@@ -223,15 +184,18 @@
 			return $this;
 		}
 
-		public function setLink($name, ICrate $crate) {
-			if ($this->schema->hasLink($name) === false) {
-				throw new CrateException(sprintf('Crate [%s] has no link [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
+		public function getCollection(string $name): ICollection {
+			if ($this->hasCollection($name) === false) {
+				throw new CrateException(sprintf('Requested unknown collection [%s] on the crate [%s].', $name, $this->schema->getSchemaName()));
 			}
-			$this->linkList[$name] = $crate;
-			return $this;
+			return $this->collectionList[$name];
 		}
 
-		public function getDirtyList() {
+		public function hasCollection(string $name): bool {
+			return isset($this->collectionList[$name]);
+		}
+
+		public function getDirtyList(): array {
 			$this->use();
 			if ($this->isDirty() === false) {
 				return [];
@@ -247,7 +211,7 @@
 			return $propertyList;
 		}
 
-		public function isDirty() {
+		public function isDirty(): bool {
 			$this->use();
 			foreach ($this->propertyList as $property) {
 				if ($property->isDirty()) {
@@ -273,7 +237,7 @@
 			$this->propertyNameList = array_merge(array_keys($this->propertyList), array_keys($this->schema->getLinkList()), array_keys($this->schema->getCollectionList()));
 		}
 
-		public function addProperty(IProperty $property, $force = false) {
+		public function addProperty(IProperty $property, bool $force = false): ICrate {
 			$this->use();
 			$schemaProperty = $property->getSchemaProperty();
 			if (isset($this->propertyList[$propertyName = $schemaProperty->getName()]) && $force === false) {

@@ -46,8 +46,6 @@
 			$headerCrate = $this->container->create(Header::class);
 			self::assertInstanceOf(Header::class, $headerCrate);
 			$headerCrate->setSchema($headerSchema);
-			$rowCollection = $headerCrate->collection('rowCollection');
-			self::assertInstanceOf(Row::class, $rowCrate = $rowCollection->createCrate());
 		}
 
 		public function testArraysException() {
