@@ -39,6 +39,7 @@
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Application\Application;
+	use Edde\Common\Application\ExceptionErrorControl;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Crate\Crate;
@@ -96,9 +97,7 @@
 					 * Application and presentation layer
 					 */
 					IApplication::class => Application::class,
-					IErrorControl::class => function () {
-						throw new RuntimeException(sprintf('Error control [%s] is not specified. This is really hard crash.', IErrorControl::class));
-					},
+					IErrorControl::class => ExceptionErrorControl::class,
 					IRouterService::class => RouterService::class,
 					IRoute::class => function (IRouterService $routerService) {
 						if (($route = $routerService->route()) === null) {
