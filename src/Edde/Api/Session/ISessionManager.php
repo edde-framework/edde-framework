@@ -10,22 +10,11 @@
 	 */
 	interface ISessionManager extends IUsable {
 		/**
-		 * optionaly sets session id without starting
-		 *
-		 * @param string $sessionId
-		 *
-		 * @return ISessionManager
-		 */
-		public function setSessionId(string $sessionId = null): ISessionManager;
-
-		/**
 		 * excplicitly open a session
 		 *
-		 * @param string $sessionId an optional id
-		 *
 		 * @return ISessionManager
 		 */
-		public function start(string $sessionId = null): ISessionManager;
+		public function start(): ISessionManager;
 
 		/**
 		 * tells if session is opened

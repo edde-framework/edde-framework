@@ -14,7 +14,7 @@
 
 		public function testBasicWorkflow() {
 			self::assertFalse($this->sessionManager->isSession());
-			$this->sessionManager->start('foo');
+			$this->sessionManager->start();
 			self::assertTrue($this->sessionManager->isSession());
 			$session = $this->sessionManager->getSession('section');
 			$session->set('poo', 'blabla');
@@ -23,7 +23,7 @@
 		}
 
 		protected function setUp() {
-			$this->sessionManager = new SessionManager();
+			$this->sessionManager = new SessionManager(new DummyFingerprint());
 			ini_set('session.use_cookies', 'off');
 			ini_set('session.use_only_cookies', 'off');
 			ini_set('session.use_trans_sid', 'on');

@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Session;
 
+	use Edde\Api\Session\IFingerprint;
 	use Edde\Api\Session\ISession;
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Session\SessionException;
@@ -10,21 +11,21 @@
 
 	class SessionManager extends AbstractUsable implements ISessionManager {
 		/**
+		 * @var IFingerprint
+		 */
+		protected $fingerprint;
+		/**
 		 * @var string
 		 */
 		protected $namespace;
-
-		protected $sessionId;
 		/**
 		 * @var ISession[]
 		 */
 		protected $sessionList = [];
 
-		/**
-		 * @param string $namespace
-		 */
-		public function __construct($namespace = null) {
-			$this->namespace = $namespace ?: 'edde';
+		public function __construct(IFingerprint $fingerprint) {
+			$this->fingerprint = $fingerprint;
+			$this->namespace = 'edde';
 		}
 
 		public function getSession(string $name): ISession {
@@ -39,15 +40,12 @@
 			return $_SESSION[$this->namespace][$name];
 		}
 
-		public function start(string $sessionId = null): ISessionManager {
+		public function start(): ISessionManager {
 			if ($this->isSession()) {
 				return $this;
 			}
-			if ($sessionId !== null) {
-				$this->setSessionId($sessionId);
-			}
-			if ($this->sessionId !== null) {
-				session_id($this->sessionId);
+			if (($fingerprint = $this->fingerprint->generate()) !== null) {
+				session_id($fingerprint);
 			}
 			session_start();
 			return $this;
@@ -55,11 +53,6 @@
 
 		public function isSession(): bool {
 			return session_status() === PHP_SESSION_ACTIVE;
-		}
-
-		public function setSessionId(string $sessionId = null): ISessionManager {
-			$this->sessionId = $sessionId;
-			return $this;
 		}
 
 		public function close(): ISessionManager {
