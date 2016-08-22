@@ -91,7 +91,14 @@
 		 *
 		 * @return IDirectory
 		 */
-		public function directory($directory);
+		public function directory($directory): IDirectory;
+
+		/**
+		 * return parent directory
+		 *
+		 * @return IDirectory
+		 */
+		public function parent(): IDirectory;
 
 		/**
 		 * @return IFile[]

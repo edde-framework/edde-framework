@@ -4,8 +4,8 @@
 	namespace Edde\Common\Link;
 
 	use Edde\Api\Link\IHostUrl;
-	use Edde\Api\Link\ILingGenerator;
 	use Edde\Api\Link\ILinkFactory;
+	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Api\Link\LinkException;
 	use Edde\Common\Usable\AbstractUsable;
 
@@ -15,7 +15,7 @@
 		 */
 		protected $hostUrl;
 		/**
-		 * @var ILingGenerator[]
+		 * @var ILinkGenerator[]
 		 */
 		protected $linkGeneratorList = [];
 
@@ -26,7 +26,7 @@
 			$this->hostUrl = $hostUrl;
 		}
 
-		public function registerLinkGenerator(ILingGenerator $lingGenerator): ILinkFactory {
+		public function registerLinkGenerator(ILinkGenerator $lingGenerator): ILinkFactory {
 			$this->linkGeneratorList[] = $lingGenerator;
 			return $this;
 		}

@@ -204,4 +204,13 @@
 		 * @return array
 		 */
 		public function array(): array;
+
+		/**
+		 * a bit tricky method; crate can be used as output of executive method, set all data and than run this commit which should execute the original method.
+		 *
+		 * @param callable|null $callback
+		 *
+		 * @return ICrate
+		 */
+		public function commit(callable $callback = null): ICrate;
 	}

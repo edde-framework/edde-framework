@@ -7,6 +7,7 @@
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\IProperty;
+	use Edde\Api\Crypt\CryptException;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Common\AbstractObject;
 
@@ -31,6 +32,10 @@
 		 * @var ICrate[]
 		 */
 		protected $linkList = [];
+		/**
+		 * @var callable
+		 */
+		protected $commit;
 
 		public function getSchema(): ISchema {
 			if ($this->schema === null) {
@@ -227,6 +232,24 @@
 				$array[$name] = $crate->array();
 			}
 			return $array;
+		}
+
+		public function commit(callable $callback = null): ICrate {
+			if ($callback === null && $this->commit === null) {
+				throw new CryptException(sprintf('Commit is not available on crate [%s]. It has to be set before calling.', $this->schema->getSchemaName()));
+			}
+			if ($callback === null) {
+				if ($this->isDirty()) {
+					call_user_func($this->commit, $this);
+				}
+				$this->commit = null;
+				return $this;
+			}
+			if ($this->commit !== null) {
+				throw new CryptException(sprintf('Commit callback has been already set on crate [%s]; please execute commit before reuse.', $this->schema->getSchemaName()));
+			}
+			$this->commit = $callback;
+			return $this;
 		}
 
 		public function __clone() {

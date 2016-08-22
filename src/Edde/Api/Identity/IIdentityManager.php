@@ -8,11 +8,20 @@
 	 */
 	interface IIdentityManager extends IAuthenticator, IAuthorizator {
 		/**
+		 * create a new identity
+		 *
+		 * @param array $identity
+		 *
+		 * @return IIdentityManager
+		 */
+		public function createIdentity(array $identity): IIdentityManager;
+
+		/**
 		 * try to build identity by default set of authenticator/authorizator
 		 *
 		 * @param array ...$credentials
 		 *
 		 * @return IIdentity
 		 */
-		public function identity(...$credentials): IIdentity;
+		public function auth(...$credentials): IIdentity;
 	}

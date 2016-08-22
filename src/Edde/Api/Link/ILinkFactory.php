@@ -9,13 +9,13 @@
 	 * Abstract tool for generating links from arbitrary input (strings, other classes, ...). This is useful for
 	 * abstracting application from url's.
 	 */
-	interface ILinkFactory extends ILingGenerator, IUsable {
+	interface ILinkFactory extends ILinkGenerator, IUsable {
 		/**
 		 * register link a generator
 		 *
-		 * @param ILingGenerator $lingGenerator
+		 * @param ILinkGenerator $lingGenerator
 		 *
 		 * @return ILinkFactory
 		 */
-		public function registerLinkGenerator(ILingGenerator $lingGenerator): ILinkFactory;
+		public function registerLinkGenerator(ILinkGenerator $lingGenerator): ILinkFactory;
 	}

@@ -6,7 +6,7 @@
 	/**
 	 * Particular link generator; it is some sort of oposite side of router.
 	 */
-	interface ILingGenerator {
+	interface ILinkGenerator {
 		/**
 		 * generate output link
 		 *

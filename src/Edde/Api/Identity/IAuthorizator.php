@@ -16,5 +16,5 @@
 		 *
 		 * @return IAuthorizator
 		 */
-		public function authorize(IIdentity $identity): IAuthorizator;
+		public function authorize(IIdentity $identity = null): IAuthorizator;
 	}

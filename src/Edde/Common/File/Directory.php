@@ -79,8 +79,12 @@
 			return is_dir($this->directory);
 		}
 
-		public function directory($directory) {
+		public function directory($directory): IDirectory {
 			return new Directory($this->getDirectory() . '/' . $directory);
+		}
+
+		public function parent(): IDirectory {
+			return new Directory($this->getDirectory() . '/..');
 		}
 
 		public function getIterator() {

@@ -11,6 +11,7 @@
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Ext\Runtime\DefaultSetupHandler;
+	use Edde\Ext\Upgrade\InitialIdentityUpgrade;
 	use Edde\Ext\Upgrade\InitialStorageUpgrade;
 
 	class AppSetupHandler extends DefaultSetupHandler {
@@ -22,7 +23,7 @@
 					$cache = $cacheFactory->factory(__DIR__);
 					if (($schemaList = $cache->load('schema-list')) === null) {
 						$schemaList = [];
-						foreach ($rootDirectory->directory('src') as $file) {
+						foreach ($rootDirectory->parent() as $file) {
 							if (strpos($path = $file->getPath(), '-schema.json') === false) {
 								continue;
 							}
@@ -36,6 +37,7 @@
 				})
 				->onSetup(IUpgradeManager::class, function (IContainer $container, IUpgradeManager $upgradeManager) {
 					$upgradeManager->registerUpgrade($container->create(InitialStorageUpgrade::class, '0.0'));
+					$upgradeManager->registerUpgrade($container->create(InitialIdentityUpgrade::class, '0.1'));
 					$upgradeManager->registerUpgrade($container->create(InitialUpgrade::class, '1.0'));
 				});
 		}

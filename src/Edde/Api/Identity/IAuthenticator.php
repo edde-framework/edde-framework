@@ -12,10 +12,10 @@
 		/**
 		 * authenticate a given identity or throw an exception
 		 *
-		 * @param IIdentity $identity
+		 * @param IIdentity $identity if not specified, global one is used
 		 * @param array ...$credentials
 		 *
 		 * @return IAuthenticator
 		 */
-		public function authenticate(IIdentity $identity, ...$credentials): IAuthenticator;
+		public function authenticate(IIdentity $identity = null, ...$credentials): IAuthenticator;
 	}
