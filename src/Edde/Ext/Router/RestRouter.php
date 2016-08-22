@@ -63,7 +63,7 @@
 					$crateList = [];
 					$this->crateFactory->include();
 					if ($reflectionMethod->getNumberOfParameters() > 0 && ($crateName = $reflectionMethod->getParameters()[0]->getClass()) !== null) {
-						$crateList[] = $this->crateFactory->crate($crateName->getName(), json_decode($this->httpRequest->getBody(), true));
+						$crateList[] = $this->crateFactory->crate($crateName->getName(), null, json_decode($this->httpRequest->getBody(), true));
 					}
 					return new Route($api, $method, $parameterList, $crateList);
 				}
