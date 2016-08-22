@@ -212,6 +212,23 @@
 			return $this;
 		}
 
+		public function array(): array {
+			$array = [];
+			foreach ($this->propertyList as $name => $property) {
+				$array[$name] = $property->get();
+			}
+			foreach ($this->collectionList as $name => $collection) {
+				/** @var $crate ICrate */
+				foreach ($collection as $crate) {
+					$array[$name][] = $crate->array();
+				}
+			}
+			foreach ($this->linkList as $name => $crate) {
+				$array[$name] = $crate->array();
+			}
+			return $array;
+		}
+
 		public function __clone() {
 			foreach ($this->propertyList as &$property) {
 				$property = clone $property;

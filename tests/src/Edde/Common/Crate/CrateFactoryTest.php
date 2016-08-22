@@ -85,7 +85,7 @@
 
 		public function testSingleMultiLink() {
 			$source = [
-				Header::class => [
+				Header::class => $src = [
 					'guid' => 'header-guid',
 					'name' => 'header name',
 					'rowCollection' => [
@@ -94,16 +94,20 @@
 							'name' => 'first name',
 							'value' => 'first value',
 							'item' => [
+								'guid' => 'flaaa',
 								'name' => 'whohooo!',
 							],
+							'header' => null,
 						],
 						[
 							'guid' => 'second guid',
 							'name' => 'second name',
 							'value' => 'second value',
 							'item' => [
+								'guid' => 'blaaa',
 								'name' => 'another whohooo!',
 							],
+							'header' => null,
 						],
 					],
 				],
@@ -134,6 +138,8 @@
 			self::assertEquals('second name', $secondRow->get('name'));
 			self::assertInstanceOf(Item::class, $secondItem = $secondRow->getLink('item'));
 			self::assertEquals('another whohooo!', $secondItem->get('name'));
+
+			self::assertEquals($src, $header->array());
 		}
 
 		protected function setUp() {

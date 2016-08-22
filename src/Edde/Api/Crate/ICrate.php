@@ -197,4 +197,11 @@
 		 * @return ICollection
 		 */
 		public function getCollection(string $name): ICollection;
+
+		/**
+		 * dump current crate as an array including collections/links
+		 *
+		 * @return array
+		 */
+		public function array(): array;
 	}
