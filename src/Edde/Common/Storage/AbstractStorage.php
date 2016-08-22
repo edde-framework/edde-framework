@@ -33,25 +33,6 @@
 			$this->crateFactory = $crateFactory;
 		}
 
-		public function load(string $crate, IQuery $query, string $schema = null) {
-			foreach ($this->collection($crate, $query, $schema) as $item) {
-				return $item;
-			}
-			throw new StorageException(sprintf('Cannot retrieve any crate [%s] by the given query.', $crate));
-		}
-
-		public function collection(string $crate, IQuery $query = null, string $schema = null): ICollection {
-			$schema = $schema ?: $crate;
-			if ($query === null) {
-				$query = new SelectQuery();
-				$query->select()
-					->all()
-					->from()
-					->source($schema);
-			}
-			return new Collection($crate, $this, $this->crateFactory, $query, $schema);
-		}
-
 		public function collectionTo(ICrate $crate, string $relation, string $source, string $target, string $crateTo = null): ICollection {
 			$relationSchema = $this->schemaManager->getSchema($relation);
 			$sourceLink = $relationSchema->getLink($source);
@@ -82,5 +63,44 @@
 				->property($targetLink->getTarget()
 					->getName(), $targetAlias);
 			return $this->collection($crateTo ?: $targetSchemaName, $selectQuery, $targetSchemaName);
+		}
+
+		public function collection(string $crate, IQuery $query = null, string $schema = null): ICollection {
+			$schema = $schema ?: $crate;
+			if ($query === null) {
+				$query = new SelectQuery();
+				$query->select()
+					->all()
+					->from()
+					->source($schema);
+			}
+			return new Collection($crate, $this, $this->crateFactory, $query, $schema);
+		}
+
+		public function getLink(ICrate $crate, string $name): ICrate {
+			$link = $crate->getSchema()
+				->getLink($name);
+			$selectQuery = new SelectQuery();
+			$targetSchemaName = $link->getTarget()
+				->getSchema()
+				->getSchemaName();
+			$selectQuery->select()
+				->all()
+				->from()
+				->source($targetSchemaName)
+				->where()
+				->eq()
+				->property($link->getTarget()
+					->getName())
+				->parameter($crate->get($link->getSource()
+					->getName()));
+			return $this->load($targetSchemaName, $selectQuery);
+		}
+
+		public function load(string $crate, IQuery $query, string $schema = null) {
+			foreach ($this->collection($crate, $query, $schema) as $item) {
+				return $item;
+			}
+			throw new StorageException(sprintf('Cannot retrieve any crate [%s] by the given query.', $crate));
 		}
 	}

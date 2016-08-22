@@ -86,4 +86,14 @@
 		 * @return ICrate
 		 */
 		public function load(string $crate, IQuery $query, string $schema = null);
+
+		/**
+		 * load crate by the given link name
+		 *
+		 * @param ICrate $crate
+		 * @param string $name
+		 *
+		 * @return ICrate
+		 */
+		public function getLink(ICrate $crate, string $name): ICrate;
 	}
