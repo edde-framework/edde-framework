@@ -4,13 +4,12 @@
 	namespace Edde\Common\Response;
 
 	use Edde\Api\Html\IHtmlControl;
-	use Edde\Common\Http\HttpResponse;
 
 	/**
 	 * This response is useful for a response to the html page; there must be "something" listening to the specific data of this
 	 * response.
 	 */
-	class HtmlResponse extends AbstractResponse {
+	class HtmlResponse extends JsonHttpResponse {
 		/**
 		 * @var string
 		 */
@@ -19,6 +18,10 @@
 		 * @var IHtmlControl[]
 		 */
 		protected $controlList = [];
+
+		public function __construct() {
+			parent::__construct(null);
+		}
 
 		public function redirect($redirect) {
 			$this->redirect = $redirect;
@@ -38,11 +41,7 @@
 			return $this;
 		}
 
-		public function send() {
-			$httpResponse = new HttpResponse();
-			$headerList = $httpResponse->getHeaderList();
-			$headerList->set('Content-Type', 'application/json');
-			$httpResponse->render();
+		public function render() {
 			$response = [];
 			foreach ($this->controlList as $selector => $control) {
 				$response['selector'][$selector] = [
@@ -53,6 +52,7 @@
 			if ($this->redirect !== null) {
 				$response['redirect'] = $this->redirect;
 			}
-			echo json_encode($response);
+			$this->json = $response;
+			parent::render();
 		}
 	}

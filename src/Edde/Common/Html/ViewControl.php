@@ -114,7 +114,7 @@
 		 */
 		public function redirect(string $redirect) {
 			$this->htmlResponse->redirect($redirect);
-			$this->htmlResponse->send();
+			$this->htmlResponse->render();
 			return $this;
 		}
 
@@ -126,7 +126,7 @@
 		public function response() {
 			$this->use();
 			$this->htmlResponse->setControlList($this->body->getControlList());
-			$this->htmlResponse->send();
+			$this->htmlResponse->render();
 			return $this;
 		}
 
