@@ -30,15 +30,31 @@
 			$this->code = 200;
 			$this->headerList = new HeaderList();
 			$this->cookieList = new CookieList();
-			$this->renderCallback = function () {
-				http_response_code($this->getCode());
-				foreach ($this->getHeaderList() as $header => $value) {
-					header("$header: $value");
-				}
-				foreach ($this->getCookieList() as $cookie) {
-					setcookie($cookie->getName(), $cookie->getValue(), $cookie->getExpire(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly());
-				}
-			};
+			$this->renderCallback = [
+				$this,
+				'callback',
+			];
+		}
+
+		public function setRenderCallback(callable $callback) {
+			$this->renderCallback = $callback;
+			return $this;
+		}
+
+		public function render() {
+			$this->default();
+			call_user_func($this->renderCallback);
+			return $this;
+		}
+
+		protected function default() {
+			http_response_code($this->getCode());
+			foreach ($this->getHeaderList() as $header => $value) {
+				header("$header: $value");
+			}
+			foreach ($this->getCookieList() as $cookie) {
+				setcookie($cookie->getName(), $cookie->getValue(), $cookie->getExpire(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly());
+			}
 		}
 
 		public function getCode() {
@@ -64,16 +80,6 @@
 
 		public function setCookieList(ICookieList $cookieList) {
 			$this->cookieList = $cookieList;
-			return $this;
-		}
-
-		public function setRenderCallback(callable $callback) {
-			$this->renderCallback = $callback;
-			return $this;
-		}
-
-		public function render() {
-			call_user_func($this->renderCallback);
 			return $this;
 		}
 	}

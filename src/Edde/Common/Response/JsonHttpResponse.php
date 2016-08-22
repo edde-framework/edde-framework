@@ -15,13 +15,11 @@
 			parent::__construct();
 			$this->json = $json;
 			$this->headerList->set('Content-Type', 'application/json');
-			$this->setRenderCallback([
-				$this,
-				'send',
-			]);
 		}
 
-		public function send() {
+		public function render() {
+			$this->default();
 			echo json_encode($this->json);
+			return $this;
 		}
 	}
