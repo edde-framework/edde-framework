@@ -13,19 +13,19 @@
 		 *
 		 * @return string
 		 */
-		public function getName();
+		public function getName(): string;
 
 		/**
 		 * initial property
 		 *
 		 * @return ISchemaProperty
 		 */
-		public function getSource();
+		public function getSource(): ISchemaProperty;
 
 		/**
 		 * target property
 		 *
 		 * @return ISchemaProperty
 		 */
-		public function getTarget();
+		public function getTarget(): ISchemaProperty;
 	}

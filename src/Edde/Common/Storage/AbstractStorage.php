@@ -94,7 +94,8 @@
 					->getName())
 				->parameter($crate->get($link->getSource()
 					->getName()));
-			return $this->load($targetSchemaName, $selectQuery);
+			$crate->link($link->getName(), $link = $this->load($targetSchemaName, $selectQuery));
+			return $link;
 		}
 
 		public function load(string $crate, IQuery $query, string $schema = null) {

@@ -26,21 +26,21 @@
 		 * @param ISchemaProperty $source
 		 * @param ISchemaProperty $target
 		 */
-		public function __construct($name, ISchemaProperty $source, ISchemaProperty $target) {
+		public function __construct(string $name, ISchemaProperty $source, ISchemaProperty $target) {
 			$this->name = $name;
 			$this->source = $source;
 			$this->target = $target;
 		}
 
-		public function getName() {
+		public function getName(): string {
 			return $this->name;
 		}
 
-		public function getSource() {
+		public function getSource(): ISchemaProperty {
 			return $this->source;
 		}
 
-		public function getTarget() {
+		public function getTarget(): ISchemaProperty {
 			return $this->target;
 		}
 	}
