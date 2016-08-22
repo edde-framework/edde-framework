@@ -83,7 +83,7 @@
 			return $this->container->create(Collection::class, $schema, $crate);
 		}
 
-		public function crate(string $crate, string $schema = null, array $push = null): ICrate {
+		public function crate(string $crate, string $schema = null, array $load = null): ICrate {
 			$this->use();
 			/** @var $crate ICrate */
 			$crate = $this->container->create($crate);
@@ -91,8 +91,8 @@
 			foreach ($schema->getPropertyList() as $schemaProperty) {
 				$crate->addProperty(new Property($schemaProperty));
 			}
-			if ($push !== null) {
-				$this->load($crate, $push);
+			if ($load !== null) {
+				$this->load($crate, $load);
 			}
 			return $crate;
 		}

@@ -14,11 +14,11 @@
 		 *
 		 * @param string $crate
 		 * @param string $schema
-		 * @param array $push
+		 * @param array $load
 		 *
 		 * @return ICrate
 		 */
-		public function crate(string $crate, string $schema = null, array $push = null): ICrate;
+		public function crate(string $crate, string $schema = null, array $load = null): ICrate;
 
 		/**
 		 * create crate collection
