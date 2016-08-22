@@ -64,7 +64,7 @@
 						$collection->addCrate($this->crate($targetCrate, $targetSchema, $collectionValue));
 					}
 					unset($source[$property]);
-				} else if ($schema->hasLink($property)) {
+				} else if (is_array($value) && $schema->hasLink($property)) {
 					$targetSchema = $schema->getLink($property)
 						->getTarget()
 						->getSchema()
