@@ -19,6 +19,8 @@
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpRequestFactory;
 	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Identity\IIdentity;
+	use Edde\Api\Identity\IIdentityManager;
 	use Edde\Api\Link\IHostUrl;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResourceManager;
@@ -51,6 +53,8 @@
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Http\HttpRequestFactory;
+	use Edde\Common\Identity\Identity;
+	use Edde\Common\Identity\IdentityManager;
 	use Edde\Common\Link\LinkFactory;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Resource\Storage\FileStorage;
@@ -121,6 +125,8 @@
 					},
 					ISessionManager::class => SessionManager::class,
 					IFingerprint::class => DummyFingerprint::class,
+					IIdentity::class => Identity::class,
+					IIdentityManager::class => IdentityManager::class,
 					ISchemaFactory::class => SchemaFactory::class,
 					ISchemaManager::class => SchemaManager::class,
 					IRootDirectory::class => function () {
