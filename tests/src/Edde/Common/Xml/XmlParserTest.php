@@ -117,7 +117,8 @@
 
 		public function testParserNode() {
 			$resourceManager = new ResourceManager();
-			$resourceManager->registerResourceHandler($xmlResourceHandlder = new XmlResourceHandler($this->xmlParser));
+			$resourceManager->registerResourceHandler($xmlResourceHandlder = new XmlResourceHandler());
+			$xmlResourceHandlder->lazyXmlParser($this->xmlParser);
 			$node = $resourceManager->file(__DIR__ . '/assets/a-bit-less-simple.xml');
 			self::assertEquals('root', $node->getName());
 			self::assertEquals(['r' => 'oot'], $node->getAttributeList());

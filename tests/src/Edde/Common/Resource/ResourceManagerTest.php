@@ -74,7 +74,8 @@
 		protected function setUp() {
 			$this->resourceManager = new ResourceManager();
 			$this->resourceManager->registerResourceHandler(new JsonResourceHandler());
-			$this->resourceManager->registerResourceHandler(new XmlResourceHandler(new XmlParser()));
+			$this->resourceManager->registerResourceHandler($xmlResourceHandler = new XmlResourceHandler());
+			$xmlResourceHandler->lazyXmlParser(new XmlParser());
 			$this->resourceManager->registerResourceHandler(new PhpResourceHandler());
 		}
 	}

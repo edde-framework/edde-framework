@@ -394,7 +394,8 @@
 
 		protected function setUp() {
 			$this->resourceManager = new ResourceManager();
-			$this->resourceManager->registerResourceHandler(new XmlResourceHandler(new XmlParser()));
+			$this->resourceManager->registerResourceHandler($xmlResourceHandler = new XmlResourceHandler());
+			$xmlResourceHandler->lazyXmlParser(new XmlParser());
 			$this->container = $container = ContainerFactory::create([
 				IResourceManager::class => $this->resourceManager,
 				ITemplateDirectory::class => function () {

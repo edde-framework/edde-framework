@@ -21,7 +21,7 @@
 		/**
 		 * @param IXmlParser $xmlParser
 		 */
-		public function __construct(IXmlParser $xmlParser) {
+		public function lazyXmlParser(IXmlParser $xmlParser) {
 			$this->xmlParser = $xmlParser;
 		}
 
