@@ -83,6 +83,7 @@
 					case '/':
 						$type = ($last !== '<' ? self::XML_TYPE_SHORTTAG : self::XML_TYPE_CLOSETAG);
 						break;
+					case "\n":
 					case ' ':
 						if ($type !== self::XML_TYPE_DOCTYPE) {
 							$attributeList = $this->parseAttributes($iterator->setContinue());
@@ -150,6 +151,7 @@
 					case '>':
 						$iterator->setSkipNext();
 						return $attributeList;
+					case "\n":
 					case ' ':
 						continue 2;
 					default:
