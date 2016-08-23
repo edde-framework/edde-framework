@@ -5,9 +5,11 @@
 
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Common\Cli\CliUtils;
+	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Router\AbstractRouter;
 
 	class CliRouter extends AbstractRouter {
+		use LazyInjectTrait;
 		/**
 		 * @var IRuntime
 		 */

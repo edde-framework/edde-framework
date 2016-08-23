@@ -90,7 +90,6 @@
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Resource\JsonResourceHandler;
 	use Edde\Ext\Resource\PhpResourceHandler;
-	use Edde\Ext\Router\CliRouter;
 	use Edde\Ext\Router\SimpleRouter;
 
 	class DefaultSetupHandler extends SetupHandler {
@@ -164,7 +163,7 @@
 					ILinkFactory::class => LinkFactory::class,
 				], $factoryList))
 				->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
-					$routerService->registerRouter($container->create(CliRouter::class));
+//					$routerService->registerRouter($container->create(CliRouter::class));
 					$routerService->registerRouter($container->create(SimpleRouter::class));
 				})
 				->onSetup(IResourceManager::class, function (IContainer $container, IResourceManager $resourceManager) {
