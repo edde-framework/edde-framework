@@ -10,5 +10,8 @@
 		{
 			"name": "value"
 		}
-	]
+	],
+	"meta-list": {
+		"storable": true
+	}
 }
