@@ -37,8 +37,12 @@
 					if (is_array($value)) {
 						$root->addNode($itemList = new Node($key));
 						foreach ($value as $item) {
-							$callback($callback, $n = new Node(), $item);
-							$itemList->addNode($n);
+							$itemList->addNode($node = new Node());
+							if (is_object($item) || is_array($item)) {
+								$callback($callback, $node, $item);
+								continue;
+							}
+							$node->setValue($item);
 						}
 						continue;
 					}

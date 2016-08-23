@@ -109,9 +109,24 @@
 			$fooSchema = $schemaList['Foo'];
 			self::assertEquals([
 				'guid',
+				'bool',
+				'auto-bool',
 			], array_keys($fooSchema->getPropertyList()));
 			self::assertTrue($fooSchema->getProperty('guid')
 				->hasGenerator());
+			$boolProperty = $fooSchema->getProperty('bool');
+			self::assertTrue($boolProperty->filter('1'));
+			self::assertTrue($boolProperty->filter('on'));
+			self::assertFalse($boolProperty->filter('0'));
+			self::assertFalse($boolProperty->filter('off'));
+			self::assertFalse($boolProperty->filter(null));
+
+			$automaficallBoolProperty = $fooSchema->getProperty('auto-bool');
+			self::assertTrue($automaficallBoolProperty->filter('1'));
+			self::assertTrue($automaficallBoolProperty->filter('on'));
+			self::assertFalse($automaficallBoolProperty->filter('0'));
+			self::assertFalse($automaficallBoolProperty->filter('off'));
+			self::assertFalse($automaficallBoolProperty->filter(null));
 		}
 
 		protected function setUp() {

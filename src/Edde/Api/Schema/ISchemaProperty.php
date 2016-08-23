@@ -72,4 +72,31 @@
 		 * generate value; if property has no generator, exception should be thrown
 		 */
 		public function generator();
+
+		/**
+		 * if the value has some filter, use them
+		 *
+		 * @param mixed $value
+		 *
+		 * @return mixed
+		 */
+		public function filter($value);
+
+		/**
+		 * execute filters for a setter value
+		 *
+		 * @param mixed $value
+		 *
+		 * @return mixed
+		 */
+		public function setterFilter($value);
+
+		/**
+		 * execute filters for a getter value
+		 *
+		 * @param mixed $value
+		 *
+		 * @return mixed
+		 */
+		public function getterFilter($value);
 	}

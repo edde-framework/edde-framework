@@ -57,15 +57,17 @@
 		public function get($default = null) {
 			if ($this->current === null && $this->value === null) {
 				$this->set($value = $default ? (is_callable($default) ? call_user_func($default) : $default) : ($this->schemaProperty->hasGenerator() ? $this->schemaProperty->generator() : null));
-				return $value;
+				return $this->schemaProperty->getterFilter($this->schemaProperty->filter($value));
 			}
+			$value = $this->value;
 			if ($this->dirty) {
-				return $this->current;
+				$value = $this->current;
 			}
-			return $this->value;
+			return $this->schemaProperty->getterFilter($this->schemaProperty->filter($value));
 		}
 
 		public function set($value) {
+			$value = $this->schemaProperty->setterFilter($this->schemaProperty->filter($value));
 			$this->dirty = false;
 			$this->current = null;
 			if ($this->value !== $value) {

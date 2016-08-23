@@ -11,6 +11,7 @@
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\SchemaFactoryException;
 	use Edde\Common\Container\LazyInjectTrait;
+	use Edde\Common\Filter\BoolFilter;
 	use Edde\Common\Node\NodeQuery;
 	use Edde\Common\Usable\AbstractUsable;
 
@@ -32,6 +33,18 @@
 		 * @var INodeQuery
 		 */
 		protected $propertyListNodeQuery;
+		/**
+		 * @var INodeQuery
+		 */
+		protected $propertyFilterNodeQuery;
+		/**
+		 * @var INodeQuery
+		 */
+		protected $propertySetterFilterNodeQuery;
+		/**
+		 * @var INodeQuery
+		 */
+		protected $propertyGetterFilterNodeQuery;
 		/**
 		 * @var INodeQuery
 		 */
@@ -94,10 +107,38 @@
 		protected function createSchema(INode $schemaNode) {
 			$schema = new Schema($schemaNode->getName(), $schemaNode->getAttribute('namespace'));
 			$schema->setMetaList($schemaNode->getMetaList());
+			$magic = $schema->getMeta('magic', true);
 			foreach ($this->propertyListNodeQuery->filter($schemaNode) as $propertyNode) {
 				$schema->addProperty($property = new SchemaProperty($schema, $propertyNode->getName(), str_replace('[]', '', $type = $propertyNode->getAttribute('type', 'string')), filter_var($propertyNode->getAttribute('required', true), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('unique'), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('identifier'), FILTER_VALIDATE_BOOLEAN), strpos($type, '[]') !== false));
 				if (($generator = $propertyNode->getAttribute('generator')) !== null) {
 					$property->setGenerator($this->container->create($generator));
+				}
+				$type = $property->getType();
+				foreach ($this->propertyFilterNodeQuery->filter($propertyNode) as $filterNode) {
+					$type = null;
+					$property->addFilter($this->container->create($filterNode->getValue()));
+				}
+				foreach ($this->propertySetterFilterNodeQuery->filter($propertyNode) as $filterNode) {
+					$type = null;
+					$property->addSetterFilter($this->container->create($filterNode->getValue()));
+				}
+				foreach ($this->propertyGetterFilterNodeQuery->filter($propertyNode) as $filterNode) {
+					$type = null;
+					$property->addGetterFilter($this->container->create($filterNode->getValue()));
+				}
+				/**
+				 * magicall thing can be turned off
+				 */
+				if ($magic === false) {
+					$type = null;
+				}
+				/**
+				 * support for automagical type convertions
+				 */
+				switch ($type) {
+					case 'bool':
+						$property->addFilter(new BoolFilter());
+						break;
 				}
 			}
 			return $schema;
@@ -105,6 +146,9 @@
 
 		protected function prepare() {
 			$this->propertyListNodeQuery = new NodeQuery('/*/property-list/*');
+			$this->propertyFilterNodeQuery = new NodeQuery('/*/property-list/*/filter/*');
+			$this->propertySetterFilterNodeQuery = new NodeQuery('/*/property-list/*/setter-filter/*');
+			$this->propertyGetterFilterNodeQuery = new NodeQuery('/*/property-list/*/getter-filter/*');
 			$this->collectionNodeQuery = new NodeQuery('/*/collection/*');
 			$this->linkNodeQuery = new NodeQuery('/*/link/*');
 		}

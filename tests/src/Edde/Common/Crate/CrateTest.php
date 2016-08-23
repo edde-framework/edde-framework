@@ -10,6 +10,7 @@
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Crypt\CryptEngine;
+	use Edde\Common\Filter\BoolFilter;
 	use Edde\Common\Filter\GuidFilter;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Schema\Schema;
@@ -96,6 +97,28 @@
 			}
 			self::assertArrayHasKey('guid', $dirty);
 			self::assertSame($dirty['guid'], $crate->get('guid'));
+		}
+
+		public function testFilters() {
+			$crate = new Crate();
+			$schema = new Schema('schema');
+			$crate->addProperty(new Property(new SchemaProperty($schema, 'guid', 'string', false, false, false, true)));
+			$crate->addProperty(new Property($property = new SchemaProperty($schema, 'bool', 'bool', false, false, false, true)));
+			$property->addFilter(new BoolFilter());
+			self::assertFalse($crate->get('bool'));
+			$crate->set('bool', 'on');
+			self::assertTrue($crate->get('bool'));
+		}
+
+		public function testSetterGetterFilters() {
+			$crate = new Crate();
+			$schema = new Schema('schema');
+			$crate->addProperty(new Property(new SchemaProperty($schema, 'guid', 'string', false, false, false, true)));
+			$crate->addProperty(new Property($property = new SchemaProperty($schema, 'bool', 'bool', false, false, false, true)));
+			$property->addSetterFilter(new BoolFilter());
+			self::assertNull($crate->get('bool'));
+			$crate->set('bool', 'on');
+			self::assertTrue($crate->get('bool'));
 		}
 
 		protected function setUp() {

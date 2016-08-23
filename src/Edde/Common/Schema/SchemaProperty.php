@@ -46,6 +46,18 @@
 		 * @var IFilter
 		 */
 		protected $generator;
+		/**
+		 * @var IFilter[]
+		 */
+		protected $filterList = [];
+		/**
+		 * @var IFilter[]
+		 */
+		protected $setterFilterList = [];
+		/**
+		 * @var IFilter[]
+		 */
+		protected $getterFilterList = [];
 
 		/**
 		 * @param ISchema $schema
@@ -140,5 +152,41 @@
 				$this->propertyName = $this->schema->getSchemaName() . '::' . $this->name;
 			}
 			return $this->propertyName;
+		}
+
+		public function addFilter(IFilter $filter) {
+			$this->filterList[] = $filter;
+			return $this;
+		}
+
+		public function addSetterFilter(IFilter $filter) {
+			$this->setterFilterList[] = $filter;
+			return $this;
+		}
+
+		public function addGetterFilter(IFilter $filter) {
+			$this->getterFilterList[] = $filter;
+			return $this;
+		}
+
+		public function filter($value) {
+			foreach ($this->filterList as $filter) {
+				$value = $filter->filter($value, $this);
+			}
+			return $value;
+		}
+
+		public function setterFilter($value) {
+			foreach ($this->setterFilterList as $filter) {
+				$value = $filter->filter($value, $this);
+			}
+			return $value;
+		}
+
+		public function getterFilter($value) {
+			foreach ($this->getterFilterList as $filter) {
+				$value = $filter->filter($value, $this);
+			}
+			return $value;
 		}
 	}
