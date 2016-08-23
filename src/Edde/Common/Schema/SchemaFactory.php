@@ -3,16 +3,23 @@
 
 	namespace Edde\Common\Schema;
 
+	use Edde\Api\Container\IContainer;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\INodeQuery;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\SchemaFactoryException;
+	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Node\NodeQuery;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class SchemaFactory extends AbstractUsable implements ISchemaFactory {
+		use LazyInjectTrait;
+		/**
+		 * @var IContainer
+		 */
+		protected $container;
 		/**
 		 * @var IResourceManager
 		 */
@@ -34,10 +41,11 @@
 		 */
 		protected $linkNodeQuery;
 
-		/**
-		 * @param IResourceManager $resourceManager
-		 */
-		public function __construct(IResourceManager $resourceManager) {
+		public function lazyContainer(IContainer $container) {
+			$this->container = $container;
+		}
+
+		public function lazyResourceManager(IResourceManager $resourceManager) {
 			$this->resourceManager = $resourceManager;
 		}
 
@@ -88,6 +96,9 @@
 			$schema->setMetaList($schemaNode->getMetaList());
 			foreach ($this->propertyListNodeQuery->filter($schemaNode) as $propertyNode) {
 				$schema->addProperty($property = new SchemaProperty($schema, $propertyNode->getName(), str_replace('[]', '', $type = $propertyNode->getAttribute('type', 'string')), filter_var($propertyNode->getAttribute('required', true), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('unique'), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('identifier'), FILTER_VALIDATE_BOOLEAN), strpos($type, '[]') !== false));
+				if (($generator = $propertyNode->getAttribute('generator')) !== null) {
+					$property->setGenerator($this->container->create($generator));
+				}
 			}
 			return $schema;
 		}

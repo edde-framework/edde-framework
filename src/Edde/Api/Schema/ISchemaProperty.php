@@ -60,4 +60,16 @@
 		 * @return bool
 		 */
 		public function isArray(): bool;
+
+		/**
+		 * has this property generator?
+		 *
+		 * @return bool
+		 */
+		public function hasGenerator(): bool;
+
+		/**
+		 * generate value; if property has no generator, exception should be thrown
+		 */
+		public function generator();
 	}

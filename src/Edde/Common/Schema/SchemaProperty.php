@@ -3,8 +3,10 @@
 
 	namespace Edde\Common\Schema;
 
+	use Edde\Api\Filter\IFilter;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaProperty;
+	use Edde\Api\Schema\SchemaException;
 	use Edde\Common\AbstractObject;
 
 	class SchemaProperty extends AbstractObject implements ISchemaProperty {
@@ -40,6 +42,10 @@
 		 * @var bool
 		 */
 		protected $array;
+		/**
+		 * @var IFilter
+		 */
+		protected $generator;
 
 		/**
 		 * @param ISchema $schema
@@ -66,13 +72,6 @@
 
 		public function getName(): string {
 			return $this->name;
-		}
-
-		public function getPropertyName(): string {
-			if ($this->propertyName === null) {
-				$this->propertyName = $this->schema->getSchemaName() . '::' . $this->name;
-			}
-			return $this->propertyName;
 		}
 
 		public function type(string $type) {
@@ -118,5 +117,28 @@
 
 		public function isArray(): bool {
 			return $this->array;
+		}
+
+		public function setGenerator(IFilter $generator) {
+			$this->generator = $generator;
+			return $this;
+		}
+
+		public function generator() {
+			if ($this->hasGenerator() === false) {
+				throw new SchemaException(sprintf('Property [%s] has no generator.', $this->getPropertyName()));
+			}
+			return $this->generator->filter(null, $this);
+		}
+
+		public function hasGenerator(): bool {
+			return $this->generator !== null;
+		}
+
+		public function getPropertyName(): string {
+			if ($this->propertyName === null) {
+				$this->propertyName = $this->schema->getSchemaName() . '::' . $this->name;
+			}
+			return $this->propertyName;
 		}
 	}

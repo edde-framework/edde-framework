@@ -8,7 +8,9 @@
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Common\Xml\XmlResourceHandler;
+	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Resource\JsonResourceHandler;
+	use Edde\Ext\Resource\PhpResourceHandler;
 	use phpunit\framework\TestCase;
 
 	class SchemaFactoryTest extends TestCase {
@@ -85,6 +87,7 @@
 		public function testResourceManager() {
 			$this->schemaFactory->load(__DIR__ . '/assets/header-schema.json');
 			$this->schemaFactory->load(__DIR__ . '/assets/row-schema.json');
+			$this->schemaFactory->load(__DIR__ . '/assets/simple-crate.php');
 			$schemaList = $this->schemaFactory->create();
 			self::assertArrayHasKey('Foo\\Bar\\Header', $schemaList);
 			self::assertArrayHasKey('Foo\\Bar\\Row', $schemaList);
@@ -103,12 +106,21 @@
 				'guid',
 				'header',
 			], array_keys($rowSchema->getPropertyList()));
+			$fooSchema = $schemaList['Foo'];
+			self::assertEquals([
+				'guid',
+			], array_keys($fooSchema->getPropertyList()));
+			self::assertTrue($fooSchema->getProperty('guid')
+				->hasGenerator());
 		}
 
 		protected function setUp() {
 			$resourceManager = new ResourceManager();
 			$resourceManager->registerResourceHandler(new XmlResourceHandler(new XmlParser()));
 			$resourceManager->registerResourceHandler(new JsonResourceHandler());
-			$this->schemaFactory = new SchemaFactory($resourceManager);
+			$resourceManager->registerResourceHandler(new PhpResourceHandler());
+			$this->schemaFactory = new SchemaFactory();
+			$this->schemaFactory->lazyContainer(ContainerFactory::create());
+			$this->schemaFactory->lazyResourceManager($resourceManager);
 		}
 	}

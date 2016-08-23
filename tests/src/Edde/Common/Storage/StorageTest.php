@@ -149,7 +149,9 @@
 		protected function setUp() {
 			$resourceManager = new ResourceManager();
 			$resourceManager->registerResourceHandler(new JsonResourceHandler());
-			$schemaFactory = new SchemaFactory($resourceManager);
+			$schemaFactory = new SchemaFactory();
+			$schemaFactory->lazyContainer(ContainerFactory::create());
+			$schemaFactory->lazyResourceManager($resourceManager);
 			$schemaFactory->load(__DIR__ . '/assets/simple-storable.json');
 			$schemaFactory->load(__DIR__ . '/assets/identity-storable.json');
 			$schemaFactory->load(__DIR__ . '/assets/group-storable.json');
