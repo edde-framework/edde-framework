@@ -9,10 +9,6 @@
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
-	use Edde\Common\Container\Container;
-	use Edde\Common\Container\DependencyFactory;
-	use Edde\Common\Container\Factory\FactoryFactory;
-	use Edde\Common\Container\FactoryManager;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
@@ -28,6 +24,7 @@
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Ext\Cache\DevNullCacheStorage;
 	use Edde\Ext\Cache\FileCacheStorage;
+	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Upgrade\InitialStorageUpgrade;
 	use phpunit\framework\TestCase;
@@ -58,14 +55,16 @@
 			FileUtils::recreate(__DIR__ . '/public');
 			$this->tempDirectory = new TempDirectory(__DIR__ . '/temp');
 			$this->tempDirectory->purge();
-			$cacheFactory = $cacheFactory = new CacheFactory(__DIR__, new DevNullCacheStorage());
-			$factoryManager = new FactoryManager();
-			$factoryManager->registerFactoryFallback(FactoryFactory::createFallback());
-			$container = new Container($factoryManager, new DependencyFactory($factoryManager, $cacheFactory), $cacheFactory);
+			$cacheFactory = new CacheFactory(__DIR__, new DevNullCacheStorage());
 			$this->storage = new DatabaseStorage($this->sqliteDriver = new SqliteDriver('sqlite:' . $this->getDatabaseFileName()), $cacheFactory);
 			$this->schemaManager = new SchemaManager(new SchemaFactory(new ResourceManager()));
 			$this->upgradeManager = new UpgradeManager();
-			$this->upgradeManager->registerUpgrade(new InitialStorageUpgrade($this->storage, $this->schemaManager, '1.0'));
+			$container = ContainerFactory::create([
+				IStorage::class => $this->storage,
+				ISchemaManager::class => $this->schemaManager,
+			]);
+			$this->upgradeManager->registerUpgrade($upgrade = new InitialStorageUpgrade());
+			$container->inject($upgrade);
 			$this->upgradeManager->upgrade();
 		}
 

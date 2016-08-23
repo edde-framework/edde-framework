@@ -31,6 +31,46 @@
 			], $source->getMetaList());
 		}
 
+		public function testXmlResourceHandler() {
+			self::assertInstanceOf(INode::class, $source = $this->resourceManager->file(__DIR__ . '/assets/sample.xml'));
+			self::assertEquals('foo', $source->getName());
+			self::assertEquals('moo', $source->getValue());
+			self::assertEquals([
+				'foo' => 'foo',
+				'poo' => 'poo',
+				'bar' => 'bar',
+			], $source->getAttributeList());
+			self::assertEmpty($source->getMetaList());
+		}
+
+		public function testPhpResourceHandler() {
+			self::assertInstanceOf(INode::class, $source = $this->resourceManager->file(__DIR__ . '/assets/sample.php'));
+			self::assertEquals('foo', $source->getName());
+			self::assertEquals('moo', $source->getValue());
+			self::assertEquals([
+				'foo' => 'foo',
+				'poo' => 'poo',
+				'bar' => 'bar',
+			], $source->getAttributeList());
+			self::assertEquals([
+				'meta' => 'list',
+			], $source->getMetaList());
+			/**
+			 * because php resource handler is based on a require, it must be working more than once
+			 */
+			self::assertInstanceOf(INode::class, $source = $this->resourceManager->file(__DIR__ . '/assets/sample.php'));
+			self::assertEquals('foo', $source->getName());
+			self::assertEquals('moo', $source->getValue());
+			self::assertEquals([
+				'foo' => 'foo',
+				'poo' => 'poo',
+				'bar' => 'bar',
+			], $source->getAttributeList());
+			self::assertEquals([
+				'meta' => 'list',
+			], $source->getMetaList());
+		}
+
 		protected function setUp() {
 			$this->resourceManager = new ResourceManager();
 			$this->resourceManager->registerResourceHandler(new JsonResourceHandler());

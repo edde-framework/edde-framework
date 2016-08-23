@@ -6,26 +6,32 @@
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
+	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\AbstractMacro;
 
 	class SwitchMacro extends AbstractMacro {
-		/**
-		 * @var ICryptEngine
-		 */
-		protected $cryptEngine;
+		use LazyInjectTrait;
+
 		/**
 		 * @var \SplStack
 		 */
 		protected $stack;
+		/**
+		 * @var ICryptEngine
+		 */
+		protected $cryptEngine;
 
-		public function __construct(ICryptEngine $cryptEngine) {
+		public function __construct() {
 			parent::__construct([
 				'm:switch',
 				'm:case',
 			]);
-			$this->cryptEngine = $cryptEngine;
 			$this->stack = new \SplStack();
+		}
+
+		public function lazyCryptEngine(ICryptEngine $cryptEngine) {
+			$this->cryptEngine = $cryptEngine;
 		}
 
 		public function run(INode $root, ICompiler $compiler) {

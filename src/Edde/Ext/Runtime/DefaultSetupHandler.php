@@ -45,7 +45,6 @@
 	use Edde\Common\Application\ExceptionErrorControl;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
-	use Edde\Common\Crate\Crate;
 	use Edde\Common\Crate\CrateDirectory;
 	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Crate\CrateGenerator;
@@ -90,9 +89,9 @@
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Resource\JsonResourceHandler;
+	use Edde\Ext\Resource\PhpResourceHandler;
 	use Edde\Ext\Router\CliRouter;
 	use Edde\Ext\Router\SimpleRouter;
-	use Edde\Ext\Upgrade\InitialStorageUpgrade;
 
 	class DefaultSetupHandler extends SetupHandler {
 		static public function create(ICacheFactory $cacheFactory = null, array $factoryList = []) {
@@ -111,8 +110,6 @@
 						}
 						return $route;
 					},
-					CliRouter::class,
-					SimpleRouter::class,
 					/**
 					 * Http request support
 					 */
@@ -161,24 +158,10 @@
 					IStyleSheetCompiler::class => StyleSheetCompiler::class,
 					IJavaScriptCompiler::class => JavaScriptCompiler::class,
 					IXmlParser::class => XmlParser::class,
-
-					XmlResourceHandler::class,
-					JsonResourceHandler::class,
-
 					IHostUrl::class => function () {
 						throw new RuntimeException(sprintf('Please define [%s] for usage in setup handler.', IHostUrl::class));
 					},
 					ILinkFactory::class => LinkFactory::class,
-
-					InitialStorageUpgrade::class,
-
-					Crate::class,
-
-					SwitchMacro::class,
-					IncludeMacro::class,
-					BindIdAttributeMacro::class,
-					SchemaMacro::class,
-					LoopMacro::class,
 				], $factoryList))
 				->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
 					$routerService->registerRouter($container->create(CliRouter::class));
@@ -187,6 +170,7 @@
 				->onSetup(IResourceManager::class, function (IContainer $container, IResourceManager $resourceManager) {
 					$resourceManager->registerResourceHandler($container->create(XmlResourceHandler::class));
 					$resourceManager->registerResourceHandler($container->create(JsonResourceHandler::class));
+					$resourceManager->registerResourceHandler($container->create(PhpResourceHandler::class));
 				})
 				->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
 					$templateManager->registerMacroList([

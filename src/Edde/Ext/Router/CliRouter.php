@@ -13,10 +13,7 @@
 		 */
 		protected $runtime;
 
-		/**
-		 * @param IRuntime $runtime
-		 */
-		public function __construct(IRuntime $runtime) {
+		public function lazyRuntime(IRuntime $runtime) {
 			$this->runtime = $runtime;
 		}
 

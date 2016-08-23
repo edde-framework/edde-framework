@@ -7,23 +7,26 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
+	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Template\AbstractMacro;
 
 	class BindIdAttributeMacro extends AbstractMacro {
+		use LazyInjectTrait;
+
+		protected $idList;
 		/**
 		 * @var ICryptEngine
 		 */
 		protected $cryptEngine;
-		protected $idList;
 
-		/**
-		 * @param ICryptEngine $cryptEngine
-		 */
-		public function __construct(ICryptEngine $cryptEngine) {
+		public function __construct() {
 			parent::__construct([
 				'm:id',
 				'm:bind',
 			]);
+		}
+
+		public function lazyCryptEngine(ICryptEngine $cryptEngine) {
 			$this->cryptEngine = $cryptEngine;
 		}
 

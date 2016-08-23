@@ -6,23 +6,26 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\ICompiler;
+	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Template\AbstractMacro;
 
 	class IncludeMacro extends AbstractMacro {
+		use LazyInjectTrait;
+
 		/**
 		 * @var IResourceManager
 		 */
 		protected $resourceManager;
 
-		/**
-		 * @param IResourceManager $resourceManager
-		 */
-		public function __construct(IResourceManager $resourceManager) {
+		public function __construct() {
 			parent::__construct([
 				'include',
 				'm:include',
 			]);
+		}
+
+		public function lazyResourceManager(IResourceManager $resourceManager) {
 			$this->resourceManager = $resourceManager;
 		}
 
