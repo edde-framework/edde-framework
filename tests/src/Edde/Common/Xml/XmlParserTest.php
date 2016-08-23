@@ -123,6 +123,30 @@
 			], $handler->getTagList());
 		}
 
+		public function testNewlineBetweenNodes() {
+			$this->xmlParser->file(__DIR__ . '/assets/newline-between-nodes.xml', $handler = new \TestXmlHandler());
+			self::assertEquals([
+				[
+					'r',
+					[],
+				],
+				[
+					'node',
+					[
+						'attr' => 'ibute',
+						'another-attribute' => 'foo',
+					],
+				],
+				[
+					'another-node',
+					[
+						'foo' => 'bar',
+						'boo' => 'poo',
+					],
+				],
+			], $handler->getTagList());
+		}
+
 		public function testMimeType() {
 			$file = new File(__DIR__ . '/assets/simple.xml');
 			self::assertEquals('text/xml', $file->getMime());

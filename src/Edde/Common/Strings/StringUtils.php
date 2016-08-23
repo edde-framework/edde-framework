@@ -414,7 +414,6 @@
 				$string = mb_substr($string, 1, $strlen);
 				$strlen = mb_strlen($string);
 			}
-			yield null;
 		}
 
 		/**

@@ -40,7 +40,6 @@
 				'a',
 				'b',
 				'c',
-				null,
 			], iterator_to_array(StringUtils::createIterator('abc')));
 			self::assertNotEquals("\xEF\xBB\xBFstring", StringUtils::checkUnicode("\xEF\xBB\xBFstring"));
 			self::assertEquals("string", StringUtils::checkUnicode("\xEF\xBB\xBFstring"));

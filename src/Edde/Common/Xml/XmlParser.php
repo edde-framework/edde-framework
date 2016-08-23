@@ -10,6 +10,7 @@
 	use Edde\Api\Xml\XmlParserException;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\File\File;
+	use Edde\Common\Iterator\ChunkIterator;
 	use Edde\Common\Iterator\Iterator;
 	use Edde\Common\Strings\StringUtils;
 
@@ -30,19 +31,20 @@
 
 		public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParser {
 			$value = '';
-			foreach ($resource as $chunk) {
-				foreach ($iterator = new Iterator(StringUtils::createIterator($chunk)) as $char) {
-					switch ($char) {
-						case '<':
-							if ($value !== '') {
-								$xmlHandler->onTextEvent($value);
-							}
-							$this->parseTag($iterator->setContinue(), $xmlHandler);
-							$value = '';
-							break;
-						default:
-							$value .= $char;
-					}
+			foreach ($iterator = new Iterator(new ChunkIterator([
+				StringUtils::class,
+				'createIterator',
+			], $resource->getIterator())) as $char) {
+				switch ($char) {
+					case '<':
+						if ($value !== '') {
+							$xmlHandler->onTextEvent($value);
+						}
+						$this->parseTag($iterator->setContinue(), $xmlHandler);
+						$value = '';
+						break;
+					default:
+						$value .= $char;
 				}
 			}
 			return $this;
@@ -85,7 +87,7 @@
 						break;
 					case "\n":
 					case ' ':
-						if ($type !== self::XML_TYPE_DOCTYPE) {
+						if ($type === self::XML_TYPE_OPENTAG) {
 							$attributeList = $this->parseAttributes($iterator->setContinue());
 							break;
 						}
@@ -188,6 +190,8 @@
 						}
 						$quote = $char;
 						break;
+					case "\t":
+					case "\n":
 					case ' ':
 						if ($open) {
 							$value .= $char;

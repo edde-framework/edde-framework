@@ -1,1 +1,4 @@
-<f name="foo" device-class="bar"/>
+<f
+	name="foo"
+	device-class="bar"
+/>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <node>
-	<!--<another-node/>-->
+	<!--<a/>-->
 	<poo/>
 	<!--
 		Multiline comment which should not be parser, I hope!
