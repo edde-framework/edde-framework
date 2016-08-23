@@ -76,6 +76,10 @@
 
 		public function store(ICrate $crate) {
 			$this->use();
+			$schema = $crate->getSchema();
+			if ($schema->getMeta('storable', false) === false) {
+				throw new StorageException(sprintf('Crate [%s] is not marked as storable (in meta data).', $schema->getSchemaName()));
+			}
 			$crate->update();
 			if ($crate->isDirty() === false) {
 				return $this;

@@ -43,7 +43,9 @@
 			$this->storage->start();
 			try {
 				foreach ($this->schemaManager->getSchemaList() as $schema) {
-					$this->storage->execute(new CreateSchemaQuery($schema));
+					if ($schema->getMeta('storable', false)) {
+						$this->storage->execute(new CreateSchemaQuery($schema));
+					}
 				}
 				$this->storage->commit();
 			} catch (\Exception $e) {
