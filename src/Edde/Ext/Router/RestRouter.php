@@ -51,8 +51,8 @@
 			$id = count($pathList) === 2 ? array_pop($pathList) : null;
 			$namespace = StringUtils::camelize(reset($pathList));
 			$classList = [
-				$this->namespace . '\\' . ($version . '\\' . $namespace . '\\' . $namespace . 'Api'),
-				$this->namespace . '\\' . ($namespace . '\\' . $namespace . 'Api'),
+				$this->namespace . '\\' . ($version . '\\' . $namespace . '\\' . $namespace . 'Service'),
+				$this->namespace . '\\' . ($namespace . '\\' . $namespace . 'Service'),
 			];
 			foreach ($classList as $api) {
 				if (class_exists($api)) {
