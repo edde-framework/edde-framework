@@ -110,11 +110,28 @@
 			], $handler->getTagList());
 		}
 
+		public function testSimpleMultilineAttributes() {
+			$this->xmlParser->file(__DIR__ . '/assets/simple-multiline-attributes.xml', $handler = new \TestXmlHandler());
+			self::assertEquals([
+				[
+					'f',
+					[
+						'name' => 'foo',
+						'device-class' => 'bar',
+					],
+				],
+			], $handler->getTagList());
+		}
+
 		public function testMultilineAttributes() {
 			$this->xmlParser->file(__DIR__ . '/assets/multiline-attributes.xml', $handler = new \TestXmlHandler());
 			self::assertEquals([
 				[
-					'f',
+					'root',
+					[],
+				],
+				[
+					'foo',
 					[
 						'name' => 'foo',
 						'device-class' => 'bar',

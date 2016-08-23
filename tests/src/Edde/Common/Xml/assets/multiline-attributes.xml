@@ -1,4 +1,6 @@
-<f
-	name="foo"
-	device-class="bar"
-/>
+<root>
+	<foo
+		name="foo"
+		device-class="bar"
+	/>
+</root>

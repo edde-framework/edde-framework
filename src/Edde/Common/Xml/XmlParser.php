@@ -154,6 +154,7 @@
 						$iterator->setSkipNext();
 						return $attributeList;
 					case "\n":
+					case "\t":
 					case ' ':
 						continue 2;
 					default:
