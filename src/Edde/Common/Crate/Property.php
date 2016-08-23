@@ -56,7 +56,7 @@
 
 		public function get($default = null) {
 			if ($this->current === null && $this->value === null) {
-				$this->set($value = is_callable($default) ? call_user_func($default) : $default);
+				$this->set($value = $default ? (is_callable($default) ? call_user_func($default) : $default) : ($this->schemaProperty->hasGenerator() ? $this->schemaProperty->generator() : null));
 				return $value;
 			}
 			if ($this->dirty) {

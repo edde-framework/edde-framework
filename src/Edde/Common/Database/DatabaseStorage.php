@@ -76,6 +76,7 @@
 
 		public function store(ICrate $crate) {
 			$this->use();
+			$crate->update();
 			if ($crate->isDirty() === false) {
 				return $this;
 			}

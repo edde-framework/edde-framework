@@ -213,4 +213,11 @@
 		 * @return ICrate
 		 */
 		public function commit(callable $callback = null): ICrate;
+
+		/**
+		 * update links, run generators on empty values, ...
+		 *
+		 * @return ICrate
+		 */
+		public function update(): ICrate;
 	}

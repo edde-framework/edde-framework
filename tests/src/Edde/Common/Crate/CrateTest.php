@@ -9,6 +9,8 @@
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Common\Container\Factory\FactoryFactory;
+	use Edde\Common\Crypt\CryptEngine;
+	use Edde\Common\Filter\GuidFilter;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Schema\Schema;
 	use Edde\Common\Schema\SchemaFactory;
@@ -69,6 +71,31 @@
 				1 => 'bello',
 				'key' => 'whepee!',
 			], $crate->get('hello'));
+		}
+
+		public function testGenerator() {
+			$crate = new Crate();
+			$schema = new Schema('schema');
+			$crate->addProperty(new Property($property = new SchemaProperty($schema, 'guid', 'string', false, false, false, true)));
+			$property->setGenerator($guidFilter = new GuidFilter());
+			$guidFilter->lazyCryptEngine(new CryptEngine());
+			self::assertNotEmpty($guid = $crate->get('guid'));
+			self::assertEquals($guid, $crate->get('guid'));
+		}
+
+		public function testAutomagicallGenerator() {
+			$crate = new Crate();
+			$schema = new Schema('schema');
+			$crate->addProperty(new Property($property = new SchemaProperty($schema, 'guid', 'string', false, false, false, true)));
+			$property->setGenerator($guidFilter = new GuidFilter());
+			$guidFilter->lazyCryptEngine(new CryptEngine());
+			$dirty = [];
+			$crate->update();
+			foreach ($crate->getDirtyList() as $name => $property) {
+				$dirty[$name] = $property->get();
+			}
+			self::assertArrayHasKey('guid', $dirty);
+			self::assertSame($dirty['guid'], $crate->get('guid'));
 		}
 
 		protected function setUp() {

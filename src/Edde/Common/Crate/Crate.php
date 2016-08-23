@@ -252,6 +252,16 @@
 			return $this;
 		}
 
+		public function update(): ICrate {
+			foreach ($this->propertyList as $property) {
+				$schemaProperty = $property->getSchemaProperty();
+				if ($property->isDirty() === false && $schemaProperty->hasGenerator()) {
+					$property->set($schemaProperty->generator());
+				}
+			}
+			return $this;
+		}
+
 		public function __clone() {
 			foreach ($this->propertyList as &$property) {
 				$property = clone $property;
