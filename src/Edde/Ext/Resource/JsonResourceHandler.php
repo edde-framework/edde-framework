@@ -29,10 +29,10 @@
 						$root->setValue($value);
 						continue 2;
 					case 'attribute-list':
-						$root->setAttributeList((array)$value);
+						$root->addAttributeList((array)$value);
 						continue 2;
 					case 'meta-list':
-						$root->setMetaList((array)$value);
+						$root->addMetaList((array)$value);
 						continue 2;
 				}
 				if (is_object($value)) {
