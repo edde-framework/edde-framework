@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Html;
 
-	use Edde\Api\Link\ILinkGenerator;
+	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceList;
 	use Edde\Api\Web\IJavaScriptCompiler;
@@ -33,9 +33,9 @@
 		 */
 		protected $javaScriptCompiler;
 		/**
-		 * @var ILinkGenerator
+		 * @var ILinkFactory
 		 */
-		protected $linkGenerator;
+		protected $linkFactory;
 		/**
 		 * @var IResourceList
 		 */
@@ -57,8 +57,8 @@
 			$this->javaScriptCompiler = $javaScriptCompiler;
 		}
 
-		public function lazyLinkGenerator(ILinkGenerator $linkGenerator) {
-			$this->linkGenerator = $linkGenerator;
+		public function lazyLinkFactory(ILinkFactory $linkFactory) {
+			$this->linkFactory = $linkFactory;
 		}
 
 		public function setAttribute($attribute, $value) {
@@ -122,7 +122,7 @@
 		 * @return $this
 		 */
 		public function redirect($redirect) {
-			$this->htmlResponse->redirect($this->linkGenerator->generate($redirect));
+			$this->htmlResponse->redirect($this->linkFactory->generate($redirect));
 			$this->htmlResponse->render();
 			return $this;
 		}
