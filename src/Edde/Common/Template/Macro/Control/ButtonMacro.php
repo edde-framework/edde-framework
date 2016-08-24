@@ -8,7 +8,7 @@
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Html\ButtonControl;
 
-	class ButtonMacro extends AbstractControlMacro {
+	class ButtonMacro extends ControlMacro {
 		public function __construct() {
 			parent::__construct(['button'], ButtonControl::class);
 		}

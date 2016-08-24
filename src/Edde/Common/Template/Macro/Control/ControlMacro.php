@@ -3,42 +3,64 @@
 
 	namespace Edde\Common\Template\Macro\Control;
 
-	use Edde\Api\Container\IContainer;
-	use Edde\Api\Html\IHtmlControl;
+	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
-	use Edde\Api\Web\IJavaScriptCompiler;
-	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Template\AbstractMacro;
 
 	class ControlMacro extends AbstractMacro {
-		public function __construct() {
-			parent::__construct(['control']);
+		/**
+		 * @var string
+		 */
+		protected $control;
+
+		/**
+		 * @param array $macroList
+		 * @param $control
+		 */
+		public function __construct($macroList, string $control) {
+			parent::__construct(is_array($macroList) ? $macroList : [$macroList]);
+			$this->control = $control;
 		}
 
-		public function run(INode $root, ICompiler $compiler) {
+		public function run(INode $root, ICompiler $compiler, callable $callback = null) {
 			$destination = $compiler->getDestination();
-			$destination->write("\t\tprotected \$container;\n\n");
-			$destination->write("\t\tprotected \$styleSheetCompiler;\n\n");
-			$destination->write("\t\tprotected \$javaScriptCompiler;\n\n");
-			$destination->write("\t\tprotected \$stack;\n\n");
-			$destination->write("\t\tprotected \$proxy;\n\n");
-			$destination->write(sprintf("\t\tpublic function __construct(%s \$container, %s \$styleSheetCompiler, %s \$javaScriptCompiler) {\n", IContainer::class, IStyleSheetCompiler::class, IJavaScriptCompiler::class));
-			$destination->write("\t\t\t\$this->container = \$container;\n");
-			$destination->write("\t\t\t\$this->styleSheetCompiler = \$styleSheetCompiler;\n");
-			$destination->write("\t\t\t\$this->javaScriptCompiler = \$javaScriptCompiler;\n");
-			$destination->write(sprintf("\t\t\t\$this->stack = new %s;\n", \SplStack::class));
-			$destination->write("\t\t}\n\n");
-			$destination->write("\t\tpublic function __call(\$function, array \$parameterList) {\n");
-			$destination->write("\t\t\treturn call_user_func_array([\$this->proxy, \$function], \$parameterList);\n");
-			$destination->write("\t\t}\n\n");
-			$destination->write(sprintf("\t\tpublic function template(\\%s \$parent) {\n", IHtmlControl::class));
-			$destination->write("\t\t\t\$this->proxy = \$parent;\n");
-			if (($attributeList = $root->getAttributeList()) !== []) {
-				$destination->write(sprintf("\t\t\t\$parent->setAttributeList(%s);\n", var_export($attributeList, true)));
+			$destination->write("\t\t\t\$parent = \$this->stack->top();\n");
+			$destination->write(sprintf("\t\t\t\$parent->addControl(\$control = \$this->container->create('%s'));\n", $this->control));
+			$this->writeTextValue($root, $destination, $compiler);
+			$attributeList = $this->getAttributeList($root, $compiler);
+			unset($attributeList['value']);
+			$this->writeAttributeList($attributeList, $destination);
+			$this->macro($root, $compiler, $callback);
+		}
+
+		protected function writeTextValue(INode $root, IFile $destination, ICompiler $compiler) {
+			if ($root->isLeaf() && ($text = $root->getValue($root->getAttribute('value'))) !== null) {
+				$destination->write(sprintf("\t\t\t\$control->setText(%s);\n", $compiler->value($text)));
 			}
-			$destination->write("\t\t\t\$this->stack->push(\$parent);\n");
-			$this->macro($root, $compiler);
-			$destination->write("\t\t}\n");
+		}
+
+		protected function writeAttributeList(array $attributeList, IFile $destination) {
+			if ($attributeList !== []) {
+				$export = [];
+				foreach ($attributeList as $name => $value) {
+					$export[] = "'" . $name . "' => " . $value;
+				}
+				$destination->write(sprintf("\t\t\t\$control->setAttributeList([%s]);\n", implode(",\n", $export)));
+			}
+		}
+
+		protected function macro(INode $root, ICompiler $compiler, callable $callback = null) {
+			$destination = $compiler->getDestination();
+			if ($root->isLeaf()) {
+				parent::macro($root, $compiler, $callback);
+				if ($callback) {
+					$callback($compiler);
+				}
+				return;
+			}
+			$destination->write("\t\t\t\$this->stack->push(\$control);\n");
+			parent::macro($root, $compiler, $callback);
+			$destination->write("\t\t\t\$control = \$this->stack->pop();\n");
 		}
 	}

@@ -7,7 +7,7 @@
 	use Edde\Api\Template\ICompiler;
 	use Edde\Common\Html\HeaderControl;
 
-	class HeaderMacro extends AbstractControlMacro {
+	class HeaderMacro extends ControlMacro {
 		public function __construct() {
 			parent::__construct([
 				'h1',

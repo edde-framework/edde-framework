@@ -15,6 +15,10 @@
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\File\RootDirectory;
+	use Edde\Common\Html\DivControl;
+	use Edde\Common\Html\SpanControl;
+	use Edde\Common\Html\Value\PasswordInputControl;
+	use Edde\Common\Html\Value\TextInputControl;
 	use Edde\Common\Link\ControlLinkGenerator;
 	use Edde\Common\Link\HostUrl;
 	use Edde\Common\Link\LinkFactory;
@@ -23,14 +27,11 @@
 	use Edde\Common\Template\Macro\Control\ButtonMacro;
 	use Edde\Common\Template\Macro\Control\ControlMacro;
 	use Edde\Common\Template\Macro\Control\CssMacro;
-	use Edde\Common\Template\Macro\Control\DivMacro;
 	use Edde\Common\Template\Macro\Control\HeaderMacro;
 	use Edde\Common\Template\Macro\Control\JsMacro;
 	use Edde\Common\Template\Macro\Control\PassMacro;
-	use Edde\Common\Template\Macro\Control\PasswordMacro;
 	use Edde\Common\Template\Macro\Control\SchemaMacro;
-	use Edde\Common\Template\Macro\Control\SpanMacro;
-	use Edde\Common\Template\Macro\Control\TextMacro;
+	use Edde\Common\Template\Macro\Control\TemplateMacro;
 	use Edde\Common\Template\Macro\IncludeMacro;
 	use Edde\Common\Template\Macro\LoopMacro;
 	use Edde\Common\Template\Macro\SwitchMacro;
@@ -416,8 +417,6 @@
 				ICryptEngine::class => CryptEngine::class,
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
-				TextMacro::class,
-				PasswordMacro::class,
 				ILinkFactory::class => function () {
 					$linkFactory = new LinkFactory($hostUrl = HostUrl::create('https://127.0.0.1/foo?param=foo'));
 					$linkFactory->registerLinkGenerator($controlLinkGenerator = new ControlLinkGenerator());
@@ -428,11 +427,11 @@
 			$this->templateManager = $this->container->create(TemplateManager::class);
 			$this->templateManager->onSetup(function (ITemplateManager $templateManager) use ($container) {
 				$templateManager->registerMacroList([
-					new ControlMacro(),
-					new DivMacro(),
-					new SpanMacro(),
-					new TextMacro(),
-					new PasswordMacro(),
+					new TemplateMacro(),
+					new ControlMacro('div', DivControl::class),
+					new ControlMacro('span', SpanControl::class),
+					new ControlMacro('password', PasswordInputControl::class),
+					new ControlMacro('text', TextInputControl::class),
 					new LoopMacro(),
 					new CssMacro(),
 					new JsMacro(),

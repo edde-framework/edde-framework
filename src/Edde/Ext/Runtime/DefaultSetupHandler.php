@@ -51,6 +51,10 @@
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
+	use Edde\Common\Html\DivControl;
+	use Edde\Common\Html\SpanControl;
+	use Edde\Common\Html\Value\PasswordInputControl;
+	use Edde\Common\Html\Value\TextInputControl;
 	use Edde\Common\Http\HttpRequestFactory;
 	use Edde\Common\Identity\Identity;
 	use Edde\Common\Identity\IdentityManager;
@@ -69,14 +73,11 @@
 	use Edde\Common\Template\Macro\Control\ButtonMacro;
 	use Edde\Common\Template\Macro\Control\ControlMacro;
 	use Edde\Common\Template\Macro\Control\CssMacro;
-	use Edde\Common\Template\Macro\Control\DivMacro;
 	use Edde\Common\Template\Macro\Control\HeaderMacro;
 	use Edde\Common\Template\Macro\Control\JsMacro;
 	use Edde\Common\Template\Macro\Control\PassMacro;
-	use Edde\Common\Template\Macro\Control\PasswordMacro;
 	use Edde\Common\Template\Macro\Control\SchemaMacro;
-	use Edde\Common\Template\Macro\Control\SpanMacro;
-	use Edde\Common\Template\Macro\Control\TextMacro;
+	use Edde\Common\Template\Macro\Control\TemplateMacro;
 	use Edde\Common\Template\Macro\IncludeMacro;
 	use Edde\Common\Template\Macro\LoopMacro;
 	use Edde\Common\Template\Macro\SwitchMacro;
@@ -174,14 +175,14 @@
 				})
 				->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
 					$templateManager->registerMacroList([
-						new ControlMacro(),
-						new DivMacro(),
-						new SpanMacro(),
+						new TemplateMacro(),
+						new ControlMacro('div', DivControl::class),
+						new ControlMacro('span', SpanControl::class),
+						new ControlMacro('password', PasswordInputControl::class),
+						new ControlMacro('text', TextInputControl::class),
 						new CssMacro(),
 						new JsMacro(),
 						new ButtonMacro(),
-						new TextMacro(),
-						new PasswordMacro(),
 						new HeaderMacro(),
 						new PassMacro(),
 						$container->create(IncludeMacro::class),
