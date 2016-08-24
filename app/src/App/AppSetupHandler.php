@@ -21,7 +21,7 @@
 					if (($schemaList = $cache->load('schema-list')) === null) {
 						$schemaList = [];
 						foreach ($rootDirectory->parent() as $file) {
-							if (strpos($path = $file->getPath(), '-schema.json') === false) {
+							if (strpos($path = $file->getPath(), '-schema.json') === false && strpos($path, '-schema.php') === false) {
 								continue;
 							}
 							$schemaList[] = $path;
