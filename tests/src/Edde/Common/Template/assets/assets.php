@@ -3,6 +3,7 @@
 	use Edde\Common\Html\DivControl;
 	use Edde\Common\Html\Document\DocumentControl;
 	use Edde\Common\Html\SpanControl;
+	use Edde\Common\Html\TemplateControl;
 
 	class TestDocument extends DocumentControl {
 		public function switchMe() {
@@ -56,5 +57,16 @@
 
 		public function getAnotherValue() {
 			return 'another-item-value ' . $this->item;
+		}
+	}
+
+	class CustomControl extends TemplateControl {
+		public function getAttr() {
+			return 'foo';
+		}
+
+		protected function prepare() {
+			parent::prepare();
+			$this->setTemplate(__DIR__ . '/template/custom-control.xml');
 		}
 	}

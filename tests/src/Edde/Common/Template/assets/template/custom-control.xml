@@ -1,0 +1,3 @@
+<control>
+	<div class="hello" sttr="get-attr()">custom control</div>
+</control>

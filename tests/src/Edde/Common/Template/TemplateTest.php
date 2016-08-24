@@ -13,10 +13,12 @@
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
+	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\Html\DivControl;
 	use Edde\Common\Html\SpanControl;
+	use Edde\Common\Html\TemplateControl;
 	use Edde\Common\Html\Value\PasswordInputControl;
 	use Edde\Common\Html\Value\TextInputControl;
 	use Edde\Common\Link\ControlLinkGenerator;
@@ -397,6 +399,17 @@
 ', $this->control->render());
 		}
 
+		public function testCustomControl() {
+			$control = new TemplateControl();
+			$control->injectContainer($this->container);
+			$control->injectTemplateManager($this->templateManager);
+			$control->setTemplate(__DIR__ . '/assets/template/custom.xml');
+			self::assertEquals('	<div class="will-use-custom-control">
+			<div class="hello" sttr="foo">custom control</div>
+	</div>
+', $control->render());
+		}
+
 		protected function setUp() {
 			$this->resourceManager = new ResourceManager();
 			$this->resourceManager->registerResourceHandler($xmlResourceHandler = new XmlResourceHandler());
@@ -424,7 +437,7 @@
 					return $linkFactory;
 				},
 			]);
-			$this->templateManager = $this->container->create(TemplateManager::class);
+			$this->container->registerFactory(ITemplateManager::class, FactoryFactory::create(ITemplateManager::class, $this->templateManager = $this->container->create(TemplateManager::class)));
 			$this->templateManager->onSetup(function (ITemplateManager $templateManager) use ($container) {
 				$templateManager->registerMacroList([
 					new TemplateMacro(),
@@ -432,6 +445,7 @@
 					new ControlMacro('span', SpanControl::class),
 					new ControlMacro('password', PasswordInputControl::class),
 					new ControlMacro('text', TextInputControl::class),
+					new ControlMacro('custom-control', \CustomControl::class),
 					new LoopMacro(),
 					new CssMacro(),
 					new JsMacro(),

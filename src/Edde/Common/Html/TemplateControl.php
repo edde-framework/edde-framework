@@ -15,6 +15,6 @@
 		public function render() {
 			$this->use();
 			$this->template($this->node->getMeta('template'));
-			parent::render();
+			return parent::render();
 		}
 	}
