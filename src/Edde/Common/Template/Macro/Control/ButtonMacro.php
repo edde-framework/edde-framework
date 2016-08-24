@@ -23,7 +23,7 @@
 			}
 			$action = $root->getAttribute('action');
 			unset($attributeList['action']);
-			$destination->write(sprintf("\t\t\t\$control->setAction(get_class(\$this->proxy), %s);\n", $compiler->value($action)));
+			$destination->write(sprintf("\t\t\t\$control->setAction([\$this->proxy, %s]);\n", $compiler->value($action)));
 			$this->writeAttributeList($attributeList, $destination);
 			$this->macro($root, $compiler, $callback);
 		}

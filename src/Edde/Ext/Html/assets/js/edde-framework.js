@@ -1,6 +1,6 @@
 var Edde = {
-	execute: function (control, action, parameterList) {
-		return $.post('?control=' + control + '&action=' + action, parameterList || {}).fail(function () {
+	execute: function (url, parameterList) {
+		return $.post(url, parameterList || {}).fail(function () {
 			alert('General server error; this should be fixed by a developer.');
 		}).done(function (data) {
 			if (data.redirect) {
@@ -20,13 +20,21 @@ var Edde = {
 		});
 	},
 	bind: function () {
+		var $document = $(document);
 		$('.edde-text-input').each(function () {
 			this.getValue = function () {
 				return $(this).val();
 			};
 		});
-		$('.edde-hide-on-click').on('click', function () {
+		$document.on('click', '.edde-hide-on-click', function () {
 			$(this).hide();
+		});
+		$document.on('click', '.edde-clickable:not(.disabled)', function () {
+			var $this = $(this);
+			$this.addClass('disabled');
+			Edde.execute($this.data('action'), Edde.crate($this.data('bind'))).always(function () {
+				$this.removeClass('disabled');
+			});
 		});
 	},
 	crate: function (id) {
@@ -45,11 +53,4 @@ var Edde = {
 
 $(document).ready(function () {
 	Edde.bind();
-	$(document).on('click', '.edde-clickable:not(.disabled)', function () {
-		var $this = $(this);
-		$this.addClass('disabled');
-		Edde.execute($this.data('control'), $this.data('action'), Edde.crate($this.data('bind'))).always(function () {
-			$this.removeClass('disabled');
-		});
-	});
 });

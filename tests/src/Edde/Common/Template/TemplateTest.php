@@ -7,6 +7,7 @@
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Html\IHtmlControl;
+	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\ITemplateDirectory;
 	use Edde\Api\Template\ITemplateManager;
@@ -14,6 +15,9 @@
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\File\RootDirectory;
+	use Edde\Common\Link\ControlLinkGenerator;
+	use Edde\Common\Link\HostUrl;
+	use Edde\Common\Link\LinkFactory;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Template\Macro\Control\BindIdAttributeMacro;
 	use Edde\Common\Template\Macro\Control\ButtonMacro;
@@ -94,7 +98,7 @@
 		<title></title>
 	</head>
 	<body>
-		<div class="button edde-clickable" data-control="TestDocument" data-action="on-update">foo</div>
+		<div class="button edde-clickable" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=on-update">foo</div>
 	</body>
 </html>
 ', $this->control->render());
@@ -414,6 +418,12 @@
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
 				TextMacro::class,
 				PasswordMacro::class,
+				ILinkGenerator::class => function () {
+					$linkGenerator = new LinkFactory($hostUrl = HostUrl::create('https://127.0.0.1/foo?param=foo'));
+					$linkGenerator->registerLinkGenerator($controlLinkGenerator = new ControlLinkGenerator());
+					$controlLinkGenerator->lazyHostUrl($hostUrl);
+					return $linkGenerator;
+				},
 			]);
 			$this->templateManager = $this->container->create(TemplateManager::class);
 			$this->templateManager->onSetup(function (ITemplateManager $templateManager) use ($container) {
