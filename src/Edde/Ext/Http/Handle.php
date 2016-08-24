@@ -76,7 +76,7 @@
 				$this->curl = null;
 				throw new ClientException(sprintf('%s: %s', $this->url, $error), $errorCode);
 			}
-			$this->contentType = curl_getinfo($this->curl, CURLINFO_CONTENT_TYPE);
+			$this->contentType = substr($contentType = curl_getinfo($this->curl, CURLINFO_CONTENT_TYPE), 0, ($index = strpos($contentType, ';')) === false ? strlen($contentType) : $index);
 			curl_close($this->curl);
 			$this->curl = null;
 			if (isset($this->contentTypeHandlerList[$this->contentType])) {
