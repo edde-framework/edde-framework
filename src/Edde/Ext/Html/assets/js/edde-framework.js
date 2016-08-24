@@ -1,4 +1,18 @@
 var Edde = {
+	init: function () {
+		var $document = $(document);
+		$document.on('click', '.edde-hide-on-click', function () {
+			$(this).hide();
+		});
+		$document.on('click', '.edde-clickable:not(.disabled)', function () {
+			var $this = $(this);
+			$this.addClass('disabled');
+			Edde.execute($this.data('action'), Edde.crate($this.data('bind'))).always(function () {
+				$this.removeClass('disabled');
+			});
+		});
+		this.bind();
+	},
 	execute: function (url, parameterList) {
 		return $.post(url, parameterList || {}).fail(function () {
 			alert('General server error; this should be fixed by a developer.');
@@ -10,6 +24,9 @@ var Edde = {
 				$.each(data.selector, function (selector, value) {
 					switch (value.action) {
 						case 'replace':
+							/**
+							 * double selector is intentional
+							 */
 							$(selector).replaceWith(value.source);
 							$(selector).show();
 							break;
@@ -20,21 +37,10 @@ var Edde = {
 		});
 	},
 	bind: function () {
-		var $document = $(document);
 		$('.edde-text-input').each(function () {
 			this.getValue = function () {
 				return $(this).val();
 			};
-		});
-		$document.on('click', '.edde-hide-on-click', function () {
-			$(this).hide();
-		});
-		$document.on('click', '.edde-clickable:not(.disabled)', function () {
-			var $this = $(this);
-			$this.addClass('disabled');
-			Edde.execute($this.data('action'), Edde.crate($this.data('bind'))).always(function () {
-				$this.removeClass('disabled');
-			});
 		});
 	},
 	crate: function (id) {
@@ -52,5 +58,5 @@ var Edde = {
 };
 
 $(document).ready(function () {
-	Edde.bind();
+	Edde.init();
 });
