@@ -54,6 +54,7 @@
 	use Edde\Common\Http\HttpRequestFactory;
 	use Edde\Common\Identity\Identity;
 	use Edde\Common\Identity\IdentityManager;
+	use Edde\Common\Link\ControlLinkGenerator;
 	use Edde\Common\Link\LinkFactory;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Resource\Storage\FileStorage;
@@ -189,6 +190,9 @@
 						$container->create(SchemaMacro::class),
 						$container->create(LoopMacro::class),
 					]);
+				})
+				->onSetup(ILinkFactory::class, function (IContainer $container, ILinkFactory $linkFactory) {
+					$linkFactory->registerLinkGenerator($container->create(ControlLinkGenerator::class));
 				});
 		}
 	}
