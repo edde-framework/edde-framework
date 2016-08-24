@@ -118,7 +118,7 @@
 	</head>
 	<body>
 		<div id="blabla" data-schema="Foo\Bar\Schema" data-property="bar"></div>
-		<div class="button edde-clickable" data-control="TestDocument" data-action="foo" data-bind="blabla"></div>
+		<div class="button edde-clickable" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=foo" data-bind="blabla"></div>
 	</body>
 </html>
 ', $this->control->render());
@@ -266,8 +266,8 @@
 		<title></title>
 	</head>
 	<body>
-		<div class="button edde-clickable looped-one" data-control="TestDocument" data-action="first"></div>
-		<div class="button edde-clickable another-looop" data-control="TestDocument" data-action="second"></div>
+		<div class="button edde-clickable looped-one" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=first"></div>
+		<div class="button edde-clickable another-looop" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=second"></div>
 	</body>
 </html>
 ', $this->control->render());
@@ -387,9 +387,9 @@
 			<span class="third special-span-class"></span>
 		</div>
 		<div class="child-pass">
-			<div class="button edde-clickable first special-button-class" data-control="TestDocument" data-action="foo"></div>
-			<div class="button edde-clickable second special-button-class" data-control="TestDocument" data-action="foo"></div>
-			<div class="button edde-clickable third special-button-class" data-control="TestDocument" data-action="foo"></div>
+			<div class="button edde-clickable first special-button-class" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=foo"></div>
+			<div class="button edde-clickable second special-button-class" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=foo"></div>
+			<div class="button edde-clickable third special-button-class" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=foo"></div>
 		</div>
 	</body>
 </html>
