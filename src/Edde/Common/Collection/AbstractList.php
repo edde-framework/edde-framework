@@ -21,6 +21,11 @@
 			return empty($this->list);
 		}
 
+		public function put(array $array): IList {
+			$this->list = $array;
+			return $this;
+		}
+
 		public function set(string $name, $value): IList {
 			$this->list[$name] = $value;
 			return $this;

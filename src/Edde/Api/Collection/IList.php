@@ -17,6 +17,13 @@
 		public function isEmpty(): bool;
 
 		/**
+		 * @param array $array
+		 *
+		 * @return IList
+		 */
+		public function put(array $array): IList;
+
+		/**
 		 * @param string $name
 		 * @param string $value
 		 *
