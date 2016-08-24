@@ -3,19 +3,19 @@
 
 	namespace Edde\Common\Html;
 
-	use Edde\Api\Link\ILinkGenerator;
+	use Edde\Api\Link\ILinkFactory;
 	use Edde\Common\Container\LazyInjectTrait;
 
 	class ButtonControl extends AbstractHtmlControl {
 		use LazyInjectTrait;
 
 		/**
-		 * @var ILinkGenerator
+		 * @var ILinkFactory
 		 */
-		protected $linkGenerator;
+		protected $linkFactory;
 
-		public function lazyLinkGenerator(ILinkGenerator $linkGenerator) {
-			$this->linkGenerator = $linkGenerator;
+		public function lazyLinkFactory(ILinkFactory $linkFactory) {
+			$this->linkFactory = $linkFactory;
 		}
 
 		public function setTitle($title) {
@@ -48,7 +48,7 @@
 		}
 
 		public function setAction($action) {
-			$this->setAttribute('data-action', $this->linkGenerator->generate($action));
+			$this->setAttribute('data-action', $this->linkFactory->generate($action));
 			return $this;
 		}
 

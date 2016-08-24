@@ -7,7 +7,7 @@
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Html\IHtmlControl;
-	use Edde\Api\Link\ILinkGenerator;
+	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\ITemplateDirectory;
 	use Edde\Api\Template\ITemplateManager;
@@ -418,11 +418,11 @@
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
 				TextMacro::class,
 				PasswordMacro::class,
-				ILinkGenerator::class => function () {
-					$linkGenerator = new LinkFactory($hostUrl = HostUrl::create('https://127.0.0.1/foo?param=foo'));
-					$linkGenerator->registerLinkGenerator($controlLinkGenerator = new ControlLinkGenerator());
+				ILinkFactory::class => function () {
+					$linkFactory = new LinkFactory($hostUrl = HostUrl::create('https://127.0.0.1/foo?param=foo'));
+					$linkFactory->registerLinkGenerator($controlLinkGenerator = new ControlLinkGenerator());
 					$controlLinkGenerator->lazyHostUrl($hostUrl);
-					return $linkGenerator;
+					return $linkFactory;
 				},
 			]);
 			$this->templateManager = $this->container->create(TemplateManager::class);
