@@ -28,7 +28,6 @@
 	use Edde\Api\Resource\Storage\IStorageDirectory;
 	use Edde\Api\Router\IRoute;
 	use Edde\Api\Router\IRouterService;
-	use Edde\Api\Router\RouterException;
 	use Edde\Api\Runtime\RuntimeException;
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
@@ -42,7 +41,6 @@
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Application\Application;
-	use Edde\Common\Application\ExceptionErrorControl;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Crate\CrateDirectory;
@@ -59,6 +57,7 @@
 	use Edde\Common\Identity\Identity;
 	use Edde\Common\Identity\IdentityManager;
 	use Edde\Common\Link\ControlLinkGenerator;
+	use Edde\Common\Link\HostUrl;
 	use Edde\Common\Link\LinkFactory;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Resource\Storage\FileStorage;
@@ -88,6 +87,7 @@
 	use Edde\Common\Web\StyleSheetCompiler;
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Common\Xml\XmlResourceHandler;
+	use Edde\Ext\Application\ExceptionErrorControl;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Resource\JsonResourceHandler;
@@ -106,10 +106,7 @@
 					IErrorControl::class => ExceptionErrorControl::class,
 					IRouterService::class => RouterService::class,
 					IRoute::class => function (IRouterService $routerService) {
-						if (($route = $routerService->route()) === null) {
-							throw new RouterException(sprintf('Cannot find route for current application request.'));
-						}
-						return $route;
+						return $routerService->route();
 					},
 					/**
 					 * Http request support
@@ -159,8 +156,8 @@
 					IStyleSheetCompiler::class => StyleSheetCompiler::class,
 					IJavaScriptCompiler::class => JavaScriptCompiler::class,
 					IXmlParser::class => XmlParser::class,
-					IHostUrl::class => function () {
-						throw new RuntimeException(sprintf('Please define [%s] for usage in setup handler.', IHostUrl::class));
+					IHostUrl::class => function (IHttpRequest $httpRequest) {
+						return HostUrl::create((string)$httpRequest->getUrl());
 					},
 					ILinkFactory::class => LinkFactory::class,
 				], $factoryList))

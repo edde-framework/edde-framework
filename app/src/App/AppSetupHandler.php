@@ -3,7 +3,6 @@
 
 	namespace App;
 
-	use App\Login\LoginView;
 	use App\Upgrade\InitialUpgrade;
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Container\IContainer;
@@ -16,9 +15,7 @@
 
 	class AppSetupHandler extends DefaultSetupHandler {
 		static public function create(ICacheFactory $cacheFactory = null, array $factoryList = []) {
-			return parent::create($cacheFactory, array_merge([
-				LoginView::class,
-			], $factoryList))
+			return parent::create($cacheFactory, array_merge([], $factoryList))
 				->onSetup(ISchemaFactory::class, function (ICacheFactory $cacheFactory, IRootDirectory $rootDirectory, ISchemaFactory $schemaFactory) {
 					$cache = $cacheFactory->factory(__DIR__);
 					if (($schemaList = $cache->load('schema-list')) === null) {
