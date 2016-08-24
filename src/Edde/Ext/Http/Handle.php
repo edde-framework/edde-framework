@@ -80,7 +80,7 @@
 			curl_close($this->curl);
 			$this->curl = null;
 			if (isset($this->contentTypeHandlerList[$this->contentType])) {
-				$this->contentTypeHandlerList[$this->contentType]($this);
+				$this->content = $this->contentTypeHandlerList[$this->contentType]($this);
 			}
 			return $this;
 		}
