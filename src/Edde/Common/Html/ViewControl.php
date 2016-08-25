@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Html;
 
+	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceList;
@@ -12,6 +13,7 @@
 	use Edde\Common\File\File;
 	use Edde\Common\Html\Document\DocumentControl;
 	use Edde\Common\Html\Document\MetaControl;
+	use Edde\Common\Response\AjaxResponse;
 	use Edde\Common\Response\HtmlResponse;
 
 	/**
@@ -21,9 +23,9 @@
 		use LazyInjectTrait;
 		use TemplateTrait;
 		/**
-		 * @var HtmlResponse
+		 * @var IHttpResponse
 		 */
-		protected $htmlResponse;
+		protected $httpResponse;
 		/**
 		 * @var IStyleSheetCompiler
 		 */
@@ -45,8 +47,8 @@
 		 */
 		protected $javaScriptList;
 
-		public function lazyHtmlResponse(HtmlResponse $htmlResponse) {
-			$this->htmlResponse = $htmlResponse;
+		public function lazyHttpResponse(IHttpResponse $httpResponse) {
+			$this->httpResponse = $httpResponse;
 		}
 
 		public function lazyStyleSheetCompiler(IStyleSheetCompiler $styleSheetCompiler) {
@@ -102,6 +104,39 @@
 			return $this;
 		}
 
+		/**
+		 * response redirect response to the client
+		 *
+		 * @param mixed $redirect
+		 *
+		 * @return $this
+		 */
+		public function redirect($redirect) {
+			(new AjaxResponse($this->httpResponse))->redirect($this->linkFactory->generate($redirect))
+				->render();
+			return $this;
+		}
+
+		/**
+		 * method specific for this "presenter"; this will sent a AjaxResponse with controls currently set to the body
+		 *
+		 * @return $this
+		 */
+		public function ajax() {
+			$this->use();
+			(new AjaxResponse($this->httpResponse))->setControlList($this->body->getControlList())
+				->render();
+			return $this;
+		}
+
+		public function response() {
+			$this->use();
+			(new HtmlResponse($this->httpResponse))->render(function () {
+				return $this->render();
+			});
+			return $this;
+		}
+
 		public function render() {
 			if ($this->styleSheetList->isEmpty() === false) {
 				$this->head->addStyleSheet($this->styleSheetCompiler->compile($this->styleSheetList)
@@ -112,31 +147,6 @@
 					->getRelativePath());
 			}
 			return parent::render();
-		}
-
-		/**
-		 * send redirect response to the client
-		 *
-		 * @param mixed $redirect
-		 *
-		 * @return $this
-		 */
-		public function redirect($redirect) {
-			$this->htmlResponse->redirect($this->linkFactory->generate($redirect));
-			$this->htmlResponse->render();
-			return $this;
-		}
-
-		/**
-		 * method specific for this "presenter"; this will sent a HtmlResponse with controls currently set to the body
-		 *
-		 * @return $this
-		 */
-		public function response() {
-			$this->use();
-			$this->htmlResponse->setControlList($this->body->getControlList());
-			$this->htmlResponse->render();
-			return $this;
 		}
 
 		protected function prepare() {

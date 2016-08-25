@@ -3,13 +3,16 @@
 
 	namespace Edde\Common\Session;
 
+	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Session\IFingerprint;
 	use Edde\Api\Session\ISession;
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Session\SessionException;
+	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class SessionManager extends AbstractUsable implements ISessionManager {
+		use LazyInjectTrait;
 		/**
 		 * @var IFingerprint
 		 */
@@ -22,10 +25,18 @@
 		 * @var ISession[]
 		 */
 		protected $sessionList = [];
+		/**
+		 * @var IHttpResponse
+		 */
+		protected $httpResponse;
 
 		public function __construct(IFingerprint $fingerprint) {
 			$this->fingerprint = $fingerprint;
 			$this->namespace = 'edde';
+		}
+
+		public function lazyHttpResponse(IHttpResponse $httpResponse) {
+			$this->httpResponse = $httpResponse;
 		}
 
 		public function getSession(string $name): ISession {
@@ -48,6 +59,12 @@
 				session_id($fingerprint);
 			}
 			session_start();
+			$headerList = $this->httpResponse->getHeaderList();
+			foreach (headers_list() as $header) {
+				list($name, $header) = explode(':', $header, 2);
+				$headerList->set(trim($name), trim($header));
+			}
+			header_remove();
 			return $this;
 		}
 

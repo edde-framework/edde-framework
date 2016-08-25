@@ -29,10 +29,10 @@
 				throw $e;
 			} catch (RouterException $e) {
 				$this->template(__DIR__ . '/template/404.xml');
-				$this->send();
+				$this->response();
 			} catch (\Exception $e) {
 				$this->template(__DIR__ . '/template/500.xml');
-				$this->send();
+				$this->response();
 			}
 		}
 	}

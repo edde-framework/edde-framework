@@ -8,7 +8,7 @@
 	 */
 	interface IResponse {
 		/**
-		 * send a repsonse to the output (http, console, ...)
+		 * response a repsonse to the output (http, console, ...)
 		 *
 		 * @return mixed
 		 */

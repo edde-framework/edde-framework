@@ -149,11 +149,4 @@
 		 * @return string
 		 */
 		public function render();
-
-		/**
-		 * execute "echo" of this component
-		 *
-		 * @return $this
-		 */
-		public function send();
 	}

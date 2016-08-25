@@ -3,6 +3,8 @@
 
 	namespace Edde\Api\Http;
 
+	use Edde\Api\Response\IResponse;
+
 	/**
 	 * Simple interface for working with http response.
 	 */
@@ -12,52 +14,54 @@
 		 *
 		 * @param int $code
 		 *
-		 * @return $this
+		 * @return IHttpResponse
 		 */
-		public function setCode($code);
+		public function setCode(int $code): IHttpResponse;
 
 		/**
 		 * return http response code
 		 *
 		 * @return int
 		 */
-		public function getCode();
+		public function getCode(): int;
 
 		/**
 		 * @param IHeaderList $headerList
 		 *
-		 * @return $this
+		 * @return IHttpResponse
 		 */
-		public function setHeaderList(IHeaderList $headerList);
+		public function setHeaderList(IHeaderList $headerList): IHttpResponse;
 
 		/**
 		 * @return IHeaderList
 		 */
-		public function getHeaderList();
+		public function getHeaderList(): IHeaderList;
 
 		/**
 		 * @param ICookieList $cookieList
 		 *
-		 * @return $this
+		 * @return IHttpResponse
 		 */
-		public function setCookieList(ICookieList $cookieList);
+		public function setCookieList(ICookieList $cookieList): IHttpResponse;
 
 		/**
 		 * @return ICookieList|ICookie[]
 		 */
-		public function getCookieList();
+		public function getCookieList(): ICookieList;
 
 		/**
-		 * @param callable $callback
+		 * set response body
 		 *
-		 * @return $this
+		 * @param IResponse $response null will remove current response
+		 *
+		 * @return IHttpResponse
 		 */
-		public function setRenderCallback(callable $callback);
+		public function setResponse(IResponse $response = null): IHttpResponse;
 
 		/**
 		 * execute response "rendering"; basically it "echoes" output
 		 *
-		 * @return void
+		 * @return IHttpResponse
 		 */
-		public function render();
+		public function render(): IHttpResponse;
 	}

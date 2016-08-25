@@ -6,6 +6,7 @@
 	use Edde\Api\Http\ICookieList;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Response\IResponse;
 	use Edde\Common\AbstractObject;
 
 	class HttpResponse extends AbstractObject implements IHttpResponse {
@@ -22,32 +23,17 @@
 		 */
 		protected $cookieList;
 		/**
-		 * @var callable
+		 * @var IResponse
 		 */
-		protected $renderCallback;
+		protected $response;
 
 		public function __construct() {
 			$this->code = 200;
 			$this->headerList = new HeaderList();
 			$this->cookieList = new CookieList();
-			$this->renderCallback = [
-				$this,
-				'callback',
-			];
 		}
 
-		public function setRenderCallback(callable $callback) {
-			$this->renderCallback = $callback;
-			return $this;
-		}
-
-		public function render() {
-			$this->default();
-			call_user_func($this->renderCallback);
-			return $this;
-		}
-
-		protected function default() {
+		public function render(): IHttpResponse {
 			http_response_code($this->getCode());
 			foreach ($this->getHeaderList() as $header => $value) {
 				header("$header: $value");
@@ -55,31 +41,40 @@
 			foreach ($this->getCookieList() as $cookie) {
 				setcookie($cookie->getName(), $cookie->getValue(), $cookie->getExpire(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly());
 			}
+			if ($this->response) {
+				$this->response->send();
+			}
+			return $this;
 		}
 
-		public function getCode() {
+		public function getCode(): int {
 			return $this->code;
 		}
 
-		public function setCode($code) {
+		public function setCode(int $code): IHttpResponse {
 			$this->code = $code;
 		}
 
-		public function getHeaderList() {
+		public function getHeaderList(): IHeaderList {
 			return $this->headerList;
 		}
 
-		public function setHeaderList(IHeaderList $headerList) {
+		public function setHeaderList(IHeaderList $headerList): IHttpResponse {
 			$this->headerList = $headerList;
 			return $this;
 		}
 
-		public function getCookieList() {
+		public function getCookieList(): ICookieList {
 			return $this->cookieList;
 		}
 
-		public function setCookieList(ICookieList $cookieList) {
+		public function setCookieList(ICookieList $cookieList): IHttpResponse {
 			$this->cookieList = $cookieList;
+			return $this;
+		}
+
+		public function setResponse(IResponse $response = null): IHttpResponse {
+			$this->response = $response;
 			return $this;
 		}
 	}

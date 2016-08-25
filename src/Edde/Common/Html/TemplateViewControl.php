@@ -12,7 +12,7 @@
 				return parent::__call($name, $arguments);
 			}
 			$this->template();
-			$this->send();
+			$this->response();
 			return $this;
 		}
 

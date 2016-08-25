@@ -55,6 +55,7 @@
 	use Edde\Common\Html\Value\PasswordInputControl;
 	use Edde\Common\Html\Value\TextInputControl;
 	use Edde\Common\Http\HttpRequestFactory;
+	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Identity\Authenticator\AuthenticatorManager;
 	use Edde\Common\Identity\Authorizato\AuthorizatorManager;
 	use Edde\Common\Identity\Identity;
@@ -116,9 +117,7 @@
 					IHttpRequest::class => function (IHttpRequestFactory $httpRequestFactory) {
 						return $httpRequestFactory->create();
 					},
-					IHttpResponse::class => function () {
-						throw new RuntimeException(sprintf('Do not request [%s] from the global space (container) as it is bad practice.', IHttpResponse::class));
-					},
+					IHttpResponse::class => HttpResponse::class,
 					ISessionManager::class => SessionManager::class,
 					IFingerprint::class => DummyFingerprint::class,
 					IIdentity::class => Identity::class,

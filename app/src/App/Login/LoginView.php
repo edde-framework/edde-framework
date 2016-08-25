@@ -10,11 +10,6 @@
 	class LoginView extends EddeViewControl {
 		use SessionTrait;
 
-		public function actionLogin() {
-			dump($this->session->get('poo'));
-			dump(headers_list());
-		}
-
 		public function handleOnLogin(LoginCrate $loginCrate) {
 			$this->redirect([
 				HomeView::class,

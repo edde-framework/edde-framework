@@ -47,7 +47,7 @@
 		public function actionSetup() {
 			$this->use();
 			$this->template();
-			$this->send();
+			$this->response();
 		}
 
 		public function handleOnUpgrade() {
@@ -61,7 +61,7 @@
 				$this->message->addClass('error')
 					->setText($e->getMessage());
 			}
-			$this->response();
+			$this->ajax();
 		}
 
 		public function handleOnRebuildCrates() {
@@ -75,7 +75,7 @@
 				$this->message->addClass('error')
 					->setText($e->getMessage());
 			}
-			$this->response();
+			$this->ajax();
 		}
 
 		public function handleOnClearCache() {
@@ -89,7 +89,7 @@
 				$this->message->addClass('error')
 					->setText($e->getMessage());
 			}
-			$this->response();
+			$this->ajax();
 		}
 
 		protected function prepare() {

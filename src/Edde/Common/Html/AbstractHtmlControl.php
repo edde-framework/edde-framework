@@ -107,10 +107,6 @@
 			return $this->getAttribute('class');
 		}
 
-		public function send() {
-			echo $this->render();
-		}
-
 		public function render() {
 			$this->use();
 			$content = [];
