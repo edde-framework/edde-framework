@@ -55,6 +55,7 @@
 		}
 
 		public function reset(string $flow): IAuthenticatorManager {
+			$this->use();
 			if (isset($this->flowList[$flow]) === false) {
 				throw new AuthenticatorException(sprintf('Cannot reset authentification flow - unknown flow [%s],', $flow));
 			}
@@ -63,6 +64,7 @@
 		}
 
 		public function getCurrentFlow() {
+			$this->use();
 			if ($this->hasFlow() === false) {
 				return null;
 			}
@@ -71,10 +73,12 @@
 		}
 
 		public function hasFlow(): bool {
+			$this->use();
 			return $this->session->get('flow', false) !== false;
 		}
 
 		public function getFlow(): array {
+			$this->use();
 			return $this->session->get('flow', []);
 		}
 
