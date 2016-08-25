@@ -33,8 +33,8 @@
 
 		public function generate($generate, ...$parameterList) {
 			$this->use();
-			foreach ($this->linkGeneratorList as $lingGenerator) {
-				if (($url = $lingGenerator->generate($generate, ...$parameterList)) !== null) {
+			foreach ($this->linkGeneratorList as $linkGenerator) {
+				if (($url = $linkGenerator->generate($generate, ...$parameterList)) !== null) {
 					return $url;
 				}
 			}
