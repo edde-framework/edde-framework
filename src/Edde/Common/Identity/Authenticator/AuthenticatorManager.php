@@ -7,12 +7,10 @@
 	use Edde\Api\Identity\Authenticator\IAuthenticator;
 	use Edde\Api\Identity\Authenticator\IAuthenticatorManager;
 	use Edde\Api\Identity\Authorizator\IAuthorizator;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Identity\AbstractAuthManager;
 	use Edde\Common\Session\SessionTrait;
 
 	class AuthenticatorManager extends AbstractAuthManager implements IAuthenticatorManager {
-		use LazyInjectTrait;
 		use SessionTrait;
 
 		/**
@@ -101,7 +99,6 @@
 		}
 
 		protected function prepare() {
-			$this->session();
 			foreach ($this->flowList as $name => $authList) {
 				foreach ($authList as $authenticator) {
 					if (isset($this->authenticatorList[$authenticator]) === false) {

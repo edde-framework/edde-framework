@@ -65,7 +65,18 @@
 				$parent = $reflectionClass;
 				$lazyInject = false;
 				while ($parent) {
-					if (($lazyInject = in_array(LazyInjectTrait::class, $parent->getTraitNames(), true)) === true) {
+					if ($lazyInject = ($func = function (callable $func, \ReflectionClass $class) {
+						if (in_array(LazyInjectTrait::class, $class->getTraitNames(), true)) {
+							return true;
+						}
+						foreach ($class->getTraits() as $trait) {
+							if ($func($func, $trait)) {
+								return true;
+							}
+						}
+						return false;
+					})($func, $parent)
+					) {
 						break;
 					}
 					$parent = $parent->getParentClass();

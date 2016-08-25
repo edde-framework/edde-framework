@@ -31,12 +31,18 @@
 						};
 					}
 				}
+				foreach ($this->lazyList() as $property => $callback) {
+					$this->lazyInjectList[$property] = $callback;
+					/** @noinspection PhpVariableVariableInspection */
+					unset($this->$property);
+				}
 			}, $this), $container);
 		}
 
 		public function __get($name) {
 			if (($dependency = $this->getLazyDependency($name)) === false) {
 				/** @noinspection PhpUndefinedClassInspection */
+				/** @noinspection PhpUndefinedMethodInspection */
 				return parent::__get($name);
 			}
 			return $dependency;
@@ -46,6 +52,7 @@
 		public function __set($name, $value) {
 			if ($this->setLazyDependency($name, $value) === false) {
 				/** @noinspection PhpUndefinedClassInspection */
+				/** @noinspection PhpUndefinedMethodInspection */
 				return parent::__set($name, $value);
 			}
 			return $this;
@@ -66,5 +73,9 @@
 			/** @noinspection PhpVariableVariableInspection */
 			$this->$name = $value;
 			return true;
+		}
+
+		protected function lazyList(): array {
+			return [];
 		}
 	}

@@ -8,12 +8,10 @@
 	use Edde\Api\Resource\Storage\IFileStorage;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Common\Cache\CacheTrait;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Resource\ResourceList;
 	use Edde\Common\Usable\UsableTrait;
 
 	class JavaScriptCompiler extends ResourceList implements IJavaScriptCompiler {
-		use LazyInjectTrait;
 		use UsableTrait;
 		use CacheTrait;
 
@@ -48,6 +46,5 @@
 		}
 
 		protected function prepare() {
-			$this->cache();
 		}
 	}

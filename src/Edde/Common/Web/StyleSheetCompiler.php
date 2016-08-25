@@ -10,7 +10,6 @@
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Web\WebException;
 	use Edde\Common\Cache\CacheTrait;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\Resource\ResourceList;
@@ -19,7 +18,6 @@
 	use Edde\Common\Usable\UsableTrait;
 
 	class StyleSheetCompiler extends ResourceList implements IStyleSheetCompiler {
-		use LazyInjectTrait;
 		use UsableTrait;
 		use CacheTrait;
 
@@ -77,6 +75,5 @@
 		}
 
 		protected function prepare() {
-			$this->cache();
 		}
 	}

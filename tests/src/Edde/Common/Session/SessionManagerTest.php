@@ -35,6 +35,6 @@
 		}
 
 		protected function tearDown() {
-			ob_end_flush();
+			$this->sessionManager->close();
 		}
 	}

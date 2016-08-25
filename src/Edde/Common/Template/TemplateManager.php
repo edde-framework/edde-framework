@@ -13,12 +13,10 @@
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Template\TemplateException;
 	use Edde\Common\Cache\CacheTrait;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\File\File;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class TemplateManager extends AbstractUsable implements ITemplateManager {
-		use LazyInjectTrait;
 		use CacheTrait;
 		/**
 		 * @var ITemplateDirectory
@@ -59,7 +57,6 @@
 		}
 
 		public function compile(IFile $file, bool $force = false): ITemplate {
-			$this->cache();
 			if (($templateFile = $this->cache->load($cacheId = $file->getPath(), false)) !== false && $force === false) {
 				return new Template(new File($templateFile));
 			}

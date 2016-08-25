@@ -4,11 +4,16 @@
 	namespace App\Login;
 
 	use App\Home\HomeView;
-	use Edde\Common\Container\LazyInjectTrait;
+	use Edde\Common\Session\SessionTrait;
 	use Edde\Ext\Html\EddeViewControl;
 
 	class LoginView extends EddeViewControl {
-		use LazyInjectTrait;
+		use SessionTrait;
+
+		public function actionLogin() {
+			dump($this->session->get('poo'));
+			dump(headers_list());
+		}
 
 		public function handleOnLogin(LoginCrate $loginCrate) {
 			$this->redirect([

@@ -5,9 +5,11 @@
 
 	use Edde\Api\Session\ISession;
 	use Edde\Api\Session\ISessionManager;
-	use Edde\Api\Session\SessionException;
+	use Edde\Common\Container\LazyInjectTrait;
 
 	trait SessionTrait {
+		use LazyInjectTrait;
+
 		/**
 		 * @var ISessionManager
 		 */
@@ -17,19 +19,19 @@
 		 */
 		protected $session;
 
-		public function injectSessionManager(ISessionManager $sessionManager) {
+		public function lazySessionManager(ISessionManager $sessionManager) {
 			$this->sessionManager = $sessionManager;
 		}
 
-		/**
-		 * prepare session section for this class
-		 *
-		 * @throws SessionException
-		 */
+		protected function lazyList(): array {
+			return [
+				'session' => function () {
+					return $this->sessionManager->getSession(static::class);
+				},
+			];
+		}
+
 		protected function session() {
-			if ($this->sessionManager === null) {
-				throw new SessionException(sprintf('Session manager has not been injected into class [%s]; cannot use session.', static::class));
-			}
 			$this->session = $this->sessionManager->getSession(static::class);
 		}
 	}
