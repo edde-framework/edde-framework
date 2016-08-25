@@ -12,7 +12,7 @@
 		/**
 		 * @var ICrate
 		 */
-		protected $identity = 'unknown';
+		protected $identity;
 		/**
 		 * @var string
 		 */
@@ -23,6 +23,7 @@
 		protected $authenticated;
 
 		public function __construct() {
+			$this->name = 'unknown';
 			$this->authenticated = false;
 		}
 
