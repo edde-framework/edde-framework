@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Identity\Authenticator;
 
-	use Edde\Api\Identity\Authenticator\AuthenticatorException;
 	use Edde\Api\Identity\Authenticator\IAuthenticatorManager;
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Common\Identity\Identity;
@@ -23,28 +22,14 @@
 		 */
 		protected $identity;
 
-		public function testUnknownFlow() {
-			$this->expectException(AuthenticatorException::class);
-			$this->expectExceptionMessage('Unknown authenticator [fo] in flow.');
-			$this->authenticatorManager->registerFlow('fo');
-			$this->authenticatorManager->use();
-		}
-
-		public function testUnknownFlow2() {
-			$this->expectException(AuthenticatorException::class);
-			$this->expectExceptionMessage('Unknown authenticator [foo] in flow [TrustedAuthenticator].');
-			$this->authenticatorManager->registerFlow(\TrustedAuthenticator::class, 'foo');
-			$this->authenticatorManager->use();
-		}
-
 		public function testFlow() {
 			self::assertEquals('unknown', $this->identity->getName());
 			self::assertFalse($this->identity->isAuthenticated());
-			$this->authenticatorManager->flow(\InitialAuthenticator::class, $this->identity, 'foo', 'bar');
+			$this->authenticatorManager->flow('flow', $this->identity, 'foo', 'bar');
 			self::assertEquals('whepee', $this->identity->getName());
 			self::assertFalse($this->identity->isAuthenticated());
 			self::assertEquals(\SecondaryAuthenticator::class, $this->authenticatorManager->getCurrentFlow());
-			$this->authenticatorManager->flow(\InitialAuthenticator::class, $this->identity, 'boo', 'poo');
+			$this->authenticatorManager->flow('flow', $this->identity, 'boo', 'poo');
 			self::assertEquals('whepee', $this->identity->getName());
 			self::assertTrue($this->identity->isAuthenticated());
 			self::assertNull($this->authenticatorManager->getCurrentFlow());
@@ -56,7 +41,7 @@
 			$this->authenticatorManager->registerAuthenticator(new \TrustedAuthenticator());
 			$this->authenticatorManager->registerAuthenticator(new \InitialAuthenticator());
 			$this->authenticatorManager->registerAuthenticator(new \SecondaryAuthenticator());
-			$this->authenticatorManager->registerFlow(\InitialAuthenticator::class, \SecondaryAuthenticator::class);
+			$this->authenticatorManager->registerFlow('flow', \InitialAuthenticator::class, \SecondaryAuthenticator::class);
 			$this->identity = new Identity();
 
 			/**

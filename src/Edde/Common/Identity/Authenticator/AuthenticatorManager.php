@@ -30,15 +30,12 @@
 		}
 
 		public function registerFlow(string $initial, string ...$authenticatorList): IAuthenticatorManager {
-			$this->flowList[$initial] = array_merge([$initial], $authenticatorList);
+			$this->flowList[$initial] = $authenticatorList;
 			return $this;
 		}
 
 		public function flow(string $flow, IIdentity $identity = null, ...$credentials): IAuthenticatorManager {
 			$this->use();
-			if (isset($this->flowList[$flow]) === false) {
-				throw new AuthenticatorException(sprintf('Cannot run authentification flow - unknown flow [%s],', $flow));
-			}
 			$current = $this->session->get('flow', $this->flowList[$flow]);
 			$this->authenticate(array_shift($current), $identity, ...$credentials);
 			$this->session->set('flow', $current);
@@ -84,9 +81,6 @@
 		protected function prepare() {
 			$this->session();
 			foreach ($this->flowList as $name => $authList) {
-				if (isset($this->authenticatorList[$name]) === false) {
-					throw new AuthenticatorException(sprintf('Unknown authenticator [%s] in flow.', $name));
-				}
 				foreach ($authList as $authenticator) {
 					if (isset($this->authenticatorList[$authenticator]) === false) {
 						throw new AuthenticatorException(sprintf('Unknown authenticator [%s] in flow [%s].', $authenticator, $name));
