@@ -66,6 +66,15 @@
 		public function reset(string $flow): IAuthenticatorManager;
 
 		/**
+		 * similar to self::reset() but hasFlow() will return true and self::getCurrentFlow() will return initial authenticator
+		 *
+		 * @param string $flow
+		 *
+		 * @return IAuthenticatorManager
+		 */
+		public function select(string $flow): IAuthenticatorManager;
+
+		/**
 		 * try to use named authenticator for authenticate the given identity
 		 *
 		 * @param string $name

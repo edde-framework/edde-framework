@@ -63,6 +63,12 @@
 			return $this;
 		}
 
+		public function select(string $flow): IAuthenticatorManager {
+			$this->reset($flow);
+			$this->session->set('flow', $this->flowList[$flow]);
+			return $this;
+		}
+
 		public function getCurrentFlow() {
 			$this->use();
 			if ($this->hasFlow() === false) {
