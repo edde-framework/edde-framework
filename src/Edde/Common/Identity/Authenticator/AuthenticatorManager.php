@@ -65,6 +65,10 @@
 			return $this;
 		}
 
+		public function hasFlow(): bool {
+			return $this->session->get('flow', false) !== false;
+		}
+
 		public function getFlow(): array {
 			return $this->session->get('flow', []);
 		}

@@ -36,6 +36,13 @@
 		public function flow(string $flow, IIdentity $identity = null, ...$credentials): IAuthenticatorManager;
 
 		/**
+		 * handy method to check if there is opened flow
+		 *
+		 * @return bool
+		 */
+		public function hasFlow(): bool;
+
+		/**
 		 * return upcoming flow or ampty array when there is no more flow
 		 *
 		 * @return string[]
