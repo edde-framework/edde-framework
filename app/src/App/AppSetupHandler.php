@@ -7,8 +7,10 @@
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Upgrade\IUpgradeManager;
+	use Edde\Common\Link\ControlLinkGenerator;
 	use Edde\Ext\Runtime\DefaultSetupHandler;
 	use Edde\Ext\Upgrade\InitialIdentityUpgrade;
 	use Edde\Ext\Upgrade\InitialStorageUpgrade;
@@ -36,6 +38,9 @@
 					$upgradeManager->registerUpgrade($container->create(InitialStorageUpgrade::class, '0.0'));
 					$upgradeManager->registerUpgrade($container->create(InitialIdentityUpgrade::class, '0.1'));
 					$upgradeManager->registerUpgrade($container->create(InitialUpgrade::class, '1.0'));
+				})
+				->onSetup(ILinkFactory::class, function (IContainer $container, ILinkFactory $linkFactory) {
+					$linkFactory->registerLinkGenerator($container->create(ControlLinkGenerator::class));
 				});
 		}
 	}
