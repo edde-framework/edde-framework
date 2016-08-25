@@ -15,9 +15,10 @@
 		public function registerAuthorizator(IAuthorizator $authorizator): IAuthorizatorManager;
 
 		/**
+		 * @param string $name
 		 * @param IIdentity|null $identity
 		 *
 		 * @return IAuthorizatorManager
 		 */
-		public function authorize(IIdentity $identity = null): IAuthorizatorManager;
+		public function authorize(string $name, IIdentity $identity = null): IAuthorizatorManager;
 	}

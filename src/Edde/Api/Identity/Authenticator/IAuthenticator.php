@@ -18,5 +18,5 @@
 		 *
 		 * @return IAuthenticator
 		 */
-		public function authenticate(IIdentity $identity = null, ...$credentials): IAuthenticator;
+		public function authenticate(IIdentity $identity, ...$credentials): IAuthenticator;
 	}
