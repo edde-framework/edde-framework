@@ -3,12 +3,11 @@
 
 	namespace Edde\Common\Identity;
 
-	use Edde\Api\Identity\IAuthenticator;
+	use Edde\Api\Identity\Authenticator\IAuthenticator;
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Common\Container\LazyInjectTrait;
-	use Edde\Common\Usable\AbstractUsable;
 
-	class Authenticator extends AbstractUsable implements IAuthenticator {
+	class Authenticator extends AbstractAuth implements IAuthenticator {
 		use LazyInjectTrait;
 		/**
 		 * @var IIdentity

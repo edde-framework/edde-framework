@@ -1,14 +1,15 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Api\Identity;
+	namespace Edde\Api\Identity\Authenticator;
 
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Identity\IAuth;
+	use Edde\Api\Identity\IIdentity;
 
 	/**
 	 * This implementation is resposnible for an identity authentification.
 	 */
-	interface IAuthenticator extends IUsable {
+	interface IAuthenticator extends IAuth {
 		/**
 		 * authenticate a given identity or throw an exception
 		 *

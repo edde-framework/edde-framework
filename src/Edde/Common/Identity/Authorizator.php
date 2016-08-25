@@ -3,12 +3,11 @@
 
 	namespace Edde\Common\Identity;
 
-	use Edde\Api\Identity\IAuthorizator;
+	use Edde\Api\Identity\Authorizator\IAuthorizator;
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Common\Container\LazyInjectTrait;
-	use Edde\Common\Usable\AbstractUsable;
 
-	class Authorizator extends AbstractUsable implements IAuthorizator {
+	class Authorizator extends AbstractAuth implements IAuthorizator {
 		use LazyInjectTrait;
 		/**
 		 * @var IIdentity

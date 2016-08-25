@@ -3,6 +3,9 @@
 
 	namespace Edde\Api\Identity;
 
+	use Edde\Api\Identity\Authenticator\IAuthenticator;
+	use Edde\Api\Identity\Authorizator\IAuthorizator;
+
 	/**
 	 * Formal shorthand for authorization/authentification.
 	 */

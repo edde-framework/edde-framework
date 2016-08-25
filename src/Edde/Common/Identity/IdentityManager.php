@@ -5,15 +5,14 @@
 
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crypt\ICryptEngine;
-	use Edde\Api\Identity\IAuthenticator;
-	use Edde\Api\Identity\IAuthorizator;
+	use Edde\Api\Identity\Authenticator\IAuthenticator;
+	use Edde\Api\Identity\Authorizator\IAuthorizator;
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Api\Identity\IIdentityManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Common\Container\LazyInjectTrait;
-	use Edde\Common\Usable\AbstractUsable;
 
-	class IdentityManager extends AbstractUsable implements IIdentityManager {
+	class IdentityManager extends AbstractAuth implements IIdentityManager {
 		use LazyInjectTrait;
 		/**
 		 * @var IAuthenticator
