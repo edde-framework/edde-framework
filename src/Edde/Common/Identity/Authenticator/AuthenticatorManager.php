@@ -6,7 +6,6 @@
 	use Edde\Api\Identity\Authenticator\AuthenticatorException;
 	use Edde\Api\Identity\Authenticator\IAuthenticator;
 	use Edde\Api\Identity\Authenticator\IAuthenticatorManager;
-	use Edde\Api\Identity\IIdentity;
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Identity\AbstractAuthManager;
 	use Edde\Common\Session\SessionTrait;
@@ -34,37 +33,39 @@
 			return $this;
 		}
 
-		public function flow(string $flow, IIdentity $identity = null, ...$credentials): IAuthenticatorManager {
+		public function flow(string $flow, ...$credentials): IAuthenticatorManager {
 			$this->use();
-			$current = $this->session->get('flow', $this->flowList[$flow]);
-			$this->authenticate(array_shift($current), $identity, ...$credentials);
-			$this->session->set('flow', $current);
-			if (empty($current)) {
-				$this->reset($flow);
+			if (($currentList = $this->session->get('flow', false)) === false) {
+				throw new AuthenticatorException(sprintf('Flow was not started; please use [%s::select()] method before.', static::class));
+			}
+			if (($current = array_shift($currentList)) !== $flow) {
+				throw new AuthenticatorException(sprintf('Unexpected authentification method [%s]; current method [%s].', $flow, $current));
+			}
+			$this->authenticate($current, ...$credentials);
+			$this->session->set('flow', $currentList);
+			if (empty($currentList)) {
+				$this->reset();
 			}
 			return $this;
 		}
 
-		public function authenticate(string $name, IIdentity $identity = null, ...$credentials): IAuthenticatorManager {
+		public function authenticate(string $name, ...$credentials): IAuthenticatorManager {
 			$this->use();
 			if (isset($this->authenticatorList[$name]) === false) {
 				throw new AuthenticatorException(sprintf('Cannot authenticate identity by unknown authenticator [%s]; did you registered it before?', $name));
 			}
-			$this->authenticatorList[$name]->authenticate($identity ?: $this->identity, ...$credentials);
+			$this->authenticatorList[$name]->authenticate($this->identity, ...$credentials);
 			return $this;
 		}
 
-		public function reset(string $flow): IAuthenticatorManager {
+		public function reset(): IAuthenticatorManager {
 			$this->use();
-			if (isset($this->flowList[$flow]) === false) {
-				throw new AuthenticatorException(sprintf('Cannot reset authentification flow - unknown flow [%s],', $flow));
-			}
 			$this->session->set('flow', null);
 			return $this;
 		}
 
 		public function select(string $flow): IAuthenticatorManager {
-			$this->reset($flow);
+			$this->reset();
 			$this->session->set('flow', $this->flowList[$flow]);
 			return $this;
 		}

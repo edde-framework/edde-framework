@@ -4,7 +4,6 @@
 	namespace Edde\Api\Identity\Authenticator;
 
 	use Edde\Api\Identity\IAuthManager;
-	use Edde\Api\Identity\IIdentity;
 
 	interface IAuthenticatorManager extends IAuthManager {
 		/**
@@ -28,12 +27,11 @@
 		 * execute an authentication flow; if the flow fails, $flow will be used as initial authenticator
 		 *
 		 * @param string $flow
-		 * @param IIdentity|null $identity
 		 * @param array ...$credentials
 		 *
 		 * @return IAuthenticatorManager
 		 */
-		public function flow(string $flow, IIdentity $identity = null, ...$credentials): IAuthenticatorManager;
+		public function flow(string $flow, ...$credentials): IAuthenticatorManager;
 
 		/**
 		 * handy method to check if there is opened flow
@@ -59,11 +57,9 @@
 		/**
 		 * authenticator manager should keep current flow state even when exception; this should restart the selected flow
 		 *
-		 * @param string $flow
-		 *
 		 * @return IAuthenticatorManager
 		 */
-		public function reset(string $flow): IAuthenticatorManager;
+		public function reset(): IAuthenticatorManager;
 
 		/**
 		 * similar to self::reset() but hasFlow() will return true and self::getCurrentFlow() will return initial authenticator
@@ -78,10 +74,9 @@
 		 * try to use named authenticator for authenticate the given identity
 		 *
 		 * @param string $name
-		 * @param IIdentity|null $identity
 		 * @param array ...$credentials
 		 *
 		 * @return IAuthenticatorManager
 		 */
-		public function authenticate(string $name, IIdentity $identity = null, ...$credentials): IAuthenticatorManager;
+		public function authenticate(string $name, ...$credentials): IAuthenticatorManager;
 	}

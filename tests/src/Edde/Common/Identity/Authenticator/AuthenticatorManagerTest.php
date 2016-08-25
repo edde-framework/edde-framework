@@ -25,11 +25,12 @@
 		public function testFlow() {
 			self::assertEquals('unknown', $this->identity->getName());
 			self::assertFalse($this->identity->isAuthenticated());
-			$this->authenticatorManager->flow('flow', $this->identity, 'foo', 'bar');
+			$this->authenticatorManager->select('flow');
+			$this->authenticatorManager->flow(\InitialAuthenticator::class, 'foo', 'bar');
 			self::assertEquals('whepee', $this->identity->getName());
 			self::assertFalse($this->identity->isAuthenticated());
 			self::assertEquals(\SecondaryAuthenticator::class, $this->authenticatorManager->getCurrentFlow());
-			$this->authenticatorManager->flow('flow', $this->identity, 'boo', 'poo');
+			$this->authenticatorManager->flow(\SecondaryAuthenticator::class, 'boo', 'poo');
 			self::assertEquals('whepee', $this->identity->getName());
 			self::assertTrue($this->identity->isAuthenticated());
 			self::assertNull($this->authenticatorManager->getCurrentFlow());
@@ -42,7 +43,7 @@
 			$this->authenticatorManager->registerAuthenticator(new \InitialAuthenticator());
 			$this->authenticatorManager->registerAuthenticator(new \SecondaryAuthenticator());
 			$this->authenticatorManager->registerFlow('flow', \InitialAuthenticator::class, \SecondaryAuthenticator::class);
-			$this->identity = new Identity();
+			$this->authenticatorManager->lazyIdentity($this->identity = new Identity());
 
 			/**
 			 * because of session usage in tests
