@@ -21,6 +21,7 @@
 		}
 
 		public function authorize(string $name, IIdentity $identity = null): IAuthorizatorManager {
+			$this->use();
 			$identity ?: $this->identity;
 			if (isset($this->authorizatorList[$name]) === false) {
 				throw new AuthorizatorException(sprintf('Cannot authorize identity [%s] by an unknown authorizator [%s]; did you registered it before?', $identity->getName(), $name));

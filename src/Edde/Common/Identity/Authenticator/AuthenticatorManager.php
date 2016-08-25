@@ -21,6 +21,7 @@
 		}
 
 		public function authenticate(string $name, IIdentity $identity = null, ...$credentials): IAuthenticatorManager {
+			$this->use();
 			if (isset($this->authenticatorList[$name]) === false) {
 				throw new AuthenticatorException(sprintf('Cannot authenticate identity by unknown authenticator [%s]; did you registered it before?', $name));
 			}
