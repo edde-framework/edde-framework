@@ -36,6 +36,13 @@
 		public function flow(string $flow, IIdentity $identity = null, ...$credentials): IAuthenticatorManager;
 
 		/**
+		 * return upcoming flow or ampty array when there is no more flow
+		 *
+		 * @return string[]
+		 */
+		public function getFlow(): array;
+
+		/**
 		 * authenticator manager should keep current flow state even when exception; this should restart the selected flow
 		 *
 		 * @param string $flow

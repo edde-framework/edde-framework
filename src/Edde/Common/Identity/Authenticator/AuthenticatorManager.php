@@ -65,6 +65,10 @@
 			return $this;
 		}
 
+		public function getFlow(): array {
+			return $this->session->get('flow', []);
+		}
+
 		protected function prepare() {
 			$this->session();
 			foreach ($this->flowList as $name => $authList) {
