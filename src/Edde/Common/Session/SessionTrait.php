@@ -23,15 +23,15 @@
 			$this->sessionManager = $sessionManager;
 		}
 
+		public function session() {
+			$this->session = $this->sessionManager->getSession(static::class);
+		}
+
 		protected function lazyList(): array {
 			return [
 				'session' => function () {
 					return $this->sessionManager->getSession(static::class);
 				},
 			];
-		}
-
-		protected function session() {
-			$this->session = $this->sessionManager->getSession(static::class);
 		}
 	}

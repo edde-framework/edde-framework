@@ -76,8 +76,8 @@
 			$styleSheetCompiler = new StyleSheetCompiler();
 			$styleSheetCompiler->lazyFileStorage($fileStorage = new FileStorage(new RootDirectory(__DIR__), new StorageDirectory(__DIR__ . '/public')));
 			$styleSheetCompiler->lazyTempDirectory($this->tempDirectory);
-			$styleSheetCompiler->injectCacheFactory(new CacheFactory(__DIR__, new FileCacheStorage(new CacheDirectory(__DIR__ . '/temp'))));
-
+			$styleSheetCompiler->lazyCacheFactory(new CacheFactory(__DIR__, new FileCacheStorage(new CacheDirectory(__DIR__ . '/temp'))));
+			$styleSheetCompiler->cache();
 			$resourceList = new ResourceList();
 			$resourceList->addResource(new File(__DIR__ . '/assets/css/font-awesome.css'));
 			$resourceList->addResource(new File(__DIR__ . '/assets/css/font-awesome.min.css'));

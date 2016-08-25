@@ -25,15 +25,15 @@
 			$this->cacheFactory = $cacheFactory;
 		}
 
+		public function cache() {
+			$this->cache = $this->cacheFactory->factory(static::class);
+		}
+
 		protected function lazyList(): array {
 			return [
 				'cache' => function () {
 					return $this->cacheFactory->factory(static::class);
 				},
 			];
-		}
-
-		protected function cache() {
-			$this->cache = $this->cacheFactory->factory(static::class);
 		}
 	}

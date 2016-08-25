@@ -64,6 +64,9 @@
 				list($name, $header) = explode(':', $header, 2);
 				$headerList->set(trim($name), trim($header));
 			}
+			if (headers_sent($file, $line)) {
+				throw new SessionException(sprintf('Cannot handle session start: somebody has already sent headers from [%s at %d].', $file, $line));
+			}
 			header_remove();
 			return $this;
 		}
