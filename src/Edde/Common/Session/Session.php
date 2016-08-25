@@ -36,6 +36,9 @@
 
 		public function set(string $name, $value): IList {
 			$this->use();
+			if ($value === null) {
+				return parent::remove($name);
+			}
 			return parent::set($name, $value);
 		}
 

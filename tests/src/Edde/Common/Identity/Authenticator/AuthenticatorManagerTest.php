@@ -43,9 +43,11 @@
 			$this->authenticatorManager->flow(\InitialAuthenticator::class, $this->identity, 'foo', 'bar');
 			self::assertEquals('whepee', $this->identity->getName());
 			self::assertFalse($this->identity->isAuthenticated());
+			self::assertEquals(\SecondaryAuthenticator::class, $this->authenticatorManager->getCurrentFlow());
 			$this->authenticatorManager->flow(\InitialAuthenticator::class, $this->identity, 'boo', 'poo');
 			self::assertEquals('whepee', $this->identity->getName());
 			self::assertTrue($this->identity->isAuthenticated());
+			self::assertNull($this->authenticatorManager->getCurrentFlow());
 		}
 
 		protected function setUp() {

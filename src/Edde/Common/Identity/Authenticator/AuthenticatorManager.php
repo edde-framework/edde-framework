@@ -61,8 +61,16 @@
 			if (isset($this->flowList[$flow]) === false) {
 				throw new AuthenticatorException(sprintf('Cannot reset authentification flow - unknown flow [%s],', $flow));
 			}
-			$this->session->set('flow', $this->flowList[$flow]);
+			$this->session->set('flow', null);
 			return $this;
+		}
+
+		public function getCurrentFlow() {
+			if ($this->hasFlow() === false) {
+				return null;
+			}
+			$flow = $this->getFlow();
+			return reset($flow);
 		}
 
 		public function hasFlow(): bool {

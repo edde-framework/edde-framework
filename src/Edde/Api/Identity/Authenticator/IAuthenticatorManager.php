@@ -50,6 +50,13 @@
 		public function getFlow(): array;
 
 		/**
+		 * return name of a current authenticator or null when there is no flow
+		 *
+		 * @return string
+		 */
+		public function getCurrentFlow();
+
+		/**
 		 * authenticator manager should keep current flow state even when exception; this should restart the selected flow
 		 *
 		 * @param string $flow
