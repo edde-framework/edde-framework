@@ -44,6 +44,7 @@
 			$this->authenticatorManager->registerAuthenticator(new \SecondaryAuthenticator());
 			$this->authenticatorManager->registerFlow('flow', \InitialAuthenticator::class, \SecondaryAuthenticator::class);
 			$this->authenticatorManager->lazyIdentity($this->identity = new Identity());
+			$this->authenticatorManager->lazyAutorizator(new \TrustedAuth());
 
 			/**
 			 * because of session usage in tests

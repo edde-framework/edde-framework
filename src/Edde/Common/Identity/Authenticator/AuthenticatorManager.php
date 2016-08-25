@@ -6,6 +6,7 @@
 	use Edde\Api\Identity\Authenticator\AuthenticatorException;
 	use Edde\Api\Identity\Authenticator\IAuthenticator;
 	use Edde\Api\Identity\Authenticator\IAuthenticatorManager;
+	use Edde\Api\Identity\Authorizator\IAuthorizator;
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Identity\AbstractAuthManager;
 	use Edde\Common\Session\SessionTrait;
@@ -22,6 +23,14 @@
 		 * @var string[][]
 		 */
 		protected $flowList = [];
+		/**
+		 * @var IAuthorizator
+		 */
+		protected $authorizator;
+
+		public function lazyAutorizator(IAuthorizator $authorizator) {
+			$this->authorizator = $authorizator;
+		}
 
 		public function registerAuthenticator(IAuthenticator $authenticator): IAuthenticatorManager {
 			$this->authenticatorList[$authenticator->getName()] = $authenticator;
@@ -44,6 +53,8 @@
 			$this->authenticate($current, ...$credentials);
 			$this->session->set('flow', $currentList);
 			if (empty($currentList)) {
+				$this->identity->setAuthenticated(true);
+				$this->authorizator->authorize($this->identity);
 				$this->reset();
 			}
 			return $this;
