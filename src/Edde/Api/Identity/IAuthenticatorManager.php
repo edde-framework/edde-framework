@@ -1,11 +1,18 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Api\Identity\Authenticator;
+	namespace Edde\Api\Identity;
 
-	use Edde\Api\Identity\IAuthManager;
+	use Edde\Api\Usable\IUsable;
 
-	interface IAuthenticatorManager extends IAuthManager {
+	interface IAuthenticatorManager extends IUsable {
+		/**
+		 * return current identity build from session
+		 *
+		 * @return IIdentity
+		 */
+		public function identity(): IIdentity;
+
 		/**
 		 * @param IAuthenticator $authenticator
 		 *

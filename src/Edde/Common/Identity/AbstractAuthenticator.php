@@ -3,13 +3,10 @@
 
 	namespace Edde\Common\Identity;
 
-	use Edde\Api\Identity\IAuth;
+	use Edde\Api\Identity\IAuthenticator;
 	use Edde\Common\Usable\AbstractUsable;
 
-	/**
-	 * @internal common stuff for Auth.
-	 */
-	abstract class AbstractAuth extends AbstractUsable implements IAuth {
+	abstract class AbstractAuthenticator extends AbstractUsable implements IAuthenticator {
 		/**
 		 * @var string
 		 */

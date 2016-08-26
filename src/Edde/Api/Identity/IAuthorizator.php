@@ -1,15 +1,14 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Api\Identity\Authorizator;
+	namespace Edde\Api\Identity;
 
-	use Edde\Api\Identity\IAuth;
-	use Edde\Api\Identity\IIdentity;
+	use Edde\Api\Usable\IUsable;
 
 	/**
 	 * Implementation of an ACL mechanism; this should set roles to the given identity.
 	 */
-	interface IAuthorizator extends IAuth {
+	interface IAuthorizator extends IUsable {
 		/**
 		 * update list of roles (ACL) of the given identity
 		 *

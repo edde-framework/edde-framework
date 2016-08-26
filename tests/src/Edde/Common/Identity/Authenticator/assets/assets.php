@@ -1,16 +1,16 @@
 <?php
 	declare(strict_types = 1);
 
-	use Edde\Api\Identity\Authenticator\IAuthenticator;
-	use Edde\Api\Identity\Authorizator\IAuthorizator;
+	use Edde\Api\Identity\IAuthenticator;
+	use Edde\Api\Identity\IAuthorizator;
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Api\Session\ISession;
 	use Edde\Api\Session\ISessionManager;
-	use Edde\Common\Identity\AbstractAuth;
+	use Edde\Common\Identity\AbstractAuthenticator;
 	use Edde\Common\Session\Session;
 	use Edde\Common\Usable\AbstractUsable;
 
-	class TrustedAuthenticator extends AbstractAuth implements IAuthenticator {
+	class TrustedAuthenticator extends AbstractAuthenticator {
 		public function authenticate(IIdentity $identity, ...$credentials): IAuthenticator {
 			$identity->setAuthenticated(true);
 			return $this;
@@ -20,7 +20,7 @@
 		}
 	}
 
-	class InitialAuthenticator extends AbstractAuth implements IAuthenticator {
+	class InitialAuthenticator extends AbstractAuthenticator {
 		public function authenticate(IIdentity $identity, ...$credentials): IAuthenticator {
 			$identity->setName('whepee');
 			return $this;
@@ -30,7 +30,7 @@
 		}
 	}
 
-	class SecondaryAuthenticator extends AbstractAuth implements IAuthenticator {
+	class SecondaryAuthenticator extends AbstractAuthenticator {
 		public function authenticate(IIdentity $identity, ...$credentials): IAuthenticator {
 			return $this;
 		}
@@ -39,7 +39,7 @@
 		}
 	}
 
-	class TrustedAuth extends AbstractAuth implements IAuthorizator {
+	class TrustedAuth extends AbstractUsable implements IAuthorizator {
 		public function authorize(IIdentity $identity): IAuthorizator {
 			return $this;
 		}

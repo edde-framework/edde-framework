@@ -1,18 +1,18 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Identity\Authenticator;
+	namespace Edde\Common\Identity;
 
-	use Edde\Api\Identity\Authenticator\AuthenticatorException;
-	use Edde\Api\Identity\Authenticator\IAuthenticator;
-	use Edde\Api\Identity\Authenticator\IAuthenticatorManager;
-	use Edde\Api\Identity\Authorizator\IAuthorizator;
-	use Edde\Common\Identity\AbstractAuthManager;
+	use Edde\Api\Identity\AuthenticatorException;
+	use Edde\Api\Identity\IAuthenticator;
+	use Edde\Api\Identity\IAuthenticatorManager;
+	use Edde\Api\Identity\IAuthorizator;
+	use Edde\Api\Identity\IIdentity;
 	use Edde\Common\Session\SessionTrait;
+	use Edde\Common\Usable\AbstractUsable;
 
-	class AuthenticatorManager extends AbstractAuthManager implements IAuthenticatorManager {
+	class AuthenticatorManager extends AbstractUsable implements IAuthenticatorManager {
 		use SessionTrait;
-
 		/**
 		 * @var IAuthenticator[]
 		 */
@@ -25,6 +25,10 @@
 		 * @var IAuthorizator
 		 */
 		protected $authorizator;
+		/**
+		 * @var IIdentity
+		 */
+		protected $identity;
 
 		public function lazyAutorizator(IAuthorizator $authorizator) {
 			$this->authorizator = $authorizator;
@@ -33,6 +37,13 @@
 		public function registerAuthenticator(IAuthenticator $authenticator): IAuthenticatorManager {
 			$this->authenticatorList[$authenticator->getName()] = $authenticator;
 			return $this;
+		}
+
+		public function identity(): IIdentity {
+			if ($this->identity === null) {
+				$this->identity = $this->session->get('identity', new Identity());
+			}
+			return $this->identity;
 		}
 
 		public function registerFlow(string $initial, string ...$authenticatorList): IAuthenticatorManager {
@@ -55,6 +66,7 @@
 				$this->authorizator->authorize($this->identity);
 				$this->reset();
 			}
+			$this->session->set('identity', $this->identity);
 			return $this;
 		}
 
@@ -70,6 +82,7 @@
 		public function reset(): IAuthenticatorManager {
 			$this->use();
 			$this->session->set('flow', null);
+			$this->session->set('identity', null);
 			return $this;
 		}
 

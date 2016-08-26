@@ -19,8 +19,7 @@
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpRequestFactory;
 	use Edde\Api\Http\IHttpResponse;
-	use Edde\Api\Identity\Authenticator\IAuthenticatorManager;
-	use Edde\Api\Identity\Authorizator\IAuthorizatorManager;
+	use Edde\Api\Identity\IAuthenticatorManager;
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Api\Link\IHostUrl;
 	use Edde\Api\Link\ILinkFactory;
@@ -56,9 +55,7 @@
 	use Edde\Common\Html\Value\TextInputControl;
 	use Edde\Common\Http\HttpRequestFactory;
 	use Edde\Common\Http\HttpResponse;
-	use Edde\Common\Identity\Authenticator\AuthenticatorManager;
-	use Edde\Common\Identity\Authorizato\AuthorizatorManager;
-	use Edde\Common\Identity\Identity;
+	use Edde\Common\Identity\AuthenticatorManager;
 	use Edde\Common\Link\HostUrl;
 	use Edde\Common\Link\LinkFactory;
 	use Edde\Common\Resource\ResourceManager;
@@ -120,7 +117,9 @@
 					IHttpResponse::class => HttpResponse::class,
 					ISessionManager::class => SessionManager::class,
 					IFingerprint::class => DummyFingerprint::class,
-					IIdentity::class => Identity::class,
+					IIdentity::class => function (IAuthenticatorManager $authenticatorManager) {
+						return $authenticatorManager->identity();
+					},
 					ISchemaFactory::class => SchemaFactory::class,
 					ISchemaManager::class => SchemaManager::class,
 					IRootDirectory::class => function () {
@@ -160,7 +159,6 @@
 					},
 					ILinkFactory::class => LinkFactory::class,
 					IAuthenticatorManager::class => AuthenticatorManager::class,
-					IAuthorizatorManager::class => AuthorizatorManager::class,
 				], $factoryList))
 				->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
 //					$routerService->registerRouter($container->create(CliRouter::class));
