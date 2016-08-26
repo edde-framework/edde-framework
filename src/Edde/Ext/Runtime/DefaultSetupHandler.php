@@ -50,6 +50,7 @@
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\DivControl;
+	use Edde\Common\Html\PlaceholderControl;
 	use Edde\Common\Html\SpanControl;
 	use Edde\Common\Html\Value\PasswordInputControl;
 	use Edde\Common\Html\Value\TextInputControl;
@@ -176,6 +177,7 @@
 						new ControlMacro('span', SpanControl::class),
 						new ControlMacro('password', PasswordInputControl::class),
 						new ControlMacro('text', TextInputControl::class),
+						new ControlMacro('placeholder', PlaceholderControl::class),
 						new CssMacro(),
 						new JsMacro(),
 						new ButtonMacro(),
