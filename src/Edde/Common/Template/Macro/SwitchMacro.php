@@ -26,6 +26,7 @@
 			parent::__construct([
 				'm:switch',
 				'm:case',
+				'case',
 			]);
 			$this->stack = new \SplStack();
 		}
@@ -42,6 +43,9 @@
 					$destination->write(sprintf("\t\t\t\$_%s = %s;\n", $id, $compiler->value($root->getValue())));
 					$this->macro($root, $compiler);
 					break;
+				/** @noinspection PhpMissingBreakStatementInspection */
+				case 'case':
+					$root->setValue($root->getAttribute('case'));
 				case 'm:case':
 					$destination->write(sprintf("\t\t\tif(\$_%s === %s) {\n", $this->stack->top(), $compiler->value($root->getValue())));
 					$this->macro($root, $compiler);

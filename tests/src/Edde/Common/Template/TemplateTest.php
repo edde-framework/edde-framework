@@ -88,6 +88,30 @@
 ', $this->control->render());
 		}
 
+		public function testSwitch2Template() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/switch2-template.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html attribute="choo" title="poo">
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div>
+			<div class="the-second-bar">lorem ipsum</div>
+			<div class="dummy-div">
+				<div class="the-second">bar content</div>
+			</div>
+		</div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
 		public function testButton() {
 			$template = $this->templateManager->template(__DIR__ . '/assets/template/button.xml');
 			$file = $template->getFile();
