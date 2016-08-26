@@ -82,7 +82,7 @@
 		public function select(string $flow): IAuthenticatorManager {
 			$this->reset();
 			if (isset($this->flowList[$flow]) === false) {
-				throw new AuthenticatorException(sprintf('Requested unknown flow [%s].', $flow));
+				throw new AuthenticatorException(sprintf('Requested unknown flow [%s]; did you registered it?', $flow));
 			}
 			$this->session->set('flow', $this->flowList[$flow]);
 			return $this;
