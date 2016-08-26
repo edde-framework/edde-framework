@@ -149,4 +149,9 @@
 		 * @return string
 		 */
 		public function render();
+
+		/**
+		 * @return IHtmlControl[]
+		 */
+		public function getIterator();
 	}

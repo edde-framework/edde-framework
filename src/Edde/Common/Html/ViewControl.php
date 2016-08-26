@@ -162,6 +162,7 @@
 				$this->head->addJavaScript($this->javaScriptCompiler->compile($this->javaScriptList)
 					->getRelativePath());
 			}
+			$this->dirty();
 			return parent::render();
 		}
 

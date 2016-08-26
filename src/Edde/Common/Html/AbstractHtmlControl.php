@@ -140,7 +140,9 @@
 			}
 			$content[] = $newline;
 			foreach ($this->getControlList() as $control) {
-				$content[] = $control->render();
+				if ($control->isDirty()) {
+					$content[] = $control->render();
+				}
 			}
 			if ($this->isPair()) {
 				$content[] = $indent . '</' . $this->getTag() . ">\n";

@@ -6,6 +6,7 @@
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Node\INode;
 	use Edde\Common\Node\Node;
+	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Usable\AbstractUsable;
 
 	abstract class AbstractControl extends AbstractUsable implements IControl {
@@ -55,6 +56,27 @@
 				$controlList[] = $node->getMeta('control');
 			}
 			return $controlList;
+		}
+
+		public function dirty(bool $dirty = true): IControl {
+			$this->use();
+			$this->node->setMeta('dirty', $dirty);
+			foreach ($this as $control) {
+				$control->dirty($dirty);
+			}
+			return $this;
+		}
+
+		public function isDirty(): bool {
+			$this->use();
+			return $this->node->getMeta('dirty', false);
+		}
+
+		public function getIterator() {
+			$this->use();
+			foreach (NodeIterator::create($this->node) as $node) {
+				yield $node->getMeta('control');
+			}
 		}
 
 		protected function prepare() {

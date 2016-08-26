@@ -10,7 +10,7 @@
 	 * Control is general element for transfering incoming request into the internal system service and for
 	 * generating response.
 	 */
-	interface IControl extends IUsable {
+	interface IControl extends IUsable, \IteratorAggregate {
 		/**
 		 * return node of this control
 		 *
@@ -54,4 +54,25 @@
 		 * @return IControl[]
 		 */
 		public function getControlList();
+
+		/**
+		 * mark control as dirty; this should change state of all child controls
+		 *
+		 * @param bool $dirty
+		 *
+		 * @return IControl
+		 */
+		public function dirty(bool $dirty = true): IControl;
+
+		/**
+		 * is this control dirty?
+		 *
+		 * @return bool
+		 */
+		public function isDirty(): bool;
+
+		/**
+		 * @return IControl[]
+		 */
+		public function getIterator();
 	}
