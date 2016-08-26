@@ -40,7 +40,7 @@
 		}
 
 		public function registerFlow(string $initial, string ...$authenticatorList): IAuthenticatorManager {
-			$this->flowList[$initial] = $authenticatorList;
+			$this->flowList[$initial] = empty($authenticatorList) ? [$initial] : $authenticatorList;
 			return $this;
 		}
 
