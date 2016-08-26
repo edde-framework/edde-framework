@@ -83,4 +83,10 @@
 				->set('location', $redirect);
 			return $this;
 		}
+
+		public function contentType(string $contentType): IHttpResponse {
+			$this->getHeaderList()
+				->set('Content-Type', $contentType);
+			return $this;
+		}
 	}

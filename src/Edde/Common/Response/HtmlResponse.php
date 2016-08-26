@@ -31,8 +31,7 @@
 
 		public function render(callable $callback) {
 			$this->callback = $callback;
-			$this->httpResponse->getHeaderList()
-				->set('Content-Type', 'text/html');
+			$this->httpResponse->contentType('text/html');
 			$this->httpResponse->setResponse($this);
 			$this->httpResponse->render();
 			return $this;

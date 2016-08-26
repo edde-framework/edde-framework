@@ -69,8 +69,7 @@
 		}
 
 		public function render() {
-			$this->httpResponse->getHeaderList()
-				->set('Content-Type', 'application/json');
+			$this->httpResponse->contentType('application/json');
 			$this->httpResponse->setResponse($this);
 			$this->httpResponse->render();
 			return $this;

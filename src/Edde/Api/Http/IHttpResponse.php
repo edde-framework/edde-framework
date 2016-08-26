@@ -59,6 +59,15 @@
 		public function setResponse(IResponse $response = null): IHttpResponse;
 
 		/**
+		 * set a content type for a response
+		 *
+		 * @param string $contentType
+		 *
+		 * @return IHttpResponse
+		 */
+		public function contentType(string $contentType): IHttpResponse;
+
+		/**
 		 * set a location header
 		 *
 		 * @param string $redirect
