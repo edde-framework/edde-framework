@@ -139,4 +139,18 @@
 			curl_setopt($this->curl, CURLOPT_POSTFIELDS, $post);
 			return $handle;
 		}
+
+		public function put($post = null) {
+			$handle = $this->setup();
+			curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'PUT');
+			curl_setopt($this->curl, CURLOPT_POSTFIELDS, $post);
+			return $handle;
+		}
+
+		public function delete($post = null) {
+			$handle = $this->setup();
+			curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
+			curl_setopt($this->curl, CURLOPT_POSTFIELDS, $post);
+			return $handle;
+		}
 	}
