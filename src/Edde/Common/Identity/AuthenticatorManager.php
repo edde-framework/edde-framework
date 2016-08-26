@@ -41,6 +41,10 @@
 
 		public function registerFlowList(array $flowList): IAuthenticatorManager {
 			foreach ($flowList as $name => $flow) {
+				if (is_string($flow)) {
+					$name = $flow;
+					$flow = [$flow];
+				}
 				$this->registerFlow($name, ...$flow);
 			}
 			return $this;
