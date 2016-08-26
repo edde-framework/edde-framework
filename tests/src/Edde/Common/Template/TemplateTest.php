@@ -28,7 +28,6 @@
 	use Edde\Common\Link\LinkFactory;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Template\Macro\Control\BindIdAttributeMacro;
-	use Edde\Common\Template\Macro\Control\ControlMacro;
 	use Edde\Common\Template\Macro\Control\PassMacro;
 	use Edde\Common\Template\Macro\Control\SchemaMacro;
 	use Edde\Common\Template\Macro\Control\TemplateMacro;
@@ -68,6 +67,7 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
+			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html attribute="choo" title="poo">
 	<head>
@@ -92,6 +92,7 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
+			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html attribute="choo" title="poo">
 	<head>
@@ -116,6 +117,7 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
+			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -135,6 +137,7 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
+			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -155,6 +158,7 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
+			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -175,6 +179,7 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
+			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -196,6 +201,7 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
+			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -218,6 +224,7 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
+			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -246,6 +253,7 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
+			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -284,6 +292,7 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
+			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -304,6 +313,7 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
+			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -334,6 +344,7 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
+			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -370,6 +381,7 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
+			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -396,6 +408,7 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
+			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -426,6 +439,7 @@
 			$control->injectContainer($this->container);
 			$control->injectTemplateManager($this->templateManager);
 			$control->setTemplate(__DIR__ . '/assets/template/custom.xml');
+			$control->dirty();
 			self::assertEquals('	<div class="will-use-custom-control">
 			<div class="hello" sttr="foo">custom control</div>
 	</div>
@@ -467,7 +481,7 @@
 					SpanControl::macro(),
 					PasswordInputControl::macro(),
 					TextInputControl::macro(),
-					new ControlMacro('custom-control', \CustomControl::class),
+					\CustomControl::macro(),
 					new LoopMacro(),
 					StyleSheetCompiler::macro(),
 					JavaScriptCompiler::macro(),

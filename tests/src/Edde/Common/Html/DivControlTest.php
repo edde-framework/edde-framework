@@ -32,6 +32,7 @@
 			$divControl->addClass('foo');
 			$divControl->addClass('bar');
 			$divControl->addControl((new DivControl())->addClass('one'));
+			$divControl->dirty();
 			self::assertEquals('<div class="foo bar">
 	<div class="one"></div>
 </div>

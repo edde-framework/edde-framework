@@ -16,6 +16,7 @@
 		public function testCommon() {
 			$this->documentControl->getHead()
 				->setTitle('some meaningfull title');
+			$this->documentControl->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -34,6 +35,7 @@
 			$head->addStyleSheet('/style.css');
 			$head->addStyleSheet('/stylish-style.css');
 			$head->setTitle('some meaningfull title');
+			$this->documentControl->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
