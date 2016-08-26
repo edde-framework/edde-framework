@@ -28,7 +28,6 @@ var Edde = {
 							break;
 						case 'add':
 							$(selector).append(value.source);
-							$(selector).show();
 							break;
 					}
 				});
