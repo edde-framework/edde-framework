@@ -32,7 +32,7 @@
 		}
 
 		public function getMeta(string $name, $default = null) {
-			return $this->metaList[$name] ?? is_callable($default) ? call_user_func($default) : $default;
+			return $this->metaList[$name] ?? ($default && is_callable($default) ? call_user_func($default) : $default);
 		}
 
 		public function getMetaList(): array {
