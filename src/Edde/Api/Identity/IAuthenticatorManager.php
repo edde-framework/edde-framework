@@ -31,6 +31,15 @@
 		public function registerFlow(string $initial, string ...$authenticatorList): IAuthenticatorManager;
 
 		/**
+		 * register flow list; array key is name of flow, value is array of flows; can be ampty array
+		 *
+		 * @param array $flowList
+		 *
+		 * @return IAuthenticatorManager
+		 */
+		public function registerFlowList(array $flowList): IAuthenticatorManager;
+
+		/**
 		 * execute an authentication flow; if the flow fails, $flow will be used as initial authenticator
 		 *
 		 * @param string $flow

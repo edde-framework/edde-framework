@@ -39,6 +39,13 @@
 			return $this;
 		}
 
+		public function registerFlowList(array $flowList): IAuthenticatorManager {
+			foreach ($flowList as $name => $flow) {
+				$this->registerFlow($name, ...$flow);
+			}
+			return $this;
+		}
+
 		public function registerFlow(string $initial, string ...$authenticatorList): IAuthenticatorManager {
 			$this->flowList[$initial] = empty($authenticatorList) ? [$initial] : $authenticatorList;
 			return $this;
