@@ -140,7 +140,7 @@
 		 */
 		public function ajax() {
 			$this->use();
-			(new AjaxResponse($this->httpResponse))->replaceControlList($this->body->getControlList())
+			(new AjaxResponse($this->httpResponse))->replace($this->body->getControlList())
 				->render();
 			return $this;
 		}

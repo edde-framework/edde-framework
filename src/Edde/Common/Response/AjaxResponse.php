@@ -49,42 +49,35 @@
 		 * @return $this
 		 * @throws ControlException
 		 */
-		public function replaceControlList(array $controlList) {
+		public function replace(IHtmlControl ...$controlList) {
 			$this->replaceControlList = [];
 			foreach ($controlList as $selector => $control) {
-				$this->addReplaceControl($control, is_string($selector) ? $selector : null);
+				$selector = is_string($selector) ? $selector : null;
+				if (($id = $control->getId()) === null && $selector === null) {
+					throw new ControlException(sprintf('Cannot replace control [%s] without selector or preset control id.', get_class($control)));
+				}
+				$this->replaceControlList[$selector ?: '#' . $id] = $control;
 			}
-			return $this;
-		}
-
-		public function addReplaceControl(IHtmlControl $htmlControl, $selector = null) {
-			if (($id = $htmlControl->getId()) === null && $selector === null) {
-				throw new ControlException(sprintf('Cannot replace control [%s] without selector or preset control id.', get_class($htmlControl)));
-			}
-			$this->replaceControlList[$selector ?: '#' . $id] = $htmlControl;
 			return $this;
 		}
 
 		/**
-		 * add list of control which will be added under the specified selector/id (those controls can have duplicite id to be bound to the same parent)
+		 * add list of control which will be added under the specified selector/id
 		 *
-		 * @param array $controlList
+		 * @param IHtmlControl[] $controlList
 		 *
 		 * @return $this
+		 * @throws ControlException
 		 */
-		public function addControlList(array $controlList) {
+		public function add(IHtmlControl ...$controlList) {
 			$this->replaceControlList = [];
 			foreach ($controlList as $selector => $control) {
-				$this->addAddControl($control, is_string($selector) ? $selector : null);
+				$selector = is_string($selector) ? $selector : null;
+				if (($id = $control->getId()) === null && $selector === null) {
+					throw new ControlException(sprintf('Cannot replace control [%s] without selector or preset control id.', get_class($control)));
+				}
+				$this->addControlList[$selector ?: '#' . $id] = $control;
 			}
-			return $this;
-		}
-
-		public function addAddControl(IHtmlControl $htmlControl, $selector = null) {
-			if (($id = $htmlControl->getId()) === null && $selector === null) {
-				throw new ControlException(sprintf('Cannot replace control [%s] without selector or preset control id.', get_class($htmlControl)));
-			}
-			$this->addControlList[$selector ?: '#' . $id] = $htmlControl;
 			return $this;
 		}
 
