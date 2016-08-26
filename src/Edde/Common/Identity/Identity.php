@@ -21,10 +21,27 @@
 		 * @var bool
 		 */
 		protected $authenticated;
+		/**
+		 * @var array
+		 */
+		protected $metaList = [];
 
 		public function __construct() {
 			$this->name = 'unknown';
 			$this->authenticated = false;
+		}
+
+		public function getMeta(string $name, $default = null) {
+			return $this->metaList[$name] ?? is_callable($default) ? call_user_func($default) : $default;
+		}
+
+		public function getMetaList(): array {
+			return $this->metaList;
+		}
+
+		public function setMetaList(array $metaList): IIdentity {
+			$this->metaList = $metaList;
+			return $this;
 		}
 
 		public function hasIdentity(): bool {

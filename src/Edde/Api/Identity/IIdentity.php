@@ -34,6 +34,32 @@
 		public function getIdentity(): ICrate;
 
 		/**
+		 * when neede only meta structure, this can be used
+		 *
+		 * @param array $metaList
+		 *
+		 * @return IIdentity
+		 */
+		public function setMetaList(array $metaList): IIdentity;
+
+		/**
+		 * return particular meta data from identity
+		 *
+		 * @param string $name
+		 * @param mixed $default
+		 *
+		 * @return mixed
+		 */
+		public function getMeta(string $name, $default = null);
+
+		/**
+		 * return current metadata structure
+		 *
+		 * @return array
+		 */
+		public function getMetaList(): array;
+
+		/**
 		 * identity can be updated in realtime (for example after login)
 		 *
 		 * @param string $name
