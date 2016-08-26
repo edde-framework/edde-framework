@@ -6,6 +6,7 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Template\ITemplateManager;
+	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Template\TemplateManager;
 	use Edde\Ext\Container\ContainerFactory;
 	use phpunit\framework\TestCase;

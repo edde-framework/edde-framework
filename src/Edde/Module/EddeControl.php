@@ -9,7 +9,7 @@
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Container\LazyInjectTrait;
-	use Edde\Common\Html\DivControl;
+	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Ext\Html\EddeViewControl;
 	use Tracy\Debugger;
 

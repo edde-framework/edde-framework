@@ -16,8 +16,10 @@
 	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\File\RootDirectory;
-	use Edde\Common\Html\DivControl;
-	use Edde\Common\Html\SpanControl;
+	use Edde\Common\Html\HeaderControl;
+	use Edde\Common\Html\Tag\ButtonControl;
+	use Edde\Common\Html\Tag\DivControl;
+	use Edde\Common\Html\Tag\SpanControl;
 	use Edde\Common\Html\TemplateControl;
 	use Edde\Common\Html\Value\PasswordInputControl;
 	use Edde\Common\Html\Value\TextInputControl;
@@ -26,11 +28,7 @@
 	use Edde\Common\Link\LinkFactory;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Template\Macro\Control\BindIdAttributeMacro;
-	use Edde\Common\Template\Macro\Control\ButtonMacro;
 	use Edde\Common\Template\Macro\Control\ControlMacro;
-	use Edde\Common\Template\Macro\Control\CssMacro;
-	use Edde\Common\Template\Macro\Control\HeaderMacro;
-	use Edde\Common\Template\Macro\Control\JsMacro;
 	use Edde\Common\Template\Macro\Control\PassMacro;
 	use Edde\Common\Template\Macro\Control\SchemaMacro;
 	use Edde\Common\Template\Macro\Control\TemplateMacro;
@@ -465,17 +463,17 @@
 			$this->templateManager->onSetup(function (ITemplateManager $templateManager) use ($container) {
 				$templateManager->registerMacroList([
 					new TemplateMacro(),
-					new ControlMacro('div', DivControl::class),
-					new ControlMacro('span', SpanControl::class),
-					new ControlMacro('password', PasswordInputControl::class),
-					new ControlMacro('text', TextInputControl::class),
+					DivControl::macro(),
+					SpanControl::macro(),
+					PasswordInputControl::macro(),
+					TextInputControl::macro(),
 					new ControlMacro('custom-control', \CustomControl::class),
 					new LoopMacro(),
-					new CssMacro(),
-					new JsMacro(),
-					new ButtonMacro(),
+					StyleSheetCompiler::macro(),
+					JavaScriptCompiler::macro(),
+					ButtonControl::macro(),
 					new SchemaMacro(),
-					new HeaderMacro(),
+					HeaderControl::macro(),
 					new PassMacro(),
 					$container->create(SwitchMacro::class),
 					$container->create(IncludeMacro::class),

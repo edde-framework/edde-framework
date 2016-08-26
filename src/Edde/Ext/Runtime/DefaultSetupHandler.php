@@ -49,9 +49,12 @@
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
-	use Edde\Common\Html\DivControl;
+	use Edde\Common\Html\Document\HeadControl;
 	use Edde\Common\Html\PlaceholderControl;
-	use Edde\Common\Html\SpanControl;
+	use Edde\Common\Html\Tag\ButtonControl;
+	use Edde\Common\Html\Tag\DivControl;
+	use Edde\Common\Html\Tag\ImgControl;
+	use Edde\Common\Html\Tag\SpanControl;
 	use Edde\Common\Html\Value\PasswordInputControl;
 	use Edde\Common\Html\Value\TextInputControl;
 	use Edde\Common\Http\HttpRequestFactory;
@@ -69,11 +72,6 @@
 	use Edde\Common\Session\DummyFingerprint;
 	use Edde\Common\Session\SessionManager;
 	use Edde\Common\Template\Macro\Control\BindIdAttributeMacro;
-	use Edde\Common\Template\Macro\Control\ButtonMacro;
-	use Edde\Common\Template\Macro\Control\ControlMacro;
-	use Edde\Common\Template\Macro\Control\CssMacro;
-	use Edde\Common\Template\Macro\Control\HeaderMacro;
-	use Edde\Common\Template\Macro\Control\JsMacro;
 	use Edde\Common\Template\Macro\Control\PassMacro;
 	use Edde\Common\Template\Macro\Control\SchemaMacro;
 	use Edde\Common\Template\Macro\Control\TemplateMacro;
@@ -162,7 +160,6 @@
 					IAuthenticatorManager::class => AuthenticatorManager::class,
 				], $factoryList))
 				->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
-//					$routerService->registerRouter($container->create(CliRouter::class));
 					$routerService->registerRouter($container->create(SimpleRouter::class));
 				})
 				->onSetup(IResourceManager::class, function (IContainer $container, IResourceManager $resourceManager) {
@@ -173,15 +170,16 @@
 				->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
 					$templateManager->registerMacroList([
 						new TemplateMacro(),
-						new ControlMacro('div', DivControl::class),
-						new ControlMacro('span', SpanControl::class),
-						new ControlMacro('password', PasswordInputControl::class),
-						new ControlMacro('text', TextInputControl::class),
-						new ControlMacro('placeholder', PlaceholderControl::class),
-						new CssMacro(),
-						new JsMacro(),
-						new ButtonMacro(),
-						new HeaderMacro(),
+						DivControl::macro(),
+						SpanControl::macro(),
+						ImgControl::macro(),
+						PasswordInputControl::macro(),
+						TextInputControl::macro(),
+						PlaceholderControl::macro(),
+						StyleSheetCompiler::macro(),
+						JavaScriptCompiler::macro(),
+						ButtonControl::macro(),
+						HeadControl::macro(),
 						new PassMacro(),
 						$container->create(IncludeMacro::class),
 						$container->create(SwitchMacro::class),

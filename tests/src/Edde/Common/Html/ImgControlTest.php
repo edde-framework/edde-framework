@@ -4,6 +4,8 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Html\HtmlException;
+	use Edde\Common\Html\Tag\DivControl;
+	use Edde\Common\Html\Tag\ImgControl;
 	use phpunit\framework\TestCase;
 
 	class ImgControlTest extends TestCase {

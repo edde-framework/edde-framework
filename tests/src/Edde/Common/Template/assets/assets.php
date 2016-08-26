@@ -1,8 +1,8 @@
 <?php
-	use Edde\Common\Html\ButtonControl;
-	use Edde\Common\Html\DivControl;
 	use Edde\Common\Html\Document\DocumentControl;
-	use Edde\Common\Html\SpanControl;
+	use Edde\Common\Html\Tag\ButtonControl;
+	use Edde\Common\Html\Tag\DivControl;
+	use Edde\Common\Html\Tag\SpanControl;
 	use Edde\Common\Html\TemplateControl;
 
 	class TestDocument extends DocumentControl {
