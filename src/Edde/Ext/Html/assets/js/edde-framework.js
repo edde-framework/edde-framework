@@ -24,11 +24,10 @@ var Edde = {
 				$.each(data.selector, function (selector, value) {
 					switch (value.action) {
 						case 'replace':
-							/**
-							 * double selector is intentional
-							 */
 							$(selector).replaceWith(value.source);
-							$(selector).show();
+							break;
+						case 'add':
+							$(selector).append(value.source);
 							break;
 					}
 				});

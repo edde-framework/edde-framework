@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Response;
 
+	use Edde\Api\Control\ControlException;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Http\IHttpResponse;
 
@@ -22,7 +23,11 @@
 		/**
 		 * @var IHtmlControl[]
 		 */
-		protected $controlList = [];
+		protected $replaceControlList = [];
+		/**
+		 * @var IHtmlControl[]
+		 */
+		protected $addControlList = [];
 
 		/**
 		 * @param IHttpResponse $httpResponse
@@ -37,33 +42,68 @@
 		}
 
 		/**
+		 * replace set of the given controls in a current page by control's ids
+		 *
 		 * @param IHtmlControl[] $controlList
 		 *
 		 * @return $this
+		 * @throws ControlException
 		 */
-		public function setControlList(array $controlList) {
-			$this->controlList = [];
+		public function replaceControlList(array $controlList) {
+			$this->replaceControlList = [];
 			foreach ($controlList as $selector => $control) {
-				$this->addControl($control, is_string($selector) ? $selector : null);
+				$this->addReplaceControl($control, is_string($selector) ? $selector : null);
 			}
 			return $this;
 		}
 
-		public function addControl(IHtmlControl $htmlControl, $selector = null) {
-			$this->controlList[$selector ?: '#' . $htmlControl->getId()] = $htmlControl;
+		public function addReplaceControl(IHtmlControl $htmlControl, $selector = null) {
+			if (($id = $htmlControl->getId()) === null && $selector === null) {
+				throw new ControlException(sprintf('Cannot replace control [%s] without selector or preset control id.', get_class($htmlControl)));
+			}
+			$this->replaceControlList[$selector ?: '#' . $id] = $htmlControl;
+			return $this;
+		}
+
+		/**
+		 * add list of control which will be added under the specified selector/id (those controls can have duplicite id to be bound to the same parent)
+		 *
+		 * @param array $controlList
+		 *
+		 * @return $this
+		 */
+		public function addControlList(array $controlList) {
+			$this->replaceControlList = [];
+			foreach ($controlList as $selector => $control) {
+				$this->addAddControl($control, is_string($selector) ? $selector : null);
+			}
+			return $this;
+		}
+
+		public function addAddControl(IHtmlControl $htmlControl, $selector = null) {
+			if (($id = $htmlControl->getId()) === null && $selector === null) {
+				throw new ControlException(sprintf('Cannot replace control [%s] without selector or preset control id.', get_class($htmlControl)));
+			}
+			$this->addControlList[$selector ?: '#' . $id] = $htmlControl;
 			return $this;
 		}
 
 		public function send() {
 			$response = [];
-			foreach ($this->controlList as $selector => $control) {
-				$response['selector'][$selector] = [
-					'action' => 'replace',
-					'source' => $control->render(),
-				];
-			}
-			if ($this->redirect !== null) {
-				$response['redirect'] = $this->redirect;
+			$response['redirect'] = $this->redirect;
+			if ($this->redirect === null) {
+				foreach ($this->replaceControlList as $selector => $control) {
+					$response['selector'][$selector] = [
+						'action' => 'replace',
+						'source' => $control->render(),
+					];
+				}
+				foreach ($this->addControlList as $selector => $control) {
+					$response['selector'][$selector] = [
+						'action' => 'add',
+						'source' => $control->render(),
+					];
+				}
 			}
 			echo json_encode($response);
 		}
