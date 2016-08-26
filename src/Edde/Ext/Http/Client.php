@@ -133,7 +133,7 @@
 		 *
 		 * @return Handle
 		 */
-		public function post(array $post = null) {
+		public function post($post = null) {
 			$handle = $this->setup();
 			curl_setopt($this->curl, CURLOPT_POST, true);
 			curl_setopt($this->curl, CURLOPT_POSTFIELDS, $post);
