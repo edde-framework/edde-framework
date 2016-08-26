@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Html;
 
+	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResource;
@@ -22,6 +23,10 @@
 	class ViewControl extends DocumentControl {
 		use LazyInjectTrait;
 		use TemplateTrait;
+		/**
+		 * @var IHttpRequest
+		 */
+		protected $httpRequest;
 		/**
 		 * @var IHttpResponse
 		 */
@@ -46,6 +51,10 @@
 		 * @var IResourceList
 		 */
 		protected $javaScriptList;
+
+		public function lazyHttpRequest(IHttpRequest $httpRequest) {
+			$this->httpRequest = $httpRequest;
+		}
 
 		public function lazyHttpResponse(IHttpResponse $httpResponse) {
 			$this->httpResponse = $httpResponse;
@@ -112,7 +121,14 @@
 		 * @return $this
 		 */
 		public function redirect($redirect) {
-			(new AjaxResponse($this->httpResponse))->redirect($this->linkFactory->generate($redirect))
+			$this->use();
+			$link = $this->linkFactory->generate($redirect);
+			if ($this->httpRequest->isAjax()) {
+				(new AjaxResponse($this->httpResponse))->redirect($link)
+					->render();
+				return $this;
+			}
+			$this->httpResponse->redirect($link)
 				->render();
 			return $this;
 		}

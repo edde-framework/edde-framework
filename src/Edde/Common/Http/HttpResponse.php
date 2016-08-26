@@ -77,4 +77,10 @@
 			$this->response = $response;
 			return $this;
 		}
+
+		public function redirect(string $redirect): IHttpResponse {
+			$this->getHeaderList()
+				->set('location', $redirect);
+			return $this;
+		}
 	}

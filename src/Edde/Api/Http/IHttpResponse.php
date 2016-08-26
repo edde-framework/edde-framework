@@ -59,6 +59,15 @@
 		public function setResponse(IResponse $response = null): IHttpResponse;
 
 		/**
+		 * set a location header
+		 *
+		 * @param string $redirect
+		 *
+		 * @return IHttpResponse
+		 */
+		public function redirect(string $redirect): IHttpResponse;
+
+		/**
 		 * execute response "rendering"; basically it "echoes" output
 		 *
 		 * @return IHttpResponse

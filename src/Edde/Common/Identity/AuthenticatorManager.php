@@ -39,13 +39,6 @@
 			return $this;
 		}
 
-		public function identity(): IIdentity {
-			if ($this->identity === null) {
-				$this->identity = $this->session->get('identity', new Identity());
-			}
-			return $this->identity;
-		}
-
 		public function registerFlow(string $initial, string ...$authenticatorList): IAuthenticatorManager {
 			$this->flowList[$initial] = $authenticatorList;
 			return $this;
@@ -112,6 +105,7 @@
 		}
 
 		protected function prepare() {
+			$this->identity = $this->identity();
 			foreach ($this->flowList as $name => $authList) {
 				foreach ($authList as $authenticator) {
 					if (isset($this->authenticatorList[$authenticator]) === false) {
@@ -119,5 +113,12 @@
 					}
 				}
 			}
+		}
+
+		public function identity(): IIdentity {
+			if ($this->identity === null) {
+				$this->identity = $this->session->get('identity', new Identity());
+			}
+			return $this->identity;
 		}
 	}
