@@ -142,11 +142,11 @@
 		/**
 		 * method specific for this "presenter"; this will sent a AjaxResponse with controls currently set to the body
 		 *
-		 * @return $this
+		 * @return IHtmlView
 		 */
-		public function ajax() {
+		public function ajax(): IHtmlView {
 			$this->use();
-			(new AjaxResponse($this->httpResponse))->replace($this->body->getControlList())
+			(new AjaxResponse($this->httpResponse))->replace(...$this->body->getControlList())
 				->render();
 			return $this;
 		}

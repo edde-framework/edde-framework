@@ -44,12 +44,6 @@
 			$this->cacheStorage = $cacheStorage;
 		}
 
-		public function actionSetup() {
-			$this->use();
-			$this->template();
-			$this->response();
-		}
-
 		public function handleOnUpgrade() {
 			$this->use();
 			try {
@@ -61,7 +55,7 @@
 				$this->message->addClass('error')
 					->setText($e->getMessage());
 			}
-			$this->ajax();
+			$this->response();
 		}
 
 		public function handleOnRebuildCrates() {
@@ -75,28 +69,30 @@
 				$this->message->addClass('error')
 					->setText($e->getMessage());
 			}
-			$this->ajax();
+			$this->response();
 		}
 
 		public function handleOnClearCache() {
 			$this->use();
+			$text = null;
 			try {
+				$this->template(__DIR__ . '/template/action-setup.xml');
 				$this->cacheStorage->invalidate();
-				$this->message->addClass('success')
-					->setText('cache has been wiped out');
+				$this->message->addClass('success');
+				$text = 'cache has been wiped out';
 			} catch (EddeException $e) {
 				Debugger::log($e);
-				$this->message->addClass('error')
-					->setText($e->getMessage());
+				$this->message->addClass('error');
+				$text = $e->getMessage();
 			}
-			$this->ajax();
+			$this->message->setText($text)
+				->dirty();
+			$this->response();
 		}
 
 		protected function prepare() {
 			parent::prepare();
-			$this->addStyleSheet(__DIR__ . '/assets/css/kube.css');
 			$this->addControl($this->message = $this->createControl(DivControl::class)
-				->addClass('alert')
 				->setId('global-message'));
 		}
 	}
