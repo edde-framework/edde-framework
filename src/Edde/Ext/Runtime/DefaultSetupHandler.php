@@ -49,7 +49,7 @@
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
-	use Edde\Common\Html\Document\HeadControl;
+	use Edde\Common\Html\HeaderControl;
 	use Edde\Common\Html\PlaceholderControl;
 	use Edde\Common\Html\Tag\ButtonControl;
 	use Edde\Common\Html\Tag\DivControl;
@@ -179,7 +179,7 @@
 						StyleSheetCompiler::macro(),
 						JavaScriptCompiler::macro(),
 						ButtonControl::macro(),
-						HeadControl::macro(),
+						HeaderControl::macro(),
 						new PassMacro(),
 						$container->create(IncludeMacro::class),
 						$container->create(SwitchMacro::class),

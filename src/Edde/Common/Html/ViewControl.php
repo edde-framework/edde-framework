@@ -133,6 +133,17 @@
 			return $this;
 		}
 
+		public function response(): IHtmlView {
+			$this->use();
+			if ($this->httpRequest->isAjax()) {
+				return $this->ajax();
+			}
+			(new HtmlResponse($this->httpResponse))->render(function () {
+				return $this->render();
+			});
+			return $this;
+		}
+
 		/**
 		 * method specific for this "presenter"; this will sent a AjaxResponse with controls currently set to the body
 		 *
@@ -140,16 +151,8 @@
 		 */
 		public function ajax() {
 			$this->use();
-			(new AjaxResponse($this->httpResponse))->replace($this->body->getControlList())
+			(new AjaxResponse($this->httpResponse))->replace(...$this->body->getControlList())
 				->render();
-			return $this;
-		}
-
-		public function response() {
-			$this->use();
-			(new HtmlResponse($this->httpResponse))->render(function () {
-				return $this->render();
-			});
 			return $this;
 		}
 

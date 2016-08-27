@@ -44,12 +44,6 @@
 			$this->cacheStorage = $cacheStorage;
 		}
 
-		public function actionSetup() {
-			$this->use();
-			$this->template();
-			$this->response();
-		}
-
 		public function handleOnUpgrade() {
 			$this->use();
 			try {
@@ -61,7 +55,7 @@
 				$this->message->addClass('error')
 					->setText($e->getMessage());
 			}
-			$this->ajax();
+			$this->response();
 		}
 
 		public function handleOnRebuildCrates() {
@@ -75,7 +69,7 @@
 				$this->message->addClass('error')
 					->setText($e->getMessage());
 			}
-			$this->ajax();
+			$this->response();
 		}
 
 		public function handleOnClearCache() {
@@ -89,12 +83,11 @@
 				$this->message->addClass('error')
 					->setText($e->getMessage());
 			}
-			$this->ajax();
+			$this->response();
 		}
 
 		protected function prepare() {
 			parent::prepare();
-			$this->addStyleSheet(__DIR__ . '/assets/css/kube.css');
 			$this->addControl($this->message = $this->createControl(DivControl::class)
 				->addClass('alert')
 				->setId('global-message'));

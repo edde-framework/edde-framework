@@ -71,6 +71,8 @@
 		 */
 		public function isDirty(): bool;
 
+		public function handle(string $method, array $parameterList, array $crateList);
+
 		/**
 		 * @return IControl[]
 		 */
