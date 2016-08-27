@@ -166,13 +166,7 @@
 			return $this->node->getMeta('pair', true);
 		}
 
-		/**
-		 * @param string $control
-		 * @param array ...$parameterList
-		 *
-		 * @return IHtmlControl
-		 */
-		protected function createControl($control, ...$parameterList) {
+		public function createControl(string $control, ...$parameterList): IHtmlControl {
 			return $this->container->create($control, ...$parameterList);
 		}
 	}

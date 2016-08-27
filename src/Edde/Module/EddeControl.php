@@ -74,22 +74,25 @@
 
 		public function handleOnClearCache() {
 			$this->use();
+			$text = null;
 			try {
+				$this->template(__DIR__ . '/template/action-setup.xml');
 				$this->cacheStorage->invalidate();
-				$this->message->addClass('success')
-					->setText('cache has been wiped out');
+				$this->message->addClass('success');
+				$text = 'cache has been wiped out';
 			} catch (EddeException $e) {
 				Debugger::log($e);
-				$this->message->addClass('error')
-					->setText($e->getMessage());
+				$this->message->addClass('error');
+				$text = $e->getMessage();
 			}
+			$this->message->setText($text)
+				->dirty();
 			$this->response();
 		}
 
 		protected function prepare() {
 			parent::prepare();
 			$this->addControl($this->message = $this->createControl(DivControl::class)
-				->addClass('alert')
 				->setId('global-message'));
 		}
 	}

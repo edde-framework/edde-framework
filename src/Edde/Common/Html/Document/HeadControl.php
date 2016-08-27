@@ -28,7 +28,7 @@
 		 *
 		 * @return $this
 		 */
-		public function addJavaScript($src) {
+		public function addJavaScript(string $src) {
 			$this->use();
 			$this->addControl($this->createControl(JavaScriptControl::class)
 				->setSrc($src));
@@ -42,7 +42,7 @@
 		 *
 		 * @return $this
 		 */
-		public function addStyleSheet($href) {
+		public function addStyleSheet(string $href) {
 			$this->use();
 			$this->addControl($this->createControl(StyleSheetControl::class)
 				->setHref($href));
