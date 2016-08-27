@@ -18,13 +18,13 @@
 
 		public function run(INode $root, ICompiler $compiler) {
 			$destination = $compiler->getDestination();
-			$value = str_replace('()', '', $root->getValue());
+			$value = $root->getValue();
 			switch ($root->getName()) {
 				case 'm:pass':
 					$this->macro($root, $compiler);
 					$value = StringUtils::firstLower(StringUtils::camelize($value));
 					if (strrpos($value, '()') !== false) {
-						$destination->write(sprintf("\t\t\t\$this->%s(\$control);\n", $value));
+						$destination->write(sprintf("\t\t\t\$this->%s(\$control);\n", str_replace('()', '', $value)));
 						break;
 					}
 					$destination->write(sprintf("\t\t\t\$reflectionProperty = \$reflectionClass->getProperty('%s');\n", $value));
@@ -32,6 +32,7 @@
 					$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->proxy, \$control);\n");
 					break;
 				case 'm:pass-child':
+					$value = str_replace('()', '', $root->getValue());
 					foreach ($root->getNodeList() as $node) {
 						$compiler->macro($node, $compiler, function (ICompiler $compiler) use ($value) {
 							$destination = $compiler->getDestination();
