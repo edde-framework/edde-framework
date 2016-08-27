@@ -435,9 +435,7 @@
 		}
 
 		public function testCustomControl() {
-			$control = new TemplateControl();
-			$control->injectContainer($this->container);
-			$control->injectTemplateManager($this->templateManager);
+			$control = $this->container->create(TemplateControl::class);
 			$control->setTemplate(__DIR__ . '/assets/template/custom.xml');
 			$control->dirty();
 			self::assertEquals('	<div class="will-use-custom-control">
