@@ -24,11 +24,11 @@
 		 */
 		protected $route;
 
-		public function injectContainer(IContainer $container) {
+		public function lazyContainer(IContainer $container) {
 			$this->container = $container;
 		}
 
-		public function injectTemplateManager(ITemplateManager $templateManager) {
+		public function lazyTemplateManager(ITemplateManager $templateManager) {
 			$this->templateManager = $templateManager;
 		}
 

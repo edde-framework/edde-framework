@@ -3,6 +3,8 @@
 
 	namespace Edde\Common\Html;
 
+	use Edde\Api\Html\IHtmlControl;
+	use Edde\Api\Html\IHtmlView;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Link\ILinkFactory;
@@ -20,7 +22,7 @@
 	/**
 	 * Formal root control for displaying page with some shorthands.
 	 */
-	class ViewControl extends DocumentControl {
+	class ViewControl extends DocumentControl implements IHtmlView {
 		use LazyInjectTrait;
 		use TemplateTrait;
 		/**
@@ -51,6 +53,10 @@
 		 * @var IResourceList
 		 */
 		protected $javaScriptList;
+		/**
+		 * @var IHtmlControl[]
+		 */
+		protected $snippetList = [];
 
 		public function lazyHttpRequest(IHttpRequest $httpRequest) {
 			$this->httpRequest = $httpRequest;
@@ -154,6 +160,7 @@
 		}
 
 		public function render() {
+			$this->use();
 			if ($this->styleSheetList->isEmpty() === false) {
 				$this->head->addStyleSheet($this->styleSheetCompiler->compile($this->styleSheetList)
 					->getRelativePath());
@@ -164,6 +171,27 @@
 			}
 			$this->dirty();
 			return parent::render();
+		}
+
+		public function snippet(IHtmlControl $htmlControl, callable $callback): IHtmlView {
+			$this->snippetList[] = [
+				$htmlControl,
+				$callback,
+			];
+			return $this;
+		}
+
+		public function snippets(): array {
+			$snippetList = [];
+			foreach ($this->snippetList as $snippet) {
+				/** @var $htmlControl IHtmlControl */
+				list($htmlControl, $callback) = $snippet;
+				$callback($htmlControl);
+				if ($htmlControl->isDirty()) {
+					$snippetList[] = $htmlControl;
+				}
+			}
+			return $snippetList;
 		}
 
 		protected function prepare() {
