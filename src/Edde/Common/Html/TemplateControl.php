@@ -16,11 +16,6 @@
 			return $this;
 		}
 
-		public function render() {
-			$this->use();
-			return parent::render();
-		}
-
 		public function dirty(bool $dirty = true): IControl {
 			$this->use();
 			if ($dirty) {

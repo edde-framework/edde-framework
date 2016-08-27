@@ -52,21 +52,21 @@
 			return $this;
 		}
 
+		public function dirty(bool $dirty = true): IControl {
+			$this->use();
+			$this->node->setMeta('dirty', $dirty);
+			foreach ($this->getControlList() as $control) {
+				$control->dirty($dirty);
+			}
+			return $this;
+		}
+
 		public function getControlList() {
 			$controlList = [];
 			foreach ($this->node->getNodeList() as $node) {
 				$controlList[] = $node->getMeta('control');
 			}
 			return $controlList;
-		}
-
-		public function dirty(bool $dirty = true): IControl {
-			$this->use();
-			$this->node->setMeta('dirty', $dirty);
-			foreach ($this as $control) {
-				$control->dirty($dirty);
-			}
-			return $this;
 		}
 
 		public function isDirty(): bool {
