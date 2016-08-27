@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Html;
 
+	use Edde\Api\Control\ControlException;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlView;
 	use Edde\Api\Http\IHttpRequest;
@@ -154,11 +155,17 @@
 		 * method specific for this "presenter"; this will sent a AjaxResponse with controls currently set to the body
 		 *
 		 * @return IHtmlView
+		 * @throws ControlException
 		 */
 		public function ajax(): IHtmlView {
 			$this->use();
-			(new AjaxResponse($this->httpResponse))->replace(...$this->body->getControlList())
-				->render();
+			$ajax = new AjaxResponse($this->httpResponse);
+			foreach ($this as $control) {
+				if ($control->isDirty()) {
+					$ajax->replace($control);
+				}
+			}
+			$ajax->render();
 			return $this;
 		}
 

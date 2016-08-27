@@ -22,7 +22,14 @@
 			switch ($root->getName()) {
 				case 'm:pass':
 					$this->macro($root, $compiler);
-					$destination->write(sprintf("\t\t\t\$this->%s(\$control);\n", StringUtils::firstLower(StringUtils::camelize($value))));
+					$value = StringUtils::firstLower(StringUtils::camelize($value));
+					if (strrpos($value, '()') !== false) {
+						$destination->write(sprintf("\t\t\t\$this->%s(\$control);\n", $value));
+						break;
+					}
+					$destination->write(sprintf("\t\t\t\$reflectionProperty = \$reflectionClass->getProperty('%s');\n", $value));
+					$destination->write("\t\t\t\$reflectionProperty->setAccessible(true);\n");
+					$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->proxy, \$control);\n");
 					break;
 				case 'm:pass-child':
 					foreach ($root->getNodeList() as $node) {

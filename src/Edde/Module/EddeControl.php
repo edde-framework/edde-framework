@@ -9,7 +9,6 @@
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Container\LazyInjectTrait;
-	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Ext\Html\EddeViewControl;
 	use Tracy\Debugger;
 
@@ -47,52 +46,45 @@
 		public function handleOnUpgrade() {
 			$this->use();
 			try {
-				$upgrade = $this->upgradeManager->upgrade();
-				$this->message->addClass('success')
-					->setText(sprintf('application has been upgraded to version [%s]', $upgrade->getVersion()));
+				$this->template(__DIR__ . '/template/action-setup.xml');
+				$this->message('success', sprintf('application has been upgraded to version [%s]', $this->upgradeManager->upgrade()
+					->getVersion()));
 			} catch (EddeException $e) {
 				Debugger::log($e);
-				$this->message->addClass('error')
-					->setText($e->getMessage());
+				$this->message('error', $e->getMessage());
 			}
 			$this->response();
+		}
+
+		protected function message(string $class, string $message) {
+			$this->message->addClass($class)
+				->setText($message)
+				->dirty();
 		}
 
 		public function handleOnRebuildCrates() {
 			$this->use();
 			try {
+				$this->template(__DIR__ . '/template/action-setup.xml');
 				$this->crateGenerator->generate(true);
-				$this->message->addClass('success')
-					->setText('crates has been rebuilt');
+				$this->message('success', 'crates has been rebuilt');
 			} catch (EddeException $e) {
 				Debugger::log($e);
-				$this->message->addClass('error')
-					->setText($e->getMessage());
+				$this->message('error', $e->getMessage());
 			}
 			$this->response();
 		}
 
 		public function handleOnClearCache() {
 			$this->use();
-			$text = null;
 			try {
 				$this->template(__DIR__ . '/template/action-setup.xml');
 				$this->cacheStorage->invalidate();
-				$this->message->addClass('success');
-				$text = 'cache has been wiped out';
+				$this->message('success', 'cache has been wiped out');
 			} catch (EddeException $e) {
 				Debugger::log($e);
-				$this->message->addClass('error');
-				$text = $e->getMessage();
+				$this->message('error', $e->getMessage());
 			}
-			$this->message->setText($text)
-				->dirty();
 			$this->response();
-		}
-
-		protected function prepare() {
-			parent::prepare();
-			$this->addControl($this->message = $this->createControl(DivControl::class)
-				->setId('global-message'));
 		}
 	}

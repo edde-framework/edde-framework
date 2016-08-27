@@ -36,7 +36,7 @@
 			$destination->write("\t\t\treturn call_user_func_array([\$this->proxy, \$function], \$parameterList);\n");
 			$destination->write("\t\t}\n\n");
 			$destination->write(sprintf("\t\tpublic function template(\\%s \$parent) {\n", IHtmlControl::class));
-			$destination->write("\t\t\t\$this->proxy = \$parent;\n");
+			$destination->write("\t\t\t\$reflectionClass = new ReflectionClass(\$this->proxy = \$parent);\n");
 			if (($attributeList = $root->getAttributeList()) !== []) {
 				$destination->write(sprintf("\t\t\t\$parent->setAttributeList(%s);\n", var_export($attributeList, true)));
 			}

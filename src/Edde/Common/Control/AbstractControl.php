@@ -103,7 +103,7 @@
 
 		public function getIterator() {
 			$this->use();
-			foreach (NodeIterator::create($this->node) as $node) {
+			foreach (NodeIterator::recursive($this->node) as $node) {
 				yield $node->getMeta('control');
 			}
 		}
