@@ -95,7 +95,7 @@
 			$source[] = "\n";
 			$parent = explode('\\', $this->parent);
 			if (($implements = $schema->getMeta('implements', '')) !== '') {
-				$implements = ' implements \\' . implode(', \\', is_array($implements) ? $implements : [$implements]);
+				$implements = ' implements \\' . implode(', \\', (array)$implements);
 			}
 			$source[] = sprintf("\tclass %s extends %s%s {\n", $schema->getName(), end($parent), $implements);
 			foreach ($schema->getPropertyList() as $schemaProperty) {

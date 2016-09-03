@@ -19,7 +19,7 @@
 		 * @param $control
 		 */
 		public function __construct($macroList, string $control) {
-			parent::__construct(is_array($macroList) ? $macroList : [$macroList]);
+			parent::__construct((array)$macroList);
 			$this->control = $control;
 		}
 
@@ -41,7 +41,7 @@
 		}
 
 		protected function writeAttributeList(array $attributeList, IFile $destination) {
-			if ($attributeList !== []) {
+			if (empty($attributeList) === false) {
 				$export = [];
 				foreach ($attributeList as $name => $value) {
 					$export[] = "'" . $name . "' => " . $value;

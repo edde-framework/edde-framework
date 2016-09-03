@@ -95,7 +95,7 @@
 					$method,
 				]);
 			}
-			return $this;
+			return $instance;
 		}
 
 		public function call(callable $callable, ...$parameterList) {

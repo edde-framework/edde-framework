@@ -12,4 +12,7 @@
 
 		public function myDummySnippet(DivControl $divControl) {
 		}
+
+		public function templateSnippet() {
+		}
 	}

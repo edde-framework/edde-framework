@@ -160,8 +160,9 @@
 		public function ajax(): IHtmlView {
 			$this->use();
 			$ajax = new AjaxResponse($this->httpResponse);
+			/** @var $control IHtmlControl */
 			foreach ($this as $control) {
-				if ($control->isDirty()) {
+				if ($control->isDirty() && $control->getId() !== null) {
 					$ajax->replace($control);
 				}
 			}

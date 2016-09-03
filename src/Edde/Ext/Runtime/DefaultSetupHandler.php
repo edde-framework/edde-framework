@@ -49,14 +49,7 @@
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
-	use Edde\Common\Html\HeaderControl;
-	use Edde\Common\Html\PlaceholderControl;
-	use Edde\Common\Html\Tag\ButtonControl;
-	use Edde\Common\Html\Tag\DivControl;
-	use Edde\Common\Html\Tag\ImgControl;
-	use Edde\Common\Html\Tag\SpanControl;
-	use Edde\Common\Html\Value\PasswordInputControl;
-	use Edde\Common\Html\Value\TextInputControl;
+	use Edde\Common\Html\MacroSet;
 	use Edde\Common\Http\HttpRequestFactory;
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Identity\AuthenticatorManager;
@@ -71,10 +64,6 @@
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Session\DummyFingerprint;
 	use Edde\Common\Session\SessionManager;
-	use Edde\Common\Template\Macro\Control\BindIdAttributeMacro;
-	use Edde\Common\Template\Macro\Control\PassMacro;
-	use Edde\Common\Template\Macro\Control\SchemaMacro;
-	use Edde\Common\Template\Macro\Control\TemplateMacro;
 	use Edde\Common\Template\Macro\IncludeMacro;
 	use Edde\Common\Template\Macro\LoopMacro;
 	use Edde\Common\Template\Macro\SwitchMacro;
@@ -168,25 +157,11 @@
 					$resourceManager->registerResourceHandler($container->create(PhpResourceHandler::class));
 				})
 				->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
-					$templateManager->registerMacroList([
-						new TemplateMacro(),
-						DivControl::macro(),
-						SpanControl::macro(),
-						ImgControl::macro(),
-						PasswordInputControl::macro(),
-						TextInputControl::macro(),
-						PlaceholderControl::macro(),
-						StyleSheetCompiler::macro(),
-						JavaScriptCompiler::macro(),
-						ButtonControl::macro(),
-						HeaderControl::macro(),
-						new PassMacro(),
+					$templateManager->registerMacroList(array_merge(MacroSet::macroList($container), [
 						$container->create(IncludeMacro::class),
 						$container->create(SwitchMacro::class),
-						$container->create(BindIdAttributeMacro::class),
-						$container->create(SchemaMacro::class),
 						$container->create(LoopMacro::class),
-					]);
+					]));
 				});
 		}
 	}

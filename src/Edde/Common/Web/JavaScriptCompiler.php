@@ -33,7 +33,7 @@
 					parent::__construct(['js']);
 				}
 
-				public function run(INode $root, ICompiler $compiler) {
+				public function run(INode $root, ICompiler $compiler, callable $callback = null) {
 					$destination = $compiler->getDestination();
 					$destination->write(sprintf("\t\t\t\$this->javaScriptCompiler->addFile('%s');\n", $compiler->file($root->getAttribute('src'))));
 				}

@@ -22,14 +22,14 @@
 					], '');
 				}
 
-				public function run(INode $root, ICompiler $compiler) {
+				public function run(INode $root, ICompiler $compiler, callable $callback = null) {
 					$destination = $compiler->getDestination();
 					$destination->write("\t\t\t\$parent = \$this->stack->top();\n");
 					$destination->write(sprintf("\t\t\t\$parent->addControl(\$control = \$this->container->create('%s'));\n", HeaderControl::class));
 					$destination->write(sprintf("\t\t\t\$control->setTag('%s');\n", $root->getName()));
 					$this->writeTextValue($root, $destination, $compiler);
 					$this->writeAttributeList($this->getAttributeList($root, $compiler), $destination);
-					$this->macro($root, $compiler);
+					$this->macro($root, $compiler, $callback);
 				}
 			};
 		}

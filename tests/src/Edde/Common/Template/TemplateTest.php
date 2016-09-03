@@ -16,21 +16,12 @@
 	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\File\RootDirectory;
-	use Edde\Common\Html\HeaderControl;
-	use Edde\Common\Html\Tag\ButtonControl;
-	use Edde\Common\Html\Tag\DivControl;
-	use Edde\Common\Html\Tag\SpanControl;
+	use Edde\Common\Html\MacroSet;
 	use Edde\Common\Html\TemplateControl;
-	use Edde\Common\Html\Value\PasswordInputControl;
-	use Edde\Common\Html\Value\TextInputControl;
 	use Edde\Common\Link\ControlLinkGenerator;
 	use Edde\Common\Link\HostUrl;
 	use Edde\Common\Link\LinkFactory;
 	use Edde\Common\Resource\ResourceManager;
-	use Edde\Common\Template\Macro\Control\BindIdAttributeMacro;
-	use Edde\Common\Template\Macro\Control\PassMacro;
-	use Edde\Common\Template\Macro\Control\SchemaMacro;
-	use Edde\Common\Template\Macro\Control\TemplateMacro;
 	use Edde\Common\Template\Macro\IncludeMacro;
 	use Edde\Common\Template\Macro\LoopMacro;
 	use Edde\Common\Template\Macro\SwitchMacro;
@@ -457,10 +448,6 @@
 					return new RootDirectory(__DIR__);
 				},
 				\TestDocument::class,
-				IncludeMacro::class,
-				SwitchMacro::class,
-				BindIdAttributeMacro::class,
-				SchemaMacro::class,
 				ICryptEngine::class => CryptEngine::class,
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
@@ -472,25 +459,12 @@
 				},
 			]);
 			$this->container->registerFactory(ITemplateManager::class, FactoryFactory::create(ITemplateManager::class, $this->templateManager = $this->container->create(TemplateManager::class)));
-			$this->templateManager->onSetup(function (ITemplateManager $templateManager) use ($container) {
-				$templateManager->registerMacroList([
-					new TemplateMacro(),
-					DivControl::macro(),
-					SpanControl::macro(),
-					PasswordInputControl::macro(),
-					TextInputControl::macro(),
-					\CustomControl::macro(),
-					new LoopMacro(),
-					StyleSheetCompiler::macro(),
-					JavaScriptCompiler::macro(),
-					ButtonControl::macro(),
-					new SchemaMacro(),
-					HeaderControl::macro(),
-					new PassMacro(),
-					$container->create(SwitchMacro::class),
-					$container->create(IncludeMacro::class),
-					$container->create(BindIdAttributeMacro::class),
-				]);
+			$this->templateManager->onSetup(function (ITemplateManager $templateManager) {
+				$templateManager->registerMacroList(array_merge(MacroSet::macroList($this->container), [
+					$this->container->inject(new IncludeMacro()),
+					$this->container->inject(new SwitchMacro()),
+					$this->container->inject(new LoopMacro()),
+				]));
 			});
 			$this->control = $this->container->create(\TestDocument::class);
 		}

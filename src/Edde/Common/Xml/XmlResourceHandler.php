@@ -5,6 +5,7 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResource;
+	use Edde\Api\Resource\IResourceHandler;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Api\Xml\XmlParserException;
 	use Edde\Common\Container\LazyInjectTrait;
@@ -20,9 +21,12 @@
 
 		/**
 		 * @param IXmlParser $xmlParser
+		 *
+		 * @return IResourceHandler
 		 */
-		public function lazyXmlParser(IXmlParser $xmlParser) {
+		public function lazyXmlParser(IXmlParser $xmlParser): IResourceHandler {
 			$this->xmlParser = $xmlParser;
+			return $this;
 		}
 
 		public function getMimeTypeList(): array {

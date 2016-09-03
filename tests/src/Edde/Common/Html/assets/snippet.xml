@@ -1,0 +1,6 @@
+<control>
+	<div class="whoop!"/>
+	<snippet m:snippet="template-snippet()">
+		<div id="foo" class="this is a snippet!"/>
+	</snippet>
+</control>
