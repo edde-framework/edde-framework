@@ -80,11 +80,13 @@
 	use Edde\Ext\Resource\JsonResourceHandler;
 	use Edde\Ext\Resource\PhpResourceHandler;
 	use Edde\Ext\Router\SimpleRouter;
+	use Edde\Framework;
 
 	class DefaultSetupHandler extends SetupHandler {
 		static public function create(ICacheFactory $cacheFactory = null, array $factoryList = []) {
 			return parent::create($cacheFactory ?: new CacheFactory(__DIR__, new InMemoryCacheStorage()))
 				->registerFactoryList(array_merge([
+					Framework::class,
 					ICacheStorage::class => InMemoryCacheStorage::class,
 					/**
 					 * Application and presentation layer
