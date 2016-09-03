@@ -4,9 +4,7 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Control\ControlException;
 	use Edde\Api\Html\IHtmlControl;
-	use Edde\Api\Template\IMacro;
 	use Edde\Common\Control\AbstractControl;
 
 	abstract class AbstractHtmlControl extends AbstractControl implements IHtmlControl {
@@ -14,10 +12,6 @@
 		 * @var IContainer
 		 */
 		protected $container;
-
-		static public function macro(): IMacro {
-			throw new ControlException(sprintf('Control [%s] does not support template macros.', static::class));
-		}
 
 		public function injectContainer(IContainer $container) {
 			$this->container = $container;

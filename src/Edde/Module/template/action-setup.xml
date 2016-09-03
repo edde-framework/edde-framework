@@ -1,7 +1,7 @@
 <control title="Edde Setup">
 	<css src="css/kube.css"/>
 
-	<div id="message" class="alert" m:pass="message"/>
+	<div id="message" class="alert" m:snippet="message"/>
 
 	<div class="row centered">
 		<div class="col col-5">

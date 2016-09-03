@@ -50,6 +50,45 @@
 
 		public function testTemplateSnippet() {
 			$this->htmlView->template(__DIR__ . '/assets/snippet.xml');
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body>
+		<div class="whoop!"></div>
+		<div class="edde-placeholder" id="foo"></div>
+	</body>
+</html>
+', $this->htmlView->render());
+		}
+
+		public function testTemplateSnippetProperty() {
+			$this->htmlView->template(__DIR__ . '/assets/snippet-property.xml');
+			self::assertInstanceOf(DivControl::class, $this->htmlView->templateSnippet);
+			$this->htmlView->templateSnippet->dirty();
+			self::assertEquals('<div id="foo" class="this is a snippet!">
+	<div class="another control"></div>
+	<div>
+		<div>deeper and deeper</div>
+	</div>
+</div>
+', $this->htmlView->templateSnippet->render());
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body>
+		<div class="whoop!"></div>
+		<div class="edde-placeholder" id="foo"></div>
+	</body>
+</html>
+', $this->htmlView->render());
 		}
 
 		protected function setUp() {

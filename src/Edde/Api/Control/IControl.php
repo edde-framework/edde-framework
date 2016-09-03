@@ -33,6 +33,13 @@
 		public function getParent();
 
 		/**
+		 * remove this control from control tree
+		 *
+		 * @return IControl
+		 */
+		public function disconnect(): IControl;
+
+		/**
 		 * add the new control to hierarchy of this control
 		 *
 		 * @param IControl $control

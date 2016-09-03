@@ -13,7 +13,7 @@
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
-	use Edde\Common\Container\Factory\FactoryFactory;
+	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\Html\MacroSet;
@@ -22,6 +22,7 @@
 	use Edde\Common\Link\HostUrl;
 	use Edde\Common\Link\LinkFactory;
 	use Edde\Common\Resource\ResourceManager;
+	use Edde\Common\Template\Macro\Control\ControlMacro;
 	use Edde\Common\Template\Macro\IncludeMacro;
 	use Edde\Common\Template\Macro\LoopMacro;
 	use Edde\Common\Template\Macro\SwitchMacro;
@@ -436,11 +437,8 @@
 		}
 
 		protected function setUp() {
-			$this->resourceManager = new ResourceManager();
-			$this->resourceManager->registerResourceHandler($xmlResourceHandler = new XmlResourceHandler());
-			$xmlResourceHandler->lazyXmlParser(new XmlParser());
-			$this->container = $container = ContainerFactory::create([
-				IResourceManager::class => $this->resourceManager,
+			$this->container = ContainerFactory::create([
+				IResourceManager::class => ResourceManager::class,
 				ITemplateDirectory::class => function () {
 					return new TemplateDirectory(__DIR__ . '/temp');
 				},
@@ -451,6 +449,8 @@
 				ICryptEngine::class => CryptEngine::class,
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
+				ITemplateManager::class => TemplateManager::class,
+				IXmlParser::class => XmlParser::class,
 				ILinkFactory::class => function () {
 					$linkFactory = new LinkFactory($hostUrl = HostUrl::create('https://127.0.0.1/foo?param=foo'));
 					$linkFactory->registerLinkGenerator($controlLinkGenerator = new ControlLinkGenerator());
@@ -458,9 +458,12 @@
 					return $linkFactory;
 				},
 			]);
-			$this->container->registerFactory(ITemplateManager::class, FactoryFactory::create(ITemplateManager::class, $this->templateManager = $this->container->create(TemplateManager::class)));
+			$this->resourceManager = $this->container->create(IResourceManager::class);
+			$this->resourceManager->registerResourceHandler($this->container->create(XmlResourceHandler::class));
+			$this->templateManager = $this->container->create(ITemplateManager::class);
 			$this->templateManager->onSetup(function (ITemplateManager $templateManager) {
 				$templateManager->registerMacroList(array_merge(MacroSet::macroList($this->container), [
+					new ControlMacro('custom-control', \CustomControl::class),
 					$this->container->inject(new IncludeMacro()),
 					$this->container->inject(new SwitchMacro()),
 					$this->container->inject(new LoopMacro()),

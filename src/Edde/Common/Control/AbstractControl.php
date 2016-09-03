@@ -34,6 +34,15 @@
 			return $parent ? $parent->getMeta('control') : null;
 		}
 
+		public function disconnect(): IControl {
+			$this->use();
+			if ($this->node->isRoot() === false) {
+				$this->node->getParent()
+					->removeNode($this->node);
+			}
+			return $this;
+		}
+
 		/**
 		 * @param IControl[] $controlList
 		 *

@@ -1,6 +1,6 @@
 <control>
 	<div class="whoop!"/>
-	<div id="foo" class="this is a snippet!" m:snippet="template-snippet()">
+	<div id="foo" class="this is a snippet!" m:snippet="template-snippet">
 		<div class="another control"/>
 		<div>
 			<div value="deeper and deeper"/>

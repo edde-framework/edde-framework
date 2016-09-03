@@ -44,9 +44,9 @@
 				$reflectionClass = new \ReflectionClass($this);
 				$file = dirname($reflectionClass->getFileName()) . '/template/' . StringUtils::recamel($this->route->getMethod()) . '.xml';
 			}
-			$template = $this->templateManager->template($file)
-				->getInstance($this->container);
-			$template->template($this);
+			$this->templateManager->template($file)
+				->getInstance($this->container)
+				->template($this);
 			return $this;
 		}
 	}

@@ -6,6 +6,7 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Html\IHtmlControl;
+	use Edde\Api\Html\IHtmlView;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IMacro;
@@ -14,9 +15,14 @@
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Container\LazyInjectTrait;
+	use Edde\Common\Html\Tag\ButtonControl;
 	use Edde\Common\Html\Tag\DivControl;
+	use Edde\Common\Html\Tag\SpanControl;
+	use Edde\Common\Html\Value\PasswordInputControl;
+	use Edde\Common\Html\Value\TextInputControl;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\AbstractMacro;
+	use Edde\Common\Template\Macro\Control\ControlMacro;
 
 	/**
 	 * Helper class for a html package macros.
@@ -28,8 +34,15 @@
 				self::snippetMacro(),
 				self::passMacro(),
 				self::schemaMacro(),
+				self::jsMacro(),
+				self::cssMacro(),
+				self::buttonMacro(),
+				self::headerMacro(),
 				$container->inject(self::bindMacro()),
-				DivControl::macro(),
+				new ControlMacro('div', DivControl::class),
+				new ControlMacro('span', SpanControl::class),
+				new ControlMacro('text', TextInputControl::class),
+				new ControlMacro('password', PasswordInputControl::class),
 			];
 		}
 
@@ -50,6 +63,7 @@
 					$destination->write("\t\tprotected \$styleSheetCompiler;\n\n");
 					$destination->write("\t\tprotected \$javaScriptCompiler;\n\n");
 					$destination->write("\t\tprotected \$stack;\n\n");
+					$destination->write(sprintf("\t\t/** @var %s */\n", IHtmlView::class));
 					$destination->write("\t\tprotected \$proxy;\n\n");
 					$destination->write(sprintf("\t\tpublic function __construct(%s \$container, %s \$styleSheetCompiler, %s \$javaScriptCompiler) {\n", IContainer::class, IStyleSheetCompiler::class, IJavaScriptCompiler::class));
 					$destination->write("\t\t\t\$this->container = \$container;\n");
@@ -83,11 +97,25 @@
 				}
 
 				public function run(INode $root, ICompiler $compiler, callable $callback = null) {
-					$snippet = str_replace('()', '', $root->getValue());
 					$destination = $compiler->getDestination();
-					$destination->write("\t\t\t\$parent = \$this->stack->top();\n");
-					$destination->write(sprintf("\t\t\t\$parent->addControl(\$control = \$this->container->create('%s'));\n", PlaceholderControl::class));
-					$destination->write(sprintf("\t\t\t\$this->proxy->snippet(\$control, [\$control, '%s']);\n", $snippet));
+					switch ($root->getName()) {
+						case 'm:snippet':
+							$this->macro($root, $compiler, $callback);
+							$destination->write("\t\t\t\$control->disconnect();\n");
+							$destination->write("\t\t\t\$parent = \$this->stack->top();\n");
+							$destination->write(sprintf("\t\t\t\$parent->addControl(\$placeholder = \$this->container->create('%s'));\n", PlaceholderControl::class));
+							$destination->write("\t\t\t\$placeholder->setId(\$control->getId());\n");
+
+							$value = StringUtils::firstLower(StringUtils::camelize($root->getValue()));
+							if (strrpos($value, '()') !== false) {
+								$destination->write(sprintf("\t\t\t\$this->proxy->snippet(\$control, [\$this->proxy, '%s']);\n", str_replace('()', '', $value)));
+								break;
+							}
+							$destination->write(sprintf("\t\t\t\$reflectionProperty = \$reflectionClass->getProperty('%s');\n", $value));
+							$destination->write("\t\t\t\$reflectionProperty->setAccessible(true);\n");
+							$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->proxy, \$control);\n");
+							break;
+					}
 				}
 			};
 		}
@@ -164,6 +192,80 @@
 
 				public function __clone() {
 					$this->schemaList = [];
+				}
+			};
+		}
+
+		static public function jsMacro(): IMacro {
+			return new class extends AbstractMacro {
+				public function __construct() {
+					parent::__construct(['js']);
+				}
+
+				public function run(INode $root, ICompiler $compiler, callable $callback = null) {
+					$destination = $compiler->getDestination();
+					$destination->write(sprintf("\t\t\t\$this->javaScriptCompiler->addFile('%s');\n", $compiler->file($root->getAttribute('src'))));
+				}
+			};
+		}
+
+		static public function cssMacro(): IMacro {
+			return new class extends AbstractMacro {
+				public function __construct() {
+					parent::__construct(['css']);
+				}
+
+				public function run(INode $root, ICompiler $compiler, callable $callback = null) {
+					$destination = $compiler->getDestination();
+					$destination->write(sprintf("\t\t\t\$this->styleSheetCompiler->addFile('%s');\n", $compiler->file($root->getAttribute('src'))));
+				}
+			};
+		}
+
+		static public function buttonMacro(): IMacro {
+			return new class extends ControlMacro {
+				public function __construct() {
+					parent::__construct(['button'], ButtonControl::class);
+				}
+
+				public function run(INode $root, ICompiler $compiler, callable $callback = null) {
+					$destination = $compiler->getDestination();
+					$destination->write("\t\t\t\$parent = \$this->stack->top();\n");
+					$destination->write(sprintf("\t\t\t\$parent->addControl(\$control = \$this->container->create('%s'));\n", $this->control));
+					$attributeList = $this->getAttributeList($root, $compiler);
+					if (isset($attributeList['action']) === false) {
+						throw new MacroException(sprintf('Missing mandatory attribute "action" in [%s].', $root->getPath()));
+					}
+					$action = $root->getAttribute('action');
+					unset($attributeList['action']);
+					$destination->write(sprintf("\t\t\t\$control->setAction([\$this->proxy, %s]);\n", $compiler->value($action)));
+					$this->writeAttributeList($attributeList, $destination);
+					$this->macro($root, $compiler, $callback);
+				}
+			};
+		}
+
+		static public function headerMacro(): IMacro {
+			return new class extends ControlMacro {
+				public function __construct() {
+					parent::__construct([
+						'h1',
+						'h2',
+						'h3',
+						'h4',
+						'h5',
+						'h6',
+					], '');
+				}
+
+				public function run(INode $root, ICompiler $compiler, callable $callback = null) {
+					$destination = $compiler->getDestination();
+					$destination->write("\t\t\t\$parent = \$this->stack->top();\n");
+					$destination->write(sprintf("\t\t\t\$parent->addControl(\$control = \$this->container->create('%s'));\n", HeaderControl::class));
+					$destination->write(sprintf("\t\t\t\$control->setTag('%s');\n", $root->getName()));
+					$this->writeTextValue($root, $destination, $compiler);
+					$this->writeAttributeList($this->getAttributeList($root, $compiler), $destination);
+					$this->macro($root, $compiler, $callback);
 				}
 			};
 		}
