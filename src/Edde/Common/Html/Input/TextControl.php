@@ -12,6 +12,7 @@
 				->addAttributeList([
 					'type' => 'text',
 					'value' => $this->node->getValue(),
-				]);
+				])
+				->client();
 		}
 	}

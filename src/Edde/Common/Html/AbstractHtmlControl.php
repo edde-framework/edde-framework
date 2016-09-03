@@ -57,6 +57,11 @@
 			return $this->node->getAttributeList();
 		}
 
+		public function client() {
+			$this->setAttribute('data-class', str_replace('\\', '.', static::class));
+			return $this;
+		}
+
 		public function getId(): string {
 			$this->use();
 			return $this->getAttribute('id', '');

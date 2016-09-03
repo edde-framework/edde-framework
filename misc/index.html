@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Da Title Here</title>
+	</head>
+	<body>
+		<script>
+			var Edde = {
+				Utils: {
+					namespaceList: {},
+					namespace: function (root, namespace) {
+						if (typeof this.namespaceList[namespace] !== 'undefined') {
+							return this.namespaceList[namespace];
+						}
+						var parts = namespace.split('.');
+						var parent = root;
+						var length = parts.length;
+						for (var i = 0; i < length; i++) {
+							if (typeof parent[parts[i]] === 'undefined') {
+								parent[parts[i]] = {};
+							}
+							parent = parent[parts[i]];
+						}
+						return this.namespaceList[namespace] = parent;
+					}
+				}
+			};
+			Edde.Utils.namespace(Edde, 'Edde.Common.Html.DivControl');
+			Edde.Utils.namespace(Edde, 'Edde.Common.Html.FooControl');
+			Edde.Utils.namespace(Edde, 'App.Login.LoginView');
+			console.log(Edde);
+			console.log(Edde.Edde.Common.Html.DivControl);
+		</script>
+	</body>
+</html>
