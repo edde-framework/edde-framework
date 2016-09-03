@@ -5,16 +5,37 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Html\IHtmlControl;
+	use Edde\Api\Web\IJavaScriptCompiler;
+	use Edde\Api\Web\IStyleSheetCompiler;
+	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Control\AbstractControl;
+	use Edde\Common\File\File;
 
 	abstract class AbstractHtmlControl extends AbstractControl implements IHtmlControl {
+		use LazyInjectTrait;
 		/**
 		 * @var IContainer
 		 */
 		protected $container;
+		/**
+		 * @var IJavaScriptCompiler
+		 */
+		protected $javaScriptCompiler;
+		/**
+		 * @var IStyleSheetCompiler
+		 */
+		protected $styleSheetCompiler;
 
 		public function injectContainer(IContainer $container) {
 			$this->container = $container;
+		}
+
+		public function lazyJavaScriptCompiler(IJavaScriptCompiler $javaScriptCompiler) {
+			$this->javaScriptCompiler = $javaScriptCompiler;
+		}
+
+		public function lazyStyleSheetCompiler(IStyleSheetCompiler $styleSheetCompiler) {
+			$this->styleSheetCompiler = $styleSheetCompiler;
 		}
 
 		public function setTag(string $tag, bool $pair = true) {
@@ -59,6 +80,15 @@
 
 		public function client() {
 			$this->setAttribute('data-class', str_replace('\\', '.', static::class));
+			$reflectionClass = new \ReflectionClass($this);
+			$javaScript = new File(str_replace('.php', '.js', $reflectionClass->getFileName()));
+			if ($javaScript->isAvailable()) {
+				$this->javaScriptCompiler->addResource($javaScript);
+			}
+			$styleSheet = new File(str_replace('.php', '.css', $reflectionClass->getFileName()));
+			if ($styleSheet->isAvailable()) {
+				$this->styleSheetCompiler->addResource($styleSheet);
+			}
 			return $this;
 		}
 

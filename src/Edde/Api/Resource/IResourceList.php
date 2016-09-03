@@ -38,6 +38,11 @@
 		public function getResourceList();
 
 		/**
+		 * @return array
+		 */
+		public function getPathList(): array;
+
+		/**
 		 * @return bool
 		 */
 		public function isEmpty();

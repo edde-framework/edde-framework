@@ -164,6 +164,8 @@
 		public function ajax(): IHtmlView {
 			$this->use();
 			$ajax = new AjaxResponse($this->httpResponse);
+			$ajax->setJavaScriptList($this->javaScriptCompiler->getPathList());
+			$ajax->setStyleSheetList($this->styleSheetCompiler->getPathList());
 			/** @var $control IHtmlControl */
 			foreach ($this as $control) {
 				if ($control->isDirty() && $control->getId() !== null) {

@@ -20,6 +20,11 @@ var Edde = {
 			if (data.redirect) {
 				window.location.replace(data.redirect);
 			}
+			if (data.javaScript) {
+				$.each(data.javaScript, function (i, src) {
+					$.getScript(src);
+				});
+			}
 			if (data.selector) {
 				$.each(data.selector, function (selector, value) {
 					switch (value.action) {
