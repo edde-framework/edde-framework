@@ -35,20 +35,20 @@
 			$this->cryptEngine = $cryptEngine;
 		}
 
-		public function run(INode $root, ICompiler $compiler) {
+		public function run(INode $root, ICompiler $compiler, callable $callback = null) {
 			$destination = $compiler->getDestination();
 			switch ($root->getName()) {
 				case 'm:switch':
 					$this->stack->push($id = StringUtils::camelize($this->cryptEngine->guid()));
 					$destination->write(sprintf("\t\t\t\$_%s = %s;\n", $id, $compiler->value($root->getValue())));
-					$this->macro($root, $compiler);
+					$this->macro($root, $compiler, $callback);
 					break;
 				/** @noinspection PhpMissingBreakStatementInspection */
 				case 'case':
 					$root->setValue($root->getAttribute('case'));
 				case 'm:case':
 					$destination->write(sprintf("\t\t\tif(\$_%s === %s) {\n", $this->stack->top(), $compiler->value($root->getValue())));
-					$this->macro($root, $compiler);
+					$this->macro($root, $compiler, $callback);
 					$destination->write("\t\t\t}\n");
 					break;
 			}

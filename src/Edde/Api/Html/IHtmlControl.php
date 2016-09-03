@@ -4,19 +4,11 @@
 	namespace Edde\Api\Html;
 
 	use Edde\Api\Control\IControl;
-	use Edde\Api\Template\IMacro;
 
 	/**
 	 * Specialized control used for html rendering
 	 */
 	interface IHtmlControl extends IControl {
-		/**
-		 * template macro for this control
-		 *
-		 * @return IMacro
-		 */
-		static public function macro(): IMacro;
-
 		/**
 		 * set the given tag to this control; pair if the given tag is in a pair (div, span, ...)
 		 *

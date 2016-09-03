@@ -24,11 +24,11 @@
 		 */
 		protected $route;
 
-		public function injectContainer(IContainer $container) {
+		public function lazyContainer(IContainer $container) {
 			$this->container = $container;
 		}
 
-		public function injectTemplateManager(ITemplateManager $templateManager) {
+		public function lazyTemplateManager(ITemplateManager $templateManager) {
 			$this->templateManager = $templateManager;
 		}
 
@@ -44,9 +44,9 @@
 				$reflectionClass = new \ReflectionClass($this);
 				$file = dirname($reflectionClass->getFileName()) . '/template/' . StringUtils::recamel($this->route->getMethod()) . '.xml';
 			}
-			$template = $this->templateManager->template($file)
-				->getInstance($this->container);
-			$template->template($this);
+			$this->templateManager->template($file)
+				->getInstance($this->container)
+				->template($this);
 			return $this;
 		}
 	}

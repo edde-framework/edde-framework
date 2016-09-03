@@ -14,7 +14,7 @@
 		 * @return IFactory[]
 		 * @throws FactoryException
 		 */
-		static public function createList(array $factoryList) {
+		static public function createList(array $factoryList): array {
 			$factories = [];
 			$singleton = true;
 			foreach ($factoryList as $name => $factory) {
@@ -37,7 +37,7 @@
 		 * @return IFactory
 		 * @throws FactoryException
 		 */
-		static public function create($name, $factory, $singleton = true, $cloneable = false) {
+		static public function create($name, $factory, $singleton = true, $cloneable = false): IFactory {
 			if (is_callable($factory)) {
 				return new CallbackFactory($name, $factory, $singleton, $cloneable);
 			} else if (is_string($factory) && class_exists($factory)) {
@@ -59,7 +59,7 @@
 		 * @return callable
 		 * @throws FactoryException
 		 */
-		static public function createFallback($singleton = false) {
+		static public function createFallback($singleton = false): callable {
 			return function ($name) use ($singleton) {
 				if (class_exists($name) === false) {
 					return null;

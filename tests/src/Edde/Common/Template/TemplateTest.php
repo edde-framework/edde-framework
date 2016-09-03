@@ -13,24 +13,16 @@
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
-	use Edde\Common\Container\Factory\FactoryFactory;
+	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\File\RootDirectory;
-	use Edde\Common\Html\HeaderControl;
-	use Edde\Common\Html\Tag\ButtonControl;
-	use Edde\Common\Html\Tag\DivControl;
-	use Edde\Common\Html\Tag\SpanControl;
+	use Edde\Common\Html\MacroSet;
 	use Edde\Common\Html\TemplateControl;
-	use Edde\Common\Html\Value\PasswordInputControl;
-	use Edde\Common\Html\Value\TextInputControl;
 	use Edde\Common\Link\ControlLinkGenerator;
 	use Edde\Common\Link\HostUrl;
 	use Edde\Common\Link\LinkFactory;
 	use Edde\Common\Resource\ResourceManager;
-	use Edde\Common\Template\Macro\Control\BindIdAttributeMacro;
-	use Edde\Common\Template\Macro\Control\PassMacro;
-	use Edde\Common\Template\Macro\Control\SchemaMacro;
-	use Edde\Common\Template\Macro\Control\TemplateMacro;
+	use Edde\Common\Template\Macro\Control\ControlMacro;
 	use Edde\Common\Template\Macro\IncludeMacro;
 	use Edde\Common\Template\Macro\LoopMacro;
 	use Edde\Common\Template\Macro\SwitchMacro;
@@ -435,9 +427,7 @@
 		}
 
 		public function testCustomControl() {
-			$control = new TemplateControl();
-			$control->injectContainer($this->container);
-			$control->injectTemplateManager($this->templateManager);
+			$control = $this->container->create(TemplateControl::class);
 			$control->setTemplate(__DIR__ . '/assets/template/custom.xml');
 			$control->dirty();
 			self::assertEquals('	<div class="will-use-custom-control">
@@ -447,11 +437,8 @@
 		}
 
 		protected function setUp() {
-			$this->resourceManager = new ResourceManager();
-			$this->resourceManager->registerResourceHandler($xmlResourceHandler = new XmlResourceHandler());
-			$xmlResourceHandler->lazyXmlParser(new XmlParser());
-			$this->container = $container = ContainerFactory::create([
-				IResourceManager::class => $this->resourceManager,
+			$this->container = ContainerFactory::create([
+				IResourceManager::class => ResourceManager::class,
 				ITemplateDirectory::class => function () {
 					return new TemplateDirectory(__DIR__ . '/temp');
 				},
@@ -459,13 +446,11 @@
 					return new RootDirectory(__DIR__);
 				},
 				\TestDocument::class,
-				IncludeMacro::class,
-				SwitchMacro::class,
-				BindIdAttributeMacro::class,
-				SchemaMacro::class,
 				ICryptEngine::class => CryptEngine::class,
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
+				ITemplateManager::class => TemplateManager::class,
+				IXmlParser::class => XmlParser::class,
 				ILinkFactory::class => function () {
 					$linkFactory = new LinkFactory($hostUrl = HostUrl::create('https://127.0.0.1/foo?param=foo'));
 					$linkFactory->registerLinkGenerator($controlLinkGenerator = new ControlLinkGenerator());
@@ -473,26 +458,16 @@
 					return $linkFactory;
 				},
 			]);
-			$this->container->registerFactory(ITemplateManager::class, FactoryFactory::create(ITemplateManager::class, $this->templateManager = $this->container->create(TemplateManager::class)));
-			$this->templateManager->onSetup(function (ITemplateManager $templateManager) use ($container) {
-				$templateManager->registerMacroList([
-					new TemplateMacro(),
-					DivControl::macro(),
-					SpanControl::macro(),
-					PasswordInputControl::macro(),
-					TextInputControl::macro(),
-					\CustomControl::macro(),
-					new LoopMacro(),
-					StyleSheetCompiler::macro(),
-					JavaScriptCompiler::macro(),
-					ButtonControl::macro(),
-					new SchemaMacro(),
-					HeaderControl::macro(),
-					new PassMacro(),
-					$container->create(SwitchMacro::class),
-					$container->create(IncludeMacro::class),
-					$container->create(BindIdAttributeMacro::class),
-				]);
+			$this->resourceManager = $this->container->create(IResourceManager::class);
+			$this->resourceManager->registerResourceHandler($this->container->create(XmlResourceHandler::class));
+			$this->templateManager = $this->container->create(ITemplateManager::class);
+			$this->templateManager->onSetup(function (ITemplateManager $templateManager) {
+				$templateManager->registerMacroList(array_merge(MacroSet::macroList($this->container), [
+					new ControlMacro('custom-control', \CustomControl::class),
+					$this->container->inject(new IncludeMacro()),
+					$this->container->inject(new SwitchMacro()),
+					$this->container->inject(new LoopMacro()),
+				]));
 			});
 			$this->control = $this->container->create(\TestDocument::class);
 		}

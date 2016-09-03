@@ -26,8 +26,9 @@
 		/**
 		 * @param INode $root
 		 * @param ICompiler $compiler
+		 * @param callable $callback
 		 *
 		 * @return IMacro
 		 */
-		public function run(INode $root, ICompiler $compiler);
+		public function run(INode $root, ICompiler $compiler, callable $callback = null);
 	}

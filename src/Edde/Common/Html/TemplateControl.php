@@ -4,19 +4,16 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Control\IControl;
+	use Edde\Common\Container\LazyInjectTrait;
 
 	class TemplateControl extends AbstractHtmlControl {
+		use LazyInjectTrait;
 		use TemplateTrait;
 
 		public function setTemplate(string $template) {
 			$this->use();
 			$this->node->setMeta('template', $template);
 			return $this;
-		}
-
-		public function render() {
-			$this->use();
-			return parent::render();
 		}
 
 		public function dirty(bool $dirty = true): IControl {

@@ -29,7 +29,7 @@
 			$this->resourceManager = $resourceManager;
 		}
 
-		public function run(INode $root, ICompiler $compiler) {
+		public function run(INode $root, ICompiler $compiler, callable $callback = null) {
 			switch ($root->getName()) {
 				case 'include':
 					$node = new Node();
@@ -38,7 +38,7 @@
 						->write(sprintf("\t\t\t/** include %s */\n", $include));
 					$node->setNodeList($this->resourceManager->file($include)
 						->getNodeList(), true);
-					$this->macro($node, $compiler);
+					$this->macro($node, $compiler, $callback);
 					$compiler->getDestination()
 						->write(sprintf("\t\t\t/** done %s */\n", $include));
 					break;
@@ -48,7 +48,7 @@
 						->write(sprintf("\t\t\t/** include %s */\n", $include));
 					$root->getNodeList()[0]->setNodeList($this->resourceManager->file($include)
 						->getNodeList(), true);
-					$this->macro($root, $compiler);
+					$this->macro($root, $compiler, $callback);
 					$compiler->getDestination()
 						->write(sprintf("\t\t\t/** done %s */\n", $include));
 					break;

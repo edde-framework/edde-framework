@@ -4,14 +4,11 @@
 	namespace Edde\Common\Web;
 
 	use Edde\Api\File\ITempDirectory;
-	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResourceList;
 	use Edde\Api\Resource\Storage\IFileStorage;
-	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Resource\ResourceList;
-	use Edde\Common\Template\AbstractMacro;
 	use Edde\Common\Usable\UsableTrait;
 
 	class JavaScriptCompiler extends ResourceList implements IJavaScriptCompiler {
@@ -26,19 +23,6 @@
 		 * @var ITempDirectory
 		 */
 		protected $tempDirectory;
-
-		static public function macro() {
-			return new class extends AbstractMacro {
-				public function __construct() {
-					parent::__construct(['js']);
-				}
-
-				public function run(INode $root, ICompiler $compiler) {
-					$destination = $compiler->getDestination();
-					$destination->write(sprintf("\t\t\t\$this->javaScriptCompiler->addFile('%s');\n", $compiler->file($root->getAttribute('src'))));
-				}
-			};
-		}
 
 		public function lazyFileStorage(IFileStorage $fileStorage) {
 			$this->fileStorage = $fileStorage;

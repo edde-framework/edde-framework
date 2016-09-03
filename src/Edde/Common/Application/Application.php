@@ -6,8 +6,8 @@
 	use Edde\Api\Application\ApplicationException;
 	use Edde\Api\Application\IErrorControl;
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Control\IControl;
 	use Edde\Api\Router\IRoute;
-	use Edde\Common\Callback\Callback;
 	use Edde\Common\Container\LazyInjectTrait;
 
 	class Application extends AbstractApplication {
@@ -40,31 +40,11 @@
 		public function run() {
 			try {
 				$this->use();
-				if (method_exists($control = $this->container->create($this->route->getClass()), $actionMethod = $this->route->getMethod()) === false) {
-					/**
-					 * ability to process __call methods; the only restriction is execution without parameters
-					 */
-					return $control->{$actionMethod}();
+				/** @var $control IControl */
+				if ((($control = $this->container->create($this->route->getClass())) instanceof IControl) === false) {
+					throw new ApplicationException(sprintf('Route class [%s] is not instance of [%s].', $this->route->getClass(), IControl::class));
 				}
-				$callback = new Callback([
-					$control,
-					$actionMethod,
-				]);
-				$parameterList = $this->route->getParameterList();
-				$argumentCount = count($argumentList = $this->route->getCrateList());
-				foreach ($callback->getParameterList() as $parameter) {
-					if (--$argumentCount >= 0) {
-						continue;
-					}
-					if (isset($parameterList[$parameter->getName()]) === false) {
-						if ($parameter->isOptional()) {
-							continue;
-						}
-						throw new ApplicationException(sprintf('Missing action parameter [%s::%s(, ...$%s, ...)].', get_class($control), $actionMethod, $parameter->getName()));
-					}
-					$argumentList[] = $parameterList[$parameter->getName()];
-				}
-				return $callback->invoke(...$argumentList);
+				return $control->handle($this->route->getMethod(), $this->route->getParameterList(), $this->route->getCrateList());
 			} catch (\Exception $e) {
 				return $this->errorControl->exception($e);
 			}

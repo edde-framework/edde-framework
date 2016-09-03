@@ -1,11 +1,9 @@
 <?php
-	use Edde\Api\Template\IMacro;
 	use Edde\Common\Html\Document\DocumentControl;
 	use Edde\Common\Html\Tag\ButtonControl;
 	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Html\Tag\SpanControl;
 	use Edde\Common\Html\TemplateControl;
-	use Edde\Common\Template\Macro\Control\ControlMacro;
 
 	class TestDocument extends DocumentControl {
 		public function switchMe() {
@@ -63,10 +61,6 @@
 	}
 
 	class CustomControl extends TemplateControl {
-		static public function macro(): IMacro {
-			return new ControlMacro('custom-control', static::class);
-		}
-
 		public function getAttr() {
 			return 'foo';
 		}

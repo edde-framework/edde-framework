@@ -37,7 +37,7 @@
 			return null;
 		}
 
-		public function run(INode $root, ICompiler $compiler) {
+		public function run(INode $root, ICompiler $compiler, callable $callback = null) {
 			$destination = $compiler->getDestination();
 			$this->loopStack->push($loop = [
 				'key_' . sha1(random_bytes(64)),
@@ -46,13 +46,13 @@
 			switch ($root->getName()) {
 				case 'loop':
 					$destination->write(sprintf("\t\t\tforeach(%s as \$%s => \$%s) {\n", $compiler->value($root->getAttribute('src')), $loop[0], $loop[1]));
-					$this->macro($root, $compiler);
+					$this->macro($root, $compiler, $callback);
 					$this->loopStack->pop();
 					$destination->write("\t\t\t}\n");
 					break;
 				case 'm:loop':
 					$destination->write(sprintf("\t\t\tforeach(%s as $%s => $%s) {\n", $compiler->value($root->getValue()), $loop[0], $loop[1]));
-					$this->macro($root, $compiler);
+					$this->macro($root, $compiler, $callback);
 					$this->loopStack->pop();
 					$destination->write("\t\t\t}\n");
 					break;

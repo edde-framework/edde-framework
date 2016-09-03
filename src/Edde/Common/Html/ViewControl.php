@@ -3,6 +3,9 @@
 
 	namespace Edde\Common\Html;
 
+	use Edde\Api\Control\ControlException;
+	use Edde\Api\Html\IHtmlControl;
+	use Edde\Api\Html\IHtmlView;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Link\ILinkFactory;
@@ -20,7 +23,7 @@
 	/**
 	 * Formal root control for displaying page with some shorthands.
 	 */
-	class ViewControl extends DocumentControl {
+	class ViewControl extends DocumentControl implements IHtmlView {
 		use LazyInjectTrait;
 		use TemplateTrait;
 		/**
@@ -51,6 +54,10 @@
 		 * @var IResourceList
 		 */
 		protected $javaScriptList;
+		/**
+		 * @var IHtmlControl[]
+		 */
+		protected $snippetList = [];
 
 		public function lazyHttpRequest(IHttpRequest $httpRequest) {
 			$this->httpRequest = $httpRequest;
@@ -133,27 +140,54 @@
 			return $this;
 		}
 
-		/**
-		 * method specific for this "presenter"; this will sent a AjaxResponse with controls currently set to the body
-		 *
-		 * @return $this
-		 */
-		public function ajax() {
+		public function response(): IHtmlView {
 			$this->use();
-			(new AjaxResponse($this->httpResponse))->replace($this->body->getControlList())
-				->render();
-			return $this;
-		}
-
-		public function response() {
-			$this->use();
+			if ($this->httpRequest->isAjax()) {
+				return $this->ajax();
+			}
 			(new HtmlResponse($this->httpResponse))->render(function () {
 				return $this->render();
 			});
 			return $this;
 		}
 
+		/**
+		 * method specific for this "presenter"; this will sent a AjaxResponse with controls currently set to the body
+		 *
+		 * @return IHtmlView
+		 * @throws ControlException
+		 */
+		public function ajax(): IHtmlView {
+			$this->use();
+			$ajax = new AjaxResponse($this->httpResponse);
+			/** @var $control IHtmlControl */
+			foreach ($this as $control) {
+				if ($control->isDirty() && $control->getId() !== null) {
+					$ajax->replace($control);
+				}
+			}
+			foreach ($this->snippets() as $snippet) {
+				$ajax->replace($snippet);
+			}
+			$ajax->render();
+			return $this;
+		}
+
+		public function snippets(): array {
+			$snippetList = [];
+			foreach ($this->snippetList as $snippet) {
+				/** @var $htmlControl IHtmlControl */
+				list($htmlControl, $callback) = $snippet;
+				$callback ? $callback($htmlControl) : null;
+				if ($htmlControl->isDirty()) {
+					$snippetList[] = $htmlControl;
+				}
+			}
+			return $snippetList;
+		}
+
 		public function render() {
+			$this->use();
 			if ($this->styleSheetList->isEmpty() === false) {
 				$this->head->addStyleSheet($this->styleSheetCompiler->compile($this->styleSheetList)
 					->getRelativePath());
@@ -164,6 +198,14 @@
 			}
 			$this->dirty();
 			return parent::render();
+		}
+
+		public function snippet(IHtmlControl $htmlControl, callable $callback = null): IHtmlView {
+			$this->snippetList[] = [
+				$htmlControl,
+				$callback,
+			];
+			return $this;
 		}
 
 		protected function prepare() {

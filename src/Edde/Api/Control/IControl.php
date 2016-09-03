@@ -33,6 +33,13 @@
 		public function getParent();
 
 		/**
+		 * remove this control from control tree
+		 *
+		 * @return IControl
+		 */
+		public function disconnect(): IControl;
+
+		/**
 		 * add the new control to hierarchy of this control
 		 *
 		 * @param IControl $control
@@ -70,6 +77,8 @@
 		 * @return bool
 		 */
 		public function isDirty(): bool;
+
+		public function handle(string $method, array $parameterList, array $crateList);
 
 		/**
 		 * @return IControl[]

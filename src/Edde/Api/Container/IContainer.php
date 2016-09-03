@@ -53,7 +53,7 @@
 		 *
 		 * @param mixed $instance
 		 *
-		 * @return $this
+		 * @return mixed return input instance (input is same as output)
 		 */
 		public function inject($instance);
 	}

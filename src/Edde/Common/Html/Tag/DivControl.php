@@ -4,15 +4,9 @@
 	namespace Edde\Common\Html\Tag;
 
 	use Edde\Api\Html\HtmlException;
-	use Edde\Api\Template\IMacro;
 	use Edde\Common\Html\AbstractHtmlControl;
-	use Edde\Common\Template\Macro\Control\ControlMacro;
 
 	class DivControl extends AbstractHtmlControl {
-		static public function macro(): IMacro {
-			return new ControlMacro('div', static::class);
-		}
-
 		public function setTag(string $tag, bool $pair = true) {
 			throw new HtmlException(sprintf('Cannot set tag [%s] to a div control.', $tag));
 		}
