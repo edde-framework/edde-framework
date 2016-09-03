@@ -5,13 +5,12 @@
 
 	use Edde\Common\Html\AbstractHtmlControl;
 
-	class TextInputControl extends AbstractHtmlControl {
+	class PasswordControl extends AbstractHtmlControl {
 		protected function prepare() {
 			parent::prepare();
 			$this->setTag('input', false)
 				->addAttributeList([
-					'type' => 'text',
-					'value' => $this->node->getValue(),
+					'type' => 'password',
 				]);
 		}
 	}

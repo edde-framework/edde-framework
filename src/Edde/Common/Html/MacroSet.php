@@ -15,8 +15,8 @@
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Container\LazyInjectTrait;
-	use Edde\Common\Html\Input\PasswordInputControl;
-	use Edde\Common\Html\Input\TextInputControl;
+	use Edde\Common\Html\Input\PasswordControl;
+	use Edde\Common\Html\Input\TextControl;
 	use Edde\Common\Html\Tag\ButtonControl;
 	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Html\Tag\SpanControl;
@@ -41,8 +41,8 @@
 				$container->inject(self::bindMacro()),
 				new ControlMacro('div', DivControl::class),
 				new ControlMacro('span', SpanControl::class),
-				new ControlMacro('text', TextInputControl::class),
-				new ControlMacro('password', PasswordInputControl::class),
+				new ControlMacro('text', TextControl::class),
+				new ControlMacro('password', PasswordControl::class),
 			];
 		}
 
