@@ -5,9 +5,9 @@
 
 	<div class="row centered">
 		<div class="col col-5">
-			<button value="Upgrade" action="on-upgrade" title="run upgrades registered to this application"/>
-			<button value="Rebuild crates" action="on-rebuild-crates" title="update automagically generated crates"/>
-			<button value="Clear cache" action="on-clear-cache" title="clear current cache"/>
+			<button value="Upgrade" action="on-upgrade()" title="run upgrades registered to this application"/>
+			<button value="Rebuild crates" action="on-rebuild-crates()" title="update automagically generated crates"/>
+			<button value="Clear cache" action="on-clear-cache()" title="clear current cache"/>
 		</div>
 	</div>
 </control>

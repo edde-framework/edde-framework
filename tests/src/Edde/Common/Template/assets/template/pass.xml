@@ -8,8 +8,8 @@
 		<span class="third"/>
 	</div>
 	<div class="child-pass" m:pass-child="special-button()">
-		<button action="foo" class="first"/>
-		<button action="foo" class="second"/>
-		<button action="foo" class="third"/>
+		<button action="foo()" class="first"/>
+		<button action="foo()" class="second"/>
+		<button action="foo()" class="third"/>
 	</div>
 </control>
