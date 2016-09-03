@@ -25,7 +25,7 @@
 		 *
 		 * @return IHtmlView
 		 */
-		public function snippet(IHtmlControl $htmlControl, callable $callback): IHtmlView;
+		public function snippet(IHtmlControl $htmlControl, callable $callback = null): IHtmlView;
 
 		/**
 		 * return array of "dirty" snippets

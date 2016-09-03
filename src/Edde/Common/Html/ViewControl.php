@@ -166,8 +166,24 @@
 					$ajax->replace($control);
 				}
 			}
+			foreach ($this->snippets() as $snippet) {
+				$ajax->replace($snippet);
+			}
 			$ajax->render();
 			return $this;
+		}
+
+		public function snippets(): array {
+			$snippetList = [];
+			foreach ($this->snippetList as $snippet) {
+				/** @var $htmlControl IHtmlControl */
+				list($htmlControl, $callback) = $snippet;
+				$callback ? $callback($htmlControl) : null;
+				if ($htmlControl->isDirty()) {
+					$snippetList[] = $htmlControl;
+				}
+			}
+			return $snippetList;
 		}
 
 		public function render() {
@@ -184,25 +200,12 @@
 			return parent::render();
 		}
 
-		public function snippet(IHtmlControl $htmlControl, callable $callback): IHtmlView {
+		public function snippet(IHtmlControl $htmlControl, callable $callback = null): IHtmlView {
 			$this->snippetList[] = [
 				$htmlControl,
 				$callback,
 			];
 			return $this;
-		}
-
-		public function snippets(): array {
-			$snippetList = [];
-			foreach ($this->snippetList as $snippet) {
-				/** @var $htmlControl IHtmlControl */
-				list($htmlControl, $callback) = $snippet;
-				$callback($htmlControl);
-				if ($htmlControl->isDirty()) {
-					$snippetList[] = $htmlControl;
-				}
-			}
-			return $snippetList;
 		}
 
 		protected function prepare() {

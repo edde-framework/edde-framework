@@ -111,6 +111,7 @@
 								$destination->write(sprintf("\t\t\t\$this->proxy->snippet(\$control, [\$this->proxy, '%s']);\n", str_replace('()', '', $value)));
 								break;
 							}
+							$destination->write("\t\t\t\$this->proxy->snippet(\$control);\n");
 							$destination->write(sprintf("\t\t\t\$reflectionProperty = \$reflectionClass->getProperty('%s');\n", $value));
 							$destination->write("\t\t\t\$reflectionProperty->setAccessible(true);\n");
 							$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->proxy, \$control);\n");
