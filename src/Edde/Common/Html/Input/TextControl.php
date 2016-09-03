@@ -7,8 +7,8 @@
 
 	class TextControl extends AbstractHtmlControl {
 		protected function prepare() {
-			parent::prepare();
-			$this->setTag('input', false)
+			parent::prepare()
+				->setTag('input', false)
 				->addAttributeList([
 					'type' => 'text',
 					'value' => $this->node->getValue(),
