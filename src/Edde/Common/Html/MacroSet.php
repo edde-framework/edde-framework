@@ -15,11 +15,11 @@
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Container\LazyInjectTrait;
+	use Edde\Common\Html\Input\PasswordInputControl;
+	use Edde\Common\Html\Input\TextInputControl;
 	use Edde\Common\Html\Tag\ButtonControl;
 	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Html\Tag\SpanControl;
-	use Edde\Common\Html\Value\PasswordInputControl;
-	use Edde\Common\Html\Value\TextInputControl;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\AbstractMacro;
 	use Edde\Common\Template\Macro\Control\ControlMacro;
@@ -238,7 +238,7 @@
 						throw new MacroException(sprintf('Missing mandatory attribute "action" in [%s].', $root->getPath()));
 					}
 					if (strrpos($action = $root->getAttribute('action'), '()', 0) === false) {
-						throw new MacroException(sprintf('Action [%s] attribute needs to have () at the end.', $action));
+						throw new MacroException(sprintf('Action [%s] attribute must have () at the end.', $action));
 					}
 					$action = str_replace('()', '', $action);
 					unset($attributeList['action']);
