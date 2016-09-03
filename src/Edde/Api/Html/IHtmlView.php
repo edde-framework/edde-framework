@@ -30,9 +30,11 @@
 		/**
 		 * return array of "dirty" snippets
 		 *
-		 * @return IHtmlControl[]
+		 * @param bool $force
+		 *
+		 * @return array|IHtmlControl[]
 		 */
-		public function snippets(): array;
+		public function snippets($force = false): array;
 
 		/**
 		 * send response to the current request

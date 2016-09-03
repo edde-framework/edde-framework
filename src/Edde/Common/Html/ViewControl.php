@@ -58,6 +58,10 @@
 		 * @var IHtmlControl[]
 		 */
 		protected $snippetList = [];
+		/**
+		 * @var IHtmlControl[]
+		 */
+		protected $snippets;
 
 		public function lazyHttpRequest(IHttpRequest $httpRequest) {
 			$this->httpRequest = $httpRequest;
@@ -173,17 +177,20 @@
 			return $this;
 		}
 
-		public function snippets(): array {
-			$snippetList = [];
+		public function snippets($force = false): array {
+			if ($this->snippets !== null && $force === false) {
+				return $this->snippets;
+			}
+			$this->snippets = [];
 			foreach ($this->snippetList as $snippet) {
 				/** @var $htmlControl IHtmlControl */
 				list($htmlControl, $callback) = $snippet;
 				$callback ? $callback($htmlControl) : null;
 				if ($htmlControl->isDirty()) {
-					$snippetList[] = $htmlControl;
+					$this->snippets[] = $htmlControl;
 				}
 			}
-			return $snippetList;
+			return $this->snippets;
 		}
 
 		public function render() {
