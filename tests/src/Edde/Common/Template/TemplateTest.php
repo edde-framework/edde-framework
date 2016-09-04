@@ -7,6 +7,7 @@
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Html\IHtmlControl;
+	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\ITemplateDirectory;
@@ -14,6 +15,7 @@
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Xml\IXmlParser;
+	use Edde\Common\AssetsDirectory;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\Html\MacroSet;
@@ -444,6 +446,9 @@
 				},
 				IRootDirectory::class => function () {
 					return new RootDirectory(__DIR__);
+				},
+				IAssetsDirectory::class => function (IRootDirectory $rootDirectory) {
+					return $rootDirectory->directory('assets', AssetsDirectory::class);
 				},
 				\TestDocument::class,
 				ICryptEngine::class => CryptEngine::class,

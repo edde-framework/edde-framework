@@ -53,6 +53,15 @@
 		 */
 		public function file(string $file): string;
 
+		/**
+		 * return reference to an Edde default asset
+		 *
+		 * @param string $asset
+		 *
+		 * @return string
+		 */
+		public function asset(string $asset): string;
+
 		public function compile(): ITemplate;
 
 		public function macro(INode $root, ICompiler $compiler, callable $callback = null);
