@@ -118,6 +118,18 @@
 			return $this;
 		}
 
+		public function removeAttributeList(string $namespace): INode {
+			unset($this->attributeNamespaceList[$namespace]);
+			foreach ($this->attributeList as $name => $value) {
+				$key = "$namespace:";
+				if (strpos($name, $key) === false) {
+					continue;
+				}
+				unset($this->attributeList[$key . $namespace]);
+			}
+			return $this;
+		}
+
 		public function addAttributeList(array $attributeList) {
 			$this->attributeNamespaceList = [];
 			foreach ($attributeList as $name => $value) {

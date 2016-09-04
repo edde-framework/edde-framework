@@ -111,6 +111,8 @@
 		 */
 		public function getAttributeList(string $namespace = null): array;
 
+		public function removeAttributeList(string $namespace): INode;
+
 		/**
 		 * @param array $metaList
 		 *

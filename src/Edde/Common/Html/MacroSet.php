@@ -328,7 +328,7 @@
 
 				public function __construct() {
 					parent::__construct([
-						'm:layout',
+						'i:layout',
 						'block',
 						'm:block',
 					]);
@@ -337,22 +337,14 @@
 				public function run(INode $root, ICompiler $compiler, callable $callback = null) {
 					$destination = $compiler->getDestination();
 					switch ($root->getName()) {
-						case 'm:layout':
-							if ($this->layout !== null) {
-								throw new MacroException(sprintf('Cannot use layout [%s]; layout was already set to [%s].', $root->getValue(), $this->layout));
-							}
-							$this->macro($root, $compiler, $callback);
-							$destination->write(sprintf("\t\t\t\$this->templateManager->template(%s);\n", $compiler->value($root->getValue())));
-							break;
-						case 'layout':
-							if ($root->hasAttribute('src') === false) {
-								throw new MacroException(sprintf('Missing "src" attribute in macro [%s].', $root->getName()));
+						case 'i:layout':
+							if (($src = $root->getValue()) === null) {
+								throw new MacroException(sprintf('Missing attribute of macro [%s].', $root->getName()));
 							}
 							if ($this->layout !== null) {
-								throw new MacroException(sprintf('Cannot use layout [%s]; layout was already set to [%s].', $root->getAttribute('src'), $this->layout));
+								throw new MacroException(sprintf('Cannot use layout [%s]; layout was already set to [%s].', $src, $this->layout));
 							}
-							$this->macro($root, $compiler, $callback);
-//							$destination->write(sprintf("\t\t\t\$this->templateManager->template(%s);\n", $compiler->value($root->getAttribute('src'))));
+							$destination->write(sprintf("\t\t\t\$this->templateManager->template(%s);\n", $compiler->value($src)));
 							break;
 						/**
 						 * block placeholder generator
