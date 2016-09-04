@@ -360,7 +360,7 @@
 						 */
 						case 'block':
 							$this->checkAttribute($macro, $element, 'name');
-							$destination->write(sprintf("\t\t\tcall_user_func(\$blockList[%s], \$parent);\n", $compiler->delimite($macro->getAttribute('name'))));
+							$destination->write(sprintf("\t\t\tcall_user_func(\$blockList[%s], \$control);\n", $compiler->delimite($macro->getAttribute('name'))));
 							break;
 						/**
 						 * block reference
@@ -369,6 +369,7 @@
 							$this->checkValue($macro, $element);
 							$destination->write("\t\t\t\$blockList = \$blockList ?? [];\n");
 							$destination->write(sprintf("\t\t\t\$blockList[%s] = function(\$parent) {\n", $compiler->delimite($macro->getValue())));
+							$destination->write("\t\t\t\$this->stack = new SplStack();\n");
 							$destination->write("\t\t\t\$this->stack->push(\$parent);\n");
 							$compiler->macro($element, $element);
 							$destination->write("\t\t\t\$this->stack->pop();\n");
