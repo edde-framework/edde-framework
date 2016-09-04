@@ -43,6 +43,10 @@
 			return 'html';
 		}
 
+		public function isPair() {
+			return true;
+		}
+
 		public function render() {
 			$this->use();
 			return "<!DOCTYPE html>\n" . parent::render();

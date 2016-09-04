@@ -5,11 +5,13 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\ITemplateDirectory;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
+	use Edde\Common\AssetsDirectory;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\File\TempDirectory;
@@ -101,6 +103,9 @@
 				},
 				IRootDirectory::class => function () {
 					return new RootDirectory(__DIR__ . '/temp');
+				},
+				IAssetsDirectory::class => function (IRootDirectory $rootDirectory) {
+					return $rootDirectory->directory('assets', AssetsDirectory::class);
 				},
 				IResourceManager::class => (new ClassFactory(IResourceManager::class, ResourceManager::class))->onSetup(function (IResourceManager $resourceManager) {
 					$resourceManager->registerResourceHandler((new XmlResourceHandler())->lazyXmlParser(new XmlParser()));

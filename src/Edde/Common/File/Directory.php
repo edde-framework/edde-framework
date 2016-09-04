@@ -6,6 +6,7 @@
 	use Edde\Api\File\DirectoryException;
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\File\IFile;
+	use Edde\Api\Resource\IResource;
 	use Edde\Common\Usable\AbstractUsable;
 	use RecursiveDirectoryIterator;
 	use RecursiveIteratorIterator;
@@ -22,7 +23,7 @@
 		/**
 		 * @param string $directory
 		 */
-		public function __construct($directory) {
+		public function __construct(string $directory) {
 			$this->directory = $directory;
 		}
 
@@ -33,30 +34,30 @@
 			}
 		}
 
-		public function save($name, $content) {
+		public function save(string $file, string $content): IResource {
 			$this->use();
-			file_put_contents($file = ($this->directory . '/' . $name), $content);
-			return new File(FileUtils::url($file));
+			file_put_contents($file = $this->filename($file), $content);
+			return new File($file);
 		}
 
-		public function get($file) {
-			return file_get_contents(FileUtils::realpath($this->filename($file)));
-		}
-
-		public function filename($file) {
+		public function filename(string $file): string {
 			return FileUtils::normalize($this->getDirectory() . '/' . $file);
 		}
 
-		public function getDirectory() {
+		public function getDirectory(): string {
 			$this->use();
 			return $this->directory;
+		}
+
+		public function get(string $file): string {
+			return file_get_contents(FileUtils::realpath($this->filename($file)));
 		}
 
 		public function file(string $file): IFile {
 			return new File($this->filename($file));
 		}
 
-		public function create() {
+		public function create(): IDirectory {
 			if (is_dir($this->directory) === false && @mkdir($this->directory, 0777, true) && is_dir($this->directory) === false) {
 				throw new DirectoryException(sprintf('Cannot create directory [%s].', $this->directory));
 			}
@@ -64,23 +65,25 @@
 			return $this;
 		}
 
-		public function purge() {
+		public function purge(): IDirectory {
 			FileUtils::recreate($this->directory);
 			$this->directory = FileUtils::realpath($this->directory);
 			return $this;
 		}
 
-		public function delete() {
+		public function delete(): IDirectory {
 			$this->use();
 			FileUtils::delete($this->directory);
+			return $this;
 		}
 
-		public function exists() {
+		public function exists(): bool {
 			return is_dir($this->directory);
 		}
 
-		public function directory($directory): IDirectory {
-			return new Directory($this->getDirectory() . '/' . $directory);
+		public function directory(string $directory, string $class = null): IDirectory {
+			$class = $class ?: Directory::class;
+			return new $class($this->getDirectory() . '/' . $directory);
 		}
 
 		public function parent(): IDirectory {
@@ -95,7 +98,7 @@
 		}
 
 		public function __toString() {
-			return $this->directory;
+			return $this->getDirectory();
 		}
 
 		protected function prepare() {

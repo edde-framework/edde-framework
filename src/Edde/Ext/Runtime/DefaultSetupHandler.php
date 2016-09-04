@@ -19,8 +19,10 @@
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpRequestFactory;
 	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Identity\IAuthenticatorManager;
 	use Edde\Api\Identity\IIdentity;
+	use Edde\Api\IEddeDirectory;
 	use Edde\Api\Link\IHostUrl;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResourceManager;
@@ -41,6 +43,7 @@
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Application\Application;
+	use Edde\Common\AssetsDirectory;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Crate\CrateDirectory;
@@ -48,6 +51,7 @@
 	use Edde\Common\Crate\CrateGenerator;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
+	use Edde\Common\EddeDirectory;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\MacroSet;
 	use Edde\Common\Http\HttpRequestFactory;
@@ -87,6 +91,17 @@
 			return parent::create($cacheFactory ?: new CacheFactory(__DIR__, new InMemoryCacheStorage()))
 				->registerFactoryList(array_merge([
 					Framework::class,
+					IEddeDirectory::class => function () {
+						/**
+						 * this is darkes possible magic; don't use this constant, don't use this interface!
+						 *
+						 * It's here only for internal use.
+						 */
+						return new EddeDirectory(EDDE_ROOT_DIRECTORY);
+					},
+					IAssetsDirectory::class => function (IEddeDirectory $eddeDirectory) {
+						return $eddeDirectory->directory('assets', AssetsDirectory::class);
+					},
 					ICacheStorage::class => InMemoryCacheStorage::class,
 					/**
 					 * Application and presentation layer
@@ -116,16 +131,16 @@
 						throw new RuntimeException(sprintf('If you want use root directory [%s], you must register it to the container!', IRootDirectory::class));
 					},
 					ITempDirectory::class => function (IRootDirectory $rootDirectory) {
-						return new TempDirectory($rootDirectory->getDirectory() . '/temp');
+						return $rootDirectory->directory('temp', TempDirectory::class);
 					},
 					ICacheDirectory::class => function (ITempDirectory $tempDirectory) {
-						return new CacheDirectory($tempDirectory->getDirectory() . '/cache');
+						return $tempDirectory->directory('cache', CacheDirectory::class);
 					},
 					IStorageDirectory::class => function (IRootDirectory $rootDirectory) {
-						return new StorageDirectory($rootDirectory->getDirectory() . '/.storage');
+						return $rootDirectory->directory('.storage', StorageDirectory::class);
 					},
 					ITemplateDirectory::class => functioN (IStorageDirectory $storageDirectory) {
-						return new TemplateDirectory($storageDirectory->getDirectory() . '/template');
+						return $storageDirectory->directory('template', TemplateDirectory::class);
 					},
 					ICryptEngine::class => CryptEngine::class,
 					IFileStorage::class => FileStorage::class,
@@ -135,7 +150,7 @@
 					ICrateGenerator::class => CrateGenerator::class,
 					ICrateFactory::class => CrateFactory::class,
 					ICrateDirectory::class => function (IStorageDirectory $storageDirectory) {
-						return new CrateDirectory($storageDirectory->getDirectory() . '/crate');
+						return $storageDirectory->directory('crate', CrateDirectory::class);
 					},
 					IStorage::class => DatabaseStorage::class,
 					IResourceManager::class => ResourceManager::class,

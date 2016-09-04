@@ -3,7 +3,7 @@
 
 	namespace App\Home;
 
-	use Edde\Ext\Html\EddeViewControl;
+	use Edde\Common\Html\TemplateViewControl;
 
-	class HomeView extends EddeViewControl {
+	class HomeView extends TemplateViewControl {
 	}
