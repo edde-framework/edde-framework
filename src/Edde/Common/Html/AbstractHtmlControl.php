@@ -5,9 +5,11 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Html\IHtmlControl;
+	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Control\AbstractControl;
 
 	abstract class AbstractHtmlControl extends AbstractControl implements IHtmlControl {
+		use LazyInjectTrait;
 		/**
 		 * @var IContainer
 		 */

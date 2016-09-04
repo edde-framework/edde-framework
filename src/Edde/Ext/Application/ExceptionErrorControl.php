@@ -6,12 +6,12 @@
 	use Edde\Api\Application\IErrorControl;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Router\RouterException;
-	use Edde\Ext\Html\EddeViewControl;
+	use Edde\Common\Html\TemplateViewControl;
 
 	/**
 	 * Only rethrows exception.
 	 */
-	class ExceptionErrorControl extends EddeViewControl implements IErrorControl {
+	class ExceptionErrorControl extends TemplateViewControl implements IErrorControl {
 		/**
 		 * @var IHttpRequest
 		 */

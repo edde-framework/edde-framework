@@ -208,13 +208,16 @@
 
 				public function run(INode $root, ICompiler $compiler, callable $callback = null) {
 					$destination = $compiler->getDestination();
+					$file = null;
 					switch ($root->getName()) {
 						case 'js':
-							$destination->write(sprintf("\t\t\t\$this->javaScriptCompiler->addFile('%s');\n", $compiler->file($root->getAttribute('src'))));
+							$file = $compiler->file($root->getAttribute('src'));
 							break;
 						case 'e:js':
+							$file = $compiler->asset($root->getAttribute('src'));
 							break;
 					}
+					$destination->write(sprintf("\t\t\t\$this->javaScriptCompiler->addFile('%s');\n", $file));
 				}
 			};
 		}

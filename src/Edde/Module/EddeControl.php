@@ -9,10 +9,10 @@
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Container\LazyInjectTrait;
-	use Edde\Ext\Html\EddeViewControl;
+	use Edde\Common\Html\TemplateViewControl;
 	use Tracy\Debugger;
 
-	class EddeControl extends EddeViewControl {
+	class EddeControl extends TemplateViewControl {
 		use LazyInjectTrait;
 		/**
 		 * @var IUpgradeManager
