@@ -328,7 +328,7 @@
 
 				public function __construct() {
 					parent::__construct([
-						'i:layout',
+						'm:layout',
 						'block',
 						'm:block',
 					]);
@@ -337,7 +337,7 @@
 				public function run(INode $root, ICompiler $compiler, callable $callback = null) {
 					$destination = $compiler->getDestination();
 					switch ($root->getName()) {
-						case 'i:layout':
+						case 'm:layout':
 							if (($src = $root->getValue()) === null) {
 								throw new MacroException(sprintf('Missing attribute of macro [%s].', $root->getName()));
 							}

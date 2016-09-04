@@ -1,4 +1,4 @@
-<control i:layout="/layout.xml">
+<control m:layout="/layout.xml">
 	<div class="foo-bar" m:block="poo"/>
 	<div m:block="poo">
 		<span value="lorem ipsum or something like that"/>
