@@ -5,6 +5,7 @@
 
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\CompilerException;
@@ -24,6 +25,10 @@
 		 * @var IRootDirectory
 		 */
 		protected $rootDirectory;
+		/**
+		 * @var IAssetsDirectory
+		 */
+		protected $assetsDirectory;
 		/**
 		 * @var IFile
 		 */
@@ -48,13 +53,15 @@
 		/**
 		 * @param INode $root
 		 * @param IRootDirectory $rootDirectory
+		 * @param IAssetsDirectory $assetsDirectory
 		 * @param IFile $source
 		 * @param IFile $destination
 		 * @param string $name
 		 */
-		public function __construct(INode $root, IRootDirectory $rootDirectory, IFile $source, IFile $destination, string $name) {
+		public function __construct(INode $root, IRootDirectory $rootDirectory, IAssetsDirectory $assetsDirectory, IFile $source, IFile $destination, string $name) {
 			$this->root = $root;
 			$this->rootDirectory = $rootDirectory;
+			$this->assetsDirectory = $assetsDirectory;
 			$this->source = $source;
 			$this->destination = $destination;
 			$this->name = $name;
@@ -137,13 +144,17 @@
 			return "'$value'";
 		}
 
-		public function file(string $value): string {
+		public function file(string $file): string {
 			$filename = $this->source->getDirectory()
-				->filename($value);
-			if ($value[0] === '/') {
-				$filename = $this->rootDirectory->filename($value);
+				->filename($file);
+			if ($file[0] === '/') {
+				$filename = $this->rootDirectory->filename($file);
 			}
 			return $filename;
+		}
+
+		public function asset(string $asset): string {
+			return $this->assetsDirectory->filename($asset);
 		}
 
 		protected function prepare() {

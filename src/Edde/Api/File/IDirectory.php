@@ -12,7 +12,7 @@
 		 *
 		 * @return string
 		 */
-		public function getDirectory();
+		public function getDirectory(): string;
 
 		/**
 		 * return iterator over file list in the current directory
@@ -24,12 +24,12 @@
 		/**
 		 * create a file with the given name in this directory
 		 *
-		 * @param string $name
-		 * @param mixed $content
+		 * @param string $file
+		 * @param string $content
 		 *
 		 * @return IResource
 		 */
-		public function save($name, $content);
+		public function save(string $file, string $content): IResource;
 
 		/**
 		 * get contents of a given file (in this directory)
@@ -38,7 +38,7 @@
 		 *
 		 * @return string
 		 */
-		public function get($file);
+		public function get(string $file): string;
 
 		/**
 		 * create filename (shortcut for $this->getDirectory.'\\'.$file)
@@ -47,7 +47,7 @@
 		 *
 		 * @return string
 		 */
-		public function filename($file);
+		public function filename(string $file): string;
 
 		/**
 		 * return a File object
@@ -61,37 +61,38 @@
 		/**
 		 * create all directories until the current one
 		 *
-		 * @return $this
+		 * @return IDirectory
 		 */
-		public function create();
+		public function create(): IDirectory;
 
 		/**
 		 * recreate directory in place effectively clean all it's contents
 		 *
-		 * @return $this
+		 * @return IDirectory
 		 */
-		public function purge();
+		public function purge(): IDirectory;
 
 		/**
 		 * physically remove the directory
 		 *
-		 * @return $this
+		 * @return IDirectory
 		 */
-		public function delete();
+		public function delete(): IDirectory;
 
 		/**
 		 * @return bool
 		 */
-		public function exists();
+		public function exists(): bool;
 
 		/**
 		 * return directory based on a current path
 		 *
 		 * @param string $directory
+		 * @param string $class directory class; sometimes it's useful return non default IDirectory interface
 		 *
 		 * @return IDirectory
 		 */
-		public function directory($directory): IDirectory;
+		public function directory(string $directory, string $class = null): IDirectory;
 
 		/**
 		 * return parent directory

@@ -200,12 +200,21 @@
 		static public function jsMacro(): IMacro {
 			return new class extends AbstractMacro {
 				public function __construct() {
-					parent::__construct(['js']);
+					parent::__construct([
+						'js',
+						'e:js',
+					]);
 				}
 
 				public function run(INode $root, ICompiler $compiler, callable $callback = null) {
 					$destination = $compiler->getDestination();
-					$destination->write(sprintf("\t\t\t\$this->javaScriptCompiler->addFile('%s');\n", $compiler->file($root->getAttribute('src'))));
+					switch ($root->getName()) {
+						case 'js':
+							$destination->write(sprintf("\t\t\t\$this->javaScriptCompiler->addFile('%s');\n", $compiler->file($root->getAttribute('src'))));
+							break;
+						case 'e:js':
+							break;
+					}
 				}
 			};
 		}
@@ -213,12 +222,24 @@
 		static public function cssMacro(): IMacro {
 			return new class extends AbstractMacro {
 				public function __construct() {
-					parent::__construct(['css']);
+					parent::__construct([
+						'css',
+						'e:css',
+					]);
 				}
 
 				public function run(INode $root, ICompiler $compiler, callable $callback = null) {
 					$destination = $compiler->getDestination();
-					$destination->write(sprintf("\t\t\t\$this->styleSheetCompiler->addFile('%s');\n", $compiler->file($root->getAttribute('src'))));
+					$file = null;
+					switch ($root->getName()) {
+						case 'css':
+							$file = $compiler->file($root->getAttribute('src'));
+							break;
+						case 'e:css':
+							$file = $compiler->asset($root->getAttribute('src'));
+							break;
+					}
+					$destination->write(sprintf("\t\t\t\$this->styleSheetCompiler->addFile('%s');\n", $file));
 				}
 			};
 		}

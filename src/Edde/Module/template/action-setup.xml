@@ -1,5 +1,7 @@
 <control title="Edde Setup">
 	<css src="css/kube.css"/>
+	<e:css src="css/edde-framework.css"/>
+	<e:js src="js/edde-framework.js"/>
 
 	<div id="message" class="alert" m:snippet="message"/>
 

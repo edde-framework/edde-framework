@@ -5,6 +5,7 @@
 
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\IMacro;
@@ -27,6 +28,10 @@
 		 */
 		protected $rootDirectory;
 		/**
+		 * @var IAssetsDirectory
+		 */
+		protected $assetsDirectory;
+		/**
 		 * @var IResourceManager
 		 */
 		protected $resourceManager;
@@ -41,6 +46,10 @@
 
 		public function lazyRootDiretory(IRootDirectory $rootDirectory) {
 			$this->rootDirectory = $rootDirectory;
+		}
+
+		public function lazyAssetsDirectory(IAssetsDirectory $assetsDirectory) {
+			$this->assetsDirectory = $assetsDirectory;
 		}
 
 		public function lazyResourceManager(IResourceManager $resourceManager) {
@@ -64,7 +73,7 @@
 			if ((($root = $this->resourceManager->resource($file)) instanceof INode) === false) {
 				throw new TemplateException(sprintf('Resource handler for [%s] must return [%s].', (string)$file->getUrl(), INode::class));
 			}
-			$compiler = new Compiler($root, $this->rootDirectory, $file, $templateFile = $this->templateDirectory->file(($name = ('Template_' . sha1((string)$file->getUrl()))) . '.php'), $name);
+			$compiler = new Compiler($root, $this->rootDirectory, $this->assetsDirectory, $file, $templateFile = $this->templateDirectory->file(($name = ('Template_' . sha1((string)$file->getUrl()))) . '.php'), $name);
 			$macroList = [];
 			foreach ($this->macroList as $macro) {
 				$macroList[] = clone $macro;
