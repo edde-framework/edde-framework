@@ -1,0 +1,8 @@
+<control>
+	<div class="foo"/>
+	<div>
+		<block name="foo"/>
+		<div class="bar"/>
+	</div>
+	<block name="poo"/>
+</control>

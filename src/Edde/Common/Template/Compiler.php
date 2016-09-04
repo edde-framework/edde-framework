@@ -132,6 +132,9 @@
 					return $item;
 				}
 			}
+			if (strpos($value, '/', 0) !== false) {
+				return var_export($this->file(substr($value, 1)), true);
+			}
 			if (strpos($value, '->', 0) !== false && strpos($value, '()') !== false) {
 				return '->' . StringUtils::firstLower(StringUtils::camelize(substr($value, 2)));
 			}
@@ -141,7 +144,7 @@
 			if ($value[0] === '$') {
 				return $value;
 			}
-			return "'$value'";
+			return var_export($value, true);
 		}
 
 		public function file(string $file): string {

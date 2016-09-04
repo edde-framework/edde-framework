@@ -438,6 +438,16 @@
 ', $control->render());
 		}
 
+//		public function testRequire() {
+//			$template = $this->templateManager->template(__DIR__ . '/assets/template/require.xml');
+//			$file = $template->getFile();
+//			self::assertTrue($file->isAvailable());
+//			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+//			$template->template($this->control);
+//			$this->control->dirty();
+//			self::assertEquals('', $this->control->render());
+//		}
+
 		protected function setUp() {
 			$this->container = ContainerFactory::create([
 				IResourceManager::class => ResourceManager::class,

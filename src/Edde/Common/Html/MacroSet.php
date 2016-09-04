@@ -10,6 +10,7 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IMacro;
+	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Template\MacroException;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
@@ -38,6 +39,7 @@
 				self::cssMacro(),
 				self::buttonMacro(),
 				self::headerMacro(),
+				self::layoutMacro(),
 				$container->inject(self::bindMacro()),
 				new ControlMacro('div', DivControl::class),
 				new ControlMacro('span', SpanControl::class),
@@ -59,23 +61,45 @@
 
 				public function run(INode $root, ICompiler $compiler, callable $callback = null) {
 					$destination = $compiler->getDestination();
-					$destination->write("\t\tprotected \$container;\n\n");
-					$destination->write("\t\tprotected \$styleSheetCompiler;\n\n");
-					$destination->write("\t\tprotected \$javaScriptCompiler;\n\n");
-					$destination->write("\t\tprotected \$stack;\n\n");
+					$destination->write(sprintf("\t\tuse %s;\n", LazyInjectTrait::class));
+
+					$dependencyList = [
+						IContainer::class,
+						IStyleSheetCompiler::class,
+						IJavaScriptCompiler::class,
+						ITemplateManager::class,
+					];
+
+					foreach ($dependencyList as $dependency) {
+						$destination->write(sprintf("\t\t/** @var %s */\n\t\tprotected $%s;\n", $dependency, StringUtils::firstLower(substr(StringUtils::extract($dependency, '\\'), 1))));
+					}
+
+					$destination->write(sprintf("\t\t/** @var %s */\n", \SplStack::class));
+					$destination->write("\t\tprotected \$stack;\n");
 					$destination->write(sprintf("\t\t/** @var %s */\n", IHtmlView::class));
-					$destination->write("\t\tprotected \$proxy;\n\n");
-					$destination->write(sprintf("\t\tpublic function __construct(%s \$container, %s \$styleSheetCompiler, %s \$javaScriptCompiler) {\n", IContainer::class, IStyleSheetCompiler::class, IJavaScriptCompiler::class));
-					$destination->write("\t\t\t\$this->container = \$container;\n");
-					$destination->write("\t\t\t\$this->styleSheetCompiler = \$styleSheetCompiler;\n");
-					$destination->write("\t\t\t\$this->javaScriptCompiler = \$javaScriptCompiler;\n");
-					$destination->write(sprintf("\t\t\t\$this->stack = new %s;\n", \SplStack::class));
-					$destination->write("\t\t}\n\n");
-					$destination->write("\t\tpublic function __call(\$function, array \$parameterList) {\n");
-					$destination->write("\t\t\treturn call_user_func_array([\$this->proxy, \$function], \$parameterList);\n");
-					$destination->write("\t\t}\n\n");
-					$destination->write(sprintf("\t\tpublic function template(\\%s \$parent) {\n", IHtmlControl::class));
-					$destination->write("\t\t\t\$reflectionClass = new ReflectionClass(\$this->proxy = \$parent);\n");
+					$destination->write("\t\tprotected \$parent;\n");
+
+					foreach ($dependencyList as $dependency) {
+						$parameter = StringUtils::firstLower(substr(StringUtils::extract($dependency, '\\'), 1));
+						$destination->write(sprintf("
+		public function lazyt%s(%s \$%s){
+			\$this->%s = \$%s;    
+		}						
+", StringUtils::firstUpper($parameter), $dependency, $parameter, $parameter, $parameter));
+					}
+
+					$destination->write(sprintf("
+		public function __call(\$function, array \$parameterList) {
+			return call_user_func_array([
+				\$this->parent, 
+				\$function
+			], \$parameterList);
+		}
+					
+		public function template(%s \$parent, array \$blockList = []) {
+			\$this->stack = new %s();
+			\$reflectionClass = new ReflectionClass(\$this->parent = \$parent);\n", IHtmlControl::class, \SplStack::class));
+
 					if (($attributeList = $root->getAttributeList()) !== []) {
 						$destination->write(sprintf("\t\t\t\$parent->setAttributeList(%s);\n", var_export($attributeList, true)));
 					}
@@ -108,13 +132,13 @@
 
 							$value = StringUtils::firstLower(StringUtils::camelize($root->getValue()));
 							if (strrpos($value, '()') !== false) {
-								$destination->write(sprintf("\t\t\t\$this->proxy->snippet(\$control, [\$this->proxy, '%s']);\n", str_replace('()', '', $value)));
+								$destination->write(sprintf("\t\t\t\$this->parent->snippet(\$control, [\$this->parent, '%s']);\n", str_replace('()', '', $value)));
 								break;
 							}
-							$destination->write("\t\t\t\$this->proxy->snippet(\$control);\n");
+							$destination->write("\t\t\t\$this->parent->snippet(\$control);\n");
 							$destination->write(sprintf("\t\t\t\$reflectionProperty = \$reflectionClass->getProperty('%s');\n", $value));
 							$destination->write("\t\t\t\$reflectionProperty->setAccessible(true);\n");
-							$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->proxy, \$control);\n");
+							$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->parent, \$control);\n");
 							break;
 					}
 				}
@@ -143,7 +167,7 @@
 							}
 							$destination->write(sprintf("\t\t\t\$reflectionProperty = \$reflectionClass->getProperty('%s');\n", $value));
 							$destination->write("\t\t\t\$reflectionProperty->setAccessible(true);\n");
-							$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->proxy, \$control);\n");
+							$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->parent, \$control);\n");
 							break;
 						case 'm:pass-child':
 							$value = str_replace('()', '', $root->getValue());
@@ -266,7 +290,7 @@
 					}
 					$action = str_replace('()', '', $action);
 					unset($attributeList['action']);
-					$destination->write(sprintf("\t\t\t\$control->setAction([\$this->proxy, %s]);\n", $compiler->value($action)));
+					$destination->write(sprintf("\t\t\t\$control->setAction([\$this->parent, %s]);\n", $compiler->value($action)));
 					$this->writeAttributeList($attributeList, $destination);
 					$this->macro($root, $compiler, $callback);
 				}
@@ -294,6 +318,56 @@
 					$this->writeTextValue($root, $destination, $compiler);
 					$this->writeAttributeList($this->getAttributeList($root, $compiler), $destination);
 					$this->macro($root, $compiler, $callback);
+				}
+			};
+		}
+
+		static public function layoutMacro(): IMacro {
+			return new class extends AbstractMacro {
+				protected $layout;
+
+				public function __construct() {
+					parent::__construct([
+						'm:layout',
+						'block',
+						'm:block',
+					]);
+				}
+
+				public function run(INode $root, ICompiler $compiler, callable $callback = null) {
+					$destination = $compiler->getDestination();
+					switch ($root->getName()) {
+						case 'm:layout':
+							if ($this->layout !== null) {
+								throw new MacroException(sprintf('Cannot use layout [%s]; layout was already set to [%s].', $root->getValue(), $this->layout));
+							}
+							$this->macro($root, $compiler, $callback);
+							$destination->write(sprintf("\t\t\t\$this->templateManager->template(%s);\n", $compiler->value($root->getValue())));
+							break;
+						case 'layout':
+							if ($root->hasAttribute('src') === false) {
+								throw new MacroException(sprintf('Missing "src" attribute in macro [%s].', $root->getName()));
+							}
+							if ($this->layout !== null) {
+								throw new MacroException(sprintf('Cannot use layout [%s]; layout was already set to [%s].', $root->getAttribute('src'), $this->layout));
+							}
+							$this->macro($root, $compiler, $callback);
+//							$destination->write(sprintf("\t\t\t\$this->templateManager->template(%s);\n", $compiler->value($root->getAttribute('src'))));
+							break;
+						/**
+						 * block placeholder generator
+						 */
+						case 'block':
+							break;
+						/**
+						 * block reference
+						 */
+						case 'm:block':
+							$destination->write("\t\t\t// block start here\n");
+							$this->macro($root, $compiler, $callback);
+							$destination->write("\t\t\t// block end here\n");
+							break;
+					}
 				}
 			};
 		}
