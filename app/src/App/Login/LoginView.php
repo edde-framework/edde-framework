@@ -5,10 +5,10 @@
 
 	use App\Home\HomeView;
 	use Edde\Common\Html\Tag\DivControl;
+	use Edde\Common\Html\TemplateViewControl;
 	use Edde\Common\Session\SessionTrait;
-	use Edde\Ext\Html\EddeViewControl;
 
-	class LoginView extends EddeViewControl {
+	class LoginView extends TemplateViewControl {
 		use SessionTrait;
 		/**
 		 * @var DivControl

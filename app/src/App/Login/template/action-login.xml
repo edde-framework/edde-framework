@@ -1,5 +1,7 @@
 <control title="Login">
 	<css src="/src/App/assets/css/kube.css"/>
+	<e:js src="js/jquery-3.1.0.js"/>
+	<e:js src="js/edde-framework.js"/>
 
 	<schema name="login" schema="App\Login\LoginCrate"/>
 
