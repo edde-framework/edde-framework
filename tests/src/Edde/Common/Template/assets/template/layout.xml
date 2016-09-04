@@ -1,6 +1,6 @@
 <control>
 	<div class="foo"/>
-	<div>
+	<div class="with-block">
 		<block name="foo"/>
 		<div class="bar"/>
 	</div>

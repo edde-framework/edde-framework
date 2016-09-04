@@ -94,7 +94,7 @@
 			$this->destination->write(sprintf("\t/** source = %s */\n\n", $this->source->getPath()));
 			$this->destination->write(sprintf("\tclass %s {\n", $this->name));
 			try {
-				$this->macro($this->root, $this);
+				$this->macro($this->root, $this->root);
 			} catch (CompilerException $e) {
 				throw new CompilerException(sprintf('Compilation of template [%s] failed: %s', (string)$this->source->getUrl(), $e->getMessage()), 0, $e);
 			}
@@ -103,30 +103,30 @@
 			return $template;
 		}
 
-		public function macro(INode $root, ICompiler $compiler, callable $callback = null) {
-			if (isset($this->macroList[$name = $root->getName()]) === false) {
-				throw new CompilerException(sprintf('Unknown macro [%s].', $root->getPath()));
+		public function macro(INode $macro, INode $element) {
+			if (isset($this->macroList[$name = $macro->getName()]) === false) {
+				throw new CompilerException(sprintf('Unknown macro [%s] in [%s].', $macro->getName(), $element->getPath()));
 			}
-			if ($root->hasAttributeList('m')) {
-				$attributeList = $root->getAttributeList();
-				foreach ($root->getAttributeList('m') as $attribute => $value) {
+			if ($macro->hasAttributeList('m')) {
+				$attributeList = $macro->getAttributeList();
+				foreach ($macro->getAttributeList('m') as $attribute => $value) {
 					/**
 					 * m attributes can be changed in $this->macro calls, so it's important to check them every loop
 					 */
-					$macroAttributeList = $root->getAttributeList('m');
+					$macroAttributeList = $macro->getAttributeList('m');
 					if (isset($macroAttributeList[$attribute]) === false) {
 						continue;
 					}
 					unset($attributeList['m:' . $attribute]);
-					$root->setAttributeList($attributeList);
-					$this->macro((new Node('m:' . $attribute, $value))->addNode($root), $this, $callback);
+					$macro->setAttributeList($attributeList);
+					$this->macro(new Node('m:' . $attribute, $value), $element);
 				}
 				return;
 			}
-			$this->macroList[$name]->run($root, $this, $callback);
+			$this->macroList[$name]->macro($macro, $element, $this);
 		}
 
-		public function value(string $value): string {
+		public function delimite(string $value): string {
 			foreach ($this->macroList as $macro) {
 				if (($item = $macro->variable($value, $this)) !== null) {
 					return $item;
@@ -134,6 +134,9 @@
 			}
 			if (strpos($value, '/', 0) !== false) {
 				return var_export($this->file(substr($value, 1)), true);
+			}
+			if (strpos($value, 'edde://', 0) !== false) {
+				return var_export($this->asset(str_replace('edde://', '', $value)), true);
 			}
 			if (strpos($value, '->', 0) !== false && strpos($value, '()') !== false) {
 				return '->' . StringUtils::firstLower(StringUtils::camelize(substr($value, 2)));
@@ -148,12 +151,11 @@
 		}
 
 		public function file(string $file): string {
-			$filename = $this->source->getDirectory()
-				->filename($file);
 			if ($file[0] === '/') {
-				$filename = $this->rootDirectory->filename($file);
+				return $this->rootDirectory->filename($file);
 			}
-			return $filename;
+			return $this->source->getDirectory()
+				->filename($file);
 		}
 
 		public function asset(string $asset): string {

@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	use Edde\Common\Html\Document\DocumentControl;
 	use Edde\Common\Html\Tag\ButtonControl;
 	use Edde\Common\Html\Tag\DivControl;
@@ -35,6 +37,11 @@
 
 		public function specialButton(ButtonControl $control) {
 			$control->addClass('special-button-class');
+		}
+
+		public function render() {
+			$this->dirty();
+			return parent::render();
 		}
 	}
 

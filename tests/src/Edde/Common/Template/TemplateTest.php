@@ -6,7 +6,6 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\File\IRootDirectory;
-	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResourceManager;
@@ -51,9 +50,75 @@
 		 */
 		protected $templateManager;
 		/**
-		 * @var IHtmlControl
+		 * @var \TestDocument
 		 */
 		protected $control;
+
+		public function testDummy() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/dummy.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body></body>
+</html>
+', $this->control->render());
+		}
+
+		public function testSimpleTemplate() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/simple-template.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div>
+			<div>
+				<div class="hidden one"></div>
+			</div>
+		</div>
+		<div>
+			<div>with value</div>
+			<div>another value</div>
+			<div>
+				<div class="another hidden"></div>
+			</div>
+		</div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
+		public function testButton() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/button.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="button edde-clickable" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=on-update">foo</div>
+	</body>
+</html>
+', $this->control->render());
+		}
 
 		public function testSwitchTemplate() {
 			$template = $this->templateManager->template(__DIR__ . '/assets/template/switch-template.xml');
@@ -61,7 +126,6 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
-			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html attribute="choo" title="poo">
 	<head>
@@ -86,7 +150,6 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
-			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html attribute="choo" title="poo">
 	<head>
@@ -105,33 +168,12 @@
 ', $this->control->render());
 		}
 
-		public function testButton() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/button.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
-			$template->template($this->control);
-			$this->control->dirty();
-			self::assertEquals('<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title></title>
-	</head>
-	<body>
-		<div class="button edde-clickable" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=on-update">foo</div>
-	</body>
-</html>
-', $this->control->render());
-		}
-
 		public function testIdBind() {
 			$template = $this->templateManager->template(__DIR__ . '/assets/template/id.xml');
 			$file = $template->getFile();
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
-			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -152,7 +194,6 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
-			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -173,7 +214,6 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
-			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -189,13 +229,33 @@
 ', $this->control->render());
 		}
 
+		public function testSpanStrangeAttributes() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/span-strange-attributes.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="foo">
+			<span data-cheat="I\'m really happy here!">some spanish span here</span>
+		</div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
 		public function testInclude() {
 			$template = $this->templateManager->template(__DIR__ . '/assets/template/include.xml');
 			$file = $template->getFile();
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
-			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -218,7 +278,6 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
-			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -247,7 +306,6 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
-			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -286,7 +344,6 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
-			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -307,7 +364,6 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
-			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -338,7 +394,6 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
-			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -375,7 +430,6 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
-			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -402,7 +456,6 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			$template->template($this->control);
-			$this->control->dirty();
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -438,15 +491,14 @@
 ', $control->render());
 		}
 
-		public function testRequire() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/require.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
-			$template->template($this->control);
-			$this->control->dirty();
-			self::assertEquals('', $this->control->render());
-		}
+//		public function testRequire() {
+//			$template = $this->templateManager->template(__DIR__ . '/assets/template/require.xml');
+//			$file = $template->getFile();
+//			self::assertTrue($file->isAvailable());
+//			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+//			$template->template($this->control);
+//			self::assertEquals('', $this->control->render());
+//		}
 
 		protected function setUp() {
 			$this->container = ContainerFactory::create([

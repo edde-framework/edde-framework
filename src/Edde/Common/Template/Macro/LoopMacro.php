@@ -24,37 +24,39 @@
 		public function variable(string $string, ICompiler $compiler) {
 			switch ($string) {
 				case ':$':
-					$loop = $this->loopStack->top();
-					return '$' . $loop[1];
+					list($key, $value) = $this->loopStack->top();
+					return '$' . $value;
 				case ':#':
-					$loop = $this->loopStack->top();
-					return '$' . $loop[0];
+					list($key, $value) = $this->loopStack->top();
+					return '$' . $key;
 			}
 			if (strpos($string, ':$') !== false) {
-				$loop = $this->loopStack->top();
-				return '$' . $loop[1] . $compiler->value(str_replace(':$', '->', $string));
+				list($key, $value) = $this->loopStack->top();
+				return '$' . $value . $compiler->delimite(str_replace(':$', '->', $string));
 			}
 			return null;
 		}
 
-		public function run(INode $root, ICompiler $compiler, callable $callback = null) {
+		public function macro(INode $macro, INode $element, ICompiler $compiler) {
 			$destination = $compiler->getDestination();
-			$this->loopStack->push($loop = [
+			$this->loopStack->push(list($key, $value) = [
 				'key_' . sha1(random_bytes(64)),
 				'value_' . sha1(random_bytes(64)),
 			]);
-			switch ($root->getName()) {
+			switch ($macro->getName()) {
 				case 'loop':
-					$destination->write(sprintf("\t\t\tforeach(%s as \$%s => \$%s) {\n", $compiler->value($root->getAttribute('src')), $loop[0], $loop[1]));
-					$this->macro($root, $compiler, $callback);
-					$this->loopStack->pop();
+					$this->checkAttribute($macro, $element, 'src');
+					$destination->write(sprintf("\t\t\tforeach(%s as \$%s => \$%s) {\n", $compiler->delimite($element->getAttribute('src')), $key, $value));
+					$this->element($element, $compiler);
 					$destination->write("\t\t\t}\n");
+					$this->loopStack->pop();
 					break;
 				case 'm:loop':
-					$destination->write(sprintf("\t\t\tforeach(%s as $%s => $%s) {\n", $compiler->value($root->getValue()), $loop[0], $loop[1]));
-					$this->macro($root, $compiler, $callback);
-					$this->loopStack->pop();
+					$this->checkValue($macro, $element);
+					$destination->write(sprintf("\t\t\tforeach(%s as $%s => $%s) {\n", $compiler->delimite($macro->getValue()), $key, $value));
+					$compiler->macro($element, $element);
 					$destination->write("\t\t\t}\n");
+					$this->loopStack->pop();
 					break;
 			}
 		}

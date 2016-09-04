@@ -37,8 +37,12 @@
 
 		public function handle(IResource $resource, INode $root = null): INode {
 			try {
-				$this->xmlParser->parse($resource, $handler = new XmlNodeHandler($root));
-				return $handler->getNode();
+				$this->xmlParser->parse($resource, $handler = new XmlNodeHandler());
+				$node = $handler->getNode();
+				if ($root !== null) {
+					$root->setNodeList($node->getNodeList(), true);
+				}
+				return $root ?: $node;
 			} catch (XmlParserException $e) {
 				throw new XmlParserException(sprintf('Cannot handle resource [%s]: %s', (string)$resource->getUrl(), $e->getMessage()), 0, $e);
 			}
