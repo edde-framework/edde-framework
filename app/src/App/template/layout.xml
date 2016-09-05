@@ -1,0 +1,7 @@
+<layout>
+	<e:css src="css/edde-framework.css"/>
+	<e:js src="js/jquery-3.1.0.js"/>
+	<e:js src="js/edde-framework.js"/>
+
+	<block name="block"/>
+</layout>

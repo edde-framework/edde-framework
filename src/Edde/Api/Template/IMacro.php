@@ -24,11 +24,11 @@
 		public function variable(string $string, ICompiler $compiler);
 
 		/**
-		 * @param INode $root
+		 * @param INode $macro input macro
+		 * @param INode $element input element (source node); this can sometimes be same as input macro
 		 * @param ICompiler $compiler
-		 * @param callable $callback
 		 *
 		 * @return IMacro
 		 */
-		public function run(INode $root, ICompiler $compiler, callable $callback = null);
+		public function macro(INode $macro, INode $element, ICompiler $compiler);
 	}

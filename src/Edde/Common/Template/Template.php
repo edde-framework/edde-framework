@@ -6,7 +6,6 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Template\ITemplate;
-	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class Template extends AbstractUsable implements ITemplate {
@@ -34,20 +33,14 @@
 			return $this->file;
 		}
 
-		public function getInstance(IContainer $container = null) {
+		public function getInstance(IContainer $container) {
 			if ($this->instnace === null) {
 				if (class_exists($class = $this->getClass()) === false) {
 					(function (IFile $file) {
 						require_once($file->getPath());
 					})($this->file);
 				}
-				if ($container !== null) {
-					if ($container->has($class) === false) {
-						$container->registerFactory($class, FactoryFactory::create($class, $class, false));
-					}
-					return $this->instnace = $container->create($class);
-				}
-				$this->instnace = new $class;
+				$this->instnace = $container->inject(new $class());
 			}
 			return $this->instnace;
 		}

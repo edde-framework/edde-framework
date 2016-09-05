@@ -1,5 +1,5 @@
 <control title="Edde Setup">
-	<css src="css/kube.css"/>
+	<e:css src="css/kube.css"/>
 	<e:css src="css/edde-framework.css"/>
 	<e:js src="js/jquery-3.1.0.js"/>
 	<e:js src="js/edde-framework.js"/>

@@ -34,6 +34,11 @@
 			return $parent ? $parent->getMeta('control') : null;
 		}
 
+		public function isLeaf(): bool {
+			$this->use();
+			return $this->node->isLeaf();
+		}
+
 		public function disconnect(): IControl {
 			$this->use();
 			if ($this->node->isRoot() === false) {

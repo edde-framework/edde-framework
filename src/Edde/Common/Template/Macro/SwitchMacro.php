@@ -12,7 +12,6 @@
 
 	class SwitchMacro extends AbstractMacro {
 		use LazyInjectTrait;
-
 		/**
 		 * @var \SplStack
 		 */
@@ -35,20 +34,25 @@
 			$this->cryptEngine = $cryptEngine;
 		}
 
-		public function run(INode $root, ICompiler $compiler, callable $callback = null) {
+		public function macro(INode $macro, INode $element, ICompiler $compiler) {
 			$destination = $compiler->getDestination();
-			switch ($root->getName()) {
+			switch ($macro->getName()) {
 				case 'm:switch':
+					$this->checkValue($macro, $element);
 					$this->stack->push($id = StringUtils::camelize($this->cryptEngine->guid()));
-					$destination->write(sprintf("\t\t\t\$_%s = %s;\n", $id, $compiler->value($root->getValue())));
-					$this->macro($root, $compiler, $callback);
+					$destination->write(sprintf("\t\t\t\$_%s = %s;\n", $id, $compiler->delimite($macro->getValue())));
+					$compiler->macro($element, $element);
 					break;
-				/** @noinspection PhpMissingBreakStatementInspection */
 				case 'case':
-					$root->setValue($root->getAttribute('case'));
+					$this->checkAttribute($macro, $element, 'case');
+					$destination->write(sprintf("\t\t\tif(\$_%s === %s) {\n", $this->stack->top(), $compiler->delimite($macro->getAttribute('case'))));
+					$this->element($element, $compiler);
+					$destination->write("\t\t\t}\n");
+					break;
 				case 'm:case':
-					$destination->write(sprintf("\t\t\tif(\$_%s === %s) {\n", $this->stack->top(), $compiler->value($root->getValue())));
-					$this->macro($root, $compiler, $callback);
+					$this->checkValue($macro, $element);
+					$destination->write(sprintf("\t\t\tif(\$_%s === %s) {\n", $this->stack->top(), $compiler->delimite($macro->getValue())));
+					$compiler->macro($element, $element);
 					$destination->write("\t\t\t}\n");
 					break;
 			}

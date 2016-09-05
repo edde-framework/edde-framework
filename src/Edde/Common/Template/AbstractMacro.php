@@ -6,6 +6,7 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IMacro;
+	use Edde\Api\Template\MacroException;
 	use Edde\Common\AbstractObject;
 
 	abstract class AbstractMacro extends AbstractObject implements IMacro {
@@ -32,14 +33,34 @@
 		protected function getAttributeList(INode $node, ICompiler $compiler) {
 			$attributeList = [];
 			foreach ($node->getAttributeList() as $name => $value) {
-				$attributeList[$name] = $compiler->value($value);
+				$attributeList[$name] = $compiler->delimite($value);
 			}
 			return $attributeList;
 		}
 
-		protected function macro(INode $root, ICompiler $compiler, callable $callback = null) {
-			foreach ($root->getNodeList() as $node) {
-				$compiler->macro($node, $compiler, $callback);
+		protected function element(INode $element, ICompiler $compiler) {
+			foreach ($element->getNodeList() as $node) {
+				$compiler->macro($node, $node);
+			}
+		}
+
+		protected function checkLeaf(INode $macro, INode $element) {
+			if ($element->isLeaf() === false) {
+				throw new MacroException(sprintf('Macro [%s] in [%s] must not have children.', $macro->getName(), $element->getPath()));
+			}
+		}
+
+		protected function checkAttribute(INode $macro, INode $element, ...$attributeList) {
+			foreach ($attributeList as $attribute) {
+				if ($macro->hasAttribute($attribute) === false) {
+					throw new MacroException(sprintf('Missing attribute "%s" in macro [%s] at [%s].', $attribute, $macro->getName(), $element->getPath()));
+				}
+			}
+		}
+
+		protected function checkValue(INode $macro, INode $element) {
+			if ($macro->getValue() === null) {
+				throw new MacroException(sprintf('Missing value of macro [%s] at [%s].', $macro->getName(), $element->getPath()));
 			}
 		}
 	}
