@@ -15,7 +15,7 @@
 
 	class ApplicationTest extends TestCase {
 		/**
-		 * @var IApplication
+		 * @var Application
 		 */
 		protected $application;
 		/**
@@ -70,5 +70,8 @@
 			$this->control = $container->create(\SomeControl::class);
 			$this->errorControl = $container->create(IErrorControl::class);
 			$this->application = $container->create(IApplication::class);
+			$this->application->lazyRoute($container->create(IRoute::class));
+			$this->application->lazyErrorControl($container->create(IErrorControl::class));
+			$this->application->lazyContainer($container);
 		}
 	}
