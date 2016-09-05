@@ -12,11 +12,11 @@
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Container\LazyInjectTrait;
+	use Edde\Common\Html\Input\PasswordControl;
+	use Edde\Common\Html\Input\TextControl;
 	use Edde\Common\Html\Tag\ButtonControl;
 	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Html\Tag\SpanControl;
-	use Edde\Common\Html\Value\PasswordInputControl;
-	use Edde\Common\Html\Value\TextInputControl;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\AbstractMacro;
@@ -40,8 +40,8 @@
 				$container->inject(self::bindMacro()),
 				new ControlMacro('div', DivControl::class),
 				new ControlMacro('span', SpanControl::class),
-				new ControlMacro('text', TextInputControl::class),
-				new ControlMacro('password', PasswordInputControl::class),
+				new ControlMacro('text', TextControl::class),
+				new ControlMacro('password', PasswordControl::class),
 			];
 		}
 
@@ -68,9 +68,12 @@
 							$destination->write("\tdeclare(strict_types = 1);\n\n");
 							$destination->write(sprintf("\t/** source = %s */\n\n", $source->getPath()));
 							$destination->write(sprintf("\tclass %s extends %s {\n", $compiler->getName(), HtmlTemplate::class));
-							$destination->write(vsprintf("\t\tpublic function template(%s \$parent) {
+							$destination->write(vsprintf("\t\tpublic function template(%s \$parent, array \$useList = []) {
 			\$this->stack = new %s();
-			\$reflectionClass = new ReflectionClass(\$this->parent = \$parent);\n", [
+			\$reflectionClass = new ReflectionClass(\$this->parent = \$parent);
+			foreach (\$useList as \$use) {
+				\$this->use(\$use);
+			}\n", [
 								IHtmlControl::class,
 								\SplStack::class,
 							]));
@@ -322,7 +325,7 @@
 							break;
 						case 'define':
 							$this->checkAttribute($macro, $element, 'name');
-							$destination->write(sprintf("\t\t\t\$this->blockList[%s] = function(%s \$parent) {\n", $compiler->delimite($macro->getAttribute('name')), IHtmlControl::class));
+							$destination->write(sprintf("\t\t\t\$this->blockList[%s] = function(%s \$parent) use(\$reflectionClass) {\n", $compiler->delimite($macro->getAttribute('name')), IHtmlControl::class));
 							$destination->write(sprintf("\t\t\t\t\$this->stack = new %s();\n", \SplStack::class));
 							$destination->write("\t\t\t\t\$this->stack->push(\$parent);\n");
 							$this->element($element, $compiler);
@@ -330,6 +333,11 @@
 							break;
 						case 'm:define':
 							$this->checkValue($macro, $element);
+							if ($element->isRoot()) {
+								$element->addNode((new Node('define', null, ['name' => $macro->getValue()]))->addNodeList($element->getNodeList(), true));
+								$compiler->macro($element, $element);
+								return;
+							}
 							$destination->write(sprintf("\t\t\t\$this->blockList[%s] = function(%s \$parent) {\n", $compiler->delimite($macro->getValue()), IHtmlControl::class));
 							$destination->write(sprintf("\t\t\t\t\$this->stack = new %s();\n", \SplStack::class));
 							$destination->write("\t\t\t\t\$this->stack->push(\$parent);\n");

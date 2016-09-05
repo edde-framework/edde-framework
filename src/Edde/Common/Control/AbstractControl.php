@@ -125,5 +125,6 @@
 		protected function prepare() {
 			$this->node = new Node();
 			$this->node->setMeta('control', $this);
+			return $this;
 		}
 	}

@@ -15,9 +15,9 @@
 		 * @param string $tag
 		 * @param bool $pair
 		 *
-		 * @return $this
+		 * @return IHtmlControl
 		 */
-		public function setTag(string $tag, bool $pair = true);
+		public function setTag(string $tag, bool $pair = true): IHtmlControl;
 
 		/**
 		 * return name of tag for this control; it can be null if only children of this control should be rendered
@@ -76,6 +76,13 @@
 		 * @return IHtmlControl
 		 */
 		public function setAttributeList(array $attributeList): IHtmlControl;
+
+		/**
+		 * @param array $attributeList
+		 *
+		 * @return IHtmlControl
+		 */
+		public function addAttributeList(array $attributeList): IHtmlControl;
 
 		/**
 		 * return attribute by the given namw
@@ -149,6 +156,24 @@
 		 * @return string
 		 */
 		public function render();
+
+		/**
+		 * load client script based on a current class name
+		 *
+		 * @param string $class
+		 * @param string $file
+		 *
+		 * @return IHtmlControl
+		 */
+		public function javascript(string $class = null, string $file = null): IHtmlControl;
+
+		/**
+		 * @param string|null $class
+		 * @param string|null $file
+		 *
+		 * @return IHtmlControl
+		 */
+		public function stylesheet(string $class = null, string $file = null): IHtmlControl;
 
 		/**
 		 * @return IHtmlControl[]

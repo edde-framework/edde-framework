@@ -46,7 +46,7 @@
 		public function handleOnUpgrade() {
 			$this->use();
 			try {
-				$this->template(__DIR__ . '/template/action-setup.xml');
+				$this->block('content', __DIR__ . '/template/action-setup.xml');
 				$this->message('success', sprintf('application has been upgraded to version [%s]', $this->upgradeManager->upgrade()
 					->getVersion()));
 			} catch (EddeException $e) {
@@ -57,7 +57,9 @@
 		}
 
 		protected function message(string $class, string $message) {
-			$this->message->addClass($class)
+			$this->message->javascript('message', __DIR__ . '/template/js/message.js')
+				->stylesheet('message', __DIR__ . '/template/js/message.css')
+				->addClass($class)
 				->setText($message)
 				->dirty();
 		}
@@ -65,7 +67,7 @@
 		public function handleOnRebuildCrates() {
 			$this->use();
 			try {
-				$this->template(__DIR__ . '/template/action-setup.xml');
+				$this->block('content', __DIR__ . '/template/action-setup.xml');
 				$this->crateGenerator->generate(true);
 				$this->message('success', 'crates has been rebuilt');
 			} catch (EddeException $e) {
@@ -78,7 +80,7 @@
 		public function handleOnClearCache() {
 			$this->use();
 			try {
-				$this->template(__DIR__ . '/template/action-setup.xml');
+				$this->block('content', __DIR__ . '/template/action-setup.xml');
 				$this->cacheStorage->invalidate();
 				$this->message('success', 'cache has been wiped out');
 			} catch (EddeException $e) {

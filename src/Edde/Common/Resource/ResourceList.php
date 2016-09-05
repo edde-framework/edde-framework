@@ -10,6 +10,9 @@
 	use Edde\Common\File\File;
 
 	class ResourceList extends AbstractObject implements IResourceList {
+		/**
+		 * @var IResource[]
+		 */
 		protected $resourceList = [];
 
 		public function addFile(string $file): IResourceList {
@@ -32,6 +35,14 @@
 
 		public function getResourceList() {
 			return new ArrayIterator($this->resourceList);
+		}
+
+		public function getPathList(): array {
+			$pathList = [];
+			foreach ($this->resourceList as $resource) {
+				$pathList[$url] = ($url = (string)$resource->getUrl());
+			}
+			return $pathList;
 		}
 
 		public function isEmpty() {

@@ -28,6 +28,8 @@
 		 * @var IHtmlControl[]
 		 */
 		protected $addControlList = [];
+		protected $javaScriptList = [];
+		protected $styleSheetList = [];
 
 		/**
 		 * @param IHttpResponse $httpResponse
@@ -38,6 +40,16 @@
 
 		public function redirect($redirect) {
 			$this->redirect = $redirect;
+			return $this;
+		}
+
+		public function setJavaScriptList(array $javaScriptList) {
+			$this->javaScriptList = $javaScriptList;
+			return $this;
+		}
+
+		public function setStyleSheetList(array $styleSheetList) {
+			$this->styleSheetList = $styleSheetList;
 			return $this;
 		}
 
@@ -85,6 +97,8 @@
 			$response = [];
 			$response['redirect'] = $this->redirect;
 			if ($this->redirect === null) {
+				$response['javaScript'] = $this->javaScriptList;
+				$response['styleSheet'] = $this->styleSheetList;
 				foreach ($this->replaceControlList as $selector => $control) {
 					$response['selector'][$selector] = [
 						'action' => 'replace',

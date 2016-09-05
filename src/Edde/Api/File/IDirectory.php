@@ -3,7 +3,6 @@
 
 	namespace Edde\Api\File;
 
-	use Edde\Api\Resource\IResource;
 	use IteratorAggregate;
 
 	interface IDirectory extends IteratorAggregate {
@@ -27,9 +26,9 @@
 		 * @param string $file
 		 * @param string $content
 		 *
-		 * @return IResource
+		 * @return IFile
 		 */
-		public function save(string $file, string $content): IResource;
+		public function save(string $file, string $content): IFile;
 
 		/**
 		 * get contents of a given file (in this directory)

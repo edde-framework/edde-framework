@@ -4,9 +4,13 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Html\IHtmlControl;
+	use Edde\Api\Web\IJavaScriptCompiler;
+	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Control\AbstractControl;
+	use Edde\Common\File\File;
 
 	abstract class AbstractHtmlControl extends AbstractControl implements IHtmlControl {
 		use LazyInjectTrait;
@@ -14,12 +18,36 @@
 		 * @var IContainer
 		 */
 		protected $container;
+		/**
+		 * @var IJavaScriptCompiler
+		 */
+		protected $javaScriptCompiler;
+		/**
+		 * @var IStyleSheetCompiler
+		 */
+		protected $styleSheetCompiler;
+		/**
+		 * @var ITempDirectory
+		 */
+		protected $tempDirectory;
 
 		public function injectContainer(IContainer $container) {
 			$this->container = $container;
 		}
 
-		public function setTag(string $tag, bool $pair = true) {
+		public function lazyJavaScriptCompiler(IJavaScriptCompiler $javaScriptCompiler) {
+			$this->javaScriptCompiler = $javaScriptCompiler;
+		}
+
+		public function lazyStyleSheetCompiler(IStyleSheetCompiler $styleSheetCompiler) {
+			$this->styleSheetCompiler = $styleSheetCompiler;
+		}
+
+		public function lazyTempDirectory(ITempDirectory $tempDirectory) {
+			$this->tempDirectory = $tempDirectory;
+		}
+
+		public function setTag(string $tag, bool $pair = true): IHtmlControl {
 			$this->use();
 			$this->node->addMetaList([
 				'tag' => $tag,
@@ -59,6 +87,30 @@
 			return $this->node->getAttributeList();
 		}
 
+		public function javascript(string $class = null, string $file = null): IHtmlControl {
+			$this->setAttribute('data-class', $class = $class ?: str_replace('\\', '.', static::class));
+			$reflectionClass = new \ReflectionClass($this);
+			$javascript = new File(str_replace('.php', '.js', $reflectionClass->getFileName()));
+			if ($file !== null) {
+				$javascript = new File($file);
+			}
+			$javascript = $this->tempDirectory->save(sha1(static::class . '-js') . '.js', $source = $javascript->get());
+			$javascript->save(sprintf("Edde.Utils.class('" . $class . "', %s);", $source));
+			$this->javaScriptCompiler->addResource($javascript);
+			return $this;
+		}
+
+		public function stylesheet(string $class = null, string $file = null): IHtmlControl {
+			$this->setAttribute('data-class', $class = $class ?: str_replace('\\', '.', static::class));
+			$reflectionClass = new \ReflectionClass($this);
+			$stylesheet = new File(str_replace('.php', '.css', $reflectionClass->getFileName()));
+			if ($file !== null) {
+				$stylesheet = new File($file);
+			}
+			$this->styleSheetCompiler->addResource($this->tempDirectory->save(sha1(static::class . '-css') . '.css', $stylesheet->get()));
+			return $this;
+		}
+
 		public function getId(): string {
 			$this->use();
 			return $this->getAttribute('id', '');
@@ -74,7 +126,7 @@
 			return $this;
 		}
 
-		public function addAttributeList(array $attributeList) {
+		public function addAttributeList(array $attributeList): IHtmlControl {
 			$this->use();
 			$this->node->addAttributeList($attributeList);
 			return $this;

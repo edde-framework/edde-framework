@@ -1,0 +1,5 @@
+<control>
+	<use src="/require2.xml"/>
+
+	<block name="require2"/>
+</control>

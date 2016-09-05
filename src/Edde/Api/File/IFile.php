@@ -106,6 +106,15 @@
 		public function write($write): IFile;
 
 		/**
+		 * override current file with the given content
+		 *
+		 * @param string $content
+		 *
+		 * @return IFile
+		 */
+		public function save(string $content): IFile;
+
+		/**
 		 * enable write cache; write is performed after number of calls or on file close; disabled (=== 0) by default
 		 *
 		 * @param int $count

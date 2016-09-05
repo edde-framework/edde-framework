@@ -32,6 +32,15 @@
 			$this->tempDirectory = $tempDirectory;
 		}
 
+		public function getPathList(): array {
+			$pathList = [];
+			foreach ($this->resourceList as $resource) {
+				$resource = $this->fileStorage->store($resource);
+				$pathList[$url] = $url = (string)$resource->getRelativePath();
+			}
+			return $pathList;
+		}
+
 		public function compile(IResourceList $resourceList) {
 			$this->use();
 			$content = [];

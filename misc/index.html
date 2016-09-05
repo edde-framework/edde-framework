@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Da Title Here</title>
+	</head>
+	<body>
+		<script>
+			var Edde = {
+				Utils: {
+					extend: function () {
+						for (var i = 1; i < arguments.length; i++) {
+							for (var key in arguments[i]) {
+								if (arguments[i].hasOwnProperty(key)) {
+									arguments[0][key] = arguments[i][key];
+								}
+							}
+						}
+						return arguments[0];
+					},
+					class: function (namespace, func, source) {
+						var parts = namespace.split('.');
+						var parent = Edde;
+						var length = parts.length;
+						for (var i = 0; i < length - 1; i++) {
+							if (typeof parent[parts[i]] === 'undefined') {
+								parent[parts[i]] = {};
+							}
+							parent = parent[parts[i]];
+						}
+						if (source) {
+							this.extend(func.prototype, source);
+						}
+						return parent[parts[length - 1]] = func;
+					}
+				}
+			};
+
+			Edde.Utils.class('Edde.Common.Html.DivControl', function () {
+			}, {
+				hello: function () {
+					return 'belooo!';
+				}
+			});
+
+			var v = new Edde.Edde.Common.Html.DivControl();
+
+			console.log(v.hello());
+		</script>
+	</body>
+</html>
