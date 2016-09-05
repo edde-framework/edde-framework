@@ -1,7 +1,8 @@
-<layout>
-	<e:css src="css/edde-framework.css"/>
-	<e:js src="js/jquery-3.1.0.js"/>
-	<e:js src="js/edde-framework.js"/>
+<control>
+	<css src="edde://css/kube.css"/>
+	<css src="edde://css/edde-framework.css"/>
+	<js src="edde://js/jquery-3.1.0.js"/>
+	<js src="edde://js/edde-framework.js"/>
 
-	<block name="block"/>
-</layout>
+	<block name="content"/>
+</control>

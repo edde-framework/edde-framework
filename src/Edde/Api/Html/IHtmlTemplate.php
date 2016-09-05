@@ -10,5 +10,5 @@
 
 		public function block(string $name, IHtmlControl $parent): IHtmlTemplate;
 
-		public function template(IHtmlControl $htmlControl);
+		public function template(IHtmlControl $htmlControl, array $useList = []);
 	}
