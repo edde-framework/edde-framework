@@ -42,6 +42,7 @@
 		 */
 		protected $parent;
 		protected $blockList = [];
+		protected $snippetList = [];
 
 		public function lazytContainer(IContainer $container) {
 			$this->container = $container;
@@ -70,11 +71,23 @@
 			return $this->blockList;
 		}
 
+		public function getSnippetList(): array {
+			return $this->snippetList;
+		}
+
 		public function block(string $name, IHtmlControl $parent) : IHtmlTemplate {
 			if (isset($this->blockList[$name]) === false) {
 				throw new TemplateException(sprintf('Requested unknown block [%s].', $name));
 			}
 			call_user_func($this->blockList[$name], $parent);
+			return $this;
+		}
+
+		public function snippet(string $name, IHtmlControl $parent) : IHtmlTemplate {
+			if (isset($this->snippetList[$name]) === false) {
+				throw new TemplateException(sprintf('Requested unknown snippet [%s].', $name));
+			}
+			call_user_func($this->snippetList[$name], $parent);
 			return $this;
 		}
 
@@ -85,9 +98,10 @@
 			$count = $node->getNodeCount();
 			$template->template($this->parent);
 			if ($count !== $node->getNodeCount()) {
-				throw new TemplateException(sprintf('Template [%s] can contain only block controls.', $file));
+				throw new TemplateException(sprintf('Template [%s] can contain only block (define) or snippet controls.', $file));
 			}
 			$this->blockList = array_merge($this->blockList, $template->getBlockList());
+			$this->snippetList = array_merge($this->snippetList, $template->getSnippetList());
 			return $this;
 		}
 	}
