@@ -39,6 +39,10 @@
 			$control->addClass('special-button-class');
 		}
 
+		public function getTemplateFileName() {
+			return __DIR__ . '/template/require.xml';
+		}
+
 		public function render() {
 			$this->dirty();
 			return parent::render();

@@ -1,5 +1,5 @@
 <control>
-	<use src="/require.xml"/>
+	<use src="get-templatefile-name()"/>
 
 	<div class="foo"/>
 	<div class="with-block">
@@ -7,4 +7,5 @@
 		<div class="bar"/>
 	</div>
 	<block name="poo"/>
+	<div class="something" m:block="something"/>
 </control>

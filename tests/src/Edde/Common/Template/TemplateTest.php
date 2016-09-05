@@ -491,14 +491,43 @@
 ', $control->render());
 		}
 
-//		public function testLayout() {
-//			$template = $this->templateManager->template(__DIR__ . '/assets/template/layout.xml');
-//			$file = $template->getFile();
-//			self::assertTrue($file->isAvailable());
-//			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
-//			$template->template($this->control);
-//			self::assertEquals('', $this->control->render());
-//		}
+		public function testLayout() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/layout.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="foo"></div>
+		<div class="with-block">
+			<div>
+				<span>lorem ipsum or something like that</span>
+			</div>
+			<div class="bar"></div>
+		</div>
+		<div class="foo-bar"></div>
+		<div class="something">
+			<div class="qwerty"></div>
+			<div>
+				<span>foo</span>
+				<div>
+					<div></div>
+					<div></div>
+					<div class="soo empty div here"></div>
+					<div></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+', $this->control->render());
+		}
 
 		protected function setUp() {
 			$this->container = ContainerFactory::create([

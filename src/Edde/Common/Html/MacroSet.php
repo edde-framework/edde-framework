@@ -17,6 +17,7 @@
 	use Edde\Common\Html\Tag\SpanControl;
 	use Edde\Common\Html\Value\PasswordInputControl;
 	use Edde\Common\Html\Value\TextInputControl;
+	use Edde\Common\Node\Node;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\AbstractMacro;
 	use Edde\Common\Template\Macro\Control\ControlMacro;
@@ -305,6 +306,8 @@
 				public function __construct() {
 					parent::__construct([
 						'use',
+						'define',
+						'm:define',
 						'block',
 						'm:block',
 					]);
@@ -317,18 +320,32 @@
 							$this->checkAttribute($macro, $element, 'src');
 							$destination->write(sprintf("\t\t\t\$this->use(%s);\n", $compiler->delimite($macro->getAttribute('src'))));
 							break;
-						case 'block':
-							$this->checkLeaf($macro, $element);
+						case 'define':
 							$this->checkAttribute($macro, $element, 'name');
-							$destination->write(sprintf("\t\t\t\$this->block(%s, \$current);\n", $compiler->delimite($macro->getAttribute('name'))));
+							$destination->write(sprintf("\t\t\t\$this->blockList[%s] = function(%s \$parent) {\n", $compiler->delimite($macro->getAttribute('name')), IHtmlControl::class));
+							$destination->write(sprintf("\t\t\t\t\$this->stack = new %s();\n", \SplStack::class));
+							$destination->write("\t\t\t\t\$this->stack->push(\$parent);\n");
+							$this->element($element, $compiler);
+							$destination->write("\t\t\t};\n");
 							break;
-						case 'm:block':
+						case 'm:define':
 							$this->checkValue($macro, $element);
 							$destination->write(sprintf("\t\t\t\$this->blockList[%s] = function(%s \$parent) {\n", $compiler->delimite($macro->getValue()), IHtmlControl::class));
 							$destination->write(sprintf("\t\t\t\t\$this->stack = new %s();\n", \SplStack::class));
 							$destination->write("\t\t\t\t\$this->stack->push(\$parent);\n");
 							$compiler->macro($element, $element);
 							$destination->write("\t\t\t};\n");
+							break;
+						case 'block':
+							$this->checkLeaf($macro, $element);
+							$this->checkAttribute($macro, $element, 'name');
+							$destination->write(sprintf("\t\t\t\$this->block(%s, \$this->stack->top());\n", $compiler->delimite($macro->getAttribute('name'))));
+							break;
+						case 'm:block':
+							$this->checkValue($macro, $element);
+							$this->checkLeaf($macro, $element);
+							$element->addNode(new Node('block', [], ['name' => $macro->getValue()]));
+							$compiler->macro($element, $element);
 							break;
 					}
 				}
