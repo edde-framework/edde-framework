@@ -55,7 +55,7 @@
 		 */
 		protected $javaScriptList;
 		/**
-		 * @var IHtmlControl[]
+		 * @var array
 		 */
 		protected $snippetList = [];
 		/**
@@ -164,8 +164,18 @@
 		public function ajax(): IHtmlView {
 			$this->use();
 			$ajax = new AjaxResponse($this->httpResponse);
-			$ajax->setJavaScriptList($this->javaScriptCompiler->getPathList());
-			$ajax->setStyleSheetList($this->styleSheetCompiler->getPathList());
+			if ($this->javaScriptCompiler->isEmpty() === false) {
+				$ajax->setJavaScriptList([
+					$this->javaScriptCompiler->compile($this->javaScriptCompiler)
+						->getRelativePath(),
+				]);
+			}
+			if ($this->styleSheetCompiler->isEmpty() === false) {
+				$ajax->setStyleSheetList([
+					$this->styleSheetCompiler->compile($this->styleSheetCompiler)
+						->getRelativePath(),
+				]);
+			}
 			/** @var $control IHtmlControl */
 			foreach ($this as $control) {
 				if ($control->isDirty() && $control->getId() !== null) {

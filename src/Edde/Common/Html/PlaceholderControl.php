@@ -4,6 +4,7 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Html\HtmlException;
+	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Template\IMacro;
 	use Edde\Common\Template\Macro\Control\ControlMacro;
 
@@ -15,7 +16,7 @@
 			return new ControlMacro('placeholder', static::class);
 		}
 
-		public function setTag(string $tag, bool $pair = true) {
+		public function setTag(string $tag, bool $pair = true): IHtmlControl {
 			throw new HtmlException(sprintf('Cannot set tag [%s] to a placeholder control.', $tag));
 		}
 

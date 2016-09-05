@@ -43,7 +43,7 @@
 			return $this;
 		}
 
-		public function setHint($hint) {
+		public function setHint(string $hint) {
 			$this->setAttribute('hint', $hint);
 			return $this;
 		}
@@ -54,8 +54,9 @@
 		}
 
 		protected function prepare() {
-			parent::prepare();
-			$this->setTag('div', true);
-			$this->addClass('button edde-clickable');
+			parent::prepare()
+				->javascript()
+				->setTag('div', true)
+				->addClass('button');
 		}
 	}

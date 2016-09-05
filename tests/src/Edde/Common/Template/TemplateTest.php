@@ -6,6 +6,7 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResourceManager;
@@ -17,6 +18,7 @@
 	use Edde\Common\AssetsDirectory;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\File\RootDirectory;
+	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\MacroSet;
 	use Edde\Common\Html\TemplateControl;
 	use Edde\Common\Link\ControlLinkGenerator;
@@ -114,7 +116,7 @@
 		<title></title>
 	</head>
 	<body>
-		<div class="button edde-clickable" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=on-update">foo</div>
+		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=on-update">foo</div>
 	</body>
 </html>
 ', $this->control->render());
@@ -182,7 +184,7 @@
 	</head>
 	<body>
 		<div id="blabla" data-schema="Foo\Bar\Schema" data-property="bar"></div>
-		<div class="button edde-clickable" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=foo" data-bind="blabla"></div>
+		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=foo" data-bind="blabla"></div>
 	</body>
 </html>
 ', $this->control->render());
@@ -201,8 +203,8 @@
 		<title></title>
 	</head>
 	<body>
-		<input type="text" value="" data-class="Edde.Common.Html.Input.TextControl" data-schema="poo" data-property="text">
-		<input type="password" class="class-here" data-schema="poo" data-property="password">
+		<input data-class="Edde.Common.Html.Input.TextControl" type="text" value="" data-schema="poo" data-property="text">
+		<input data-class="Edde.Common.Html.Input.PasswordControl" type="password" class="class-here" data-schema="poo" data-property="password">
 	</body>
 </html>
 ', $this->control->render());
@@ -351,8 +353,8 @@
 		<title></title>
 	</head>
 	<body>
-		<div class="button edde-clickable looped-one" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=first"></div>
-		<div class="button edde-clickable another-looop" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=second"></div>
+		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button looped-one" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=first"></div>
+		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button another-looop" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=second"></div>
 	</body>
 </html>
 ', $this->control->render());
@@ -472,9 +474,9 @@
 			<span class="third special-span-class"></span>
 		</div>
 		<div class="child-pass">
-			<div class="button edde-clickable first special-button-class" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=foo"></div>
-			<div class="button edde-clickable second special-button-class" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=foo"></div>
-			<div class="button edde-clickable third special-button-class" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=foo"></div>
+			<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button first special-button-class" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=foo"></div>
+			<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button second special-button-class" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=foo"></div>
+			<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button third special-button-class" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=foo"></div>
 		</div>
 	</body>
 </html>
@@ -560,6 +562,9 @@
 				},
 				IRootDirectory::class => function () {
 					return new RootDirectory(__DIR__);
+				},
+				ITempDirectory::class => function () {
+					return new TempDirectory(__DIR__ . '/temp');
 				},
 				IAssetsDirectory::class => function (IRootDirectory $rootDirectory) {
 					return $rootDirectory->directory('assets', AssetsDirectory::class);

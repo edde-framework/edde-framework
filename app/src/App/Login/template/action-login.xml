@@ -8,5 +8,6 @@
 			<button value="login" m:bind="login" action="on-login()"/>
 		</div>
 	</div>
+
 	<button value="login" action="on-show()"/>
 </control>

@@ -8,6 +8,7 @@
 	class PasswordControl extends AbstractHtmlControl {
 		protected function prepare() {
 			parent::prepare()
+				->javascript()
 				->setTag('input', false)
 				->addAttributeList([
 					'type' => 'password',

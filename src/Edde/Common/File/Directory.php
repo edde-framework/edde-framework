@@ -6,7 +6,6 @@
 	use Edde\Api\File\DirectoryException;
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\File\IFile;
-	use Edde\Api\Resource\IResource;
 	use Edde\Common\Usable\AbstractUsable;
 	use RecursiveDirectoryIterator;
 	use RecursiveIteratorIterator;
@@ -34,7 +33,7 @@
 			}
 		}
 
-		public function save(string $file, string $content): IResource {
+		public function save(string $file, string $content): IFile {
 			$this->use();
 			file_put_contents($file = $this->filename($file), $content);
 			return new File($file);

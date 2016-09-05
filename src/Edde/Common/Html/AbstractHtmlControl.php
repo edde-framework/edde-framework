@@ -4,6 +4,7 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
@@ -25,6 +26,10 @@
 		 * @var IStyleSheetCompiler
 		 */
 		protected $styleSheetCompiler;
+		/**
+		 * @var ITempDirectory
+		 */
+		protected $tempDirectory;
 
 		public function injectContainer(IContainer $container) {
 			$this->container = $container;
@@ -38,7 +43,11 @@
 			$this->styleSheetCompiler = $styleSheetCompiler;
 		}
 
-		public function setTag(string $tag, bool $pair = true) {
+		public function lazyTempDirectory(ITempDirectory $tempDirectory) {
+			$this->tempDirectory = $tempDirectory;
+		}
+
+		public function setTag(string $tag, bool $pair = true): IHtmlControl {
 			$this->use();
 			$this->node->addMetaList([
 				'tag' => $tag,
@@ -78,27 +87,23 @@
 			return $this->node->getAttributeList();
 		}
 
-		public function client() {
+		public function javascript(): IHtmlControl {
 			$this->setAttribute('data-class', str_replace('\\', '.', static::class));
 			$reflectionClass = new \ReflectionClass($this);
 			$javaScript = new File(str_replace('.php', '.js', $reflectionClass->getFileName()));
-			if ($javaScript->isAvailable()) {
-				$this->javaScriptCompiler->addResource($javaScript);
-			}
-			$styleSheet = new File(str_replace('.php', '.css', $reflectionClass->getFileName()));
-			if ($styleSheet->isAvailable()) {
-				$this->styleSheetCompiler->addResource($styleSheet);
-			}
+			$javaScript = $this->tempDirectory->save(sha1(static::class . '-js') . '.js', $source = $javaScript->get());
+			$javaScript->save(sprintf("Edde.Utils.class('" . $this->getAttribute('data-class') . "', %s);", $source));
+			$this->javaScriptCompiler->addResource($javaScript);
 			return $this;
+		}
+
+		public function getAttribute(string $name, string $default = '') {
+			return $this->node->getAttribute($name, $default);
 		}
 
 		public function getId(): string {
 			$this->use();
 			return $this->getAttribute('id', '');
-		}
-
-		public function getAttribute(string $name, string $default = '') {
-			return $this->node->getAttribute($name, $default);
 		}
 
 		public function setText(string $text) {
@@ -107,7 +112,7 @@
 			return $this;
 		}
 
-		public function addAttributeList(array $attributeList) {
+		public function addAttributeList(array $attributeList): IHtmlControl {
 			$this->use();
 			$this->node->addAttributeList($attributeList);
 			return $this;

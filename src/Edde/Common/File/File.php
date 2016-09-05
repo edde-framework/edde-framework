@@ -144,6 +144,14 @@
 			return $this->handle;
 		}
 
+		public function save(string $content): IFile {
+			if ($this->isOpen()) {
+				throw new FileException(sprintf('Cannot write (save) content to aready opened file [%s].', $this->getPath()));
+			}
+			file_put_contents($this->url->getPath(), $content);
+			return $this;
+		}
+
 		public function rename(string $rename): IFile {
 			FileUtils::rename($this->url->getPath(), $rename);
 			return $this;

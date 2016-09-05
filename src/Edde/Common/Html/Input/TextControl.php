@@ -8,11 +8,11 @@
 	class TextControl extends AbstractHtmlControl {
 		protected function prepare() {
 			parent::prepare()
+				->javascript()
 				->setTag('input', false)
 				->addAttributeList([
 					'type' => 'text',
 					'value' => $this->node->getValue(),
-				])
-				->client();
+				]);
 		}
 	}

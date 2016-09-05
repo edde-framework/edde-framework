@@ -8,29 +8,44 @@
 		<script>
 			var Edde = {
 				Utils: {
-					namespaceList: {},
-					namespace: function (root, namespace) {
-						if (typeof this.namespaceList[namespace] !== 'undefined') {
-							return this.namespaceList[namespace];
+					extend: function () {
+						for (var i = 1; i < arguments.length; i++) {
+							for (var key in arguments[i]) {
+								if (arguments[i].hasOwnProperty(key)) {
+									arguments[0][key] = arguments[i][key];
+								}
+							}
 						}
+						return arguments[0];
+					},
+					class: function (namespace, func, source) {
 						var parts = namespace.split('.');
-						var parent = root;
+						var parent = Edde;
 						var length = parts.length;
-						for (var i = 0; i < length; i++) {
+						for (var i = 0; i < length - 1; i++) {
 							if (typeof parent[parts[i]] === 'undefined') {
 								parent[parts[i]] = {};
 							}
 							parent = parent[parts[i]];
 						}
-						return this.namespaceList[namespace] = parent;
+						if (source) {
+							this.extend(func.prototype, source);
+						}
+						return parent[parts[length - 1]] = func;
 					}
 				}
 			};
-			Edde.Utils.namespace(Edde, 'Edde.Common.Html.DivControl');
-			Edde.Utils.namespace(Edde, 'Edde.Common.Html.FooControl');
-			Edde.Utils.namespace(Edde, 'App.Login.LoginView');
-			console.log(Edde);
-			console.log(Edde.Edde.Common.Html.DivControl);
+
+			Edde.Utils.class('Edde.Common.Html.DivControl', function () {
+			}, {
+				hello: function () {
+					return 'belooo!';
+				}
+			});
+
+			var v = new Edde.Edde.Common.Html.DivControl();
+
+			console.log(v.hello());
 		</script>
 	</body>
 </html>
