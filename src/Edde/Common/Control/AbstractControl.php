@@ -24,6 +24,9 @@
 
 		public function getRoot() {
 			$this->use();
+			if ($this->node->isRoot()) {
+				return $this;
+			}
 			return $this->node->getRoot()
 				->getMeta('control');
 		}
