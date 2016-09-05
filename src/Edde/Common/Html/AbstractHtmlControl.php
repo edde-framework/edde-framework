@@ -87,23 +87,37 @@
 			return $this->node->getAttributeList();
 		}
 
-		public function javascript(): IHtmlControl {
-			$this->setAttribute('data-class', str_replace('\\', '.', static::class));
+		public function javascript(string $class = null, string $file = null): IHtmlControl {
+			$this->setAttribute('data-class', $class = $class ?: str_replace('\\', '.', static::class));
 			$reflectionClass = new \ReflectionClass($this);
-			$javaScript = new File(str_replace('.php', '.js', $reflectionClass->getFileName()));
-			$javaScript = $this->tempDirectory->save(sha1(static::class . '-js') . '.js', $source = $javaScript->get());
-			$javaScript->save(sprintf("Edde.Utils.class('" . $this->getAttribute('data-class') . "', %s);", $source));
-			$this->javaScriptCompiler->addResource($javaScript);
+			$javascript = new File(str_replace('.php', '.js', $reflectionClass->getFileName()));
+			if ($file !== null) {
+				$javascript = new File($file);
+			}
+			$javascript = $this->tempDirectory->save(sha1(static::class . '-js') . '.js', $source = $javascript->get());
+			$javascript->save(sprintf("Edde.Utils.class('" . $class . "', %s);", $source));
+			$this->javaScriptCompiler->addResource($javascript);
 			return $this;
 		}
 
-		public function getAttribute(string $name, string $default = '') {
-			return $this->node->getAttribute($name, $default);
+		public function stylesheet(string $class = null, string $file = null): IHtmlControl {
+			$this->setAttribute('data-class', $class = $class ?: str_replace('\\', '.', static::class));
+			$reflectionClass = new \ReflectionClass($this);
+			$stylesheet = new File(str_replace('.php', '.css', $reflectionClass->getFileName()));
+			if ($file !== null) {
+				$stylesheet = new File($file);
+			}
+			$this->styleSheetCompiler->addResource($this->tempDirectory->save(sha1(static::class . '-css') . '.css', $stylesheet->get()));
+			return $this;
 		}
 
 		public function getId(): string {
 			$this->use();
 			return $this->getAttribute('id', '');
+		}
+
+		public function getAttribute(string $name, string $default = '') {
+			return $this->node->getAttribute($name, $default);
 		}
 
 		public function setText(string $text) {

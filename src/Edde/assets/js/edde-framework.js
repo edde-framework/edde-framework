@@ -28,6 +28,14 @@ var Edde = {
 						$.getScript(src);
 					});
 				}
+				if (data.styleSheet) {
+					$.each(data.styleSheet, function (i, src) {
+						if ($('head link[href="' + src + '"]').length) {
+							return;
+						}
+						$('<link/>', {rel: 'stylesheet', href: src}).appendTo('head');
+					});
+				}
 				if (data.selector) {
 					$.each(data.selector, function (selector, value) {
 						switch (value.action) {

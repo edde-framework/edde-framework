@@ -158,6 +158,18 @@
 		public function render();
 
 		/**
+		 * load client script based on a current class name
+		 *
+		 * @param string $class
+		 * @param string $file
+		 *
+		 * @return IHtmlControl
+		 */
+		public function javascript(string $class = null, string $file = null): IHtmlControl;
+
+		public function stylesheet(string $class = null, string $file = null): IHtmlControl;
+
+		/**
 		 * @return IHtmlControl[]
 		 */
 		public function getIterator();
