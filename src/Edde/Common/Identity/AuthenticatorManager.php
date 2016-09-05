@@ -14,6 +14,14 @@
 	class AuthenticatorManager extends AbstractUsable implements IAuthenticatorManager {
 		use SessionTrait;
 		/**
+		 * @var IIdentity
+		 */
+		protected $identity;
+		/**
+		 * @var IAuthorizator
+		 */
+		protected $authorizator;
+		/**
 		 * @var IAuthenticator[]
 		 */
 		protected $authenticatorList = [];
@@ -21,14 +29,10 @@
 		 * @var string[][]
 		 */
 		protected $flowList = [];
-		/**
-		 * @var IAuthorizator
-		 */
-		protected $authorizator;
-		/**
-		 * @var IIdentity
-		 */
-		protected $identity;
+
+		public function lazyIdentity(IIdentity $identity) {
+			$this->identity = $identity;
+		}
 
 		public function lazyAutorizator(IAuthorizator $authorizator) {
 			$this->authorizator = $authorizator;
@@ -119,7 +123,6 @@
 		}
 
 		protected function prepare() {
-			$this->identity = $this->identity();
 			foreach ($this->flowList as $name => $authList) {
 				foreach ($authList as $authenticator) {
 					if (isset($this->authenticatorList[$authenticator]) === false) {
@@ -127,12 +130,5 @@
 					}
 				}
 			}
-		}
-
-		public function identity(): IIdentity {
-			if ($this->identity === null) {
-				$this->identity = $this->session->get('identity', new Identity());
-			}
-			return $this->identity;
 		}
 	}

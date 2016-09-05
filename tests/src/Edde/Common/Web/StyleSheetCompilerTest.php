@@ -3,7 +3,9 @@
 
 	namespace Edde\Common\Web;
 
+	use Edde\Api\Database\IDriver;
 	use Edde\Api\File\ITempDirectory;
+	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Upgrade\IUpgradeManager;
@@ -15,14 +17,12 @@
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Resource\ResourceList;
-	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Resource\Storage\FileStorage;
 	use Edde\Common\Resource\Storage\StorageDirectory;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Upgrade\UpgradeManager;
-	use Edde\Ext\Cache\DevNullCacheStorage;
 	use Edde\Ext\Cache\FileCacheStorage;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
@@ -55,14 +55,20 @@
 			FileUtils::recreate(__DIR__ . '/public');
 			$this->tempDirectory = new TempDirectory(__DIR__ . '/temp');
 			$this->tempDirectory->purge();
-			$cacheFactory = new CacheFactory(__DIR__, new DevNullCacheStorage());
-			$this->storage = new DatabaseStorage($this->sqliteDriver = new SqliteDriver('sqlite:' . $this->getDatabaseFileName()), $cacheFactory);
-			$this->schemaManager = new SchemaManager(new SchemaFactory(new ResourceManager()));
-			$this->upgradeManager = new UpgradeManager();
+
 			$container = ContainerFactory::create([
-				IStorage::class => $this->storage,
-				ISchemaManager::class => $this->schemaManager,
+				IStorage::class => DatabaseStorage::class,
+				ISchemaFactory::class => SchemaFactory::class,
+				ISchemaManager::class => SchemaManager::class,
+				IUpgradeManager::class => UpgradeManager::class,
+				IDriver::class => function () {
+					return $this->sqliteDriver = new SqliteDriver('sqlite:' . $this->getDatabaseFileName());
+				},
 			]);
+			$this->storage = $container->create(IStorage::class);
+			$this->schemaManager = $container->create(ISchemaManager::class);
+			$this->upgradeManager = $container->create(IUpgradeManager::class);
+
 			$this->upgradeManager->registerUpgrade($upgrade = new InitialStorageUpgrade());
 			$container->inject($upgrade);
 			$this->upgradeManager->upgrade();

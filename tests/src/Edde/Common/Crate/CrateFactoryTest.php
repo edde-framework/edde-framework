@@ -6,9 +6,9 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\ICrateFactory;
+	use Edde\Api\Crate\ICrateGenerator;
+	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
-	use Edde\Common\Container\Factory\FactoryFactory;
-	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Ext\Container\ContainerFactory;
@@ -143,7 +143,20 @@
 		}
 
 		protected function setUp() {
-			$this->schemaManager = new SchemaManager(new SchemaFactory(new ResourceManager()));
+			$this->container = ContainerFactory::create([
+				Crate::class,
+				Header::class,
+				Row::class,
+				Item::class,
+				Collection::class,
+				ISchemaManager::class => SchemaManager::class,
+				ISchemaFactory::class => SchemaFactory::class,
+				ICrateFactory::class => CrateFactory::class,
+				ICrateGenerator::class => DummyCrateGenerator::class,
+			]);
+
+			$this->schemaManager = $this->container->create(ISchemaManager::class);
+			$this->crateFactory = $this->container->create(ICrateFactory::class);
 
 			$rowSchema = new RowSchema($headerSchema = new HeaderSchema(), $itemSchema = new ItemSchema());
 
@@ -153,14 +166,5 @@
 			$headerSchema->use();
 			$rowSchema->use();
 			$itemSchema->use();
-
-			$this->container = ContainerFactory::create([
-				Crate::class,
-				Header::class,
-				Row::class,
-				Item::class,
-				Collection::class,
-			]);
-			$this->container->registerFactory(ICrateFactory::class, FactoryFactory::create(ICrateFactory::class, $this->crateFactory = new CrateFactory($this->container, $this->schemaManager, new DummyCrateGenerator())));
 		}
 	}

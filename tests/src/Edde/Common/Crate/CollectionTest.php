@@ -5,8 +5,9 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Crate\ICrateFactory;
-	use Edde\Common\Container\Factory\FactoryFactory;
-	use Edde\Common\Resource\ResourceManager;
+	use Edde\Api\Crate\ICrateGenerator;
+	use Edde\Api\Schema\ISchemaFactory;
+	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Common\Schema\Schema;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
@@ -50,8 +51,13 @@
 			$this->container = ContainerFactory::create([
 				Crate::class,
 				FooBarBar::class,
+				ICrateFactory::class => CrateFactory::class,
+				ICrateGenerator::class => DummyCrateGenerator::class,
+				ISchemaManager::class => SchemaManager::class,
+				ISchemaFactory::class => SchemaFactory::class,
 			]);
-			$this->container->registerFactory(ICrateFactory::class, FactoryFactory::create(ICrateFactory::class, $this->crateFactory = new CrateFactory($this->container, $schemaManager = new SchemaManager(new SchemaFactory(new ResourceManager())), new DummyCrateGenerator())));
+			$this->crateFactory = $this->container->create(ICrateFactory::class);
+			$schemaManager = $this->container->create(ISchemaManager::class);
 			$schema = new Schema('Foo\\Bar\\FooBar');
 			$schema->addProperty(new SchemaProperty($schema, 'guid'));
 			$schema->addProperty(new SchemaProperty($schema, 'name'));

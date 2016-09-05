@@ -4,9 +4,13 @@
 	namespace Edde\Common\Identity\Authenticator;
 
 	use Edde\Api\Identity\IAuthenticatorManager;
+	use Edde\Api\Identity\IAuthorizator;
 	use Edde\Api\Identity\IIdentity;
+	use Edde\Api\Identity\IIdentityManager;
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Common\Identity\AuthenticatorManager;
+	use Edde\Common\Identity\IdentityManager;
+	use Edde\Ext\Container\ContainerFactory;
 	use phpunit\framework\TestCase;
 
 	require_once(__DIR__ . '/assets/assets.php');
@@ -40,15 +44,24 @@
 		}
 
 		protected function setUp() {
-			$this->authenticatorManager = new AuthenticatorManager();
-			$this->authenticatorManager->lazySessionManager($this->sessionManager = new \DummySession());
-			$this->authenticatorManager->lazyAutorizator(new \TrustedAuth());
+			$container = ContainerFactory::create([
+				IAuthenticatorManager::class => AuthenticatorManager::class,
+				IIdentityManager::class => IdentityManager::class,
+				IIdentity::class => function (IIdentityManager $identityManager) {
+					return $identityManager->identity();
+				},
+				ISessionManager::class => \DummySession::class,
+				IAuthorizator::class => \TrustedAuth::class,
+			]);
+			$this->authenticatorManager = $container->create(IAuthenticatorManager::class);
 			$this->authenticatorManager->session();
 			$this->authenticatorManager->registerAuthenticator(new \TrustedAuthenticator());
 			$this->authenticatorManager->registerAuthenticator(new \InitialAuthenticator());
 			$this->authenticatorManager->registerAuthenticator(new \SecondaryAuthenticator());
 			$this->authenticatorManager->registerFlow('flow', \InitialAuthenticator::class, \SecondaryAuthenticator::class);
-			$this->identity = $this->authenticatorManager->identity();
+			$this->sessionManager = $container->create(ISessionManager::class);
+			$this->identity = $container->create(IIdentityManager::class)
+				->identity();
 		}
 
 		protected function tearDown() {

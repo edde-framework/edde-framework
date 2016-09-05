@@ -38,4 +38,14 @@
 			$data[8] = chr(ord($data[8]) & 0x3f | 0x80);
 			return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
 		}
+
+		public function password(string $password): string {
+			return password_hash($password, PASSWORD_DEFAULT, [
+				'cost' => 12,
+			]);
+		}
+
+		public function verify(string $source, string $hash): bool {
+			return password_verify($source, $hash);
+		}
 	}

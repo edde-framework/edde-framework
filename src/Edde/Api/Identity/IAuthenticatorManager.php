@@ -7,13 +7,6 @@
 
 	interface IAuthenticatorManager extends IUsable {
 		/**
-		 * return current identity build from session
-		 *
-		 * @return IIdentity
-		 */
-		public function identity(): IIdentity;
-
-		/**
 		 * @param IAuthenticator $authenticator
 		 *
 		 * @return IAuthenticatorManager

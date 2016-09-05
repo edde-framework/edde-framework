@@ -5,10 +5,13 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Crate\ICrateFactory;
+	use Edde\Api\Crate\ICrateGenerator;
+	use Edde\Api\Database\IDriver;
+	use Edde\Api\File\ITempDirectory;
+	use Edde\Api\Resource\IResourceManager;
+	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
-	use Edde\Common\Cache\CacheFactory;
-	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Crate\Crate;
 	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Crate\DummyCrateGenerator;
@@ -19,7 +22,6 @@
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
-	use Edde\Ext\Cache\DevNullCacheStorage;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Resource\JsonResourceHandler;
@@ -147,25 +149,32 @@
 		}
 
 		protected function setUp() {
-			$resourceManager = new ResourceManager();
+			$container = ContainerFactory::create([
+				IResourceManager::class => ResourceManager::class,
+				ISchemaFactory::class => SchemaFactory::class,
+				ISchemaManager::class => SchemaManager::class,
+				IStorage::class => DatabaseStorage::class,
+				ITempDirectory::class => function () {
+					return new TempDirectory(__DIR__ . '/temp');
+				},
+				IDriver::class => function (ITempDirectory $tempDirectory) {
+					return $this->sqliteDriver = new SqliteDriver('sqlite:' . $tempDirectory->filename('storage.sqlite'));
+				},
+				ICrateFactory::class => CrateFactory::class,
+				ICrateGenerator::class => DummyCrateGenerator::class,
+			]);
+			$resourceManager = $container->create(IResourceManager::class);
 			$resourceManager->registerResourceHandler(new JsonResourceHandler());
-			$schemaFactory = new SchemaFactory();
-			$schemaFactory->lazyContainer(ContainerFactory::create());
-			$schemaFactory->lazyResourceManager($resourceManager);
+			$schemaFactory = $container->create(ISchemaFactory::class);
 			$schemaFactory->load(__DIR__ . '/assets/simple-storable.json');
 			$schemaFactory->load(__DIR__ . '/assets/identity-storable.json');
 			$schemaFactory->load(__DIR__ . '/assets/group-storable.json');
 			$schemaFactory->load(__DIR__ . '/assets/identity-group-storable.json');
-			$this->schemaManager = new SchemaManager($schemaFactory);
-			$this->container = ContainerFactory::create([
-				Crate::class,
-			]);
-			$tempDirectory = new TempDirectory(__DIR__ . '/temp');
+			$this->schemaManager = $container->create(ISchemaManager::class);
+			$tempDirectory = $container->create(ITempDirectory::class);
 			$tempDirectory->purge();
-			$this->storage = new DatabaseStorage($this->sqliteDriver = new SqliteDriver('sqlite:' . $tempDirectory->filename('storage.sqlite')), new CacheFactory(__DIR__, new DevNullCacheStorage()));
-			$this->storage->lazySchemaManager($this->schemaManager);
-			$this->container->registerFactory(ICrateFactory::class, FactoryFactory::create(ICrateFactory::class, $this->crateFactory = new CrateFactory($this->container, $this->schemaManager, new DummyCrateGenerator())));
-			$this->storage->lazyCrateFactory($this->crateFactory);
+			$this->storage = $container->create(IStorage::class);
+			$this->crateFactory = $container->create(ICrateFactory::class);
 		}
 
 		protected function tearDown() {

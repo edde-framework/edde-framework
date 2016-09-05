@@ -4,5 +4,6 @@
 	<js src="edde://js/jquery-3.1.0.js"/>
 	<js src="edde://js/edde-framework.js"/>
 
+	<flash id="flash" m:snippet="flash"/>
 	<block name="content"/>
 </control>

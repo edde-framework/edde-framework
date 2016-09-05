@@ -3,16 +3,27 @@
 
 	namespace Edde\Common\Upgrade;
 
+	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Upgrade\IUpgrade;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Upgrade\UpgradeException;
+	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class UpgradeManager extends AbstractUsable implements IUpgradeManager {
+		use LazyInjectTrait;
+		/**
+		 * @var IStorage
+		 */
+		protected $storage;
 		/**
 		 * @var IUpgrade[]
 		 */
 		protected $upgradeList = [];
+
+		public function lazyStorage(IStorage $storage) {
+			$this->storage = $storage;
+		}
 
 		public function registerUpgrade(IUpgrade $upgrade, $force = false) {
 			$version = $upgrade->getVersion();
@@ -45,11 +56,18 @@
 				throw new UpgradeException(sprintf('Cannot run upgrade - unknown upgrade version [%s].', $version));
 			}
 			$upgrade = null;
-			foreach ($this->upgradeList as $upgrade) {
-				$upgrade->upgrade();
-				if ($upgrade->getVersion() === $version) {
-					break;
+			try {
+				$this->storage->start();
+				foreach ($this->upgradeList as $upgrade) {
+					$upgrade->upgrade();
+					if ($upgrade->getVersion() === $version) {
+						break;
+					}
 				}
+				$this->storage->commit();
+			} catch (\Exception $e) {
+				$this->storage->rollback();
+				throw $e;
 			}
 			if ($upgrade === null) {
 				throw new UpgradeException(sprintf('No upgrades has been run for version [%s].', $version));

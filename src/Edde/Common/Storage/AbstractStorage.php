@@ -98,7 +98,7 @@
 			return $link;
 		}
 
-		public function load(string $crate, IQuery $query, string $schema = null) {
+		public function load(string $crate, IQuery $query, string $schema = null): ICrate {
 			foreach ($this->collection($crate, $query, $schema) as $item) {
 				return $item;
 			}

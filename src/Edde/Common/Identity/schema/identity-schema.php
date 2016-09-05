@@ -3,6 +3,8 @@
 
 	namespace Edde\Common\Identity;
 
+	use Edde\Common\Filter\GuidFilter;
+
 	return [
 		'name' => 'IdentityStorable',
 		'namespace' => __NAMESPACE__,
@@ -11,6 +13,7 @@
 				'name' => 'guid',
 				'unique' => true,
 				'identifier' => true,
+				'generator' => GuidFilter::class,
 			],
 			[
 				'name' => 'name',

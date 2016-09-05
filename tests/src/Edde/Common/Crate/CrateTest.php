@@ -7,12 +7,12 @@
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\ICrateFactory;
+	use Edde\Api\Crate\ICrateGenerator;
+	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
-	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Filter\BoolFilter;
 	use Edde\Common\Filter\GuidFilter;
-	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Schema\Schema;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
@@ -127,8 +127,13 @@
 				Header::class,
 				Row::class,
 				Collection::class,
+				ISchemaManager::class => SchemaManager::class,
+				ISchemaFactory::class => SchemaFactory::class,
+				ICrateFactory::class => CrateFactory::class,
+				ICrateGenerator::class => DummyCrateGenerator::class,
 			]);
-			$this->container->registerFactory(ICrateFactory::class, FactoryFactory::create(ICrateFactory::class, $this->crateFactory = new CrateFactory($this->container, $this->schemaManager = $schemaManager = new SchemaManager(new SchemaFactory(new ResourceManager())), new DummyCrateGenerator())));
+			$this->crateFactory = $this->container->create(ICrateFactory::class);
+			$this->schemaManager = $this->container->create(ISchemaManager::class);
 			$headerSchema = new Schema(Header::class);
 			$headerSchema->addPropertyList([
 				$headerGuid = (new SchemaProperty($headerSchema, 'guid'))->unique()
@@ -147,7 +152,7 @@
 			]);
 
 			$rowSchema->linkTo('header', 'rowCollection', $headerLink, $headerGuid);
-			$schemaManager->addSchema($headerSchema);
-			$schemaManager->addSchema($rowSchema);
+			$this->schemaManager->addSchema($headerSchema);
+			$this->schemaManager->addSchema($rowSchema);
 		}
 	}

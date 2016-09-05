@@ -74,7 +74,7 @@
 		public function generator();
 
 		/**
-		 * if the value has some filter, use them
+		 * if the value has some filters, use them
 		 *
 		 * @param mixed $value
 		 *

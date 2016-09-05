@@ -11,6 +11,7 @@
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\Node\INodeQuery;
 	use Edde\Api\Query\IQuery;
+	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Storage\StorageException;
 	use Edde\Common\Node\NodeQuery;
 	use Edde\Common\Query\Insert\InsertQuery;
@@ -37,9 +38,9 @@
 		 */
 		protected $sourceNodeQuery;
 		/**
-		 * @var bool
+		 * @var int
 		 */
-		protected $transaction;
+		protected $transaction = 0;
 
 		/**
 		 * @param IDriver $driver
@@ -48,33 +49,37 @@
 		public function __construct(IDriver $driver, ICacheFactory $cacheFactory) {
 			$this->driver = $driver;
 			$this->cacheFactory = $cacheFactory;
-			$this->transaction = false;
+			$this->transaction = 0;
 		}
 
-		public function start($exclusive = false) {
+		public function start($exclusive = false): IStorage {
 			$this->use();
-			if ($this->transaction && $exclusive) {
+			if ($this->transaction++ > 0) {
+				if ($exclusive === false) {
+					return $this;
+				}
 				throw new StorageException('Cannot start exclusive transaction, there is already running another one.');
 			}
 			$this->driver->start();
 			return $this;
 		}
 
-		public function commit() {
+		public function commit(): IStorage {
 			$this->use();
-			$this->transaction = false;
-			$this->driver->commit();
+			if (--$this->transaction <= 0) {
+				$this->driver->commit();
+			}
 			return $this;
 		}
 
-		public function rollback() {
+		public function rollback(): IStorage {
 			$this->use();
-			$this->transaction = false;
+			$this->transaction = 0;
 			$this->driver->rollback();
 			return $this;
 		}
 
-		public function store(ICrate $crate) {
+		public function store(ICrate $crate): IStorage {
 			$this->use();
 			$schema = $crate->getSchema();
 			if ($schema->getMeta('storable', false) === false) {

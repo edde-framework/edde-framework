@@ -3,11 +3,21 @@
 
 	namespace Edde\Common\Upgrade;
 
+	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Upgrade\IUpgrade;
+	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Upgrade\UpgradeException;
+	use Edde\Ext\Container\ContainerFactory;
 	use phpunit\framework\TestCase;
 
+	require_once(__DIR__ . '/assets/assets.php');
+
 	class UpgradeManagerTest extends TestCase {
+		/**
+		 * @var IUpgradeManager
+		 */
+		protected $upgradeManager;
+
 		public function testCommon() {
 			$version = 0;
 			$upgradeManager = $this->createUpgradeManager(function () use (&$version) {
@@ -20,11 +30,10 @@
 		}
 
 		protected function createUpgradeManager(callable $callback) {
-			$upgradeManager = new UpgradeManager();
-			$upgradeManager->registerUpgrade(new CallbackUpgrade($callback, '1.0'));
-			$upgradeManager->registerUpgrade(new CallbackUpgrade($callback, '1.1'));
-			$upgradeManager->registerUpgrade(new CallbackUpgrade($callback, '1.2'));
-			return $upgradeManager;
+			$this->upgradeManager->registerUpgrade(new CallbackUpgrade($callback, '1.0'));
+			$this->upgradeManager->registerUpgrade(new CallbackUpgrade($callback, '1.1'));
+			$this->upgradeManager->registerUpgrade(new CallbackUpgrade($callback, '1.2'));
+			return $this->upgradeManager;
 		}
 
 		public function testUpgradeTo() {
@@ -47,5 +56,13 @@
 			});
 			self::assertEquals(0, $version);
 			self::assertInstanceOf(IUpgrade::class, $upgrade = $upgradeManager->upgradeTo('3.4'));
+		}
+
+		protected function setUp() {
+			$container = ContainerFactory::create([
+				IStorage::class => \DummyStorage::class,
+				IUpgradeManager::class => UpgradeManager::class,
+			]);
+			$this->upgradeManager = $container->create(IUpgradeManager::class);
 		}
 	}

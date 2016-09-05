@@ -3,14 +3,19 @@
 
 	namespace App;
 
+	use App\Login\SimpleAuthenticator;
+	use App\Message\FlashControl;
 	use App\Upgrade\InitialUpgrade;
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\Identity\IAuthenticatorManager;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Schema\ISchemaFactory;
+	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Link\ControlLinkGenerator;
+	use Edde\Common\Template\Macro\Control\ControlMacro;
 	use Edde\Ext\Runtime\DefaultSetupHandler;
 	use Edde\Ext\Upgrade\InitialStorageUpgrade;
 
@@ -39,6 +44,17 @@
 				})
 				->onSetup(ILinkFactory::class, function (IContainer $container, ILinkFactory $linkFactory) {
 					$linkFactory->registerLinkGenerator($container->create(ControlLinkGenerator::class));
+				})
+				->onSetup(IAuthenticatorManager::class, function (IContainer $container, IAuthenticatorManager $authenticatorManager) {
+					$authenticatorManager->registerAuthenticator($container->create(SimpleAuthenticator::class));
+					$authenticatorManager->registerFlow(SimpleAuthenticator::class);
+				})
+				->onSetup(ITemplateManager::class, function (ITemplateManager $templateManager) {
+					$templateManager->registerMacroList([
+						new ControlMacro([
+							'flash',
+						], FlashControl::class),
+					]);
 				});
 		}
 	}

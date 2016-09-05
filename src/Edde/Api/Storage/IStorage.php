@@ -16,23 +16,23 @@
 		 *
 		 * @param bool $exclusive if true and there is already transaction, exception should be thrown
 		 *
-		 * @return $this
+		 * @return IStorage
 		 */
-		public function start($exclusive = false);
+		public function start($exclusive = false): IStorage;
 
 		/**
 		 * commit a transaciton
 		 *
-		 * @return $this
+		 * @return IStorage
 		 */
-		public function commit();
+		public function commit(): IStorage;
 
 		/**
 		 * rollback a transaction
 		 *
-		 * @return $this
+		 * @return IStorage
 		 */
-		public function rollback();
+		public function rollback(): IStorage;
 
 		/**
 		 * execute the given query against this storage and return storage's native result
@@ -48,9 +48,9 @@
 		 *
 		 * @param ICrate $crate
 		 *
-		 * @return $this
+		 * @return IStorage
 		 */
-		public function store(ICrate $crate);
+		public function store(ICrate $crate): IStorage;
 
 		/**
 		 * return collection based on the input query; if storage doesn't understand the queery, exception should be thrown
@@ -72,7 +72,7 @@
 		 * @param string $target
 		 * @param string $crateTo optional target crate class
 		 *
-		 * @return \Edde\Api\Crate\ICrate[]|ICollection
+		 * @return ICrate[]|ICollection
 		 */
 		public function collectionTo(ICrate $crate, string $relation, string $source, string $target, string $crateTo = null): ICollection;
 
@@ -85,7 +85,7 @@
 		 *
 		 * @return ICrate
 		 */
-		public function load(string $crate, IQuery $query, string $schema = null);
+		public function load(string $crate, IQuery $query, string $schema = null): ICrate;
 
 		/**
 		 * load crate by the given link name

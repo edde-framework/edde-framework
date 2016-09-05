@@ -34,4 +34,23 @@
 		 * @return string
 		 */
 		public function guid(string $seed = null): string;
+
+		/**
+		 * generate secure password one-way hash
+		 *
+		 * @param string $password
+		 *
+		 * @return string
+		 */
+		public function password(string $password): string;
+
+		/**
+		 * verify input string against hashed password
+		 *
+		 * @param string $source
+		 * @param string $hash
+		 *
+		 * @return bool
+		 */
+		public function verify(string $source, string $hash): bool;
 	}

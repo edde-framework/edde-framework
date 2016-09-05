@@ -14,7 +14,6 @@
 	 */
 	class InitialStorageUpgrade extends AbstractUpgrade {
 		use LazyInjectTrait;
-
 		/**
 		 * @var IStorage
 		 */
@@ -40,17 +39,10 @@
 		}
 
 		protected function onUpgrade() {
-			$this->storage->start();
-			try {
-				foreach ($this->schemaManager->getSchemaList() as $schema) {
-					if ($schema->getMeta('storable', false)) {
-						$this->storage->execute(new CreateSchemaQuery($schema));
-					}
+			foreach ($this->schemaManager->getSchemaList() as $schema) {
+				if ($schema->getMeta('storable', false)) {
+					$this->storage->execute(new CreateSchemaQuery($schema));
 				}
-				$this->storage->commit();
-			} catch (\Exception $e) {
-				$this->storage->rollback();
-				throw $e;
 			}
 		}
 

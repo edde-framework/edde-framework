@@ -22,6 +22,7 @@
 	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Identity\IAuthenticatorManager;
 	use Edde\Api\Identity\IIdentity;
+	use Edde\Api\Identity\IIdentityManager;
 	use Edde\Api\IEddeDirectory;
 	use Edde\Api\Link\IHostUrl;
 	use Edde\Api\Link\ILinkFactory;
@@ -57,6 +58,7 @@
 	use Edde\Common\Http\HttpRequestFactory;
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Identity\AuthenticatorManager;
+	use Edde\Common\Identity\IdentityManager;
 	use Edde\Common\Link\HostUrl;
 	use Edde\Common\Link\LinkFactory;
 	use Edde\Common\Resource\ResourceManager;
@@ -122,9 +124,6 @@
 					IHttpResponse::class => HttpResponse::class,
 					ISessionManager::class => SessionManager::class,
 					IFingerprint::class => DummyFingerprint::class,
-					IIdentity::class => function (IAuthenticatorManager $authenticatorManager) {
-						return $authenticatorManager->identity();
-					},
 					ISchemaFactory::class => SchemaFactory::class,
 					ISchemaManager::class => SchemaManager::class,
 					IRootDirectory::class => function () {
@@ -164,6 +163,10 @@
 					},
 					ILinkFactory::class => LinkFactory::class,
 					IAuthenticatorManager::class => AuthenticatorManager::class,
+					IIdentityManager::class => IdentityManager::class,
+					IIdentity::class => function (IIdentityManager $identityManager) {
+						return $identityManager->identity();
+					},
 				], $factoryList))
 				->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
 					$routerService->registerRouter($container->create(SimpleRouter::class));

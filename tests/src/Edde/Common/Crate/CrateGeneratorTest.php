@@ -3,16 +3,17 @@
 
 	namespace Edde\Common\Crate;
 
+	use Edde\Api\Cache\ICacheFactory;
+	use Edde\Api\Crate\ICrateDirectory;
 	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Resource\IResource;
+	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
-	use Edde\Common\Cache\CacheFactory;
-	use Edde\Common\Container\FactoryManager;
-	use Edde\Common\Resource\ResourceManager;
+	use Edde\Common\Cache\DummyCacheFactory;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
-	use Edde\Ext\Cache\InMemoryCacheStorage;
+	use Edde\Ext\Container\ContainerFactory;
 	use Foo\Bar\Header2Schema;
 	use Foo\Bar\Item2Schema;
 	use Foo\Bar\Row2Schema;
@@ -51,13 +52,22 @@
 		}
 
 		protected function setUp() {
-			$this->schemaManager = new SchemaManager(new SchemaFactory(new ResourceManager()));
+			$container = ContainerFactory::create([
+				ISchemaManager::class => SchemaManager::class,
+				ISchemaFactory::class => SchemaFactory::class,
+				ICrateGenerator::class => CrateGenerator::class,
+				ICrateDirectory::class => function () {
+					return $this->crateDirectory = new CrateDirectory(__DIR__ . '/temp');
+				},
+				ICacheFactory::class => DummyCacheFactory::class,
+			]);
+
+			$this->schemaManager = $container->create(ISchemaManager::class);
 			$this->schemaManager->addSchema($header = new Header2Schema());
 			$this->schemaManager->addSchema($item = new Item2Schema());
 			$this->schemaManager->addSchema(new Row2Schema($header, $item));
-			$this->crateDirectory = new CrateDirectory(__DIR__ . '/temp');
+			$this->crateGenerator = $container->create(ICrateGenerator::class);
 			$this->crateDirectory->purge();
-			$this->crateGenerator = new CrateGenerator($this->schemaManager, $this->crateDirectory, new CacheFactory(__NAMESPACE__, new InMemoryCacheStorage()), new FactoryManager());
 		}
 
 		protected function tearDown() {
