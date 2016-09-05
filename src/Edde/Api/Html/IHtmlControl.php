@@ -167,6 +167,12 @@
 		 */
 		public function javascript(string $class = null, string $file = null): IHtmlControl;
 
+		/**
+		 * @param string|null $class
+		 * @param string|null $file
+		 *
+		 * @return IHtmlControl
+		 */
 		public function stylesheet(string $class = null, string $file = null): IHtmlControl;
 
 		/**
