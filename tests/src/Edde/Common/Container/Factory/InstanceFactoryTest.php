@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Container\Factory;
 
 	use Edde\Api\Container\FactoryException;
@@ -7,7 +9,6 @@
 	use Edde\Common\Container\DependencyFactory;
 	use Edde\Common\Container\FactoryManager;
 	use Edde\Common\ContainerTest\DummyCacheStorage;
-	use Edde\Framework;
 	use phpunit\framework\TestCase;
 
 	require_once(__DIR__ . '/../assets.php');

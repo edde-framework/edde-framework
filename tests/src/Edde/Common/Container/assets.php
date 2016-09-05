@@ -1,9 +1,22 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\ContainerTest;
 
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Cache\AbstractCacheStorage;
 	use Edde\Common\Container\LazyInjectTrait;
+
+	class SimpleDependency {
+	}
+
+	class SimpleUnknownDependency {
+	}
+
+	class SimpleClass {
+		public function __construct(SimpleDependency $simpleDependency, SimpleUnknownDependency $simpleUnknownDependency, $dummyOne) {
+		}
+	}
 
 	/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 	class AlphaDependencyClass {

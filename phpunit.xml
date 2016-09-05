@@ -14,7 +14,8 @@
 
 	<filter>
 		<whitelist processUncoveredFilesFromWhitelist="true">
-			<directory suffix=".php">src</directory>
+			<directory suffix=".php">src/Edde/Common</directory>
+			<directory suffix=".php">src/Edde/Ext</directory>
 		</whitelist>
 	</filter>
 </phpunit>

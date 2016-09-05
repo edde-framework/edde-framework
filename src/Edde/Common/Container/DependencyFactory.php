@@ -4,6 +4,7 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Cache\ICacheFactory;
+	use Edde\Api\Container\DependencyException;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IDependencyFactory;
 	use Edde\Api\Container\IFactoryManager;
@@ -16,6 +17,7 @@
 		 * @var IFactoryManager
 		 */
 		protected $factoryManager;
+		protected $dependencyList = [];
 
 		/**
 		 * @param IFactoryManager $factoryManager
@@ -39,6 +41,10 @@
 			if ($this->factoryManager->hasFactory($name) === false) {
 				return;
 			}
+			if (isset($this->dependencyList[$name])) {
+				throw new DependencyException(sprintf('Detected recursive dependency [%s] in stack [%s].', $name, implode(', ', array_keys($this->dependencyList))));
+			}
+			$this->dependencyList[$name] = true;
 			$factory = $this->factoryManager->getFactory($name);
 			foreach ($factory->getParameterList() as $parameter) {
 				if ($parameter->hasClass() === false) {
@@ -47,6 +53,7 @@
 				$root->addNode($node = new Dependency($parameter->getClass(), true, $parameter->isOptional()));
 				$this->build($parameter->getClass(), $node);
 			}
+			unset($this->dependencyList[$name]);
 		}
 
 		protected function prepare() {
