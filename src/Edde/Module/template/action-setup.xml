@@ -1,9 +1,4 @@
-<control title="Edde Setup">
-	<e:css src="css/kube.css"/>
-	<e:css src="css/edde-framework.css"/>
-	<e:js src="js/jquery-3.1.0.js"/>
-	<e:js src="js/edde-framework.js"/>
-
+<control title="Edde Setup" m:define="content">
 	<div id="message" class="alert" m:snippet="message"/>
 
 	<div class="row centered">

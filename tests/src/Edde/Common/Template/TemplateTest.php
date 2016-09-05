@@ -201,8 +201,8 @@
 		<title></title>
 	</head>
 	<body>
-		<input class="edde-value edde-text-input" type="text" value="" data-schema="poo" data-property="text">
-		<input class="edde-value edde-text-input class-here" type="password" data-schema="poo" data-property="password">
+		<input type="text" value="" data-class="Edde.Common.Html.Input.TextControl" data-schema="poo" data-property="text">
+		<input type="password" class="class-here" data-schema="poo" data-property="password">
 	</body>
 </html>
 ', $this->control->render());
@@ -524,6 +524,29 @@
 				</div>
 			</div>
 		</div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
+		public function testLayout2() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/layout2.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="foo"></div>
+		<div>
+			<div class="poo"></div>
+		</div>
+		<div class="bar"></div>
 	</body>
 </html>
 ', $this->control->render());

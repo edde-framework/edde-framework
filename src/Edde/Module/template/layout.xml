@@ -1,0 +1,8 @@
+<control>
+	<css src="edde://css/kube.css"/>
+	<css src="edde://css/edde-framework.css"/>
+	<js src="edde://js/jquery-3.1.0.js"/>
+	<js src="edde://js/edde-framework.js"/>
+
+	<block name="content"/>
+</control>

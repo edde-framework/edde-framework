@@ -131,11 +131,11 @@
 					return $item;
 				}
 			}
-			if (strpos($value, '/', 0) !== false) {
-				return var_export($this->file(substr($value, 1)), true);
-			}
 			if (strpos($value, 'edde://', 0) !== false) {
 				return var_export($this->asset(str_replace('edde://', '', $value)), true);
+			}
+			if (strpos($value, '/', 0) !== false) {
+				return var_export($this->file(substr($value, 1)), true);
 			}
 			if (strpos($value, '->', 0) !== false && strpos($value, '()') !== false) {
 				return '->' . StringUtils::firstLower(StringUtils::camelize(substr($value, 2)));
@@ -149,16 +149,16 @@
 			return var_export($value, true);
 		}
 
+		public function asset(string $asset): string {
+			return $this->assetsDirectory->filename($asset);
+		}
+
 		public function file(string $file): string {
 			if ($file[0] === '/') {
 				return $this->rootDirectory->filename($file);
 			}
 			return $this->source->getDirectory()
 				->filename($file);
-		}
-
-		public function asset(string $asset): string {
-			return $this->assetsDirectory->filename($asset);
 		}
 
 		protected function prepare() {

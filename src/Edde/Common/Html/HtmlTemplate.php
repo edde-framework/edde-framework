@@ -70,20 +70,24 @@
 			return $this->blockList;
 		}
 
-		public function block(string $name, IHtmlControl $parent) {
+		public function block(string $name, IHtmlControl $parent) : IHtmlTemplate {
 			if (isset($this->blockList[$name]) === false) {
 				throw new TemplateException(sprintf('Requested unknown block [%s].', $name));
 			}
 			call_user_func($this->blockList[$name], $parent);
+			return $this;
 		}
 
-		protected function use (string $file) {
+		public function use (string $file): IHtmlTemplate {
 			$template = $this->templateManager->template($file);
 			$template = $template->getInstance($this->container);
-			$template->template($container = new ContainerControl());
-			if ($container->isLeaf() === false) {
+			$node = $this->parent->getNode();
+			$count = $node->getNodeCount();
+			$template->template($this->parent);
+			if ($count !== $node->getNodeCount()) {
 				throw new TemplateException(sprintf('Template [%s] can contain only block controls.', $file));
 			}
 			$this->blockList = array_merge($this->blockList, $template->getBlockList());
+			return $this;
 		}
 	}
