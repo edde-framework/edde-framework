@@ -137,14 +137,14 @@
 			if (strpos($value, '/', 0) !== false) {
 				return var_export($this->file(substr($value, 1)), true);
 			}
-			if (strpos($value, '->', 0) !== false && strpos($value, '()') !== false) {
+			if (strpos($value, '->', 0) !== false) {
 				return '->' . StringUtils::firstLower(StringUtils::camelize(substr($value, 2)));
 			}
 			if (strpos($value, '()') !== false) {
 				return '$this->' . StringUtils::firstLower(StringUtils::camelize($value));
 			}
 			if ($value[0] === '$') {
-				return $value;
+				return '$' . StringUtils::firstLower(StringUtils::camelize(substr($value, 1)));
 			}
 			return var_export($value, true);
 		}
