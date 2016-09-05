@@ -26,6 +26,13 @@
 		public function getRoot();
 
 		/**
+		 * has this control some children?
+		 *
+		 * @return bool
+		 */
+		public function isLeaf(): bool;
+
+		/**
 		 * return parent or null of this control is root
 		 *
 		 * @return IControl|null

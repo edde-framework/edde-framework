@@ -6,14 +6,10 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Html\IHtmlControl;
-	use Edde\Api\Html\IHtmlView;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IMacro;
-	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Template\MacroException;
-	use Edde\Api\Web\IJavaScriptCompiler;
-	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Html\Tag\ButtonControl;
@@ -21,7 +17,6 @@
 	use Edde\Common\Html\Tag\SpanControl;
 	use Edde\Common\Html\Value\PasswordInputControl;
 	use Edde\Common\Html\Value\TextInputControl;
-	use Edde\Common\Node\Node;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\AbstractMacro;
 	use Edde\Common\Template\Macro\Control\ControlMacro;
@@ -57,52 +52,27 @@
 		static public function controlMacro(): IMacro {
 			return new class() extends AbstractMacro {
 				public function __construct() {
-					parent::__construct(['control']);
+					parent::__construct([
+						'control',
+					]);
 				}
 
 				public function macro(INode $macro, INode $element, ICompiler $compiler) {
 					$destination = $compiler->getDestination();
+					$source = $compiler->getSource();
 
 					switch ($macro->getName()) {
 						case 'control':
-							$destination->write(sprintf("\t\tuse %s;\n", LazyInjectTrait::class));
-
-							$dependencyList = [
-								IContainer::class,
-								IStyleSheetCompiler::class,
-								IJavaScriptCompiler::class,
-								ITemplateManager::class,
-							];
-
-							foreach ($dependencyList as $dependency) {
-								$destination->write(sprintf("\t\t/** @var %s */\n\t\tprotected $%s;\n", $dependency, StringUtils::firstLower(substr(StringUtils::extract($dependency, '\\'), 1))));
-							}
-
-							$destination->write(sprintf("\t\t/** @var %s */\n", \SplStack::class));
-							$destination->write("\t\tprotected \$stack;\n");
-							$destination->write(sprintf("\t\t/** @var %s */\n", IHtmlView::class));
-							$destination->write("\t\tprotected \$parent;\n");
-
-							foreach ($dependencyList as $dependency) {
-								$parameter = StringUtils::firstLower(substr(StringUtils::extract($dependency, '\\'), 1));
-								$destination->write(sprintf("
-		public function lazyt%s(%s \$%s){
-			\$this->%s = \$%s;    
-		}						
-", StringUtils::firstUpper($parameter), $dependency, $parameter, $parameter, $parameter));
-							}
-
-							$destination->write(sprintf("
-		public function __call(\$function, array \$parameterList) {
-			return call_user_func_array([
-				\$this->parent, 
-				\$function
-			], \$parameterList);
-		}
-					
-		public function template(%s \$parent, array \$blockList = []) {
+							$destination->write("<?php\n");
+							$destination->write("\tdeclare(strict_types = 1);\n\n");
+							$destination->write(sprintf("\t/** source = %s */\n\n", $source->getPath()));
+							$destination->write(sprintf("\tclass %s extends %s {\n", $compiler->getName(), HtmlTemplate::class));
+							$destination->write(vsprintf("\t\tpublic function template(%s \$parent) {
 			\$this->stack = new %s();
-			\$reflectionClass = new ReflectionClass(\$this->parent = \$parent);\n", IHtmlControl::class, \SplStack::class));
+			\$reflectionClass = new ReflectionClass(\$this->parent = \$parent);\n", [
+								IHtmlControl::class,
+								\SplStack::class,
+							]));
 
 							if (($attributeList = $element->getAttributeList()) !== []) {
 								$destination->write(sprintf("\t\t\t\$parent->setAttributeList(%s);\n", var_export($attributeList, true)));
@@ -110,6 +80,7 @@
 							$destination->write("\t\t\t\$this->stack->push(\$parent);\n");
 							$this->element($element, $compiler);
 							$destination->write("\t\t}\n");
+							$destination->write("\t}\n");
 							break;
 					}
 				}
@@ -123,7 +94,9 @@
 		static public function snippetMacro(): IMacro {
 			return new class() extends AbstractMacro {
 				public function __construct() {
-					parent::__construct(['m:snippet']);
+					parent::__construct([
+						'm:snippet',
+					]);
 				}
 
 				public function macro(INode $macro, INode $element, ICompiler $compiler) {
@@ -132,20 +105,20 @@
 						case 'm:snippet':
 							$this->checkValue($macro, $element);
 							$compiler->macro($element, $element);
-							$destination->write("\t\t\t\$control->disconnect();\n");
+							$destination->write("\t\t\t\$current->disconnect();\n");
 							$destination->write("\t\t\t\$parent = \$this->stack->top();\n");
 							$destination->write(sprintf("\t\t\t\$parent->addControl(\$placeholder = \$this->container->create('%s'));\n", PlaceholderControl::class));
-							$destination->write("\t\t\t\$placeholder->setId(\$control->getId());\n");
+							$destination->write("\t\t\t\$placeholder->setId(\$current->getId());\n");
 
 							$value = StringUtils::firstLower(StringUtils::camelize($macro->getValue()));
 							if (strrpos($value, '()') !== false) {
-								$destination->write(sprintf("\t\t\t\$this->parent->snippet(\$control, [\$this->parent, '%s']);\n", str_replace('()', '', $value)));
+								$destination->write(sprintf("\t\t\t\$this->parent->snippet(\$current, [\$this->parent, '%s']);\n", str_replace('()', '', $value)));
 								break;
 							}
-							$destination->write("\t\t\t\$this->parent->snippet(\$control);\n");
+							$destination->write("\t\t\t\$this->parent->snippet(\$current);\n");
 							$destination->write(sprintf("\t\t\t\$reflectionProperty = \$reflectionClass->getProperty('%s');\n", $value));
 							$destination->write("\t\t\t\$reflectionProperty->setAccessible(true);\n");
-							$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->parent, \$control);\n");
+							$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->parent, \$current);\n");
 							break;
 					}
 				}
@@ -170,12 +143,12 @@
 							$compiler->macro($element, $element);
 							$value = StringUtils::firstLower(StringUtils::camelize($value));
 							if (strrpos($value, '()') !== false) {
-								$destination->write(sprintf("\t\t\t\$this->%s(\$control);\n", str_replace('()', '', $value)));
+								$destination->write(sprintf("\t\t\t\$this->%s(\$current);\n", str_replace('()', '', $value)));
 								break;
 							}
 							$destination->write(sprintf("\t\t\t\$reflectionProperty = \$reflectionClass->getProperty('%s');\n", $value));
 							$destination->write("\t\t\t\$reflectionProperty->setAccessible(true);\n");
-							$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->parent, \$control);\n");
+							$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->parent, \$current);\n");
 							break;
 						case 'm:pass-child':
 							foreach ($element->getNodeList() as $node) {
@@ -282,7 +255,7 @@
 					switch ($macro->getName()) {
 						case 'button':
 							$destination->write("\t\t\t\$parent = \$this->stack->top();\n");
-							$destination->write(sprintf("\t\t\t\$parent->addControl(\$control = \$this->container->create('%s'));\n", $this->control));
+							$this->writeCreateControl($destination, $this->control);
 							$attributeList = $this->getAttributeList($macro, $compiler);
 							if (isset($attributeList['action']) === false) {
 								throw new MacroException(sprintf('Missing mandatory attribute "action" in [%s].', $macro->getPath()));
@@ -292,7 +265,7 @@
 							}
 							$action = str_replace('()', '', $action);
 							unset($attributeList['action']);
-							$destination->write(sprintf("\t\t\t\$control->setAction([\$this->parent, %s]);\n", $compiler->delimite($action)));
+							$destination->write(sprintf("\t\t\t\$current->setAction([\$this->parent, %s]);\n", $compiler->delimite($action)));
 							$this->writeAttributeList($attributeList, $destination);
 							break;
 					}
@@ -316,8 +289,8 @@
 				public function macro(INode $macro, INode $element, ICompiler $compiler) {
 					$destination = $compiler->getDestination();
 					$destination->write("\t\t\t\$parent = \$this->stack->top();\n");
-					$destination->write(sprintf("\t\t\t\$parent->addControl(\$control = \$this->container->create('%s'));\n", HeaderControl::class));
-					$destination->write(sprintf("\t\t\t\$control->setTag('%s');\n", $element->getName()));
+					$this->writeCreateControl($destination, HeaderControl::class);
+					$destination->write(sprintf("\t\t\t\$current->setTag('%s');\n", $element->getName()));
 					$this->writeTextValue($element, $destination, $compiler);
 					$this->writeAttributeList($this->getAttributeList($element, $compiler), $destination);
 					$this->element($element, $compiler);
@@ -331,8 +304,7 @@
 
 				public function __construct() {
 					parent::__construct([
-						'm:layout',
-						'n:layout',
+						'use',
 						'block',
 						'm:block',
 					]);
@@ -341,39 +313,21 @@
 				public function macro(INode $macro, INode $element, ICompiler $compiler) {
 					$destination = $compiler->getDestination();
 					switch ($macro->getName()) {
-						case 'm:layout':
-							$this->checkValue($macro, $element);
-							$src = $macro->getValue();
-							if ($this->layout !== null) {
-								throw new MacroException(sprintf('Cannot use layout [%s]; layout was already set to [%s].', $src, $this->layout));
-							}
-							$element->setNodeList(array_merge($element->getNodeList(), [new Node('n:layout', $src)]));
-							$compiler->macro($element, $element);
+						case 'use':
+							$this->checkAttribute($macro, $element, 'src');
+							$destination->write(sprintf("\t\t\t\$this->use(%s);\n", $compiler->delimite($macro->getAttribute('src'))));
 							break;
-						case 'n:layout':
-							$this->checkValue($macro, $element);
-							$destination->write(sprintf("\t\t\t\$template = \$this->templateManager->template(%s);\n", $compiler->delimite($macro->getValue())));
-							$destination->write("\t\t\t\$template->getInstance(\$this->container)->template(\$this->parent, \$blockList ?? []);\n");
-							break;
-						/**
-						 * block placeholder generator
-						 */
 						case 'block':
+							$this->checkLeaf($macro, $element);
 							$this->checkAttribute($macro, $element, 'name');
-							$destination->write(sprintf("\t\t\tcall_user_func(\$blockList[%s], \$control);\n", $compiler->delimite($macro->getAttribute('name'))));
+							$destination->write(sprintf("\t\t\t\$this->block(%s, \$current);\n", $compiler->delimite($macro->getAttribute('name'))));
 							break;
-						/**
-						 * block reference
-						 */
 						case 'm:block':
 							$this->checkValue($macro, $element);
-							$destination->write("\t\t\t\$blockList = \$blockList ?? [];\n");
-							$destination->write(sprintf("\t\t\t\$blockList[%s] = function(\$parent) {\n", $compiler->delimite($macro->getValue())));
-							$destination->write("\t\t\t\$this->stack = new SplStack();\n");
-							$destination->write("\t\t\t\$this->stack->push(\$parent);\n");
+							$destination->write(sprintf("\t\t\t\$this->blockList[%s] = function(%s \$parent) {\n", $compiler->delimite($macro->getValue()), IHtmlControl::class));
+							$destination->write(sprintf("\t\t\t\t\$this->stack = new %s();\n", \SplStack::class));
+							$destination->write("\t\t\t\t\$this->stack->push(\$parent);\n");
 							$compiler->macro($element, $element);
-							$destination->write("\t\t\t\$this->stack->pop();\n");
-							$destination->write("\t\t\treturn \$control;\n");
 							$destination->write("\t\t\t};\n");
 							break;
 					}

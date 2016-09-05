@@ -1,4 +1,6 @@
 <control>
+	<use src="/require.xml"/>
+
 	<div class="foo"/>
 	<div class="with-block">
 		<block name="foo"/>

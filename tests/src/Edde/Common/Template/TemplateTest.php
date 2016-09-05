@@ -491,8 +491,8 @@
 ', $control->render());
 		}
 
-//		public function testRequire() {
-//			$template = $this->templateManager->template(__DIR__ . '/assets/template/require.xml');
+//		public function testLayout() {
+//			$template = $this->templateManager->template(__DIR__ . '/assets/template/layout.xml');
 //			$file = $template->getFile();
 //			self::assertTrue($file->isAvailable());
 //			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));

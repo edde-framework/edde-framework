@@ -26,7 +26,7 @@
 		public function macro(INode $macro, INode $element, ICompiler $compiler) {
 			$destination = $compiler->getDestination();
 			$destination->write("\t\t\t\$parent = \$this->stack->top();\n");
-			$destination->write(sprintf("\t\t\t\$parent->addControl(\$control = \$this->container->create('%s'));\n", $this->control));
+			$this->writeCreateControl($destination, $this->control);
 			$this->writeTextValue($element, $destination, $compiler);
 			$attributeList = $this->getAttributeList($element, $compiler);
 			unset($attributeList['value']);
@@ -34,9 +34,13 @@
 			$this->element($element, $compiler);
 		}
 
+		protected function writeCreateControl(IFile $destination, string $control) {
+			$destination->write(sprintf("\t\t\t\$parent->addControl(\$current = \$this->container->create('%s'));\n", $control));
+		}
+
 		protected function writeTextValue(INode $root, IFile $destination, ICompiler $compiler) {
 			if ($root->isLeaf() && ($text = $root->getValue($root->getAttribute('value'))) !== null) {
-				$destination->write(sprintf("\t\t\t\$control->setText(%s);\n", $compiler->delimite($text)));
+				$destination->write(sprintf("\t\t\t\$current->setText(%s);\n", $compiler->delimite($text)));
 			}
 		}
 
@@ -46,7 +50,7 @@
 				foreach ($attributeList as $name => $value) {
 					$export[] = "'" . $name . "' => " . $value;
 				}
-				$destination->write(sprintf("\t\t\t\$control->setAttributeList([%s]);\n", implode(",\n", $export)));
+				$destination->write(sprintf("\t\t\t\$current->setAttributeList([%s]);\n", implode(",\n", $export)));
 			}
 		}
 
@@ -56,8 +60,8 @@
 				parent::element($element, $compiler);
 				return;
 			}
-			$destination->write("\t\t\t\$this->stack->push(\$control);\n");
+			$destination->write("\t\t\t\$this->stack->push(\$current);\n");
 			parent::element($element, $compiler);
-			$destination->write("\t\t\t\$control = \$this->stack->pop();\n");
+			$destination->write("\t\t\t\$current = \$this->stack->pop();\n");
 		}
 	}

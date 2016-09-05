@@ -85,20 +85,19 @@
 			return $this->destination;
 		}
 
+		public function getName(): string {
+			return $this->name;
+		}
+
 		public function compile(): ITemplate {
 			$this->use();
 			$template = new Template($this->destination);
 			$this->destination->enableWriteCache(3);
-			$this->destination->write("<?php\n");
-			$this->destination->write("\tdeclare(strict_types = 1);\n\n");
-			$this->destination->write(sprintf("\t/** source = %s */\n\n", $this->source->getPath()));
-			$this->destination->write(sprintf("\tclass %s {\n", $this->name));
 			try {
 				$this->macro($this->root, $this->root);
 			} catch (CompilerException $e) {
 				throw new CompilerException(sprintf('Compilation of template [%s] failed: %s', (string)$this->source->getUrl(), $e->getMessage()), 0, $e);
 			}
-			$this->destination->write("\t}\n");
 			$this->destination->close();
 			return $template;
 		}
