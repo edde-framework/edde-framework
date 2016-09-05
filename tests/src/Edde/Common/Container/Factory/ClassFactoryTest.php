@@ -1,18 +1,24 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Container\Factory;
 
-	use Edde\Common\Cache\CacheFactory;
+	use Edde\Api\Container\DependencyException;
+	use Edde\Api\Container\IContainer;
 	use Edde\Common\Callback\Parameter;
-	use Edde\Common\Container\Container;
-	use Edde\Common\Container\DependencyFactory;
-	use Edde\Common\Container\FactoryManager;
-	use Edde\Common\ContainerTest\DummyCacheStorage;
+	use Edde\Common\ContainerTest\RecursiveClass;
 	use Edde\Common\ContainerTest\TestCommonClass;
+	use Edde\Ext\Container\ContainerFactory;
 	use phpunit\framework\TestCase;
 
 	require_once(__DIR__ . '/../assets.php');
 
 	class ClassFactoryTest extends TestCase {
+		/**
+		 * @var IContainer
+		 */
+		protected $container;
+
 		public function testCommon() {
 			$factory = new ClassFactory('name', TestCommonClass::class, false, false);
 			self::assertEquals('name', $factory->getName());
@@ -22,17 +28,16 @@
 			], $factory->getParameterList());
 			self::assertFalse($factory->isCloneable());
 			self::assertFalse($factory->isSingleton());
-			$container = $this->createDummyContainer();
 			/** @var $alpha TestCommonClass */
 			$alpha = $factory->create('name', [
 				'a',
 				'b',
-			], $container);
+			], $this->container);
 			/** @var $beta TestCommonClass */
 			$beta = $factory->create('name', [
 				'b',
 				'c',
-			], $container);
+			], $this->container);
 			self::assertNotEquals($alpha, $beta);
 			self::assertEquals('a', $alpha->getFoo());
 			self::assertEquals('b', $alpha->getBar());
@@ -40,22 +45,17 @@
 			self::assertEquals('c', $beta->getBar());
 		}
 
-		public function createDummyContainer() {
-			return new Container($factoryManager = new FactoryManager(), new DependencyFactory($factoryManager, $cacheFactory = new CacheFactory(__DIR__, new DummyCacheStorage())), $cacheFactory);
-		}
-
 		public function testCloneable() {
 			$factory = new ClassFactory('name', TestCommonClass::class, false, true);
 			self::assertTrue($factory->isCloneable());
 			self::assertFalse($factory->isSingleton());
-			$container = $this->createDummyContainer();
 			self::assertNotEquals($alpha = $factory->create('name', [
 				'a',
 				'b',
-			], $container), $beta = $factory->create('name', [
+			], $this->container), $beta = $factory->create('name', [
 				'a',
 				'b',
-			], $container));
+			], $this->container));
 			self::assertFalse($alpha->isCloned());
 			self::assertTrue($beta->isCloned());
 		}
@@ -64,13 +64,24 @@
 			$factory = new ClassFactory('name', TestCommonClass::class);
 			self::assertFalse($factory->isCloneable());
 			self::assertTrue($factory->isSingleton());
-			$container = $this->createDummyContainer();
 			self::assertEquals($factory->create('name', [
 				'a',
 				'b',
-			], $container), $factory->create('name', [
+			], $this->container), $factory->create('name', [
 				'a',
 				'b',
-			], $container));
+			], $this->container));
+		}
+
+		public function testCircularDependency() {
+			$this->expectException(DependencyException::class);
+			$this->expectExceptionMessage('Detected recursive dependency [Edde\Common\ContainerTest\RecursiveClass] in stack [Edde\Common\ContainerTest\RecursiveClass].');
+			$this->container->create(RecursiveClass::class);
+		}
+
+		protected function setUp() {
+			$this->container = ContainerFactory::create([
+				RecursiveClass::class,
+			]);
 		}
 	}
