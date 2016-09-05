@@ -53,6 +53,7 @@
 
 		public function setCode(int $code): IHttpResponse {
 			$this->code = $code;
+			return $this;
 		}
 
 		public function getHeaderList(): IHeaderList {

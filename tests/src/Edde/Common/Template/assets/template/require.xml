@@ -1,0 +1,18 @@
+<control>
+	<div class="foo-bar" m:define="poo"/>
+	<div m:define="foo">
+		<span value="lorem ipsum or something like that"/>
+	</div>
+	<define name="something">
+		<div class="qwerty"/>
+		<div>
+			<span value="foo"/>
+			<div>
+				<div/>
+				<div/>
+				<div class="soo empty div here"/>
+				<div/>
+			</div>
+		</div>
+	</define>
+</control>

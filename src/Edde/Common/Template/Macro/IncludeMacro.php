@@ -7,7 +7,6 @@
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Common\Container\LazyInjectTrait;
-	use Edde\Common\Node\Node;
 	use Edde\Common\Template\AbstractMacro;
 
 	class IncludeMacro extends AbstractMacro {
@@ -29,28 +28,23 @@
 			$this->resourceManager = $resourceManager;
 		}
 
-		public function run(INode $root, ICompiler $compiler, callable $callback = null) {
-			switch ($root->getName()) {
+		public function macro(INode $macro, INode $element, ICompiler $compiler) {
+			$destination = $compiler->getDestination();
+			switch ($macro->getName()) {
 				case 'include':
-					$node = new Node();
-					$include = $compiler->file($root->getAttribute('src'));
-					$compiler->getDestination()
-						->write(sprintf("\t\t\t/** include %s */\n", $include));
-					$node->setNodeList($this->resourceManager->file($include)
-						->getNodeList(), true);
-					$this->macro($node, $compiler, $callback);
-					$compiler->getDestination()
-						->write(sprintf("\t\t\t/** done %s */\n", $include));
+					$this->checkAttribute($macro, $element, 'src');
+					$destination->write(sprintf("\t\t\t/** include %s */\n", $include = $compiler->file($macro->getAttribute('src'))));
+					$this->resourceManager->file($include, null, $element);
+					$this->element($element, $compiler);
+					$destination->write(sprintf("\t\t\t/** done %s */\n", $include));
 					break;
 				case 'm:include':
-					$include = $compiler->file($root->getValue());
-					$compiler->getDestination()
-						->write(sprintf("\t\t\t/** include %s */\n", $include));
-					$root->getNodeList()[0]->setNodeList($this->resourceManager->file($include)
-						->getNodeList(), true);
-					$this->macro($root, $compiler, $callback);
-					$compiler->getDestination()
-						->write(sprintf("\t\t\t/** done %s */\n", $include));
+					$this->checkValue($macro, $element);
+					$include = $compiler->file($macro->getValue());
+					$destination->write(sprintf("\t\t\t/** include %s */\n", $include));
+					$this->resourceManager->file($include, null, $element);
+					$compiler->macro($element, $element);
+					$destination->write(sprintf("\t\t\t/** done %s */\n", $include));
 					break;
 			}
 		}

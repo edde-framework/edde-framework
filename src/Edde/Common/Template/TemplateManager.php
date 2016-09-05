@@ -66,6 +66,9 @@
 		}
 
 		public function compile(IFile $file, bool $force = false): ITemplate {
+			if ($file->isAvailable() === false) {
+				throw new TemplateException(sprintf('Template file [%s] is not available.', $file->getPath()));
+			}
 			if (($templateFile = $this->cache->load($cacheId = $file->getPath(), false)) !== false && $force === false) {
 				return new Template(new File($templateFile));
 			}

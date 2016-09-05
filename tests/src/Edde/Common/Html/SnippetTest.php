@@ -65,6 +65,19 @@
 	</body>
 </html>
 ', $this->htmlView->render());
+			$snippetList = [];
+			foreach ($this->htmlView->snippets() as $snippet) {
+				$snippetList[] = $snippet->render();
+			}
+			self::assertEquals([
+				'<div id="foo" class="this is a snippet!">
+	<div class="another control"></div>
+	<div>
+		<div>deeper and deeper</div>
+	</div>
+</div>
+',
+			], $snippetList);
 		}
 
 		public function testTemplateSnippetProperty() {

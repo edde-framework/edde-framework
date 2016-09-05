@@ -42,7 +42,7 @@
 		protected function prepare() {
 			$this->memcache = new \Memcache();
 			foreach ($this->serverList as $item) {
-				$this->memcache->addserver($item[0], $item[1]);
+				$this->memcache->addServer($item[0], $item[1]);
 			}
 		}
 	}

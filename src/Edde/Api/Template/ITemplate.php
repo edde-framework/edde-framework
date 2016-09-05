@@ -24,5 +24,5 @@
 		 *
 		 * @return mixed
 		 */
-		public function getInstance(IContainer $container = null);
+		public function getInstance(IContainer $container);
 	}

@@ -1,0 +1,11 @@
+<control>
+	<use src="get-templatefile-name()"/>
+
+	<div class="foo"/>
+	<div class="with-block">
+		<block name="foo"/>
+		<div class="bar"/>
+	</div>
+	<block name="poo"/>
+	<div class="something" m:block="something"/>
+</control>

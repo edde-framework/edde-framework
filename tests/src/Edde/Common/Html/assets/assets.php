@@ -19,5 +19,6 @@
 		}
 
 		public function templateSnippet(DivControl $divControl) {
+			$divControl->dirty();
 		}
 	}

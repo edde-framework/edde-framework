@@ -36,13 +36,18 @@
 		public function getDestination(): IFile;
 
 		/**
+		 * @return string
+		 */
+		public function getName(): string;
+
+		/**
 		 * process php value (evaluates function call/variable/...)
 		 *
 		 * @param string $value
 		 *
 		 * @return string
 		 */
-		public function value(string $value): string;
+		public function delimite(string $value): string;
 
 		/**
 		 * translate file path to real file path (relative/absolute to root/absolute/...)
@@ -64,5 +69,5 @@
 
 		public function compile(): ITemplate;
 
-		public function macro(INode $root, ICompiler $compiler, callable $callback = null);
+		public function macro(INode $macro, INode $element);
 	}

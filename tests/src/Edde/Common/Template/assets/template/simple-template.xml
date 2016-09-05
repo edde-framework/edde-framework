@@ -1,0 +1,14 @@
+<control>
+	<div>
+		<div>
+			<div class="hidden one"/>
+		</div>
+	</div>
+	<div>
+		<div value="with value"/>
+		<div value="another value"/>
+		<div>
+			<div class="another hidden"/>
+		</div>
+	</div>
+</control>
