@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Html;
+	namespace Edde\Common\Html\Macro;
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Control\IControl;
@@ -13,15 +13,18 @@
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Container\LazyInjectTrait;
+	use Edde\Common\Html\ContainerControl;
+	use Edde\Common\Html\HeaderControl;
+	use Edde\Common\Html\HtmlTemplate;
 	use Edde\Common\Html\Input\PasswordControl;
 	use Edde\Common\Html\Input\TextControl;
+	use Edde\Common\Html\PlaceholderControl;
 	use Edde\Common\Html\Tag\ButtonControl;
 	use Edde\Common\Html\Tag\DivControl;
+	use Edde\Common\Html\Tag\ImgControl;
 	use Edde\Common\Html\Tag\SpanControl;
-	use Edde\Common\Node\Node;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\AbstractMacro;
-	use Edde\Common\Template\Macro\Control\ControlMacro;
 
 	/**
 	 * Helper class for a html package macros.
@@ -43,6 +46,8 @@
 				new ControlMacro('span', SpanControl::class),
 				new ControlMacro('text', TextControl::class),
 				new ControlMacro('password', PasswordControl::class),
+				new ControlMacro('img', ImgControl::class),
+				new ControlMacro('placeholder', PlaceholderControl::class),
 			];
 		}
 
@@ -307,7 +312,7 @@
 
 		static public function layoutMacro(): IMacro {
 			return new class extends AbstractMacro {
-				protected $layout;
+				protected $defineList = [];
 
 				public function __construct() {
 					parent::__construct([
@@ -328,35 +333,23 @@
 							break;
 						case 'define':
 							$this->checkAttribute($macro, $element, 'name');
-							$destination->write(sprintf("\t\t\t\$this->blockList[%s] = function(%s \$parent) use(\$reflectionClass) {\n", $compiler->delimite($macro->getAttribute('name')), IHtmlControl::class));
-							$destination->write(sprintf("\t\t\t\t\$this->stack = new %s();\n", \SplStack::class));
-							$destination->write("\t\t\t\t\$this->stack->push(\$parent);\n");
-							$this->element($element, $compiler);
-							$destination->write("\t\t\t};\n");
+							$this->checkNotLeaf($macro, $element);
+							$this->defineList[$macro->getAttribute('name')] = $element->getNodeList();
 							break;
 						case 'm:define':
 							$this->checkValue($macro, $element);
-							if ($element->isRoot()) {
-								$element->addNode((new Node('define', null, ['name' => $macro->getValue()]))->addNodeList($element->getNodeList(), true));
-								$compiler->macro($element, $element);
-								return;
-							}
-							$destination->write(sprintf("\t\t\t\$this->blockList[%s] = function(%s \$parent) {\n", $compiler->delimite($macro->getValue()), IHtmlControl::class));
-							$destination->write(sprintf("\t\t\t\t\$this->stack = new %s();\n", \SplStack::class));
-							$destination->write("\t\t\t\t\$this->stack->push(\$parent);\n");
-							$compiler->macro($element, $element);
-							$destination->write("\t\t\t};\n");
+							$this->defineList[$macro->getValue()] = $element;
 							break;
 						case 'block':
 							$this->checkLeaf($macro, $element);
 							$this->checkAttribute($macro, $element, 'name');
-							$destination->write(sprintf("\t\t\t\$this->block(%s, \$this->stack->top());\n", $compiler->delimite($macro->getAttribute('name'))));
+//							$destination->write(sprintf("\t\t\t\$this->block(%s, \$this->stack->top());\n", $compiler->delimite($macro->getAttribute('name'))));
 							break;
 						case 'm:block':
 							$this->checkValue($macro, $element);
 							$this->checkLeaf($macro, $element);
-							$element->addNode(new Node('block', [], ['name' => $macro->getValue()]));
-							$compiler->macro($element, $element);
+//							$element->addNode(new Node('block', [], ['name' => $macro->getValue()]));
+//							$compiler->macro($element, $element);
 							break;
 					}
 				}

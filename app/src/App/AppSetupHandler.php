@@ -14,8 +14,8 @@
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Upgrade\IUpgradeManager;
+	use Edde\Common\Html\Macro\ControlMacro;
 	use Edde\Common\Link\ControlLinkGenerator;
-	use Edde\Common\Template\Macro\Control\ControlMacro;
 	use Edde\Ext\Runtime\DefaultSetupHandler;
 	use Edde\Ext\Upgrade\InitialStorageUpgrade;
 

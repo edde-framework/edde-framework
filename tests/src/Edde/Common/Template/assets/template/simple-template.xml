@@ -10,5 +10,6 @@
 		<div>
 			<div class="another hidden"/>
 		</div>
+		<div value="foo"/>
 	</div>
 </control>

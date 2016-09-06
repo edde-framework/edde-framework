@@ -50,6 +50,12 @@
 			}
 		}
 
+		protected function checkNotLeaf(INode $macro, INode $element) {
+			if ($element->isLeaf()) {
+				throw new MacroException(sprintf('Macro [%s] in [%s] must have children nodes.', $macro->getName(), $element->getPath()));
+			}
+		}
+
 		protected function checkAttribute(INode $macro, INode $element, ...$attributeList) {
 			foreach ($attributeList as $attribute) {
 				if ($macro->hasAttribute($attribute) === false) {

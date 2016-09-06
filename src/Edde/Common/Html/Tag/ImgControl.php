@@ -5,15 +5,9 @@
 
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Html\HtmlException;
-	use Edde\Api\Template\IMacro;
 	use Edde\Common\Html\AbstractHtmlControl;
-	use Edde\Common\Template\Macro\Control\ControlMacro;
 
 	class ImgControl extends AbstractHtmlControl {
-		static public function macro(): IMacro {
-			return new ControlMacro('img', static::class);
-		}
-
 		public function getTag() {
 			return 'img';
 		}

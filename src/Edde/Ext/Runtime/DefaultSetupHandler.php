@@ -54,7 +54,10 @@
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\EddeDirectory;
 	use Edde\Common\File\TempDirectory;
-	use Edde\Common\Html\MacroSet;
+	use Edde\Common\Html\Macro\IncludeMacro;
+	use Edde\Common\Html\Macro\LoopMacro;
+	use Edde\Common\Html\Macro\MacroSet;
+	use Edde\Common\Html\Macro\SwitchMacro;
 	use Edde\Common\Http\HttpRequestFactory;
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Identity\AuthenticatorManager;
@@ -70,9 +73,6 @@
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Session\DummyFingerprint;
 	use Edde\Common\Session\SessionManager;
-	use Edde\Common\Template\Macro\IncludeMacro;
-	use Edde\Common\Template\Macro\LoopMacro;
-	use Edde\Common\Template\Macro\SwitchMacro;
 	use Edde\Common\Template\TemplateDirectory;
 	use Edde\Common\Template\TemplateManager;
 	use Edde\Common\Upgrade\UpgradeManager;

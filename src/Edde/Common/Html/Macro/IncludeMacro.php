@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Template\Macro;
+	namespace Edde\Common\Html\Macro;
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResourceManager;
