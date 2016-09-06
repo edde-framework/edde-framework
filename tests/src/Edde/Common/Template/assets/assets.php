@@ -44,10 +44,6 @@
 			$control->addClass('special-button-class');
 		}
 
-		public function getTemplateFileName() {
-			return __DIR__ . '/template/require.xml';
-		}
-
 		public function callTheSnippet(DivControl $divControl) {
 			$divControl->dirty();
 		}

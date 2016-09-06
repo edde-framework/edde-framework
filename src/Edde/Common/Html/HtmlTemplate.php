@@ -41,7 +41,7 @@
 		/**
 		 * @var callable[]
 		 */
-		protected $controlList = [];
+		protected $controlList;
 
 		public function lazytContainer(IContainer $container) {
 			$this->container = $container;
@@ -66,17 +66,31 @@
 			], $parameterList);
 		}
 
-		public function template(IControl $root) {
-			$this->root = $root;
-			$this->reflectionClass = new \ReflectionClass($root);
-			$this->onTemplate();
-			$this->build();
+		public function include (string $file) {
+			$template = $this->templateManager->template($file);
+			$template = $template->getInstance($this->container);
+			/** @var $template IHtmlTemplate */
+			$this->controlList = array_merge($this->getControlList(), $template->getControlList());
+			return $this;
+		}
+
+		public function getControlList(): array {
+			if ($this->controlList === null) {
+				$this->controlList = $this->onTemplate();
+			}
+			return $this->controlList;
 		}
 
 		abstract protected function onTemplate();
 
+		public function template(IControl $root) {
+			$this->root = $root;
+			$this->reflectionClass = new \ReflectionClass($root);
+			$this->build();
+		}
+
 		public function build() {
-			foreach ($this->controlList as $callable) {
+			foreach ($this->getControlList() as $callable) {
 				$callable($this->root);
 			}
 		}

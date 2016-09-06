@@ -58,14 +58,16 @@
 								}
 								$destination->write(sprintf("\t\t\t\$this->root->setAttributeList([%s]);\n", implode(",\n", $export)));
 							}
+							$destination->write("\t\t\t\t\$controlList = [];\n");
 							foreach ($element->getNodeList() as $node) {
 								$destination->write(sprintf("\t\t\t/** %s */\n", $node->getPath()));
-								$destination->write(sprintf("\t\t\t\$this->controlList[%s] = function(%s \$root) {\n", $id = $compiler->delimite($node->getAttribute('id', hash('sha256', random_bytes(256)))), IControl::class));
+								$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) {\n", $id = $compiler->delimite($node->getAttribute('id', hash('sha256', random_bytes(256)))), IControl::class));
 								$destination->write("\t\t\t\t\$stack = new SplStack();\n");
 								$destination->write("\t\t\t\t\$stack->push(\$parent = \$root);\n");
 								$compiler->macro($node, $node);
 								$destination->write("\t\t\t};\n");
 							}
+							$destination->write("\t\t\treturn \$controlList;\n");
 							$destination->write("\t\t}\n");
 							$destination->write("\t}\n");
 							break;

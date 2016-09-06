@@ -8,6 +8,7 @@
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Html\IHtmlControl;
+	use Edde\Api\Html\IHtmlTemplate;
 	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResourceManager;
@@ -499,6 +500,8 @@
 			$file = $template->getFile();
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			$template->include(__DIR__ . '/assets/template/require.xml');
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
