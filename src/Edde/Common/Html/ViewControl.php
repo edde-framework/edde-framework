@@ -174,9 +174,9 @@
 					$ajax->replace($control);
 				}
 			}
-//			foreach ($this->invalidate() as $snippet) {
-//				$ajax->replace($snippet);
-//			}
+			foreach ($this->invalidate() as $snippet) {
+				$ajax->replace($snippet);
+			}
 			$ajax->render();
 			return $this;
 		}

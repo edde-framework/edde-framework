@@ -115,7 +115,7 @@
 							$isMethod = strrpos($value, '()') !== false;
 
 							$destination->write(sprintf("\t\t\t\$this->parent->addSnippet(%s, function(%s \$parent) use(\$reflectionClass) {\n", $snippetId = $compiler->delimite($id = $element->getAttribute('id', sha1(random_bytes(64)))), IControl::class));
-							$destination->write(sprintf("\t\t\t\$this->stack = new %s();\n", \SplStack::class));
+//							$destination->write(sprintf("\t\t\t\$this->stack = new %s();\n", \SplStack::class));
 							$destination->write("\t\t\t\$this->stack->push(\$parent);\n");
 							$compiler->macro($element, $element);
 							if ($isMethod === false) {
