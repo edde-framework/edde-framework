@@ -54,11 +54,11 @@
 			$control->addSnippet('foo', function (IControl $parent) {
 				$parent->addControl($control = new \TestControl());
 				return $control;
-			});
-			$control->snippet('foo');
-			$list = $control->invalidate(function (IControl $control) {
+			}, function (IControl $control) {
 				$control->dirty();
 			});
+			$control->snippet('foo');
+			$list = $control->invalidate();
 			self::assertCount(1, $list);
 			/** @var $snippet IControl */
 			$snippet = reset($list);

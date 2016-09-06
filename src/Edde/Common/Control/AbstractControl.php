@@ -96,7 +96,7 @@
 			return $controlList;
 		}
 
-		public function addSnippet(string $name, callable $snippet): IControl {
+		public function addSnippet(string $name, callable $snippet, callable $callback = null): IControl {
 			$this->snippetList[$name] = [
 				/** callable */
 				$snippet,
@@ -104,6 +104,8 @@
 				null,
 				/** returned snippet control */
 				null,
+				/** invalidator callback */
+				$callback,
 			];
 			return $this;
 		}
@@ -122,18 +124,19 @@
 			return $this;
 		}
 
-		public function invalidate(callable $callback, string $name = null): array {
+		public function invalidate(callable $callback = null, string $name = null): array {
 			$snippetList = [];
 			foreach (($name ? (array)$name : array_keys($this->snippetList)) as $snippet) {
 				if (isset($this->snippetList[$snippet]) === false) {
 					throw new ControlException(sprintf('Requested unknown snippet [%s] on control [%s].', $snippet, static::class));
 				}
 				/** @var $control IControl */
-				list(, $parent, $control) = $this->snippetList[$snippet];
+				list(, $parent, $control, $invalidator) = $this->snippetList[$snippet];
 				if ($parent === null) {
 					throw new ControlException(sprintf('Snippet [%s] was not executed on [%s].', $snippet, static::class));
 				}
-				$callback($control);
+				$callback = $callback ?: $invalidator;
+				$callback ? $callback($control) : null;
 				if ($control->isDirty()) {
 					$snippetList[] = $control;
 				}

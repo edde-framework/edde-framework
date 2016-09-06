@@ -74,10 +74,11 @@
 		 *
 		 * @param string $name
 		 * @param callable $snippet
+		 * @param callable $callback optional invalidator callback
 		 *
 		 * @return IControl
 		 */
-		public function addSnippet(string $name, callable $snippet): IControl;
+		public function addSnippet(string $name, callable $snippet, callable $callback = null): IControl;
 
 		/**
 		 * execute the given snippet; snippet will use provided parent or current control
@@ -97,7 +98,7 @@
 		 *
 		 * @return IControl[]
 		 */
-		public function invalidate(callable $callback, string $name = null): array;
+		public function invalidate(callable $callback = null, string $name = null): array;
 
 		/**
 		 * mark control as dirty; this should change state of all child controls

@@ -54,14 +54,6 @@
 		 * @var IResourceList
 		 */
 		protected $javaScriptList;
-		/**
-		 * @var array
-		 */
-		protected $snippetList = [];
-		/**
-		 * @var IHtmlControl[]
-		 */
-		protected $snippets;
 
 		public function lazyHttpRequest(IHttpRequest $httpRequest) {
 			$this->httpRequest = $httpRequest;
@@ -182,27 +174,11 @@
 					$ajax->replace($control);
 				}
 			}
-			foreach ($this->snippets() as $snippet) {
-				$ajax->replace($snippet);
-			}
+//			foreach ($this->invalidate() as $snippet) {
+//				$ajax->replace($snippet);
+//			}
 			$ajax->render();
 			return $this;
-		}
-
-		public function snippets($force = false): array {
-			if ($this->snippets !== null && $force === false) {
-				return $this->snippets;
-			}
-			$this->snippets = [];
-			foreach ($this->snippetList as $snippet) {
-				/** @var $htmlControl IHtmlControl */
-				list($htmlControl, $callback) = $snippet;
-				$callback ? $callback($htmlControl) : null;
-				if ($htmlControl->isDirty()) {
-					$this->snippets[] = $htmlControl;
-				}
-			}
-			return $this->snippets;
 		}
 
 		public function render() {
@@ -217,14 +193,6 @@
 			}
 			$this->dirty();
 			return parent::render();
-		}
-
-		public function snippet(IHtmlControl $htmlControl, callable $callback = null): IHtmlView {
-			$this->snippetList[] = [
-				$htmlControl,
-				$callback,
-			];
-			return $this;
 		}
 
 		protected function prepare() {
