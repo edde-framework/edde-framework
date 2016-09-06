@@ -29,8 +29,8 @@
 					$this->checkAttribute($macro, $element, 'name', 'schema');
 					$this->schemaList[$macro->getAttribute('name')] = $macro->getAttribute('schema');
 					$destination->write(sprintf("\t\t\t/** %s */\n", $element->getPath()));
-					$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash) {\n", $compiler->delimite($element->getMeta('control')), IControl::class));
-					foreach ($element->getNodeList() as $node) {
+					$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash) {\n", $compiler->delimite($macro->getMeta('control')), IControl::class));
+					foreach ($macro->getNodeList() as $node) {
 						$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
 						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$root);\n", $compiler->delimite($node->getMeta('control'))));
 					}
@@ -42,16 +42,15 @@
 					if (isset($this->schemaList[$schema]) === false) {
 						throw new MacroException(sprintf('Unknown attribute schema [%s] on [%s].', $schema, $element->getPath()));
 					}
-					$e = $element->getNodeList()[0];
-					$e->setAttribute('data-schema', $this->schemaList[$schema]);
-					$e->setAttribute('data-property', $property);
-					$this->element($element, $compiler);
+					$element->setAttribute('data-schema', $this->schemaList[$schema]);
+					$element->setAttribute('data-property', $property);
 					$destination->write(sprintf("\t\t\t/** %s */\n", $element->getPath()));
-					$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash) {\n", $compiler->delimite($element->getMeta('control')), IControl::class));
+					$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash) {\n", $compiler->delimite($macro->getMeta('control')), IControl::class));
 					foreach ($element->getNodeList() as $node) {
 						$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
 						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$root);\n", $compiler->delimite($node->getMeta('control'))));
 					}
+					$this->element($macro, $compiler);
 					$destination->write("\t\t\t};\n");
 					break;
 			}
