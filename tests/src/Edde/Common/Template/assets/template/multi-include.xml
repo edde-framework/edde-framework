@@ -1,0 +1,10 @@
+<control>
+	<div>
+		<div>
+			<div>
+				<div class="include here" x:include="./include.xml"/>
+			</div>
+		</div>
+	</div>
+	<div class="alone here"/>
+</control>

@@ -41,14 +41,14 @@
 				case 'm:switch':
 					$this->checkValue($macro, $element);
 					$this->stack->push($id = StringUtils::camelize($this->cryptEngine->guid()));
-					$destination->write(sprintf("\t\t\t\$_%s = %s;\n", $id, $compiler->delimite($macro->getValue())));
+					$destination->write(sprintf("\t\t\t\$stash[%s] = %s;\n", $compiler->delimite($id), $compiler->delimite($macro->getValue())));
 					$compiler->macro($element, $element);
 					break;
 				case 'case':
 					$this->checkAttribute($macro, $element, 'case');
-					$destination->write(sprintf("\t\t\tif(\$_%s === %s) {\n", $this->stack->top(), $compiler->delimite($macro->getAttribute('case'))));
+					$destination->write(sprintf("\t\t\tif(\$stash[%s] === %s) {\n", $compiler->delimite($this->stack->top()), $compiler->delimite($macro->getAttribute('case'))));
 					$destination->write(sprintf("\t\t\t/** %s */\n", $element->getPath()));
-					$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList) {\n", $compiler->delimite($element->getMeta('control')), IControl::class));
+					$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash) {\n", $compiler->delimite($element->getMeta('control')), IControl::class));
 					$destination->write("\t\t\t\t\$control = \$root;\n");
 					foreach ($element->getNodeList() as $node) {
 						$destination->write(sprintf("\t\t\t\tisset(\$controlList[%s]) ? \$controlList[%s](\$control) : null;\n", $id = $compiler->delimite($node->getMeta('control')), $id));
@@ -59,7 +59,7 @@
 					break;
 				case 'm:case':
 					$this->checkValue($macro, $element);
-					$destination->write(sprintf("\t\t\tif(\$_%s === %s) {\n", $this->stack->top(), $compiler->delimite($macro->getValue())));
+					$destination->write(sprintf("\t\t\tif(\$stash[%s] === %s) {\n", $compiler->delimite($this->stack->top()), $compiler->delimite($macro->getValue())));
 					$compiler->macro($element, $element);
 					$destination->write("\t\t\t}\n");
 					break;

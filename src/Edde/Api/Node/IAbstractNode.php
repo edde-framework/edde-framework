@@ -158,4 +158,14 @@
 		 * @return int
 		 */
 		public function getNodeCount();
+
+		/**
+		 * replace the given child node by the list of nodes
+		 *
+		 * @param IAbstractNode $node
+		 * @param array $nodeList
+		 *
+		 * @return IAbstractNode
+		 */
+		public function replaceNode(IAbstractNode $node, array $nodeList): IAbstractNode;
 	}

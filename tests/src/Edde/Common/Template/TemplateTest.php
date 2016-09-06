@@ -288,6 +288,37 @@
 ', $this->control->render());
 		}
 
+		public function testMultiInclude() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/multi-include.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div>
+			<div>
+				<div>
+					<div class="include here">
+						<div class="simple-div">
+							<div>simply included</div>
+						</div>
+						<span class="another-included">span here</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="alone here"></div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
 		public function testLoop01() {
 			$template = $this->templateManager->template(__DIR__ . '/assets/template/loop-01.xml');
 			$file = $template->getFile();
@@ -304,8 +335,14 @@
 		<div class="looping">
 			<div>looped-one</div>
 		</div>
+		<div>
+			<span class="looped-one">value</span>
+		</div>
 		<div class="looping">
 			<div>another-looop</div>
+		</div>
+		<div>
+			<span class="another-looop">value</span>
 		</div>
 		<div class="another-kind-of-loop">
 			<div class="looping2" data-tribute="first">looped-one</div>

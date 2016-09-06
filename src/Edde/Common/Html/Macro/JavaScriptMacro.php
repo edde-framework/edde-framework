@@ -21,7 +21,7 @@
 			switch ($macro->getName()) {
 				case 'js':
 					$this->checkAttribute($macro, $element, 'src');
-					$destination->write(sprintf("\t\t\t\$controlList[null][] = function(%s \$root) use(&\$controlList) {\n", IControl::class));
+					$destination->write(sprintf("\t\t\t\$controlList[null][] = function(%s \$root) use(&\$controlList, &\$stash) {\n", IControl::class));
 					$destination->write(sprintf("\t\t\t\t\$this->javaScriptCompiler->addFile(%s);\n", $compiler->delimite($macro->getAttribute('src'))));
 					$destination->write("\t\t\t};\n");
 					break;

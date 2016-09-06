@@ -193,6 +193,12 @@
 			return count($this->nodeList);
 		}
 
+		public function replaceNode(IAbstractNode $node, array $nodeList): IAbstractNode {
+			array_splice($this->nodeList, array_search($node, $this->nodeList, true), 0, $nodeList);
+			unset($this->nodeList[array_search($node, $this->nodeList, true)]);
+			return $this;
+		}
+
 		public function __clone() {
 			throw new NodeException(sprintf('Clone is not supported on the [%s].', static::class));
 		}

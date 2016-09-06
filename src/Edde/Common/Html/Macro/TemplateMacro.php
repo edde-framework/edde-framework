@@ -28,6 +28,7 @@
 		public function __construct() {
 			parent::__construct([
 				'control',
+				'template',
 			], '');
 		}
 
@@ -46,6 +47,8 @@
 				$container->inject(new SwitchMacro()),
 				$container->inject(new SchemaMacro()),
 				$container->inject(new BindMacro()),
+				$container->inject(new IncludeMacro()),
+				$container->inject(new LoopMacro()),
 			];
 		}
 
@@ -69,10 +72,11 @@
 					$destination->write(sprintf("\tclass %s extends %s {\n", $compiler->getName(), HtmlTemplate::class));
 					$destination->write("\t\tprotected function onTemplate() {\n");
 					$destination->write("\t\t\t\$controlList = [];\n");
+					$destination->write("\t\t\t\$stash = [];\n");
 					foreach (NodeIterator::recursive($element) as $node) {
 						$node->setMeta('control', $id = $node->getAttribute('id', $this->cryptEngine->guid()));
 					}
-					$destination->write(sprintf("\t\t\t\$controlList[null][] = function(%s \$root) use(&\$controlList) {\n", IControl::class));
+					$destination->write(sprintf("\t\t\t\$controlList[null][] = function(%s \$root) use(&\$controlList, &\$stash) {\n", IControl::class));
 					$destination->write("\t\t\t\$control = \$root;\n");
 					$this->writeAttributeList($this->getAttributeList($element, $compiler), $destination);
 					foreach ($element->getNodeList() as $node) {

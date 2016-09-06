@@ -21,7 +21,7 @@
 			switch ($macro->getName()) {
 				case 'css':
 					$this->checkAttribute($macro, $element, 'src');
-					$destination->write(sprintf("\t\t\t\$controlList[null][] = function(%s \$root) use(&\$controlList) {\n", IControl::class));
+					$destination->write(sprintf("\t\t\t\$controlList[null][] = function(%s \$root) use(&\$controlList, &\$stash) {\n", IControl::class));
 					$destination->write(sprintf("\t\t\t\t\$this->styleSheetCompiler->addFile(%s);\n", $compiler->delimite($macro->getAttribute('src'))));
 					$destination->write("\t\t\t};\n");
 					break;
