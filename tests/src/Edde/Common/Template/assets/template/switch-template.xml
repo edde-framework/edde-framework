@@ -1,13 +1,13 @@
 <control attribute="choo" title="poo">
-	<css src="/css/style.css"/>
+	<css id="for-fun" src="/css/style.css"/>
 	<js src="/js/some.js"/>
 
-	<div m:switch="switch-me()">
-		<div m:case="foo" class="the-one"/>
-		<div m:case="bar" class="the-second-bar" value="lorem ipsum"/>
-		<div class="dummy-div">
-			<div m:case="bar" class="the-second">bar content</div>
-			<div m:case="foo" class="the-one-foo">foo content</div>
+	<div id="to-be-switched" m:switch="switch-me()">
+		<div id="foo-id" m:case="foo" class="the-one"/>
+		<div id="bar-id" m:case="bar" class="the-second-bar" value="lorem ipsum"/>
+		<div id="dummy-div" class="dummy-div">
+			<div id="inner-bar" m:case="bar" class="the-second">bar content</div>
+			<div id="inner-foo" m:case="foo" class="the-one-foo">foo content</div>
 		</div>
 	</div>
 </control>

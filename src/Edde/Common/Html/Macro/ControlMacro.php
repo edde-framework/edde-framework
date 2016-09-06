@@ -34,7 +34,7 @@
 			$this->onControl($macro, $element, $compiler);
 			$this->writeAttributeList($this->getAttributeList($element, $compiler), $destination);
 			foreach ($element->getNodeList() as $node) {
-				$destination->write(sprintf("\t\t\t\tisset(\$controlList[%s]) ? \$controlList[%s](\$control) : null;\n", $id = $compiler->delimite($node->getMeta('control')), $id));
+				$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
 			}
 			$destination->write("\t\t\t};\n");
 			$this->element($element, $compiler);

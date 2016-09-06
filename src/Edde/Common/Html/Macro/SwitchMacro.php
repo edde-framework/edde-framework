@@ -24,8 +24,7 @@
 
 		public function __construct() {
 			parent::__construct([
-				'm:switch',
-				'm:case',
+				'switch',
 				'case',
 			]);
 			$this->stack = new \SplStack();
@@ -38,30 +37,34 @@
 		public function macro(INode $macro, INode $element, ICompiler $compiler) {
 			$destination = $compiler->getDestination();
 			switch ($macro->getName()) {
-				case 'm:switch':
+				case 'switch':
 					$this->checkValue($macro, $element);
 					$this->stack->push($id = StringUtils::camelize($this->cryptEngine->guid()));
+					$destination->write(sprintf("\t\t\t/** %s */\n", $macro->getPath()));
+					$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash) {\n", $compiler->delimite($element->getMeta('control')), IControl::class));
 					$destination->write(sprintf("\t\t\t\$stash[%s] = %s;\n", $compiler->delimite($id), $compiler->delimite($macro->getValue())));
-					$compiler->macro($element, $element);
+					$destination->write("\t\t\t\t\$control = \$root;\n");
+					foreach ($element->getNodeList() as $node) {
+						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
+					}
+					$destination->write("\t\t\t};\n");
+					$this->element($element, $compiler);
 					break;
 				case 'case':
-					$this->checkAttribute($macro, $element, 'case');
-					$destination->write(sprintf("\t\t\tif(\$stash[%s] === %s) {\n", $compiler->delimite($this->stack->top()), $compiler->delimite($macro->getAttribute('case'))));
+					$this->checkValue($macro, $element);
+					$destination->write(sprintf("\t\t\t/** %s */\n", $macro->getPath()));
+					$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash) {\n", $compiler->delimite($macro->getMeta('control')), IControl::class));
+					$destination->write(sprintf("\t\t\tif(\$stash[%s] === %s) {\n", $compiler->delimite($this->stack->top()), $compiler->delimite($macro->getValue())));
 					$destination->write(sprintf("\t\t\t/** %s */\n", $element->getPath()));
 					$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash) {\n", $compiler->delimite($element->getMeta('control')), IControl::class));
 					$destination->write("\t\t\t\t\$control = \$root;\n");
 					foreach ($element->getNodeList() as $node) {
-						$destination->write(sprintf("\t\t\t\tisset(\$controlList[%s]) ? \$controlList[%s](\$control) : null;\n", $id = $compiler->delimite($node->getMeta('control')), $id));
+						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
 					}
 					$destination->write("\t\t\t};\n");
 					$this->element($element, $compiler);
 					$destination->write("\t\t\t}\n");
-					break;
-				case 'm:case':
-					$this->checkValue($macro, $element);
-					$destination->write(sprintf("\t\t\tif(\$stash[%s] === %s) {\n", $compiler->delimite($this->stack->top()), $compiler->delimite($macro->getValue())));
-					$compiler->macro($element, $element);
-					$destination->write("\t\t\t}\n");
+					$destination->write("\t\t\t};\n");
 					break;
 			}
 		}

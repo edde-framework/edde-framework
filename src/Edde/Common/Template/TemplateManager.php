@@ -15,6 +15,7 @@
 	use Edde\Api\Template\TemplateException;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\File\File;
+	use Edde\Common\Node\Node;
 	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Usable\AbstractUsable;
 
@@ -77,8 +78,7 @@
 			if ((($root = $this->resourceManager->resource($file)) instanceof INode) === false) {
 				throw new TemplateException(sprintf('Resource handler for [%s] must return [%s].', (string)$file->getUrl(), INode::class));
 			}
-			$this->process($root, $file);
-			$compiler = new Compiler($root, $this->rootDirectory, $this->assetsDirectory, $file, $templateFile = $this->templateDirectory->file(($name = ('Template_' . sha1((string)$file->getUrl()))) . '.php'), $name);
+			$compiler = new Compiler($this->update($this->process($root, $file)), $this->rootDirectory, $this->assetsDirectory, $file, $templateFile = $this->templateDirectory->file(($name = ('Template_' . sha1((string)$file->getUrl()))) . '.php'), $name);
 			$macroList = [];
 			foreach ($this->macroList as $macro) {
 				$macroList[] = clone $macro;
@@ -86,6 +86,19 @@
 			$compiler->registerMacroList($macroList);
 			$this->cache->save($cacheId, $templateFile->getPath());
 			return $compiler->compile();
+		}
+
+		protected function update(INode $root) {
+			foreach (NodeIterator::recursive($root) as $node) {
+				if ($node->hasAttributeList('m') === false) {
+					continue;
+				}
+				foreach ($node->getAttributeList('m') as $attribute => $value) {
+					$node->switch(new Node($attribute, $value));
+				}
+				$node->removeAttributeList('m');
+			}
+			return $root;
 		}
 
 		protected function process(INode $root, IFile $source): INode {

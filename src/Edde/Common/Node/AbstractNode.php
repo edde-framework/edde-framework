@@ -110,18 +110,6 @@
 			throw new NodeException('The given node is not in current node list.');
 		}
 
-		public function getNodeList() {
-			return $this->nodeList;
-		}
-
-		public function setNodeList($nodeList, $move = false) {
-			$this->nodeList = [];
-			foreach ($nodeList as $node) {
-				$this->addNode($node, $move);
-			}
-			return $this;
-		}
-
 		public function clearNodeList() {
 			foreach ($this->nodeList as $node) {
 				$node->setParent(null);
@@ -193,9 +181,40 @@
 			return count($this->nodeList);
 		}
 
-		public function replaceNode(IAbstractNode $node, array $nodeList): IAbstractNode {
-			array_splice($this->nodeList, array_search($node, $this->nodeList, true), 0, $nodeList);
-			unset($this->nodeList[array_search($node, $this->nodeList, true)]);
+		public function insert(IAbstractNode $abstractNode): IAbstractNode {
+			if ($abstractNode->isLeaf() === false) {
+				throw new NodeException('Node must be empty.');
+			}
+			$this->addNode($abstractNode->addNodeList($this->getNodeList(), true));
+			return $this;
+		}
+
+		public function getNodeList() {
+			return $this->nodeList;
+		}
+
+		public function setNodeList($nodeList, $move = false) {
+			$this->nodeList = [];
+			foreach ($nodeList as $node) {
+				$this->addNode($node, $move);
+			}
+			return $this;
+		}
+
+		public function switch (IAbstractNode $abstractNode): IAbstractNode {
+			$parent = $this->getParent();
+			$parent->replaceNode($this, [$abstractNode]);
+			$abstractNode->addNode($this);
+			$abstractNode->setParent($parent);
+			return $this;
+		}
+
+		public function replaceNode(IAbstractNode $abstractNode, array $nodeList): IAbstractNode {
+			array_splice($this->nodeList, array_search($abstractNode, $this->nodeList, true), 0, $nodeList);
+			unset($this->nodeList[array_search($abstractNode, $this->nodeList, true)]);
+			foreach ($nodeList as $node) {
+				$node->setParent($this);
+			}
 			return $this;
 		}
 

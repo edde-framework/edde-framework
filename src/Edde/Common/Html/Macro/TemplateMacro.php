@@ -80,7 +80,8 @@
 					$destination->write("\t\t\t\$control = \$root;\n");
 					$this->writeAttributeList($this->getAttributeList($element, $compiler), $destination);
 					foreach ($element->getNodeList() as $node) {
-						$destination->write(sprintf("\t\t\t\tisset(\$controlList[%s]) ? \$controlList[%s](\$root) : null;\n", $id = $compiler->delimite($node->getMeta('control')), $id));
+						$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
+						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$root);\n", $compiler->delimite($node->getMeta('control'))));
 					}
 					$destination->write("\t\t\t};\n");
 					$this->element($element, $compiler);

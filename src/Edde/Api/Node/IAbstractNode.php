@@ -160,12 +160,28 @@
 		public function getNodeCount();
 
 		/**
+		 * insert the given node under current one (current one will have excatly one children)
+		 *
+		 * @param IAbstractNode $abstractNode
+		 *
+		 * @return IAbstractNode
+		 */
+		public function insert(IAbstractNode $abstractNode): IAbstractNode;
+
+		/**
+		 * @param IAbstractNode $abstractNode
+		 *
+		 * @return IAbstractNode
+		 */
+		public function switch (IAbstractNode $abstractNode): IAbstractNode;
+
+		/**
 		 * replace the given child node by the list of nodes
 		 *
-		 * @param IAbstractNode $node
+		 * @param IAbstractNode $abstractNode
 		 * @param array $nodeList
 		 *
 		 * @return IAbstractNode
 		 */
-		public function replaceNode(IAbstractNode $node, array $nodeList): IAbstractNode;
+		public function replaceNode(IAbstractNode $abstractNode, array $nodeList): IAbstractNode;
 	}
