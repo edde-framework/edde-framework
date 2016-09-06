@@ -93,10 +93,11 @@
 				if ($node->hasAttributeList('m') === false) {
 					continue;
 				}
-				foreach ($node->getAttributeList('m') as $attribute => $value) {
-					$node->switch(new Node($attribute, $value));
-				}
+				$attributeList = $node->getAttributeList('m');
 				$node->removeAttributeList('m');
+				foreach (array_reverse($attributeList, true) as $attribute => $value) {
+					$node = $node->switch((new Node($attribute, $value))->setMeta('inline', true));
+				}
 			}
 			return $root;
 		}

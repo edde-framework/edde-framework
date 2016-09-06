@@ -206,7 +206,7 @@
 			$parent->replaceNode($this, [$abstractNode]);
 			$abstractNode->addNode($this);
 			$abstractNode->setParent($parent);
-			return $this;
+			return $abstractNode;
 		}
 
 		public function replaceNode(IAbstractNode $abstractNode, array $nodeList): IAbstractNode {

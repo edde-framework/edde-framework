@@ -171,7 +171,7 @@
 		/**
 		 * @param IAbstractNode $abstractNode
 		 *
-		 * @return IAbstractNode
+		 * @return IAbstractNode return newly switched node
 		 */
 		public function switch (IAbstractNode $abstractNode): IAbstractNode;
 
