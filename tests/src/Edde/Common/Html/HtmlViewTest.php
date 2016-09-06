@@ -41,22 +41,6 @@
 ', $this->htmlView->render());
 		}
 
-		public function testSnippet() {
-			$this->htmlView->addControl($controlAlpha = $this->htmlView->createControl(DivControl::class));
-			$this->htmlView->addControl($controlBeta = $this->htmlView->createControl(DivControl::class));
-			$this->htmlView->snippet($controlAlpha, [
-				$this->htmlView,
-				'myDivSnippet',
-			]);
-			$this->htmlView->snippet($controlBeta, [
-				$this->htmlView,
-				'myDummySnippet',
-			]);
-			self::assertCount(1, $snippets = $this->htmlView->snippets());
-			$control = reset($snippets);
-			self::assertTrue($control->isDirty());
-		}
-
 		protected function setUp() {
 			$this->container = ContainerFactory::create([
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
