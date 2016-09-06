@@ -21,6 +21,7 @@
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\File\TempDirectory;
+	use Edde\Common\Html\ContainerControl;
 	use Edde\Common\Html\Macro\ControlMacro;
 	use Edde\Common\Html\TemplateControl;
 	use Edde\Common\Link\ControlLinkGenerator;
@@ -76,6 +77,7 @@
 			$file = $template->getFile();
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -92,7 +94,7 @@
 		<div>
 			<div>with value</div>
 			<div>another value</div>
-			<div>
+			<div id="foo">
 				<div class="another hidden"></div>
 			</div>
 			<div>foo</div>
@@ -103,6 +105,8 @@
 	</body>
 </html>
 ', $this->control->render());
+			$template->control('foo', $container = new ContainerControl());
+			self::assertEquals('', $container->render());
 		}
 
 		public function testButton() {

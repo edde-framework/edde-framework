@@ -4,6 +4,7 @@
 	namespace Edde\Common\Html\Macro;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Control\IControl;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
@@ -57,6 +58,11 @@
 		public function macro(INode $macro, INode $element, ICompiler $compiler) {
 			$destination = $compiler->getDestination();
 			$destination->write(sprintf("\t\t\t\t/** %s */\n", $element->getPath()));
+
+			$destination->write(sprintf("\t\t\t\$controlList[%s] = \$func = function(%s \$root) use(&\$controlList) {\n", $id = $compiler->delimite($element->getAttribute('id', hash('sha256', random_bytes(256)))), IControl::class));
+			$destination->write("\t\t\t\t\$stack = new SplStack();\n");
+			$destination->write("\t\t\t\t\$stack->push(\$parent = \$root);\n");
+
 			$destination->write("\t\t\t\t\$parent = \$stack->top();\n");
 			$destination->write(sprintf("\t\t\t\t\$parent->addControl(\$control = \$this->container->create(%s));\n", $compiler->delimite($this->control)));
 			$this->writeTextValue($element, $destination, $compiler);
@@ -64,6 +70,8 @@
 			unset($attributeList['value']);
 			$this->writeAttributeList($attributeList, $destination);
 			$this->element($element, $compiler);
+			$destination->write("\t\t\t};\n");
+			$destination->write("\t\t\t\$func(\$stack->top());\n");
 		}
 
 		protected function writeTextValue(INode $root, IFile $destination, ICompiler $compiler) {

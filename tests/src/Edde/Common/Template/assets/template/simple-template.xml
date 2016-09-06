@@ -7,7 +7,7 @@
 	<div>
 		<div value="with value"/>
 		<div value="another value"/>
-		<div>
+		<div id="foo">
 			<div class="another hidden"/>
 		</div>
 		<div value="foo"/>

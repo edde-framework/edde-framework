@@ -16,4 +16,14 @@
 		 * @return array
 		 */
 		public function getControlList(): array;
+
+		/**
+		 * apply named block on root control
+		 *
+		 * @param string $name
+		 * @param IControl $root
+		 *
+		 * @return IHtmlTemplate
+		 */
+		public function control(string $name, IControl $root): IHtmlTemplate;
 	}

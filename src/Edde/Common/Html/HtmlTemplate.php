@@ -7,6 +7,7 @@
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Html\IHtmlTemplate;
 	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Template\TemplateException;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\AbstractObject;
@@ -93,5 +94,14 @@
 			foreach ($this->getControlList() as $callable) {
 				$callable($this->root);
 			}
+		}
+
+		public function control(string $name, IControl $root): IHtmlTemplate {
+			if (isset($this->controlList[$name]) === false) {
+				throw new TemplateException(sprintf('Requested unknown control block [%s] on [%s].', $name, $root->getNode()
+					->getPath()));
+			}
+			$this->controlList[$name]($root);
+			return $this;
 		}
 	}
