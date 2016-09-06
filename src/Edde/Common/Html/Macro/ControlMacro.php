@@ -3,9 +3,16 @@
 
 	namespace Edde\Common\Html\Macro;
 
+	use Edde\Api\Container\IContainer;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
+	use Edde\Common\Html\Input\PasswordControl;
+	use Edde\Common\Html\Input\TextControl;
+	use Edde\Common\Html\PlaceholderControl;
+	use Edde\Common\Html\Tag\DivControl;
+	use Edde\Common\Html\Tag\ImgControl;
+	use Edde\Common\Html\Tag\SpanControl;
 	use Edde\Common\Template\AbstractMacro;
 
 	class ControlMacro extends AbstractMacro {
@@ -21,6 +28,30 @@
 		public function __construct($macroList, string $control) {
 			parent::__construct((array)$macroList);
 			$this->control = $control;
+		}
+
+		public static function macroList(IContainer $container): array {
+			return [
+				MacroSet::controlMacro(),
+				MacroSet::snippetMacro(),
+				MacroSet::passMacro(),
+				MacroSet::schemaMacro(),
+				MacroSet::jsMacro(),
+				MacroSet::cssMacro(),
+				MacroSet::buttonMacro(),
+				MacroSet::headerMacro(),
+				MacroSet::layoutMacro(),
+				$container->inject(MacroSet::bindMacro()),
+				$container->inject(new IncludeMacro()),
+				$container->inject(new SwitchMacro()),
+				$container->inject(new LoopMacro()),
+				new ControlMacro('div', DivControl::class),
+				new ControlMacro('span', SpanControl::class),
+				new ControlMacro('text', TextControl::class),
+				new ControlMacro('password', PasswordControl::class),
+				new ControlMacro('img', ImgControl::class),
+				new ControlMacro('placeholder', PlaceholderControl::class),
+			];
 		}
 
 		public function macro(INode $macro, INode $element, ICompiler $compiler) {

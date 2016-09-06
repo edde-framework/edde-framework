@@ -54,10 +54,7 @@
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\EddeDirectory;
 	use Edde\Common\File\TempDirectory;
-	use Edde\Common\Html\Macro\IncludeMacro;
-	use Edde\Common\Html\Macro\LoopMacro;
-	use Edde\Common\Html\Macro\MacroSet;
-	use Edde\Common\Html\Macro\SwitchMacro;
+	use Edde\Common\Html\Macro\ControlMacro;
 	use Edde\Common\Http\HttpRequestFactory;
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Identity\AuthenticatorManager;
@@ -177,11 +174,7 @@
 					$resourceManager->registerResourceHandler($container->create(PhpResourceHandler::class));
 				})
 				->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
-					$templateManager->registerMacroList(array_merge(MacroSet::macroList($container), [
-						$container->create(IncludeMacro::class),
-						$container->create(SwitchMacro::class),
-						$container->create(LoopMacro::class),
-					]));
+					$templateManager->registerMacroList(ControlMacro::macroList($container));
 				});
 		}
 	}

@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Html\Macro;
 
-	use Edde\Api\Container\IContainer;
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Html\IHtmlControl;
@@ -16,13 +15,7 @@
 	use Edde\Common\Html\ContainerControl;
 	use Edde\Common\Html\HeaderControl;
 	use Edde\Common\Html\HtmlTemplate;
-	use Edde\Common\Html\Input\PasswordControl;
-	use Edde\Common\Html\Input\TextControl;
-	use Edde\Common\Html\PlaceholderControl;
 	use Edde\Common\Html\Tag\ButtonControl;
-	use Edde\Common\Html\Tag\DivControl;
-	use Edde\Common\Html\Tag\ImgControl;
-	use Edde\Common\Html\Tag\SpanControl;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\AbstractMacro;
 
@@ -30,27 +23,6 @@
 	 * Helper class for a html package macros.
 	 */
 	class MacroSet extends AbstractObject {
-		static public function macroList(IContainer $container): array {
-			return [
-				self::controlMacro(),
-				self::snippetMacro(),
-				self::passMacro(),
-				self::schemaMacro(),
-				self::jsMacro(),
-				self::cssMacro(),
-				self::buttonMacro(),
-				self::headerMacro(),
-				self::layoutMacro(),
-				$container->inject(self::bindMacro()),
-				new ControlMacro('div', DivControl::class),
-				new ControlMacro('span', SpanControl::class),
-				new ControlMacro('text', TextControl::class),
-				new ControlMacro('password', PasswordControl::class),
-				new ControlMacro('img', ImgControl::class),
-				new ControlMacro('placeholder', PlaceholderControl::class),
-			];
-		}
-
 		/**
 		 * root macro for all controls
 		 *

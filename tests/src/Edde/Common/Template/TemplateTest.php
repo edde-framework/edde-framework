@@ -21,10 +21,6 @@
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\Macro\ControlMacro;
-	use Edde\Common\Html\Macro\IncludeMacro;
-	use Edde\Common\Html\Macro\LoopMacro;
-	use Edde\Common\Html\Macro\MacroSet;
-	use Edde\Common\Html\Macro\SwitchMacro;
 	use Edde\Common\Html\TemplateControl;
 	use Edde\Common\Link\ControlLinkGenerator;
 	use Edde\Common\Link\HostUrl;
@@ -612,12 +608,7 @@
 			$this->resourceManager->registerResourceHandler($this->container->create(XmlResourceHandler::class));
 			$this->templateManager = $this->container->create(ITemplateManager::class);
 			$this->templateManager->onSetup(function (ITemplateManager $templateManager) {
-				$templateManager->registerMacroList(array_merge(MacroSet::macroList($this->container), [
-					new ControlMacro('custom-control', \CustomControl::class),
-					$this->container->inject(new IncludeMacro()),
-					$this->container->inject(new SwitchMacro()),
-					$this->container->inject(new LoopMacro()),
-				]));
+				$templateManager->registerMacroList(ControlMacro::macroList($this->container));
 			});
 			$this->control = $this->container->create(\TestDocument::class);
 		}
