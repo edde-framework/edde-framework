@@ -91,8 +91,9 @@
 		}
 
 		public function build() {
-			foreach ($this->getControlList() as $callable) {
-				$callable($this->root);
+			$controlList = $this->getControlList();
+			foreach ($controlList[null] as $callback) {
+				$callback($this->root);
 			}
 		}
 

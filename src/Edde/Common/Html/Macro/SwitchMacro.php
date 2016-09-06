@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Html\Macro;
 
+	use Edde\Api\Control\IControl;
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
@@ -46,6 +47,13 @@
 				case 'case':
 					$this->checkAttribute($macro, $element, 'case');
 					$destination->write(sprintf("\t\t\tif(\$_%s === %s) {\n", $this->stack->top(), $compiler->delimite($macro->getAttribute('case'))));
+					$destination->write(sprintf("\t\t\t/** %s */\n", $element->getPath()));
+					$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList) {\n", $compiler->delimite($element->getMeta('control')), IControl::class));
+					$destination->write("\t\t\t\t\$control = \$root;\n");
+					foreach ($element->getNodeList() as $node) {
+						$destination->write(sprintf("\t\t\t\tisset(\$controlList[%s]) ? \$controlList[%s](\$control) : null;\n", $id = $compiler->delimite($node->getMeta('control')), $id));
+					}
+					$destination->write("\t\t\t};\n");
 					$this->element($element, $compiler);
 					$destination->write("\t\t\t}\n");
 					break;

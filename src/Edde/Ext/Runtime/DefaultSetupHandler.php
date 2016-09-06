@@ -54,7 +54,7 @@
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\EddeDirectory;
 	use Edde\Common\File\TempDirectory;
-	use Edde\Common\Html\Macro\ControlMacro;
+	use Edde\Common\Html\Macro\TemplateMacro;
 	use Edde\Common\Http\HttpRequestFactory;
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Identity\AuthenticatorManager;
@@ -174,7 +174,7 @@
 					$resourceManager->registerResourceHandler($container->create(PhpResourceHandler::class));
 				})
 				->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
-					$templateManager->registerMacroList(ControlMacro::macroList($container));
+					$templateManager->registerMacroList(TemplateMacro::macroList($container));
 				});
 		}
 	}

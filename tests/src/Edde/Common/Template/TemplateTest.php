@@ -23,6 +23,7 @@
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\ContainerControl;
 	use Edde\Common\Html\Macro\ControlMacro;
+	use Edde\Common\Html\Macro\TemplateMacro;
 	use Edde\Common\Html\TemplateControl;
 	use Edde\Common\Link\ControlLinkGenerator;
 	use Edde\Common\Link\HostUrl;
@@ -86,27 +87,34 @@
 		<title></title>
 	</head>
 	<body>
-		<div>
-			<div>
-				<div class="hidden one"></div>
+		<div id="first-one" class="simple node"></div>
+		<div id="2">
+			<div id="3">
+				<div id="4" class="hidden one"></div>
 			</div>
 		</div>
-		<div>
-			<div>with value</div>
-			<div>another value</div>
-			<div id="foo">
+		<div id="5">
+			<div id="6">with value</div>
+			<div id="7">another value</div>
+			<div id="8">
 				<div class="another hidden"></div>
 			</div>
-			<div>foo</div>
+			<div id="9">foo</div>
 		</div>
-		<div class="bunch">
-			<span>foobar and so</span>
+		<div id="10" class="bunch">
+			<div id="11">foobar and so</div>
 		</div>
 	</body>
 </html>
 ', $this->control->render());
-			$template->control('foo', $container = new ContainerControl());
-			self::assertEquals('', $container->render());
+			$template->control('2', $container = new ContainerControl());
+			$container->dirty();
+			self::assertEquals('	<div id="2">
+		<div id="3">
+			<div id="4" class="hidden one"></div>
+		</div>
+	</div>
+', $container->render());
 		}
 
 		public function testButton() {
@@ -619,7 +627,7 @@
 			$this->resourceManager->registerResourceHandler($this->container->create(XmlResourceHandler::class));
 			$this->templateManager = $this->container->create(ITemplateManager::class);
 			$this->templateManager->onSetup(function (ITemplateManager $templateManager) {
-				$templateManager->registerMacroList(ControlMacro::macroList($this->container));
+				$templateManager->registerMacroList(TemplateMacro::macroList($this->container));
 				$templateManager->registerMacroList([new ControlMacro('custom-control', \CustomControl::class)]);
 			});
 			$this->control = $this->container->create(\TestDocument::class);
