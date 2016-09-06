@@ -102,7 +102,7 @@
 			<div id="9">foo</div>
 		</div>
 		<div id="10" class="bunch">
-			<div id="11">foobar and so</div>
+			<span id="11">foobar and so</span>
 		</div>
 	</body>
 </html>
