@@ -149,10 +149,10 @@
 		<title></title>
 	</head>
 	<body>
-		<div>
-			<div class="the-second-bar">lorem ipsum</div>
-			<div class="dummy-div">
-				<div class="the-second">bar content</div>
+		<div id="to-be-switched">
+			<div id="bar-id" class="the-second-bar">lorem ipsum</div>
+			<div id="dummy-div" class="dummy-div">
+				<div id="inner-bar" class="the-second">bar content</div>
 			</div>
 		</div>
 	</body>
