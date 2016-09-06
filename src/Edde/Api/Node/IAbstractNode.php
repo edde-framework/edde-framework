@@ -122,6 +122,13 @@
 		public function isLeaf();
 
 		/**
+		 * is this node last in the parent's node list? Throw an exception if this node is root
+		 *
+		 * @return bool
+		 */
+		public function isLast(): bool;
+
+		/**
 		 * @return int
 		 */
 		public function getLevel();

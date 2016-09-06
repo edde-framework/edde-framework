@@ -94,6 +94,10 @@
 			<div>
 				<div class="another hidden"></div>
 			</div>
+			<div>foo</div>
+		</div>
+		<div class="bunch">
+			<span>foobar and so</span>
 		</div>
 	</body>
 </html>
@@ -609,6 +613,7 @@
 			$this->templateManager = $this->container->create(ITemplateManager::class);
 			$this->templateManager->onSetup(function (ITemplateManager $templateManager) {
 				$templateManager->registerMacroList(ControlMacro::macroList($this->container));
+				$templateManager->registerMacroList([new ControlMacro('custom-control', \CustomControl::class)]);
 			});
 			$this->control = $this->container->create(\TestDocument::class);
 		}

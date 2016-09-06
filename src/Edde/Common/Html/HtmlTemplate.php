@@ -4,19 +4,16 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Html\IHtmlControl;
+	use Edde\Api\Control\IControl;
 	use Edde\Api\Html\IHtmlTemplate;
 	use Edde\Api\Template\ITemplateManager;
-	use Edde\Api\Template\TemplateException;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Container\LazyInjectTrait;
-	use SplStack;
 
 	abstract class HtmlTemplate extends AbstractObject implements IHtmlTemplate {
 		use LazyInjectTrait;
-
 		/**
 		 * @var IContainer
 		 */
@@ -34,15 +31,17 @@
 		 */
 		protected $templateManager;
 		/**
-		 * @var SplStack
+		 * @var IControl
 		 */
-		protected $stack;
+		protected $root;
 		/**
-		 * @var \Edde\Api\Html\IHtmlView
+		 * @var \ReflectionClass
 		 */
-		protected $parent;
-		protected $blockList = [];
-		protected $snippetList = [];
+		protected $reflectionClass;
+		/**
+		 * @var callable[]
+		 */
+		protected $controlList = [];
 
 		public function lazytContainer(IContainer $container) {
 			$this->container = $container;
@@ -62,46 +61,23 @@
 
 		public function __call($function, array $parameterList) {
 			return call_user_func_array([
-				$this->parent,
+				$this->root,
 				$function,
 			], $parameterList);
 		}
 
-		public function getBlockList(): array {
-			return $this->blockList;
+		public function template(IControl $root) {
+			$this->root = $root;
+			$this->reflectionClass = new \ReflectionClass($root);
+			$this->onTemplate();
+			$this->build();
 		}
 
-		public function getSnippetList(): array {
-			return $this->snippetList;
-		}
+		abstract protected function onTemplate();
 
-		public function block(string $name, IHtmlControl $parent) : IHtmlTemplate {
-			if (isset($this->blockList[$name]) === false) {
-				throw new TemplateException(sprintf('Requested unknown block [%s].', $name));
+		public function build() {
+			foreach ($this->controlList as $callable) {
+				$callable($this->root);
 			}
-			call_user_func($this->blockList[$name], $parent);
-			return $this;
-		}
-
-		public function snippet(string $name, IHtmlControl $parent) : IHtmlTemplate {
-			if (isset($this->snippetList[$name]) === false) {
-				throw new TemplateException(sprintf('Requested unknown snippet [%s].', $name));
-			}
-			call_user_func($this->snippetList[$name], $parent);
-			return $this;
-		}
-
-		public function use (string $file): IHtmlTemplate {
-			$template = $this->templateManager->template($file);
-			$template = $template->getInstance($this->container);
-			$node = $this->parent->getNode();
-			$count = $node->getNodeCount();
-			$template->template($this->parent);
-			if ($count !== $node->getNodeCount()) {
-				throw new TemplateException(sprintf('Template [%s] can contain only block (define) or snippet controls.', $file));
-			}
-			$this->blockList = array_merge($this->blockList, $template->getBlockList());
-			$this->snippetList = array_merge($this->snippetList, $template->getSnippetList());
-			return $this;
 		}
 	}

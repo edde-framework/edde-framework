@@ -56,10 +56,6 @@
 			return $this;
 		}
 
-		public function isRoot() {
-			return $this->getParent() === null;
-		}
-
 		public function isChild() {
 			return $this->getParent() !== null;
 		}
@@ -75,6 +71,7 @@
 			if ($this->accept($abstractNode) === false) {
 				throw new NodeException(sprintf("Current node [%s] doesn't accept given node [%s].", static::class, get_class($abstractNode)));
 			}
+			/** @var $parent IAbstractNode */
 			$parent = $abstractNode->getParent();
 			if ($move || $parent === null) {
 				if ($parent) {
@@ -169,6 +166,19 @@
 
 		public function isLeaf() {
 			return count($this->nodeList) === 0;
+		}
+
+		public function isLast(): bool {
+			if ($this->isRoot()) {
+				throw new NodeException(sprintf('Cannot check last flag of root node.'));
+			}
+			$nodeList = $this->getParent()
+				->getNodeList();
+			return end($nodeList) === $this;
+		}
+
+		public function isRoot() {
+			return $this->getParent() === null;
 		}
 
 		public function getTreeSize() {

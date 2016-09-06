@@ -3,12 +3,8 @@
 
 	namespace Edde\Api\Html;
 
+	use Edde\Api\Control\IControl;
+
 	interface IHtmlTemplate {
-		public function use (string $file): IHtmlTemplate;
-
-		public function getBlockList(): array;
-
-		public function block(string $name, IHtmlControl $parent): IHtmlTemplate;
-
-		public function template(IHtmlControl $htmlControl, array $useList = []);
+		public function template(IControl $root);
 	}

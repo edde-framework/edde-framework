@@ -65,7 +65,7 @@
 				->getInstance($this->container);
 			/** @var $control IHtmlView */
 			$control = $this;
-			$template->template($control, $useList);
+			$template->template($control);
 			return $this;
 		}
 

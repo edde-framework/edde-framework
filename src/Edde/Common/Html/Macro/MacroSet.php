@@ -5,7 +5,6 @@
 
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Crypt\ICryptEngine;
-	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IMacro;
@@ -44,23 +43,29 @@
 						case 'control':
 							$destination->write("<?php\n");
 							$destination->write("\tdeclare(strict_types = 1);\n\n");
-							$destination->write(sprintf("\t/** source = %s */\n\n", $source->getPath()));
+							$destination->write(sprintf("\t
+	/**
+	 * source = %s
+	 * date = %s	        
+	 */\n", $source->getPath(), (new \DateTime())->format('Y-m-d H:i:s')));
 							$destination->write(sprintf("\tclass %s extends %s {\n", $compiler->getName(), HtmlTemplate::class));
-							$destination->write(vsprintf("\t\tpublic function template(%s \$parent, array \$useList = []) {
-			\$this->stack = new %s();
-			\$reflectionClass = new ReflectionClass(\$this->parent = \$parent);
-			foreach (\$useList as \$use) {
-				\$this->use(\$use);
-			}\n", [
-								IHtmlControl::class,
-								\SplStack::class,
-							]));
-
-							if (($attributeList = $element->getAttributeList()) !== []) {
-								$destination->write(sprintf("\t\t\t\$parent->setAttributeList(%s);\n", var_export($attributeList, true)));
+							$destination->write("\t\tprotected function onTemplate() {\n");
+							$attributeList = $element->getAttributeList();
+							if (empty($attributeList) === false) {
+								$export = [];
+								foreach ($attributeList as $name => $value) {
+									$export[] = "'" . $name . "' => " . $compiler->delimite($value);
+								}
+								$destination->write(sprintf("\t\t\t\$this->root->setAttributeList([%s]);\n", implode(",\n", $export)));
 							}
-							$destination->write("\t\t\t\$this->stack->push(\$parent);\n");
-							$this->element($element, $compiler);
+							foreach ($element->getNodeList() as $node) {
+								$destination->write(sprintf("\t\t\t/** %s */\n", $node->getPath()));
+								$destination->write(sprintf("\t\t\t\$this->controlList[%s] = function(%s \$root) {\n", $id = $compiler->delimite($node->getAttribute('id', hash('sha256', random_bytes(256)))), IControl::class));
+								$destination->write("\t\t\t\t\$stack = new SplStack();\n");
+								$destination->write("\t\t\t\t\$stack->push(\$parent = \$root);\n");
+								$compiler->macro($node, $node);
+								$destination->write("\t\t\t};\n");
+							}
 							$destination->write("\t\t}\n");
 							$destination->write("\t}\n");
 							break;
@@ -91,18 +96,18 @@
 							$value = StringUtils::firstLower(StringUtils::camelize($macro->getValue()));
 							$isMethod = strrpos($value, '()') !== false;
 
-							$destination->write(sprintf("\t\t\t\$this->parent->addSnippet(%s, function(%s \$parent) use(\$reflectionClass) {\n", $snippetId = $compiler->delimite($id = $element->getAttribute('id', sha1(random_bytes(64)))), IControl::class));
+							$destination->write(sprintf("\t\t\t\$this->root->addSnippet(%s, function(%s \$parent) use(\$reflectionClass) {\n", $snippetId = $compiler->delimite($id = $element->getAttribute('id', sha1(random_bytes(64)))), IControl::class));
 //							$destination->write(sprintf("\t\t\t\$this->stack = new %s();\n", \SplStack::class));
 							$destination->write("\t\t\t\$this->stack->push(\$parent);\n");
 							$compiler->macro($element, $element);
 							if ($isMethod === false) {
 								$destination->write(sprintf("\t\t\t\$reflectionProperty = \$reflectionClass->getProperty('%s');\n", $value));
 								$destination->write("\t\t\t\$reflectionProperty->setAccessible(true);\n");
-								$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->parent, \$current);\n");
+								$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->root, \$control);\n");
 							}
-							$destination->write("\t\t\treturn \$current;\n");
+							$destination->write("\t\t\treturn \$control;\n");
 							$destination->write(sprintf("\t\t\t}%s);\n", $isMethod ? ', [$this->parent, ' . $compiler->delimite(str_replace('()', '', $value)) . ']' : ''));
-							$destination->write(sprintf("\t\t\t\$this->parent->snippet(%s, new %s());\n", $snippetId, ContainerControl::class));
+							$destination->write(sprintf("\t\t\t\$this->root->snippet(%s, new %s());\n", $snippetId, ContainerControl::class));
 							break;
 					}
 				}
@@ -127,12 +132,12 @@
 							$compiler->macro($element, $element);
 							$value = StringUtils::firstLower(StringUtils::camelize($value));
 							if (strrpos($value, '()') !== false) {
-								$destination->write(sprintf("\t\t\t\$this->%s(\$current);\n", str_replace('()', '', $value)));
+								$destination->write(sprintf("\t\t\t\$this->%s(\$control);\n", str_replace('()', '', $value)));
 								break;
 							}
 							$destination->write(sprintf("\t\t\t\$reflectionProperty = \$reflectionClass->getProperty('%s');\n", $value));
 							$destination->write("\t\t\t\$reflectionProperty->setAccessible(true);\n");
-							$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->parent, \$current);\n");
+							$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->root, \$control);\n");
 							break;
 						case 'm:pass-child':
 							foreach ($element->getNodeList() as $node) {
@@ -238,8 +243,8 @@
 					$destination = $compiler->getDestination();
 					switch ($macro->getName()) {
 						case 'button':
-							$destination->write("\t\t\t\$parent = \$this->stack->top();\n");
-							$this->writeCreateControl($destination, $this->control);
+							$destination->write("\t\t\t\$parent = \$stack->top();\n");
+							$destination->write(sprintf("\t\t\t\t\$parent->addControl(\$control = \$this->container->create(%s));\n", $compiler->delimite($this->control)));
 							$attributeList = $this->getAttributeList($macro, $compiler);
 							if (isset($attributeList['action']) === false) {
 								throw new MacroException(sprintf('Missing mandatory attribute "action" in [%s].', $macro->getPath()));
@@ -249,7 +254,7 @@
 							}
 							$action = str_replace('()', '', $action);
 							unset($attributeList['action']);
-							$destination->write(sprintf("\t\t\t\$current->setAction([\$this->parent, %s]);\n", $compiler->delimite($action)));
+							$destination->write(sprintf("\t\t\t\$control->setAction([\$this->root, %s]);\n", $compiler->delimite($action)));
 							$this->writeAttributeList($attributeList, $destination);
 							break;
 					}
@@ -267,14 +272,14 @@
 						'h4',
 						'h5',
 						'h6',
-					], '');
+					], HeaderControl::class);
 				}
 
 				public function macro(INode $macro, INode $element, ICompiler $compiler) {
 					$destination = $compiler->getDestination();
-					$destination->write("\t\t\t\$parent = \$this->stack->top();\n");
-					$this->writeCreateControl($destination, HeaderControl::class);
-					$destination->write(sprintf("\t\t\t\$current->setTag('%s');\n", $element->getName()));
+					$destination->write("\t\t\t\$parent = \$stack->top();\n");
+					$destination->write(sprintf("\t\t\t\t\$parent->addControl(\$control = \$this->container->create(%s));\n", $compiler->delimite($this->control)));
+					$destination->write(sprintf("\t\t\t\$control->setTag('%s');\n", $element->getName()));
 					$this->writeTextValue($element, $destination, $compiler);
 					$this->writeAttributeList($this->getAttributeList($element, $compiler), $destination);
 					$this->element($element, $compiler);
