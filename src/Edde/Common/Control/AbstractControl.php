@@ -124,7 +124,7 @@
 			return $this;
 		}
 
-		public function invalidate(callable $callback = null, string $name = null): array {
+		public function invalidate(string $name = null, callable $callback = null): array {
 			$snippetList = [];
 			foreach (($name ? (array)$name : array_keys($this->snippetList)) as $snippet) {
 				if (isset($this->snippetList[$snippet]) === false) {

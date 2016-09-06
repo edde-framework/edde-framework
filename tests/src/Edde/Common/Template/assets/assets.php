@@ -8,6 +8,11 @@
 	use Edde\Common\Html\TemplateControl;
 
 	class TestDocument extends DocumentControl {
+		/**
+		 * @var DivControl
+		 */
+		public $snippy;
+
 		public function switchMe() {
 			return 'bar';
 		}
@@ -41,6 +46,10 @@
 
 		public function getTemplateFileName() {
 			return __DIR__ . '/template/require.xml';
+		}
+
+		public function callTheSnippet(DivControl $divControl) {
+			$divControl->dirty();
 		}
 
 		public function render() {

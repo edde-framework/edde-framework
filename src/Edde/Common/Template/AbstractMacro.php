@@ -58,6 +58,14 @@
 			}
 		}
 
+		protected function checkElementAttribute(INode $macro, INode $element, ...$attributeList) {
+			foreach ($attributeList as $attribute) {
+				if ($element->hasAttribute($attribute) === false) {
+					throw new MacroException(sprintf('Missing attribute "%s" in element [%s] for macro [%s].', $attribute, $element->getPath(), $macro->getName()));
+				}
+			}
+		}
+
 		protected function checkValue(INode $macro, INode $element) {
 			if ($macro->getValue() === null) {
 				throw new MacroException(sprintf('Missing value of macro [%s] at [%s].', $macro->getName(), $element->getPath()));

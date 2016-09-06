@@ -93,12 +93,13 @@
 		/**
 		 * invalidate the given snippet or invalidate all available snippets
 		 *
-		 * @param callable $callback
 		 * @param string $name
 		 *
-		 * @return IControl[]
+		 * @param callable $callback
+		 *
+		 * @return array|IControl[]
 		 */
-		public function invalidate(callable $callback = null, string $name = null): array;
+		public function invalidate(string $name = null, callable $callback = null): array;
 
 		/**
 		 * mark control as dirty; this should change state of all child controls

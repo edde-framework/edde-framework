@@ -4,6 +4,7 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Control\IControl;
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Node\INode;
@@ -108,21 +109,23 @@
 					switch ($macro->getName()) {
 						case 'm:snippet':
 							$this->checkValue($macro, $element);
-							$compiler->macro($element, $element);
-							$destination->write("\t\t\t\$current->disconnect();\n");
-							$destination->write("\t\t\t\$parent = \$this->stack->top();\n");
-							$destination->write(sprintf("\t\t\t\$parent->addControl(\$placeholder = \$this->container->create('%s'));\n", PlaceholderControl::class));
-							$destination->write("\t\t\t\$placeholder->setId(\$current->getId());\n");
+							$this->checkElementAttribute($macro, $element, 'id');
 
 							$value = StringUtils::firstLower(StringUtils::camelize($macro->getValue()));
-							if (strrpos($value, '()') !== false) {
-								$destination->write(sprintf("\t\t\t\$this->parent->snippet(\$current, [\$this->parent, '%s']);\n", str_replace('()', '', $value)));
-								break;
+							$isMethod = strrpos($value, '()') !== false;
+
+							$destination->write(sprintf("\t\t\t\$this->parent->addSnippet(%s, function(%s \$parent) use(\$reflectionClass) {\n", $snippetId = $compiler->delimite($id = $element->getAttribute('id', sha1(random_bytes(64)))), IControl::class));
+							$destination->write(sprintf("\t\t\t\$this->stack = new %s();\n", \SplStack::class));
+							$destination->write("\t\t\t\$this->stack->push(\$parent);\n");
+							$compiler->macro($element, $element);
+							if ($isMethod === false) {
+								$destination->write(sprintf("\t\t\t\$reflectionProperty = \$reflectionClass->getProperty('%s');\n", $value));
+								$destination->write("\t\t\t\$reflectionProperty->setAccessible(true);\n");
+								$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->parent, \$current);\n");
 							}
-							$destination->write("\t\t\t\$this->parent->snippet(\$current);\n");
-							$destination->write(sprintf("\t\t\t\$reflectionProperty = \$reflectionClass->getProperty('%s');\n", $value));
-							$destination->write("\t\t\t\$reflectionProperty->setAccessible(true);\n");
-							$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->parent, \$current);\n");
+							$destination->write("\t\t\treturn \$current;\n");
+							$destination->write(sprintf("\t\t\t}%s);\n", $isMethod ? ', [$this->parent, ' . $compiler->delimite(str_replace('()', '', $value)) . ']' : ''));
+							$destination->write(sprintf("\t\t\t\$this->parent->snippet(%s, new %s());\n", $snippetId, ContainerControl::class));
 							break;
 					}
 				}

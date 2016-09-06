@@ -1,0 +1,10 @@
+<control>
+	<div class="something"/>
+	<div id="bar" class="this-will-be-a-snippet" m:snippet="snippy">
+		<span>some content here</span>
+		<div>
+			<span>with deep span here</span>
+		</div>
+	</div>
+	<div id="foo" class="simple-div" m:snippet="call-the-snippet()"/>
+</control>
