@@ -4,6 +4,7 @@
 	namespace Edde\Common\Control;
 
 	use Edde\Api\Control\ControlException;
+	use Edde\Api\Control\IControl;
 	use phpunit\framework\TestCase;
 
 	require_once(__DIR__ . '/assets/assets.php');
@@ -34,5 +35,35 @@
 		public function testDummyHandle() {
 			$control = new \TestControl();
 			self::assertEquals('dumyyyy', $control->handle('dummy', [], []));
+		}
+
+		public function testSnippets() {
+			$control = new \TestControl();
+			$control->addSnippet('foo', function (IControl $parent) {
+				$parent->addControl($control = new \TestControl());
+				return $control;
+			});
+			$target = new \TestControl();
+			self::assertTrue($target->isLeaf());
+			$control->snippet('foo', $target);
+			self::assertFalse($target->isLeaf(), 'Target is still leaf; new controls were note added.');
+		}
+
+		public function testStnippetInvalidation() {
+			$control = new \TestControl();
+			$control->addSnippet('foo', function (IControl $parent) {
+				$parent->addControl($control = new \TestControl());
+				return $control;
+			});
+			$control->snippet('foo');
+			$list = $control->invalidate(function (IControl $control) {
+				$control->dirty();
+			});
+			self::assertCount(1, $list);
+			/** @var $snippet IControl */
+			$snippet = reset($list);
+			self::assertFalse($control->isDirty());
+			self::assertTrue($snippet->isDirty());
+			self::assertNotSame($control, $snippet);
 		}
 	}

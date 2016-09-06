@@ -70,6 +70,36 @@
 		public function getControlList();
 
 		/**
+		 * register a new snippet (function for a deferred control creation)
+		 *
+		 * @param string $name
+		 * @param callable $snippet
+		 *
+		 * @return IControl
+		 */
+		public function addSnippet(string $name, callable $snippet): IControl;
+
+		/**
+		 * execute the given snippet; snippet will use provided parent or current control
+		 *
+		 * @param string $name
+		 * @param IControl|null $parent
+		 *
+		 * @return IControl
+		 */
+		public function snippet(string $name, IControl $parent = null): IControl;
+
+		/**
+		 * invalidate the given snippet or invalidate all available snippets
+		 *
+		 * @param callable $callback
+		 * @param string $name
+		 *
+		 * @return IControl[]
+		 */
+		public function invalidate(callable $callback, string $name = null): array;
+
+		/**
 		 * mark control as dirty; this should change state of all child controls
 		 *
 		 * @param bool $dirty

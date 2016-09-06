@@ -16,6 +16,16 @@
 		 * @var INode
 		 */
 		protected $node;
+		/**
+		 * @var callable[]
+		 */
+		protected $snippetList = [];
+		/**
+		 * already called snippets
+		 *
+		 * @var array
+		 */
+		protected $snippets = [];
 
 		public function getNode() {
 			$this->use();
@@ -84,6 +94,51 @@
 				$controlList[] = $node->getMeta('control');
 			}
 			return $controlList;
+		}
+
+		public function addSnippet(string $name, callable $snippet): IControl {
+			$this->snippetList[$name] = [
+				/** callable */
+				$snippet,
+				/** parent */
+				null,
+				/** returned snippet control */
+				null,
+			];
+			return $this;
+		}
+
+		public function snippet(string $name, IControl $parent = null): IControl {
+			if (isset($this->snippetList[$name]) === false) {
+				throw new ControlException(sprintf('Requested unknown snippet [%s] on control [%s].', $name, static::class));
+			}
+			$parent = $parent ?: $this;
+			$snippet = &$this->snippetList[$name];
+			if ($snippet[2] !== null) {
+				throw new ControlException(sprintf('Snippet [%s] was already called on control [%s].', $name, static::class));
+			}
+			$snippet[1] = $parent;
+			$snippet[2] = $snippet[0]($parent);
+			return $this;
+		}
+
+		public function invalidate(callable $callback, string $name = null): array {
+			$snippetList = [];
+			foreach (($name ? (array)$name : array_keys($this->snippetList)) as $snippet) {
+				if (isset($this->snippetList[$snippet]) === false) {
+					throw new ControlException(sprintf('Requested unknown snippet [%s] on control [%s].', $snippet, static::class));
+				}
+				/** @var $control IControl */
+				list(, $parent, $control) = $this->snippetList[$snippet];
+				if ($parent === null) {
+					throw new ControlException(sprintf('Snippet [%s] was not executed on [%s].', $snippet, static::class));
+				}
+				$callback($control);
+				if ($control->isDirty()) {
+					$snippetList[] = $control;
+				}
+			}
+			return $snippetList;
 		}
 
 		public function isDirty(): bool {
