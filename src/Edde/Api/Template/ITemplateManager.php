@@ -29,9 +29,8 @@
 		 *
 		 * @param string $file
 		 * @param array $parameterList
-		 * @param bool $force
 		 *
 		 * @return ITemplate
 		 */
-		public function template(string $file, array $parameterList = [], bool $force = false): ITemplate;
+		public function template(string $file, ...$parameterList): ITemplate;
 	}

@@ -47,7 +47,7 @@
 		}
 
 		public function handleOnShow() {
-			$this->snippets(__DIR__ . '/template/action-login.xml', 'content');
+			$this->snippet(__DIR__ . '/template/action-login.xml', 'content');
 			$this->login->dirty();
 			$this->response();
 		}

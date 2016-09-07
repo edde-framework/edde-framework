@@ -17,16 +17,6 @@
 		 * @var INode
 		 */
 		protected $node;
-		/**
-		 * @var callable[]
-		 */
-		protected $snippetList = [];
-		/**
-		 * already called snippets
-		 *
-		 * @var array
-		 */
-		protected $snippets = [];
 
 		public function getNode() {
 			$this->use();
@@ -95,32 +85,6 @@
 				$controlList[] = $node->getMeta('control');
 			}
 			return $controlList;
-		}
-
-		public function addSnippet(string $name, callable $snippet, callable $callback = null): IControl {
-			$this->snippetList[$name] = [
-				/** callable */
-				$snippet,
-				/** snippet was created (called) */
-				false,
-				/** invalidator callback */
-				$callback,
-			];
-			return $this;
-		}
-
-		public function snippet(string $name): IControl {
-			if (isset($this->snippetList[$name]) === false) {
-				throw new ControlException(sprintf('Requested unknown snippet [%s] on control [%s].', $name, static::class));
-			}
-			$snippet = &$this->snippetList[$name];
-			if ($snippet[1]) {
-				return $this;
-			}
-			$snippet[1] = true;
-			$control = $snippet[0]($this);
-			$snippet[2] ? $snippet[2]($control) : null;
-			return $this;
 		}
 
 		/**

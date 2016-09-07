@@ -70,26 +70,6 @@
 		public function getControlList();
 
 		/**
-		 * register a new snippet (function for a deferred control creation)
-		 *
-		 * @param string $name
-		 * @param callable $snippet
-		 * @param callable $callback optional invalidator callback
-		 *
-		 * @return IControl
-		 */
-		public function addSnippet(string $name, callable $snippet, callable $callback = null): IControl;
-
-		/**
-		 * execute the given snippet; snippet will use provided parent or current control
-		 *
-		 * @param string $name
-		 *
-		 * @return IControl
-		 */
-		public function snippet(string $name): IControl;
-
-		/**
 		 * return all invalid (dirty) controls
 		 *
 		 * @return array|IControl[]

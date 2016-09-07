@@ -4,7 +4,6 @@
 	namespace Edde\Common\Control;
 
 	use Edde\Api\Control\ControlException;
-	use Edde\Api\Control\IControl;
 	use phpunit\framework\TestCase;
 
 	require_once(__DIR__ . '/assets/assets.php');
@@ -35,23 +34,5 @@
 		public function testDummyHandle() {
 			$control = new \TestControl();
 			self::assertEquals('dumyyyy', $control->handle('dummy', [], []));
-		}
-
-		public function testStnippetInvalidation() {
-			$control = new \TestControl();
-			$control->addSnippet('foo', function (IControl $parent) {
-				$parent->addControl($control = new \TestControl());
-				return $control;
-			}, function (IControl $control) {
-				$control->dirty();
-			});
-			$control->snippet('foo');
-			$list = $control->invalidate();
-			self::assertCount(1, $list);
-			/** @var $snippet IControl */
-			$snippet = reset($list);
-			self::assertFalse($control->isDirty());
-			self::assertTrue($snippet->isDirty());
-			self::assertNotSame($control, $snippet);
 		}
 	}

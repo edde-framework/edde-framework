@@ -23,14 +23,14 @@
 			switch ($string) {
 				case ':$':
 					list($key, $value) = $this->loopStack->top();
-					return '$stash[' . $compiler->delimite($value) . ']';
+					return '$this->stash[' . $compiler->delimite($value) . ']';
 				case ':#':
 					list($key, $value) = $this->loopStack->top();
-					return '$stash[' . $compiler->delimite($key) . ']';
+					return '$this->stash[' . $compiler->delimite($key) . ']';
 			}
 			if (strpos($string, ':$') !== false) {
 				list($key, $value) = $this->loopStack->top();
-				return '$stash[' . $compiler->delimite($value) . ']' . $compiler->delimite(str_replace(':$', '->', $string));
+				return '$this->stash[' . $compiler->delimite($value) . ']' . $compiler->delimite(str_replace(':$', '->', $string));
 			}
 			return null;
 		}
@@ -46,9 +46,8 @@
 					$source = $macro->getAttribute('src', $macro->getValue());
 					$this->start($macro, $element, $compiler);
 					$destination->write(sprintf("\t\t\t\tforeach(%s as \$%s => \$%s) {\n", $compiler->delimite($source), $key, $value));
-					$destination->write(sprintf("\t\t\t\t\t\$stash[%s] = \$%s;\n", $compiler->delimite($key), $key));
-					$destination->write(sprintf("\t\t\t\t\t\$stash[%s] = \$%s;\n", $compiler->delimite($value), $value));
-					$destination->write(sprintf("\t\t\t/** %s (%s) */\n", $macro->getPath(), $element->getPath()));
+					$destination->write(sprintf("\t\t\t\t\t\$this->stash[%s] = \$%s;\n", $compiler->delimite($key), $key));
+					$destination->write(sprintf("\t\t\t\t\t\$this->stash[%s] = \$%s;\n", $compiler->delimite($value), $value));
 					$this->dependencies($macro, $compiler);
 					$destination->write("\t\t\t\t}\n");
 					$this->end($macro, $element, $compiler);

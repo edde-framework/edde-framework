@@ -10,30 +10,18 @@
 		/**
 		 * build up a target control with this template
 		 *
-		 * @param IControl $control
-		 * @param array $importList another templates required by this one
-		 *
 		 * @return IHtmlTemplate
 		 */
-		public function template(IControl $control, array $importList = []): IHtmlTemplate;
+		public function template(): IHtmlTemplate;
 
 		/**
 		 * add a dependant template file
 		 *
-		 * @param string $file
+		 * @param string[] $importList
 		 *
 		 * @return IHtmlTemplate
 		 */
-		public function import(string $file): IHtmlTemplate;
-
-		/**
-		 * @param string $id
-		 * @param callable $callback
-		 * @param bool $force
-		 *
-		 * @return IHtmlTemplate
-		 */
-		public function addControl($id, callable $callback, bool $force = false): IHtmlTemplate;
+		public function import(...$importList): IHtmlTemplate;
 
 		/**
 		 * return array of lambdas for controls
@@ -43,12 +31,12 @@
 		public function getControlList(): array;
 
 		/**
-		 * apply named block on root control
+		 * apply named block on a root control
 		 *
 		 * @param string $name
 		 * @param IControl $root
 		 *
 		 * @return IControl
 		 */
-		public function control(string $name, IControl $root): IControl;
+		public function snippet(string $name, IControl $root): IControl;
 	}
