@@ -746,6 +746,42 @@
 ', $this->control->render());
 		}
 
+		public function testRootDefine() {
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/root-define.xml', $this->control));
+			$template->template();
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div>
+			<span>boo</span>
+		</div>
+	</body>
+</html>
+', $this->control->render());
+			$template->snippet('foo', $this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div>
+			<span>boo</span>
+		</div>
+		<div>
+			<span>boo</span>
+		</div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
 		protected function setUp() {
 			$this->container = ContainerFactory::create([
 				IResourceManager::class => ResourceManager::class,

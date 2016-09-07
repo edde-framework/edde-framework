@@ -1,0 +1,5 @@
+<control m:define="foo">
+	<div>
+		<span>boo</span>
+	</div>
+</control>
