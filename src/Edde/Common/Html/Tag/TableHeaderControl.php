@@ -7,13 +7,13 @@
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Common\Html\AbstractHtmlControl;
 
-	class SpanControl extends AbstractHtmlControl {
+	class TableHeaderControl extends AbstractHtmlControl {
 		public function setTag(string $tag, bool $pair = true): IHtmlControl {
 			throw new HtmlException(sprintf('Cannot set tag [%s] to a [%s] control.', $tag, static::class));
 		}
 
 		protected function prepare() {
 			parent::prepare();
-			parent::setTag('span', true);
+			parent::setTag('th', true);
 		}
 	}
