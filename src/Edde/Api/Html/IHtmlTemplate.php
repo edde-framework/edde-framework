@@ -31,12 +31,12 @@
 		public function getControlList(): array;
 
 		/**
-		 * apply named block on root control
+		 * apply named block on a root control
 		 *
 		 * @param string $name
 		 * @param IControl $root
 		 *
 		 * @return IControl
 		 */
-		public function control(string $name, IControl $root): IControl;
+		public function snippet(string $name, IControl $root): IControl;
 	}

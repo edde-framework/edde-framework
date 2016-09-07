@@ -107,7 +107,7 @@
 			return $this->controlList;
 		}
 
-		public function control(string $name, IControl $root): IControl {
+		public function snippet(string $name, IControl $root): IControl {
 			$this->use();
 			if (isset($this->controlList[$name]) === false) {
 				throw new TemplateException(sprintf('Requested unknown control block [%s] on [%s].', $name, $root->getNode()

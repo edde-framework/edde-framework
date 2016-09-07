@@ -86,7 +86,7 @@
 			$control = $this;
 			$template = $this->templateManager->template($file = $file ?: $this->getActionTemplateFile(), $control);
 			foreach ($snippetList as $snippet) {
-				$template->control($snippet, $control);
+				$template->snippet($snippet, $control);
 				$control->snippet($snippet);
 			}
 			return $this;

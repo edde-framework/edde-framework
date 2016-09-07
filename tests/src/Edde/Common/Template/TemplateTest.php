@@ -113,7 +113,7 @@
 			$template->template();
 			/** @var $template IHtmlTemplate */
 			$template->template();
-			$template->control('2', $container = new ContainerControl());
+			$template->snippet('2', $container = new ContainerControl());
 		}
 
 		public function testButton() {
@@ -649,7 +649,7 @@
 </html>
 ', $this->control->render());
 			self::assertEmpty($this->control->snippy);
-			$this->control->snippet('some-snippet-name');
+			$template->snippet('some-snippet-name', $this->control);
 			self::assertNotEmpty($this->control->snippy);
 			self::assertInstanceOf(DivControl::class, $this->control->snippy);
 			$this->control->invalidate();
@@ -684,7 +684,7 @@
 	</body>
 </html>
 ', $this->control->render());
-			$this->control->snippet('message');
+			$template->snippet('message', $this->control);
 			self::assertNotEmpty($this->control->message);
 			self::assertInstanceOf(DivControl::class, $this->control->message);
 			self::assertEquals($expect = '		<div class="alert"></div>
