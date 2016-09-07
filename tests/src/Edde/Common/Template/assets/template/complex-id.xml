@@ -1,6 +1,8 @@
 <control>
 	<block name="content">
-		<div class="alert" m:snippet="message" m:pass="message"/>
+		<div class="a-little-bit-hidden-snippet">
+			<div class="alert" m:snippet="message" m:pass="message"/>
+		</div>
 		<placeholder id="message"/>
 	</block>
 </control>

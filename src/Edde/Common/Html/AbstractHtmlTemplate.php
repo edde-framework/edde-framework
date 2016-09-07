@@ -41,6 +41,10 @@
 		protected $reflectionClass;
 		protected $stash;
 		/**
+		 * @var IControl
+		 */
+		protected $current;
+		/**
 		 * @var callable[]
 		 */
 		protected $controlList;
@@ -74,19 +78,18 @@
 			return $this;
 		}
 
-		public function include (IHtmlTemplate $htmlTemplate) {
-		}
-
-		public function template(IControl $root, array $useList = []): IHtmlTemplate {
+		public function template(IControl $root, array $importList = []): IHtmlTemplate {
 			$this->root = $root;
 			$this->stash = [];
 			$this->reflectionClass = new \ReflectionClass($root);
 			$callback = $this->getControlList()[null];
+			$this->importList = array_merge($this->importList, $importList);
 			foreach ($this->importList as $import) {
 				/** @var $template IHtmlTemplate */
 				if ((($template = $this->templateManager->template($import)) instanceof IHtmlTemplate) === false) {
 					throw new TemplateException(sprintf('Unsupported included template [%s] type [%s]; template must be instance of [%s].', $import, get_class($template), IHtmlTemplate::class));
 				}
+				$template->root = $root;
 				$this->controlList = array_merge($this->controlList, $template->getControlList());
 			}
 			$this->controlList[null] = $callback;
@@ -109,8 +112,7 @@
 				throw new TemplateException(sprintf('Requested unknown control block [%s] on [%s].', $name, $root->getNode()
 					->getPath()));
 			}
-			$this->controlList[$name]($root);
-			return $root;
+			return $this->controlList[$name]($root);
 		}
 
 		public function addControl($id, callable $callback, bool $force = false): IHtmlTemplate {

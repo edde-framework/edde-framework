@@ -679,6 +679,7 @@
 		<title></title>
 	</head>
 	<body>
+		<div class="a-little-bit-hidden-snippet"></div>
 		<div class="edde-placeholder" id="message"></div>
 	</body>
 </html>
@@ -688,6 +689,7 @@
 			self::assertInstanceOf(DivControl::class, $this->control->message);
 			self::assertEquals($expect = '		<div class="alert"></div>
 ', $this->control->message->render());
+			$this->control->dirty(false);
 			$this->control->message->dirty();
 			self::assertCount(1, $snippetList = $this->control->invalidate());
 			$message = reset($snippetList);

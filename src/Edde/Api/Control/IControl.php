@@ -84,22 +84,17 @@
 		 * execute the given snippet; snippet will use provided parent or current control
 		 *
 		 * @param string $name
-		 * @param IControl|null $parent
 		 *
 		 * @return IControl
 		 */
-		public function snippet(string $name, IControl $parent = null): IControl;
+		public function snippet(string $name): IControl;
 
 		/**
-		 * invalidate the given snippet or invalidate all available snippets
-		 *
-		 * @param string $name
-		 *
-		 * @param callable $callback
+		 * return all invalid (dirty) controls
 		 *
 		 * @return array|IControl[]
 		 */
-		public function invalidate(string $name = null, callable $callback = null): array;
+		public function invalidate(): array;
 
 		/**
 		 * mark control as dirty; this should change state of all child controls

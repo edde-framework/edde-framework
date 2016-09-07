@@ -37,18 +37,6 @@
 			self::assertEquals('dumyyyy', $control->handle('dummy', [], []));
 		}
 
-		public function testSnippets() {
-			$control = new \TestControl();
-			$control->addSnippet('foo', function (IControl $parent) {
-				$parent->addControl($control = new \TestControl());
-				return $control;
-			});
-			$target = new \TestControl();
-			self::assertTrue($target->isLeaf());
-			$control->snippet('foo', $target);
-			self::assertFalse($target->isLeaf(), 'Target is still leaf; new controls were note added.');
-		}
-
 		public function testStnippetInvalidation() {
 			$control = new \TestControl();
 			$control->addSnippet('foo', function (IControl $parent) {

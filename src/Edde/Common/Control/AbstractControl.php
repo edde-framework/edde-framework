@@ -5,6 +5,7 @@
 
 	use Edde\Api\Control\ControlException;
 	use Edde\Api\Control\IControl;
+	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Node\INode;
 	use Edde\Common\Callback\Callback;
 	use Edde\Common\Node\Node;
@@ -100,48 +101,39 @@
 			$this->snippetList[$name] = [
 				/** callable */
 				$snippet,
-				/** parent */
-				null,
-				/** returned snippet control */
-				null,
+				/** snippet was created (called) */
+				false,
 				/** invalidator callback */
 				$callback,
 			];
 			return $this;
 		}
 
-		public function snippet(string $name, IControl $parent = null): IControl {
+		public function snippet(string $name): IControl {
 			if (isset($this->snippetList[$name]) === false) {
 				throw new ControlException(sprintf('Requested unknown snippet [%s] on control [%s].', $name, static::class));
 			}
-			$parent = $parent ?: $this;
 			$snippet = &$this->snippetList[$name];
-			if ($snippet[2] !== null) {
-				throw new ControlException(sprintf('Snippet [%s] was already called on control [%s].', $name, static::class));
+			if ($snippet[1]) {
+				return $this;
 			}
-			$snippet[1] = $parent;
-			$snippet[2] = $snippet[0]($parent);
+			$snippet[1] = true;
+			$control = $snippet[0]($this);
+			$snippet[2] ? $snippet[2]($control) : null;
 			return $this;
 		}
 
-		public function invalidate(string $name = null, callable $callback = null): array {
-			$snippetList = [];
-			foreach (($name ? (array)$name : array_keys($this->snippetList)) as $snippet) {
-				if (isset($this->snippetList[$snippet]) === false) {
-					throw new ControlException(sprintf('Requested unknown snippet [%s] on control [%s].', $snippet, static::class));
-				}
-				/** @var $control IControl */
-				list(, $parent, $control, $invalidator) = $this->snippetList[$snippet];
-				if ($parent === null) {
-					continue;
-				}
-				$callback = $callback ?: $invalidator;
-				$callback ? $callback($control) : null;
+		/**
+		 * @return IHtmlControl[]
+		 */
+		public function invalidate(): array {
+			$invalidList = [];
+			foreach ($this as $control) {
 				if ($control->isDirty()) {
-					$snippetList[] = $control;
+					$invalidList[] = $control;
 				}
 			}
-			return $snippetList;
+			return $invalidList;
 		}
 
 		public function isDirty(): bool {

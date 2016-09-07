@@ -38,7 +38,7 @@
 			$this->route = $route;
 		}
 
-		public function template(string $layout = null, ...$useList) {
+		public function template(string $layout = null, ...$importList) {
 			$this->check();
 			if ($layout === null) {
 				$reflectionClass = new \ReflectionClass($this);
@@ -56,18 +56,14 @@
 					}
 				}
 				if ($layout !== $action && file_exists($action)) {
-					$useList[] = $action;
+					$importList[] = $action;
 				}
 			}
 			/** @var $control IHtmlView */
 			/** @var $template IHtmlTemplate */
 			$control = $this;
-			$template = $this->templateManager->template($layout)
-				->getInstance($this->container);
-			foreach ($useList as $use) {
-				$template->import($use);
-			}
-			$template->template($control);
+			$template = $this->templateManager->template($layout);
+			$template->template($control, $importList);
 			return $this;
 		}
 
@@ -82,16 +78,15 @@
 			return dirname($reflectionClass->getFileName()) . '/template/' . StringUtils::recamel($this->route->getMethod()) . '.xml';
 		}
 
-		public function block(string $file, string ...$blockList) {
+		public function snippets(string $file, string ...$snippetList) {
 			$this->check();
-			/** @var $template IHtmlTemplate */
-			$template = $this->templateManager->template($file = $file ?: $this->getActionTemplateFile())
-				->getInstance($this->container);
 			/** @var $control IHtmlView */
+			/** @var $template IHtmlTemplate */
 			$control = $this;
+			$template = $this->templateManager->template($file = $file ?: $this->getActionTemplateFile());
 			$template->template($control);
-			foreach ($blockList as $block) {
-				$template->control($block, $control);
+			foreach ($snippetList as $snippet) {
+				$control->snippet($snippet);
 			}
 			return $this;
 		}

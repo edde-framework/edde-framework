@@ -4,7 +4,6 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Control\ControlException;
-	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlView;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
@@ -168,14 +167,10 @@
 						->getRelativePath(),
 				]);
 			}
-			/** @var $control IHtmlControl */
-			foreach ($this as $control) {
-				if ($control->isDirty() && $control->getId() !== null) {
+			foreach ($this->invalidate() as $control) {
+				if ($control->getId() !== '') {
 					$ajax->replace($control);
 				}
-			}
-			foreach ($this->invalidate() as $snippet) {
-				$ajax->replace($snippet);
 			}
 			$ajax->render();
 			return $this;
