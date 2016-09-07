@@ -1,9 +1,9 @@
 <control>
-	<div class="foo-bar" m:define="moo"/>
-	<div m:define="foo">
+	<div class="foo-bar" m:block="moo"/>
+	<div m:block="foo">
 		<span value="lorem ipsum or something like that"/>
 	</div>
-	<div id="id" m:define="poo"/>
+	<div id="id" m:block="poo"/>
 	<block name="something">
 		<div class="qwerty"/>
 		<div>
