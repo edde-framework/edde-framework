@@ -35,10 +35,11 @@
 						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$root);\n", $compiler->delimite($node->getMeta('control'))));
 					}
 					$destination->write("\t\t\t};\n");
+					$this->element($macro, $compiler);
 					break;
 				case 'bind':
 					if (isset($this->idList[$id = $macro->getValue()]) === false) {
-						throw new MacroException(sprintf('Unknown bind id [%s] at [%s].', $id, $element->getPath()));
+						throw new MacroException(sprintf('Unknown bind id [%s] at [%s].', $id, $macro->getPath()));
 					}
 					$element->setAttribute('bind', $this->idList[$id]);
 					$destination->write(sprintf("\t\t\t/** %s */\n", $element->getPath()));
@@ -48,6 +49,7 @@
 						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$root);\n", $compiler->delimite($node->getMeta('control'))));
 					}
 					$destination->write("\t\t\t};\n");
+					$this->element($macro, $compiler);
 					break;
 			}
 			$this->element($element, $compiler);
