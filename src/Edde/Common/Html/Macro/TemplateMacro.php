@@ -67,6 +67,8 @@
 					$destination->write("\tdeclare(strict_types = 1);\n\n");
 					$destination->write(sprintf("\t
 	/**
+	 * ** this file is automagically generated **
+	 *
 	 * source = %s
 	 * date = %s	        
 	 */\n", $source->getPath(), (new \DateTime())->format('Y-m-d H:i:s')));

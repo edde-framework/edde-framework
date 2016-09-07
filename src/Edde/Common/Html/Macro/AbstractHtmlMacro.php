@@ -19,7 +19,7 @@
 		protected function start(INode $macro, INode $element, ICompiler $compiler) {
 			$destination = $compiler->getDestination();
 			$destination->write(sprintf("\t\t\t/** %s (%s) */\n", $macro->getPath(), $element->getPath()));
-			$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash) {\n", $compiler->delimite($macro->getMeta('control')), IControl::class));
+			$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash): %s {\n", $compiler->delimite($macro->getMeta('control')), IControl::class, IControl::class));
 			$destination->write("\t\t\t\t\$control = \$root;\n");
 		}
 

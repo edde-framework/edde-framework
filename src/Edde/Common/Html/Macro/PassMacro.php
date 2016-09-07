@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Html\Macro;
 
+	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Common\Strings\StringUtils;
@@ -18,28 +19,32 @@
 		public function macro(INode $macro, INode $element, ICompiler $compiler) {
 			$destination = $compiler->getDestination();
 			$this->checkValue($macro, $element);
-			$value = $macro->getValue();
 			switch ($macro->getName()) {
 				case 'pass':
-					$compiler->macro($element, $element);
-					$value = StringUtils::firstLower(StringUtils::camelize($value));
 					$this->start($macro, $element, $compiler);
 					$this->dependencies($macro, $compiler);
-					if (strrpos($value, '()') !== false) {
-						$destination->write(sprintf("\t\t\t\t\$this->%s(\$current);\n", str_replace('()', '', $value)));
-					} else {
-						$destination->write(sprintf("\t\t\t\$reflectionProperty = \$reflectionClass->getProperty('%s');\n", $value));
-						$destination->write("\t\t\t\$reflectionProperty->setAccessible(true);\n");
-						$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->root, \$current);\n");
-					}
+					$this->pass($macro, $destination);
 					$this->end($macro, $element, $compiler);
 					break;
 				case 'pass-child':
-					foreach ($element->getNodeList() as $node) {
-						$node->setAttribute('m:pass', $macro->getValue());
-					}
-					$compiler->macro($element, $element);
+					$this->start($macro, $element, $compiler);
+					$this->dependencies($macro, $compiler);
+					$destination->write("\t\t\t\tforeach(\$current->getControlList() as \$current) {\n");
+					$this->pass($macro, $destination);
+					$destination->write("\t\t\t\t}\n");
+					$this->end($macro, $element, $compiler);
 					break;
+			}
+		}
+
+		protected function pass(INode $macro, IFile $destination) {
+			$value = $macro->getValue();
+			if (strrpos($value = StringUtils::firstLower(StringUtils::camelize($value)), '()') !== false) {
+				$destination->write(sprintf("\t\t\t\t\$this->%s(\$current);\n", str_replace('()', '', $value)));
+			} else {
+				$destination->write(sprintf("\t\t\t\$reflectionProperty = \$reflectionClass->getProperty('%s');\n", $value));
+				$destination->write("\t\t\t\$reflectionProperty->setAccessible(true);\n");
+				$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->root, \$current);\n");
 			}
 		}
 	}
