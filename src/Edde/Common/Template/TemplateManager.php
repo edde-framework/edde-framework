@@ -107,14 +107,19 @@
 		}
 
 		protected function update(INode $root) {
-			foreach (($iterator = NodeIterator::recursive($root)) as $node) {
+			foreach (($iterator = NodeIterator::recursive($root, true)) as $node) {
 				if ($node->hasAttributeList('m') === false) {
 					continue;
 				}
 				$attributeList = $node->getAttributeList('m');
 				$node->removeAttributeList('m');
 				foreach (array_reverse($attributeList, true) as $attribute => $value) {
-					$node = $node->switch((new Node($attribute, $value))->setMeta('inline', true));
+					$macro = (new Node($attribute, $value))->setMeta('inline', true);
+					if ($node->isRoot()) {
+						$node->insert($macro);
+						continue;
+					}
+					$node = $node->switch($macro);
 				}
 				$iterator->rewind();
 			}
