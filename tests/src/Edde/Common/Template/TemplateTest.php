@@ -227,7 +227,12 @@
 				<title></title>
 			</head>
 			<body>
-				<div id="blabla" data-schema="Foo\Bar\Schema" data-property="bar"></div>
+				<div id="blabla" data-schema="Foo\Bar\Schema" data-property="bar">
+					<span>value</span>
+					<div class="foo">
+						<div id="bar"></div>
+					</div>
+				</div>
 				<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=foo" data-bind="blabla"></div>
 			</body>
 		</html>

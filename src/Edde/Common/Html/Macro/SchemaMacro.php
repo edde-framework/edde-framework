@@ -48,7 +48,7 @@
 					$element->setAttribute('data-property', $property);
 					$destination->write(sprintf("\t\t\t/** %s (%s) */\n", $macro->getPath(), $element->getPath()));
 					$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash) {\n", $compiler->delimite($macro->getMeta('control')), IControl::class));
-					foreach ($element->getNodeList() as $node) {
+					foreach ($macro->getNodeList() as $node) {
 						$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
 						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$root);\n", $compiler->delimite($node->getMeta('control'))));
 					}

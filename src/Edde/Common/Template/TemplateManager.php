@@ -89,7 +89,7 @@
 		}
 
 		protected function update(INode $root) {
-			foreach (NodeIterator::recursive($root) as $node) {
+			foreach (($iterator = NodeIterator::recursive($root)) as $node) {
 				if ($node->hasAttributeList('m') === false) {
 					continue;
 				}
@@ -98,6 +98,7 @@
 				foreach (array_reverse($attributeList, true) as $attribute => $value) {
 					$node = $node->switch((new Node($attribute, $value))->setMeta('inline', true));
 				}
+				$iterator->rewind();
 			}
 			return $root;
 		}
