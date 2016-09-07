@@ -713,6 +713,23 @@
 ', $this->control->snippy->render());
 		}
 
+		public function testComplexId() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/complex-id.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body></body>
+</html>
+', $this->control->render());
+		}
+
 		protected function setUp() {
 			$this->container = ContainerFactory::create([
 				IResourceManager::class => ResourceManager::class,
