@@ -36,7 +36,6 @@
 						$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->root, \$control);\n");
 					}
 					$this->end($macro, $element, $compiler);
-					$this->element($macro, $compiler);
 					break;
 				case 'pass-child':
 					foreach ($element->getNodeList() as $node) {

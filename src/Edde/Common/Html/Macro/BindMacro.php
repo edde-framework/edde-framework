@@ -32,7 +32,6 @@
 						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
 					}
 					$this->end($macro, $element, $compiler);
-					$this->element($macro, $compiler);
 					break;
 				case 'bind':
 					if (isset($this->idList[$id = $macro->getValue()]) === false) {
@@ -45,7 +44,6 @@
 						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$root);\n", $compiler->delimite($node->getMeta('control'))));
 					}
 					$this->end($macro, $element, $compiler);
-					$this->element($macro, $compiler);
 					break;
 			}
 			$this->element($element, $compiler);

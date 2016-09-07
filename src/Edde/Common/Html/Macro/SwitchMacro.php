@@ -44,7 +44,6 @@
 						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
 					}
 					$this->end($macro, $element, $compiler);
-					$this->element($macro, $compiler);
 					break;
 				case 'case':
 					$this->checkValue($macro, $element);
@@ -55,7 +54,6 @@
 					}
 					$destination->write("\t\t\t}\n");
 					$this->end($macro, $element, $compiler);
-					$this->element($macro, $compiler);
 					break;
 			}
 		}

@@ -55,7 +55,6 @@
 					}
 					$destination->write("\t\t\t\t}\n");
 					$this->end($macro, $element, $compiler);
-					$this->element($macro, $compiler);
 					$this->loopStack->pop();
 					break;
 			}

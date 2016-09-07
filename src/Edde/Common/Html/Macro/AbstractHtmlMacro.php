@@ -21,6 +21,7 @@
 			$destination = $compiler->getDestination();
 			$destination->write("\t\t\t\treturn \$control;\n");
 			$destination->write("\t\t\t};\n");
+			$this->element($macro, $compiler);
 		}
 
 		protected function writeTextValue(INode $root, IFile $destination, ICompiler $compiler) {

@@ -29,11 +29,10 @@
 			$this->writeTextValue($element, $destination, $compiler);
 			$this->onControl($macro, $element, $compiler);
 			$this->writeAttributeList($this->getAttributeList($element, $compiler), $destination);
-			foreach ($element->getNodeList() as $node) {
+			foreach ($macro->getNodeList() as $node) {
 				$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
 			}
 			$this->end($macro, $element, $compiler);
-			$this->element($element, $compiler);
 		}
 
 		protected function onControl(INode $macro, INode $element, ICompiler $compiler) {

@@ -33,7 +33,6 @@
 						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$root);\n", $compiler->delimite($node->getMeta('control'))));
 					}
 					$this->end($macro, $element, $compiler);
-					$this->element($macro, $compiler);
 					break;
 				case 'property':
 					$this->checkValue($macro, $element);
@@ -49,7 +48,6 @@
 						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$root);\n", $compiler->delimite($node->getMeta('control'))));
 					}
 					$this->end($macro, $element, $compiler);
-					$this->element($macro, $compiler);
 					break;
 			}
 		}
