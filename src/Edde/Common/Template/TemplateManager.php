@@ -15,6 +15,8 @@
 	use Edde\Api\Template\TemplateException;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\File\File;
+	use Edde\Common\Node\Node;
+	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class TemplateManager extends AbstractUsable implements ITemplateManager {
@@ -76,7 +78,7 @@
 			if ((($root = $this->resourceManager->resource($file)) instanceof INode) === false) {
 				throw new TemplateException(sprintf('Resource handler for [%s] must return [%s].', (string)$file->getUrl(), INode::class));
 			}
-			$compiler = new Compiler($root, $this->rootDirectory, $this->assetsDirectory, $file, $templateFile = $this->templateDirectory->file(($name = ('Template_' . sha1((string)$file->getUrl()))) . '.php'), $name);
+			$compiler = new Compiler($this->update($this->process($root, $file)), $this->rootDirectory, $this->assetsDirectory, $file, $templateFile = $this->templateDirectory->file(($name = ('Template_' . sha1((string)$file->getUrl()))) . '.php'), $name);
 			$macroList = [];
 			foreach ($this->macroList as $macro) {
 				$macroList[] = clone $macro;
@@ -84,6 +86,57 @@
 			$compiler->registerMacroList($macroList);
 			$this->cache->save($cacheId, $templateFile->getPath());
 			return $compiler->compile();
+		}
+
+		protected function update(INode $root) {
+			foreach (($iterator = NodeIterator::recursive($root)) as $node) {
+				if ($node->hasAttributeList('m') === false) {
+					continue;
+				}
+				$attributeList = $node->getAttributeList('m');
+				$node->removeAttributeList('m');
+				foreach (array_reverse($attributeList, true) as $attribute => $value) {
+					$node = $node->switch((new Node($attribute, $value))->setMeta('inline', true));
+				}
+				$iterator->rewind();
+			}
+			return $root;
+		}
+
+		protected function process(INode $root, IFile $source): INode {
+			foreach (NodeIterator::recursive($root) as $node) {
+				if ($node->hasAttributeList('x')) {
+					$processList = $node->getAttributeList('x');
+					foreach ($processList as $process => $value) {
+						switch ($process) {
+							case 'include':
+								$this->process($this->resourceManager->resource($file = new File($this->delimite($value, $source)), null, $node), $file);
+								break;
+						}
+					}
+					continue;
+				}
+				$node->removeAttributeList('x');
+				if (strpos($name = $node->getName(), 'x:', 0) === false) {
+					continue;
+				}
+				switch ($name) {
+					case 'x:include':
+						$root->replaceNode($node, $this->process($this->resourceManager->resource($file = new File($this->delimite($node->getAttribute('src'), $source)), null), $file)
+							->getNodeList());
+						break;
+				}
+			}
+			$root->removeAttributeList('x');
+			return $root;
+		}
+
+		protected function delimite(string $value, IFile $source): string {
+			if (strpos($value, './', 0) !== false) {
+				return $source->getDirectory()
+					->filename(str_replace('./', '', $value));
+			}
+			return $value;
 		}
 
 		protected function prepare() {

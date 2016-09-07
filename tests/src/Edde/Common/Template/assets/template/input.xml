@@ -1,6 +1,6 @@
 <control>
 	<schema name="foo" schema="poo"/>
 
-	<text m:schema="foo.text"/>
-	<password class="class-here" m:schema="foo.password"/>
+	<text m:property="foo.text"/>
+	<password class="class-here" m:property="foo.password"/>
 </control>

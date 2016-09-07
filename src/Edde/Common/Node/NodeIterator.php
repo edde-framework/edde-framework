@@ -5,6 +5,7 @@
 
 	use ArrayIterator;
 	use Edde\Api\Node\IAbstractNode;
+	use Edde\Api\Node\INode;
 	use Edde\Common\AbstractObject;
 	use RecursiveIterator;
 	use RecursiveIteratorIterator;
@@ -27,6 +28,12 @@
 			return new self($abstractNode);
 		}
 
+		/**
+		 * @param IAbstractNode $abstractNode
+		 * @param bool $root
+		 *
+		 * @return RecursiveIteratorIterator|INode[]
+		 */
 		static public function recursive(IAbstractNode $abstractNode, $root = false) {
 			if ($root === true) {
 				$root = new Node();

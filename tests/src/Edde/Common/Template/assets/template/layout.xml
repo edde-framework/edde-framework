@@ -1,11 +1,10 @@
 <control>
-	<use src="get-templatefile-name()"/>
-
 	<div class="foo"/>
 	<div class="with-block">
-		<block name="foo"/>
+		<include src="foo"/>
 		<div class="bar"/>
 	</div>
-	<block name="poo"/>
-	<div class="something" m:block="something"/>
+	<include src="poo"/>
+	<include src="poo"/>
+	<div class="something" m:include="something"/>
 </control>

@@ -3,6 +3,9 @@
 		<div class="looping">
 			<div value=":$"/>
 		</div>
+		<div>
+			<span class=":$">value</span>
+		</div>
 	</loop>
 	<div class="another-kind-of-loop">
 		<div class="looping2" data-tribute=":#" m:loop="get-item-list()" value=":$"/>

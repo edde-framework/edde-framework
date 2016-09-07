@@ -1,13 +1,12 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Template\Macro;
+	namespace Edde\Common\Html\Macro;
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
-	use Edde\Common\Template\AbstractMacro;
 
-	class LoopMacro extends AbstractMacro {
+	class LoopMacro extends AbstractHtmlMacro {
 		/**
 		 * @var \SplStack
 		 */
@@ -16,7 +15,6 @@
 		public function __construct() {
 			parent::__construct([
 				'loop',
-				'm:loop',
 			]);
 			$this->loopStack = new \SplStack();
 		}
@@ -25,14 +23,14 @@
 			switch ($string) {
 				case ':$':
 					list($key, $value) = $this->loopStack->top();
-					return '$' . $value;
+					return '$stash[' . $compiler->delimite($value) . ']';
 				case ':#':
 					list($key, $value) = $this->loopStack->top();
-					return '$' . $key;
+					return '$stash[' . $compiler->delimite($key) . ']';
 			}
 			if (strpos($string, ':$') !== false) {
 				list($key, $value) = $this->loopStack->top();
-				return '$' . $value . $compiler->delimite(str_replace(':$', '->', $string));
+				return '$stash[' . $compiler->delimite($value) . ']' . $compiler->delimite(str_replace(':$', '->', $string));
 			}
 			return null;
 		}
@@ -45,17 +43,15 @@
 			]);
 			switch ($macro->getName()) {
 				case 'loop':
-					$this->checkAttribute($macro, $element, 'src');
-					$destination->write(sprintf("\t\t\tforeach(%s as \$%s => \$%s) {\n", $compiler->delimite($element->getAttribute('src')), $key, $value));
-					$this->element($element, $compiler);
-					$destination->write("\t\t\t}\n");
-					$this->loopStack->pop();
-					break;
-				case 'm:loop':
-					$this->checkValue($macro, $element);
-					$destination->write(sprintf("\t\t\tforeach(%s as $%s => $%s) {\n", $compiler->delimite($macro->getValue()), $key, $value));
-					$compiler->macro($element, $element);
-					$destination->write("\t\t\t}\n");
+					$source = $macro->getAttribute('src', $macro->getValue());
+					$this->start($macro, $element, $compiler);
+					$destination->write(sprintf("\t\t\t\tforeach(%s as \$%s => \$%s) {\n", $compiler->delimite($source), $key, $value));
+					$destination->write(sprintf("\t\t\t\t\t\$stash[%s] = \$%s;\n", $compiler->delimite($key), $key));
+					$destination->write(sprintf("\t\t\t\t\t\$stash[%s] = \$%s;\n", $compiler->delimite($value), $value));
+					$destination->write(sprintf("\t\t\t/** %s (%s) */\n", $macro->getPath(), $element->getPath()));
+					$this->dependencies($macro, $compiler);
+					$destination->write("\t\t\t\t}\n");
+					$this->end($macro, $element, $compiler);
 					$this->loopStack->pop();
 					break;
 			}

@@ -122,6 +122,13 @@
 		public function isLeaf();
 
 		/**
+		 * is this node last in the parent's node list? Throw an exception if this node is root
+		 *
+		 * @return bool
+		 */
+		public function isLast(): bool;
+
+		/**
 		 * @return int
 		 */
 		public function getLevel();
@@ -151,4 +158,30 @@
 		 * @return int
 		 */
 		public function getNodeCount();
+
+		/**
+		 * insert the given node under current one (current one will have excatly one children)
+		 *
+		 * @param IAbstractNode $abstractNode
+		 *
+		 * @return IAbstractNode
+		 */
+		public function insert(IAbstractNode $abstractNode): IAbstractNode;
+
+		/**
+		 * @param IAbstractNode $abstractNode
+		 *
+		 * @return IAbstractNode return newly switched node
+		 */
+		public function switch (IAbstractNode $abstractNode): IAbstractNode;
+
+		/**
+		 * replace the given child node by the list of nodes
+		 *
+		 * @param IAbstractNode $abstractNode
+		 * @param array $nodeList
+		 *
+		 * @return IAbstractNode
+		 */
+		public function replaceNode(IAbstractNode $abstractNode, array $nodeList): IAbstractNode;
 	}

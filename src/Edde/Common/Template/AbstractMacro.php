@@ -50,10 +50,24 @@
 			}
 		}
 
+		protected function checkNotLeaf(INode $macro, INode $element) {
+			if ($element->isLeaf()) {
+				throw new MacroException(sprintf('Macro [%s] in [%s] must have children nodes.', $macro->getName(), $element->getPath()));
+			}
+		}
+
 		protected function checkAttribute(INode $macro, INode $element, ...$attributeList) {
 			foreach ($attributeList as $attribute) {
 				if ($macro->hasAttribute($attribute) === false) {
 					throw new MacroException(sprintf('Missing attribute "%s" in macro [%s] at [%s].', $attribute, $macro->getName(), $element->getPath()));
+				}
+			}
+		}
+
+		protected function checkElementAttribute(INode $macro, INode $element, ...$attributeList) {
+			foreach ($attributeList as $attribute) {
+				if ($element->hasAttribute($attribute) === false) {
+					throw new MacroException(sprintf('Missing attribute "%s" in element [%s] for macro [%s].', $attribute, $element->getPath(), $macro->getName()));
 				}
 			}
 		}

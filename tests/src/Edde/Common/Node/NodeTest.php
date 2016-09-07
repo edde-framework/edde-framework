@@ -705,4 +705,25 @@
 			self::assertTrue($node->hasAttributeList('b'));
 			self::assertFalse($node->hasAttributeList('poo'));
 		}
+
+		public function testSwitch() {
+			$foo = new Node('foo');
+			$bar = new Node('bar');
+			$poo = new Node('poo');
+
+			$foo->addNode($bar->addNode($poo));
+			self::assertEquals('/foo/bar/poo', $poo->getPath());
+			self::assertSame($foo, $bar->getParent());
+			self::assertSame($bar, $poo->getParent());
+			$bar->switch($poo);
+			self::assertEquals('/foo/poo', $poo->getPath());
+			self::assertEquals('/foo/poo/bar', $bar->getPath());
+			self::assertSame($foo, $poo->getParent());
+			self::assertSame($poo, $bar->getParent());
+
+			$foo->switch($bar);
+			self::assertTrue($bar->isRoot());
+			self::assertFalse($foo->isRoot());
+			self::assertEquals('/bar/foo/poo', $poo->getPath());
+		}
 	}

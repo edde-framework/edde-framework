@@ -8,6 +8,15 @@
 	use Edde\Common\Html\TemplateControl;
 
 	class TestDocument extends DocumentControl {
+		/**
+		 * @var DivControl
+		 */
+		public $snippy;
+		/**
+		 * @var DivControl
+		 */
+		public $specialDiv;
+
 		public function switchMe() {
 			return 'bar';
 		}
@@ -28,6 +37,7 @@
 		}
 
 		public function specialDiv(DivControl $divControl) {
+			$this->specialDiv = $divControl;
 			$divControl->addClass('special-class');
 		}
 
@@ -37,10 +47,6 @@
 
 		public function specialButton(ButtonControl $control) {
 			$control->addClass('special-button-class');
-		}
-
-		public function getTemplateFileName() {
-			return __DIR__ . '/template/require.xml';
 		}
 
 		public function render() {

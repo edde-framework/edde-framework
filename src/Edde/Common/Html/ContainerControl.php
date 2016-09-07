@@ -8,9 +8,11 @@
 	class ContainerControl extends AbstractHtmlControl {
 		public function render() {
 			$this->use();
+			$renderList = [];
 			/** @var $control IHtmlControl */
 			foreach ($this->getControlList() as $control) {
-				$control->render();
+				$renderList[] = $control->render();
 			}
+			return implode('', $renderList);
 		}
 	}

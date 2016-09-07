@@ -54,7 +54,7 @@
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\EddeDirectory;
 	use Edde\Common\File\TempDirectory;
-	use Edde\Common\Html\MacroSet;
+	use Edde\Common\Html\Macro\TemplateMacro;
 	use Edde\Common\Http\HttpRequestFactory;
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Identity\AuthenticatorManager;
@@ -70,9 +70,6 @@
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Session\DummyFingerprint;
 	use Edde\Common\Session\SessionManager;
-	use Edde\Common\Template\Macro\IncludeMacro;
-	use Edde\Common\Template\Macro\LoopMacro;
-	use Edde\Common\Template\Macro\SwitchMacro;
 	use Edde\Common\Template\TemplateDirectory;
 	use Edde\Common\Template\TemplateManager;
 	use Edde\Common\Upgrade\UpgradeManager;
@@ -177,11 +174,7 @@
 					$resourceManager->registerResourceHandler($container->create(PhpResourceHandler::class));
 				})
 				->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
-					$templateManager->registerMacroList(array_merge(MacroSet::macroList($container), [
-						$container->create(IncludeMacro::class),
-						$container->create(SwitchMacro::class),
-						$container->create(LoopMacro::class),
-					]));
+					$templateManager->registerMacroList(TemplateMacro::macroList($container));
 				});
 		}
 	}

@@ -4,7 +4,7 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Html\IHtmlControl;
+	use Edde\Api\Control\IControl;
 	use Edde\Api\Html\IHtmlTemplate;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Template\TemplateException;
@@ -12,11 +12,9 @@
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Container\LazyInjectTrait;
-	use SplStack;
 
 	abstract class HtmlTemplate extends AbstractObject implements IHtmlTemplate {
 		use LazyInjectTrait;
-
 		/**
 		 * @var IContainer
 		 */
@@ -34,14 +32,17 @@
 		 */
 		protected $templateManager;
 		/**
-		 * @var SplStack
+		 * @var IControl
 		 */
-		protected $stack;
+		protected $root;
 		/**
-		 * @var \Edde\Api\Html\IHtmlView
+		 * @var \ReflectionClass
 		 */
-		protected $parent;
-		protected $blockList = [];
+		protected $reflectionClass;
+		/**
+		 * @var callable[]
+		 */
+		protected $controlList = [];
 
 		public function lazytContainer(IContainer $container) {
 			$this->container = $container;
@@ -61,33 +62,43 @@
 
 		public function __call($function, array $parameterList) {
 			return call_user_func_array([
-				$this->parent,
+				$this->root,
 				$function,
 			], $parameterList);
 		}
 
-		public function getBlockList(): array {
-			return $this->blockList;
-		}
-
-		public function block(string $name, IHtmlControl $parent) : IHtmlTemplate {
-			if (isset($this->blockList[$name]) === false) {
-				throw new TemplateException(sprintf('Requested unknown block [%s].', $name));
-			}
-			call_user_func($this->blockList[$name], $parent);
+		public function include (string $file, IControl $root) {
+			$template = $this->templateManager->template($file);
+			$template = $template->getInstance($this->container);
+			/** @var $template IHtmlTemplate */
+			$this->controlList = array_merge($this->getControlList($root), $template->getControlList($root));
 			return $this;
 		}
 
-		public function use (string $file): IHtmlTemplate {
-			$template = $this->templateManager->template($file);
-			$template = $template->getInstance($this->container);
-			$node = $this->parent->getNode();
-			$count = $node->getNodeCount();
-			$template->template($this->parent);
-			if ($count !== $node->getNodeCount()) {
-				throw new TemplateException(sprintf('Template [%s] can contain only block controls.', $file));
+		public function getControlList(IControl $root): array {
+			$this->root = $root;
+			return array_merge($this->controlList, $this->onTemplate());
+		}
+
+		abstract protected function onTemplate(): array;
+
+		public function template(IControl $root) {
+			$this->root = $root;
+			$this->reflectionClass = new \ReflectionClass($root);
+			$this->build();
+		}
+
+		public function build() {
+			$controlList = $this->getControlList($this->root);
+			$controlList[null]($this->root);
+		}
+
+		public function control(string $name, IControl $root): IHtmlTemplate {
+			if (isset($this->controlList[$name]) === false) {
+				throw new TemplateException(sprintf('Requested unknown control block [%s] on [%s].', $name, $root->getNode()
+					->getPath()));
 			}
-			$this->blockList = array_merge($this->blockList, $template->getBlockList());
+			$this->controlList[$name]($root);
 			return $this;
 		}
 	}

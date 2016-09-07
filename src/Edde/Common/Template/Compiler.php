@@ -12,7 +12,7 @@
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\ITemplate;
-	use Edde\Common\Node\Node;
+	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Usable\AbstractUsable;
 
@@ -106,21 +106,13 @@
 			if (isset($this->macroList[$name = $macro->getName()]) === false) {
 				throw new CompilerException(sprintf('Unknown macro [%s] in [%s].', $macro->getName(), $element->getPath()));
 			}
-			if ($macro->hasAttributeList('m')) {
-				$attributeList = $macro->getAttributeList();
-				foreach ($macro->getAttributeList('m') as $attribute => $value) {
-					/**
-					 * m attributes can be changed in $this->macro calls, so it's important to check them every loop
-					 */
-					$macroAttributeList = $macro->getAttributeList('m');
-					if (isset($macroAttributeList[$attribute]) === false) {
-						continue;
+			if ($macro->getMeta('inline', false)) {
+				foreach (NodeIterator::recursive($macro) as $node) {
+					if ($node->getMeta('inline', false) === false) {
+						$element = $node;
+						break;
 					}
-					unset($attributeList['m:' . $attribute]);
-					$macro->setAttributeList($attributeList);
-					$this->macro(new Node('m:' . $attribute, $value), $element);
 				}
-				return;
 			}
 			$this->macroList[$name]->macro($macro, $element, $this);
 		}
@@ -140,7 +132,7 @@
 			if (strpos($value, '->', 0) !== false) {
 				return '->' . StringUtils::firstLower(StringUtils::camelize(substr($value, 2)));
 			}
-			if (strpos($value, '()') !== false) {
+			if (strpos($value, '(') !== false) {
 				return '$this->' . StringUtils::firstLower(StringUtils::camelize($value));
 			}
 			if ($value[0] === '$') {

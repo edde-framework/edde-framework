@@ -1,0 +1,10 @@
+<control>
+	<schema name="foo" schema="Foo\Bar\Schema"/>
+	<div id="blabla" m:id="foo" m:property="foo.bar">
+		<span>value</span>
+		<div class="foo">
+			<div id="bar"/>
+		</div>
+	</div>
+	<button action="foo()" m:bind="foo"/>
+</control>

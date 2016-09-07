@@ -125,7 +125,7 @@
 				if (strpos($name, $key) === false) {
 					continue;
 				}
-				unset($this->attributeList[$key . $namespace]);
+				unset($this->attributeList[$name]);
 			}
 			return $this;
 		}

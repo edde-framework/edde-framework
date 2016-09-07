@@ -1,14 +1,19 @@
 <control>
-	<div>
-		<div>
-			<div class="hidden one"/>
+	<div id="first-one" class="simple node"/>
+	<div id="2">
+		<div id="3">
+			<div id="4" class="hidden one"/>
 		</div>
 	</div>
-	<div>
-		<div value="with value"/>
-		<div value="another value"/>
-		<div>
+	<div id="5">
+		<div id="6" value="with value"/>
+		<div id="7" value="another value"/>
+		<div id="8">
 			<div class="another hidden"/>
 		</div>
+		<div id="9" value="foo"/>
+	</div>
+	<div id="10" class="bunch">
+		<span id="11">foobar and so</span>
 	</div>
 </control>

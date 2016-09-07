@@ -1,5 +1,14 @@
 <control>
-	<schema name="foo" schema="Foo\Bar\Schema"/>
-	<div id="blabla" m:id="foo" m:schema="foo.bar"/>
-	<button action="foo()" m:bind="foo"/>
+	<div class="dummy-div">
+		<div id="blabla" m:id="foo"/>
+		<div id="foo" m:id="some-id">
+			<div class="children-node"/>
+			<span>hello world!</span>
+		</div>
+		<div class="hidden-button">
+			<button action="foo()" m:bind="foo">
+				<span>even button has another contorls</span>
+			</button>
+		</div>
+	</div>
 </control>

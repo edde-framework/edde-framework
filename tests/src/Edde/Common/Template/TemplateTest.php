@@ -7,6 +7,7 @@
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\File\ITempDirectory;
+	use Edde\Api\Html\IHtmlTemplate;
 	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResourceManager;
@@ -19,16 +20,15 @@
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\File\TempDirectory;
-	use Edde\Common\Html\MacroSet;
+	use Edde\Common\Html\ContainerControl;
+	use Edde\Common\Html\Macro\ControlMacro;
+	use Edde\Common\Html\Macro\TemplateMacro;
+	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Html\TemplateControl;
 	use Edde\Common\Link\ControlLinkGenerator;
 	use Edde\Common\Link\HostUrl;
 	use Edde\Common\Link\LinkFactory;
 	use Edde\Common\Resource\ResourceManager;
-	use Edde\Common\Template\Macro\Control\ControlMacro;
-	use Edde\Common\Template\Macro\IncludeMacro;
-	use Edde\Common\Template\Macro\LoopMacro;
-	use Edde\Common\Template\Macro\SwitchMacro;
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
 	use Edde\Common\Xml\XmlParser;
@@ -78,6 +78,7 @@
 			$file = $template->getFile();
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -86,21 +87,34 @@
 		<title></title>
 	</head>
 	<body>
-		<div>
-			<div>
-				<div class="hidden one"></div>
+		<div id="first-one" class="simple node"></div>
+		<div id="2">
+			<div id="3">
+				<div id="4" class="hidden one"></div>
 			</div>
 		</div>
-		<div>
-			<div>with value</div>
-			<div>another value</div>
-			<div>
+		<div id="5">
+			<div id="6">with value</div>
+			<div id="7">another value</div>
+			<div id="8">
 				<div class="another hidden"></div>
 			</div>
+			<div id="9">foo</div>
+		</div>
+		<div id="10" class="bunch">
+			<span id="11">foobar and so</span>
 		</div>
 	</body>
 </html>
 ', $this->control->render());
+			$template->control('2', $container = new ContainerControl());
+			$container->dirty();
+			self::assertEquals('	<div id="2">
+		<div id="3">
+			<div id="4" class="hidden one"></div>
+		</div>
+	</div>
+', $container->render());
 		}
 
 		public function testButton() {
@@ -135,10 +149,10 @@
 		<title></title>
 	</head>
 	<body>
-		<div>
-			<div class="the-second-bar">lorem ipsum</div>
-			<div class="dummy-div">
-				<div class="the-second">bar content</div>
+		<div id="to-be-switched">
+			<div id="bar-id" class="the-second-bar">lorem ipsum</div>
+			<div id="dummy-div" class="dummy-div">
+				<div id="inner-bar" class="the-second">bar content</div>
 			</div>
 		</div>
 	</body>
@@ -170,7 +184,7 @@
 ', $this->control->render());
 		}
 
-		public function testIdBind() {
+		public function testId() {
 			$template = $this->templateManager->template(__DIR__ . '/assets/template/id.xml');
 			$file = $template->getFile();
 			self::assertTrue($file->isAvailable());
@@ -183,7 +197,42 @@
 		<title></title>
 	</head>
 	<body>
-		<div id="blabla" data-schema="Foo\Bar\Schema" data-property="bar"></div>
+		<div class="dummy-div">
+			<div id="blabla"></div>
+			<div id="foo">
+				<div class="children-node"></div>
+				<span>hello world!</span>
+			</div>
+			<div class="hidden-button">
+				<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=foo" data-bind="blabla">
+					<span>even button has another contorls</span>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
+		public function testSchema() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/schema.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="blabla" data-schema="Foo\Bar\Schema" data-property="bar">
+			<span>value</span>
+			<div class="foo">
+				<div id="bar"></div>
+			</div>
+		</div>
 		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=foo" data-bind="blabla"></div>
 	</body>
 </html>
@@ -274,6 +323,37 @@
 ', $this->control->render());
 		}
 
+		public function testMultiInclude() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/multi-include.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div>
+			<div>
+				<div>
+					<div class="include here">
+						<div class="simple-div">
+							<div>simply included</div>
+						</div>
+						<span class="another-included">span here</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="alone here"></div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
 		public function testLoop01() {
 			$template = $this->templateManager->template(__DIR__ . '/assets/template/loop-01.xml');
 			$file = $template->getFile();
@@ -290,8 +370,14 @@
 		<div class="looping">
 			<div>looped-one</div>
 		</div>
+		<div>
+			<span class="looped-one">value</span>
+		</div>
 		<div class="looping">
 			<div>another-looop</div>
+		</div>
+		<div>
+			<span class="another-looop">value</span>
 		</div>
 		<div class="another-kind-of-loop">
 			<div class="looping2" data-tribute="first">looped-one</div>
@@ -452,6 +538,31 @@
 ', $this->control->render());
 		}
 
+		public function testSimplePass() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/test-simple-pass.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="pass-me special-class">
+			<span class="foo bar">some span here</span>
+		</div>
+		<div id="foo" class="poo"></div>
+	</body>
+</html>
+', $this->control->render());
+			self::assertNotEmpty($this->control->specialDiv);
+			self::assertInstanceOf(DivControl::class, $this->control->specialDiv);
+			self::assertContains('special-class', $this->control->specialDiv->getClassList());
+		}
+
 		public function testPass() {
 			$template = $this->templateManager->template(__DIR__ . '/assets/template/pass.xml');
 			$file = $template->getFile();
@@ -493,11 +604,47 @@
 ', $control->render());
 		}
 
+		public function testRequire() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/require.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="foo-bar"></div>
+		<div>
+			<span>lorem ipsum or something like that</span>
+		</div>
+		<div id="id"></div>
+		<div class="qwerty"></div>
+		<div>
+			<span>foo</span>
+			<div>
+				<div></div>
+				<div></div>
+				<div class="soo empty div here"></div>
+				<div></div>
+			</div>
+		</div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
 		public function testLayout() {
 			$template = $this->templateManager->template(__DIR__ . '/assets/template/layout.xml');
 			$file = $template->getFile();
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			$template->include(__DIR__ . '/assets/template/require.xml', $this->control);
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -513,26 +660,26 @@
 			</div>
 			<div class="bar"></div>
 		</div>
-		<div class="foo-bar"></div>
-		<div class="something">
-			<div class="qwerty"></div>
+		<div id="id"></div>
+		<div id="id"></div>
+		<div class="qwerty"></div>
+		<div>
+			<span>foo</span>
 			<div>
-				<span>foo</span>
-				<div>
-					<div></div>
-					<div></div>
-					<div class="soo empty div here"></div>
-					<div></div>
-				</div>
+				<div></div>
+				<div></div>
+				<div class="soo empty div here"></div>
+				<div></div>
 			</div>
 		</div>
+		<div class="something"></div>
 	</body>
 </html>
 ', $this->control->render());
 		}
 
-		public function testLayout2() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/layout2.xml');
+		public function testSnippet() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/snippet.xml');
 			$file = $template->getFile();
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
@@ -543,15 +690,27 @@
 		<meta charset="utf-8">
 		<title></title>
 	</head>
+	<body></body>
+</html>
+', $this->control->render());
+			self::assertEmpty($this->control->snippy);
+			$this->control->snippet('some-snippet-name');
+			self::assertNotEmpty($this->control->snippy);
+			self::assertInstanceOf(DivControl::class, $this->control->snippy);
+			$this->control->invalidate();
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
 	<body>
-		<div class="foo"></div>
-		<div>
-			<div class="poo"></div>
-		</div>
-		<div class="bar"></div>
+		<div id="moo" class="simple-div"></div>
 	</body>
 </html>
 ', $this->control->render());
+			self::assertEquals('		<div id="moo" class="simple-div"></div>
+', $this->control->snippy->render());
 		}
 
 		protected function setUp() {
@@ -586,12 +745,8 @@
 			$this->resourceManager->registerResourceHandler($this->container->create(XmlResourceHandler::class));
 			$this->templateManager = $this->container->create(ITemplateManager::class);
 			$this->templateManager->onSetup(function (ITemplateManager $templateManager) {
-				$templateManager->registerMacroList(array_merge(MacroSet::macroList($this->container), [
-					new ControlMacro('custom-control', \CustomControl::class),
-					$this->container->inject(new IncludeMacro()),
-					$this->container->inject(new SwitchMacro()),
-					$this->container->inject(new LoopMacro()),
-				]));
+				$templateManager->registerMacroList(TemplateMacro::macroList($this->container));
+				$templateManager->registerMacroList([new ControlMacro('custom-control', \CustomControl::class)]);
 			});
 			$this->control = $this->container->create(\TestDocument::class);
 		}

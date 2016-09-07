@@ -56,10 +56,6 @@
 			return $this;
 		}
 
-		public function isRoot() {
-			return $this->getParent() === null;
-		}
-
 		public function isChild() {
 			return $this->getParent() !== null;
 		}
@@ -75,6 +71,7 @@
 			if ($this->accept($abstractNode) === false) {
 				throw new NodeException(sprintf("Current node [%s] doesn't accept given node [%s].", static::class, get_class($abstractNode)));
 			}
+			/** @var $parent IAbstractNode */
 			$parent = $abstractNode->getParent();
 			if ($move || $parent === null) {
 				if ($parent) {
@@ -111,18 +108,6 @@
 				}
 			}
 			throw new NodeException('The given node is not in current node list.');
-		}
-
-		public function getNodeList() {
-			return $this->nodeList;
-		}
-
-		public function setNodeList($nodeList, $move = false) {
-			$this->nodeList = [];
-			foreach ($nodeList as $node) {
-				$this->addNode($node, $move);
-			}
-			return $this;
 		}
 
 		public function clearNodeList() {
@@ -171,6 +156,19 @@
 			return count($this->nodeList) === 0;
 		}
 
+		public function isLast(): bool {
+			if ($this->isRoot()) {
+				throw new NodeException(sprintf('Cannot check last flag of root node.'));
+			}
+			$nodeList = $this->getParent()
+				->getNodeList();
+			return end($nodeList) === $this;
+		}
+
+		public function isRoot() {
+			return $this->getParent() === null;
+		}
+
 		public function getTreeSize() {
 			$size = 1;
 			foreach ($this->nodeList as $node) {
@@ -181,6 +179,45 @@
 
 		public function getNodeCount() {
 			return count($this->nodeList);
+		}
+
+		public function insert(IAbstractNode $abstractNode): IAbstractNode {
+			if ($abstractNode->isLeaf() === false) {
+				throw new NodeException('Node must be empty.');
+			}
+			$this->addNode($abstractNode->addNodeList($this->getNodeList(), true));
+			return $this;
+		}
+
+		public function getNodeList() {
+			return $this->nodeList;
+		}
+
+		public function setNodeList($nodeList, $move = false) {
+			$this->nodeList = [];
+			foreach ($nodeList as $node) {
+				$this->addNode($node, $move);
+			}
+			return $this;
+		}
+
+		public function switch (IAbstractNode $abstractNode): IAbstractNode {
+			if (($parent = $this->getParent()) !== null) {
+				$parent->replaceNode($this, [$abstractNode]);
+			}
+			$abstractNode->addNode($this);
+			$abstractNode->setParent($parent);
+			$this->setParent($abstractNode);
+			return $abstractNode;
+		}
+
+		public function replaceNode(IAbstractNode $abstractNode, array $nodeList): IAbstractNode {
+			array_splice($this->nodeList, array_search($abstractNode, $this->nodeList, true), 0, $nodeList);
+			unset($this->nodeList[array_search($abstractNode, $this->nodeList, true)]);
+			foreach ($nodeList as $node) {
+				$node->setParent($this);
+			}
+			return $this;
 		}
 
 		public function __clone() {

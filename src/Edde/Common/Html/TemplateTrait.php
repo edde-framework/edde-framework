@@ -10,7 +10,6 @@
 	use Edde\Api\Html\IHtmlView;
 	use Edde\Api\Router\IRoute;
 	use Edde\Api\Template\ITemplateManager;
-	use Edde\Api\Template\TemplateException;
 	use Edde\Common\Strings\StringUtils;
 
 	trait TemplateTrait {
@@ -60,12 +59,15 @@
 					$useList[] = $action;
 				}
 			}
+			/** @var $control IHtmlView */
 			/** @var $template IHtmlTemplate */
+			$control = $this;
 			$template = $this->templateManager->template($layout)
 				->getInstance($this->container);
-			/** @var $control IHtmlView */
-			$control = $this;
-			$template->template($control, $useList);
+			foreach ($useList as $use) {
+				$template->include($use, $control);
+			}
+			$template->template($control);
 			return $this;
 		}
 
@@ -80,20 +82,17 @@
 			return dirname($reflectionClass->getFileName()) . '/template/' . StringUtils::recamel($this->route->getMethod()) . '.xml';
 		}
 
-		public function block(string $block, string $file = null) {
+		public function block(string $file, string ...$blockList) {
 			$this->check();
 			/** @var $template IHtmlTemplate */
 			$template = $this->templateManager->template($file = $file ?: $this->getActionTemplateFile())
 				->getInstance($this->container);
 			/** @var $control IHtmlView */
 			$control = $this;
-			$node = $control->getNode();
-			$count = $node->getNodeCount();
 			$template->template($control);
-			if ($count !== $node->getNodeCount()) {
-				throw new TemplateException(sprintf('Template [%s] can contain only block controls.', $file));
+			foreach ($blockList as $block) {
+				$template->control($block, $control);
 			}
-			$template->block($block, $control);
 			return $this;
 		}
 	}
