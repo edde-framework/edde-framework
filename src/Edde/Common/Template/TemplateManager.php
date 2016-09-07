@@ -73,16 +73,24 @@
 		}
 
 		public function template(string $file, array $parameterList = [], bool $force = false): ITemplate {
-			throw new \Exception('not implemented yet: make compile standalone (returning only IFile); template will do a job');
-			return $this->compile(new File($file), $force);
+			return $this->instance($this->compile(new File($file), $force), $parameterList);
 		}
 
-		public function compile(IFile $file, bool $force = false): ITemplate {
+		public function instance(IFile $file, array $parameterList = []) {
+			if (class_exists($class = str_replace('.php', '', $file->getName())) === false) {
+				(function (IFile $file) {
+					require_once($file->getPath());
+				})($file);
+			}
+			return $this->container->create($class, ...$parameterList);
+		}
+
+		public function compile(IFile $file, bool $force = false): IFile {
 			if ($file->isAvailable() === false) {
 				throw new TemplateException(sprintf('Template file [%s] is not available.', $file->getPath()));
 			}
 			if (($templateFile = $this->cache->load($cacheId = $file->getPath(), false)) !== false && $force === false) {
-				return $this->instance(new File($templateFile));
+				return new File($templateFile);
 			}
 			$this->use();
 			if ((($root = $this->resourceManager->resource($file)) instanceof INode) === false) {
@@ -95,16 +103,7 @@
 			}
 			$compiler->registerMacroList($macroList);
 			$this->cache->save($cacheId, $templateFile->getPath());
-			return $this->instance($compiler->compile());
-		}
-
-		public function instance(IFile $file) {
-			if (class_exists($class = str_replace('.php', '', $file->getName())) === false) {
-				(function (IFile $file) {
-					require_once($file->getPath());
-				})($file);
-			}
-			return $this->container->inject(new $class());
+			return $compiler->compile();
 		}
 
 		protected function update(INode $root) {

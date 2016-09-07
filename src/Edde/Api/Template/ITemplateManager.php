@@ -20,9 +20,9 @@
 		 * @param IFile $file
 		 * @param bool $force
 		 *
-		 * @return ITemplate
+		 * @return IFile
 		 */
-		public function compile(IFile $file, bool $force = false): ITemplate;
+		public function compile(IFile $file, bool $force = false): IFile;
 
 		/**
 		 * shorthand for compile
