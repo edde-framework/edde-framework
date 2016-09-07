@@ -26,24 +26,14 @@
 			switch ($macro->getName()) {
 				case 'id':
 					$element->setAttribute('id', $this->idList[$macro->getValue()] = $element->getAttribute('id', $element->getMeta('control')));
-					$this->start($macro, $element, $compiler);
-					foreach ($macro->getNodeList() as $node) {
-						$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
-						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
-					}
-					$this->end($macro, $element, $compiler);
+					$this->lambda($macro, $element, $compiler);
 					break;
 				case 'bind':
 					if (isset($this->idList[$id = $macro->getValue()]) === false) {
 						throw new MacroException(sprintf('Unknown bind id [%s] at [%s].', $id, $macro->getPath()));
 					}
 					$element->setAttribute('bind', $this->idList[$id]);
-					$this->start($macro, $element, $compiler);
-					foreach ($macro->getNodeList() as $node) {
-						$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
-						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$root);\n", $compiler->delimite($node->getMeta('control'))));
-					}
-					$this->end($macro, $element, $compiler);
+					$this->lambda($macro, $element, $compiler);
 					break;
 			}
 			$this->element($element, $compiler);

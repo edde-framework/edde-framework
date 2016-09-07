@@ -40,18 +40,14 @@
 					$this->stack->push($id = StringUtils::camelize($this->cryptEngine->guid()));
 					$this->start($macro, $element, $compiler);
 					$destination->write(sprintf("\t\t\t\$stash[%s] = %s;\n", $compiler->delimite($id), $compiler->delimite($macro->getValue())));
-					foreach ($macro->getNodeList() as $node) {
-						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
-					}
+					$this->dependencies($macro, $compiler);
 					$this->end($macro, $element, $compiler);
 					break;
 				case 'case':
 					$this->checkValue($macro, $element);
 					$this->start($macro, $element, $compiler);
 					$destination->write(sprintf("\t\t\tif(\$stash[%s] === %s) {\n", $compiler->delimite($this->stack->top()), $compiler->delimite($macro->getAttribute('case', $macro->getValue()))));
-					foreach ($macro->getNodeList() as $node) {
-						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
-					}
+					$this->dependencies($macro, $compiler);
 					$destination->write("\t\t\t}\n");
 					$this->end($macro, $element, $compiler);
 					break;

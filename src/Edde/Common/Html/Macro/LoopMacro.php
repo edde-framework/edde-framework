@@ -49,10 +49,7 @@
 					$destination->write(sprintf("\t\t\t\t\t\$stash[%s] = \$%s;\n", $compiler->delimite($key), $key));
 					$destination->write(sprintf("\t\t\t\t\t\$stash[%s] = \$%s;\n", $compiler->delimite($value), $value));
 					$destination->write(sprintf("\t\t\t/** %s (%s) */\n", $macro->getPath(), $element->getPath()));
-					foreach ($macro->getNodeList() as $node) {
-						$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
-						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
-					}
+					$this->dependencies($macro, $compiler);
 					$destination->write("\t\t\t\t}\n");
 					$this->end($macro, $element, $compiler);
 					$this->loopStack->pop();

@@ -80,10 +80,7 @@
 					$destination->write(sprintf("\t\t\t\$controlList[null][] = function(%s \$root) use(&\$controlList, &\$stash) {\n", IControl::class));
 					$destination->write("\t\t\t\t\$control = \$root;\n");
 					$this->writeAttributeList($this->getAttributeList($element, $compiler), $destination);
-					foreach ($element->getNodeList() as $node) {
-						$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
-						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
-					}
+				$this->dependencies($macro, $compiler);
 					$destination->write("\t\t\t};\n");
 					$this->element($element, $compiler);
 					// fun will be here

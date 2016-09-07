@@ -10,14 +10,28 @@
 	use Edde\Common\Template\AbstractMacro;
 
 	abstract class AbstractHtmlMacro extends AbstractMacro {
-		public function start(INode $macro, INode $element, ICompiler $compiler) {
+		public function lambda(INode $macro, INode $element, ICompiler $compiler) {
+			$this->start($macro, $element, $compiler);
+			$this->dependencies($macro, $compiler);
+			$this->end($macro, $element, $compiler);
+		}
+
+		protected function start(INode $macro, INode $element, ICompiler $compiler) {
 			$destination = $compiler->getDestination();
 			$destination->write(sprintf("\t\t\t/** %s (%s) */\n", $macro->getPath(), $element->getPath()));
 			$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash) {\n", $compiler->delimite($macro->getMeta('control')), IControl::class));
 			$destination->write("\t\t\t\t\$control = \$root;\n");
 		}
 
-		public function end(INode $macro, INode $element, ICompiler $compiler) {
+		protected function dependencies(INode $macro, ICompiler $compiler) {
+			$destination = $compiler->getDestination();
+			foreach ($macro->getNodeList() as $node) {
+				$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
+				$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
+			}
+		}
+
+		protected function end(INode $macro, INode $element, ICompiler $compiler) {
 			$destination = $compiler->getDestination();
 			$destination->write("\t\t\t\treturn \$control;\n");
 			$destination->write("\t\t\t};\n");

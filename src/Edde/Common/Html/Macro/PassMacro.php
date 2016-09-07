@@ -24,10 +24,7 @@
 					$compiler->macro($element, $element);
 					$value = StringUtils::firstLower(StringUtils::camelize($value));
 					$this->start($macro, $element, $compiler);
-					foreach ($macro->getNodeList() as $node) {
-						$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
-						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
-					}
+					$this->dependencies($macro, $compiler);
 					if (strrpos($value, '()') !== false) {
 						$destination->write(sprintf("\t\t\t\t\$this->%s(\$control);\n", str_replace('()', '', $value)));
 					} else {

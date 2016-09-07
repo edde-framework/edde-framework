@@ -29,9 +29,7 @@
 			$this->writeTextValue($element, $destination, $compiler);
 			$this->onControl($macro, $element, $compiler);
 			$this->writeAttributeList($this->getAttributeList($element, $compiler), $destination);
-			foreach ($macro->getNodeList() as $node) {
-				$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
-			}
+			$this->dependencies($macro, $compiler);
 			$this->end($macro, $element, $compiler);
 		}
 

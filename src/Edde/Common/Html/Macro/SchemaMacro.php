@@ -21,18 +21,12 @@
 		}
 
 		public function macro(INode $macro, INode $element, ICompiler $compiler) {
-			$destination = $compiler->getDestination();
 			switch ($macro->getName()) {
 				case 'schema':
 					$this->checkLeaf($macro, $element);
 					$this->checkAttribute($macro, $element, 'name', 'schema');
 					$this->schemaList[$macro->getAttribute('name')] = $macro->getAttribute('schema');
-					$this->start($macro, $element, $compiler);
-					foreach ($macro->getNodeList() as $node) {
-						$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
-						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$root);\n", $compiler->delimite($node->getMeta('control'))));
-					}
-					$this->end($macro, $element, $compiler);
+					$this->lambda($macro, $element, $compiler);
 					break;
 				case 'property':
 					$this->checkValue($macro, $element);
@@ -42,12 +36,7 @@
 					}
 					$element->setAttribute('data-schema', $this->schemaList[$schema]);
 					$element->setAttribute('data-property', $property);
-					$this->start($macro, $element, $compiler);
-					foreach ($macro->getNodeList() as $node) {
-						$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
-						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$root);\n", $compiler->delimite($node->getMeta('control'))));
-					}
-					$this->end($macro, $element, $compiler);
+					$this->lambda($macro, $element, $compiler);
 					break;
 			}
 		}
