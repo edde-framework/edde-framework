@@ -10,7 +10,6 @@
 		public function __construct() {
 			parent::__construct([
 				'include',
-				'define',
 				'block',
 			]);
 		}
@@ -25,18 +24,10 @@
 					$this->dependencies($macro, $compiler);
 					$this->end($macro, $element, $compiler);
 					break;
-				case 'define':
-					$this->checkValue($macro, $element);
-					$this->start($macro, $element, $compiler);
-					$destination->write(sprintf("\t\t\t\t\$this->controlList[%s](\$control);\n", $compiler->delimite($id = $macro->getValue())));
-					$this->end($macro, $element, $compiler, false);
-					$macro->setMeta('control', $id);
-					$this->lambda($macro, $element, $compiler);
-					break;
 				case 'block':
-					$this->checkAttribute($macro, $element, 'name');
+					$macro->getMeta('inline') ? $this->checkValue($macro, $element) : $this->checkAttribute($macro, $element, 'name');
 					$this->start($macro, $element, $compiler);
-					$destination->write(sprintf("\t\t\t\t\$this->controlList[%s](\$control);\n", $compiler->delimite($id = $macro->getAttribute('name'))));
+					$destination->write(sprintf("\t\t\t\t\$this->controlList[%s](\$control);\n", $compiler->delimite($id = $macro->getAttribute('name', $macro->getValue()))));
 					$this->end($macro, $element, $compiler, false);
 					$macro->setMeta('control', $id);
 					$this->lambda($macro, $element, $compiler);

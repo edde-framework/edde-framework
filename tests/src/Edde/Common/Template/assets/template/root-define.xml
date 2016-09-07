@@ -1,4 +1,4 @@
-<control m:define="foo">
+<control m:block="foo">
 	<div>
 		<span>boo</span>
 	</div>
