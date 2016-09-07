@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Html\Macro;
 
-	use Edde\Api\Control\IControl;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 
@@ -45,9 +44,7 @@
 			switch ($macro->getName()) {
 				case 'loop':
 					$source = $macro->getAttribute('src', $macro->getValue());
-					$destination->write(sprintf("\t\t\t\t/** macro: %s */\n", $macro->getPath()));
-					$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash) {\n", $compiler->delimite($macro->getMeta('control')), IControl::class));
-					$destination->write("\t\t\t\t\$control = \$root;\n");
+					$this->start($macro, $element, $compiler);
 					$destination->write(sprintf("\t\t\t\tforeach(%s as \$%s => \$%s) {\n", $compiler->delimite($source), $key, $value));
 					$destination->write(sprintf("\t\t\t\t\t\$stash[%s] = \$%s;\n", $compiler->delimite($key), $key));
 					$destination->write(sprintf("\t\t\t\t\t\$stash[%s] = \$%s;\n", $compiler->delimite($value), $value));
@@ -57,7 +54,7 @@
 						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
 					}
 					$destination->write("\t\t\t\t}\n");
-					$destination->write("\t\t\t};\n");
+					$this->end($macro, $element, $compiler);
 					$this->element($macro, $compiler);
 					$this->loopStack->pop();
 					break;

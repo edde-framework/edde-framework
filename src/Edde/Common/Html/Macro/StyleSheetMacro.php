@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Html\Macro;
 
-	use Edde\Api\Control\IControl;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 
@@ -20,9 +19,9 @@
 			switch ($macro->getName()) {
 				case 'css':
 					$this->checkAttribute($macro, $element, 'src');
-					$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash) {\n", $compiler->delimite($macro->getMeta('control')), IControl::class));
+					$this->start($macro, $element, $compiler);
 					$destination->write(sprintf("\t\t\t\t\$this->styleSheetCompiler->addFile(%s);\n", $compiler->delimite($macro->getAttribute('src'))));
-					$destination->write("\t\t\t};\n");
+					$this->end($macro, $element, $compiler);
 					break;
 			}
 		}

@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Html\Macro;
 
-	use Edde\Api\Control\IControl;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Common\Strings\StringUtils;
@@ -24,9 +23,7 @@
 				case 'pass':
 					$compiler->macro($element, $element);
 					$value = StringUtils::firstLower(StringUtils::camelize($value));
-					$destination->write(sprintf("\t\t\t\t/** macro: %s */\n", $macro->getPath()));
-					$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash) {\n", $compiler->delimite($macro->getMeta('control')), IControl::class));
-					$destination->write("\t\t\t\t\$control = \$root;\n");
+					$this->start($macro, $element, $compiler);
 					foreach ($macro->getNodeList() as $node) {
 						$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
 						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
@@ -38,7 +35,7 @@
 						$destination->write("\t\t\t\$reflectionProperty->setAccessible(true);\n");
 						$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->root, \$control);\n");
 					}
-					$destination->write("\t\t\t};\n");
+					$this->end($macro, $element, $compiler);
 					$this->element($macro, $compiler);
 					break;
 				case 'pass-child':

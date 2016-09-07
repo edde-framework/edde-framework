@@ -3,12 +3,10 @@
 
 	namespace Edde\Common\Html\Macro;
 
-	use Edde\Api\Control\IControl;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
-	use Edde\Common\Template\AbstractMacro;
 
-	class JavaScriptMacro extends AbstractMacro {
+	class JavaScriptMacro extends AbstractHtmlMacro {
 		public function __construct() {
 			parent::__construct([
 				'js',
@@ -21,9 +19,9 @@
 			switch ($macro->getName()) {
 				case 'js':
 					$this->checkAttribute($macro, $element, 'src');
-					$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash) {\n", $compiler->delimite($macro->getMeta('control')), IControl::class));
+					$this->start($macro, $element, $compiler);
 					$destination->write(sprintf("\t\t\t\t\$this->javaScriptCompiler->addFile(%s);\n", $compiler->delimite($macro->getAttribute('src'))));
-					$destination->write("\t\t\t};\n");
+					$this->end($macro, $element, $compiler);
 					break;
 			}
 		}
