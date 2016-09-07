@@ -661,17 +661,16 @@
 			</div>
 			<div class="bar"></div>
 		</div>
-		<div class="foo-bar"></div>
-		<div class="something">
-			<div class="qwerty"></div>
+		<div id="id"></div>
+		<div id="id"></div>
+		<div class="qwerty"></div>
+		<div>
+			<span>foo</span>
 			<div>
-				<span>foo</span>
-				<div>
-					<div></div>
-					<div></div>
-					<div class="soo empty div here"></div>
-					<div></div>
-				</div>
+				<div></div>
+				<div></div>
+				<div class="soo empty div here"></div>
+				<div></div>
 			</div>
 		</div>
 		<div class="something"></div>
