@@ -595,10 +595,6 @@
 ', $this->control->render());
 		}
 
-		public function testAnonymousId() {
-			// this is dependant on testPass()
-		}
-
 		public function testCustomControl() {
 			$control = $this->container->create(TemplateControl::class);
 			$control->setTemplate(__DIR__ . '/assets/template/custom.xml');
@@ -607,6 +603,40 @@
 			<div class="hello" attr="foo">custom control</div>
 	</div>
 ', $control->render());
+		}
+
+		public function testRequire() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/require.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="foo-bar"></div>
+		<div>
+			<span>lorem ipsum or something like that</span>
+		</div>
+		<div id="id"></div>
+		<div class="qwerty"></div>
+		<div>
+			<span>foo</span>
+			<div>
+				<div></div>
+				<div></div>
+				<div class="soo empty div here"></div>
+				<div></div>
+			</div>
+		</div>
+	</body>
+</html>
+', $this->control->render());
 		}
 
 		public function testLayout() {
@@ -644,6 +674,7 @@
 				</div>
 			</div>
 		</div>
+		<div class="something"></div>
 	</body>
 </html>
 ', $this->control->render());

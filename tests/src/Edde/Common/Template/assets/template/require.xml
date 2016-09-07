@@ -1,9 +1,10 @@
 <control>
-	<div class="foo-bar" m:define="poo"/>
+	<div class="foo-bar" m:define="moo"/>
 	<div m:define="foo">
 		<span value="lorem ipsum or something like that"/>
 	</div>
-	<define name="something">
+	<div id="id" m:define="poo"/>
+	<block name="something">
 		<div class="qwerty"/>
 		<div>
 			<span value="foo"/>
@@ -14,5 +15,5 @@
 				<div/>
 			</div>
 		</div>
-	</define>
+	</block>
 </control>

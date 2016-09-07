@@ -42,7 +42,7 @@
 		/**
 		 * @var callable[]
 		 */
-		protected $controlList;
+		protected $controlList = [];
 
 		public function lazytContainer(IContainer $container) {
 			$this->container = $container;
@@ -76,13 +76,10 @@
 		}
 
 		public function getControlList(): array {
-			if ($this->controlList === null) {
-				$this->controlList = $this->onTemplate();
-			}
-			return $this->controlList;
+			return array_merge($this->controlList, $this->onTemplate());
 		}
 
-		abstract protected function onTemplate();
+		abstract protected function onTemplate(): array;
 
 		public function template(IControl $root) {
 			$this->root = $root;
@@ -92,9 +89,7 @@
 
 		public function build() {
 			$controlList = $this->getControlList();
-			foreach ($controlList[null] as $callback) {
-				$callback($this->root);
-			}
+			$controlList[null]($this->root);
 		}
 
 		public function control(string $name, IControl $root): IHtmlTemplate {

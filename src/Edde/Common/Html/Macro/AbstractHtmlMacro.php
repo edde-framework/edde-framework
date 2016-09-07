@@ -31,11 +31,11 @@
 			}
 		}
 
-		protected function end(INode $macro, INode $element, ICompiler $compiler) {
+		protected function end(INode $macro, INode $element, ICompiler $compiler, $chilren = true) {
 			$destination = $compiler->getDestination();
 			$destination->write("\t\t\t\treturn \$control;\n");
 			$destination->write("\t\t\t};\n");
-			$this->element($macro, $compiler);
+			$chilren ? $this->element($macro, $compiler) : null;
 		}
 
 		protected function writeTextValue(INode $root, IFile $destination, ICompiler $compiler) {
@@ -58,7 +58,7 @@
 				foreach ($attributeList as $name => $value) {
 					$export[] = "'" . $name . "' => " . $value;
 				}
-				$destination->write(sprintf("\t\t\t\t\$control->setAttributeList([%s]);\n", implode(",\n", $export)));
+				$destination->write(sprintf("\t\t\t\t\$control->setAttributeList([%s]);\n", implode(', ', $export)));
 			}
 		}
 	}
