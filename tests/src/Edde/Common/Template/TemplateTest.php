@@ -24,6 +24,7 @@
 	use Edde\Common\Html\ContainerControl;
 	use Edde\Common\Html\Macro\ControlMacro;
 	use Edde\Common\Html\Macro\TemplateMacro;
+	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Html\TemplateControl;
 	use Edde\Common\Link\ControlLinkGenerator;
 	use Edde\Common\Link\HostUrl;
@@ -554,9 +555,13 @@
 		<div class="pass-me special-class">
 			<span class="foo bar">some span here</span>
 		</div>
+		<div id="foo" class="poo"></div>
 	</body>
 </html>
 ', $this->control->render());
+			self::assertNotEmpty($this->control->specialDiv);
+			self::assertInstanceOf(DivControl::class, $this->control->specialDiv);
+			self::assertContains('special-class', $this->control->specialDiv->getClassList());
 		}
 
 		public function testPass() {

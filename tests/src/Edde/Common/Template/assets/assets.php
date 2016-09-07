@@ -12,6 +12,10 @@
 		 * @var DivControl
 		 */
 		public $snippy;
+		/**
+		 * @var DivControl
+		 */
+		public $specialDiv;
 
 		public function switchMe() {
 			return 'bar';
@@ -33,6 +37,7 @@
 		}
 
 		public function specialDiv(DivControl $divControl) {
+			$this->specialDiv = $divControl;
 			$divControl->addClass('special-class');
 		}
 
