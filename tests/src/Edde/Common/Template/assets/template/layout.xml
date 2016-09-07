@@ -4,6 +4,6 @@
 		<block name="foo"/>
 		<div class="bar"/>
 	</div>
-	<!--<include src="poo"/>-->
-	<!--<div class="something" m:include="something"/>-->
+	<x:include src="poo"/>
+	<div class="something" x:include="something"/>
 </control>
