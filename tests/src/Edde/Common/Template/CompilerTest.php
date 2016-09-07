@@ -20,9 +20,11 @@
 		public function testDelimite() {
 			self::assertEquals("'foo'", $this->compiler->delimite('foo'));
 			self::assertEquals("'fo\\'o'", $this->compiler->delimite("fo'o"));
-			self::assertEquals('$this->methodCall', $this->compiler->delimite('method-call()'));
+			self::assertEquals('$this->methodCall()', $this->compiler->delimite('method-call()'));
+			self::assertEquals('$this->methodCall(', $this->compiler->delimite('method-call('));
 			self::assertEquals('$simpleVariable', $this->compiler->delimite('$simple-variable'));
 			self::assertEquals('->someCall()', $this->compiler->delimite('->some-call()'));
+			self::assertEquals('->someCall(', $this->compiler->delimite('->some-call('));
 			self::assertEquals('->someCall2', $this->compiler->delimite('->some-call2'));
 			self::assertEquals('->fooVariableHere', $this->compiler->delimite('->foo-variable-here'));
 			self::assertEquals("'" . FileUtils::normalize(__DIR__ . '/assets/template/button.xml') . "'", $this->compiler->delimite('edde://button.xml'));
