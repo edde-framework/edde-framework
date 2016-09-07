@@ -202,10 +202,12 @@
 		}
 
 		public function switch (IAbstractNode $abstractNode): IAbstractNode {
-			$parent = $this->getParent();
-			$parent->replaceNode($this, [$abstractNode]);
+			if (($parent = $this->getParent()) !== null) {
+				$parent->replaceNode($this, [$abstractNode]);
+			}
 			$abstractNode->addNode($this);
 			$abstractNode->setParent($parent);
+			$this->setParent($abstractNode);
 			return $abstractNode;
 		}
 
