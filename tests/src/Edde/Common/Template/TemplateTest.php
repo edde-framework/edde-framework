@@ -538,6 +538,27 @@
 ', $this->control->render());
 		}
 
+		public function testSimplePass() {
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/test-simple-pass.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="pass-me special-class">
+			<span class="foo bar">some span here</span>
+		</div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
 		public function testPass() {
 			$template = $this->templateManager->template(__DIR__ . '/assets/template/pass.xml');
 			$file = $template->getFile();

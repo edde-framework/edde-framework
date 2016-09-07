@@ -1,0 +1,6 @@
+<control>
+	<div class="pass-me" m:pass="special-div()">
+		<span class="foo bar">some span here</span>
+	</div>
+	<div id="foo" class="poo"/>
+</control>

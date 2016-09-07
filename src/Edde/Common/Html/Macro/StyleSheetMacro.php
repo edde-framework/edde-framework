@@ -6,9 +6,8 @@
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
-	use Edde\Common\Template\AbstractMacro;
 
-	class StyleSheetMacro extends AbstractMacro {
+	class StyleSheetMacro extends AbstractHtmlMacro {
 		public function __construct() {
 			parent::__construct([
 				'css',

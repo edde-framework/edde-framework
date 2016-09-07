@@ -7,9 +7,8 @@
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Common\Container\LazyInjectTrait;
-	use Edde\Common\Template\AbstractMacro;
 
-	class IncludeMacro extends AbstractMacro {
+	class IncludeMacro extends AbstractHtmlMacro {
 		use LazyInjectTrait;
 
 		/**

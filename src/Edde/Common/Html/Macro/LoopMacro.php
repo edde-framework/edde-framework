@@ -6,9 +6,8 @@
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
-	use Edde\Common\Template\AbstractMacro;
 
-	class LoopMacro extends AbstractMacro {
+	class LoopMacro extends AbstractHtmlMacro {
 		/**
 		 * @var \SplStack
 		 */
@@ -54,6 +53,7 @@
 					$destination->write(sprintf("\t\t\t\t\t\$stash[%s] = \$%s;\n", $compiler->delimite($value), $value));
 					$destination->write(sprintf("\t\t\t/** %s (%s) */\n", $macro->getPath(), $element->getPath()));
 					foreach ($macro->getNodeList() as $node) {
+						$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
 						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
 					}
 					$destination->write("\t\t\t\t}\n");

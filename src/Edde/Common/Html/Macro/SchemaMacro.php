@@ -7,9 +7,8 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\Template\AbstractMacro;
 
-	class SchemaMacro extends AbstractMacro {
+	class SchemaMacro extends AbstractHtmlMacro {
 		/**
 		 * @var array
 		 */

@@ -9,9 +9,8 @@
 	use Edde\Api\Template\ICompiler;
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Strings\StringUtils;
-	use Edde\Common\Template\AbstractMacro;
 
-	class SwitchMacro extends AbstractMacro {
+	class SwitchMacro extends AbstractHtmlMacro {
 		use LazyInjectTrait;
 		/**
 		 * @var \SplStack

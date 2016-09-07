@@ -8,9 +8,8 @@
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Container\LazyInjectTrait;
-	use Edde\Common\Template\AbstractMacro;
 
-	class BindMacro extends AbstractMacro {
+	class BindMacro extends AbstractHtmlMacro {
 		use LazyInjectTrait;
 
 		protected $idList;

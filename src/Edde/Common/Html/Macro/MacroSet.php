@@ -10,7 +10,6 @@
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Html\ContainerControl;
-	use Edde\Common\Html\HeaderControl;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\AbstractMacro;
 
@@ -58,66 +57,6 @@
 			};
 		}
 
-		static public function passMacro(): IMacro {
-			return new class extends AbstractMacro {
-				public function __construct() {
-					parent::__construct([
-						'm:pass',
-						'm:pass-child',
-					]);
-				}
-
-				public function macro(INode $macro, INode $element, ICompiler $compiler) {
-					$destination = $compiler->getDestination();
-					$this->checkValue($macro, $element);
-					$value = $macro->getValue();
-					switch ($macro->getName()) {
-						case 'm:pass':
-							$compiler->macro($element, $element);
-							$value = StringUtils::firstLower(StringUtils::camelize($value));
-							if (strrpos($value, '()') !== false) {
-								$destination->write(sprintf("\t\t\t\$this->%s(\$control);\n", str_replace('()', '', $value)));
-								break;
-							}
-							$destination->write(sprintf("\t\t\t\$reflectionProperty = \$reflectionClass->getProperty('%s');\n", $value));
-							$destination->write("\t\t\t\$reflectionProperty->setAccessible(true);\n");
-							$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->root, \$control);\n");
-							break;
-						case 'm:pass-child':
-							foreach ($element->getNodeList() as $node) {
-								$node->setAttribute('m:pass', $macro->getValue());
-							}
-							$compiler->macro($element, $element);
-							break;
-					}
-				}
-			};
-		}
-
-		static public function headerMacro(): IMacro {
-			return new class extends ControlMacro {
-				public function __construct() {
-					parent::__construct([
-						'h1',
-						'h2',
-						'h3',
-						'h4',
-						'h5',
-						'h6',
-					], HeaderControl::class);
-				}
-
-				public function macro(INode $macro, INode $element, ICompiler $compiler) {
-					$destination = $compiler->getDestination();
-					$destination->write("\t\t\t\$parent = \$stack->top();\n");
-					$destination->write(sprintf("\t\t\t\t\$parent->addControl(\$control = \$this->container->create(%s));\n", $compiler->delimite($this->control)));
-					$destination->write(sprintf("\t\t\t\$control->setTag('%s');\n", $element->getName()));
-					$this->writeTextValue($element, $destination, $compiler);
-					$this->writeAttributeList($this->getAttributeList($element, $compiler), $destination);
-					$this->element($element, $compiler);
-				}
-			};
-		}
 
 		static public function layoutMacro(): IMacro {
 			return new class extends AbstractMacro {

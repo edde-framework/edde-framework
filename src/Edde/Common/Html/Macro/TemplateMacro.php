@@ -50,6 +50,7 @@
 				$container->inject(new IncludeMacro()),
 				$container->inject(new LoopMacro()),
 				$container->inject(new HeaderMacro()),
+				$container->inject(new PassMacro()),
 			];
 		}
 
