@@ -80,7 +80,7 @@
 		public function handleOnClearCache() {
 			$this->use();
 			try {
-				$this->snippets(__DIR__ . '/template/action-setup.xml', 'message');
+				$this->snippets(__DIR__ . '/template/layout.xml', 'message');
 				$this->cacheStorage->invalidate();
 				$this->message('success', 'cache has been wiped out');
 			} catch (EddeException $e) {
