@@ -32,7 +32,7 @@
 			$this->onControl($macro, $element, $compiler);
 			$this->writeAttributeList($this->getAttributeList($element, $compiler), $destination);
 			foreach ($element->getNodeList() as $node) {
-				$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$root);\n", $compiler->delimite($node->getMeta('control'))));
+				$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
 			}
 			$destination->write("\t\t\t\treturn \$control;\n");
 			$destination->write("\t\t\t};\n");
