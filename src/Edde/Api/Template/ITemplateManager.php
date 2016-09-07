@@ -20,17 +20,18 @@
 		 * @param IFile $file
 		 * @param bool $force
 		 *
-		 * @return ITemplate
+		 * @return IFile
 		 */
-		public function compile(IFile $file, bool $force = false): ITemplate;
+		public function compile(IFile $file, bool $force = false): IFile;
 
 		/**
 		 * shorthand for compile
 		 *
 		 * @param string $file
+		 * @param array $parameterList
 		 * @param bool $force
 		 *
 		 * @return ITemplate
 		 */
-		public function template(string $file, bool $force = false): ITemplate;
+		public function template(string $file, array $parameterList = [], bool $force = false): ITemplate;
 	}
