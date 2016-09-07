@@ -133,7 +133,7 @@
 				return '->' . StringUtils::firstLower(StringUtils::camelize(substr($value, 2)));
 			}
 			if (strpos($value, '()') !== false) {
-				return '$this->' . StringUtils::firstLower(StringUtils::camelize($value));
+				return '$this->' . StringUtils::firstLower(StringUtils::camelize(str_replace('()', '', $value)));
 			}
 			if ($value[0] === '$') {
 				return '$' . StringUtils::firstLower(StringUtils::camelize(substr($value, 1)));

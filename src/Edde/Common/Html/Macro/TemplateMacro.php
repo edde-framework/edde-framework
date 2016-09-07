@@ -51,6 +51,7 @@
 				$container->inject(new HeaderMacro()),
 				$container->inject(new PassMacro()),
 				$container->inject(new IncludeMacro()),
+				$container->inject(new SnippetMacro()),
 			];
 		}
 

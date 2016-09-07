@@ -19,16 +19,9 @@
 			$destination = $compiler->getDestination();
 			switch ($macro->getName()) {
 				case 'include':
-					$src = null;
-					if ($macro->getMeta('inline')) {
-						$this->checkValue($macro, $element);
-						$src = $macro->getValue();
-					} else {
-						$this->checkAttribute($macro, $element, 'src');
-						$src = $macro->getAttribute('src');
-					}
+					$macro->getMeta('inline') ? $this->checkValue($macro, $element) : $this->checkAttribute($macro, $element, 'src');
 					$this->start($macro, $element, $compiler);
-					$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($src)));
+					$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$control);\n", $compiler->delimite($macro->getAttribute('src', $macro->getValue()))));
 					$this->dependencies($macro, $compiler);
 					$this->end($macro, $element, $compiler);
 					break;

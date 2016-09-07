@@ -133,7 +133,7 @@
 				/** @var $control IControl */
 				list(, $parent, $control, $invalidator) = $this->snippetList[$snippet];
 				if ($parent === null) {
-					throw new ControlException(sprintf('Snippet [%s] was not executed on [%s].', $snippet, static::class));
+					continue;
 				}
 				$callback = $callback ?: $invalidator;
 				$callback ? $callback($control) : null;

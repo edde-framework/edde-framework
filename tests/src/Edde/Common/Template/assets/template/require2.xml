@@ -1,7 +1,0 @@
-<control m:define="require2">
-	<div class="foo"/>
-	<div>
-		<div class="poo"/>
-	</div>
-	<div class="bar"/>
-</control>

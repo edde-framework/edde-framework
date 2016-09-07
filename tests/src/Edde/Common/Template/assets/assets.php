@@ -49,10 +49,6 @@
 			$control->addClass('special-button-class');
 		}
 
-		public function callTheSnippet(DivControl $divControl) {
-			$divControl->dirty();
-		}
-
 		public function render() {
 			$this->dirty();
 			return parent::render();

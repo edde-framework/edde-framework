@@ -7,7 +7,6 @@
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\File\ITempDirectory;
-	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlTemplate;
 	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Link\ILinkFactory;
@@ -679,29 +678,6 @@
 ', $this->control->render());
 		}
 
-		public function testLayout2() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/layout2.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
-			$template->template($this->control);
-			self::assertEquals('<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title></title>
-	</head>
-	<body>
-		<div class="foo"></div>
-		<div>
-			<div class="poo"></div>
-		</div>
-		<div class="bar"></div>
-	</body>
-</html>
-', $this->control->render());
-		}
-
 		public function testSnippet() {
 			$template = $this->templateManager->template(__DIR__ . '/assets/template/snippet.xml');
 			$file = $template->getFile();
@@ -714,17 +690,27 @@
 		<meta charset="utf-8">
 		<title></title>
 	</head>
+	<body></body>
+</html>
+', $this->control->render());
+			self::assertEmpty($this->control->snippy);
+			$this->control->snippet('some-snippet-name');
+			self::assertNotEmpty($this->control->snippy);
+			self::assertInstanceOf(DivControl::class, $this->control->snippy);
+			$this->control->invalidate();
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
 	<body>
-		<div class="something"></div>
+		<div id="moo" class="simple-div"></div>
 	</body>
 </html>
 ', $this->control->render());
-			$snippets = $this->control->invalidate();
-			/** @var $control IHtmlControl */
-			$control = reset($snippets);
-			self::assertCount(1, $snippets);
-			self::assertEquals('	<div id="foo" class="simple-div"></div>
-', $control->render());
+			self::assertEquals('		<div id="moo" class="simple-div"></div>
+', $this->control->snippy->render());
 		}
 
 		protected function setUp() {

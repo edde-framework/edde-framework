@@ -42,9 +42,9 @@
 			if (strrpos($value = StringUtils::firstLower(StringUtils::camelize($value)), '()') !== false) {
 				$destination->write(sprintf("\t\t\t\t\$this->%s(\$current);\n", str_replace('()', '', $value)));
 			} else {
-				$destination->write(sprintf("\t\t\t\$reflectionProperty = \$reflectionClass->getProperty('%s');\n", $value));
-				$destination->write("\t\t\t\$reflectionProperty->setAccessible(true);\n");
-				$destination->write("\t\t\t\$reflectionProperty->setValue(\$this->root, \$current);\n");
+				$destination->write(sprintf("\t\t\t\t\$reflectionProperty = \$this->reflectionClass->getProperty('%s');\n", $value));
+				$destination->write("\t\t\t\t\$reflectionProperty->setAccessible(true);\n");
+				$destination->write("\t\t\t\t\$reflectionProperty->setValue(\$this->root, \$current);\n");
 			}
 		}
 	}
