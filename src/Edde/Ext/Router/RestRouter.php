@@ -17,6 +17,10 @@
 		 */
 		protected $namespace;
 		/**
+		 * @var string
+		 */
+		protected $base;
+		/**
 		 * @var IHttpRequest
 		 */
 		protected $httpRequest;
@@ -27,9 +31,11 @@
 
 		/**
 		 * @param string $namespace
+		 * @param string $base part of url (for example /api/, /rest/, ...) to detect a match
 		 */
-		public function __construct(string $namespace) {
+		public function __construct(string $namespace, string $base) {
 			$this->namespace = $namespace;
+			$this->base = $base;
 		}
 
 		public function lazyHttpRequest(IHttpRequest $httpRequest) {
