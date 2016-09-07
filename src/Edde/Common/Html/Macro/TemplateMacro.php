@@ -46,7 +46,6 @@
 				$container->inject(new JavaScriptMacro()),
 				$container->inject(new SwitchMacro()),
 				$container->inject(new SchemaMacro()),
-				$container->inject(new BindMacro()),
 				$container->inject(new LoopMacro()),
 				$container->inject(new HeaderMacro()),
 				$container->inject(new PassMacro()),
