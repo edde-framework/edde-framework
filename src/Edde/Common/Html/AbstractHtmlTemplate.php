@@ -81,7 +81,7 @@
 		public function template(IControl $root, array $importList = []): IHtmlTemplate {
 			$this->root = $root;
 			$this->importList = array_merge($this->importList, $importList);
-			$this->getControlList()[null]();
+			$this->getControlList()[null]($this->root);
 			return $this;
 		}
 
