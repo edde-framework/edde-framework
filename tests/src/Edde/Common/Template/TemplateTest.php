@@ -697,6 +697,55 @@
 			self::assertEquals($expect, $message->render());
 		}
 
+		public function testTable() {
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/table.xml', $this->control));
+			$template->template();
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<table>
+			<tr>
+				<th>head</th>
+				<td>row</td>
+			</tr>
+			<tr>
+				<td class="foo">td here</td>
+			</tr>
+		</table>
+		<table class="full featured">
+			<caption class="this should be a method on a table"></caption>
+			<colgroup>
+				<col class="foo" span="2">
+			</colgroup>
+			<thead>
+				<tr>
+					<th>foo</th>
+					<td>bar</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>bar</td>
+					<td>foo</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td>foot here</td>
+					<td>boo here</td>
+				</tr>
+			</tfoot>
+		</table>
+	</body>
+</html>
+', $this->control->render());
+		}
+
 		protected function setUp() {
 			$this->container = ContainerFactory::create([
 				IResourceManager::class => ResourceManager::class,

@@ -9,15 +9,11 @@
 
 	class DivControl extends AbstractHtmlControl {
 		public function setTag(string $tag, bool $pair = true): IHtmlControl {
-			throw new HtmlException(sprintf('Cannot set tag [%s] to a div control.', $tag));
-		}
-
-		public function isPair() {
-			return true;
+			throw new HtmlException(sprintf('Cannot set tag [%s] to a [%s] control.', $tag, static::class));
 		}
 
 		protected function prepare() {
 			parent::prepare();
-			parent::setTag('div');
+			parent::setTag('div', true);
 		}
 	}

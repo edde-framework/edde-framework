@@ -13,9 +13,19 @@
 	use Edde\Common\Html\Input\PasswordControl;
 	use Edde\Common\Html\Input\TextControl;
 	use Edde\Common\Html\PlaceholderControl;
+	use Edde\Common\Html\Tag\CaptionControl;
+	use Edde\Common\Html\Tag\ColumnControl;
+	use Edde\Common\Html\Tag\ColumnGroupControl;
 	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Html\Tag\ImgControl;
 	use Edde\Common\Html\Tag\SpanControl;
+	use Edde\Common\Html\Tag\TableBodyControl;
+	use Edde\Common\Html\Tag\TableCellControl;
+	use Edde\Common\Html\Tag\TableControl;
+	use Edde\Common\Html\Tag\TableFootControl;
+	use Edde\Common\Html\Tag\TableHeadControl;
+	use Edde\Common\Html\Tag\TableHeaderControl;
+	use Edde\Common\Html\Tag\TableRowControl;
 	use Edde\Common\Node\NodeIterator;
 
 	class TemplateMacro extends ControlMacro {
@@ -41,6 +51,16 @@
 				$container->inject(new ControlMacro('password', PasswordControl::class)),
 				$container->inject(new ControlMacro('img', ImgControl::class)),
 				$container->inject(new ControlMacro('placeholder', PlaceholderControl::class)),
+				$container->inject(new ControlMacro('table', TableControl::class)),
+				$container->inject(new ControlMacro('thead', TableHeadControl::class)),
+				$container->inject(new ControlMacro('tbody', TableBodyControl::class)),
+				$container->inject(new ControlMacro('tfoot', TableFootControl::class)),
+				$container->inject(new ControlMacro('tr', TableRowControl::class)),
+				$container->inject(new ControlMacro('th', TableHeaderControl::class)),
+				$container->inject(new ControlMacro('td', TableCellControl::class)),
+				$container->inject(new ControlMacro('col', ColumnControl::class)),
+				$container->inject(new ControlMacro('colgroup', ColumnGroupControl::class)),
+				$container->inject(new ControlMacro('caption', CaptionControl::class)),
 				$container->inject(new ButtonMacro()),
 				$container->inject(new StyleSheetMacro()),
 				$container->inject(new JavaScriptMacro()),
