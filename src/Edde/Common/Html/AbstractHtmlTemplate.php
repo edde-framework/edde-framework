@@ -80,27 +80,27 @@
 
 		public function template(IControl $root, array $importList = []): IHtmlTemplate {
 			$this->root = $root;
-			$this->stash = [];
-			$this->reflectionClass = new \ReflectionClass($root);
-			$callback = $this->getControlList()[null];
 			$this->importList = array_merge($this->importList, $importList);
-			foreach ($this->importList as $import) {
-				/** @var $template IHtmlTemplate */
-				if ((($template = $this->templateManager->template($import)) instanceof IHtmlTemplate) === false) {
-					throw new TemplateException(sprintf('Unsupported included template [%s] type [%s]; template must be instance of [%s].', $import, get_class($template), IHtmlTemplate::class));
-				}
-				$template->root = $root;
-				$this->controlList = array_merge($this->controlList, $template->getControlList());
-			}
-			$this->controlList[null] = $callback;
-			$callback($this->root);
+			$this->getControlList()[null]();
 			return $this;
 		}
 
 		public function getControlList(): array {
 			if ($this->controlList === null) {
 				$this->controlList = [];
+				$this->stash = [];
+				$this->reflectionClass = new \ReflectionClass($this->root);
 				$this->onTemplate();
+				$callback = $this->getControlList()[null];
+				foreach ($this->importList as $import) {
+					/** @var $template IHtmlTemplate */
+					if ((($template = $this->templateManager->template($import)) instanceof IHtmlTemplate) === false) {
+						throw new TemplateException(sprintf('Unsupported included template [%s] type [%s]; template must be instance of [%s].', $import, get_class($template), IHtmlTemplate::class));
+					}
+					$template->root = $this->root;
+					$this->controlList = array_merge($this->controlList, $template->getControlList());
+				}
+				$this->controlList[null] = $callback;
 			}
 			return $this->controlList;
 		}
@@ -108,6 +108,7 @@
 		abstract protected function onTemplate();
 
 		public function control(string $name, IControl $root): IControl {
+			$this->getControlList();
 			if (isset($this->controlList[$name]) === false) {
 				throw new TemplateException(sprintf('Requested unknown control block [%s] on [%s].', $name, $root->getNode()
 					->getPath()));
