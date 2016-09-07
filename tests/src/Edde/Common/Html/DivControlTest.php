@@ -22,7 +22,7 @@
 
 		public function testDivException() {
 			$this->expectException(HtmlException::class);
-			$this->expectExceptionMessage('Cannot set tag [poo] to a div control.');
+			$this->expectExceptionMessage(sprintf('Cannot set tag [poo] to a [%s] control.', DivControl::class));
 			$divControl = new DivControl();
 			$divControl->setTag('poo');
 		}
