@@ -65,7 +65,7 @@
 			$template = $this->templateManager->template($layout)
 				->getInstance($this->container);
 			foreach ($useList as $use) {
-				$template->include($use, $control);
+				$template->import($use);
 			}
 			$template->template($control);
 			return $this;

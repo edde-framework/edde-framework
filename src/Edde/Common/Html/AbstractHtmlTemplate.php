@@ -10,10 +10,10 @@
 	use Edde\Api\Template\TemplateException;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
-	use Edde\Common\AbstractObject;
 	use Edde\Common\Container\LazyInjectTrait;
+	use Edde\Common\Template\AbstractTemplate;
 
-	abstract class HtmlTemplate extends AbstractObject implements IHtmlTemplate {
+	abstract class AbstractHtmlTemplate extends AbstractTemplate implements IHtmlTemplate {
 		use LazyInjectTrait;
 		/**
 		 * @var IContainer
@@ -39,10 +39,12 @@
 		 * @var \ReflectionClass
 		 */
 		protected $reflectionClass;
+		protected $stash;
 		/**
 		 * @var callable[]
 		 */
-		protected $controlList = [];
+		protected $controlList;
+		protected $importList = [];
 
 		public function lazytContainer(IContainer $container) {
 			$this->container = $container;
@@ -67,46 +69,55 @@
 			], $parameterList);
 		}
 
-		public function include (string $file, IControl $root) {
-			$template = $this->templateManager->template($file);
-			$template = $template->getInstance($this->container);
-			/** @var $template IHtmlTemplate */
-			$this->controlList = array_merge($this->getControlList($root), $template->getControlList($root));
+		public function import(string $file): IHtmlTemplate {
+			$this->importList[$file] = $file;
 			return $this;
 		}
 
-		public function getControlList(IControl $root): array {
+		public function include (IHtmlTemplate $htmlTemplate) {
+		}
+
+		public function template(IControl $root, array $useList = []): IHtmlTemplate {
 			$this->root = $root;
-			$this->onTemplate();
+			$this->stash = [];
+			$this->reflectionClass = new \ReflectionClass($root);
+			$callback = $this->getControlList()[null];
+			foreach ($this->importList as $import) {
+				/** @var $template IHtmlTemplate */
+				if ((($template = $this->templateManager->template($import)) instanceof IHtmlTemplate) === false) {
+					throw new TemplateException(sprintf('Unsupported included template [%s] type [%s]; template must be instance of [%s].', $import, get_class($template), IHtmlTemplate::class));
+				}
+				$this->controlList = array_merge($this->controlList, $template->getControlList());
+			}
+			$this->controlList[null] = $callback;
+			$callback($this->root);
+			return $this;
+		}
+
+		public function getControlList(): array {
+			if ($this->controlList === null) {
+				$this->controlList = [];
+				$this->onTemplate();
+			}
 			return $this->controlList;
 		}
 
 		abstract protected function onTemplate();
 
-		public function template(IControl $root) {
-			$this->root = $root;
-			$this->reflectionClass = new \ReflectionClass($root);
-			$this->build();
-		}
-
-		public function build() {
-			$controlList = $this->getControlList($this->root);
-			$controlList[null]($this->root);
-		}
-
-		public function control(string $name, IControl $root): IHtmlTemplate {
+		public function control(string $name, IControl $root): IControl {
 			if (isset($this->controlList[$name]) === false) {
 				throw new TemplateException(sprintf('Requested unknown control block [%s] on [%s].', $name, $root->getNode()
 					->getPath()));
 			}
 			$this->controlList[$name]($root);
-			return $this;
+			return $root;
 		}
 
-		protected function addControl($id, callable $callback) {
-			if (isset($this->controlList[$id])) {
+		public function addControl($id, callable $callback, bool $force = false): IHtmlTemplate {
+			if (isset($this->controlList[$id]) && $force === false) {
 				throw new TemplateException(sprintf('An control id [%s] is already taken (there can be automagicall clash problem, ...).', $id));
 			}
 			$this->controlList[$id] = $callback;
+			return $this;
 		}
 	}

@@ -11,7 +11,6 @@
 	use Edde\Api\Template\CompilerException;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IMacro;
-	use Edde\Api\Template\ITemplate;
 	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Usable\AbstractUsable;
@@ -89,9 +88,8 @@
 			return $this->name;
 		}
 
-		public function compile(): ITemplate {
+		public function compile(): IFile {
 			$this->use();
-			$template = new Template($this->destination);
 			$this->destination->enableWriteCache(3);
 			try {
 				$this->macro($this->root, $this->root);
@@ -99,7 +97,7 @@
 				throw new CompilerException(sprintf('Compilation of template [%s] failed: %s', (string)$this->source->getUrl(), $e->getMessage()), 0, $e);
 			}
 			$this->destination->close();
-			return $template;
+			return $this->destination;
 		}
 
 		public function macro(INode $macro, INode $element) {

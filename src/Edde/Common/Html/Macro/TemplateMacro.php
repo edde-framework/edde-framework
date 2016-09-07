@@ -9,7 +9,7 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Common\Container\LazyInjectTrait;
-	use Edde\Common\Html\HtmlTemplate;
+	use Edde\Common\Html\AbstractHtmlTemplate;
 	use Edde\Common\Html\Input\PasswordControl;
 	use Edde\Common\Html\Input\TextControl;
 	use Edde\Common\Html\PlaceholderControl;
@@ -73,13 +73,12 @@
 	 * source = %s
 	 * date = %s	        
 	 */\n", $source->getPath(), (new \DateTime())->format('Y-m-d H:i:s')));
-					$destination->write(sprintf("\tclass %s extends %s {\n", $compiler->getName(), HtmlTemplate::class));
+					$destination->write(sprintf("\tclass %s extends %s {\n", $compiler->getName(), AbstractHtmlTemplate::class));
 					$destination->write("\t\tprotected function onTemplate() {\n");
-					$destination->write("\t\t\t\$stash = [];\n");
 					foreach (NodeIterator::recursive($element) as $node) {
 						$node->setMeta('control', $this->cryptEngine->guid());
 					}
-					$destination->write(sprintf("\t\t\t\$this->addControl(null, function(%s \$root) use(&\$stash) {\n", IControl::class));
+					$destination->write(sprintf("\t\t\t\$this->addControl(null, function(%s \$root) {\n", IControl::class));
 					$destination->write("\t\t\t\t\$control = \$root;\n");
 					$this->writeAttributeList($this->getAttributeList($element, $compiler), $destination);
 					$this->dependencies($macro, $compiler);

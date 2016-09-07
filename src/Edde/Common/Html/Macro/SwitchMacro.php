@@ -39,14 +39,14 @@
 					$this->checkValue($macro, $element);
 					$this->stack->push($id = StringUtils::camelize($this->cryptEngine->guid()));
 					$this->start($macro, $element, $compiler);
-					$destination->write(sprintf("\t\t\t\t\$stash[%s] = %s;\n", $compiler->delimite($id), $compiler->delimite($macro->getValue())));
+					$destination->write(sprintf("\t\t\t\t\$this->stash[%s] = %s;\n", $compiler->delimite($id), $compiler->delimite($macro->getValue())));
 					$this->dependencies($macro, $compiler);
 					$this->end($macro, $element, $compiler);
 					break;
 				case 'case':
 					$this->checkValue($macro, $element);
 					$this->start($macro, $element, $compiler);
-					$destination->write(sprintf("\t\t\t\tif(\$stash[%s] === %s) {\n", $compiler->delimite($this->stack->top()), $compiler->delimite($macro->getAttribute('case', $macro->getValue()))));
+					$destination->write(sprintf("\t\t\t\tif(\$this->stash[%s] === %s) {\n", $compiler->delimite($this->stack->top()), $compiler->delimite($macro->getAttribute('case', $macro->getValue()))));
 					$this->dependencies($macro, $compiler);
 					$destination->write("\t\t\t\t}\n");
 					$this->end($macro, $element, $compiler);

@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Template;
 
+	use Edde\Api\Container\IContainer;
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\IAssetsDirectory;
@@ -21,6 +22,10 @@
 
 	class TemplateManager extends AbstractUsable implements ITemplateManager {
 		use CacheTrait;
+		/**
+		 * @var IContainer
+		 */
+		protected $container;
 		/**
 		 * @var ITemplateDirectory
 		 */
@@ -41,6 +46,10 @@
 		 * @var IMacro[]
 		 */
 		protected $macroList = [];
+
+		public function lazyContainer(IContainer $container) {
+			$this->container = $container;
+		}
 
 		public function lazyTemplateDiretory(ITemplateDirectory $templateDirectory) {
 			$this->templateDirectory = $templateDirectory;
@@ -72,7 +81,7 @@
 				throw new TemplateException(sprintf('Template file [%s] is not available.', $file->getPath()));
 			}
 			if (($templateFile = $this->cache->load($cacheId = $file->getPath(), false)) !== false && $force === false) {
-				return new Template(new File($templateFile));
+				return new AbstractTemplate(new File($templateFile));
 			}
 			$this->use();
 			if ((($root = $this->resourceManager->resource($file)) instanceof INode) === false) {
@@ -85,7 +94,7 @@
 			}
 			$compiler->registerMacroList($macroList);
 			$this->cache->save($cacheId, $templateFile->getPath());
-			return $compiler->compile();
+			return $this->instance($compiler->compile());
 		}
 
 		protected function update(INode $root) {
@@ -137,6 +146,15 @@
 					->filename(str_replace('./', '', $value));
 			}
 			return $value;
+		}
+
+		public function instance(IFile $file) {
+			if (class_exists($class = str_replace('.php', '', $file->getName())) === false) {
+				(function (IFile $file) {
+					require_once($file->getPath());
+				})($file);
+			}
+			return $this->container->inject(new $class());
 		}
 
 		protected function prepare() {

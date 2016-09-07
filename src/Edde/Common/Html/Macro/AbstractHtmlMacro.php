@@ -18,13 +18,13 @@
 
 		protected function start(INode $macro, INode $element, ICompiler $compiler) {
 			$destination = $compiler->getDestination();
-			$destination->write(sprintf('
+			$destination->write(sprintf("
 			{
 			/**
 			 * context: %s
 			 * macro: %s
 			 * element: %s
-			 */', static::class, $macro->getPath(), $element->getPath()));
+			 */\n", static::class, $macro->getPath(), $element->getPath()));
 			$destination->write(sprintf("\t\t\t\$this->addControl(%s, function(%s \$root) use(&\$stash): %s {\n", $compiler->delimite($macro->getMeta('control')), IControl::class, IControl::class));
 			$destination->write("\t\t\t\t\$control = \$root;\n");
 		}
@@ -33,13 +33,13 @@
 			$destination = $compiler->getDestination();
 			foreach ($macro->getNodeList() as $node) {
 				$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
-				$destination->write(sprintf("\t\t\t\t\$current = \$this->controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
+				$destination->write(sprintf("\t\t\t\t\$current = \$this->control(%s, \$control);\n", $compiler->delimite($node->getMeta('control'))));
 			}
 		}
 
 		protected function end(INode $macro, INode $element, ICompiler $compiler, $chilren = true) {
 			$destination = $compiler->getDestination();
-			$destination->write("\t\t\t\treturn \$current ?? \$control;\n");
+			$destination->write("\t\t\t\treturn \$control;\n");
 			$destination->write("\t\t\t});\n");
 			$destination->write("\t\t\t}\n");
 			$chilren ? $this->element($macro, $compiler) : null;
