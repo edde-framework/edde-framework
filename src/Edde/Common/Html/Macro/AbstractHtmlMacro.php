@@ -18,7 +18,13 @@
 
 		protected function start(INode $macro, INode $element, ICompiler $compiler) {
 			$destination = $compiler->getDestination();
-			$destination->write(sprintf("\t\t\t/** %s (%s) */\n", $macro->getPath(), $element->getPath()));
+			$destination->write(sprintf('
+			{
+			/**
+			 * context: %s
+			 * macro: %s
+			 * element: %s
+			 */', static::class, $macro->getPath(), $element->getPath()));
 			$destination->write(sprintf("\t\t\t\$this->addControl(%s, function(%s \$root) use(&\$stash): %s {\n", $compiler->delimite($macro->getMeta('control')), IControl::class, IControl::class));
 			$destination->write("\t\t\t\t\$control = \$root;\n");
 		}
@@ -35,6 +41,7 @@
 			$destination = $compiler->getDestination();
 			$destination->write("\t\t\t\treturn \$current ?? \$control;\n");
 			$destination->write("\t\t\t});\n");
+			$destination->write("\t\t\t}\n");
 			$chilren ? $this->element($macro, $compiler) : null;
 		}
 

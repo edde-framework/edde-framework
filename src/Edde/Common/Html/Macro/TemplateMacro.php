@@ -69,7 +69,7 @@
 					$destination->write("\tdeclare(strict_types = 1);\n\n");
 					$destination->write(sprintf("\t
 	/**
-	 * ** this file is automagically generated **
+	 * @automagically-generated file
 	 *
 	 * source = %s
 	 * date = %s	        

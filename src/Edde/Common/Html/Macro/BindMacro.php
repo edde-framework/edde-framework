@@ -36,7 +36,7 @@
 					$element->setAttribute('bind', $this->bindList[$id]);
 					$this->start($macro, $element, $compiler);
 					$this->dependencies($macro, $compiler);
-					$this->end($macro, $element, $compiler, false);
+					$this->end($macro, $element, $compiler);
 					break;
 			}
 			$this->element($element, $compiler);
