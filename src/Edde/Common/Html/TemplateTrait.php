@@ -63,6 +63,7 @@
 			/** @var $template IHtmlTemplate */
 			$control = $this;
 			$template = $this->templateManager->template($layout, $control);
+			$template->import(...$importList);
 			$template->template();
 			return $this;
 		}

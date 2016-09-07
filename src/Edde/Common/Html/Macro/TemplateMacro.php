@@ -74,15 +74,15 @@
 	 * date = %s	        
 	 */\n", $source->getPath(), (new \DateTime())->format('Y-m-d H:i:s')));
 					$destination->write(sprintf("\tclass %s extends %s {\n", $compiler->getName(), AbstractHtmlTemplate::class));
-					$destination->write("\t\tprotected function onTemplate() {\n");
+					$destination->write("\t\tprotected function onPrepare() {\n");
 					foreach (NodeIterator::recursive($element) as $node) {
 						$node->setMeta('control', $this->cryptEngine->guid());
 					}
-					$destination->write(sprintf("\t\t\t\$this->addControl(null, function(%s \$root) {\n", IControl::class));
+					$destination->write(sprintf("\t\t\t\$this->controlList[null] = function(%s \$root) {\n", IControl::class));
 					$destination->write("\t\t\t\t\$control = \$root;\n");
 					$this->writeAttributeList($this->getAttributeList($element, $compiler), $destination);
 					$this->dependencies($macro, $compiler);
-					$destination->write("\t\t\t});\n");
+					$destination->write("\t\t\t};\n");
 					$this->element($element, $compiler);
 					$destination->write("\t\t}\n");
 					$destination->write("\t}\n");

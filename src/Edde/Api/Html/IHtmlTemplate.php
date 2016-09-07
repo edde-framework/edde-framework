@@ -10,29 +10,18 @@
 		/**
 		 * build up a target control with this template
 		 *
-		 * @param array $importList another templates required by this one
-		 *
 		 * @return IHtmlTemplate
 		 */
-		public function template(array $importList = []): IHtmlTemplate;
+		public function template(): IHtmlTemplate;
 
 		/**
 		 * add a dependant template file
 		 *
-		 * @param string $file
+		 * @param string[] $importList
 		 *
 		 * @return IHtmlTemplate
 		 */
-		public function import(string $file): IHtmlTemplate;
-
-		/**
-		 * @param string $id
-		 * @param callable $callback
-		 * @param bool $force
-		 *
-		 * @return IHtmlTemplate
-		 */
-		public function addControl($id, callable $callback, bool $force = false): IHtmlTemplate;
+		public function import(...$importList): IHtmlTemplate;
 
 		/**
 		 * return array of lambdas for controls

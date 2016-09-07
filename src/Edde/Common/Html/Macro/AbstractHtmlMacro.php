@@ -24,7 +24,7 @@
 			 * macro: %s
 			 * element: %s
 			 */\n", static::class, $macro->getPath(), $element->getPath()));
-			$destination->write(sprintf("\t\t\t\$this->addControl(%s, function(%s \$root): %s {\n", $compiler->delimite($macro->getMeta('control')), IControl::class, IControl::class));
+			$destination->write(sprintf("\t\t\t\$this->controlList[%s] = function(%s \$root): %s {\n", $compiler->delimite($macro->getMeta('control')), IControl::class, IControl::class));
 			$destination->write("\t\t\t\t\$control = \$root;\n");
 		}
 
@@ -39,7 +39,7 @@
 		protected function end(INode $macro, INode $element, ICompiler $compiler, $chilren = true) {
 			$destination = $compiler->getDestination();
 			$destination->write("\t\t\t\treturn \$control;\n");
-			$destination->write("\t\t\t});\n");
+			$destination->write("\t\t\t};\n");
 			$chilren ? $this->element($macro, $compiler) : null;
 		}
 
