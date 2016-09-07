@@ -199,6 +199,10 @@
 	<body>
 		<div class="dummy-div">
 			<div id="blabla"></div>
+			<div id="foo">
+				<div class="children-node"></div>
+				<span>hello world!</span>
+			</div>
 			<div class="hidden-button">
 				<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=foo" data-bind="blabla">
 					<span>even button has another contorls</span>

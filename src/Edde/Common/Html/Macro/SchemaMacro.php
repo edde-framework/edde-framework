@@ -26,15 +26,17 @@
 			$destination = $compiler->getDestination();
 			switch ($macro->getName()) {
 				case 'schema':
+					$this->checkLeaf($macro, $element);
 					$this->checkAttribute($macro, $element, 'name', 'schema');
 					$this->schemaList[$macro->getAttribute('name')] = $macro->getAttribute('schema');
-					$destination->write(sprintf("\t\t\t/** %s */\n", $element->getPath()));
+					$destination->write(sprintf("\t\t\t/** %s (%s) */\n", $macro->getPath(), $element->getPath()));
 					$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash) {\n", $compiler->delimite($macro->getMeta('control')), IControl::class));
 					foreach ($macro->getNodeList() as $node) {
 						$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
 						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$root);\n", $compiler->delimite($node->getMeta('control'))));
 					}
 					$destination->write("\t\t\t};\n");
+					$this->element($macro, $compiler);
 					break;
 				case 'property':
 					$this->checkValue($macro, $element);
@@ -44,14 +46,14 @@
 					}
 					$element->setAttribute('data-schema', $this->schemaList[$schema]);
 					$element->setAttribute('data-property', $property);
-					$destination->write(sprintf("\t\t\t/** %s */\n", $element->getPath()));
+					$destination->write(sprintf("\t\t\t/** %s (%s) */\n", $macro->getPath(), $element->getPath()));
 					$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash) {\n", $compiler->delimite($macro->getMeta('control')), IControl::class));
 					foreach ($element->getNodeList() as $node) {
 						$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
 						$destination->write(sprintf("\t\t\t\t\$controlList[%s](\$root);\n", $compiler->delimite($node->getMeta('control'))));
 					}
-					$this->element($macro, $compiler);
 					$destination->write("\t\t\t};\n");
+					$this->element($macro, $compiler);
 					break;
 			}
 		}

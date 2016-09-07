@@ -28,7 +28,7 @@
 			switch ($macro->getName()) {
 				case 'id':
 					$element->setAttribute('id', $this->idList[$macro->getValue()] = $element->getAttribute('id', $element->getMeta('control')));
-					$destination->write(sprintf("\t\t\t/** %s */\n", $macro->getPath()));
+					$destination->write(sprintf("\t\t\t/** %s (%s) */\n", $macro->getPath(), $element->getPath()));
 					$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash) {\n", $compiler->delimite($macro->getMeta('control')), IControl::class));
 					foreach ($macro->getNodeList() as $node) {
 						$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
@@ -42,7 +42,7 @@
 						throw new MacroException(sprintf('Unknown bind id [%s] at [%s].', $id, $macro->getPath()));
 					}
 					$element->setAttribute('bind', $this->idList[$id]);
-					$destination->write(sprintf("\t\t\t/** %s */\n", $element->getPath()));
+					$destination->write(sprintf("\t\t\t/** %s (%s) */\n", $macro->getPath(), $element->getPath()));
 					$destination->write(sprintf("\t\t\t\$controlList[%s] = function(%s \$root) use(&\$controlList, &\$stash) {\n", $compiler->delimite($macro->getMeta('control')), IControl::class));
 					foreach ($macro->getNodeList() as $node) {
 						$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
