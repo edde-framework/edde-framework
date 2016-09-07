@@ -79,7 +79,7 @@
 			return dirname($reflectionClass->getFileName()) . '/template/' . StringUtils::recamel($this->route->getMethod()) . '.xml';
 		}
 
-		public function snippets(string $file, string ...$snippetList) {
+		public function snippet(string $file, string ...$snippetList) {
 			$this->check();
 			/** @var $control IHtmlView */
 			/** @var $template IHtmlTemplate */
@@ -87,7 +87,6 @@
 			$template = $this->templateManager->template($file = $file ?: $this->getActionTemplateFile(), $control);
 			foreach ($snippetList as $snippet) {
 				$template->snippet($snippet, $control);
-				$control->snippet($snippet);
 			}
 			return $this;
 		}
