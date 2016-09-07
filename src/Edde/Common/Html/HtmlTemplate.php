@@ -77,7 +77,8 @@
 
 		public function getControlList(IControl $root): array {
 			$this->root = $root;
-			return array_merge($this->controlList, $this->onTemplate());
+			$this->onTemplate();
+			return $this->controlList;
 		}
 
 		abstract protected function onTemplate(): array;
@@ -100,5 +101,12 @@
 			}
 			$this->controlList[$name]($root);
 			return $this;
+		}
+
+		protected function addControl($id, callable $callback) {
+			if (isset($this->controlList[$id])) {
+				throw new TemplateException(sprintf('An control id [%s] is already taken (there can be automagicall clash problem, ...).', $id));
+			}
+			$this->controlList[$id] = $callback;
 		}
 	}
