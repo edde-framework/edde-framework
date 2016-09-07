@@ -13,6 +13,7 @@
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\ITemplateDirectory;
 	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Template\TemplateException;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Xml\IXmlParser;
@@ -57,10 +58,8 @@
 		protected $control;
 
 		public function testDummy() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/dummy.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/dummy.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -74,11 +73,8 @@
 		}
 
 		public function testSimpleTemplate() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/simple-template.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/simple-template.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -107,21 +103,22 @@
 	</body>
 </html>
 ', $this->control->render());
+		}
+
+		public function testSimpleId() {
+			$this->expectException(TemplateException::class);
+			$this->expectExceptionMessage('Requested unknown control block [2] on [/].');
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/simple-template.xml'));
+			$template->template($this->control);
+			/** @var $template IHtmlTemplate */
+			$template->template($this->control);
 			$template->control('2', $container = new ContainerControl());
-			$container->dirty();
-			self::assertEquals('	<div id="2">
-		<div id="3">
-			<div id="4" class="hidden one"></div>
-		</div>
-	</div>
-', $container->render());
 		}
 
 		public function testButton() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/button.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/button.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -137,10 +134,8 @@
 		}
 
 		public function testSwitchTemplate() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/switch-template.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/switch-template.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html attribute="choo" title="poo">
@@ -161,10 +156,8 @@
 		}
 
 		public function testSwitch2Template() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/switch2-template.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/switch2-template.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html attribute="choo" title="poo">
@@ -185,10 +178,8 @@
 		}
 
 		public function testId() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/id.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/id.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -215,10 +206,8 @@
 		}
 
 		public function testSchema() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/schema.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/schema.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -240,10 +229,8 @@
 		}
 
 		public function testInput() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/input.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/input.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -260,10 +247,8 @@
 		}
 
 		public function testSpan() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/span.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/span.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -281,10 +266,8 @@
 		}
 
 		public function testSpanStrangeAttributes() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/span-strange-attributes.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/span-strange-attributes.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -302,10 +285,8 @@
 		}
 
 		public function testInclude() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/include.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/include.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -324,10 +305,8 @@
 		}
 
 		public function testMultiInclude() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/multi-include.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/multi-include.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -355,10 +334,8 @@
 		}
 
 		public function testLoop01() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/loop-01.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/loop-01.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -389,10 +366,8 @@
 		}
 
 		public function testLoop02() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/loop-02.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/loop-02.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -427,10 +402,8 @@
 		}
 
 		public function testLoop03() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/loop-03.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/loop-03.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -447,10 +420,8 @@
 		}
 
 		public function testLoop04() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/loop-04.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/loop-04.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -477,10 +448,8 @@
 		}
 
 		public function testLoop05() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/loop-05.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/loop-05.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -513,10 +482,8 @@
 		}
 
 		public function testHeader() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/header.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/header.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -539,10 +506,8 @@
 		}
 
 		public function testSimplePass() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/test-simple-pass.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/test-simple-pass.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -564,10 +529,8 @@
 		}
 
 		public function testPass() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/pass.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/pass.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -605,11 +568,8 @@
 		}
 
 		public function testRequire() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/require.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/require.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -639,12 +599,9 @@
 		}
 
 		public function testLayout() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/layout.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			/** @var $template IHtmlTemplate */
-			$template->include(__DIR__ . '/assets/template/require.xml', $this->control);
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/layout.xml'));
+			$template->import(__DIR__ . '/assets/template/require.xml');
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -679,10 +636,8 @@
 		}
 
 		public function testSnippet() {
-			$template = $this->templateManager->template(__DIR__ . '/assets/template/snippet.xml');
-			$file = $template->getFile();
-			self::assertTrue($file->isAvailable());
-			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/snippet.xml'));
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -711,6 +666,35 @@
 ', $this->control->render());
 			self::assertEquals('		<div id="moo" class="simple-div"></div>
 ', $this->control->snippy->render());
+		}
+
+		public function testComplexId() {
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/complex-id.xml'));
+			$template->template($this->control);
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="a-little-bit-hidden-snippet"></div>
+		<div class="edde-placeholder" id="message"></div>
+	</body>
+</html>
+', $this->control->render());
+			$this->control->snippet('message');
+			self::assertNotEmpty($this->control->message);
+			self::assertInstanceOf(DivControl::class, $this->control->message);
+			self::assertEquals($expect = '		<div class="alert"></div>
+', $this->control->message->render());
+			$this->control->dirty(false);
+			$this->control->message->dirty();
+			self::assertCount(1, $snippetList = $this->control->invalidate());
+			$message = reset($snippetList);
+			self::assertInstanceOf(DivControl::class, $message);
+			self::assertEquals($expect, $message->render());
 		}
 
 		protected function setUp() {

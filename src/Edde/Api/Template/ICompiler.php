@@ -67,7 +67,7 @@
 		 */
 		public function asset(string $asset): string;
 
-		public function compile(): ITemplate;
+		public function compile(): IFile;
 
 		public function macro(INode $macro, INode $element);
 	}

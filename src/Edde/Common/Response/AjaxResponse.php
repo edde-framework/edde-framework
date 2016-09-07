@@ -65,7 +65,7 @@
 			$this->replaceControlList = [];
 			foreach ($controlList as $selector => $control) {
 				$selector = is_string($selector) ? $selector : null;
-				if (($id = $control->getId()) === null && $selector === null) {
+				if (($id = $control->getId()) === '' && $selector === null) {
 					throw new ControlException(sprintf('Cannot replace control [%s] without selector or preset control id.', get_class($control)));
 				}
 				$this->replaceControlList[$selector ?: '#' . $id] = $control;
@@ -85,7 +85,7 @@
 			$this->replaceControlList = [];
 			foreach ($controlList as $selector => $control) {
 				$selector = is_string($selector) ? $selector : null;
-				if (($id = $control->getId()) === null && $selector === null) {
+				if (($id = $control->getId()) === '' && $selector === null) {
 					throw new ControlException(sprintf('Cannot replace control [%s] without selector or preset control id.', get_class($control)));
 				}
 				$this->addControlList[$selector ?: '#' . $id] = $control;

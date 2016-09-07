@@ -4,20 +4,43 @@
 	namespace Edde\Api\Html;
 
 	use Edde\Api\Control\IControl;
+	use Edde\Api\Template\ITemplate;
 
-	interface IHtmlTemplate {
-		public function include (string $file, IControl $root);
+	interface IHtmlTemplate extends ITemplate {
+		/**
+		 * build up a target control with this template
+		 *
+		 * @param IControl $control
+		 * @param array $importList another templates required by this one
+		 *
+		 * @return IHtmlTemplate
+		 */
+		public function template(IControl $control, array $importList = []): IHtmlTemplate;
 
-		public function template(IControl $root);
+		/**
+		 * add a dependant template file
+		 *
+		 * @param string $file
+		 *
+		 * @return IHtmlTemplate
+		 */
+		public function import(string $file): IHtmlTemplate;
+
+		/**
+		 * @param string $id
+		 * @param callable $callback
+		 * @param bool $force
+		 *
+		 * @return IHtmlTemplate
+		 */
+		public function addControl($id, callable $callback, bool $force = false): IHtmlTemplate;
 
 		/**
 		 * return array of lambdas for controls
 		 *
-		 * @param IControl $root
-		 *
-		 * @return array
+		 * @return callable[]
 		 */
-		public function getControlList(IControl $root): array;
+		public function getControlList(): array;
 
 		/**
 		 * apply named block on root control
@@ -25,7 +48,7 @@
 		 * @param string $name
 		 * @param IControl $root
 		 *
-		 * @return IHtmlTemplate
+		 * @return IControl
 		 */
-		public function control(string $name, IControl $root): IHtmlTemplate;
+		public function control(string $name, IControl $root): IControl;
 	}

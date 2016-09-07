@@ -1,12 +1,12 @@
 <control>
 	<div class="dummy-div">
-		<div id="blabla" m:id="foo"/>
-		<div id="foo" m:id="some-id">
+		<div id="blabla"/>
+		<div id="foo">
 			<div class="children-node"/>
 			<span>hello world!</span>
 		</div>
 		<div class="hidden-button">
-			<button action="foo()" m:bind="foo">
+			<button action="foo()" bind="blabla">
 				<span>even button has another contorls</span>
 			</button>
 		</div>

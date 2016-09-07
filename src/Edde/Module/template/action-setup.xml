@@ -1,6 +1,6 @@
 <control title="Edde Setup">
 	<block name="content">
-		<div class="alert" m:snippet="message" m:pass="message"/>
+		<div id="message" class="alert" m:snippet="message" m:pass="message"/>
 		<placeholder id="message"/>
 
 		<div class="row centered">

@@ -9,7 +9,7 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Common\Container\LazyInjectTrait;
-	use Edde\Common\Html\HtmlTemplate;
+	use Edde\Common\Html\AbstractHtmlTemplate;
 	use Edde\Common\Html\Input\PasswordControl;
 	use Edde\Common\Html\Input\TextControl;
 	use Edde\Common\Html\PlaceholderControl;
@@ -46,7 +46,6 @@
 				$container->inject(new JavaScriptMacro()),
 				$container->inject(new SwitchMacro()),
 				$container->inject(new SchemaMacro()),
-				$container->inject(new BindMacro()),
 				$container->inject(new LoopMacro()),
 				$container->inject(new HeaderMacro()),
 				$container->inject(new PassMacro()),
@@ -69,25 +68,22 @@
 					$destination->write("\tdeclare(strict_types = 1);\n\n");
 					$destination->write(sprintf("\t
 	/**
-	 * ** this file is automagically generated **
+	 * @automagically-generated file
 	 *
 	 * source = %s
 	 * date = %s	        
 	 */\n", $source->getPath(), (new \DateTime())->format('Y-m-d H:i:s')));
-					$destination->write(sprintf("\tclass %s extends %s {\n", $compiler->getName(), HtmlTemplate::class));
-					$destination->write("\t\tprotected function onTemplate(): array {\n");
-					$destination->write("\t\t\t\$controlList = &\$this->controlList;\n");
-					$destination->write("\t\t\t\$stash = [];\n");
+					$destination->write(sprintf("\tclass %s extends %s {\n", $compiler->getName(), AbstractHtmlTemplate::class));
+					$destination->write("\t\tprotected function onTemplate() {\n");
 					foreach (NodeIterator::recursive($element) as $node) {
-						$node->setMeta('control', $id = $node->getAttribute('id', $this->cryptEngine->guid()));
+						$node->setMeta('control', $this->cryptEngine->guid());
 					}
-					$destination->write(sprintf("\t\t\t\$controlList[null] = function(%s \$root) use(&\$controlList, &\$stash) {\n", IControl::class));
+					$destination->write(sprintf("\t\t\t\$this->addControl(null, function(%s \$root) {\n", IControl::class));
 					$destination->write("\t\t\t\t\$control = \$root;\n");
 					$this->writeAttributeList($this->getAttributeList($element, $compiler), $destination);
 					$this->dependencies($macro, $compiler);
-					$destination->write("\t\t\t};\n");
+					$destination->write("\t\t\t});\n");
 					$this->element($element, $compiler);
-					$destination->write("\t\t\treturn \$controlList;\n");
 					$destination->write("\t\t}\n");
 					$destination->write("\t}\n");
 					break;

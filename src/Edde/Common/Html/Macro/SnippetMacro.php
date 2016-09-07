@@ -21,7 +21,7 @@
 					$name = $macro->getAttribute('name', $macro->getValue());
 					$this->start($macro, $element, $compiler);
 					$id = $compiler->delimite($name);
-					$destination->write(sprintf("\t\t\t\t\$this->root->addSnippet(%s, \$controlList[%s]);\n", $id, $id));
+					$destination->write(sprintf("\t\t\t\t\$this->root->addSnippet(%s, \$this->controlList[%s]);\n", $id, $id));
 					$this->end($macro, $element, $compiler, false);
 					$macro->setMeta('control', $name);
 					$this->lambda($macro, $element, $compiler);
