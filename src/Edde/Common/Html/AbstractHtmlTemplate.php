@@ -5,6 +5,7 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Control\IControl;
+	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlTemplate;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Template\TemplateException;
@@ -15,6 +16,10 @@
 
 	abstract class AbstractHtmlTemplate extends AbstractTemplate implements IHtmlTemplate {
 		use LazyInjectTrait;
+		/**
+		 * @var IHtmlControl
+		 */
+		protected $root;
 		/**
 		 * @var IContainer
 		 */
@@ -32,10 +37,6 @@
 		 */
 		protected $templateManager;
 		/**
-		 * @var IControl
-		 */
-		protected $root;
-		/**
 		 * @var \ReflectionClass
 		 */
 		protected $reflectionClass;
@@ -49,6 +50,13 @@
 		 */
 		protected $controlList;
 		protected $importList = [];
+
+		/**
+		 * @param IHtmlControl $root
+		 */
+		public function __construct(IHtmlControl $root) {
+			$this->root = $root;
+		}
 
 		public function lazytContainer(IContainer $container) {
 			$this->container = $container;
@@ -78,8 +86,7 @@
 			return $this;
 		}
 
-		public function template(IControl $root, array $importList = []): IHtmlTemplate {
-			$this->root = $root;
+		public function template(array $importList = []): IHtmlTemplate {
 			$this->importList = array_merge($this->importList, $importList);
 			$this->getControlList()[null]($this->root);
 			return $this;
@@ -94,10 +101,9 @@
 				$callback = $this->getControlList()[null];
 				foreach ($this->importList as $import) {
 					/** @var $template IHtmlTemplate */
-					if ((($template = $this->templateManager->template($import)) instanceof IHtmlTemplate) === false) {
+					if ((($template = $this->templateManager->template($import, $this->root)) instanceof IHtmlTemplate) === false) {
 						throw new TemplateException(sprintf('Unsupported included template [%s] type [%s]; template must be instance of [%s].', $import, get_class($template), IHtmlTemplate::class));
 					}
-					$template->root = $this->root;
 					$this->controlList = array_merge($this->controlList, $template->getControlList());
 				}
 				$this->controlList[null] = $callback;

@@ -72,8 +72,8 @@
 			return $this;
 		}
 
-		public function template(string $file, array $parameterList = [], bool $force = false): ITemplate {
-			return $this->instance($this->compile(new File($file), $force), $parameterList);
+		public function template(string $file, ...$parameterList): ITemplate {
+			return $this->instance($this->compile(new File($file)), $parameterList);
 		}
 
 		public function instance(IFile $file, array $parameterList = []) {

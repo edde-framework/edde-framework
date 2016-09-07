@@ -48,7 +48,6 @@
 					$destination->write(sprintf("\t\t\t\tforeach(%s as \$%s => \$%s) {\n", $compiler->delimite($source), $key, $value));
 					$destination->write(sprintf("\t\t\t\t\t\$this->stash[%s] = \$%s;\n", $compiler->delimite($key), $key));
 					$destination->write(sprintf("\t\t\t\t\t\$this->stash[%s] = \$%s;\n", $compiler->delimite($value), $value));
-					$destination->write(sprintf("\t\t\t/** %s (%s) */\n", $macro->getPath(), $element->getPath()));
 					$this->dependencies($macro, $compiler);
 					$destination->write("\t\t\t\t}\n");
 					$this->end($macro, $element, $compiler);

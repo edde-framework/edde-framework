@@ -62,8 +62,8 @@
 			/** @var $control IHtmlView */
 			/** @var $template IHtmlTemplate */
 			$control = $this;
-			$template = $this->templateManager->template($layout);
-			$template->template($control, $importList);
+			$template = $this->templateManager->template($layout, $control);
+			$template->template();
 			return $this;
 		}
 
@@ -83,7 +83,7 @@
 			/** @var $control IHtmlView */
 			/** @var $template IHtmlTemplate */
 			$control = $this;
-			$template = $this->templateManager->template($file = $file ?: $this->getActionTemplateFile());
+			$template = $this->templateManager->template($file = $file ?: $this->getActionTemplateFile(), $control);
 			foreach ($snippetList as $snippet) {
 				$template->control($snippet, $control);
 				$control->snippet($snippet);

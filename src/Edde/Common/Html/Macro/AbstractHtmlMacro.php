@@ -19,7 +19,6 @@
 		protected function start(INode $macro, INode $element, ICompiler $compiler) {
 			$destination = $compiler->getDestination();
 			$destination->write(sprintf("
-			{
 			/**
 			 * context: %s
 			 * macro: %s
@@ -41,7 +40,6 @@
 			$destination = $compiler->getDestination();
 			$destination->write("\t\t\t\treturn \$control;\n");
 			$destination->write("\t\t\t});\n");
-			$destination->write("\t\t\t}\n");
 			$chilren ? $this->element($macro, $compiler) : null;
 		}
 

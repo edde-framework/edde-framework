@@ -10,12 +10,11 @@
 		/**
 		 * build up a target control with this template
 		 *
-		 * @param IControl $control
 		 * @param array $importList another templates required by this one
 		 *
 		 * @return IHtmlTemplate
 		 */
-		public function template(IControl $control, array $importList = []): IHtmlTemplate;
+		public function template(array $importList = []): IHtmlTemplate;
 
 		/**
 		 * add a dependant template file
