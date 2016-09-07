@@ -82,7 +82,7 @@
 			return dirname($reflectionClass->getFileName()) . '/template/' . StringUtils::recamel($this->route->getMethod()) . '.xml';
 		}
 
-		public function block(string $block, string $file = null) {
+		public function block(string $file, string ...$blockList) {
 			$this->check();
 			/** @var $template IHtmlTemplate */
 			$template = $this->templateManager->template($file = $file ?: $this->getActionTemplateFile())
@@ -90,7 +90,9 @@
 			/** @var $control IHtmlView */
 			$control = $this;
 			$template->template($control);
-			$template->control($block, $control);
+			foreach ($blockList as $block) {
+				$template->control($block, $control);
+			}
 			return $this;
 		}
 	}
