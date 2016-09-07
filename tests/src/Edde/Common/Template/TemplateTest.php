@@ -644,7 +644,7 @@
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
 			/** @var $template IHtmlTemplate */
-			$template->include(__DIR__ . '/assets/template/require.xml');
+			$template->include(__DIR__ . '/assets/template/require.xml', $this->control);
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>

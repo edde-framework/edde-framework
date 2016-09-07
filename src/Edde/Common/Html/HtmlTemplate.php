@@ -67,15 +67,16 @@
 			], $parameterList);
 		}
 
-		public function include (string $file) {
+		public function include (string $file, IControl $root) {
 			$template = $this->templateManager->template($file);
 			$template = $template->getInstance($this->container);
 			/** @var $template IHtmlTemplate */
-			$this->controlList = array_merge($this->getControlList(), $template->getControlList());
+			$this->controlList = array_merge($this->getControlList($root), $template->getControlList($root));
 			return $this;
 		}
 
-		public function getControlList(): array {
+		public function getControlList(IControl $root): array {
+			$this->root = $root;
 			return array_merge($this->controlList, $this->onTemplate());
 		}
 
@@ -88,7 +89,7 @@
 		}
 
 		public function build() {
-			$controlList = $this->getControlList();
+			$controlList = $this->getControlList($this->root);
 			$controlList[null]($this->root);
 		}
 

@@ -4,5 +4,5 @@
 	<js src="edde://js/jquery-3.1.0.js"/>
 	<js src="edde://js/edde-framework.js"/>
 
-	<block name="content"/>
+	<include src="content"/>
 </control>

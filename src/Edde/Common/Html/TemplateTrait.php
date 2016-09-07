@@ -10,7 +10,6 @@
 	use Edde\Api\Html\IHtmlView;
 	use Edde\Api\Router\IRoute;
 	use Edde\Api\Template\ITemplateManager;
-	use Edde\Api\Template\TemplateException;
 	use Edde\Common\Strings\StringUtils;
 
 	trait TemplateTrait {
@@ -60,11 +59,14 @@
 					$useList[] = $action;
 				}
 			}
+			/** @var $control IHtmlView */
 			/** @var $template IHtmlTemplate */
+			$control = $this;
 			$template = $this->templateManager->template($layout)
 				->getInstance($this->container);
-			/** @var $control IHtmlView */
-			$control = $this;
+			foreach ($useList as $use) {
+				$template->include($use, $control);
+			}
 			$template->template($control);
 			return $this;
 		}
@@ -87,13 +89,8 @@
 				->getInstance($this->container);
 			/** @var $control IHtmlView */
 			$control = $this;
-			$node = $control->getNode();
-			$count = $node->getNodeCount();
 			$template->template($control);
-			if ($count !== $node->getNodeCount()) {
-				throw new TemplateException(sprintf('Template [%s] can contain only block controls.', $file));
-			}
-			$template->block($block, $control);
+			$template->control($block, $control);
 			return $this;
 		}
 	}
