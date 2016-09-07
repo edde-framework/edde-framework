@@ -75,16 +75,16 @@
 	 * date = %s	        
 	 */\n", $source->getPath(), (new \DateTime())->format('Y-m-d H:i:s')));
 					$destination->write(sprintf("\tclass %s extends %s {\n", $compiler->getName(), HtmlTemplate::class));
-					$destination->write("\t\tprotected function onTemplate(): array {\n");
+					$destination->write("\t\tprotected function onTemplate() {\n");
 					$destination->write("\t\t\t\$stash = [];\n");
 					foreach (NodeIterator::recursive($element) as $node) {
-						$node->setMeta('control', $id = $node->getAttribute('id', $this->cryptEngine->guid()));
+						$node->setMeta('control', $this->cryptEngine->guid());
 					}
-				$destination->write(sprintf("\t\t\t\$this->addControl(null, function(%s \$root) use(&\$stash) {\n", IControl::class));
+					$destination->write(sprintf("\t\t\t\$this->addControl(null, function(%s \$root) use(&\$stash) {\n", IControl::class));
 					$destination->write("\t\t\t\t\$control = \$root;\n");
 					$this->writeAttributeList($this->getAttributeList($element, $compiler), $destination);
 					$this->dependencies($macro, $compiler);
-				$destination->write("\t\t\t});\n");
+					$destination->write("\t\t\t});\n");
 					$this->element($element, $compiler);
 					$destination->write("\t\t}\n");
 					$destination->write("\t}\n");

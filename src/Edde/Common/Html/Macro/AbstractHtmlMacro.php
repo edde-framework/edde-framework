@@ -33,7 +33,7 @@
 
 		protected function end(INode $macro, INode $element, ICompiler $compiler, $chilren = true) {
 			$destination = $compiler->getDestination();
-			$destination->write("\t\t\t\treturn \$control;\n");
+			$destination->write("\t\t\t\treturn \$current ?? \$control;\n");
 			$destination->write("\t\t\t});\n");
 			$chilren ? $this->element($macro, $compiler) : null;
 		}

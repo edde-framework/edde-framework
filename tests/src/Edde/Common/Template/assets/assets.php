@@ -16,6 +16,10 @@
 		 * @var DivControl
 		 */
 		public $specialDiv;
+		/**
+		 * @var DivControl
+		 */
+		public $message;
 
 		public function switchMe() {
 			return 'bar';

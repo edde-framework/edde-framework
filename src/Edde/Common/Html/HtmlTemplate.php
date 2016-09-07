@@ -81,7 +81,7 @@
 			return $this->controlList;
 		}
 
-		abstract protected function onTemplate(): array;
+		abstract protected function onTemplate();
 
 		public function template(IControl $root) {
 			$this->root = $root;

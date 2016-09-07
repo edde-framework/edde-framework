@@ -13,6 +13,7 @@
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\ITemplateDirectory;
 	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Template\TemplateException;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Xml\IXmlParser;
@@ -107,14 +108,18 @@
 	</body>
 </html>
 ', $this->control->render());
+		}
+
+		public function testSimpleId() {
+			$this->expectException(TemplateException::class);
+			$this->expectExceptionMessage('Requested unknown control block [2] on [/].');
+			$template = $this->templateManager->template(__DIR__ . '/assets/template/simple-template.xml');
+			$file = $template->getFile();
+			self::assertTrue($file->isAvailable());
+			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
+			$template->template($this->control);
 			$template->control('2', $container = new ContainerControl());
-			$container->dirty();
-			self::assertEquals('	<div id="2">
-		<div id="3">
-			<div id="4" class="hidden one"></div>
-		</div>
-	</div>
-', $container->render());
 		}
 
 		public function testButton() {
@@ -718,6 +723,7 @@
 			$file = $template->getFile();
 			self::assertTrue($file->isAvailable());
 			self::assertEquals($template->getInstance($this->container), $template = $template->getInstance($this->container));
+			/** @var $template IHtmlTemplate */
 			$template->template($this->control);
 			self::assertEquals('<!DOCTYPE html>
 <html>
@@ -725,9 +731,21 @@
 		<meta charset="utf-8">
 		<title></title>
 	</head>
-	<body></body>
+	<body>
+		<div class="edde-placeholder" id="message"></div>
+	</body>
 </html>
 ', $this->control->render());
+			$this->control->snippet('message');
+			self::assertNotEmpty($this->control->message);
+			self::assertInstanceOf(DivControl::class, $this->control->message);
+			self::assertEquals($expect = '		<div class="alert"></div>
+', $this->control->message->render());
+			$this->control->message->dirty();
+			self::assertCount(1, $snippetList = $this->control->invalidate());
+			$message = reset($snippetList);
+			self::assertInstanceOf(DivControl::class, $message);
+			self::assertEquals($expect, $message->render());
 		}
 
 		protected function setUp() {
