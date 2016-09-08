@@ -100,8 +100,7 @@
 			return $this;
 		}
 
-		public function stylesheet(string $class = null, string $file = null): IHtmlControl {
-			$this->setAttribute('data-class', $class = $class ?: str_replace('\\', '.', static::class));
+		public function stylesheet(string $file = null): IHtmlControl {
 			$reflectionClass = new \ReflectionClass($this);
 			$stylesheet = new File(str_replace('.php', '.css', $reflectionClass->getFileName()));
 			if ($file !== null) {
