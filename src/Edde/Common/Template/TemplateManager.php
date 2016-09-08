@@ -93,10 +93,7 @@
 				return new File($templateFile);
 			}
 			$this->use();
-			if ((($root = $this->resourceManager->resource($file)) instanceof INode) === false) {
-				throw new TemplateException(sprintf('Resource handler for [%s] must return [%s].', (string)$file->getUrl(), INode::class));
-			}
-			$compiler = new Compiler($this->update($this->process($root, $file)), $this->rootDirectory, $this->assetsDirectory, $file, $templateFile = $this->templateDirectory->file(($name = ('Template_' . sha1((string)$file->getUrl()))) . '.php'), $name);
+			$compiler = new Compiler($this->update($this->process($this->load($file), $file)), $this->rootDirectory, $this->assetsDirectory, $file, $templateFile = $this->templateDirectory->file(($name = ('Template_' . sha1((string)$file->getUrl()))) . '.php'), $name);
 			$macroList = [];
 			foreach ($this->macroList as $macro) {
 				$macroList[] = clone $macro;
@@ -127,23 +124,19 @@
 		}
 
 		protected function process(INode $root, IFile $source): INode {
-			foreach (NodeIterator::recursive($root, true) as $node) {
+			foreach (NodeIterator::recursive($root) as $node) {
 				if ($node->hasAttributeList('x')) {
 					$processList = $node->getAttributeList('x');
 					foreach ($processList as $process => $value) {
 						switch ($process) {
 							case 'include':
-								$include = $this->resourceManager->resource($file = new File($this->delimite($value, $source)), null, $node);
-								if ($node->isRoot()) {
-									break;
-								}
-								$this->process($include, $file);
+								$this->process($this->resourceManager->resource($file = new File($this->delimite($value, $source)), null, $node), $file);
 								break;
 						}
 					}
+					$node->removeAttributeList('x');
 					continue;
 				}
-				$node->removeAttributeList('x');
 				if (strpos($name = $node->getName(), 'x:', 0) === false) {
 					continue;
 				}
@@ -154,7 +147,6 @@
 						break;
 				}
 			}
-			$root->removeAttributeList('x');
 			return $root;
 		}
 
@@ -164,6 +156,13 @@
 					->filename(str_replace('./', '', $value));
 			}
 			return $value;
+		}
+
+		protected function load(IFile $file) {
+			if ((($node = $this->resourceManager->resource($file)) instanceof INode) === false) {
+				throw new TemplateException(sprintf('Resource handler for [%s] must return [%s].', (string)$file->getUrl(), INode::class));
+			}
+			return $node;
 		}
 
 		protected function prepare() {
