@@ -7,4 +7,7 @@
 	use Edde\Common\AbstractObject;
 
 	abstract class AbstractResponse extends AbstractObject implements IResponse {
+		public function send() {
+			echo $this->render();
+		}
 	}

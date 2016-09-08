@@ -16,7 +16,7 @@
 			$this->text = $text;
 		}
 
-		public function send() {
-			echo is_callable($this->text) ? call_user_func($this->text) : $this->text;
+		public function render() :string {
+			return is_callable($this->text) ? call_user_func($this->text) : $this->text;
 		}
 	}

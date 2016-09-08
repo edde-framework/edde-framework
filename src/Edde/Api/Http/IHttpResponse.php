@@ -77,6 +77,13 @@
 		public function redirect(string $redirect): IHttpResponse;
 
 		/**
+		 * return repsonse body or empty string if... the body is empty ;)
+		 *
+		 * @return string
+		 */
+		public function getBody(): string;
+
+		/**
 		 * execute response "rendering"; basically it "echoes" output
 		 *
 		 * @return IHttpResponse

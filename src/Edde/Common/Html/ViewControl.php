@@ -4,6 +4,7 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Control\ControlException;
+	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlView;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
@@ -16,8 +17,8 @@
 	use Edde\Common\File\File;
 	use Edde\Common\Html\Document\DocumentControl;
 	use Edde\Common\Html\Document\MetaControl;
+	use Edde\Common\Response\AbstractResponse;
 	use Edde\Common\Response\AjaxResponse;
-	use Edde\Common\Response\HtmlResponse;
 
 	/**
 	 * Formal root control for displaying page with some shorthands.
@@ -140,8 +141,15 @@
 			if ($this->httpRequest->isAjax()) {
 				return $this->ajax();
 			}
-			(new HtmlResponse($this->httpResponse))->render(function () {
-				return $this->render();
+			$this->httpResponse->setResponse(new class($this) extends AbstractResponse {
+				/**
+				 * @var IHtmlControl
+				 */
+				protected $htmlControl;
+
+				public function render() :string {
+					return $this->htmlControl->render();
+				}
 			});
 			return $this;
 		}

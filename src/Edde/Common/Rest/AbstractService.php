@@ -7,6 +7,7 @@
 	use Edde\Api\Rest\IService;
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Control\AbstractControl;
+	use Edde\Common\Response\TextResponse;
 	use Edde\Common\Strings\StringUtils;
 
 	abstract class AbstractService extends AbstractControl implements IService {
@@ -37,6 +38,8 @@
 				$this->httpResponse->setCode(self::ERROR_NOT_ALOWED);
 				$headerList = $this->httpResponse->getHeaderList();
 				$headerList->set('Allowed', implode(', ', $this->getMethodList()));
+				$this->httpResponse->contentType('text/plain');
+				$this->httpResponse->setResponse(new TextResponse(sprintf('The requested method [%s] is not supported.', $method)));
 				return;
 			}
 		}

@@ -61,8 +61,10 @@
 			self::assertEquals(405, $this->httpResponse->getCode());
 			self::assertEquals([
 				'Allowed' => 'GET, DELETE',
+				'Content-Type' => 'text/plain',
 			], $this->httpResponse->getHeaderList()
 				->array());
+			self::assertEquals('The requested method [PATCH] is not supported.', $this->httpResponse->getBody());
 		}
 
 		protected function setUp() {
