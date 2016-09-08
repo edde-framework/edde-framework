@@ -24,6 +24,8 @@
 			self::assertEquals('$this->methodCall(', $this->compiler->delimite('method-call('));
 			self::assertEquals('$simpleVariable', $this->compiler->delimite('$simple-variable'));
 			self::assertEquals('->someCall()', $this->compiler->delimite('->some-call()'));
+			self::assertEquals("'foo boo (a'", $this->compiler->delimite('foo boo (a'));
+			self::assertEquals("'foo boo ('", $this->compiler->delimite('foo boo ('));
 			self::assertEquals('->someCall(', $this->compiler->delimite('->some-call('));
 			self::assertEquals('->someCall2', $this->compiler->delimite('->some-call2'));
 			self::assertEquals('->fooVariableHere', $this->compiler->delimite('->foo-variable-here'));
