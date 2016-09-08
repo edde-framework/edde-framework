@@ -18,7 +18,6 @@
 	use Edde\Common\Html\Document\DocumentControl;
 	use Edde\Common\Html\Document\MetaControl;
 	use Edde\Common\Response\AbstractResponse;
-	use Edde\Common\Response\AjaxResponse;
 
 	/**
 	 * Formal root control for displaying page with some shorthands.
@@ -127,8 +126,17 @@
 			$this->use();
 			$link = $this->linkFactory->generate($redirect);
 			if ($this->httpRequest->isAjax()) {
-				(new AjaxResponse($this->httpResponse))->redirect($link)
-					->render();
+				$this->httpResponse->setResponse(new class($redirect) extends AbstractResponse {
+					protected $redirect;
+
+					public function __construct($link) {
+						$this->redirect = $link;
+					}
+
+					public function render(): string {
+						return json_encode(['redirect' => $this->redirect]);
+					}
+				});
 				return $this;
 			}
 			$this->httpResponse->redirect($link)
@@ -147,7 +155,11 @@
 				 */
 				protected $htmlControl;
 
-				public function render() :string {
+				public function __construct(IHtmlControl $htmlControl) {
+					$this->htmlControl = $htmlControl;
+				}
+
+				public function render(): string {
 					return $this->htmlControl->render();
 				}
 			});
@@ -155,32 +167,64 @@
 		}
 
 		/**
-		 * method specific for this "presenter"; this will sent a AjaxResponse with controls currently set to the body
+		 * method specific for this "presenter"; this will sent a proprietary ajax response
 		 *
 		 * @return IHtmlView
 		 * @throws ControlException
 		 */
 		public function ajax(): IHtmlView {
 			$this->use();
-			$ajax = new AjaxResponse($this->httpResponse);
-			if ($this->javaScriptCompiler->isEmpty() === false) {
-				$ajax->setJavaScriptList([
-					$this->javaScriptCompiler->compile($this->javaScriptCompiler)
-						->getRelativePath(),
-				]);
-			}
-			if ($this->styleSheetCompiler->isEmpty() === false) {
-				$ajax->setStyleSheetList([
-					$this->styleSheetCompiler->compile($this->styleSheetCompiler)
-						->getRelativePath(),
-				]);
-			}
-			foreach ($this->invalidate() as $control) {
-				if ($control->getId() !== '') {
-					$ajax->replace($control);
-				}
-			}
-			$ajax->render();
+			$this->httpResponse->contentType('application/json')
+				->setResponse(new class($this, $this->javaScriptCompiler, $this->styleSheetCompiler) extends AbstractResponse {
+					/**
+					 * @var ViewControl
+					 */
+					protected $viewControl;
+					/**
+					 * @var IJavaScriptCompiler
+					 */
+					protected $javaScriptCompiler;
+					/**
+					 * @var IStyleSheetCompiler
+					 */
+					protected $styleSheetCompiler;
+
+					/**
+					 * @param ViewControl $viewControl
+					 * @param IJavaScriptCompiler $javaScriptCompiler
+					 * @param IStyleSheetCompiler $styleSheetCompiler
+					 */
+					public function __construct(ViewControl $viewControl, IJavaScriptCompiler $javaScriptCompiler, IStyleSheetCompiler $styleSheetCompiler) {
+						$this->viewControl = $viewControl;
+						$this->javaScriptCompiler = $javaScriptCompiler;
+						$this->styleSheetCompiler = $styleSheetCompiler;
+					}
+
+					public function render(): string {
+						$ajax = [];
+						if ($this->javaScriptCompiler->isEmpty() === false) {
+							$ajax['javaScript'] = [
+								$this->javaScriptCompiler->compile($this->javaScriptCompiler)
+									->getRelativePath(),
+							];
+						}
+						if ($this->styleSheetCompiler->isEmpty() === false) {
+							$ajax['styleSheet'] = [
+								$this->styleSheetCompiler->compile($this->styleSheetCompiler)
+									->getRelativePath(),
+							];
+						}
+						foreach ($this->viewControl->invalidate() as $control) {
+							if (($id = $control->getId()) !== '') {
+								$ajax['selector']['#' . $id] = [
+									'action' => 'replace',
+									'source' => $control->render(),
+								];
+							}
+						}
+						return json_encode($ajax);
+					}
+				});
 			return $this;
 		}
 
@@ -196,6 +240,12 @@
 			}
 			$this->dirty();
 			return parent::render();
+		}
+
+		public function handle(string $method, array $parameterList, array $crateList) {
+			$result = parent::handle($method, $parameterList, $crateList);
+			$this->httpResponse->render();
+			return $result;
 		}
 
 		protected function prepare() {
