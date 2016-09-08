@@ -5,21 +5,13 @@
 
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Http\IHttpRequest;
+	use Edde\Api\Rest\IService;
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Router\AbstractRouter;
 	use Edde\Common\Router\Route;
-	use Edde\Common\Strings\StringUtils;
 
 	class RestRouter extends AbstractRouter {
 		use LazyInjectTrait;
-		/**
-		 * @var string
-		 */
-		protected $namespace;
-		/**
-		 * @var string
-		 */
-		protected $base;
 		/**
 		 * @var IHttpRequest
 		 */
@@ -28,50 +20,32 @@
 		 * @var ICrateFactory
 		 */
 		protected $crateFactory;
-
 		/**
-		 * @param string $namespace
-		 * @param string $base part of url (for example /api/, /rest/, ...) to detect a match
+		 * @var IService[]
 		 */
-		public function __construct(string $namespace, string $base) {
-			$this->namespace = $namespace;
-			$this->base = $base;
-		}
+		protected $serviceList = [];
 
 		public function lazyHttpRequest(IHttpRequest $httpRequest) {
 			$this->httpRequest = $httpRequest;
 		}
 
-		public function lazyCrateFactory(ICrateFactory $crateFactory) {
-			$this->crateFactory = $crateFactory;
+		public function registerServiceList(array $serviceList) {
+			foreach ($serviceList as $service) {
+				$this->registerService($service);
+			}
+			return $this;
+		}
+
+		public function registerService(IService $service) {
+			$this->serviceList[] = $service;
+			return $this;
 		}
 
 		public function route() {
 			$url = $this->httpRequest->getUrl();
-			$pathList = $url->getPathList();
-			if (count($pathList) < 3 || $pathList[0] !== 'api') {
-				return null;
-			}
-			array_shift($pathList);
-			$version = count($pathList) === 3 ? array_shift($pathList) : null;
-			$id = count($pathList) === 2 ? array_pop($pathList) : null;
-			$namespace = StringUtils::camelize(reset($pathList));
-			$classList = [
-				$this->namespace . '\\' . ($version . '\\' . $namespace . '\\' . $namespace . 'Service'),
-				$this->namespace . '\\' . ($namespace . '\\' . $namespace . 'Service'),
-			];
-			foreach ($classList as $api) {
-				if (class_exists($api)) {
-					$parameterList = $url->getQuery();
-					$parameterList['id'] = $id;
-					$reflectionClass = new \ReflectionClass($api);
-					$reflectionMethod = $reflectionClass->getMethod($method = 'handle' . StringUtils::camelize(strtolower($this->httpRequest->getMethod())));
-					$crateList = [];
-					$this->crateFactory->include();
-					if ($reflectionMethod->getNumberOfParameters() > 0 && ($crateName = $reflectionMethod->getParameters()[0]->getClass()) !== null) {
-						$crateList[] = $this->crateFactory->crate($crateName->getName(), null, json_decode($this->httpRequest->getBody(), true));
-					}
-					return new Route($api, $method, $parameterList, $crateList);
+			foreach ($this->serviceList as $service) {
+				if ($service->match($url)) {
+					return new Route(get_class($service), $this->httpRequest->getMethod(), $url->getQuery());
 				}
 			}
 			return null;
