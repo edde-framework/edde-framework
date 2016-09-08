@@ -42,6 +42,7 @@
 		}
 
 		public function route() {
+			$this->use();
 			$url = $this->httpRequest->getUrl();
 			foreach ($this->serviceList as $service) {
 				if ($service->match($url)) {

@@ -55,7 +55,9 @@
 		public function testNotAllowed() {
 			$this->httpRequest->setUrl(Url::create('http://localhost/api/test-service'));
 			$this->httpRequest->setMethod('patch');
+			self::assertFalse($this->restRouter->isUsed());
 			self::assertNotEmpty($route = $this->restRouter->route());
+			self::assertTrue($this->restRouter->isUsed());
 			self::assertEquals(TestService::class, $route->getClass());
 			$this->application->run();
 			self::assertEquals(405, $this->httpResponse->getCode());
