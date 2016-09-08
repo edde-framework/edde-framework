@@ -79,6 +79,10 @@
 			return $this;
 		}
 
+		public function getBody(): string {
+			return $this->response ? $this->response->render() : '';
+		}
+
 		public function redirect(string $redirect): IHttpResponse {
 			$this->getHeaderList()
 				->set('location', $redirect);

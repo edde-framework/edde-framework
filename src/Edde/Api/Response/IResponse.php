@@ -8,7 +8,14 @@
 	 */
 	interface IResponse {
 		/**
-		 * response a repsonse to the output (http, console, ...)
+		 * return response as a string
+		 *
+		 * @return string
+		 */
+		public function render() :string;
+
+		/**
+		 * send a repsonse to the output (http, console, ...)
 		 *
 		 * @return mixed
 		 */
