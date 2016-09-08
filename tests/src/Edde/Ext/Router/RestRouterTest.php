@@ -59,11 +59,14 @@
 			self::assertEquals(TestService::class, $route->getClass());
 			$this->application->run();
 			self::assertEquals(405, $this->httpResponse->getCode());
+			$headers = $this->httpResponse->getHeaderList()
+				->array();
+			self::assertArrayHasKey('Date', $headers);
+			unset($headers['Date']);
 			self::assertEquals([
 				'Allowed' => 'GET, DELETE',
 				'Content-Type' => 'text/plain',
-			], $this->httpResponse->getHeaderList()
-				->array());
+			], $headers);
 			self::assertEquals('The requested method [PATCH] is not supported.', $this->httpResponse->getBody());
 		}
 

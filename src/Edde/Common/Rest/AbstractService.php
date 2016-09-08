@@ -38,6 +38,7 @@
 				$this->httpResponse->setCode(self::ERROR_NOT_ALOWED);
 				$headerList = $this->httpResponse->getHeaderList();
 				$headerList->set('Allowed', implode(', ', $this->getMethodList()));
+				$headerList->set('Date', gmdate('D, d M Y H:i:s T'));
 				$this->httpResponse->contentType('text/plain');
 				$this->httpResponse->setResponse(new TextResponse(sprintf('The requested method [%s] is not supported.', $method)));
 				return;
