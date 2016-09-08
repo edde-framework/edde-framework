@@ -304,6 +304,37 @@
 ', $this->control->render());
 		}
 
+		public function testRootInclude() {
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/root-include.xml', $this->control));
+			$template->template();
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="foo-bar"></div>
+		<div>
+			<span>lorem ipsum or something like that</span>
+		</div>
+		<div id="id"></div>
+		<div class="qwerty"></div>
+		<div>
+			<span>foo</span>
+			<div>
+				<div></div>
+				<div></div>
+				<div class="soo empty div here"></div>
+				<div></div>
+			</div>
+		</div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
 		public function testMultiInclude() {
 			/** @var $template IHtmlTemplate */
 			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/multi-include.xml', $this->control));

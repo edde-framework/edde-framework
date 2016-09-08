@@ -212,7 +212,10 @@
 		}
 
 		public function replaceNode(IAbstractNode $abstractNode, array $nodeList): IAbstractNode {
-			array_splice($this->nodeList, array_search($abstractNode, $this->nodeList, true), 0, $nodeList);
+			if (($index = array_search($abstractNode, $this->nodeList, true)) === false || $abstractNode->getParent() !== $this) {
+				throw new NodeException(sprintf('Cannot replace the given node in root; root is not parent of the given node.'));
+			}
+			array_splice($this->nodeList, $index, 0, $nodeList);
 			unset($this->nodeList[array_search($abstractNode, $this->nodeList, true)]);
 			foreach ($nodeList as $node) {
 				$node->setParent($this);

@@ -124,13 +124,17 @@
 			if (strpos($value, 'edde://', 0) !== false) {
 				return var_export($this->asset(str_replace('edde://', '', $value)), true);
 			}
-			if (strpos($value, '/', 0) !== false) {
+			if ($value[0] === '/') {
 				return var_export($this->file(substr($value, 1)), true);
 			}
 			if (strpos($value, '->', 0) !== false) {
 				return '->' . StringUtils::firstLower(StringUtils::camelize(substr($value, 2)));
 			}
-			if (strpos($value, '(') !== false) {
+			if (strrpos($value, '(') !== false && StringUtils::webalize($method = str_replace([
+					'(',
+					')',
+				], '', $value)) === $method
+			) {
 				return '$this->' . StringUtils::firstLower(StringUtils::camelize($value));
 			}
 			if ($value[0] === '$') {

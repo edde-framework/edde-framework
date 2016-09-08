@@ -24,9 +24,12 @@
 			self::assertEquals('$this->methodCall(', $this->compiler->delimite('method-call('));
 			self::assertEquals('$simpleVariable', $this->compiler->delimite('$simple-variable'));
 			self::assertEquals('->someCall()', $this->compiler->delimite('->some-call()'));
+			self::assertEquals("'foo boo (a'", $this->compiler->delimite('foo boo (a'));
+			self::assertEquals("'foo boo ('", $this->compiler->delimite('foo boo ('));
 			self::assertEquals('->someCall(', $this->compiler->delimite('->some-call('));
 			self::assertEquals('->someCall2', $this->compiler->delimite('->some-call2'));
 			self::assertEquals('->fooVariableHere', $this->compiler->delimite('->foo-variable-here'));
+			self::assertEquals("'foo/boo'", $this->compiler->delimite('foo/boo'));
 			self::assertEquals("'" . FileUtils::normalize(__DIR__ . '/assets/template/button.xml') . "'", $this->compiler->delimite('edde://button.xml'));
 			self::assertEquals("'" . FileUtils::normalize(__DIR__ . '/assets/template/id.xml') . "'", $this->compiler->delimite('/assets/template/id.xml'));
 			self::assertEquals("'" . FileUtils::normalize(__DIR__ . '/assets/template/custom.xml') . "'", $this->compiler->delimite('//assets/template/custom.xml'));

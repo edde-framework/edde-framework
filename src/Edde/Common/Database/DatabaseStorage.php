@@ -74,6 +74,9 @@
 
 		public function rollback(): IStorage {
 			$this->use();
+			if ($this->transaction === 0) {
+				return $this;
+			}
 			$this->transaction = 0;
 			$this->driver->rollback();
 			return $this;

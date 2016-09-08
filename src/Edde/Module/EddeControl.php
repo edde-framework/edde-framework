@@ -46,7 +46,7 @@
 		public function handleOnUpgrade() {
 			$this->use();
 			try {
-				$this->snippet(__DIR__ . '/template/action-setup.xml', 'message');
+				$this->snippet(__DIR__ . '/template/layout.xml', 'message');
 				$this->message('success', sprintf('application has been upgraded to version [%s]', $this->upgradeManager->upgrade()
 					->getVersion()));
 			} catch (EddeException $e) {
@@ -67,7 +67,7 @@
 		public function handleOnRebuildCrates() {
 			$this->use();
 			try {
-				$this->snippet(__DIR__ . '/template/action-setup.xml', 'message');
+				$this->snippet(__DIR__ . '/template/layout.xml', 'message');
 				$this->crateGenerator->generate(true);
 				$this->message('success', 'crates has been rebuilt');
 			} catch (EddeException $e) {
