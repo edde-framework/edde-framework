@@ -124,6 +124,9 @@
 			if (strpos($value, 'edde://', 0) !== false) {
 				return var_export($this->asset(str_replace('edde://', '', $value)), true);
 			}
+			if (substr($value, 0, 2) === './') {
+				return var_export($this->file(substr($value, 2)), true);
+			}
 			if ($value[0] === '/') {
 				return var_export($this->file(substr($value, 1)), true);
 			}

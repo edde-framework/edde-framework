@@ -168,12 +168,12 @@
 		public function javascript(string $class = null, string $file = null): IHtmlControl;
 
 		/**
-		 * @param string|null $class
 		 * @param string|null $file
 		 *
 		 * @return IHtmlControl
+		 * @internal param null|string $class
 		 */
-		public function stylesheet(string $class = null, string $file = null): IHtmlControl;
+		public function stylesheet(string $file = null): IHtmlControl;
 
 		/**
 		 * @return IHtmlControl[]
