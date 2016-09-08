@@ -124,10 +124,13 @@
 		}
 
 		protected function process(INode $root, IFile $source): INode {
-			foreach (NodeIterator::recursive($root) as $node) {
+			foreach (NodeIterator::recursive($root, true) as $node) {
 				if ($node->hasAttributeList('x')) {
 					$processList = $node->getAttributeList('x');
+					$attributeList = $node->getAttributeList();
 					foreach ($processList as $process => $value) {
+						unset($attributeList['x:' . $process]);
+						$node->setAttributeList($attributeList);
 						switch ($process) {
 							case 'include':
 								$this->process($this->resourceManager->resource($file = new File($this->delimite($value, $source)), null, $node), $file);
