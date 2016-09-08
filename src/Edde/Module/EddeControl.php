@@ -58,7 +58,7 @@
 
 		protected function message(string $class, string $message) {
 			$this->message->javascript('message', __DIR__ . '/template/js/message.js')
-				->stylesheet('message', __DIR__ . '/template/js/message.css')
+				->stylesheet(__DIR__ . '/template/js/message.css')
 				->addClass($class)
 				->setText($message)
 				->dirty();

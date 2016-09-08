@@ -31,8 +31,8 @@
 			self::assertEquals('->fooVariableHere', $this->compiler->delimite('->foo-variable-here'));
 			self::assertEquals("'foo/boo'", $this->compiler->delimite('foo/boo'));
 			self::assertEquals("'" . FileUtils::normalize(__DIR__ . '/assets/template/button.xml') . "'", $this->compiler->delimite('edde://button.xml'));
-			self::assertEquals("'" . FileUtils::normalize(__DIR__ . '/assets/template/id.xml') . "'", $this->compiler->delimite('/assets/template/id.xml'));
-			self::assertEquals("'" . FileUtils::normalize(__DIR__ . '/assets/template/custom.xml') . "'", $this->compiler->delimite('//assets/template/custom.xml'));
+			self::assertEquals("'" . FileUtils::normalize(__DIR__ . '/assets/template/id.xml') . "'", $this->compiler->delimite('./assets/template/id.xml'));
+			self::assertEquals("'" . FileUtils::normalize(__DIR__ . '/assets/template/custom.xml') . "'", $this->compiler->delimite('/assets/template/custom.xml'));
 		}
 
 		protected function setUp() {
