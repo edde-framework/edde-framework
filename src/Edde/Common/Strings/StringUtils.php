@@ -202,7 +202,7 @@
 			if ($lower) {
 				$string = strtolower($string);
 			}
-			$string = preg_replace('~[^a-z0-9' . preg_quote($charlist, '~') . ']+~i', '-', $string);
+			$string = preg_replace('~[^a-z0-9' . ($charlist ? preg_quote($charlist, '~') : '') . ']+~i', '-', $string);
 			$string = trim($string, '-');
 			return $string;
 		}

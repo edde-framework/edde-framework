@@ -130,7 +130,11 @@
 			if (strpos($value, '->', 0) !== false) {
 				return '->' . StringUtils::firstLower(StringUtils::camelize(substr($value, 2)));
 			}
-			if (strpos($value, '(') !== false) {
+			if (strrpos($value, '(') !== false && StringUtils::webalize($method = str_replace([
+					'(',
+					')',
+				], '', $value)) === $method
+			) {
 				return '$this->' . StringUtils::firstLower(StringUtils::camelize($value));
 			}
 			if ($value[0] === '$') {
