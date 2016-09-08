@@ -14,12 +14,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tracy.git",
-                "reference": "2408e50cfcbb4a1dcff89f9fd447e5cc7aa28d8a"
+                "reference": "781a2f72587e5807314365f9c3207a13ac614090"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tracy/zipball/2408e50cfcbb4a1dcff89f9fd447e5cc7aa28d8a",
-                "reference": "2408e50cfcbb4a1dcff89f9fd447e5cc7aa28d8a",
+                "url": "https://api.github.com/repos/nette/tracy/zipball/781a2f72587e5807314365f9c3207a13ac614090",
+                "reference": "781a2f72587e5807314365f9c3207a13ac614090",
                 "shasum": ""
             },
             "require": {
@@ -68,7 +68,7 @@
                 "debugger",
                 "nette"
             ],
-            "time": "2016-09-06 12:54:14"
+            "time": "2016-09-07 11:05:30"
         }
     ],
     "aliases": [],
