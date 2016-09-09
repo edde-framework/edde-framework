@@ -111,6 +111,16 @@
 
 		public function handle(string $method, array $parameterList, array $crateList) {
 			$this->event(new HandleEvent($this, $method, $parameterList, $crateList));
+			$this->event(new DoneEvent($this, $result = $this->execute($method, $parameterList, $crateList)));
+			return $result;
+		}
+
+		protected function execute(string $method, array $parameterList, array $crateList) {
+			$argumentList = [];
+			$callback = [
+				$this,
+				$method,
+			];
 			if (method_exists($this, $actionMethod = $method)) {
 				$callback = new Callback([
 					$this,
@@ -129,14 +139,8 @@
 					}
 					$argumentList[] = $parameterList[$parameter->getName()];
 				}
-				$this->event(new DoneEvent($this, $result = $callback->invoke(...$argumentList)));
-				return $result;
 			}
-			/**
-			 * ability to process __call methods; the only restriction is execution without parameters
-			 */
-			$this->event(new DoneEvent($this, $result = $this->{$actionMethod}()));
-			return $result;
+			return $callback(...$argumentList);
 		}
 
 		public function getIterator() {

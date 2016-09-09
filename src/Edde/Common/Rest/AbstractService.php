@@ -33,7 +33,7 @@
 			$this->httpResponse = $httpResponse;
 		}
 
-		public function handle(string $method, array $parameterList, array $crateList) {
+		public function execute(string $method, array $parameterList, array $crateList) {
 			if (isset(self::$methodList[$method = strtoupper($method)]) === false) {
 				$this->httpResponse->setCode(self::ERROR_NOT_ALOWED);
 				$headerList = $this->httpResponse->getHeaderList();
@@ -41,8 +41,9 @@
 				$headerList->set('Date', gmdate('D, d M Y H:i:s T'));
 				$this->httpResponse->contentType('text/plain');
 				$this->httpResponse->setResponse(new TextResponse(sprintf('The requested method [%s] is not supported.', $method)));
-				return;
+				return null;
 			}
+			return parent::execute($method, $parameterList, $crateList);
 		}
 
 		/**

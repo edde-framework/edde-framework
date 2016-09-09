@@ -8,6 +8,7 @@
 
 	class RouterService extends RouterList implements IRouterService {
 		public function route() {
+			$this->use();
 			if (($route = parent::route()) === null) {
 				throw new RouterException(sprintf('Cannot find route for current application request.'));
 			}

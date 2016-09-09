@@ -19,7 +19,6 @@
 
 		public function route() {
 			foreach ($this->routerList as $router) {
-				$router->use();
 				if (($route = $router->route()) !== null) {
 					return $route;
 				}
