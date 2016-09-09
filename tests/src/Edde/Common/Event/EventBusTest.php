@@ -11,6 +11,7 @@
 	use Foo\Bar\EventHandler;
 	use Foo\Bar\MultiEventHandler;
 	use Foo\Bar\SomeEvent;
+	use Foo\Bar\SomeUsefullClass;
 	use phpunit\framework\TestCase;
 
 	require_once(__DIR__ . '/assets/assets.php');
@@ -44,6 +45,17 @@
 			$this->expectExceptionMessage('Event class [Foo\Bar\SomeEvent] was already registered in handler [Foo\Bar\MultiEventHandler].');
 			$this->eventBus->handler(new ReflectionHandler(new MultiEventHandler()));
 			$this->eventBus->event($event = new SomeEvent());
+		}
+
+		public function testTraitBusHandler() {
+			$someUsefullClass = new SomeUsefullClass($this->eventBus);
+			$someUsefullClass->handler(new ReflectionHandler(new EventHandler()));
+			$someUsefullClass->event($event = new SomeEvent());
+			self::assertTrue($event->flag);
+			$someUsefullClass->event($event = new AnotherEvent());
+			self::assertTrue($event->flag);
+			$someUsefullClass->event($event = new DummyEvent());
+			self::assertFalse($event->flag);
 		}
 
 		protected function setUp() {
