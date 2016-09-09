@@ -3,6 +3,7 @@
 
 	namespace Edde\Api\Control;
 
+	use Edde\Api\Event\IEventBus;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Usable\IUsable;
 
@@ -10,7 +11,7 @@
 	 * Control is general element for transfering incoming request into the internal system service and for
 	 * generating response.
 	 */
-	interface IControl extends IUsable, \IteratorAggregate {
+	interface IControl extends IUsable, IEventBus, \IteratorAggregate {
 		/**
 		 * return node of this control
 		 *
@@ -92,6 +93,15 @@
 		 */
 		public function isDirty(): bool;
 
+		/**
+		 * execute the given method in this controls
+		 *
+		 * @param string $method
+		 * @param array $parameterList
+		 * @param array $crateList
+		 *
+		 * @return mixed
+		 */
 		public function handle(string $method, array $parameterList, array $crateList);
 
 		/**

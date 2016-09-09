@@ -8,11 +8,15 @@
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Node\INode;
 	use Edde\Common\Callback\Callback;
+	use Edde\Common\Control\Event\DoneEvent;
+	use Edde\Common\Control\Event\HandleEvent;
+	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Usable\AbstractUsable;
 
 	abstract class AbstractControl extends AbstractUsable implements IControl {
+		use EventTrait;
 		/**
 		 * @var INode
 		 */
@@ -106,6 +110,7 @@
 		}
 
 		public function handle(string $method, array $parameterList, array $crateList) {
+			$this->event(new HandleEvent($this, $method, $parameterList, $crateList));
 			if (method_exists($this, $actionMethod = $method)) {
 				$callback = new Callback([
 					$this,
@@ -124,12 +129,14 @@
 					}
 					$argumentList[] = $parameterList[$parameter->getName()];
 				}
-				return $callback->invoke(...$argumentList);
+				$this->event(new DoneEvent($this, $result = $callback->invoke(...$argumentList)));
+				return $result;
 			}
 			/**
 			 * ability to process __call methods; the only restriction is execution without parameters
 			 */
-			return $this->{$actionMethod}();
+			$this->event(new DoneEvent($this, $result = $this->{$actionMethod}()));
+			return $result;
 		}
 
 		public function getIterator() {
