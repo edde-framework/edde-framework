@@ -5,6 +5,8 @@
 
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Converter\IConverter;
+	use Edde\Api\Node\INode;
+	use Edde\Common\File\File;
 	use phpunit\framework\TestCase;
 
 	class JsonConverterTest extends TestCase {
@@ -25,6 +27,20 @@
 			$expect = new \stdClass();
 			$expect->foo = true;
 			self::assertEquals($expect, $this->converter->convert(json_encode($expect), 'object'));
+		}
+
+		public function testNodeConvert() {
+			self::assertInstanceOf(INode::class, $source = $this->converter->convert(new File(__DIR__ . '/assets/sample.json'), 'node'));
+			self::assertEquals('foo', $source->getName());
+			self::assertEquals('moo', $source->getValue());
+			self::assertEquals([
+				'foo' => 'foo',
+				'poo' => 'poo',
+				'bar' => 'bar',
+			], $source->getAttributeList());
+			self::assertEquals([
+				'meta' => 'list',
+			], $source->getMetaList());
 		}
 
 		public function testException() {
