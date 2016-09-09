@@ -48,7 +48,7 @@
 		}
 
 		public function testTraitBusHandler() {
-			$someUsefullClass = new SomeUsefullClass($this->eventBus);
+			$someUsefullClass = new SomeUsefullClass();
 			$someUsefullClass->handler(new ReflectionHandler(new EventHandler()));
 			$someUsefullClass->event($event = new SomeEvent());
 			self::assertTrue($event->flag);
