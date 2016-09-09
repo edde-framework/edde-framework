@@ -18,4 +18,11 @@
 		 * @return bool
 		 */
 		public function match(IUrl $url): bool;
+
+		/**
+		 * return supported methods indexed by HTTP keyword
+		 *
+		 * @return array
+		 */
+		public function getMethodList(): array;
 	}
