@@ -17,6 +17,8 @@
 		 */
 		public function listen(string $event, callable $handler): IEventBus;
 
+		public function handler($handler): IEventBus;
+
 		/**
 		 * emit an event to all it's listeners; it should NOT do any magic
 		 *
