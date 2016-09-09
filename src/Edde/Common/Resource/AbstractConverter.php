@@ -3,23 +3,28 @@
 
 	namespace Edde\Common\Resource;
 
-	use Edde\Api\Resource\IConverter;
+	use Edde\Api\Converter\ConverterException;
+	use Edde\Api\Converter\IConverter;
 	use Edde\Common\AbstractObject;
 
 	abstract class AbstractConverter extends AbstractObject implements IConverter {
 		/**
-		 * @var string
+		 * @var string[]
 		 */
-		protected $source;
+		protected $mimeList;
 
 		/**
-		 * @param string $source
+		 * @param array $mimeList
 		 */
-		public function __construct($source) {
-			$this->source = $source;
+		public function __construct(array $mimeList) {
+			$this->mimeList = $mimeList;
 		}
 
-		public function getMime(): string {
-			return $this->source;
+		public function getMimeList(): array {
+			return $this->mimeList;
+		}
+
+		protected function exception(string $target) {
+			throw new ConverterException(sprintf('Unsuported convertion in [%s] from [%s] to [%s].', static::class, implode(', ', $this->mimeList), $target));
 		}
 	}

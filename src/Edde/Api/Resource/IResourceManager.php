@@ -53,17 +53,4 @@
 		 * @return INode
 		 */
 		public function resource(IResource $resource, string $mime = null, INode $root = null): INode;
-
-		public function registerConverter(IConverter $converter): IResourceManager;
-
-		/**
-		 * magical method for generic data conversion; ideologically it is based on a mime type conversion, but identifiers can be arbitrary
-		 *
-		 * @param mixed $source generic input which will be converted in a generic output (defined by mime a target)
-		 * @param string $mime generic identifier, it can be formal mime type or anything else (but there must be known converter)
-		 * @param string $target target type of conversion
-		 *
-		 * @return mixed return converted source; result depends on mime+target combination
-		 */
-		public function convert($source, string $mime, string $target);
 	}
