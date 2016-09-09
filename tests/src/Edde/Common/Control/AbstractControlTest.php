@@ -4,6 +4,8 @@
 	namespace Edde\Common\Control;
 
 	use Edde\Api\Control\ControlException;
+	use Edde\Common\Control\Event\DoneEvent;
+	use Edde\Common\Control\Event\HandleEvent;
 	use phpunit\framework\TestCase;
 
 	require_once(__DIR__ . '/assets/assets.php');
@@ -21,7 +23,19 @@
 			self::assertSame($control, $another->getRoot());
 			self::assertSame($control, $another->getParent());
 			self::assertSame($controlList, iterator_to_array($control));
+
+			$eventList = [];
+			$control->listen(HandleEvent::class, function (HandleEvent $handleEvent) use (&$eventList) {
+				$eventList[] = get_class($handleEvent);
+			});
+			$control->listen(DoneEvent::class, function (DoneEvent $doneEvent) use (&$eventList) {
+				$eventList[] = get_class($doneEvent);
+			});
 			self::assertEquals('pooboo', $control->handle('someMethod', ['foo' => 'poo',], ['boo']));
+			self::assertEquals([
+				HandleEvent::class,
+				DoneEvent::class,
+			], $eventList);
 		}
 
 		public function testHandleException() {
