@@ -7,6 +7,8 @@
 	use Edde\Api\Application\IErrorControl;
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Router\IRoute;
+	use Edde\Common\Application\Event\FinishEvent;
+	use Edde\Common\Application\Event\StartEvent;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use phpunit\framework\TestCase;
@@ -35,7 +37,18 @@
 			$this->route->class = \SomeControl::class;
 			$this->route->method = 'executeThisMethod';
 			$this->route->parameters = ['poo' => 'return this as result'];
+			$eventList = [];
+			$this->application->listen(StartEvent::class, function (StartEvent $startEvent) use (&$eventList) {
+				$eventList[] = get_class($startEvent);
+			});
+			$this->application->listen(FinishEvent::class, function (FinishEvent $finishEvent) use (&$eventList) {
+				$eventList[] = get_class($finishEvent);
+			});
 			self::assertEquals('return this as result', $this->application->run());
+			self::assertEquals([
+				StartEvent::class,
+				FinishEvent::class,
+			], $eventList);
 		}
 
 		public function testErrorControl() {
