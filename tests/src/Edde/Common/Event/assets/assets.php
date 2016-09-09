@@ -37,8 +37,4 @@
 
 	class SomeUsefullClass implements IEventBus {
 		use EventTrait;
-
-		public function __construct(IEventBus $eventBus) {
-			$this->eventBus = $eventBus;
-		}
 	}

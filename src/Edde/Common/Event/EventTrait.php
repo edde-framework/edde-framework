@@ -3,36 +3,35 @@
 
 	namespace Edde\Common\Event;
 
-	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEvent;
 	use Edde\Api\Event\IEventBus;
 
 	trait EventTrait {
 		/**
-		 * event bus must be provided from "outside" to prevent magical appearance
+		 * local event bus from a EventTrait
 		 *
 		 * @var IEventBus
 		 */
-		protected $eventBus;
+		protected $traitEventBus;
 
 		public function listen(string $event, callable $handler): IEventBus {
-			if ($this->eventBus === null) {
-				throw new EventException(sprintf('An instance of [%s] was not provided to the class [%s] of trait [%s::$eventBus].', IEventBus::class, static::class, EventTrait::class));
+			if ($this->traitEventBus === null) {
+				$this->traitEventBus = new EventBus();
 			}
-			return $this->eventBus->listen($event, $handler);
+			return $this->traitEventBus->listen($event, $handler);
 		}
 
 		public function handler($handler): IEventBus {
-			if ($this->eventBus === null) {
-				throw new EventException(sprintf('An instance of [%s] was not provided to the class [%s] of trait [%s::$eventBus].', IEventBus::class, static::class, EventTrait::class));
+			if ($this->traitEventBus === null) {
+				$this->traitEventBus = new EventBus();
 			}
-			return $this->eventBus->handler($handler);
+			return $this->traitEventBus->handler($handler);
 		}
 
 		public function event(IEvent $event): IEventBus {
-			if ($this->eventBus === null) {
-				throw new EventException(sprintf('An instance of [%s] was not provided to the class [%s] of trait [%s::$eventBus].', IEventBus::class, static::class, EventTrait::class));
+			if ($this->traitEventBus === null) {
+				$this->traitEventBus = new EventBus();
 			}
-			return $this->eventBus->event($event);
+			return $this->traitEventBus->event($event);
 		}
 	}
