@@ -34,13 +34,23 @@
 		}
 
 		public function execute(string $method, array $parameterList, array $crateList) {
-			if (isset(self::$methodList[$method = strtoupper($method)]) === false) {
+			$methodList = $this->getMethodList();
+			if (in_array($method = strtoupper($method), self::$methodList, true) === false) {
 				$this->httpResponse->setCode(self::ERROR_NOT_ALOWED);
 				$headerList = $this->httpResponse->getHeaderList();
-				$headerList->set('Allowed', implode(', ', $this->getMethodList()));
+				$headerList->set('Allowed', $allowed = implode(', ', $methodList));
 				$headerList->set('Date', gmdate('D, d M Y H:i:s T'));
 				$this->httpResponse->contentType('text/plain');
-				$this->httpResponse->setResponse(new TextResponse(sprintf('The requested method [%s] is not supported.', $method)));
+				$this->httpResponse->setResponse(new TextResponse(sprintf('The requested method [%s] is not supported; allowed methods are [%s].', $method, $allowed)));
+				return null;
+			}
+			if (isset($methodList[$method]) === false) {
+				$this->httpResponse->setCode(self::ERROR_NOT_ALOWED);
+				$headerList = $this->httpResponse->getHeaderList();
+				$headerList->set('Allowed', $allowed = implode(', ', $methodList));
+				$headerList->set('Date', gmdate('D, d M Y H:i:s T'));
+				$this->httpResponse->contentType('text/plain');
+				$this->httpResponse->setResponse(new TextResponse(sprintf('The requested method [%s] is not implemented; allowed methods are [%s].', $method, $allowed)));
 				return null;
 			}
 			return parent::execute($method, $parameterList, $crateList);
@@ -55,7 +65,7 @@
 			$methodList = [];
 			foreach (self::$methodList as $method) {
 				if (method_exists($this, 'rest' . StringUtils::firstUpper(strtolower($method)))) {
-					$methodList[] = $method;
+					$methodList[$method] = $method;
 				}
 			}
 			return $methodList;

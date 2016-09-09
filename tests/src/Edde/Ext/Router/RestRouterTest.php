@@ -69,7 +69,7 @@
 				'Allowed' => 'GET, DELETE',
 				'Content-Type' => 'text/plain',
 			], $headers);
-			self::assertEquals('The requested method [PATCH] is not supported.', $this->httpResponse->getBody());
+			self::assertEquals('The requested method [PATCH] is not implemented; allowed methods are [GET, DELETE].', $this->httpResponse->getBody());
 		}
 
 		protected function setUp() {
