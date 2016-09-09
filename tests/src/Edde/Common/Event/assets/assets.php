@@ -3,7 +3,9 @@
 
 	namespace Foo\Bar;
 
+	use Edde\Api\Event\IEventBus;
 	use Edde\Common\Event\AbstractEvent;
+	use Edde\Common\Event\EventTrait;
 
 	class SomeEvent extends AbstractEvent {
 		public $flag = false;
@@ -30,5 +32,13 @@
 	class MultiEventHandler extends EventHandler {
 		public function someSomeEvent(SomeEvent $someEvent) {
 			$someEvent->flag = true;
+		}
+	}
+
+	class SomeUsefullClass implements IEventBus {
+		use EventTrait;
+
+		public function __construct(IEventBus $eventBus) {
+			$this->eventBus = $eventBus;
 		}
 	}
