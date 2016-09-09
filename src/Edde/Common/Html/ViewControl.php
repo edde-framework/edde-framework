@@ -242,12 +242,6 @@
 			return parent::render();
 		}
 
-		public function handle(string $method, array $parameterList, array $crateList) {
-			$result = parent::handle($method, $parameterList, $crateList);
-			$this->httpResponse->render();
-			return $result;
-		}
-
 		protected function prepare() {
 			parent::prepare();
 			$this->styleSheetList = $this->styleSheetCompiler;
