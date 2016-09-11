@@ -62,7 +62,7 @@
 				->onSetup(IApplication::class, function (IHttpResponse $httpResponse, IApplication $application) {
 					$application->listen(FinishEvent::class, [
 						$httpResponse,
-						'render',
+						'send',
 					]);
 				});
 		}

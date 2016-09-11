@@ -3,8 +3,10 @@
 
 	namespace Edde\Ext\Router;
 
+	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Http\IHttpRequest;
+	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Common\Application\Request;
 	use Edde\Common\Container\LazyInjectTrait;
@@ -30,6 +32,14 @@
 		 * @var IHttpRequest
 		 */
 		protected $httpRequest;
+		/**
+		 * @var IHttpResponse
+		 */
+		protected $httpResponse;
+		/**
+		 * @var IResponseManager
+		 */
+		protected $responseManager;
 
 		/**
 		 * @param IRuntime $runtime
@@ -44,6 +54,14 @@
 
 		public function lazyHttpRequest(IHttpRequest $httpRequest) {
 			$this->httpRequest = $httpRequest;
+		}
+
+		public function lazyHttpResponse(IHttpResponse $httpResponse) {
+			$this->httpResponse = $httpResponse;
+		}
+
+		public function lazyResponseManager(IResponseManager $responseManager) {
+			$this->responseManager = $responseManager;
 		}
 
 		public function createRequest() {
@@ -78,7 +96,9 @@
 			}
 			$parameterList = $url->getQuery();
 			unset($parameterList['control'], $parameterList['action']);
-			return new Request('http+' . $headerList->getContentType(), $class, $method, array_merge($parameterList, $crateList));
+			$this->responseManager->setMime($mime = $headerList->getContentType($headerList->getAccept()));
+			$this->httpResponse->contentType($mime);
+			return new Request('http+' . $headerList->getContentType('text/html'), $class, $method, array_merge($parameterList, $crateList));
 		}
 
 		protected function prepare() {

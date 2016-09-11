@@ -176,6 +176,13 @@
 		public function stylesheet(string $file = null): IHtmlControl;
 
 		/**
+		 * return all invalid (dirty) controls
+		 *
+		 * @return array|IHtmlControl[]
+		 */
+		public function invalidate(): array;
+
+		/**
 		 * @return IHtmlControl[]
 		 */
 		public function getIterator();

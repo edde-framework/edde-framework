@@ -7,7 +7,6 @@
 	use Edde\Api\Rest\IService;
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Control\AbstractControl;
-	use Edde\Common\Response\TextResponse;
 	use Edde\Common\Strings\StringUtils;
 
 	abstract class AbstractService extends AbstractControl implements IService {
