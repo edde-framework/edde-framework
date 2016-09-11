@@ -6,10 +6,12 @@
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Application\IErrorControl;
 	use Edde\Api\Application\IRequest;
+	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Common\Application\Application;
+	use Edde\Common\Application\ResponseManager;
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpRequest;
@@ -76,6 +78,7 @@
 			$container = ContainerFactory::create([
 				RestRouter::class,
 				IRouterService::class => RouterService::class,
+				IResponseManager::class => ResponseManager::class,
 				IRequest::class => function (IRouterService $routerService) {
 					return $routerService->createRequest();
 				},

@@ -6,6 +6,7 @@
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Application\IErrorControl;
 	use Edde\Api\Application\IRequest;
+	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Control\IControl;
 	use Edde\Common\Application\Event\FinishEvent;
 	use Edde\Common\Application\Event\StartEvent;
@@ -73,6 +74,7 @@
 		protected function setUp() {
 			$container = ContainerFactory::create([
 				IApplication::class => Application::class,
+				IResponseManager::class => ResponseManager::class,
 				IRequest::class => function () {
 					return new \SomeRequest();
 				},
