@@ -6,9 +6,9 @@
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Runtime\IRuntime;
+	use Edde\Common\Application\Request;
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Router\AbstractRouter;
-	use Edde\Common\Router\Route;
 	use Edde\Common\Strings\StringUtils;
 
 	/**
@@ -46,7 +46,7 @@
 			$this->httpRequest = $httpRequest;
 		}
 
-		public function route() {
+		public function createRequest() {
 			$this->use();
 			if ($this->runtime->isConsoleMode()) {
 				return null;
@@ -77,7 +77,7 @@
 			}
 			$parameterList = $url->getQuery();
 			unset($parameterList['control'], $parameterList['action']);
-			return new Route($class, $method, $parameterList, $crateList);
+			return new Request('type', $class, $method, array_merge($parameterList, $crateList));
 		}
 
 		protected function prepare() {

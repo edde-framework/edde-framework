@@ -8,7 +8,6 @@
 	use Edde\Api\Rest\IService;
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Router\AbstractRouter;
-	use Edde\Common\Router\Route;
 
 	class RestRouter extends AbstractRouter {
 		use LazyInjectTrait;
@@ -41,12 +40,13 @@
 			return $this;
 		}
 
-		public function route() {
+		public function createRequest() {
+			throw new \Exception('not implemented yet: not updated to use Request');
 			$this->use();
 			$url = $this->httpRequest->getUrl();
 			foreach ($this->serviceList as $service) {
 				if ($service->match($url)) {
-					return new Route(get_class($service), $this->httpRequest->getMethod(), $url->getQuery());
+//					return new Request(get_class($service), $this->httpRequest->getMethod(), $url->getQuery());
 				}
 			}
 			return null;

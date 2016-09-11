@@ -44,19 +44,19 @@
 
 		public function testNotMatch() {
 			$this->httpRequest->setUrl(Url::create('http://localhost/foo/bar'));
-			self::assertEmpty($this->restRouter->route());
+			self::assertEmpty($this->restRouter->createRequest());
 		}
 
 		public function testMatchUnknown() {
 			$this->httpRequest->setUrl(Url::create('http://localhost/api/'));
-			self::assertEmpty($this->restRouter->route());
+			self::assertEmpty($this->restRouter->createRequest());
 		}
 
 		public function testNotAllowed() {
 			$this->httpRequest->setUrl(Url::create('http://localhost/api/test-service'));
 			$this->httpRequest->setMethod('patch');
 			self::assertFalse($this->restRouter->isUsed());
-			self::assertNotEmpty($route = $this->restRouter->route());
+			self::assertNotEmpty($route = $this->restRouter->createRequest());
 			self::assertTrue($this->restRouter->isUsed());
 			self::assertEquals(TestService::class, $route->getClass());
 			$this->application->run();
@@ -77,7 +77,7 @@
 				RestRouter::class,
 				IRouterService::class => RouterService::class,
 				IRoute::class => function (IRouterService $routerService) {
-					return $routerService->route();
+					return $routerService->createRequest();
 				},
 				IErrorControl::class => RethrowErrorControl::class,
 				IApplication::class => Application::class,

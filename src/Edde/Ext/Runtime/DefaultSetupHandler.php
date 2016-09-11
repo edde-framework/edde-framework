@@ -111,7 +111,7 @@
 					IErrorControl::class => ExceptionErrorControl::class,
 					IRouterService::class => RouterService::class,
 					IRoute::class => function (IRouterService $routerService) {
-						return $routerService->route();
+						return $routerService->createRequest();
 					},
 					/**
 					 * Http request support
