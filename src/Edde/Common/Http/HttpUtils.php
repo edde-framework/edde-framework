@@ -35,7 +35,27 @@
 				];
 			}
 			usort($accepts, function ($alpha, $beta) {
-				return $alpha['weight'] < $beta['weight'];
+				if ($alpha['weight'] !== $beta['weight']) {
+					return $alpha['weight'] < $beta['weight'];
+				}
+				$alphaMime = explode('/', $alpha['mime']);
+				$betaMime = explode('/', $beta['mime']);
+				if ($alphaMime[0] !== $betaMime[0]) {
+					return 0;
+				}
+				if ($alphaMime[1] !== '*' && $betaMime[1] === '*') {
+					return -1;
+				}
+				if ($alphaMime[1] === '*' && $betaMime[1] !== '*') {
+					return 1;
+				}
+				if (strpos($alphaMime[1], ';') !== false) {
+					return -1;
+				}
+				if (strpos($betaMime[1], ';') !== false) {
+					return 1;
+				}
+				return 0;
 			});
 			foreach ($accepts as $value) {
 				$acceptList[] = $value['mime'];

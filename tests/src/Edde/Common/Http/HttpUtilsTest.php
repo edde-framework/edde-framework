@@ -55,4 +55,13 @@
 				'text/drop',
 			], HttpUtils::accept('text/plain, application/json;q=0.5, text/html, text/drop;q=0'));
 		}
+
+		public function testAcceptHeader6() {
+			self::assertEquals([
+				'text/plain;format=flowed',
+				'text/plain',
+				'text/*',
+				'*/*',
+			], HttpUtils::accept('text/*, text/plain, text/plain;format=flowed, */*'));
+		}
 	}
