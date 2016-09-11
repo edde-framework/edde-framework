@@ -52,7 +52,6 @@
 				'text/plain',
 				'text/html',
 				'application/json',
-				'text/drop',
 			], HttpUtils::accept('text/plain, application/json;q=0.5, text/html, text/drop;q=0'));
 		}
 
@@ -63,5 +62,19 @@
 				'text/*',
 				'*/*',
 			], HttpUtils::accept('text/*, text/plain, text/plain;format=flowed, */*'));
+		}
+
+		public function testLanguage1() {
+			self::assertEquals([
+				'en',
+			], HttpUtils::language(null, 'en'));
+		}
+
+		public function testLanguage2() {
+			self::assertEquals([
+				'da',
+				'en-gb',
+				'en',
+			], HttpUtils::language('da, en-gb;q=0.8, en;q=0.7', 'en'));
 		}
 	}
