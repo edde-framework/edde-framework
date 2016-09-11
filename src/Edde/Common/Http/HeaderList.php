@@ -10,6 +10,10 @@
 	 * Simple header list implementation over an array.
 	 */
 	class HeaderList extends AbstractList implements IHeaderList {
+		public function getContentType(string $default = ''): string {
+			return $this->get('Content-Type', $default);
+		}
+
 		public function getUserAgent(string $default = ''): string {
 			return $this->get('User-Agent', $default);
 		}
