@@ -5,6 +5,7 @@
 
 	use App\Login\SimpleAuthenticator;
 	use App\Message\FlashControl;
+	use App\Rest\AppService;
 	use App\Upgrade\InitialUpgrade;
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Cache\ICacheFactory;
@@ -13,12 +14,14 @@
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Identity\IAuthenticatorManager;
 	use Edde\Api\Link\ILinkFactory;
+	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Application\Event\FinishEvent;
 	use Edde\Common\Html\Macro\ControlMacro;
 	use Edde\Common\Link\ControlLinkGenerator;
+	use Edde\Ext\Router\RestRouter;
 	use Edde\Ext\Runtime\DefaultSetupHandler;
 	use Edde\Ext\Upgrade\InitialStorageUpgrade;
 
@@ -40,6 +43,9 @@
 					foreach ($schemaList as $schema) {
 						$schemaFactory->load($schema);
 					}
+				})
+				->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
+					$routerService->registerRouter($container->create(RestRouter::class));
 				})
 				->onSetup(IUpgradeManager::class, function (IContainer $container, IUpgradeManager $upgradeManager) {
 					$upgradeManager->registerUpgrade($container->create(InitialStorageUpgrade::class, '0.0'));
@@ -64,6 +70,9 @@
 						$httpResponse,
 						'send',
 					]);
+				})
+				->onSetup(RestRouter::class, function (IContainer $container, RestRouter $restRouter) {
+					$restRouter->registerService($container->create(AppService::class));
 				});
 		}
 	}

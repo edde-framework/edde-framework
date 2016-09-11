@@ -96,9 +96,9 @@
 			}
 			$parameterList = $url->getQuery();
 			unset($parameterList['control'], $parameterList['action']);
-			$this->responseManager->setMime($mime = $headerList->getContentType($headerList->getAccept()));
+			$this->responseManager->setMime('http+' . ($mime = $headerList->getContentType($headerList->getAccept())));
 			$this->httpResponse->contentType($mime);
-			return new Request('http+' . $headerList->getContentType('text/html'), $class, $method, array_merge($parameterList, $crateList));
+			return new Request($mime, $class, $method, array_merge($parameterList, $crateList));
 		}
 
 		protected function prepare() {

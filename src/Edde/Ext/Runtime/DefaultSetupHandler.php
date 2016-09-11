@@ -87,6 +87,7 @@
 	use Edde\Ext\Converter\PhpConverter;
 	use Edde\Ext\Converter\XmlConverter;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
+	use Edde\Ext\Router\RestRouter;
 	use Edde\Ext\Router\SimpleRouter;
 	use Edde\Framework;
 
@@ -171,6 +172,8 @@
 					IIdentity::class => function (IIdentityManager $identityManager) {
 						return $identityManager->identity();
 					},
+
+					RestRouter::class,
 				], $factoryList))
 				->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
 					$routerService->registerRouter($container->create(SimpleRouter::class));
