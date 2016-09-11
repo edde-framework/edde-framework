@@ -10,6 +10,15 @@
 	 */
 	interface IHeaderList extends IList {
 		/**
+		 * return content type from header or default
+		 *
+		 * @param string $default
+		 *
+		 * @return string
+		 */
+		public function getContentType(string $default = ''): string;
+
+		/**
 		 * return user agent
 		 *
 		 * @param string $default
