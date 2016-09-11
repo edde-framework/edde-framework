@@ -33,7 +33,7 @@
 			$this->httpResponse = $httpResponse;
 		}
 
-		public function execute(string $method, array $parameterList, array $crateList) {
+		public function execute(string $method, array $parameterList) {
 			$methodList = $this->getMethodList();
 			if (in_array($method = strtoupper($method), self::$methodList, true) === false) {
 				$this->httpResponse->setCode(self::ERROR_NOT_ALOWED);
@@ -53,7 +53,7 @@
 				$this->httpResponse->setResponse(new TextResponse(sprintf('The requested method [%s] is not implemented; allowed methods are [%s].', $method, $allowed)));
 				return null;
 			}
-			return parent::execute($methodList[$method], $parameterList, $crateList);
+			return parent::execute($methodList[$method], $parameterList);
 		}
 
 		public function getMethodList(): array {

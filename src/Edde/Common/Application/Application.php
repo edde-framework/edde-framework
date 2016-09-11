@@ -58,7 +58,7 @@
 				if ((($control = $this->container->create($this->request->getClass())) instanceof IControl) === false) {
 					throw new ApplicationException(sprintf('Route class [%s] is not instance of [%s].', $this->request->getClass(), IControl::class));
 				}
-				$this->event(new FinishEvent($this, $result = $control->handle($this->request->getMethod(), $this->request->getParameterList(), [])));
+				$this->event(new FinishEvent($this, $result = $control->handle($this->request->getMethod(), $this->request->getParameterList())));
 				return $result;
 			} catch (\Exception $e) {
 				$this->event(new ErrorEvent($this, $e));

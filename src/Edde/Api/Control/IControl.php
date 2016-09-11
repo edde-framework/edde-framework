@@ -98,11 +98,10 @@
 		 *
 		 * @param string $method
 		 * @param array $parameterList
-		 * @param array $crateList
 		 *
 		 * @return mixed
 		 */
-		public function handle(string $method, array $parameterList, array $crateList);
+		public function handle(string $method, array $parameterList);
 
 		/**
 		 * @return IControl[]
