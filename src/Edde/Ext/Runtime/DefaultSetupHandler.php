@@ -5,6 +5,8 @@
 
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Application\IErrorControl;
+	use Edde\Api\Application\IRequest;
+	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Cache\ICacheStorage;
@@ -30,7 +32,6 @@
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\Storage\IFileStorage;
 	use Edde\Api\Resource\Storage\IStorageDirectory;
-	use Edde\Api\Router\IRoute;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Runtime\RuntimeException;
 	use Edde\Api\Schema\ISchemaFactory;
@@ -45,6 +46,7 @@
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Application\Application;
+	use Edde\Common\Application\ResponseManager;
 	use Edde\Common\AssetsDirectory;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
@@ -110,9 +112,10 @@
 					IApplication::class => Application::class,
 					IErrorControl::class => ExceptionErrorControl::class,
 					IRouterService::class => RouterService::class,
-					IRoute::class => function (IRouterService $routerService) {
+					IRequest::class => function (IRouterService $routerService) {
 						return $routerService->createRequest();
 					},
+					IResponseManager::class => ResponseManager::class,
 					/**
 					 * Http request support
 					 */

@@ -5,9 +5,11 @@
 
 	use Edde\Api\Application\ApplicationException;
 	use Edde\Api\Application\IErrorControl;
+	use Edde\Api\Application\IRequest;
+	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Control\IControl;
-	use Edde\Api\Router\IRoute;
+	use Edde\Api\Resource\IResourceManager;
 	use Edde\Common\Application\Event\ErrorEvent;
 	use Edde\Common\Application\Event\FinishEvent;
 	use Edde\Common\Application\Event\StartEvent;
@@ -16,9 +18,13 @@
 	class Application extends AbstractApplication {
 		use LazyInjectTrait;
 		/**
-		 * @var IRoute
+		 * @var IRequest
 		 */
-		protected $route;
+		protected $request;
+		/**
+		 * @var IResourceManager
+		 */
+		protected $responseManager;
 		/**
 		 * @var IContainer
 		 */
@@ -28,8 +34,12 @@
 		 */
 		protected $errorControl;
 
-		public function lazyRoute(IRoute $route) {
-			$this->route = $route;
+		public function lazyRoute(IRequest $request) {
+			$this->request = $request;
+		}
+
+		public function lazyResponseManager(IResponseManager $responseManager) {
+			$this->responseManager = $responseManager;
 		}
 
 		public function lazyContainer(IContainer $container) {
@@ -45,10 +55,10 @@
 				$this->use();
 				$this->event(new StartEvent($this));
 				/** @var $control IControl */
-				if ((($control = $this->container->create($this->route->getClass())) instanceof IControl) === false) {
-					throw new ApplicationException(sprintf('Route class [%s] is not instance of [%s].', $this->route->getClass(), IControl::class));
+				if ((($control = $this->container->create($this->request->getClass())) instanceof IControl) === false) {
+					throw new ApplicationException(sprintf('Route class [%s] is not instance of [%s].', $this->request->getClass(), IControl::class));
 				}
-				$this->event(new FinishEvent($this, $result = $control->handle($this->route->getMethod(), $this->route->getParameterList(), $this->route->getCrateList())));
+				$this->event(new FinishEvent($this, $result = $control->handle($this->request->getMethod(), $this->request->getParameterList(), [])));
 				return $result;
 			} catch (\Exception $e) {
 				$this->event(new ErrorEvent($this, $e));

@@ -5,8 +5,8 @@
 
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Application\IErrorControl;
+	use Edde\Api\Application\IRequest;
 	use Edde\Api\Control\IControl;
-	use Edde\Api\Router\IRoute;
 	use Edde\Common\Application\Event\FinishEvent;
 	use Edde\Common\Application\Event\StartEvent;
 	use Edde\Common\Container\Factory\ClassFactory;
@@ -21,9 +21,9 @@
 		 */
 		protected $application;
 		/**
-		 * @var \SomeRoute
+		 * @var \SomeRequest
 		 */
-		protected $route;
+		protected $request;
 		/**
 		 * @var \SomeControl
 		 */
@@ -34,9 +34,9 @@
 		protected $errorControl;
 
 		public function testWorkflow() {
-			$this->route->class = \SomeControl::class;
-			$this->route->method = 'executeThisMethod';
-			$this->route->parameters = ['poo' => 'return this as result'];
+			$this->request->class = \SomeControl::class;
+			$this->request->method = 'executeThisMethod';
+			$this->request->parameters = ['poo' => 'return this as result'];
 			$eventList = [];
 			$this->application->listen(StartEvent::class, function (StartEvent $startEvent) use (&$eventList) {
 				$eventList[] = get_class($startEvent);
@@ -53,18 +53,18 @@
 
 		public function testErrorControl() {
 			$this->control->throw();
-			$this->route->class = \SomeControl::class;
-			$this->route->method = 'executeThisMethod';
-			$this->route->parameters = ['poo' => 'return this as result'];
+			$this->request->class = \SomeControl::class;
+			$this->request->method = 'executeThisMethod';
+			$this->request->parameters = ['poo' => 'return this as result'];
 			self::assertInstanceOf(\Exception::class, $this->application->run());
 			self::assertNotEmpty($exception = $this->errorControl->getException());
 			self::assertEquals('some error', $exception->getMessage());
 		}
 
 		public function testForbiddenControl() {
-			$this->route->class = \ForbiddenControl::class;
-			$this->route->method = 'foo';
-			$this->route->parameters = [];
+			$this->request->class = \ForbiddenControl::class;
+			$this->request->method = 'foo';
+			$this->request->parameters = [];
 			$this->application->run();
 			self::assertInstanceOf(\Exception::class, $exception = $this->errorControl->getException());
 			self::assertEquals(sprintf('Route class [ForbiddenControl] is not instance of [%s].', IControl::class), $exception->getMessage());
@@ -73,18 +73,15 @@
 		protected function setUp() {
 			$container = ContainerFactory::create([
 				IApplication::class => Application::class,
-				IRoute::class => function () {
-					return new \SomeRoute();
+				IRequest::class => function () {
+					return new \SomeRequest();
 				},
 				\SomeControl::class => new ClassFactory(\SomeControl::class, \SomeControl::class, true),
 				IErrorControl::class => \SomeErrorControl::class,
 			]);
-			$this->route = $container->create(IRoute::class);
+			$this->request = $container->create(IRequest::class);
 			$this->control = $container->create(\SomeControl::class);
 			$this->errorControl = $container->create(IErrorControl::class);
 			$this->application = $container->create(IApplication::class);
-			$this->application->lazyRoute($container->create(IRoute::class));
-			$this->application->lazyErrorControl($container->create(IErrorControl::class));
-			$this->application->lazyContainer($container);
 		}
 	}

@@ -6,6 +6,7 @@
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Rest\IService;
+	use Edde\Common\Application\Request;
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Router\AbstractRouter;
 
@@ -41,12 +42,12 @@
 		}
 
 		public function createRequest() {
-			throw new \Exception('not implemented yet: not updated to use Request');
 			$this->use();
 			$url = $this->httpRequest->getUrl();
+			$headerList = $this->httpRequest->getHeaderList();
 			foreach ($this->serviceList as $service) {
 				if ($service->match($url)) {
-//					return new Request(get_class($service), $this->httpRequest->getMethod(), $url->getQuery());
+					return new Request($headerList->getContentType(), get_class($service), $this->httpRequest->getMethod(), $url->getQuery());
 				}
 			}
 			return null;

@@ -5,9 +5,9 @@
 
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Application\IErrorControl;
+	use Edde\Api\Application\IRequest;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
-	use Edde\Api\Router\IRoute;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Common\Application\Application;
 	use Edde\Common\Http\CookieList;
@@ -76,7 +76,7 @@
 			$container = ContainerFactory::create([
 				RestRouter::class,
 				IRouterService::class => RouterService::class,
-				IRoute::class => function (IRouterService $routerService) {
+				IRequest::class => function (IRouterService $routerService) {
 					return $routerService->createRequest();
 				},
 				IErrorControl::class => RethrowErrorControl::class,
