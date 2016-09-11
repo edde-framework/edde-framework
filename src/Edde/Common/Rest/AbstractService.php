@@ -3,8 +3,10 @@
 
 	namespace Edde\Common\Rest;
 
+	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Rest\IService;
+	use Edde\Common\Application\Response;
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Control\AbstractControl;
 	use Edde\Common\Strings\StringUtils;
@@ -27,9 +29,17 @@
 		 * @var IHttpResponse
 		 */
 		protected $httpResponse;
+		/**
+		 * @var IResponseManager
+		 */
+		protected $responseManager;
 
 		public function lazyHttpResponse(IHttpResponse $httpResponse) {
 			$this->httpResponse = $httpResponse;
+		}
+
+		public function lazyResponseManager(IResponseManager $responseManager) {
+			$this->responseManager = $responseManager;
 		}
 
 		public function execute(string $method, array $parameterList) {
@@ -39,8 +49,11 @@
 				$headerList = $this->httpResponse->getHeaderList();
 				$headerList->set('Allowed', $allowed = implode(', ', array_keys($methodList)));
 				$headerList->set('Date', gmdate('D, d M Y H:i:s T'));
+				$this->responseManager->setMime('http+text/plain');
 				$this->httpResponse->contentType('text/plain');
-				$this->httpResponse->setResponse(new TextResponse(sprintf('The requested method [%s] is not supported; allowed methods are [%s].', $method, $allowed)));
+				$this->responseManager->response(new Response('calback', function () use ($method, $allowed) {
+					sprintf('The requested method [%s] is not supported; allowed methods are [%s].', $method, $allowed);
+				}));
 				return null;
 			}
 			if (isset($methodList[$method]) === false) {
@@ -48,8 +61,11 @@
 				$headerList = $this->httpResponse->getHeaderList();
 				$headerList->set('Allowed', $allowed = implode(', ', array_keys($methodList)));
 				$headerList->set('Date', gmdate('D, d M Y H:i:s T'));
+				$this->responseManager->setMime('http+text/plain');
 				$this->httpResponse->contentType('text/plain');
-				$this->httpResponse->setResponse(new TextResponse(sprintf('The requested method [%s] is not implemented; allowed methods are [%s].', $method, $allowed)));
+				$this->responseManager->response(new Response('calback', function () use ($method, $allowed) {
+					sprintf('The requested method [%s] is not supported; allowed methods are [%s].', $method, $allowed);
+				}));
 				return null;
 			}
 			return parent::execute($methodList[$method], $parameterList);
