@@ -21,4 +21,20 @@
 				'*/*',
 			], HttpUtils::accept('text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'));
 		}
+
+		public function testAcceptHeader2() {
+			self::assertEquals([
+				'audio/basic',
+				'audio/*',
+			], HttpUtils::accept('audio/*; q=0.2, audio/basic'));
+		}
+
+		public function testAcceptHeader3() {
+			self::assertEquals([
+				'text/html',
+				'text/x-c',
+				'text/x-dvi',
+				'text/plain',
+			], HttpUtils::accept('text/plain; q=0.5, text/html, text/x-dvi; q=0.8, text/x-c'));
+		}
 	}
