@@ -52,6 +52,7 @@
 				return null;
 			}
 			$url = $this->httpRequest->getUrl();
+			$headerList = $this->httpRequest->getHeaderList();
 			$class = $url->getParameter('control', false);
 			$action = $url->getParameter('action', false);
 			if ($action === false) {
@@ -77,7 +78,7 @@
 			}
 			$parameterList = $url->getQuery();
 			unset($parameterList['control'], $parameterList['action']);
-			return new Request('type', $class, $method, array_merge($parameterList, $crateList));
+			return new Request($headerList->getContentType(), $class, $method, array_merge($parameterList, $crateList));
 		}
 
 		protected function prepare() {
