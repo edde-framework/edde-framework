@@ -26,7 +26,6 @@
 					continue;
 				}
 				$weight = isset($match['weight']) ? (float)$match['weight'] : 1;
-				$weight = ($weight >= 0 && $weight <= 1 ? $weight : 1);
 				if ($weight < 0 || $weight > 1) {
 					continue;
 				}

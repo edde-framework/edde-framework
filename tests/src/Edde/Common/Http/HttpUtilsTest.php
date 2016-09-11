@@ -37,4 +37,22 @@
 				'text/plain',
 			], HttpUtils::accept('text/plain; q=0.5, text/html, text/x-dvi; q=0.8, text/x-c'));
 		}
+
+		public function testAcceptHeader4() {
+			self::assertEquals([
+				'text/plain',
+				'text/html',
+				'application/json',
+				'*/*',
+			], HttpUtils::accept('text/plain, application/json;q=0.5, text/html, */*;q=0.1'));
+		}
+
+		public function testAcceptHeader5() {
+			self::assertEquals([
+				'text/plain',
+				'text/html',
+				'application/json',
+				'text/drop',
+			], HttpUtils::accept('text/plain, application/json;q=0.5, text/html, text/drop;q=0'));
+		}
 	}
