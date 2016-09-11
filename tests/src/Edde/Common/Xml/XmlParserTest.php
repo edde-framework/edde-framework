@@ -3,9 +3,14 @@
 
 	namespace Edde\Common\Xml;
 
+	use Edde\Api\Converter\IConverterManager;
+	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Xml\IXmlParser;
+	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\File\File;
 	use Edde\Common\Resource\ResourceManager;
+	use Edde\Ext\Container\ContainerFactory;
+	use Edde\Ext\Converter\XmlConverter;
 	use phpunit\framework\TestCase;
 
 	require_once(__DIR__ . '/assets/assets.php');
@@ -170,9 +175,14 @@
 		}
 
 		public function testParserNode() {
-			$resourceManager = new ResourceManager();
-			$resourceManager->registerResourceHandler($xmlResourceHandlder = new XmlResourceHandler());
-			$xmlResourceHandlder->lazyXmlParser($this->xmlParser);
+			$container = ContainerFactory::create([
+				IResourceManager::class => ResourceManager::class,
+				IConverterManager::class => ConverterManager::class,
+				IXmlParser::class => XmlParser::class,
+			]);
+			$resourceManager = $container->create(IResourceManager::class);
+			$converterManager = $container->create(IConverterManager::class);
+			$converterManager->registerConverter($container->create(XmlConverter::class));
 			$node = $resourceManager->file(__DIR__ . '/assets/a-bit-less-simple.xml');
 			self::assertEquals('root', $node->getName());
 			self::assertEquals(['r' => 'oot'], $node->getAttributeList());

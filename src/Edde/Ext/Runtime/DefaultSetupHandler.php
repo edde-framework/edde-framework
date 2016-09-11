@@ -9,6 +9,7 @@
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Crate\ICrateDirectory;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crate\ICrateGenerator;
@@ -47,6 +48,7 @@
 	use Edde\Common\AssetsDirectory;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
+	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crate\CrateDirectory;
 	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Crate\CrateGenerator;
@@ -76,12 +78,12 @@
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
 	use Edde\Common\Xml\XmlParser;
-	use Edde\Common\Xml\XmlResourceHandler;
 	use Edde\Ext\Application\ExceptionErrorControl;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
+	use Edde\Ext\Converter\JsonConverter;
+	use Edde\Ext\Converter\PhpConverter;
+	use Edde\Ext\Converter\XmlConverter;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
-	use Edde\Ext\Resource\JsonResourceHandler;
-	use Edde\Ext\Resource\PhpResourceHandler;
 	use Edde\Ext\Router\SimpleRouter;
 	use Edde\Framework;
 
@@ -150,6 +152,7 @@
 					},
 					IStorage::class => DatabaseStorage::class,
 					IResourceManager::class => ResourceManager::class,
+					IConverterManager::class => ConverterManager::class,
 					IUpgradeManager::class => UpgradeManager::class,
 					ITemplateManager::class => TemplateManager::class,
 					IStyleSheetCompiler::class => StyleSheetCompiler::class,
@@ -168,10 +171,10 @@
 				->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
 					$routerService->registerRouter($container->create(SimpleRouter::class));
 				})
-				->onSetup(IResourceManager::class, function (IContainer $container, IResourceManager $resourceManager) {
-					$resourceManager->registerResourceHandler($container->create(XmlResourceHandler::class));
-					$resourceManager->registerResourceHandler($container->create(JsonResourceHandler::class));
-					$resourceManager->registerResourceHandler($container->create(PhpResourceHandler::class));
+				->onSetup(IConverterManager::class, function (IContainer $container, IConverterManager $converterManager) {
+					$converterManager->registerConverter($container->create(XmlConverter::class));
+					$converterManager->registerConverter($container->create(JsonConverter::class));
+					$converterManager->registerConverter($container->create(PhpConverter::class));
 				})
 				->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
 					$templateManager->registerMacroList(TemplateMacro::macroList($container));

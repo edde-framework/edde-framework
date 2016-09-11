@@ -3,14 +3,15 @@
 
 	namespace Edde\Common\Schema;
 
+	use Edde\Api\Converter\IConverterManager;
+	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Schema\ISchemaFactory;
+	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Resource\ResourceManager;
-	use Edde\Common\Xml\XmlParser;
-	use Edde\Common\Xml\XmlResourceHandler;
 	use Edde\Ext\Container\ContainerFactory;
-	use Edde\Ext\Resource\JsonResourceHandler;
-	use Edde\Ext\Resource\PhpResourceHandler;
+	use Edde\Ext\Converter\JsonConverter;
+	use Edde\Ext\Converter\PhpConverter;
 	use phpunit\framework\TestCase;
 
 	class SchemaFactoryTest extends TestCase {
@@ -130,12 +131,14 @@
 		}
 
 		protected function setUp() {
-			$resourceManager = new ResourceManager();
-			$resourceManager->registerResourceHandler(new XmlResourceHandler(new XmlParser()));
-			$resourceManager->registerResourceHandler(new JsonResourceHandler());
-			$resourceManager->registerResourceHandler(new PhpResourceHandler());
-			$this->schemaFactory = new SchemaFactory();
-			$this->schemaFactory->lazyContainer(ContainerFactory::create());
-			$this->schemaFactory->lazyResourceManager($resourceManager);
+			$container = ContainerFactory::create([
+				IResourceManager::class => ResourceManager::class,
+				IConverterManager::class => ConverterManager::class,
+				ISchemaFactory::class => SchemaFactory::class,
+			]);
+			$converterManager = $container->create(IConverterManager::class);
+			$converterManager->registerConverter($container->create(JsonConverter::class));
+			$converterManager->registerConverter($container->create(PhpConverter::class));
+			$this->schemaFactory = $container->create(ISchemaFactory::class);
 		}
 	}

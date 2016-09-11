@@ -3,12 +3,17 @@
 
 	namespace Edde\Common\Resource;
 
+	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResourceManager;
+	use Edde\Api\Xml\IXmlParser;
+	use Edde\Common\Converter\ConverterManager;
+	use Edde\Common\Node\Node;
 	use Edde\Common\Xml\XmlParser;
-	use Edde\Common\Xml\XmlResourceHandler;
-	use Edde\Ext\Resource\JsonResourceHandler;
-	use Edde\Ext\Resource\PhpResourceHandler;
+	use Edde\Ext\Container\ContainerFactory;
+	use Edde\Ext\Converter\JsonConverter;
+	use Edde\Ext\Converter\PhpConverter;
+	use Edde\Ext\Converter\XmlConverter;
 	use phpunit\framework\TestCase;
 
 	class ResourceManagerTest extends TestCase {
@@ -17,7 +22,7 @@
 		 */
 		protected $resourceManager;
 
-		public function testJsonResourceHandler() {
+		public function testJson() {
 			self::assertInstanceOf(INode::class, $source = $this->resourceManager->file(__DIR__ . '/assets/sample.json'));
 			self::assertEquals('foo', $source->getName());
 			self::assertEquals('moo', $source->getValue());
@@ -31,7 +36,23 @@
 			], $source->getMetaList());
 		}
 
-		public function testXmlResourceHandler() {
+		public function testJsonWithRoot() {
+			self::assertInstanceOf(INode::class, $source = $this->resourceManager->file(__DIR__ . '/assets/sample.json', null, $root = new Node('my-root')));
+			self::assertFalse($root->isLeaf(), 'Root has not been filled, oops!');
+			self::assertCount(1, $nodeList = $root->getNodeList());
+			/** @var $source INode */
+			$source = $nodeList[0];
+			self::assertEquals('moo', $source->getName());
+			self::assertNull($source->getValue());
+			self::assertEquals([
+				'foo' => 'bar',
+			], $source->getAttributeList());
+			self::assertEquals([
+				'meta' => 'meta-moo',
+			], $source->getMetaList());
+		}
+
+		public function testXml() {
 			self::assertInstanceOf(INode::class, $source = $this->resourceManager->file(__DIR__ . '/assets/sample.xml'));
 			self::assertEquals('foo', $source->getName());
 			self::assertEquals('moo', $source->getValue());
@@ -43,7 +64,7 @@
 			self::assertEmpty($source->getMetaList());
 		}
 
-		public function testPhpResourceHandler() {
+		public function testPhpInclude() {
 			self::assertInstanceOf(INode::class, $source = $this->resourceManager->file(__DIR__ . '/assets/sample.php'));
 			self::assertEquals('foo', $source->getName());
 			self::assertEquals('moo', $source->getValue());
@@ -72,10 +93,15 @@
 		}
 
 		protected function setUp() {
-			$this->resourceManager = new ResourceManager();
-			$this->resourceManager->registerResourceHandler(new JsonResourceHandler());
-			$this->resourceManager->registerResourceHandler($xmlResourceHandler = new XmlResourceHandler());
-			$xmlResourceHandler->lazyXmlParser(new XmlParser());
-			$this->resourceManager->registerResourceHandler(new PhpResourceHandler());
+			$container = ContainerFactory::create([
+				IResourceManager::class => ResourceManager::class,
+				IConverterManager::class => ConverterManager::class,
+				IXmlParser::class => XmlParser::class,
+			]);
+			$this->resourceManager = $container->create(IResourceManager::class);
+			$converterManager = $container->create(IConverterManager::class);
+			$converterManager->registerConverter($container->create(JsonConverter::class));
+			$converterManager->registerConverter($container->create(XmlConverter::class));
+			$converterManager->registerConverter($container->create(PhpConverter::class));
 		}
 	}

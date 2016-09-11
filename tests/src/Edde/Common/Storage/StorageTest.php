@@ -4,6 +4,7 @@
 	namespace Edde\Common\Storage;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\Database\IDriver;
@@ -12,6 +13,7 @@
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
+	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crate\Crate;
 	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Crate\DummyCrateGenerator;
@@ -23,8 +25,8 @@
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Ext\Container\ContainerFactory;
+	use Edde\Ext\Converter\JsonConverter;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
-	use Edde\Ext\Resource\JsonResourceHandler;
 	use phpunit\framework\TestCase;
 
 	class StorageTest extends TestCase {
@@ -151,6 +153,7 @@
 		protected function setUp() {
 			$container = ContainerFactory::create([
 				IResourceManager::class => ResourceManager::class,
+				IConverterManager::class => ConverterManager::class,
 				ISchemaFactory::class => SchemaFactory::class,
 				ISchemaManager::class => SchemaManager::class,
 				IStorage::class => DatabaseStorage::class,
@@ -163,8 +166,8 @@
 				ICrateFactory::class => CrateFactory::class,
 				ICrateGenerator::class => DummyCrateGenerator::class,
 			]);
-			$resourceManager = $container->create(IResourceManager::class);
-			$resourceManager->registerResourceHandler(new JsonResourceHandler());
+			$converterManager = $container->create(IConverterManager::class);
+			$converterManager->registerConverter($container->create(JsonConverter::class));
 			$schemaFactory = $container->create(ISchemaFactory::class);
 			$schemaFactory->load(__DIR__ . '/assets/simple-storable.json');
 			$schemaFactory->load(__DIR__ . '/assets/identity-storable.json');
