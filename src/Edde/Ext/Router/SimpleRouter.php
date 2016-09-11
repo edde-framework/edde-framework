@@ -78,7 +78,7 @@
 			}
 			$parameterList = $url->getQuery();
 			unset($parameterList['control'], $parameterList['action']);
-			return new Request($headerList->getContentType(), $class, $method, array_merge($parameterList, $crateList));
+			return new Request('http+' . $headerList->getContentType(), $class, $method, array_merge($parameterList, $crateList));
 		}
 
 		protected function prepare() {

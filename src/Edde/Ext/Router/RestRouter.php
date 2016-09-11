@@ -47,7 +47,7 @@
 			$headerList = $this->httpRequest->getHeaderList();
 			foreach ($this->serviceList as $service) {
 				if ($service->match($url)) {
-					return new Request($headerList->getContentType(), get_class($service), $this->httpRequest->getMethod(), $url->getQuery());
+					return new Request('http+' . $headerList->getContentType(), get_class($service), $this->httpRequest->getMethod(), $url->getQuery());
 				}
 			}
 			return null;
