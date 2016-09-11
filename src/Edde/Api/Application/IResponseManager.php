@@ -19,9 +19,25 @@
 		public function response(IResponse $response): IResponseManager;
 
 		/**
-		 * return current response or create a default one (which will became "current")
+		 * if a response is not set, internal default should be applied or empty response should be returned
 		 *
-		 * @return IResponse
+		 * @param string $mime
+		 *
+		 * @return IResponseManager
 		 */
-		public function getResponse(): IResponse;
+		public function setMime(string $mime): IResponseManager;
+
+		/**
+		 * return target mime type of request (it can be echoing, json_encoding, ...)
+		 *
+		 * @return string
+		 */
+		public function getMime(): string;
+
+		/**
+		 * execute response
+		 *
+		 * @return mixed
+		 */
+		public function execute();
 	}

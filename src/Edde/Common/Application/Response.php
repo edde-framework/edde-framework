@@ -12,22 +12,14 @@
 		 */
 		protected $type;
 		protected $response;
-		/**
-		 * @var string
-		 */
-		protected $mime;
 
 		/**
-		 * Response constructor.
-		 *
 		 * @param string $type
 		 * @param $response
-		 * @param string $mime
 		 */
-		public function __construct(string $type = null, $response = null, string $mime = null) {
+		public function __construct(string $type = null, $response = null) {
 			$this->type = $type;
 			$this->response = $response;
-			$this->mime = $mime;
 		}
 
 		public function getType(): string {
@@ -36,9 +28,5 @@
 
 		public function getResponse() {
 			return $this->response;
-		}
-
-		public function getMime(): string {
-			return $this->mime;
 		}
 	}

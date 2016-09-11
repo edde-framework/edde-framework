@@ -12,20 +12,29 @@
 		 * @var IResponse
 		 */
 		protected $response;
+		/**
+		 * @var string
+		 */
+		protected $mime;
 
 		public function response(IResponse $response): IResponseManager {
 			$this->response = $response;
 			return $this;
 		}
 
-		public function getResponse(): IResponse {
+		public function getMime(): string {
+			return $this->mime;
+		}
+
+		public function setMime(string $mime): IResponseManager {
+			$this->mime = $mime;
+			return $this;
+		}
+
+		public function execute() {
 			$this->use();
-			return $this->response;
 		}
 
 		protected function prepare() {
-			if ($this->response === null) {
-				$this->response = new Response();
-			}
 		}
 	}

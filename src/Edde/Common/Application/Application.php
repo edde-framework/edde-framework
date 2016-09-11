@@ -9,7 +9,7 @@
 	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Control\IControl;
-	use Edde\Api\Resource\IResourceManager;
+	use Edde\Api\Converter\IConverterManager;
 	use Edde\Common\Application\Event\ErrorEvent;
 	use Edde\Common\Application\Event\FinishEvent;
 	use Edde\Common\Application\Event\StartEvent;
@@ -22,9 +22,13 @@
 		 */
 		protected $request;
 		/**
-		 * @var IResourceManager
+		 * @var IResponseManager
 		 */
 		protected $responseManager;
+		/**
+		 * @var IConverterManager
+		 */
+		protected $converterManager;
 		/**
 		 * @var IContainer
 		 */
@@ -40,6 +44,10 @@
 
 		public function lazyResponseManager(IResponseManager $responseManager) {
 			$this->responseManager = $responseManager;
+		}
+
+		public function lazyConverterManager(IConverterManager $converterManager) {
+			$this->converterManager = $converterManager;
 		}
 
 		public function lazyContainer(IContainer $container) {
@@ -59,6 +67,7 @@
 					throw new ApplicationException(sprintf('Route class [%s] is not instance of [%s].', $this->request->getClass(), IControl::class));
 				}
 				$this->event(new FinishEvent($this, $result = $control->handle($this->request->getMethod(), $this->request->getParameterList())));
+				$this->responseManager->execute();
 				return $result;
 			} catch (\Exception $e) {
 				$this->event(new ErrorEvent($this, $e));
