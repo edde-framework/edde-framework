@@ -4,6 +4,7 @@
 	namespace Edde\Common\Template;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\File\ITempDirectory;
@@ -18,6 +19,7 @@
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\AssetsDirectory;
+	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\File\TempDirectory;
@@ -33,17 +35,13 @@
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
 	use Edde\Common\Xml\XmlParser;
-	use Edde\Common\Xml\XmlResourceHandler;
 	use Edde\Ext\Container\ContainerFactory;
+	use Edde\Ext\Converter\XmlConverter;
 	use phpunit\framework\TestCase;
 
 	require_once(__DIR__ . '/assets/assets.php');
 
 	class TemplateTest extends TestCase {
-		/**
-		 * @var IResourceManager
-		 */
-		protected $resourceManager;
 		/**
 		 * @var IContainer
 		 */
@@ -814,8 +812,9 @@
 		}
 
 		protected function setUp() {
-			$this->container = ContainerFactory::create([
+			$this->container = $container = ContainerFactory::create([
 				IResourceManager::class => ResourceManager::class,
+				IConverterManager::class => ConverterManager::class,
 				ITemplateDirectory::class => function () {
 					return new TemplateDirectory(__DIR__ . '/temp');
 				},
@@ -841,8 +840,8 @@
 					return $linkFactory;
 				},
 			]);
-			$this->resourceManager = $this->container->create(IResourceManager::class);
-			$this->resourceManager->registerResourceHandler($this->container->create(XmlResourceHandler::class));
+			$converterManager = $container->create(IConverterManager::class);
+			$converterManager->registerConverter($container->create(XmlConverter::class));
 			$this->templateManager = $this->container->create(ITemplateManager::class);
 			$this->templateManager->onSetup(function (ITemplateManager $templateManager) {
 				$templateManager->registerMacroList(TemplateMacro::macroList($this->container));

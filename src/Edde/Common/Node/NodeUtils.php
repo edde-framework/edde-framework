@@ -28,6 +28,16 @@
 						case 'meta-list':
 							$root->addMetaList((array)$value);
 							continue 2;
+						case 'node-list':
+							foreach ($value as $item) {
+								$root->addNode($node = new Node());
+								if (is_object($item) || is_array($item)) {
+									$callback($callback, $node, $item);
+									continue;
+								}
+								$node->setValue($item);
+							}
+							continue 2;
 					}
 					if (is_object($value)) {
 						$value = [

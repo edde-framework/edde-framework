@@ -36,7 +36,7 @@
 		}
 
 		public function testDummyConverter() {
-			self::assertNull($this->converterManager->convert('this will be null on output', 'boo', 'something'));
+			self::assertEquals($expect = 'this will be null on output', $this->converterManager->convert($expect, 'boo', 'something'));
 		}
 
 		protected function setUp() {

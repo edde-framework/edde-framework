@@ -8,5 +8,14 @@
 	},
 	"meta-list": {
 		"meta": "list"
-	}
+	},
+	"node-list": [
+		{
+			"name": "moo",
+			"foo": "bar",
+			"meta-list": {
+				"meta": "meta-moo"
+			}
+		}
+	]
 }

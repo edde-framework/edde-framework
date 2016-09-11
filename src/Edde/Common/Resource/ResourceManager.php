@@ -3,29 +3,25 @@
 
 	namespace Edde\Common\Resource;
 
+	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResource;
-	use Edde\Api\Resource\IResourceHandler;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\ResourceManagerException;
+	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\File\File;
 	use Edde\Common\Url\Url;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class ResourceManager extends AbstractUsable implements IResourceManager {
+		use LazyInjectTrait;
 		/**
-		 * @var IResourceHandler[]
+		 * @var IConverterManager
 		 */
-		protected $handlerList = [];
+		protected $converterManager;
 
-		public function registerResourceHandler(IResourceHandler $resourceHandler, bool $force = false): IResourceManager {
-			foreach ($resourceHandler->getMimeTypeList() as $mime) {
-				if (isset($this->handlerList[$mime]) && $force === false) {
-					throw new ResourceManagerException(sprintf('Cannot register resource handler [%s]; mime type [%s] has been already registered by [%s].', get_class($resourceHandler), $mime, get_class($this->handlerList[$mime])));
-				}
-				$this->handlerList[$mime] = $resourceHandler;
-			}
-			return $this;
+		public function lazyConverterManager(IConverterManager $converterManager) {
+			$this->converterManager = $converterManager;
 		}
 
 		public function file(string $file, string $mime = null, INode $root = null): INode {
@@ -33,16 +29,15 @@
 		}
 
 		public function resource(IResource $resource, string $mime = null, INode $root = null): INode {
-			return $this->getHandler($resource, $mime)
-				->handle($resource, $root);
-		}
-
-		public function getHandler(IResource $resource, string $mime = null): IResourceHandler {
-			$this->use();
-			if (isset($this->handlerList[$mime = $mime ?: $resource->getMime()]) === false) {
-				throw new ResourceManagerException(sprintf('Requested unknown handler for a mime type [%s] of resource [%s].', $mime, (string)$resource->getUrl()));
+			$mime = $mime ?: $resource->getMime();
+			/** @var $node INode */
+			if (($node = $this->converterManager->convert($resource, $mime, INode::class)) instanceof INode === false) {
+				throw new ResourceManagerException(sprintf('Convertion has failed: converter for [%s] did not returned an instance of [%s].', $mime, INode::class));
 			}
-			return $this->handlerList[$mime];
+			if ($root) {
+				$root->setNodeList($node->getNodeList(), true);
+			}
+			return $root ?? $node;
 		}
 
 		public function handle(string $url, string $mime = null, INode $root = null): INode {

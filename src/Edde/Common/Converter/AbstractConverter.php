@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Resource;
+	namespace Edde\Common\Converter;
 
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Converter\IConverter;
@@ -22,6 +22,10 @@
 
 		public function getMimeList(): array {
 			return $this->mimeList;
+		}
+
+		protected function unsupported($source, string $target) {
+			throw new ConverterException(sprintf('Cannot convert unsupported type [%s] to [%s] in [%s].', gettype($source), $target, static::class));
 		}
 
 		protected function exception(string $target) {

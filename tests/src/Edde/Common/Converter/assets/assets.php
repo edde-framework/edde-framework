@@ -1,16 +1,16 @@
 <?php
 	declare(strict_types = 1);
 
-	use Edde\Common\Resource\AbstractConverter;
+	use Edde\Common\Converter\AbstractConverter;
 
 	class DummyConverter extends AbstractConverter {
 		public function convert($source, string $target) {
-			return null;
+			return $source;
 		}
 	}
 
 	class CleverConverter extends AbstractConverter {
 		public function convert($source, string $target) {
-			return null;
+			return $source;
 		}
 	}

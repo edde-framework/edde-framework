@@ -8,22 +8,6 @@
 
 	interface IResourceManager extends IUsable {
 		/**
-		 * @param IResourceHandler $resourceHandler
-		 * @param bool $force === true override already registered handlers?
-		 *
-		 * @return IResourceManager
-		 */
-		public function registerResourceHandler(IResourceHandler $resourceHandler, bool $force = false): IResourceManager;
-
-		/**
-		 * @param IResource $resource
-		 * @param string $mime
-		 *
-		 * @return IResourceHandler
-		 */
-		public function getHandler(IResource $resource, string $mime = null): IResourceHandler;
-
-		/**
 		 * IResource is created from the given url and then handler is selected based on a mime
 		 *
 		 * @param string $url

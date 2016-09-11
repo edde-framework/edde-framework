@@ -29,6 +29,7 @@
 			if (isset($this->converterList[$mime]) === false) {
 				throw new ConverterException(sprintf('Cannot convert unknown source mime [%s] to [%s].', $mime, $target));
 			}
+			return $this->converterList[$mime]->convert($source, $target);
 		}
 
 		protected function prepare() {
