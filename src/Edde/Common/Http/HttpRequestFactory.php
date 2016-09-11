@@ -32,23 +32,26 @@
 				'CONTENT_MD5' => 'Content-Md5',
 			];
 			foreach ($_SERVER as $key => $value) {
+				if (empty($value)) {
+					continue;
+				}
 				if (strpos($key, 'HTTP_') === 0) {
 					$key = substr($key, 5);
-					if (!isset($copy_server[$key]) || !isset($_SERVER[$key])) {
+					if (isset($copy_server[$key]) === false || isset($_SERVER[$key]) === false) {
 						$key = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', $key))));
 						$headers[$key] = $value;
 					}
-				} elseif (isset($copy_server[$key])) {
+				} else if (isset($copy_server[$key])) {
 					$headers[$copy_server[$key]] = $value;
 				}
 			}
-			if (!isset($headers['Authorization'])) {
+			if (isset($headers['Authorization']) === false) {
 				if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
 					$headers['Authorization'] = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
-				} elseif (isset($_SERVER['PHP_AUTH_USER'])) {
+				} else if (isset($_SERVER['PHP_AUTH_USER'])) {
 					$basic_pass = $_SERVER['PHP_AUTH_PW'] ?? '';
 					$headers['Authorization'] = 'Basic ' . base64_encode($_SERVER['PHP_AUTH_USER'] . ':' . $basic_pass);
-				} elseif (isset($_SERVER['PHP_AUTH_DIGEST'])) {
+				} else if (isset($_SERVER['PHP_AUTH_DIGEST'])) {
 					$headers['Authorization'] = $_SERVER['PHP_AUTH_DIGEST'];
 				}
 			}
