@@ -5,6 +5,8 @@
 
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Web\IJavaScriptCompiler;
+	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Converter\AbstractConverter;
 
@@ -14,6 +16,14 @@
 		 * @var IHttpResponse
 		 */
 		protected $httpResponse;
+		/**
+		 * @var IJavaScriptCompiler
+		 */
+		protected $javaScriptCompiler;
+		/**
+		 * @var IStyleSheetCompiler
+		 */
+		protected $styleSheetCompiler;
 
 		public function __construct() {
 			parent::__construct([
@@ -23,6 +33,14 @@
 
 		public function lazyHttpResponse(IHttpResponse $httpResponse) {
 			$this->httpResponse = $httpResponse;
+		}
+
+		public function lazyJavaScriptCompiler(IJavaScriptCompiler $javaScriptCompiler) {
+			$this->javaScriptCompiler = $javaScriptCompiler;
+		}
+
+		public function lazyStyleSheetCompiler(IStyleSheetCompiler $styleSheetCompiler) {
+			$this->styleSheetCompiler = $styleSheetCompiler;
 		}
 
 		public function convert($source, string $target) {
@@ -37,18 +55,18 @@
 				case 'application/json':
 					$this->httpResponse->send();
 					$json = [];
-//					if ($this->javaScriptCompiler->isEmpty() === false) {
-//						$json['javaScript'] = [
-//							$this->javaScriptCompiler->compile($this->javaScriptCompiler)
-//								->getRelativePath(),
-//						];
-//					}
-//					if ($this->styleSheetCompiler->isEmpty() === false) {
-//						$json['styleSheet'] = [
-//							$this->styleSheetCompiler->compile($this->styleSheetCompiler)
-//								->getRelativePath(),
-//						];
-//					}
+					if ($this->javaScriptCompiler->isEmpty() === false) {
+						$json['javaScript'] = [
+							$this->javaScriptCompiler->compile($this->javaScriptCompiler)
+								->getRelativePath(),
+						];
+					}
+					if ($this->styleSheetCompiler->isEmpty() === false) {
+						$json['styleSheet'] = [
+							$this->styleSheetCompiler->compile($this->styleSheetCompiler)
+								->getRelativePath(),
+						];
+					}
 					foreach ($source->invalidate() as $control) {
 						if (($id = $control->getId()) !== '') {
 							$json['selector']['#' . $id] = [
@@ -64,5 +82,6 @@
 					return $this->convert($source, 'text/html');
 			}
 			$this->exception($target);
+			return null;
 		}
 	}
