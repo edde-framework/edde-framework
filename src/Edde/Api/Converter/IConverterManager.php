@@ -11,9 +11,11 @@
 		 *
 		 * @param IConverter $converter
 		 *
+		 * @param bool $force
+		 *
 		 * @return IConverterManager
 		 */
-		public function registerConverter(IConverter $converter): IConverterManager;
+		public function registerConverter(IConverter $converter, bool $force = false): IConverterManager;
 
 		/**
 		 * magical method for generic data conversion; ideologically it is based on a mime type conversion, but identifiers can be arbitrary

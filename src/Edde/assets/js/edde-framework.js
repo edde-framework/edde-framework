@@ -16,7 +16,14 @@ var Edde = {
 			}, 0);
 		},
 		execute: function (url, parameterList) {
-			return $.post(url, parameterList || {}).fail(function () {
+			return $.ajax({
+				url: url,
+				method: 'POST',
+				data: parameterList || {},
+				contentType: 'application/json',
+				dataType: 'json'
+			}).fail(function (e) {
+				console.log(e);
 				alert('General server error; this should be fixed by a developer.');
 			}).done(function (data) {
 				if (data.redirect) {

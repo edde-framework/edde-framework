@@ -14,9 +14,9 @@
 		 */
 		protected $converterList = [];
 
-		public function registerConverter(IConverter $converter): IConverterManager {
+		public function registerConverter(IConverter $converter, bool $force = false): IConverterManager {
 			foreach ($converter->getMimeList() as $mime) {
-				if (isset($this->converterList[$mime])) {
+				if (isset($this->converterList[$mime]) && $force === false) {
 					throw new ConverterException(sprintf('Converter [%s] has conflict with converter [%s] on mime [%s].', get_class($converter), get_class($this->converterList[$mime]), $mime));
 				}
 				$this->converterList[$mime] = $converter;

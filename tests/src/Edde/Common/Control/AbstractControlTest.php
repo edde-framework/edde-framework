@@ -31,7 +31,10 @@
 			$control->listen(DoneEvent::class, function (DoneEvent $doneEvent) use (&$eventList) {
 				$eventList[] = get_class($doneEvent);
 			});
-			self::assertEquals('pooboo', $control->handle('someMethod', ['foo' => 'poo',], ['boo']));
+			self::assertEquals('poofoo', $control->handle('someMethod', [
+				'foo' => 'poo',
+				'boo' => 'foo',
+			]));
 			self::assertEquals([
 				HandleEvent::class,
 				DoneEvent::class,
@@ -42,11 +45,11 @@
 			$this->expectException(ControlException::class);
 			$this->expectExceptionMessage('Missing action parameter [TestControl::someMethod(, ...$boo, ...)].');
 			$control = new \TestControl();
-			self::assertEquals('pooboo', $control->handle('someMethod', ['foo' => 'poo',], []));
+			self::assertEquals('pooboo', $control->handle('someMethod', ['foo' => 'poo',]));
 		}
 
 		public function testDummyHandle() {
 			$control = new \TestControl();
-			self::assertEquals('dumyyyy', $control->handle('dummy', [], []));
+			self::assertEquals('dumyyyy', $control->handle('dummy', []));
 		}
 	}

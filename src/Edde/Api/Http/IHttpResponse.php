@@ -3,8 +3,6 @@
 
 	namespace Edde\Api\Http;
 
-	use Edde\Api\Response\IResponse;
-
 	/**
 	 * Simple interface for working with http response.
 	 */
@@ -50,15 +48,6 @@
 		public function getCookieList(): ICookieList;
 
 		/**
-		 * set response body
-		 *
-		 * @param IResponse $response null will remove current response
-		 *
-		 * @return IHttpResponse
-		 */
-		public function setResponse(IResponse $response = null): IHttpResponse;
-
-		/**
 		 * set a content type for a response
 		 *
 		 * @param string $contentType
@@ -77,16 +66,9 @@
 		public function redirect(string $redirect): IHttpResponse;
 
 		/**
-		 * return repsonse body or empty string if... the body is empty ;)
-		 *
-		 * @return string
-		 */
-		public function getBody(): string;
-
-		/**
 		 * execute response "rendering"; basically it "echoes" output
 		 *
 		 * @return IHttpResponse
 		 */
-		public function render(): IHttpResponse;
+		public function send(): IHttpResponse;
 	}

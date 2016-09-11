@@ -3,21 +3,20 @@
 
 	namespace Edde\Common\Html;
 
-	use Edde\Api\Control\ControlException;
+	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlView;
 	use Edde\Api\Http\IHttpRequest;
-	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceList;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
+	use Edde\Common\Application\Response;
 	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\File\File;
 	use Edde\Common\Html\Document\DocumentControl;
 	use Edde\Common\Html\Document\MetaControl;
-	use Edde\Common\Response\AbstractResponse;
 
 	/**
 	 * Formal root control for displaying page with some shorthands.
@@ -30,9 +29,9 @@
 		 */
 		protected $httpRequest;
 		/**
-		 * @var IHttpResponse
+		 * @var IResponseManager
 		 */
-		protected $httpResponse;
+		protected $responseManager;
 		/**
 		 * @var IStyleSheetCompiler
 		 */
@@ -58,8 +57,8 @@
 			$this->httpRequest = $httpRequest;
 		}
 
-		public function lazyHttpResponse(IHttpResponse $httpResponse) {
-			$this->httpResponse = $httpResponse;
+		public function lazyResponseManager(IResponseManager $responseManager) {
+			$this->responseManager = $responseManager;
 		}
 
 		public function lazyStyleSheetCompiler(IStyleSheetCompiler $styleSheetCompiler) {
@@ -125,106 +124,13 @@
 		public function redirect($redirect) {
 			$this->use();
 			$link = $this->linkFactory->generate($redirect);
-			if ($this->httpRequest->isAjax()) {
-				$this->httpResponse->setResponse(new class($redirect) extends AbstractResponse {
-					protected $redirect;
-
-					public function __construct($link) {
-						$this->redirect = $link;
-					}
-
-					public function render(): string {
-						return json_encode(['redirect' => $this->redirect]);
-					}
-				});
-				return $this;
-			}
-			$this->httpResponse->redirect($link)
-				->render();
+			throw new \Exception('not implemented yet: need to be reimplemented');
 			return $this;
 		}
 
 		public function response(): IHtmlView {
 			$this->use();
-			if ($this->httpRequest->isAjax()) {
-				return $this->ajax();
-			}
-			$this->httpResponse->setResponse(new class($this) extends AbstractResponse {
-				/**
-				 * @var IHtmlControl
-				 */
-				protected $htmlControl;
-
-				public function __construct(IHtmlControl $htmlControl) {
-					$this->htmlControl = $htmlControl;
-				}
-
-				public function render(): string {
-					return $this->htmlControl->render();
-				}
-			});
-			return $this;
-		}
-
-		/**
-		 * method specific for this "presenter"; this will sent a proprietary ajax response
-		 *
-		 * @return IHtmlView
-		 * @throws ControlException
-		 */
-		public function ajax(): IHtmlView {
-			$this->use();
-			$this->httpResponse->contentType('application/json')
-				->setResponse(new class($this, $this->javaScriptCompiler, $this->styleSheetCompiler) extends AbstractResponse {
-					/**
-					 * @var ViewControl
-					 */
-					protected $viewControl;
-					/**
-					 * @var IJavaScriptCompiler
-					 */
-					protected $javaScriptCompiler;
-					/**
-					 * @var IStyleSheetCompiler
-					 */
-					protected $styleSheetCompiler;
-
-					/**
-					 * @param ViewControl $viewControl
-					 * @param IJavaScriptCompiler $javaScriptCompiler
-					 * @param IStyleSheetCompiler $styleSheetCompiler
-					 */
-					public function __construct(ViewControl $viewControl, IJavaScriptCompiler $javaScriptCompiler, IStyleSheetCompiler $styleSheetCompiler) {
-						$this->viewControl = $viewControl;
-						$this->javaScriptCompiler = $javaScriptCompiler;
-						$this->styleSheetCompiler = $styleSheetCompiler;
-					}
-
-					public function render(): string {
-						$ajax = [];
-						if ($this->javaScriptCompiler->isEmpty() === false) {
-							$ajax['javaScript'] = [
-								$this->javaScriptCompiler->compile($this->javaScriptCompiler)
-									->getRelativePath(),
-							];
-						}
-						if ($this->styleSheetCompiler->isEmpty() === false) {
-							$ajax['styleSheet'] = [
-								$this->styleSheetCompiler->compile($this->styleSheetCompiler)
-									->getRelativePath(),
-							];
-						}
-						foreach ($this->viewControl->invalidate() as $control) {
-							if (($id = $control->getId()) !== '') {
-								$ajax['selector']['#' . $id] = [
-									'action' => 'replace',
-									'source' => $control->render(),
-								];
-							}
-						}
-						return json_encode($ajax);
-					}
-				});
+			$this->responseManager->response(new Response(IHtmlControl::class, $this));
 			return $this;
 		}
 

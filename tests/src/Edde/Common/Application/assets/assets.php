@@ -2,8 +2,8 @@
 	declare(strict_types = 1);
 
 	use Edde\Api\Application\IErrorControl;
+	use Edde\Api\Application\IRequest;
 	use Edde\Api\Control\ControlException;
-	use Edde\Api\Router\IRoute;
 	use Edde\Common\Control\AbstractControl;
 
 	class SomeControl extends AbstractControl {
@@ -39,24 +39,24 @@
 		}
 	}
 
-	class SomeRoute implements IRoute {
+	class SomeRequest implements IRequest {
 		public $class;
 		public $method;
 		public $parameters;
 
-		public function getClass() {
+		public function getType(): string {
+			return 'foo';
+		}
+
+		public function getClass(): string {
 			return $this->class;
 		}
 
-		public function getMethod() {
+		public function getMethod(): string {
 			return $this->method;
 		}
 
-		public function getParameterList() {
+		public function getParameterList(): array {
 			return $this->parameters;
-		}
-
-		public function getCrateList() {
-			return [];
 		}
 	}

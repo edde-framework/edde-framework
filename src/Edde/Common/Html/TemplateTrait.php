@@ -3,12 +3,12 @@
 
 	namespace Edde\Common\Html;
 
+	use Edde\Api\Application\IRequest;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Html\HtmlException;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlTemplate;
 	use Edde\Api\Html\IHtmlView;
-	use Edde\Api\Router\IRoute;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Common\Strings\StringUtils;
 
@@ -22,9 +22,9 @@
 		 */
 		protected $templateManager;
 		/**
-		 * @var IRoute
+		 * @var IRequest
 		 */
-		protected $route;
+		protected $request;
 
 		public function lazyContainer(IContainer $container) {
 			$this->container = $container;
@@ -34,8 +34,8 @@
 			$this->templateManager = $templateManager;
 		}
 
-		public function lazyRoute(IRoute $route) {
-			$this->route = $route;
+		public function lazyRequest(IRequest $request) {
+			$this->request = $request;
 		}
 
 		public function template(string $layout = null, ...$importList) {
@@ -76,7 +76,7 @@
 
 		protected function getActionTemplateFile() {
 			$reflectionClass = new \ReflectionClass($this);
-			return dirname($reflectionClass->getFileName()) . '/template/' . StringUtils::recamel($this->route->getMethod()) . '.xml';
+			return dirname($reflectionClass->getFileName()) . '/template/' . StringUtils::recamel($this->request->getMethod()) . '.xml';
 		}
 
 		public function snippet(string $file, string ...$snippetList) {

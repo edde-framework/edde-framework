@@ -109,13 +109,13 @@
 			return $this->node->getMeta('dirty', false);
 		}
 
-		public function handle(string $method, array $parameterList, array $crateList) {
-			$this->event(new HandleEvent($this, $method, $parameterList, $crateList));
-			$this->event(new DoneEvent($this, $result = $this->execute($method, $parameterList, $crateList)));
+		public function handle(string $method, array $parameterList) {
+			$this->event(new HandleEvent($this, $method, $parameterList));
+			$this->event(new DoneEvent($this, $result = $this->execute($method, $parameterList)));
 			return $result;
 		}
 
-		protected function execute(string $method, array $parameterList, array $crateList) {
+		protected function execute(string $method, array $parameterList) {
 			$argumentList = [];
 			$callback = [
 				$this,
@@ -126,8 +126,8 @@
 					$this,
 					$actionMethod,
 				]);
-				$argumentCount = count($argumentList = $crateList);
-				foreach ($callback->getParameterList() as $parameter) {
+				$argumentCount = count($argumentList = []);
+				foreach ($callback->getParameterList() as $key => $parameter) {
 					if (--$argumentCount >= 0) {
 						continue;
 					}

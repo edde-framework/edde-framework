@@ -3,15 +3,21 @@
 
 	namespace Edde\Common\Router;
 
+	use Edde\Api\Application\IRequest;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Router\RouterException;
 
 	class RouterService extends RouterList implements IRouterService {
-		public function route() {
+		/**
+		 * @var IRequest
+		 */
+		protected $request;
+
+		public function createRequest() {
 			$this->use();
-			if (($route = parent::route()) === null) {
-				throw new RouterException(sprintf('Cannot find route for current application request.'));
+			if ($this->request === null && ($this->request = parent::createRequest()) === null) {
+				throw new RouterException(sprintf('Cannot handle current application request.'));
 			}
-			return $route;
+			return $this->request;
 		}
 	}

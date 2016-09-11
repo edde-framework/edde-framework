@@ -17,9 +17,9 @@
 			return $this;
 		}
 
-		public function route() {
+		public function createRequest() {
 			foreach ($this->routerList as $router) {
-				if (($route = $router->route()) !== null) {
+				if (($route = $router->createRequest()) !== null) {
 					return $route;
 				}
 			}

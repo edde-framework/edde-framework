@@ -2,11 +2,11 @@
 	declare(strict_types = 1);
 
 	use Edde\Api\Application\IErrorControl;
-	use Edde\Api\Cache\ICacheFactory;
-	use Edde\Common\Cache\DummyCacheFactory;
+	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Ext\Application\RethrowErrorControl;
+	use Edde\Ext\Cache\DevNullCacheStorage;
 
 	return [
 		IErrorControl::class => RethrowErrorControl::class,
-		ICacheFactory::class => new DummyCacheFactory(),
+		ICacheStorage::class => new DevNullCacheStorage(),
 	];
