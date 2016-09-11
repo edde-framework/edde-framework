@@ -77,4 +77,17 @@
 				'en',
 			], HttpUtils::language('da, en-gb;q=0.8, en;q=0.7', 'en'));
 		}
+
+		public function testCharset1() {
+			self::assertEquals([
+				'utf-8',
+			], HttpUtils::charset(null, 'utf-8'));
+		}
+
+		public function testCharset2() {
+			self::assertEquals([
+				'iso-8859-5',
+				'unicode-1-1',
+			], HttpUtils::charset('iso-8859-5, unicode-1-1;q=0.8', 'utf-8'));
+		}
 	}

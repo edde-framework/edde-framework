@@ -15,7 +15,6 @@
 		 * @return array
 		 */
 		static public function accept(string $accept = null): array {
-			$acceptList = [];
 			if ($accept === null) {
 				return ['*/*'];
 			}
@@ -57,6 +56,7 @@
 				}
 				return 0;
 			});
+			$acceptList = [];
 			foreach ($accepts as $value) {
 				$acceptList[] = $value['mime'];
 			}
@@ -72,7 +72,6 @@
 		 * @return array
 		 */
 		static public function language(string $language = null, string $default = 'en'): array {
-			$languageList = [];
 			if ($language === null) {
 				return [$default];
 			}
@@ -93,9 +92,38 @@
 			usort($langs, function ($alpha, $beta) {
 				return $alpha['weight'] < $beta['weight'];
 			});
+			$languageList = [];
 			foreach ($langs as $value) {
 				$languageList[] = $value['lang'];
 			}
 			return $languageList;
+		}
+
+		static public function charset(string $charset = null, $default = 'utf-8') {
+			if ($charset === null) {
+				return [$default];
+			}
+			foreach (explode(',', $charset) as $part) {
+				$match = StringUtils::match($part, '~\s*(?<charset>[^;]+)(?:\s*;\s*[qQ]\=(?<weight>[01](?:\.\d*)?))?\s*~', true);
+				if ($match === null) {
+					continue;
+				}
+				$weight = isset($match['weight']) ? (float)$match['weight'] : 1;
+				if ($weight < 0 || $weight > 1) {
+					continue;
+				}
+				$charsets[] = [
+					'charset' => $match['charset'],
+					'weight' => $weight,
+				];
+			}
+			usort($charsets, function ($alpha, $beta) {
+				return $alpha['weight'] < $beta['weight'];
+			});
+			$charsetList = [];
+			foreach ($charsets as $value) {
+				$charsetList[] = $value['charset'];
+			}
+			return $charsetList;
 		}
 	}
