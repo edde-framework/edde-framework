@@ -26,7 +26,7 @@
 					continue;
 				}
 				$weight = isset($match['weight']) ? (float)$match['weight'] : 1;
-				if ($weight < 0 || $weight > 1) {
+				if ($weight <= 0 || $weight > 1) {
 					continue;
 				}
 				$accepts[] = [
@@ -61,5 +61,41 @@
 				$acceptList[] = $value['mime'];
 			}
 			return $acceptList;
+		}
+
+		/**
+		 * parse an input language string (Accept-Language header) and return langauge order
+		 *
+		 * @param string $language
+		 * @param string $default
+		 *
+		 * @return array
+		 */
+		static public function language(string $language = null, string $default = 'en'): array {
+			$languageList = [];
+			if ($language === null) {
+				return [$default];
+			}
+			foreach (explode(',', $language) as $part) {
+				$match = StringUtils::match($part, '~\s*(?<lang>[^;]+)(?:\s*;\s*[qQ]\=(?<weight>[01](?:\.\d*)?))?\s*~', true);
+				if ($match === null) {
+					continue;
+				}
+				$weight = isset($match['weight']) ? (float)$match['weight'] : 1;
+				if ($weight < 0 || $weight > 1) {
+					continue;
+				}
+				$langs[] = [
+					'lang' => $match['lang'],
+					'weight' => $weight,
+				];
+			}
+			usort($langs, function ($alpha, $beta) {
+				return $alpha['weight'] < $beta['weight'];
+			});
+			foreach ($langs as $value) {
+				$languageList[] = $value['lang'];
+			}
+			return $languageList;
 		}
 	}
