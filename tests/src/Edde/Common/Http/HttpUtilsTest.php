@@ -6,6 +6,12 @@
 	use phpunit\framework\TestCase;
 
 	class HttpUtilsTest extends TestCase {
+		public function testNullAcceptHeader() {
+			self::assertEquals([
+				'*/*',
+			], HttpUtils::accept(null));
+		}
+
 		public function testAcceptHeader() {
 			self::assertEquals([
 				'text/html',
