@@ -24,6 +24,7 @@
 
 		public function __construct($body, string $mime = '') {
 			$this->body = $body;
+			$this->mime = $mime;
 		}
 
 		public function lazyConverterManager(IConverterManager $converterManager) {
