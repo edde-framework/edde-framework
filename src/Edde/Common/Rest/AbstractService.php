@@ -67,16 +67,19 @@
 		}
 
 		protected function error(int $code, string $message) {
-			$this->httpResponse->setCode($code);
+			$this->code($code);
 			$headerList = $this->httpResponse->getHeaderList();
 			$headerList->set('Date', gmdate('D, d M Y H:i:s T'));
 			$this->response('text/plain', $message);
 		}
 
-		protected function response(string $contentType, $response, string $type = null) {
-			$type = $type ?: $contentType;
-			$this->responseManager->setMime('http+' . $contentType);
-			$this->httpResponse->contentType($contentType);
-			$this->responseManager->response(new Response('http+' . $type, $response));
+		protected function code(int $code) {
+			$this->httpResponse->setCode($code);
+			return $this;
+		}
+
+		protected function response(string $target, $response) {
+			$this->responseManager->response(new Response('http+' . $target, $response));
+			return $this;
 		}
 	}
