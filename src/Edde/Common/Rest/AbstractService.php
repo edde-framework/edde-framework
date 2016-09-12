@@ -73,8 +73,13 @@
 			$this->httpResponse->setCode($code);
 			$headerList = $this->httpResponse->getHeaderList();
 			$headerList->set('Date', gmdate('D, d M Y H:i:s T'));
-			$this->responseManager->setMime('http+text/plain');
-			$this->httpResponse->contentType('text/plain');
-			$this->responseManager->response(new Response('http+text/plain', $message));
+			$this->response('text/plain', $message);
+		}
+
+		protected function response(string $contentType, $response, string $type = null) {
+			$type = $type ?: $contentType;
+			$this->responseManager->setMime('http+' . $contentType);
+			$this->httpResponse->contentType($contentType);
+			$this->responseManager->response(new Response('http+' . $type, $response));
 		}
 	}
