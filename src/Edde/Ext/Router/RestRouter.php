@@ -9,11 +9,9 @@
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Rest\IService;
 	use Edde\Common\Application\Request;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Router\AbstractRouter;
 
 	class RestRouter extends AbstractRouter {
-		use LazyInjectTrait;
 		/**
 		 * @var IHttpRequest
 		 */

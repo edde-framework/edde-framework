@@ -8,7 +8,6 @@
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Html\AbstractHtmlTemplate;
 	use Edde\Common\Html\Input\PasswordControl;
 	use Edde\Common\Html\Input\TextControl;
@@ -29,7 +28,6 @@
 	use Edde\Common\Node\NodeIterator;
 
 	class TemplateMacro extends ControlMacro {
-		use LazyInjectTrait;
 		/**
 		 * @var ICryptEngine
 		 */

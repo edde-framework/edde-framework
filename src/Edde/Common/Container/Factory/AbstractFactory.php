@@ -43,16 +43,6 @@
 			return $this->name;
 		}
 
-		public function setSingleton($singleton) {
-			$this->singleton = $singleton;
-			return $this;
-		}
-
-		public function setCloneable($cloneable) {
-			$this->cloneable = $cloneable;
-			return $this;
-		}
-
 		public function onSetup(callable $callback) {
 			$this->onSetupList[] = $callback;
 			return $this;
@@ -86,8 +76,18 @@
 			return $this->cloneable;
 		}
 
+		public function setCloneable($cloneable) {
+			$this->cloneable = $cloneable;
+			return $this;
+		}
+
 		public function isSingleton() {
 			return $this->singleton;
+		}
+
+		public function setSingleton($singleton) {
+			$this->singleton = $singleton;
+			return $this;
 		}
 
 		abstract public function factory(array $parameterList, IContainer $container);

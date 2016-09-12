@@ -13,10 +13,8 @@
 	use Edde\Common\Application\Event\ErrorEvent;
 	use Edde\Common\Application\Event\FinishEvent;
 	use Edde\Common\Application\Event\StartEvent;
-	use Edde\Common\Container\LazyInjectTrait;
 
 	class Application extends AbstractApplication {
-		use LazyInjectTrait;
 		/**
 		 * @var IRequest
 		 */

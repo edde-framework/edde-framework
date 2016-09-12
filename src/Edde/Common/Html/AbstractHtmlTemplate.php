@@ -4,6 +4,7 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlTemplate;
@@ -11,12 +12,10 @@
 	use Edde\Api\Template\TemplateException;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Template\AbstractTemplate;
 	use Edde\Common\Usable\UsableTrait;
 
-	abstract class AbstractHtmlTemplate extends AbstractTemplate implements IHtmlTemplate {
-		use LazyInjectTrait;
+	abstract class AbstractHtmlTemplate extends AbstractTemplate implements IHtmlTemplate, ILazyInject {
 		use UsableTrait;
 		/**
 		 * @var IHtmlControl

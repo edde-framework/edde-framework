@@ -7,11 +7,9 @@
 	use Edde\Api\Application\IResponse;
 	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Converter\IConverterManager;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class ResponseManager extends AbstractUsable implements IResponseManager {
-		use LazyInjectTrait;
 		/**
 		 * @var IRequest
 		 */

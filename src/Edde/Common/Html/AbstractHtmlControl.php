@@ -8,12 +8,10 @@
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Control\AbstractControl;
 	use Edde\Common\File\File;
 
 	abstract class AbstractHtmlControl extends AbstractControl implements IHtmlControl {
-		use LazyInjectTrait;
 		/**
 		 * @var IContainer
 		 */

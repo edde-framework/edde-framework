@@ -6,11 +6,9 @@
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Strings\StringUtils;
 
 	class SwitchMacro extends AbstractHtmlMacro {
-		use LazyInjectTrait;
 		/**
 		 * @var \SplStack
 		 */

@@ -5,13 +5,11 @@
 
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheFactory;
-	use Edde\Common\Container\LazyInjectTrait;
 
 	/**
 	 * This trait is shorthand for creating cache to a supported class (it must be created through container).
 	 */
 	trait CacheTrait {
-		use LazyInjectTrait;
 		/**
 		 * @var ICacheFactory
 		 */
@@ -26,14 +24,8 @@
 		}
 
 		public function cache() {
-			$this->cache = $this->cacheFactory->factory(static::class);
-		}
-
-		protected function lazyList(): array {
-			return [
-				'cache' => function () {
-					return $this->cacheFactory->factory(static::class);
-				},
-			];
+			$this->lazy('cache', function () {
+				return $this->cacheFactory->factory(static::class);
+			});
 		}
 	}

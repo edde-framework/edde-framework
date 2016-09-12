@@ -3,13 +3,11 @@
 
 	namespace Edde\Common\Translator\Dictionary;
 
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Resource\IResourceManager;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Translator\AbstractDictionary;
 
-	class CsvDictionary extends AbstractDictionary {
-		use LazyInjectTrait;
-
+	class CsvDictionary extends AbstractDictionary implements ILazyInject {
 		/**
 		 * @var string
 		 */

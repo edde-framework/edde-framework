@@ -7,11 +7,9 @@
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Converter\AbstractConverter;
 
 	class HtmlConverter extends AbstractConverter {
-		use LazyInjectTrait;
 		/**
 		 * @var IHttpResponse
 		 */

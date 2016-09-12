@@ -6,12 +6,10 @@
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Storage\IStorage;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Identity\IdentityStorable;
 	use Edde\Common\Upgrade\AbstractUpgrade;
 
 	class InitialUpgrade extends AbstractUpgrade {
-		use LazyInjectTrait;
 		/**
 		 * @var IStorage
 		 */

@@ -4,14 +4,12 @@
 	namespace Edde\Ext\Converter;
 
 	use Edde\Api\Http\IHttpResponse;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Converter\AbstractConverter;
 
 	/**
 	 * Basic http converter; it will convert http+text/plain and http+callback to output.
 	 */
 	class HttpConverter extends AbstractConverter {
-		use LazyInjectTrait;
 		/**
 		 * @var IHttpResponse
 		 */

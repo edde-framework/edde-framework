@@ -8,14 +8,12 @@
 	use Edde\Api\Identity\IAuthenticator;
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Api\Identity\IIdentityManager;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Identity\AbstractAuthenticator;
 
 	/**
 	 * Authenticates against database table.
 	 */
 	class SimpleAuthenticator extends AbstractAuthenticator {
-		use LazyInjectTrait;
 		/**
 		 * @var IIdentityManager
 		 */

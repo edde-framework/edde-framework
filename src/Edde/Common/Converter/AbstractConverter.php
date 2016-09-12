@@ -3,11 +3,12 @@
 
 	namespace Edde\Common\Converter;
 
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Converter\IConverter;
 	use Edde\Common\AbstractObject;
 
-	abstract class AbstractConverter extends AbstractObject implements IConverter {
+	abstract class AbstractConverter extends AbstractObject implements IConverter, ILazyInject {
 		/**
 		 * @var string[]
 		 */
