@@ -3,9 +3,9 @@
 
 	namespace Edde\Common\ContainerTest;
 
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Cache\AbstractCacheStorage;
-	use Edde\Common\Container\LazyInjectTrait;
 
 	class SimpleDependency {
 	}
@@ -94,21 +94,30 @@
 	}
 
 	/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
-	class LazyInjectTraitClass extends AbstractObject {
-		use LazyInjectTrait;
+	class LazyInjectTraitClass extends AbstractObject implements ILazyInject {
 		/**
 		 * @var BetaDependencyClass
 		 */
 		private $betaDependencyClass;
+		/**
+		 * @var AlphaDependencyClass
+		 */
+		private $alphaDependencyClass;
 
 		/**
 		 * @param BetaDependencyClass $betaDependencyClass
+		 * @param AlphaDependencyClass $alphaDependencyClass
 		 */
-		public function lazyDependency(BetaDependencyClass $betaDependencyClass) {
+		public function lazyDependency(BetaDependencyClass $betaDependencyClass, AlphaDependencyClass $alphaDependencyClass) {
 			$this->betaDependencyClass = $betaDependencyClass;
+			$this->alphaDependencyClass = $alphaDependencyClass;
 		}
 
 		public function foo() {
 			return $this->betaDependencyClass;
+		}
+
+		public function bar() {
+			return $this->alphaDependencyClass;
 		}
 	}

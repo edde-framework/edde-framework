@@ -4,6 +4,7 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Common\ContainerTest\AlphaDependencyClass;
 	use Edde\Common\ContainerTest\BetaDependencyClass;
 	use Edde\Common\ContainerTest\LazyInjectTraitClass;
 	use Edde\Common\ContainerTest\SimpleClass;
@@ -30,6 +31,7 @@
 		public function testLazyInject() {
 			$lazyClass = $this->container->create(LazyInjectTraitClass::class);
 			self::assertInstanceOf(BetaDependencyClass::class, $lazyClass->foo());
+			self::assertInstanceOf(AlphaDependencyClass::class, $lazyClass->bar());
 		}
 
 		protected function setUp() {

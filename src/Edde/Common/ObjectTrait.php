@@ -11,20 +11,24 @@
 		 */
 		protected $objectPropertyList = [];
 
-		public function objectProperty(string $name, callable $callback) {
-			$this->objectPropertyList[$name] = $callback;
+		public function lazy(string $property, callable  $callback) {
+			return $this->objectProperty($property, $callback);
+		}
+
+		public function objectProperty(string $property, callable $callback) {
+			$this->objectPropertyList[$property] = $callback;
 			/**
 			 * this magic allows to remove a private property, ou yay!
 			 */
-			call_user_func(\Closure::bind(function (string $name) {
-				unset($this->$name);
-			}, $this, static::class), $name);
+			call_user_func(\Closure::bind(function (string $property) {
+				unset($this->$property);
+			}, $this, static::class), $property);
 			return $this;
 		}
 
 		public function __get($name) {
 			if (isset($this->objectPropertyList[$name])) {
-				return $this->$name = call_user_func(\Closure::bind($this->objectPropertyList[$name], $this, static::class));
+				return $this->$name = call_user_func($this->objectPropertyList[$name]);
 			}
 			throw new EddeException(sprintf('Reading from the undefined/private/protected property [%s::$%s].', static::class, $name));
 		}

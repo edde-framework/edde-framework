@@ -10,6 +10,7 @@
 	use Edde\Api\Container\IDependencyFactory;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\IFactoryManager;
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Common\Callback\Callback;
 	use Edde\Common\Usable\AbstractUsable;
 
@@ -62,32 +63,32 @@
 						$methodList[$name] = $name;
 					}
 				}
-				$parent = $reflectionClass;
-				$lazyInject = false;
-				while ($parent) {
-					if ($lazyInject = ($func = function (callable $func, \ReflectionClass $class) {
-						if (in_array(LazyInjectTrait::class, $class->getTraitNames(), true)) {
-							return true;
-						}
-						foreach ($class->getTraits() as $trait) {
-							if ($func($func, $trait)) {
-								return true;
+				$injectList = [];
+				if (in_array(ILazyInject::class, $reflectionClass->getInterfaceNames(), true)) {
+					foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
+						$name = $reflectionMethod->getName();
+						if ($reflectionMethod->getNumberOfParameters() > 0 && strpos($name, 'lazy') !== false && strlen($name) > 4) {
+							$parameterList = [];
+							foreach ($reflectionMethod->getParameters() as $parameter) {
+								$parameterList[$parameter->getName()] = $parameter->getClass()
+									->getName();
 							}
+							$injectList[$name] = $parameterList;
 						}
-						return false;
-					})($func, $parent)
-					) {
-						break;
 					}
-					$parent = $parent->getParentClass();
 				}
 				$this->cache->save($cacheId, $reflection = [
 					'method-list' => $methodList,
-					'lazy-inject' => $lazyInject,
+					'lazy-inject' => $injectList,
 				]);
 			}
-			if ($reflection['lazy-inject']) {
-				$instance->lazy($this);
+			/** @var $instance ILazyInject */
+			foreach ($reflection['lazy-inject'] as $method) {
+				foreach ($method as $property => $class) {
+					$instance->lazy($property, function () use ($class) {
+						return $this->create($class);
+					});
+				}
 			}
 			foreach ($reflection['method-list'] as $method) {
 				$this->call([
@@ -96,20 +97,6 @@
 				]);
 			}
 			return $instance;
-		}
-
-		public function call(callable $callable, ...$parameterList) {
-			$this->use();
-			$callback = new Callback($callable);
-			$dependencies = [];
-			$grab = count($dependencyList = $callback->getParameterList()) - count($parameterList);
-			foreach ($dependencyList as $dependency) {
-				if ($grab-- <= 0 || $dependency->isOptional() || $dependency->hasClass() === false) {
-					break;
-				}
-				$dependencies[] = $this->create($dependency->getClass());
-			}
-			return $callback->invoke(...array_merge($dependencies, $parameterList));
 		}
 
 		public function create($name, ...$parameterList) {
@@ -127,6 +114,20 @@
 			}
 			return $this->factoryManager->getFactory($name = $root->getName())
 				->create($name, array_merge($dependencyList, $parameterList), $this);
+		}
+
+		public function call(callable $callable, ...$parameterList) {
+			$this->use();
+			$callback = new Callback($callable);
+			$dependencies = [];
+			$grab = count($dependencyList = $callback->getParameterList()) - count($parameterList);
+			foreach ($dependencyList as $dependency) {
+				if ($grab-- <= 0 || $dependency->isOptional() || $dependency->hasClass() === false) {
+					break;
+				}
+				$dependencies[] = $this->create($dependency->getClass());
+			}
+			return $callback->invoke(...array_merge($dependencies, $parameterList));
 		}
 
 		protected function prepare() {
