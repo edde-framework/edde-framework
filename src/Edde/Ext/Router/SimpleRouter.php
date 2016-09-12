@@ -5,8 +5,11 @@
 
 	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Crate\ICrateFactory;
+	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Http\IPostList;
+	use Edde\Api\Http\IRequestUrl;
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Common\Application\Request;
 	use Edde\Common\Router\AbstractRouter;
@@ -22,6 +25,18 @@
 		 * @var IRuntime
 		 */
 		protected $runtime;
+		/**
+		 * @var IRequestUrl
+		 */
+		protected $requestUrl;
+		/**
+		 * @var IHeaderList
+		 */
+		protected $headerList;
+		/**
+		 * @var IPostList
+		 */
+		protected $postList;
 		/**
 		 * @var ICrateFactory
 		 */
@@ -46,6 +61,18 @@
 			$this->runtime = $runtime;
 		}
 
+		public function lazyRequestUrl(IRequestUrl $requestUrl) {
+			$this->requestUrl = $requestUrl;
+		}
+
+		public function lazyHeaderList(IHeaderList $headerList) {
+			$this->headerList = $headerList;
+		}
+
+		public function lazyPostList(IPostList $postList) {
+			$this->postList = $postList;
+		}
+
 		public function lazyCrateFactory(ICrateFactory $crateFactory) {
 			$this->crateFactory = $crateFactory;
 		}
@@ -67,12 +94,10 @@
 			if ($this->runtime->isConsoleMode()) {
 				return null;
 			}
-			$url = $this->httpRequest->getUrl();
-			$headerList = $this->httpRequest->getHeaderList();
-			$class = $url->getParameter('control', false);
-			$action = $url->getParameter('action', false);
+			$class = $this->requestUrl->getParameter('control', false);
+			$action = $this->requestUrl->getParameter('action', false);
 			if ($action === false) {
-				$pathList = $url->getPathList();
+				$pathList = $this->requestUrl->getPathList();
 				$action = StringUtils::camelize(array_pop($pathList));
 				foreach ($pathList as &$path) {
 					$path = StringUtils::camelize($path);
@@ -87,15 +112,14 @@
 			$crateList = [];
 			if ($this->httpRequest->isMethod('POST')) {
 				$method = 'handle' . $action;
-				$postList = $this->httpRequest->getPostList();
-				if ($postList->isEmpty() === false) {
-					$crateList = $this->crateFactory->build($postList->array());
+				if ($this->postList->isEmpty() === false) {
+					$crateList = $this->crateFactory->build($this->postList->array());
 				}
 			}
-			$parameterList = $url->getQuery();
+			$parameterList = $this->requestUrl->getQuery();
 			unset($parameterList['control'], $parameterList['action']);
-			$this->responseManager->setMime('http+' . ($mime = $headerList->getContentType($headerList->getAccept())));
-			$this->httpResponse->contentType($mime);
+			$this->httpResponse->contentType($mime = $this->headerList->getContentType($this->headerList->getAccept()));
+			$this->responseManager->setMime($mime = ('http+' . $mime));
 			return new Request($mime, $class, $method, array_merge($parameterList, $crateList));
 		}
 

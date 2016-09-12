@@ -3,20 +3,22 @@
 
 	namespace Edde\Common\Http;
 
+	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\ICookieList;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Http\IPostList;
+	use Edde\Api\Http\IRequestUrl;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Url\Url;
 
 	class HttpRequest extends AbstractObject implements IHttpRequest {
 		/**
-		 * @var IUrl
+		 * @var IRequestUrl
 		 */
-		protected $url;
+		protected $requestUrl;
 		/**
 		 * @var string
 		 */
@@ -63,12 +65,12 @@
 			$this->cookieList = $cookieList;
 		}
 
-		public function getUrl() {
-			return $this->url;
+		public function getRequestUrl(): IRequestUrl {
+			return $this->requestUrl;
 		}
 
-		public function setUrl(IUrl $url) {
-			$this->url = $url;
+		public function setRequestUrl(IRequestUrl $requestUrl): HttpRequest {
+			$this->requestUrl = $requestUrl;
 			return $this;
 		}
 
@@ -76,7 +78,7 @@
 			return $this->method;
 		}
 
-		public function setMethod($method) {
+		public function setMethod(string $method): HttpRequest {
 			$this->method = $method;
 			return $this;
 		}
@@ -116,7 +118,7 @@
 			return $this->remoteAddress;
 		}
 
-		public function setRemoteAddress($remoteAddress) {
+		public function setRemoteAddress(string $remoteAddress): HttpRequest {
 			$this->remoteAddress = $remoteAddress;
 			return $this;
 		}
@@ -128,7 +130,7 @@
 			return $this->remoteHost;
 		}
 
-		public function setRemoteHost($remoteHost) {
+		public function setRemoteHost(string $remoteHost): HttpRequest {
 			$this->remoteHost = $remoteHost;
 			return $this;
 		}
@@ -141,32 +143,19 @@
 		}
 
 		public function isSecured() {
-			return $this->url->getScheme() === 'https';
+			return $this->requestUrl->getScheme() === 'https';
 		}
 
 		public function isAjax() {
 			return $this->headerList->get('X-Requested-With') === 'XMLHttpRequest';
 		}
 
-		public function getBody() {
-			if ($this->hasBody === false) {
-				$this->hasBody = true;
-				$this->body = is_callable($this->body) ? call_user_func($this->body) : $this->body;
-			}
+		public function getBody(): IBody {
 			return $this->body;
 		}
 
-		public function setBody($body) {
+		public function setBody(IBody $body) {
 			$this->body = $body;
-			return $this;
-		}
-
-		public function getResponse() {
-			return $this->response;
-		}
-
-		public function setResponse(IHttpResponse $httpResponse) {
-			$this->response = $httpResponse;
 			return $this;
 		}
 	}

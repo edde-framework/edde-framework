@@ -11,9 +11,9 @@
 	 */
 	interface IHttpRequest {
 		/**
-		 * @return IUrl
+		 * @return IRequestUrl
 		 */
-		public function getUrl();
+		public function getRequestUrl(): IRequestUrl;
 
 		/**
 		 * @return string
@@ -89,23 +89,7 @@
 		public function isAjax();
 
 		/**
-		 * @return mixed
+		 * @return IBody
 		 */
-		public function getBody();
-
-		/**
-		 * bind response to this request; in common case this response should be sent to a client
-		 *
-		 * @param IHttpResponse $httpResponse
-		 *
-		 * @return $this
-		 */
-		public function setResponse(IHttpResponse $httpResponse);
-
-		/**
-		 * response should be always set (for example status 200, 404, 500, ...)
-		 *
-		 * @return IHttpResponse
-		 */
-		public function getResponse();
+		public function getBody(): IBody;
 	}
