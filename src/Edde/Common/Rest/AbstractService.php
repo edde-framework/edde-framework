@@ -74,9 +74,12 @@
 			$this->response('text/plain', $message, $code);
 		}
 
-		protected function response(string $target, $response, int $code = null) {
+		protected function response(string $target, $response, int $code = null, string $contentType = null) {
 			if ($code) {
 				$this->httpResponse->setCode($code);
+			}
+			if ($contentType) {
+				$this->httpResponse->contentType($contentType);
 			}
 			$this->responseManager->response(new Response('http+' . $target, $response));
 			return $this;

@@ -30,6 +30,6 @@
 		}
 
 		protected function exception(string $target) {
-			throw new ConverterException(sprintf('Unsuported convertion in [%s] from [%s] to [%s].', static::class, implode(', ', $this->mimeList), $target));
+			throw new ConverterException(sprintf('Unsuported conversion in [%s] from [%s] to [%s].', static::class, implode(', ', $this->mimeList), $target));
 		}
 	}
