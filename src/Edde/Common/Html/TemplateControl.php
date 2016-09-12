@@ -4,10 +4,8 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Control\IControl;
-	use Edde\Common\Container\LazyInjectTrait;
 
 	class TemplateControl extends AbstractHtmlControl {
-		use LazyInjectTrait;
 		use TemplateTrait;
 
 		public function setTemplate(string $template) {

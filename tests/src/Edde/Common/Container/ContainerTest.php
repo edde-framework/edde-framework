@@ -4,6 +4,9 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Common\ContainerTest\AlphaDependencyClass;
+	use Edde\Common\ContainerTest\BetaDependencyClass;
+	use Edde\Common\ContainerTest\LazyInjectTraitClass;
 	use Edde\Common\ContainerTest\SimpleClass;
 	use Edde\Common\ContainerTest\SimpleDependency;
 	use Edde\Common\ContainerTest\SimpleUnknownDependency;
@@ -25,10 +28,18 @@
 			self::assertInstanceOf(SimpleClass::class, $this->container->create(SimpleClass::class, new SimpleUnknownDependency(), 1));
 		}
 
+		public function testLazyInject() {
+			$lazyClass = $this->container->create(LazyInjectTraitClass::class);
+			self::assertInstanceOf(BetaDependencyClass::class, $lazyClass->foo());
+			self::assertInstanceOf(AlphaDependencyClass::class, $lazyClass->bar());
+		}
+
 		protected function setUp() {
 			$this->container = ContainerFactory::create([
 				SimpleClass::class,
 				SimpleDependency::class,
+				LazyInjectTraitClass::class,
+				BetaDependencyClass::class,
 			]);
 		}
 	}

@@ -9,7 +9,6 @@
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Common\Application\Request;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Router\AbstractRouter;
 	use Edde\Common\Strings\StringUtils;
 
@@ -19,7 +18,6 @@
 	 * Only difference is for GET/POST -> action/handle method mapping.
 	 */
 	class SimpleRouter extends AbstractRouter {
-		use LazyInjectTrait;
 		/**
 		 * @var IRuntime
 		 */

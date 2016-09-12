@@ -3,14 +3,13 @@
 
 	namespace Edde\Common\Filter;
 
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Crypt\ICryptEngine;
-	use Edde\Common\Container\LazyInjectTrait;
 
 	/**
 	 * Generate guid; if the value is set, it is used as a seed.
 	 */
-	class GuidFilter extends AbstractFilter {
-		use LazyInjectTrait;
+	class GuidFilter extends AbstractFilter implements ILazyInject {
 		/**
 		 * @var ICryptEngine
 		 */

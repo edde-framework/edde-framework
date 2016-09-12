@@ -86,13 +86,13 @@
 		}
 
 		public function compile(IFile $file, bool $force = false): IFile {
+			$this->use();
 			if ($file->isAvailable() === false) {
 				throw new TemplateException(sprintf('Template file [%s] is not available.', $file->getPath()));
 			}
 			if (($templateFile = $this->cache->load($cacheId = $file->getPath(), false)) !== false && $force === false) {
 				return new File($templateFile);
 			}
-			$this->use();
 			$compiler = new Compiler($this->update($this->process($this->load($file), $file)), $this->rootDirectory, $this->assetsDirectory, $file, $templateFile = $this->templateDirectory->file(($name = ('Template_' . sha1((string)$file->getUrl()))) . '.php'), $name);
 			$macroList = [];
 			foreach ($this->macroList as $macro) {
@@ -170,5 +170,6 @@
 
 		protected function prepare() {
 			$this->templateDirectory->create();
+			$this->cache();
 		}
 	}

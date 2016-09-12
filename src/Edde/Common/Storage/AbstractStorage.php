@@ -10,12 +10,10 @@
 	use Edde\Api\Storage\ICollection;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Storage\StorageException;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Query\Select\SelectQuery;
 	use Edde\Common\Usable\AbstractUsable;
 
 	abstract class AbstractStorage extends AbstractUsable implements IStorage {
-		use LazyInjectTrait;
 		/**
 		 * @var ISchemaManager
 		 */

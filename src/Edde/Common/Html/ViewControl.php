@@ -13,7 +13,6 @@
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Application\Response;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\File\File;
 	use Edde\Common\Html\Document\DocumentControl;
 	use Edde\Common\Html\Document\MetaControl;
@@ -22,7 +21,6 @@
 	 * Formal root control for displaying page with some shorthands.
 	 */
 	class ViewControl extends DocumentControl implements IHtmlView {
-		use LazyInjectTrait;
 		use TemplateTrait;
 		/**
 		 * @var IHttpRequest

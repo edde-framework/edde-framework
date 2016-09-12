@@ -69,13 +69,13 @@
 			return $this;
 		}
 
+		public function isAuthenticated(): bool {
+			return $this->authenticated;
+		}
+
 		public function setAuthenticated(bool $authenticated): IIdentity {
 			$this->authenticated = $authenticated;
 			return $this;
-		}
-
-		public function isAuthenticated(): bool {
-			return $this->authenticated;
 		}
 
 		protected function prepare() {

@@ -5,7 +5,6 @@
 
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Query\Schema\CreateSchemaQuery;
 	use Edde\Common\Upgrade\AbstractUpgrade;
 
@@ -13,7 +12,6 @@
 	 * This upgrade is useful for initial storage setup; it will create all available schemas.
 	 */
 	class InitialStorageUpgrade extends AbstractUpgrade {
-		use LazyInjectTrait;
 		/**
 		 * @var IStorage
 		 */

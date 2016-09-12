@@ -8,11 +8,9 @@
 	use Edde\Api\Session\ISession;
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Session\SessionException;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class SessionManager extends AbstractUsable implements ISessionManager {
-		use LazyInjectTrait;
 		/**
 		 * @var IFingerprint
 		 */

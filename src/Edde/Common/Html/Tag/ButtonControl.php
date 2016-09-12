@@ -4,12 +4,9 @@
 	namespace Edde\Common\Html\Tag;
 
 	use Edde\Api\Link\ILinkFactory;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Html\AbstractHtmlControl;
 
 	class ButtonControl extends AbstractHtmlControl {
-		use LazyInjectTrait;
-
 		/**
 		 * @var ILinkFactory
 		 */

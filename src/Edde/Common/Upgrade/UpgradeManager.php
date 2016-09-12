@@ -7,11 +7,9 @@
 	use Edde\Api\Upgrade\IUpgrade;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Upgrade\UpgradeException;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class UpgradeManager extends AbstractUsable implements IUpgradeManager {
-		use LazyInjectTrait;
 		/**
 		 * @var IStorage
 		 */

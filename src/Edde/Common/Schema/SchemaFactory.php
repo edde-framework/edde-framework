@@ -10,13 +10,11 @@
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\SchemaFactoryException;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Filter\BoolFilter;
 	use Edde\Common\Node\NodeQuery;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class SchemaFactory extends AbstractUsable implements ISchemaFactory {
-		use LazyInjectTrait;
 		/**
 		 * @var IContainer
 		 */

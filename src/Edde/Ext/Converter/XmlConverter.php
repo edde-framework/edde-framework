@@ -7,12 +7,10 @@
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Api\Xml\XmlParserException;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Converter\AbstractConverter;
 	use Edde\Common\Xml\XmlNodeHandler;
 
 	class XmlConverter extends AbstractConverter {
-		use LazyInjectTrait;
 		/**
 		 * @var IXmlParser
 		 */

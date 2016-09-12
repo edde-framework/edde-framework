@@ -3,14 +3,13 @@
 
 	namespace Edde\Common\Link;
 
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Link\IHostUrl;
 	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Common\AbstractObject;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Url\Url;
 
-	class ControlLinkGenerator extends AbstractObject implements ILinkGenerator {
-		use LazyInjectTrait;
+	class ControlLinkGenerator extends AbstractObject implements ILinkGenerator, ILazyInject {
 		/**
 		 * @var IHostUrl
 		 */

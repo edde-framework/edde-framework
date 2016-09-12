@@ -5,11 +5,8 @@
 
 	use Edde\Api\Session\ISession;
 	use Edde\Api\Session\ISessionManager;
-	use Edde\Common\Container\LazyInjectTrait;
 
 	trait SessionTrait {
-		use LazyInjectTrait;
-
 		/**
 		 * @var ISessionManager
 		 */
@@ -24,14 +21,8 @@
 		}
 
 		public function session() {
-			$this->session = $this->sessionManager->getSession(static::class);
-		}
-
-		protected function lazyList(): array {
-			return [
-				'session' => function () {
-					return $this->sessionManager->getSession(static::class);
-				},
-			];
+			$this->objectProperty('session', function () {
+				return $this->sessionManager->getSession(static::class);
+			});
 		}
 	}

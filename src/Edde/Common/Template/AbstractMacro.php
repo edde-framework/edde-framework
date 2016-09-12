@@ -3,13 +3,14 @@
 
 	namespace Edde\Common\Template;
 
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\AbstractObject;
 
-	abstract class AbstractMacro extends AbstractObject implements IMacro {
+	abstract class AbstractMacro extends AbstractObject implements IMacro, ILazyInject {
 		/**
 		 * @var array
 		 */

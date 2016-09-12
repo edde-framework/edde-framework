@@ -7,11 +7,9 @@
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Schema\SchemaException;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class SchemaManager extends AbstractUsable implements ISchemaManager {
-		use LazyInjectTrait;
 		/**
 		 * @var ISchemaFactory
 		 */

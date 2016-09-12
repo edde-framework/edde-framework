@@ -61,11 +61,6 @@
 			return $this->url->getExtension();
 		}
 
-		public function setAutoClose(bool $autoClose = true): IFile {
-			$this->autoClose = $autoClose;
-			return $this;
-		}
-
 		public function openForAppend(): IFile {
 			$this->open('a');
 			return $this;
@@ -187,5 +182,10 @@
 
 		public function isAutoClose(): bool {
 			return $this->autoClose;
+		}
+
+		public function setAutoClose(bool $autoClose = true): IFile {
+			$this->autoClose = $autoClose;
+			return $this;
 		}
 	}

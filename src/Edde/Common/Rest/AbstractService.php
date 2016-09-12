@@ -7,13 +7,10 @@
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Rest\IService;
 	use Edde\Common\Application\Response;
-	use Edde\Common\Container\LazyInjectTrait;
 	use Edde\Common\Control\AbstractControl;
 	use Edde\Common\Strings\StringUtils;
 
 	abstract class AbstractService extends AbstractControl implements IService {
-		use LazyInjectTrait;
-
 		const ERROR_NOT_FOUND = 404;
 		const ERROR_NOT_ALOWED = 405;
 

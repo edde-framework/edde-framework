@@ -30,6 +30,7 @@
 		}
 
 		public function getIdentityCrate(string $identity): ICrate {
+			$this->use();
 			$selectQuery = new SelectQuery();
 			$selectQuery->select()
 				->all()
@@ -51,6 +52,7 @@
 		}
 
 		public function identity(): IIdentity {
+			$this->use();
 			if ($this->identity === null) {
 				$this->identity = $this->session->get('identity', new Identity());
 			}
@@ -58,5 +60,6 @@
 		}
 
 		protected function prepare() {
+			$this->session();
 		}
 	}
