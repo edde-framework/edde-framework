@@ -28,8 +28,8 @@
 	use Edde\Common\Html\Macro\TemplateMacro;
 	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Html\TemplateControl;
+	use Edde\Common\Http\HostUrl;
 	use Edde\Common\Link\ControlLinkGenerator;
-	use Edde\Common\Link\HostUrl;
 	use Edde\Common\Link\LinkFactory;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Web\JavaScriptCompiler;

@@ -22,16 +22,17 @@
 	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\ICookieList;
 	use Edde\Api\Http\IHeaderList;
+	use Edde\Api\Http\IHostUrl;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpRequestFactory;
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Http\IPostList;
+	use Edde\Api\Http\IRequestUrl;
 	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Identity\IAuthenticatorManager;
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Api\Identity\IIdentityManager;
 	use Edde\Api\IEddeDirectory;
-	use Edde\Api\Link\IHostUrl;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\Storage\IFileStorage;
@@ -64,11 +65,11 @@
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\Converter\HtmlConverter;
 	use Edde\Common\Html\Macro\TemplateMacro;
+	use Edde\Common\Http\HostUrl;
 	use Edde\Common\Http\HttpRequestFactory;
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Identity\AuthenticatorManager;
 	use Edde\Common\Identity\IdentityManager;
-	use Edde\Common\Link\HostUrl;
 	use Edde\Common\Link\LinkFactory;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Resource\Storage\FileStorage;
@@ -130,6 +131,9 @@
 					IHttpRequest::class => function (IHttpRequestFactory $httpRequestFactory) {
 						return $httpRequestFactory->create();
 					},
+					IRequestUrl::class => function (IHttpRequest $httpRequest) {
+						return $httpRequest->getRequestUrl();
+					},
 					IHeaderList::class => function (IHttpRequest $httpRequest) {
 						return $httpRequest->getHeaderList();
 					},
@@ -181,7 +185,7 @@
 					IJavaScriptCompiler::class => JavaScriptCompiler::class,
 					IXmlParser::class => XmlParser::class,
 					IHostUrl::class => function (IHttpRequest $httpRequest) {
-						return HostUrl::create((string)$httpRequest->getUrl());
+						return HostUrl::create((string)$httpRequest->getRequestUrl());
 					},
 					ILinkFactory::class => LinkFactory::class,
 					IAuthenticatorManager::class => AuthenticatorManager::class,

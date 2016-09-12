@@ -9,15 +9,16 @@
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Http\IPostList;
+	use Edde\Api\Http\IRequestUrl;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Url\Url;
 
 	class HttpRequest extends AbstractObject implements IHttpRequest {
 		/**
-		 * @var IUrl
+		 * @var IRequestUrl
 		 */
-		protected $url;
+		protected $requestUrl;
 		/**
 		 * @var string
 		 */
@@ -64,12 +65,12 @@
 			$this->cookieList = $cookieList;
 		}
 
-		public function getUrl() {
-			return $this->url;
+		public function getRequestUrl(): IRequestUrl {
+			return $this->requestUrl;
 		}
 
-		public function setUrl(IUrl $url): HttpRequest {
-			$this->url = $url;
+		public function setRequestUrl(IRequestUrl $requestUrl): HttpRequest {
+			$this->requestUrl = $requestUrl;
 			return $this;
 		}
 
@@ -142,7 +143,7 @@
 		}
 
 		public function isSecured() {
-			return $this->url->getScheme() === 'https';
+			return $this->requestUrl->getScheme() === 'https';
 		}
 
 		public function isAjax() {
@@ -155,15 +156,6 @@
 
 		public function setBody(IBody $body) {
 			$this->body = $body;
-			return $this;
-		}
-
-		public function getResponse() {
-			return $this->response;
-		}
-
-		public function setResponse(IHttpResponse $httpResponse) {
-			$this->response = $httpResponse;
 			return $this;
 		}
 	}

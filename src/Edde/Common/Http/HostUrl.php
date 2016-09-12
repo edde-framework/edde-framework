@@ -1,9 +1,9 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Link;
+	namespace Edde\Common\Http;
 
-	use Edde\Api\Link\IHostUrl;
+	use Edde\Api\Http\IHostUrl;
 	use Edde\Common\Url\Url;
 
 	class HostUrl extends Url implements IHostUrl {
