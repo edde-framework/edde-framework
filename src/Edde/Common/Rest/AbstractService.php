@@ -4,6 +4,7 @@
 	namespace Edde\Common\Rest;
 
 	use Edde\Api\Application\IResponseManager;
+	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Rest\IService;
 	use Edde\Common\Application\Response;
@@ -23,7 +24,10 @@
 			'PATCH',
 			'DELETE',
 		];
-
+		/**
+		 * @var IBody
+		 */
+		protected $body;
 		/**
 		 * @var IHttpResponse
 		 */
@@ -32,6 +36,10 @@
 		 * @var IResponseManager
 		 */
 		protected $responseManager;
+
+		public function lazyBody(IBody $body) {
+			$this->body = $body;
+		}
 
 		public function lazyHttpResponse(IHttpResponse $httpResponse) {
 			$this->httpResponse = $httpResponse;
