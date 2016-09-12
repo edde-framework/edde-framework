@@ -96,11 +96,10 @@
 	/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 	class LazyInjectTraitClass extends AbstractObject {
 		use LazyInjectTrait;
-
 		/**
 		 * @var BetaDependencyClass
 		 */
-		protected $betaDependencyClass;
+		private $betaDependencyClass;
 
 		/**
 		 * @param BetaDependencyClass $betaDependencyClass
@@ -110,7 +109,6 @@
 		}
 
 		public function foo() {
-			$this->lazyEnablePropertyBypass('betaDependencyClass');
 			return $this->betaDependencyClass;
 		}
 	}
