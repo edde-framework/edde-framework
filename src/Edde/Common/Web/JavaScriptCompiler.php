@@ -55,5 +55,6 @@
 		}
 
 		protected function prepare() {
+			$this->cache();
 		}
 	}
