@@ -89,9 +89,9 @@
 		public function isAjax();
 
 		/**
-		 * @return mixed
+		 * @return IBody
 		 */
-		public function getBody();
+		public function getBody(): IBody;
 
 		/**
 		 * bind response to this request; in common case this response should be sent to a client

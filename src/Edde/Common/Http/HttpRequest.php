@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Http;
 
+	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\ICookieList;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttpRequest;
@@ -67,7 +68,7 @@
 			return $this->url;
 		}
 
-		public function setUrl(IUrl $url) {
+		public function setUrl(IUrl $url): HttpRequest {
 			$this->url = $url;
 			return $this;
 		}
@@ -76,7 +77,7 @@
 			return $this->method;
 		}
 
-		public function setMethod($method) {
+		public function setMethod(string $method): HttpRequest {
 			$this->method = $method;
 			return $this;
 		}
@@ -116,7 +117,7 @@
 			return $this->remoteAddress;
 		}
 
-		public function setRemoteAddress($remoteAddress) {
+		public function setRemoteAddress(string $remoteAddress): HttpRequest {
 			$this->remoteAddress = $remoteAddress;
 			return $this;
 		}
@@ -128,7 +129,7 @@
 			return $this->remoteHost;
 		}
 
-		public function setRemoteHost($remoteHost) {
+		public function setRemoteHost(string $remoteHost): HttpRequest {
 			$this->remoteHost = $remoteHost;
 			return $this;
 		}
@@ -148,15 +149,11 @@
 			return $this->headerList->get('X-Requested-With') === 'XMLHttpRequest';
 		}
 
-		public function getBody() {
-			if ($this->hasBody === false) {
-				$this->hasBody = true;
-				$this->body = is_callable($this->body) ? call_user_func($this->body) : $this->body;
-			}
+		public function getBody(): IBody {
 			return $this->body;
 		}
 
-		public function setBody($body) {
+		public function setBody(IBody $body) {
 			$this->body = $body;
 			return $this;
 		}

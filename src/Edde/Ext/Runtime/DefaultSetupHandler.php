@@ -19,9 +19,13 @@
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\File\ITempDirectory;
+	use Edde\Api\Http\IBody;
+	use Edde\Api\Http\ICookieList;
+	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpRequestFactory;
 	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Http\IPostList;
 	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Identity\IAuthenticatorManager;
 	use Edde\Api\Identity\IIdentity;
@@ -125,6 +129,18 @@
 					IHttpRequestFactory::class => HttpRequestFactory::class,
 					IHttpRequest::class => function (IHttpRequestFactory $httpRequestFactory) {
 						return $httpRequestFactory->create();
+					},
+					IHeaderList::class => function (IHttpRequest $httpRequest) {
+						return $httpRequest->getHeaderList();
+					},
+					ICookieList::class => function (IHttpRequest $httpRequest) {
+						return $httpRequest->getCookieList();
+					},
+					IPostList::class => function (IHttpRequest $httpRequest) {
+						return $httpRequest->getPostList();
+					},
+					IBody::class => function (IHttpRequest $httpRequest) {
+						return $httpRequest->getBody();
 					},
 					IHttpResponse::class => HttpResponse::class,
 					ISessionManager::class => SessionManager::class,
