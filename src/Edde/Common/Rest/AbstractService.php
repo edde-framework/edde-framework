@@ -90,7 +90,7 @@
 				$this->httpResponse->contentType($contentType);
 				$this->responseManager->setMime('http+' . $contentType);
 			}
-			$this->responseManager->response(new Response('http+' . $target, $response));
+			$this->responseManager->response(new Response($target, $response));
 			return $this;
 		}
 	}
