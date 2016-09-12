@@ -16,23 +16,23 @@
 	class AbstractObjectTest extends TestCase {
 		public function testObjectWrite() {
 			$this->expectException(EddeException::class);
-			$this->expectExceptionMessage('Writing to the undefined/private/protected property [Edde\Common\TestObject::$foo].');
+			$this->expectExceptionMessage('Writing to the undefined/private/protected property [Edde\Common\TestObject::$boo].');
 			$object = new TestObject();
-			$object->foo = true;
+			$object->boo = true;
 		}
 
 		public function testObjectIsset() {
 			$this->expectException(EddeException::class);
-			$this->expectExceptionMessage('Cannot check isset on undefined/private/protected property [Edde\Common\TestObject::$foo].');
+			$this->expectExceptionMessage('Cannot check isset on undefined/private/protected property [Edde\Common\TestObject::$boo].');
 			$object = new TestObject();
-			$isset = isset($object->foo);
+			$isset = isset($object->boo);
 		}
 
 		public function testObjectRead() {
 			$this->expectException(EddeException::class);
-			$this->expectExceptionMessage('Reading from the undefined/private/protected property [Edde\Common\TestObject::$foo].');
+			$this->expectExceptionMessage('Reading from the undefined/private/protected property [Edde\Common\TestObject::$boo].');
 			$object = new TestObject();
-			$foo = $object->foo;
+			$foo = $object->boo;
 		}
 
 		public function testPropertyCallback() {
