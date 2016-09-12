@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Web;
 
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Resource\IResourceList;
 	use Edde\Api\Resource\Storage\IFileStorage;
@@ -11,7 +12,7 @@
 	use Edde\Common\Resource\ResourceList;
 	use Edde\Common\Usable\UsableTrait;
 
-	class JavaScriptCompiler extends ResourceList implements IJavaScriptCompiler {
+	class JavaScriptCompiler extends ResourceList implements IJavaScriptCompiler, ILazyInject {
 		use UsableTrait;
 		use CacheTrait;
 

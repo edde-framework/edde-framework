@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Web;
 
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceList;
@@ -17,7 +18,7 @@
 	use Edde\Common\Url\Url;
 	use Edde\Common\Usable\UsableTrait;
 
-	class StyleSheetCompiler extends ResourceList implements IStyleSheetCompiler {
+	class StyleSheetCompiler extends ResourceList implements IStyleSheetCompiler, ILazyInject {
 		use UsableTrait;
 		use CacheTrait;
 
