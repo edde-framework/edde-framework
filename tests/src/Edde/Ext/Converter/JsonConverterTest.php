@@ -45,7 +45,7 @@
 
 		public function testException() {
 			$this->expectException(ConverterException::class);
-			$this->expectExceptionMessage(sprintf('Unsuported convertion in [%s] from [application/json, json] to [my-mime/here].', JsonConverter::class));
+			$this->expectExceptionMessage(sprintf('Unsuported conversion in [%s] from [application/json, json] to [my-mime/here].', JsonConverter::class));
 			$this->converter->convert('foo', 'my-mime/here');
 		}
 
