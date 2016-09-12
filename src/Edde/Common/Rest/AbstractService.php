@@ -67,18 +67,15 @@
 		}
 
 		protected function error(int $code, string $message) {
-			$this->code($code);
 			$headerList = $this->httpResponse->getHeaderList();
 			$headerList->set('Date', gmdate('D, d M Y H:i:s T'));
-			$this->response('text/plain', $message);
+			$this->response('text/plain', $message, $code);
 		}
 
-		protected function code(int $code) {
-			$this->httpResponse->setCode($code);
-			return $this;
-		}
-
-		protected function response(string $target, $response) {
+		protected function response(string $target, $response, int $code = null) {
+			if ($code) {
+				$this->httpResponse->setCode($code);
+			}
 			$this->responseManager->response(new Response('http+' . $target, $response));
 			return $this;
 		}
