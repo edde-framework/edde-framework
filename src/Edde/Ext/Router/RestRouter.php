@@ -3,8 +3,10 @@
 
 	namespace Edde\Ext\Router;
 
+	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Http\IHttpRequest;
+	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Rest\IService;
 	use Edde\Common\Application\Request;
 	use Edde\Common\Container\LazyInjectTrait;
@@ -17,6 +19,14 @@
 		 */
 		protected $httpRequest;
 		/**
+		 * @var IHttpResponse
+		 */
+		protected $httpResponse;
+		/**
+		 * @var IResponseManager
+		 */
+		protected $responseManager;
+		/**
 		 * @var ICrateFactory
 		 */
 		protected $crateFactory;
@@ -27,6 +37,14 @@
 
 		public function lazyHttpRequest(IHttpRequest $httpRequest) {
 			$this->httpRequest = $httpRequest;
+		}
+
+		public function lazyHttpResponse(IHttpResponse $httpResponse) {
+			$this->httpResponse = $httpResponse;
+		}
+
+		public function lazyResponseManager(IResponseManager $responseManager) {
+			$this->responseManager = $responseManager;
 		}
 
 		public function registerServiceList(array $serviceList) {
@@ -47,6 +65,8 @@
 			$headerList = $this->httpRequest->getHeaderList();
 			foreach ($this->serviceList as $service) {
 				if ($service->match($url)) {
+					$this->responseManager->setMime('http+' . ($mime = $headerList->getContentType($headerList->getAccept())));
+					$this->httpResponse->contentType($mime);
 					return new Request('http+' . $headerList->getContentType(), get_class($service), $this->httpRequest->getMethod(), $url->getQuery());
 				}
 			}

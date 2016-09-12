@@ -83,10 +83,12 @@
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Ext\Application\ExceptionErrorControl;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
+	use Edde\Ext\Converter\HttpConverter;
 	use Edde\Ext\Converter\JsonConverter;
 	use Edde\Ext\Converter\PhpConverter;
 	use Edde\Ext\Converter\XmlConverter;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
+	use Edde\Ext\Router\RestRouter;
 	use Edde\Ext\Router\SimpleRouter;
 	use Edde\Framework;
 
@@ -171,6 +173,8 @@
 					IIdentity::class => function (IIdentityManager $identityManager) {
 						return $identityManager->identity();
 					},
+
+					RestRouter::class,
 				], $factoryList))
 				->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
 					$routerService->registerRouter($container->create(SimpleRouter::class));
@@ -181,6 +185,7 @@
 					$converterManager->registerConverter($container->create(PhpConverter::class));
 
 					$converterManager->registerConverter($container->create(HtmlConverter::class));
+					$converterManager->registerConverter($container->create(HttpConverter::class));
 				})
 				->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
 					$templateManager->registerMacroList(TemplateMacro::macroList($container));

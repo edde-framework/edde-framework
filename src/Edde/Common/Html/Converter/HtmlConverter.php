@@ -49,11 +49,9 @@
 				$this->unsupported($source, $target);
 			}
 			switch ($target) {
-				case 'text/html':
-					echo $render = $source->render();
-					return $render;
-				case 'application/json':
+				case 'http+application/json':
 					$this->httpResponse->send();
+				case 'application/json':
 					$json = [];
 					if ($this->javaScriptCompiler->isEmpty() === false) {
 						$json['javaScript'] = [
@@ -75,11 +73,13 @@
 							];
 						}
 					}
-					echo $json = json_encode($json);
-					return $json;
+					echo json_encode($json);
+					return null;
 				case 'http+text/html':
 					$this->httpResponse->send();
-					return $this->convert($source, 'text/html');
+				case 'text/html':
+					echo $source->render();
+					return null;
 			}
 			$this->exception($target);
 			return null;
