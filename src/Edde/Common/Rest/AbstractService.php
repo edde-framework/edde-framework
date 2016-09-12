@@ -11,6 +11,8 @@
 	use Edde\Common\Strings\StringUtils;
 
 	abstract class AbstractService extends AbstractControl implements IService {
+		const OK_CREATED = 201;
+
 		const ERROR_NOT_FOUND = 404;
 		const ERROR_NOT_ALOWED = 405;
 
