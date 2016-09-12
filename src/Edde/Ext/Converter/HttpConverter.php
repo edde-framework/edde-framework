@@ -20,6 +20,7 @@
 		public function __construct() {
 			parent::__construct([
 				'http+text/plain',
+				'http+string',
 				'http+callback',
 			]);
 		}
@@ -29,20 +30,17 @@
 		}
 
 		public function convert($source, string $target) {
+			if (is_callable($source) === false && is_string($source) === false) {
+				$this->unsupported($source, $target);
+			}
 			switch ($target) {
 				case 'http+text/plain':
-					if (is_string($source) === false) {
-						$this->unsupported($source, $target);
-					}
 					$this->httpResponse->send();
+					if (is_callable($source)) {
+						$source();
+						return null;
+					}
 					echo $source;
-					return null;
-				case 'http+callback':
-					if (is_callable($source) === false) {
-						$this->unsupported($source, $target);
-					}
-					$this->httpResponse->send();
-					$source();
 					return null;
 			}
 			$this->exception($target);
