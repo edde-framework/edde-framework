@@ -51,9 +51,7 @@
 				$headerList->set('Date', gmdate('D, d M Y H:i:s T'));
 				$this->responseManager->setMime('http+text/plain');
 				$this->httpResponse->contentType('text/plain');
-				$this->responseManager->response(new Response('calback', function () use ($method, $allowed) {
-					sprintf('The requested method [%s] is not supported; allowed methods are [%s].', $method, $allowed);
-				}));
+				$this->responseManager->response(new Response('text/plain', sprintf('The requested method [%s] is not supported; allowed methods are [%s].', $method, $allowed)));
 				return null;
 			}
 			if (isset($methodList[$method]) === false) {
@@ -63,8 +61,10 @@
 				$headerList->set('Date', gmdate('D, d M Y H:i:s T'));
 				$this->responseManager->setMime('http+text/plain');
 				$this->httpResponse->contentType('text/plain');
-				$this->responseManager->response(new Response('calback', function () use ($method, $allowed) {
-					sprintf('The requested method [%s] is not supported; allowed methods are [%s].', $method, $allowed);
+//				$this->responseManager->response(new Response('http+text/plain', sprintf('The requested method [%s] is not supported; allowed methods are [%s].', $method, $allowed)));
+				$this->responseManager->response(new Response('http+callback', function () {
+					echo "hello";
+//					sprintf('The requested method [%s] is not supported; allowed methods are [%s].', $method, $allowed);
 				}));
 				return null;
 			}

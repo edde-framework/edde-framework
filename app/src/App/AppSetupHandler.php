@@ -7,18 +7,15 @@
 	use App\Message\FlashControl;
 	use App\Rest\AppService;
 	use App\Upgrade\InitialUpgrade;
-	use Edde\Api\Application\IApplication;
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\File\IRootDirectory;
-	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Identity\IAuthenticatorManager;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Upgrade\IUpgradeManager;
-	use Edde\Common\Application\Event\FinishEvent;
 	use Edde\Common\Html\Macro\ControlMacro;
 	use Edde\Common\Link\ControlLinkGenerator;
 	use Edde\Ext\Router\RestRouter;
@@ -63,12 +60,6 @@
 						new ControlMacro([
 							'flash',
 						], FlashControl::class),
-					]);
-				})
-				->onSetup(IApplication::class, function (IHttpResponse $httpResponse, IApplication $application) {
-					$application->listen(FinishEvent::class, [
-						$httpResponse,
-						'send',
 					]);
 				})
 				->onSetup(RestRouter::class, function (IContainer $container, RestRouter $restRouter) {

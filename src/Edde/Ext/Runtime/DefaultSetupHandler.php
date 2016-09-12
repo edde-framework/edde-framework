@@ -83,6 +83,7 @@
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Ext\Application\ExceptionErrorControl;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
+	use Edde\Ext\Converter\HttpConverter;
 	use Edde\Ext\Converter\JsonConverter;
 	use Edde\Ext\Converter\PhpConverter;
 	use Edde\Ext\Converter\XmlConverter;
@@ -184,6 +185,7 @@
 					$converterManager->registerConverter($container->create(PhpConverter::class));
 
 					$converterManager->registerConverter($container->create(HtmlConverter::class));
+					$converterManager->registerConverter($container->create(HttpConverter::class));
 				})
 				->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
 					$templateManager->registerMacroList(TemplateMacro::macroList($container));
