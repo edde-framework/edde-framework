@@ -90,4 +90,17 @@
 				'unicode-1-1',
 			], HttpUtils::charset('iso-8859-5, unicode-1-1;q=0.8', 'utf-8'));
 		}
+
+		public function testContentType1() {
+			self::assertEquals((object)[
+				'type' => 'applicaiton/json',
+			], HttpUtils::contentType('applicaiton/json'));
+		}
+
+		public function testContentType2() {
+			self::assertEquals((object)[
+				'type' => 'applicaiton/json',
+				'charset' => 'utf-8',
+			], HttpUtils::contentType('applicaiton/json; charset=utf-8'));
+		}
 	}
