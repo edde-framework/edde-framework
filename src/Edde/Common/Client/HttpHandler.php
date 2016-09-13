@@ -76,10 +76,7 @@
 			if ($this->curl === null) {
 				throw new ClientException(sprintf('Cannot execute handler for the url [%s] more than once.', (string)$this->httpRequest->getRequestUrl()));
 			}
-			$options = [
-				CURLOPT_HTTPHEADER => $this->httpRequest->getHeaderList()
-					->headers(),
-			];
+			$options = [];
 			if ($body = $this->httpRequest->getBody()) {
 				$options[CURLOPT_POSTFIELDS] = $body->convert();
 				if (($target = $body->getTarget()) !== '') {
@@ -100,6 +97,8 @@
 				}
 				return $length;
 			};
+			$options[CURLOPT_HTTPHEADER] = $this->httpRequest->getHeaderList()
+				->headers();
 			curl_setopt_array($this->curl, $options);
 			if (($content = curl_exec($this->curl)) === false) {
 				$error = curl_error($this->curl);
