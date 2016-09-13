@@ -10,6 +10,23 @@
 	 */
 	interface IHttpHandler {
 		/**
+		 * @param string $authorization
+		 *
+		 * @return IHttpHandler
+		 */
+		public function authorization(string $authorization): IHttpHandler;
+
+		/**
+		 * this should modify an original http request class (if used)
+		 *
+		 * @param string $name
+		 * @param string $value
+		 *
+		 * @return IHttpHandler
+		 */
+		public function header(string $name, string $value): IHttpHandler;
+
+		/**
 		 * execute a client request
 		 *
 		 * @return IHttpResponse
