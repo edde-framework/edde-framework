@@ -62,6 +62,11 @@
 			return $this;
 		}
 
+		public function content($content, string $mime, string $target): IHttpHandler {
+			$this->httpRequest->setBody($this->container->inject(new Body($content, $mime, $target)));
+			return $this;
+		}
+
 		public function body(IBody $body): IHttpHandler {
 			$this->httpRequest->setBody($this->container->inject($body));
 			return $this;

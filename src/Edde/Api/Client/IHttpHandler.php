@@ -33,6 +33,17 @@
 		public function header(string $name, string $value): IHttpHandler;
 
 		/**
+		 * method build round body method (internally should create IBody class)
+		 *
+		 * @param mixed $content
+		 * @param string $mime
+		 * @param string $target
+		 *
+		 * @return IHttpHandler
+		 */
+		public function content($content, string $mime, string $target): IHttpHandler;
+
+		/**
 		 * @param IBody $body
 		 *
 		 * @return IHttpHandler
