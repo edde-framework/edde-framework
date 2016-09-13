@@ -9,7 +9,6 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Http\IHttpRequest;
-	use Edde\Common\Http\Body;
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpRequest;
@@ -62,7 +61,6 @@
 
 		protected function createRequest($url) {
 			$httpRequest = new HttpRequest(new PostList(), new HeaderList(), new CookieList());
-			$httpRequest->setBody($this->container->inject(new Body()));
 			$httpRequest->setRequestUrl(RequestUrl::create($url));
 			return $httpRequest;
 		}
