@@ -5,6 +5,7 @@
 
 	use Edde\Api\Client\ClientException;
 	use Edde\Api\Client\IHttpHandler;
+	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
@@ -25,6 +26,10 @@
 		 * @var resource
 		 */
 		protected $curl;
+		/**
+		 * @var IContainer
+		 */
+		protected $container;
 
 		/**
 		 * @param IHttpRequest $httpRequest
@@ -33,6 +38,10 @@
 		public function __construct(IHttpRequest $httpRequest, $curl) {
 			$this->httpRequest = $httpRequest;
 			$this->curl = $curl;
+		}
+
+		public function lazyContainer(IContainer $container) {
+			$this->container = $container;
 		}
 
 		public function execute(): IHttpResponse {
@@ -60,7 +69,7 @@
 			$headerList->set('Content-Type', $contentType = $headerList->get('Content-Type', curl_getinfo($this->curl, CURLINFO_CONTENT_TYPE)));
 			curl_close($this->curl);
 			$this->curl = null;
-			$httpResponse = new HttpResponse(new Body($content, $contentType));
+			$this->container->inject($httpResponse = new HttpResponse($this->container->inject(new Body($content, $contentType))));
 			$httpResponse->setHeaderList($headerList);
 			return $httpResponse;
 		}

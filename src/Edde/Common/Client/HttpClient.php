@@ -70,7 +70,7 @@
 
 		protected function createRequest($url) {
 			$httpRequest = new HttpRequest(new PostList(), new HeaderList(), new CookieList());
-			$httpRequest->setBody(new Body());
+			$httpRequest->setBody($this->container->inject(new Body()));
 			$httpRequest->setRequestUrl(RequestUrl::create($url));
 			return $httpRequest;
 		}
@@ -81,7 +81,7 @@
 			if ($post instanceof IPostList) {
 				$httpRequest->setPostList($post);
 			} else {
-				$httpRequest->setBody(new Body($post, $mime));
+				$httpRequest->setBody($this->container->inject(new Body($post, $mime)));
 			}
 			return $this->request($httpRequest);
 		}
@@ -89,14 +89,14 @@
 		public function put($url, $put, string $mime): IHttpHandler {
 			return $this->request($this->createRequest($url)
 				->setMethod('PUT')
-				->setBody(new Body($put, $mime)));
+				->setBody($this->container->inject(new Body($put, $mime))));
 		}
 
 		public function delete($url, $delete = null, string $mime = null): IHttpHandler {
 			$request = $this->createRequest($url)
 				->setMethod('DELETE');
 			if ($delete !== null) {
-				$request->setBody(new Body($delete, $mime));
+				$request->setBody($this->container->inject(new Body($delete, $mime)));
 			}
 			return $this->request($request);
 		}

@@ -27,11 +27,11 @@
 		 */
 		protected $body;
 
-		public function __construct(IBody $body = null) {
+		public function __construct(IBody $body) {
 			$this->code = 200;
 			$this->headerList = new HeaderList();
 			$this->cookieList = new CookieList();
-			$this->body = $body ?: new Body();
+			$this->body = $body;
 		}
 
 		public function send(): IHttpResponse {
