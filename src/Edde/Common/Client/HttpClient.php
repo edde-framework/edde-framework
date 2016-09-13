@@ -1,21 +1,27 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Http;
+	namespace Edde\Common\Client;
 
+	use Edde\Api\Client\ClientException;
+	use Edde\Api\Client\IHttpClient;
+	use Edde\Api\Client\IHttpHandler;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Converter\IConverterManager;
-	use Edde\Api\Http\ClientException;
-	use Edde\Api\Http\IClient;
 	use Edde\Api\Http\IHttpRequest;
-	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Http\IPostList;
+	use Edde\Common\Http\Body;
+	use Edde\Common\Http\CookieList;
+	use Edde\Common\Http\HeaderList;
+	use Edde\Common\Http\HttpRequest;
+	use Edde\Common\Http\PostList;
+	use Edde\Common\Http\RequestUrl;
 	use Edde\Common\Usable\AbstractUsable;
 
 	/**
 	 * Simple http client implementation.
 	 */
-	class Client extends AbstractUsable implements IClient {
+	class HttpClient extends AbstractUsable implements IHttpClient {
 		/**
 		 * @var IConverterManager
 		 */
@@ -33,12 +39,12 @@
 			$this->container = $container;
 		}
 
-		public function get($url): IHttpResponse {
+		public function get($url): IHttpHandler {
 			return $this->request($this->createRequest($url)
 				->setMethod('GET'));
 		}
 
-		public function request(IHttpRequest $httpRequest): IHttpResponse {
+		public function request(IHttpRequest $httpRequest): IHttpHandler {
 			$this->use();
 			$postList = $httpRequest->getPostList();
 			$headerList = $httpRequest->getHeaderList();
@@ -46,7 +52,6 @@
 			if (($mime = $body->getMime()) !== '') {
 				$headerList->set('Content-Type', $mime);
 			}
-			$responseHeaderList = new HeaderList();
 			curl_setopt_array($curl = curl_init($url = (string)$httpRequest->getRequestUrl()), [
 				CURLOPT_SSL_VERIFYPEER => false,
 				CURLOPT_FOLLOWLOCATION => true,
@@ -60,28 +65,8 @@
 				CURLOPT_CUSTOMREQUEST => ($method = $httpRequest->getMethod()),
 				CURLOPT_POST => strtoupper($method) === 'POST',
 				CURLOPT_POSTFIELDS => ($postList->isEmpty() ? $body->getBody() : $postList->array()),
-				CURLOPT_HEADERFUNCTION => function ($curl, $header) use ($responseHeaderList) {
-					$length = strlen($header);
-					if (($text = trim($header)) !== '' && strpos($header, ':') !== false) {
-						list($header, $content) = explode(':', $header, 2);
-						$responseHeaderList->set($header, trim($content));
-					}
-					return $length;
-				},
 			]);
-			if (($content = curl_exec($curl)) === false) {
-				$error = curl_error($curl);
-				$errorCode = curl_errno($curl);
-				curl_close($curl);
-				$curl = null;
-				throw new ClientException(sprintf('%s: %s', $url, $error), $errorCode);
-			}
-			$headerList->set('Content-Type', $contentType = $headerList->get('Content-Type', curl_getinfo($curl, CURLINFO_CONTENT_TYPE)));
-			curl_close($curl);
-			$curl = null;
-			$httpResponse = new HttpResponse($this->container->inject(new Body($content, $contentType)));
-			$httpResponse->setHeaderList($headerList);
-			return $httpResponse;
+			return $this->container->inject(new HttpHandler($curl, $httpRequest->getRequestUrl()));
 		}
 
 		protected function createRequest($url) {
@@ -91,7 +76,7 @@
 			return $httpRequest;
 		}
 
-		public function post($url, $post, string $mime = null): IHttpResponse {
+		public function post($url, $post, string $mime = null): IHttpHandler {
 			$httpRequest = $this->createRequest($url)
 				->setMethod('POST');
 			if ($post instanceof IPostList) {
@@ -102,13 +87,13 @@
 			return $this->request($httpRequest);
 		}
 
-		public function put($url, $put, string $mime): IHttpResponse {
+		public function put($url, $put, string $mime): IHttpHandler {
 			return $this->request($this->createRequest($url)
 				->setMethod('PUT')
 				->setBody(new Body($put, $mime)));
 		}
 
-		public function delete($url, $delete = null, string $mime = null): IHttpResponse {
+		public function delete($url, $delete = null, string $mime = null): IHttpHandler {
 			$request = $this->createRequest($url)
 				->setMethod('DELETE');
 			if ($delete !== null) {

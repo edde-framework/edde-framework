@@ -10,6 +10,7 @@
 	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Cache\ICacheStorage;
+	use Edde\Api\Client\IHttpClient;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Crate\ICrateDirectory;
@@ -55,6 +56,7 @@
 	use Edde\Common\AssetsDirectory;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
+	use Edde\Common\Client\HttpClient;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crate\CrateDirectory;
 	use Edde\Common\Crate\CrateFactory;
@@ -148,6 +150,7 @@
 						return $httpRequest->getBody();
 					},
 					IHttpResponse::class => HttpResponse::class,
+					IHttpClient::class => HttpClient::class,
 					ISessionManager::class => SessionManager::class,
 					IFingerprint::class => DummyFingerprint::class,
 					ISchemaFactory::class => SchemaFactory::class,
