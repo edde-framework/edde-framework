@@ -75,13 +75,15 @@
 			return $httpRequest;
 		}
 
-		public function post($url, $post, string $mime = null, string $target = null): IHttpHandler {
+		public function post($url, $post = null, string $mime = null, string $target = null): IHttpHandler {
 			$httpRequest = $this->createRequest($url)
 				->setMethod('POST');
-			if ($post instanceof IPostList) {
-				$httpRequest->setPostList($post);
-			} else {
-				$httpRequest->setBody($this->container->inject(new Body($post, $mime, $target)));
+			if ($post) {
+				if ($post instanceof IPostList) {
+					$httpRequest->setPostList($post);
+				} else {
+					$httpRequest->setBody($this->container->inject(new Body($post, $mime, $target)));
+				}
 			}
 			return $this->request($httpRequest);
 		}

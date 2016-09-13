@@ -36,7 +36,7 @@
 		 * @internal param string $type mime type of provided $post ($post [$type] -> data [$mime] conversion will be done)
 		 *
 		 */
-		public function post($url, $post, string $mime = null, string $target = null): IHttpHandler;
+		public function post($url, $post = null, string $mime = null, string $target = null): IHttpHandler;
 
 		/**
 		 * @param string|IUrl $url
