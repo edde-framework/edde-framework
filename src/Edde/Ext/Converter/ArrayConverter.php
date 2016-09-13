@@ -30,10 +30,11 @@
 				case 'http+json':
 				case 'http+application/json':
 					$this->httpResponse->send();
+					echo $json = json_encode($source);
+					return $json;
 				case 'json':
 				case 'application/json':
-					echo json_encode($source);
-					return null;
+					return json_encode($source);
 			}
 			$this->exception($target);
 		}
