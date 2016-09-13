@@ -45,6 +45,17 @@
 			$this->container = $container;
 		}
 
+		public function authorization(string $authorization): IHttpHandler {
+			$this->header('Authorization', $authorization);
+			return $this;
+		}
+
+		public function header(string $name, string $value): IHttpHandler {
+			$this->httpRequest->getHeaderList()
+				->set($name, $value);
+			return $this;
+		}
+
 		public function execute(): IHttpResponse {
 			if ($this->curl === null) {
 				throw new ClientException(sprintf('Cannot execute handler for the url [%s] more than once.', (string)$this->httpRequest->getRequestUrl()));
