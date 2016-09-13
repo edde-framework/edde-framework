@@ -56,6 +56,11 @@
 			return $this;
 		}
 
+		public function keepConnectionAlive(): IHttpHandler {
+			$this->header('Connection', 'keep-alive');
+			return $this;
+		}
+
 		public function execute(): IHttpResponse {
 			if ($this->curl === null) {
 				throw new ClientException(sprintf('Cannot execute handler for the url [%s] more than once.', (string)$this->httpRequest->getRequestUrl()));

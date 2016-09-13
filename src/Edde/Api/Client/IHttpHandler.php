@@ -17,6 +17,10 @@
 		public function authorization(string $authorization): IHttpHandler;
 
 		/**
+		 * @return IHttpHandler
+		 */
+		public function keepConnectionAlive(): IHttpHandler;
+		/**
 		 * this should modify an original http request class (if used)
 		 *
 		 * @param string $name
