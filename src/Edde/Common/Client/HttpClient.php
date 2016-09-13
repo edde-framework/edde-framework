@@ -59,14 +59,13 @@
 				CURLOPT_FORBID_REUSE => true,
 				CURLOPT_RETURNTRANSFER => true,
 				CURLOPT_ENCODING => 'utf-8',
-				CURLOPT_HTTPHEADER => $headerList->headers(),
 				CURLOPT_CONNECTTIMEOUT => 5,
 				CURLOPT_TIMEOUT => 60,
 				CURLOPT_CUSTOMREQUEST => ($method = $httpRequest->getMethod()),
 				CURLOPT_POST => strtoupper($method) === 'POST',
 				CURLOPT_POSTFIELDS => ($postList->isEmpty() ? $body->getBody() : $postList->array()),
 			]);
-			return $this->container->inject(new HttpHandler($curl, $httpRequest->getRequestUrl()));
+			return $this->container->inject(new HttpHandler($httpRequest, $curl));
 		}
 
 		protected function createRequest($url) {
