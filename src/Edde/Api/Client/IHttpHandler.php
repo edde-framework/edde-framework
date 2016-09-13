@@ -3,6 +3,7 @@
 
 	namespace Edde\Api\Client;
 
+	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpResponse;
 
 	/**
@@ -30,6 +31,13 @@
 		 * @return IHttpHandler
 		 */
 		public function header(string $name, string $value): IHttpHandler;
+
+		/**
+		 * @param IBody $body
+		 *
+		 * @return IHttpHandler
+		 */
+		public function body(IBody $body): IHttpHandler;
 
 		/**
 		 * execute a client request

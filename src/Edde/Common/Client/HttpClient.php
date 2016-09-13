@@ -9,7 +9,6 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Http\IHttpRequest;
-	use Edde\Api\Http\IPostList;
 	use Edde\Common\Http\Body;
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
@@ -46,12 +45,6 @@
 
 		public function request(IHttpRequest $httpRequest): IHttpHandler {
 			$this->use();
-			$postList = $httpRequest->getPostList();
-			$headerList = $httpRequest->getHeaderList();
-			$body = $httpRequest->getBody();
-			if (($target = $body->getTarget()) !== '') {
-				$headerList->set('Content-Type', $target);
-			}
 			curl_setopt_array($curl = curl_init($url = (string)$httpRequest->getRequestUrl()), [
 				CURLOPT_SSL_VERIFYPEER => false,
 				CURLOPT_FOLLOWLOCATION => true,
@@ -63,7 +56,6 @@
 				CURLOPT_TIMEOUT => 60,
 				CURLOPT_CUSTOMREQUEST => $method = $httpRequest->getMethod(),
 				CURLOPT_POST => strtoupper($method) === 'POST',
-				CURLOPT_POSTFIELDS => $postList->isEmpty() ? $body->convert() : $postList->array(),
 			]);
 			return $this->container->inject(new HttpHandler($httpRequest, $curl));
 		}
@@ -75,32 +67,19 @@
 			return $httpRequest;
 		}
 
-		public function post($url, $post = null, string $mime = null, string $target = null): IHttpHandler {
-			$httpRequest = $this->createRequest($url)
-				->setMethod('POST');
-			if ($post) {
-				if ($post instanceof IPostList) {
-					$httpRequest->setPostList($post);
-				} else {
-					$httpRequest->setBody($this->container->inject(new Body($post, $mime, $target)));
-				}
-			}
-			return $this->request($httpRequest);
-		}
-
-		public function put($url, $put, string $mime, string $target): IHttpHandler {
+		public function post($url): IHttpHandler {
 			return $this->request($this->createRequest($url)
-				->setMethod('PUT')
-				->setBody($this->container->inject(new Body($put, $mime, $target))));
+				->setMethod('POST'));
 		}
 
-		public function delete($url, $delete = null, string $mime = null, string $target = null): IHttpHandler {
-			$httpRequest = $this->createRequest($url)
-				->setMethod('DELETE');
-			if ($delete !== null) {
-				$httpRequest->setBody($this->container->inject(new Body($delete, $mime, $target)));
-			}
-			return $this->request($httpRequest);
+		public function put($url): IHttpHandler {
+			return $this->request($this->createRequest($url)
+				->setMethod('PUT'));
+		}
+
+		public function delete($url): IHttpHandler {
+			return $this->request($this->createRequest($url)
+				->setMethod('DELETE'));
 		}
 
 		protected function prepare() {

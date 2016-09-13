@@ -89,7 +89,14 @@
 		public function isAjax();
 
 		/**
-		 * @return IBody
+		 * @param IBody|null $body
+		 *
+		 * @return IHttpRequest
 		 */
-		public function getBody(): IBody;
+		public function setBody(IBody $body = null): IHttpRequest;
+
+		/**
+		 * @return IBody|null
+		 */
+		public function getBody();
 	}

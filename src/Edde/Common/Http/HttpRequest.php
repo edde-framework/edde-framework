@@ -150,11 +150,11 @@
 			return $this->headerList->get('X-Requested-With') === 'XMLHttpRequest';
 		}
 
-		public function getBody(): IBody {
+		public function getBody() {
 			return $this->body;
 		}
 
-		public function setBody(IBody $body) {
+		public function setBody(IBody $body = null): IHttpRequest {
 			$this->body = $body;
 			return $this;
 		}
