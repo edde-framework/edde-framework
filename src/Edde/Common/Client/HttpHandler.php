@@ -13,6 +13,7 @@
 	use Edde\Common\Http\Body;
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpResponse;
+	use Edde\Common\Http\HttpUtils;
 
 	/**
 	 * Http client handler; this should not be used in common; only as a result from HttpClient calls
@@ -66,10 +67,13 @@
 				$this->curl = null;
 				throw new ClientException(sprintf('%s: %s', (string)$this->httpRequest->getRequestUrl(), $error), $errorCode);
 			}
-			$headerList->set('Content-Type', $contentType = $headerList->get('Content-Type', curl_getinfo($this->curl, CURLINFO_CONTENT_TYPE)));
+			if (is_string($contentType = $headerList->get('Content-Type', curl_getinfo($this->curl, CURLINFO_CONTENT_TYPE)))) {
+				$type = HttpUtils::contentType($contentType);
+			}
+			$headerList->set('Content-Type', $contentType);
 			curl_close($this->curl);
 			$this->curl = null;
-			$this->container->inject($httpResponse = new HttpResponse($this->container->inject(new Body($content, $contentType))));
+			$this->container->inject($httpResponse = new HttpResponse($this->container->inject(new Body($content, isset($type) ? $type->type : $contentType))));
 			$httpResponse->setHeaderList($headerList);
 			return $httpResponse;
 		}
