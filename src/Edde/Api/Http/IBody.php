@@ -17,12 +17,18 @@
 		public function getMime(): string;
 
 		/**
+		 * @return string
+		 */
+		public function getTarget(): string;
+
+		/**
 		 * try to convert a request body to specified target using system-wide converter manager
 		 *
-		 * @param string $target
 		 * @param string $mime override the original mime type for convesion
+		 *
+		 * @param string $target
 		 *
 		 * @return mixed
 		 */
-		public function convert(string $target, string $mime = null);
+		public function convert(string $mime = null, string $target = null);
 	}

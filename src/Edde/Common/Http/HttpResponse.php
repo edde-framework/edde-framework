@@ -87,6 +87,6 @@
 		}
 
 		public function body(string $target, $mime = null) {
-			return $this->body->convert($target, $mime);
+			return $this->body->convert($mime, $target);
 		}
 	}
