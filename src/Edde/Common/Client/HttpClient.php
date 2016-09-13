@@ -49,8 +49,8 @@
 			$postList = $httpRequest->getPostList();
 			$headerList = $httpRequest->getHeaderList();
 			$body = $httpRequest->getBody();
-			if (($mime = $body->getMime()) !== '') {
-				$headerList->set('Content-Type', $mime);
+			if (($target = $body->getTarget()) !== '') {
+				$headerList->set('Content-Type', $target);
 			}
 			curl_setopt_array($curl = curl_init($url = (string)$httpRequest->getRequestUrl()), [
 				CURLOPT_SSL_VERIFYPEER => false,
@@ -61,9 +61,9 @@
 				CURLOPT_ENCODING => 'utf-8',
 				CURLOPT_CONNECTTIMEOUT => 5,
 				CURLOPT_TIMEOUT => 60,
-				CURLOPT_CUSTOMREQUEST => ($method = $httpRequest->getMethod()),
+				CURLOPT_CUSTOMREQUEST => $method = $httpRequest->getMethod(),
 				CURLOPT_POST => strtoupper($method) === 'POST',
-				CURLOPT_POSTFIELDS => ($postList->isEmpty() ? $body->convert() : $postList->array()),
+				CURLOPT_POSTFIELDS => $postList->isEmpty() ? $body->convert() : $postList->array(),
 			]);
 			return $this->container->inject(new HttpHandler($httpRequest, $curl));
 		}
