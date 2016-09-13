@@ -15,10 +15,10 @@
 		/**
 		 * @var IContainer
 		 */
-		protected $contianer;
+		protected $container;
 
 		public function lazyContainer(IContainer $container) {
-			$this->contianer = $container;
+			$this->container = $container;
 		}
 
 		public function create() {
@@ -26,7 +26,7 @@
 				->setMethod($_SERVER['REQUEST_METHOD'] ?? '')
 				->setRemoteAddress($_SERVER['REMOTE_ADDR'] ?? '')
 				->setRemoteHost($_SERVER['REMOTE_HOST'] ?? '')
-				->setBody($this->contianer->inject(new Body(function () {
+				->setBody($this->container->inject(new Body(function () {
 					return file_get_contents('php://input');
 				}, $headerList->getContentType())));
 		}
