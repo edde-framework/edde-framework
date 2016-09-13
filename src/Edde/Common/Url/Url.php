@@ -42,6 +42,9 @@
 		protected $fragment = '';
 
 		static public function create($url = null) {
+			if ($url instanceof IUrl) {
+				return $url;
+			}
 			$self = new static();
 			if ($url !== null) {
 				$self->build($url);

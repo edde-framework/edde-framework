@@ -22,7 +22,7 @@
 		 */
 		protected $converterManager;
 
-		public function __construct($body, string $mime = '') {
+		public function __construct($body = null, string $mime = '') {
 			$this->body = $body;
 			$this->mime = $mime;
 		}
@@ -31,14 +31,18 @@
 			$this->converterManager = $converterManager;
 		}
 
-		public function convert(string $target) {
-			return $this->converterManager->convert($this->getBody(), $this->mime, $target);
+		public function convert(string $target, string $mime = null) {
+			return $this->converterManager->convert($this->getBody(), $mime ?: $this->mime, $target);
 		}
 
-		public function getBody(): string {
+		public function getBody() {
 			if (is_callable($this->body)) {
 				$this->body = call_user_func($this->body);
 			}
 			return $this->body;
+		}
+
+		public function getMime(): string {
+			return $this->mime;
 		}
 	}

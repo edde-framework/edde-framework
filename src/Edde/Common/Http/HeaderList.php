@@ -41,4 +41,12 @@
 		public function getAcceptCharsetList(string $default): array {
 			return HttpUtils::charset($this->get('Accept-Charset'), $default);
 		}
+
+		public function headers(): array {
+			$headers = [];
+			foreach ($this->list as $header => $value) {
+				$headers[$header] = $header . ': ' . $value;
+			}
+			return $headers;
+		}
 	}

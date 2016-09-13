@@ -9,14 +9,20 @@
 		 *
 		 * @return string
 		 */
-		public function getBody(): string;
+		public function getBody();
+
+		/**
+		 * @return string
+		 */
+		public function getMime(): string;
 
 		/**
 		 * try to convert a request body to specified target using system-wide converter manager
 		 *
 		 * @param string $target
+		 * @param string $mime override the original mime type for convesion
 		 *
 		 * @return mixed
 		 */
-		public function convert(string $target);
+		public function convert(string $target, string $mime = null);
 	}
