@@ -66,6 +66,23 @@
 		public function redirect(string $redirect): IHttpResponse;
 
 		/**
+		 * return a response body
+		 *
+		 * @return IBody
+		 */
+		public function getBody(): IBody;
+
+		/**
+		 * retrieve decoded body or exception should be thrown
+		 *
+		 * @param string $target
+		 * @param string|null $mime override incoming mime; it is not recommanded to use this option in common
+		 *
+		 * @return mixed
+		 */
+		public function body(string $target, $mime = null);
+
+		/**
 		 * execute response "rendering"; basically it "echoes" output
 		 *
 		 * @return IHttpResponse

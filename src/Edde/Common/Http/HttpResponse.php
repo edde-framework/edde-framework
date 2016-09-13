@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Http;
 
+	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\ICookieList;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttpResponse;
@@ -21,11 +22,16 @@
 		 * @var ICookieList
 		 */
 		protected $cookieList;
+		/**
+		 * @var IBody
+		 */
+		protected $body;
 
-		public function __construct() {
+		public function __construct(IBody $body = null) {
 			$this->code = 200;
 			$this->headerList = new HeaderList();
 			$this->cookieList = new CookieList();
+			$this->body = $body ?: new Body();
 		}
 
 		public function send(): IHttpResponse {
@@ -74,5 +80,13 @@
 		public function contentType(string $contentType): IHttpResponse {
 			$this->headerList->set('Content-Type', $contentType);
 			return $this;
+		}
+
+		public function getBody(): IBody {
+			return $this->body;
+		}
+
+		public function body(string $target, $mime = null) {
+			return $this->body->convert($target, $mime);
 		}
 	}

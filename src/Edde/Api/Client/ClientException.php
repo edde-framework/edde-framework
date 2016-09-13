@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Ext\Http;
+	namespace Edde\Api\Client;
 
 	use Edde\Api\EddeException;
 

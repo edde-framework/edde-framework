@@ -76,4 +76,11 @@
 		 * @return array
 		 */
 		public function getAcceptCharsetList(string $default): array;
+
+		/**
+		 * return array of "compiled" headers
+		 *
+		 * @return array
+		 */
+		public function headers(): array;
 	}
