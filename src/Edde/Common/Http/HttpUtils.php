@@ -126,4 +126,17 @@
 			}
 			return $charsetList;
 		}
+
+		static public function contentType(string $contentType) {
+			$type = explode(';', $contentType);
+			$stdClass = new \stdClass();
+			$stdClass->type = trim($type[0]);
+			if (isset($type[1])) {
+				foreach (explode(',', trim($type[1])) as $part) {
+					list($key, $value) = explode('=', $part);
+					$stdClass->$key = $value;
+				}
+			}
+			return $stdClass;
+		}
 	}
