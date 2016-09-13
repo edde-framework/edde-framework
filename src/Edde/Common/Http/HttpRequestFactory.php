@@ -17,7 +17,7 @@
 		 */
 		protected $contianer;
 
-		public function lazContainer(IContainer $container) {
+		public function lazyContainer(IContainer $container) {
 			$this->contianer = $container;
 		}
 
