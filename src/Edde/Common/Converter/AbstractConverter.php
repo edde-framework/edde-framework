@@ -25,7 +25,10 @@
 			return $this->mimeList;
 		}
 
-		protected function unsupported($source, string $target) {
+		protected function unsupported($source, string $target, bool $check = null) {
+			if ($check) {
+				return;
+			}
 			throw new ConverterException(sprintf('Cannot convert unsupported type [%s] to [%s] in [%s].', is_object($source) ? get_class($source) : gettype($source), $target, static::class));
 		}
 

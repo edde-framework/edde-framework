@@ -121,8 +121,7 @@
 		 */
 		public function redirect($redirect) {
 			$this->use();
-			$link = $this->linkFactory->generate($redirect);
-			throw new \Exception('not implemented yet: need to be reimplemented');
+			$this->responseManager->response(new Response('redirect', $this->linkFactory->generate($redirect)));
 			return $this;
 		}
 
