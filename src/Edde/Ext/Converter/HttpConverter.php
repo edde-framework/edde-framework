@@ -17,10 +17,9 @@
 
 		public function __construct() {
 			parent::__construct([
-				'http+text/plain',
-				'http+string',
-				'http+array',
-				'http+callback',
+				'text/plain',
+				'string',
+				'callback',
 			]);
 		}
 
