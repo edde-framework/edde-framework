@@ -7,9 +7,9 @@
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Schema\ISchemaManager;
+	use Edde\Api\Storage\EmptyResultException;
 	use Edde\Api\Storage\ICollection;
 	use Edde\Api\Storage\IStorage;
-	use Edde\Api\Storage\StorageException;
 	use Edde\Common\Query\Select\SelectQuery;
 	use Edde\Common\Usable\AbstractUsable;
 
@@ -100,6 +100,6 @@
 			foreach ($this->collection($crate, $query, $schema) as $item) {
 				return $item;
 			}
-			throw new StorageException(sprintf('Cannot retrieve any crate [%s] by the given query.', $crate));
+			throw new EmptyResultException(sprintf('Cannot retrieve any crate [%s] by the given query.', $crate));
 		}
 	}
