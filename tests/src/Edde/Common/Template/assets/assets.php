@@ -54,6 +54,16 @@
 			$control->addClass('special-button-class');
 		}
 
+		public function loop() {
+			for ($i = 0; $i < 3; $i++) {
+				yield (function () {
+					for ($i = 0; $i < 5; $i++) {
+						yield 'item-' . $i;
+					}
+				})();
+			}
+		}
+
 		public function render() {
 			$this->dirty();
 			return parent::render();
