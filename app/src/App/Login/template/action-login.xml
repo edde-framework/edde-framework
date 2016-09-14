@@ -6,9 +6,9 @@
 		<div class="col col-4">
 			<text m:schema="login.login"/>
 			<password m:schema="login.password"/>
-			<button value="login" bind="login" action="on-login()"/>
+			<button value="login" bind="login" action="@on-login"/>
 		</div>
 	</div>
 
-	<button value="login" action="on-show()"/>
+	<button value="login" action="@on-show"/>
 </control>

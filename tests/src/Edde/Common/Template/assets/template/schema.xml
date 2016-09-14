@@ -6,5 +6,5 @@
 			<div id="bar"/>
 		</div>
 	</div>
-	<button action="foo()" bind="blabla"/>
+	<button action="@foo" bind="blabla"/>
 </control>
