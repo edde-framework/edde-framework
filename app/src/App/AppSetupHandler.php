@@ -18,6 +18,7 @@
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Html\Macro\ControlMacro;
 	use Edde\Common\Link\ControlLinkGenerator;
+	use Edde\Common\Link\HttpLinkGenerator;
 	use Edde\Ext\Router\RestRouter;
 	use Edde\Ext\Runtime\DefaultSetupHandler;
 	use Edde\Ext\Upgrade\InitialStorageUpgrade;
@@ -50,6 +51,7 @@
 				})
 				->onSetup(ILinkFactory::class, function (IContainer $container, ILinkFactory $linkFactory) {
 					$linkFactory->registerLinkGenerator($container->create(ControlLinkGenerator::class));
+					$linkFactory->registerLinkGenerator($container->create(HttpLinkGenerator::class));
 				})
 				->onSetup(IAuthenticatorManager::class, function (IContainer $container, IAuthenticatorManager $authenticatorManager) {
 					$authenticatorManager->registerAuthenticator($container->create(SimpleAuthenticator::class));

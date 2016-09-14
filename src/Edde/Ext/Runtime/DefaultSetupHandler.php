@@ -94,6 +94,7 @@
 	use Edde\Ext\Converter\HttpConverter;
 	use Edde\Ext\Converter\JsonConverter;
 	use Edde\Ext\Converter\PhpConverter;
+	use Edde\Ext\Converter\RedirectConverter;
 	use Edde\Ext\Converter\XmlConverter;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Router\RestRouter;
@@ -211,6 +212,7 @@
 
 					$converterManager->registerConverter($container->create(HtmlConverter::class));
 					$converterManager->registerConverter($container->create(HttpConverter::class));
+					$converterManager->registerConverter($container->create(RedirectConverter::class));
 				})
 				->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
 					$templateManager->registerMacroList(TemplateMacro::macroList($container));

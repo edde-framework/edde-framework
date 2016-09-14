@@ -36,6 +36,16 @@
 		public function getHeaderList(): IHeaderList;
 
 		/**
+		 * shortcut to header list
+		 *
+		 * @param string $header
+		 * @param string $value
+		 *
+		 * @return IHttpResponse
+		 */
+		public function header(string $header, string $value): IHttpResponse;
+
+		/**
 		 * @param ICookieList $cookieList
 		 *
 		 * @return IHttpResponse

@@ -72,6 +72,11 @@
 			return $this;
 		}
 
+		public function header(string $header, string $value): IHttpResponse {
+			$this->headerList->set($header, $value);
+			return $this;
+		}
+
 		public function redirect(string $redirect): IHttpResponse {
 			$this->headerList->set('location', $redirect);
 			return $this;
