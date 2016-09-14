@@ -5,6 +5,7 @@
 
 	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Crate\ICrateFactory;
+	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
@@ -37,6 +38,10 @@
 		 * @var IPostList
 		 */
 		protected $postList;
+		/**
+		 * @var IBody
+		 */
+		protected $body;
 		/**
 		 * @var ICrateFactory
 		 */
@@ -71,6 +76,10 @@
 
 		public function lazyPostList(IPostList $postList) {
 			$this->postList = $postList;
+		}
+
+		public function lazyBody(IBody $body) {
+			$this->body = $body;
 		}
 
 		public function lazyCrateFactory(ICrateFactory $crateFactory) {
@@ -112,8 +121,8 @@
 			$crateList = [];
 			if ($this->httpRequest->isMethod('POST')) {
 				$method = 'handle' . $action;
-				if ($this->postList->isEmpty() === false) {
-					$crateList = $this->crateFactory->build($this->postList->array());
+				if (($source = ($this->postList->isEmpty() ? $this->body->convert('array') : $this->postList->array())) !== null) {
+					$crateList = $this->crateFactory->build($source);
 				}
 			}
 			$parameterList = $this->requestUrl->getQuery();

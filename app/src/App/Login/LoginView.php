@@ -35,7 +35,7 @@
 		}
 
 		public function handleOnLogin(LoginCrate $loginCrate) {
-			$this->template(null, __DIR__ . '/template/action-login.xml');
+			$this->snippet(__DIR__ . '/../template/layout.xml', 'flash');
 			$this->flash->setText('foo');
 			$this->flash->dirty();
 //			$this->authenticatorManager->flow(SimpleAuthenticator::class, $loginCrate->getLogin(), $loginCrate->getPassword());
