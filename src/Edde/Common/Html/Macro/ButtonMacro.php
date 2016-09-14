@@ -21,6 +21,6 @@
 				throw new MacroException(sprintf('Action [%s] attribute needs to have () at the end.', $action));
 			}
 			$destination = $compiler->getDestination();
-			$destination->write(sprintf("\t\t\t\$control->setAction([\$this->root, %s]);\n", $compiler->delimite(str_replace('()', '', $action))));
+			$destination->write(sprintf("\t\t\t\t\$control->setAction([\$this->root, %s]);\n", $compiler->delimite(str_replace('()', '', $action))));
 		}
 	}

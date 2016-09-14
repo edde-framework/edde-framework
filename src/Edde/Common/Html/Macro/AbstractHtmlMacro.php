@@ -32,7 +32,7 @@
 			$destination = $compiler->getDestination();
 			foreach ($macro->getNodeList() as $node) {
 				$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
-				$destination->write(sprintf("\t\t\t\t\$current = \$this->controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
+				$destination->write(sprintf("\t\t\t\t\$last = \$this->controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
 			}
 		}
 

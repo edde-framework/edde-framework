@@ -2,10 +2,15 @@
 	<div class="pass-me" m:pass="special-div()">
 		<span class="foo bar">some span here</span>
 	</div>
+	<div class="pass-me" m:pass="special-property">
+		<span class="foo bar">some span here</span>
+	</div>
 	<div class="child-pass" m:pass-child="special-span()">
 		<span class="first"/>
 		<span class="second"/>
-		<span class="third"/>
+		<span class="third">
+			<div class="with internal div"/>
+		</span>
 	</div>
 	<div class="child-pass" m:pass-child="special-button()">
 		<button action="foo()" class="first"/>
