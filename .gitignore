@@ -1,6 +1,4 @@
 /vendor/
-/builds/
-/cache/
 /doc/
 /.idea/workspace.xml
 *.log
