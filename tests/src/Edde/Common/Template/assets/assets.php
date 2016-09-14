@@ -73,6 +73,10 @@
 			$this->item = $item;
 		}
 
+		public function getAction() {
+			return 'some-action-' . $this->item;
+		}
+
 		public function getValue() {
 			return 'item-value ' . $this->item;
 		}

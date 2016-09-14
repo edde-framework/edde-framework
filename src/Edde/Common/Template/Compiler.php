@@ -121,6 +121,9 @@
 					return $item;
 				}
 			}
+			if ($value[0] === '@') {
+				return '[$this->root, ' . $this->delimite(substr($value, 1)) . ']';
+			}
 			if (strpos($value, 'edde://', 0) !== false) {
 				return var_export($this->asset(str_replace('edde://', '', $value)), true);
 			}

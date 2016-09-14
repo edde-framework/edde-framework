@@ -510,6 +510,40 @@
 ', $this->control->render());
 		}
 
+		public function testLoop06() {
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/loop-06.xml', $this->control));
+			$template->template();
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div>
+			<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=some-action-whee"></div>
+			<div class="first"></div>
+			<div class="second"></div>
+			<div>another-item-value whee</div>
+		</div>
+		<div>
+			<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=some-action-foo"></div>
+			<div class="first"></div>
+			<div class="second"></div>
+			<div>another-item-value foo</div>
+		</div>
+		<div>
+			<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=some-action-poo"></div>
+			<div class="first"></div>
+			<div class="second"></div>
+			<div>another-item-value poo</div>
+		</div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
 		public function testHeader() {
 			/** @var $template IHtmlTemplate */
 			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/header.xml', $this->control));
