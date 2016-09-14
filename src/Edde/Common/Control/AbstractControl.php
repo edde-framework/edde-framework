@@ -127,7 +127,7 @@
 				$callback = new Callback($callback);
 				$argumentCount = count($argumentList);
 				foreach ($callback->getParameterList() as $key => $parameter) {
-					if (--$argumentCount > 0) {
+					if (--$argumentCount >= 0) {
 						continue;
 					}
 					if (isset($parameterList[$parameter->getName()]) === false) {
