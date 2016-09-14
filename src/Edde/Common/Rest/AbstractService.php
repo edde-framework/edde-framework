@@ -79,18 +79,18 @@
 		protected function error(int $code, string $message) {
 			$headerList = $this->httpResponse->getHeaderList();
 			$headerList->set('Date', gmdate('D, d M Y H:i:s T'));
-			$this->response('text/plain', $message, $code);
+			$this->response($message, 'text/plain', $code);
 		}
 
-		protected function response(string $target, $response, int $code = null, string $contentType = null) {
+		protected function response($response, string $mime, int $code = null, string $target = null) {
 			if ($code) {
 				$this->httpResponse->setCode($code);
 			}
-			if ($contentType) {
-				$this->httpResponse->contentType($contentType);
-				$this->responseManager->setMime('http+' . $contentType);
+			if ($target) {
+				$this->httpResponse->contentType($target);
+				$this->responseManager->setMime('http+' . $target);
 			}
-			$this->responseManager->response(new Response($target, $response));
+			$this->responseManager->response(new Response($mime, $response));
 			return $this;
 		}
 	}

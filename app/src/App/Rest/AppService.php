@@ -15,6 +15,6 @@
 		}
 
 		public function restGet() {
-			$this->response('text/plain', static::class . ' rest api!');
+			$this->response(static::class . ' rest api!', 'text/plain');
 		}
 	}
