@@ -249,7 +249,7 @@
 		 *
 		 * @return array|null
 		 */
-		static public function match(string $string, string $pattern, bool $named = false, bool $trim = false): array {
+		static public function match(string $string, string $pattern, bool $named = false, bool $trim = false) {
 			$match = null;
 			$match = self::pcre('preg_match', [
 				$pattern,
@@ -259,7 +259,8 @@
 			if ($match === null) {
 				return null;
 			}
-			if ($named) {
+			if ($named && is_array($match)) {
+				/** @var $match array */
 				foreach ($match as $k => $v) {
 					if (is_int($k) || ((is_array($trim) || $trim) && empty($v))) {
 						unset($match[$k]);
