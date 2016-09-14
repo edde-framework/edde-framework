@@ -57,17 +57,14 @@
 			if (($reflection = $this->cache->load($cacheId = ('reflection/' . get_class($instance)))) === null) {
 				$reflectionClass = new \ReflectionClass($instance);
 				$methodList = [];
+				$injectList = [];
 				foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
 					$name = $reflectionMethod->getName();
-					if ($reflectionMethod->getNumberOfParameters() > 0 && strpos($name, 'inject') !== false && strlen($name) > 6) {
-						$methodList[$name] = $name;
-					}
-				}
-				$injectList = [];
-				if (in_array(ILazyInject::class, $reflectionClass->getInterfaceNames(), true)) {
-					foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
-						$name = $reflectionMethod->getName();
-						if ($reflectionMethod->getNumberOfParameters() > 0 && strpos($name, 'lazy') !== false && strlen($name) > 4) {
+					if ($reflectionMethod->getNumberOfParameters() > 0) {
+						if (strpos($name, 'inject') !== false && strlen($name) > 6) {
+							$methodList[$name] = $name;
+						}
+						if (strpos($name, 'lazy') !== false && strlen($name) > 4) {
 							$parameterList = [];
 							foreach ($reflectionMethod->getParameters() as $parameter) {
 								$parameterList[$parameter->getName()] = $parameter->getClass()
@@ -76,6 +73,9 @@
 							$injectList[$name] = $parameterList;
 						}
 					}
+				}
+				if (in_array(ILazyInject::class, $reflectionClass->getInterfaceNames(), true) === false) {
+					$injectList = [];
 				}
 				$this->cache->save($cacheId, $reflection = [
 					'method-list' => $methodList,
