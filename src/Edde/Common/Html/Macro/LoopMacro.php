@@ -21,31 +21,32 @@
 
 		public function variable(string $string, ICompiler $compiler) {
 			switch ($string) {
-				case ':$':
+				case '$:':
 					list($key, $value) = $this->loopStack->top();
 					return '$this->stash[' . $compiler->delimite($value) . ']';
-				case ':#':
+				case '$#':
 					list($key, $value) = $this->loopStack->top();
 					return '$this->stash[' . $compiler->delimite($key) . ']';
 			}
-			if (strpos($string, ':$', 0) === 0) {
+			if (strpos($string, '$:', 0) === 0) {
 				list($key, $value) = $this->loopStack->top();
-				return '$this->stash[' . $compiler->delimite($value) . ']' . $compiler->delimite(str_replace(':$', '->', $string));
+				return '$this->stash[' . $compiler->delimite($value) . ']' . $compiler->delimite(str_replace('$:', '->', $string));
 			}
 			return null;
 		}
 
 		public function macro(INode $macro, INode $element, ICompiler $compiler) {
 			$destination = $compiler->getDestination();
-			$this->loopStack->push(list($key, $value) = [
-				'key_' . sha1(random_bytes(64)),
-				'value_' . sha1(random_bytes(64)),
-			]);
 			switch ($macro->getName()) {
 				case 'loop':
 					$source = $macro->getAttribute('src', $macro->getValue());
 					$this->start($macro, $element, $compiler);
-					$destination->write(sprintf("\t\t\t\tforeach(%s as \$%s => \$%s) {\n", $compiler->delimite($source), $key, $value));
+					$delimite = $compiler->delimite($source);
+					$this->loopStack->push(list($key, $value) = [
+						'key_' . sha1(random_bytes(64)),
+						'value_' . sha1(random_bytes(64)),
+					]);
+					$destination->write(sprintf("\t\t\t\tforeach(%s as \$%s => \$%s) {\n", $delimite, $key, $value));
 					$destination->write(sprintf("\t\t\t\t\t\$this->stash[%s] = \$%s;\n", $compiler->delimite($key), $key));
 					$destination->write(sprintf("\t\t\t\t\t\$this->stash[%s] = \$%s;\n", $compiler->delimite($value), $value));
 					$this->dependencies($macro, $compiler);

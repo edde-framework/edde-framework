@@ -1,10 +1,10 @@
 <control>
 	<loop src="get-item-list()">
 		<div class="looping">
-			<div class=":$" x:include="./include.xml"/>
+			<div class="$:" x:include="./include.xml"/>
 		</div>
 	</loop>
 	<div class="another-kind-of-loop">
-		<div class="looping2" data-tribute=":#" m:loop="get-item-list()" value=":$"/>
+		<div class="looping2" data-tribute="$#" m:loop="get-item-list()" value="$:"/>
 	</div>
 </control>

@@ -544,6 +544,43 @@
 ', $this->control->render());
 		}
 
+		public function testLoop07() {
+			/** @var $template IHtmlTemplate */
+			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/loop-07.xml', $this->control));
+			$template->template();
+			self::assertEquals('<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="0">
+			<div>item-0</div>
+			<div>item-1</div>
+			<div>item-2</div>
+			<div>item-3</div>
+			<div>item-4</div>
+		</div>
+		<div class="1">
+			<div>item-0</div>
+			<div>item-1</div>
+			<div>item-2</div>
+			<div>item-3</div>
+			<div>item-4</div>
+		</div>
+		<div class="2">
+			<div>item-0</div>
+			<div>item-1</div>
+			<div>item-2</div>
+			<div>item-3</div>
+			<div>item-4</div>
+		</div>
+	</body>
+</html>
+', $this->control->render());
+		}
+
 		public function testHeader() {
 			/** @var $template IHtmlTemplate */
 			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/header.xml', $this->control));
