@@ -123,6 +123,7 @@
 		}
 
 		protected function prepare() {
+			$this->session();
 			foreach ($this->flowList as $name => $authList) {
 				foreach ($authList as $authenticator) {
 					if (isset($this->authenticatorList[$authenticator]) === false) {
