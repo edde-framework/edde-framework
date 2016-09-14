@@ -24,11 +24,11 @@
 		/**
 		 * try to convert a request body to specified target using system-wide converter manager
 		 *
-		 * @param string $mime override the original mime type for convesion
-		 *
 		 * @param string $target
+		 *
+		 * @param string $mime override the original mime type for convesion
 		 *
 		 * @return mixed
 		 */
-		public function convert(string $mime = null, string $target = null);
+		public function convert(string $target = null, string $mime = null);
 	}

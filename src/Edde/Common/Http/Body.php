@@ -36,7 +36,7 @@
 			$this->converterManager = $converterManager;
 		}
 
-		public function convert(string $mime = null, string $target = null) {
+		public function convert(string $target = null, string $mime = null) {
 			return $this->converterManager->convert($this->getBody(), $mime ?: $this->mime, $this->target ?: $target);
 		}
 
