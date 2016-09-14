@@ -125,7 +125,7 @@
 			];
 			if (method_exists($this, $method)) {
 				$callback = new Callback($callback);
-				$argumentCount = count($parameterList);
+				$argumentCount = count($argumentList);
 				foreach ($callback->getParameterList() as $key => $parameter) {
 					if (--$argumentCount > 0) {
 						continue;
