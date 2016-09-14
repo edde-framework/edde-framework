@@ -1,6 +1,7 @@
 <control title="Login" m:block="content">
 	<schema name="login" schema="App\Login\LoginCrate"/>
 
+	<placeholder id="login"/>
 	<div id="login" class="row centered" m:snippet="login" m:pass="login">
 		<div class="col col-4">
 			<text m:schema="login.login"/>

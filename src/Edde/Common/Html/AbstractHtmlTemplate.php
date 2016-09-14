@@ -54,7 +54,7 @@
 		/**
 		 * @var IControl
 		 */
-		protected $current;
+		protected $last;
 		/**
 		 * @var callable[]
 		 */

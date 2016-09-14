@@ -25,7 +25,7 @@
 			$destination = $compiler->getDestination();
 
 			$this->start($macro, $element, $compiler);
-			$destination->write(sprintf("\t\t\t\t\$root->addControl(\$this->current = \$control = \$this->container->create(%s));\n", $compiler->delimite($this->control)));
+			$destination->write(sprintf("\t\t\t\t\$root->addControl(\$this->last = \$control = \$this->container->create(%s));\n", $compiler->delimite($this->control)));
 			$this->writeTextValue($macro, $destination, $compiler);
 			$this->onControl($macro, $element, $compiler);
 			$this->writeAttributeList($this->getAttributeList($macro, $compiler), $destination);
