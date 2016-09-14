@@ -128,7 +128,7 @@
 				return var_export($this->file(substr($value, 2)), true);
 			}
 			if ($value[0] === '/') {
-				return var_export($this->file(substr($value, 1)), true);
+				return var_export($this->file($value), true);
 			}
 			if (strpos($value, '->', 0) !== false) {
 				return '->' . StringUtils::firstLower(StringUtils::camelize(substr($value, 2)));
