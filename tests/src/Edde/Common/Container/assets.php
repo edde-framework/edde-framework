@@ -121,3 +121,9 @@
 			return $this->alphaDependencyClass;
 		}
 	}
+
+	/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
+	class LazyMissmatch extends AbstractObject implements ILazyInject {
+		public function lazyDependency(BetaDependencyClass $betaDependencyClass) {
+		}
+	}

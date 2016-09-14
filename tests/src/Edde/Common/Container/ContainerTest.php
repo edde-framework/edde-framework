@@ -3,10 +3,12 @@
 
 	namespace Edde\Common\Container;
 
+	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Common\ContainerTest\AlphaDependencyClass;
 	use Edde\Common\ContainerTest\BetaDependencyClass;
 	use Edde\Common\ContainerTest\LazyInjectTraitClass;
+	use Edde\Common\ContainerTest\LazyMissmatch;
 	use Edde\Common\ContainerTest\SimpleClass;
 	use Edde\Common\ContainerTest\SimpleDependency;
 	use Edde\Common\ContainerTest\SimpleUnknownDependency;
@@ -32,6 +34,12 @@
 			$lazyClass = $this->container->create(LazyInjectTraitClass::class);
 			self::assertInstanceOf(BetaDependencyClass::class, $lazyClass->foo());
 			self::assertInstanceOf(AlphaDependencyClass::class, $lazyClass->bar());
+		}
+
+		public function testLazyMissmatch() {
+			$this->expectException(ContainerException::class);
+			$this->expectExceptionMessage('Lazy inject missmatch: parameter [$betaDependencyClass] of method [Edde\Common\ContainerTest\LazyMissmatch::lazyDependency()] must have a property [Edde\Common\ContainerTest\LazyMissmatch::$betaDependencyClass] with the same name as the paramete (for example protected $betaDependencyClass).');
+			$this->container->create(LazyMissmatch::class);
 		}
 
 		protected function setUp() {
