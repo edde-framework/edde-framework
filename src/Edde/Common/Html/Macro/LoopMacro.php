@@ -21,16 +21,17 @@
 
 		public function variable(string $string, ICompiler $compiler) {
 			switch ($string) {
-				case ':$':
+				case '$:':
 					list($key, $value) = $this->loopStack->top();
 					return '$this->stash[' . $compiler->delimite($value) . ']';
-				case ':#':
+				case '$#':
 					list($key, $value) = $this->loopStack->top();
 					return '$this->stash[' . $compiler->delimite($key) . ']';
 			}
-			if (strpos($string, ':$', 0) === 0) {
+			if (strpos($string, '$:', 0) === 0) {
 				list($key, $value) = $this->loopStack->top();
-				return '$this->stash[' . $compiler->delimite($value) . ']' . $compiler->delimite(str_replace(':$', '->', $string));
+				return '$this->stash[' . $compiler->delimite($value) . ']' . $compiler->delimite(str_replace('$:', '->', $string));
+				//				return '$this->stash[' . $compiler->delimite($value) . ']->' . $compiler->delimite(substr($string, 2));
 			}
 			return null;
 		}

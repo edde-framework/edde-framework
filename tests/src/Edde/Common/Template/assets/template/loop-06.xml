@@ -1,7 +1,7 @@
 <control>
 	<div m:loop="get-some-item-list()">
-		<button action="@:$get-action()"/>
-		<div class=":#" m:loop="get-item-list()"/>
-		<div value=":$get-another-value()"/>
+		<button action="@$:get-action()"/>
+		<div class="$#" m:loop="get-item-list()"/>
+		<div value="$:get-another-value()"/>
 	</div>
 </control>
