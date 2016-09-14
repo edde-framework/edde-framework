@@ -561,6 +561,8 @@
 			/** @var $template IHtmlTemplate */
 			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/pass.xml', $this->control));
 			$template->template();
+			self::assertNotEmpty($this->control->specialDiv);
+			self::assertInstanceOf(DivControl::class, $this->control->specialDiv);
 			self::assertEquals('<!DOCTYPE html>
 <html>
 	<head>
@@ -571,10 +573,15 @@
 		<div class="pass-me special-class">
 			<span class="foo bar">some span here</span>
 		</div>
+		<div class="pass-me">
+			<span class="foo bar">some span here</span>
+		</div>
 		<div class="child-pass">
 			<span class="first special-span-class"></span>
 			<span class="second special-span-class"></span>
-			<span class="third special-span-class"></span>
+			<span class="third special-span-class">
+				<div class="with internal div"></div>
+			</span>
 		</div>
 		<div class="child-pass">
 			<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button first special-button-class" data-action="https://127.0.0.1/foo?param=foo&control=TestDocument&action=foo"></div>

@@ -71,15 +71,14 @@
 							];
 						}
 					}
-					echo json_encode($json);
-					return null;
+					echo $json = json_encode($json);
+					return $json;
 				case 'http+text/html':
 					$this->httpResponse->send();
 				case 'text/html':
-					echo $source->render();
-					return null;
+					echo $render = $source->render();
+					return $render;
 			}
-			$this->exception($target);
-			return null;
+			return $this->exception($target);
 		}
 	}

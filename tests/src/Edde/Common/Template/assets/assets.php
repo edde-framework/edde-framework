@@ -20,6 +20,7 @@
 		 * @var DivControl
 		 */
 		public $message;
+		public $specialProperty;
 
 		public function switchMe() {
 			return 'bar';

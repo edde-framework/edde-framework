@@ -116,26 +116,25 @@
 		}
 
 		protected function execute(string $method, array $parameterList) {
-			$argumentList = [];
+			$argumentList = array_filter($parameterList, function ($key) {
+				return is_int($key);
+			}, ARRAY_FILTER_USE_KEY);
 			$callback = [
 				$this,
 				$method,
 			];
-			if (method_exists($this, $actionMethod = $method)) {
-				$callback = new Callback([
-					$this,
-					$actionMethod,
-				]);
-				$argumentCount = count($argumentList = []);
+			if (method_exists($this, $method)) {
+				$callback = new Callback($callback);
+				$argumentCount = count($argumentList);
 				foreach ($callback->getParameterList() as $key => $parameter) {
-					if (--$argumentCount >= 0) {
+					if (--$argumentCount > 0) {
 						continue;
 					}
 					if (isset($parameterList[$parameter->getName()]) === false) {
 						if ($parameter->isOptional()) {
 							continue;
 						}
-						throw new ControlException(sprintf('Missing action parameter [%s::%s(, ...$%s, ...)].', static::class, $actionMethod, $parameter->getName()));
+						throw new ControlException(sprintf('Missing action parameter [%s::%s(, ...$%s, ...)].', static::class, $method, $parameter->getName()));
 					}
 					$argumentList[] = $parameterList[$parameter->getName()];
 				}

@@ -29,7 +29,7 @@
 				case 'pass-child':
 					$this->start($macro, $element, $compiler);
 					$this->dependencies($macro, $compiler);
-					$destination->write("\t\t\t\tforeach(\$current->getControlList() as \$current) {\n");
+					$destination->write("\t\t\t\tforeach(\$last->getControlList() as \$last) {\n");
 					$this->pass($macro, $destination);
 					$destination->write("\t\t\t\t}\n");
 					$this->end($macro, $element, $compiler);
@@ -40,11 +40,11 @@
 		protected function pass(INode $macro, IFile $destination) {
 			$value = $macro->getValue();
 			if (strrpos($value = StringUtils::firstLower(StringUtils::camelize($value)), '()') !== false) {
-				$destination->write(sprintf("\t\t\t\t\$this->%s(\$current);\n", str_replace('()', '', $value)));
+				$destination->write(sprintf("\t\t\t\t\$this->%s(\$last);\n", str_replace('()', '', $value)));
 			} else {
 				$destination->write(sprintf("\t\t\t\t\$reflectionProperty = \$this->reflectionClass->getProperty('%s');\n", $value));
 				$destination->write("\t\t\t\t\$reflectionProperty->setAccessible(true);\n");
-				$destination->write("\t\t\t\t\$reflectionProperty->setValue(\$this->root, \$this->current);\n");
+				$destination->write("\t\t\t\t\$reflectionProperty->setValue(\$this->root, \$last);\n");
 			}
 		}
 	}

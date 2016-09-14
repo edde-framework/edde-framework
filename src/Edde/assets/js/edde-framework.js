@@ -19,7 +19,7 @@ var Edde = {
 			return $.ajax({
 				url: url,
 				method: 'POST',
-				data: parameterList || {},
+				data: parameterList ? JSON.stringify(parameterList) : {},
 				contentType: 'application/json',
 				dataType: 'json'
 			}).fail(function (e) {
@@ -58,8 +58,9 @@ var Edde = {
 			});
 		},
 		crate: function (id) {
-			var crate = {};
+			var crate = null;
 			if (id) {
+				crate = {};
 				$('#' + id).find('[data-schema]').each(function () {
 					var $this = $(this);
 					var dataClass = $this.data('schema');

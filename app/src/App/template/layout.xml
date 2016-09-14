@@ -1,9 +1,11 @@
 <control>
 	<css src="edde://css/kube.css"/>
 	<css src="edde://css/edde-framework.css"/>
+	<js src="edde://js/json2.js"/>
 	<js src="edde://js/jquery-3.1.0.js"/>
 	<js src="edde://js/edde-framework.js"/>
 
-	<flash id="flash" m:snippet="flash"/>
+	<placeholder id="flash"/>
+	<flash id="flash" m:snippet="flash" m:pass="flash"/>
 	<block name="content"/>
 </control>
