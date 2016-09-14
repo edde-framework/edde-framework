@@ -5,6 +5,7 @@
 
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheFactory;
+	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IDependencyFactory;
@@ -67,6 +68,16 @@
 						if (strpos($name, 'lazy') !== false && strlen($name) > 4) {
 							$parameterList = [];
 							foreach ($reflectionMethod->getParameters() as $parameter) {
+								if ($reflectionClass->hasProperty($parameter->getName()) === false) {
+									throw new ContainerException(vsprintf("Lazy inject missmatch: parameter [$%s] of method [%s::%s()] must have a property [%s::$%s] with the same name as the paramete (for example protected \$%s).", [
+										$parameter->getName(),
+										$reflectionClass->getName(),
+										$reflectionMethod->getName(),
+										$reflectionClass->getName(),
+										$parameter->getName(),
+										$parameter->getName(),
+									]));
+								}
 								$parameterList[$parameter->getName()] = $parameter->getClass()
 									->getName();
 							}
