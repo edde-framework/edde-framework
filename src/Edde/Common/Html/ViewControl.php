@@ -145,6 +145,13 @@
 			return parent::render();
 		}
 
+		protected function placeholder(string $id) {
+			$this->addControl($this->createControl(PlaceholderControl::class)
+				->setId($id)
+				->dirty());
+			return $this;
+		}
+
 		protected function prepare() {
 			parent::prepare();
 			$this->styleSheetList = $this->styleSheetCompiler;
