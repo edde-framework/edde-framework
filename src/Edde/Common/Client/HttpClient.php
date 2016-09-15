@@ -9,6 +9,10 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Http\IHttpRequest;
+	use Edde\Common\Client\Event\HandlerEvent;
+	use Edde\Common\Client\Event\PostEvent;
+	use Edde\Common\Client\Event\RequestEvent;
+	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpRequest;
@@ -20,6 +24,7 @@
 	 * Simple http client implementation.
 	 */
 	class HttpClient extends AbstractUsable implements IHttpClient {
+		use EventTrait;
 		/**
 		 * @var IConverterManager
 		 */
@@ -62,22 +67,32 @@
 		protected function createRequest($url) {
 			$httpRequest = new HttpRequest(new PostList(), new HeaderList(), new CookieList());
 			$httpRequest->setRequestUrl(RequestUrl::create($url));
+			$this->event(new RequestEvent($httpRequest));
 			return $httpRequest;
 		}
 
 		public function post($url): IHttpHandler {
-			return $this->request($this->createRequest($url)
-				->setMethod('POST'));
+			$httpRequest = $this->createRequest($url)
+				->setMethod('POST');
+			$this->event(new PostEvent($httpRequest, $httpHandler = $this->request($httpRequest)));
+			$this->event(new HandlerEvent($httpRequest, $httpHandler));
+			return $httpHandler;
 		}
 
 		public function put($url): IHttpHandler {
-			return $this->request($this->createRequest($url)
-				->setMethod('PUT'));
+			$httpRequest = $this->createRequest($url)
+				->setMethod('PUT');
+			$this->event(new PostEvent($httpRequest, $httpHandler = $this->request($httpRequest)));
+			$this->event(new HandlerEvent($httpRequest, $httpHandler));
+			return $httpHandler;
 		}
 
 		public function delete($url): IHttpHandler {
-			return $this->request($this->createRequest($url)
-				->setMethod('DELETE'));
+			$httpRequest = $this->createRequest($url)
+				->setMethod('DELETE');
+			$this->event(new PostEvent($httpRequest, $httpHandler = $this->request($httpRequest)));
+			$this->event(new HandlerEvent($httpRequest, $httpHandler));
+			return $httpHandler;
 		}
 
 		protected function prepare() {
