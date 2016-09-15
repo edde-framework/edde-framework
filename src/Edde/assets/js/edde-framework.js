@@ -1,4 +1,12 @@
 var Edde = {
+	Event: {
+		listen: function (element, event, handler) {
+			$(element).on(event, handler);
+		},
+		event: function (event) {
+			$(document).trigger(event);
+		}
+	},
 	Utils: {
 		class: function (name, func) {
 			setTimeout(function () {
@@ -16,6 +24,7 @@ var Edde = {
 			}, 0);
 		},
 		execute: function (url, parameterList) {
+			Edde.Event.event('edde.on-ajax');
 			return $.ajax({
 				url: url,
 				method: 'POST',
@@ -23,9 +32,11 @@ var Edde = {
 				contentType: 'application/json',
 				dataType: 'json'
 			}).fail(function (e) {
+				Edde.Event.event('edde.on-ajax-fail');
 				console.log(e);
 				alert('General server error; this should be fixed by a developer.');
 			}).done(function (data) {
+				Edde.Event.event('edde.on-ajax-done');
 				if (data.redirect) {
 					window.location.replace(data.redirect);
 					return;
@@ -55,6 +66,8 @@ var Edde = {
 						}
 					});
 				}
+			}).always(function () {
+				Edde.Event.event('edde.on-ajax-always');
 			});
 		},
 		crate: function (id) {
