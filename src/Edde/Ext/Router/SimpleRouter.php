@@ -127,7 +127,7 @@
 			}
 			$parameterList = $this->requestUrl->getQuery();
 			unset($parameterList['control'], $parameterList['action']);
-			$this->httpResponse->contentType($mime = $this->headerList->getContentType($this->headerList->getAccept()));
+			$this->httpResponse->setContentType($mime = $this->headerList->getContentType($this->headerList->getAccept()));
 			$this->responseManager->setMime($mime = ('http+' . $mime));
 			return new Request($mime, $class, $method, array_merge($parameterList, $crateList));
 		}

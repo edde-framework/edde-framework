@@ -9,11 +9,23 @@
 	 * Interface describing http request; it can has arbitrary usage, not only for wrapping of
 	 * PHP's $_REQUEST/... variables.
 	 */
-	interface IHttpRequest {
+	interface IHttpRequest extends IHttp {
 		/**
 		 * @return IRequestUrl
 		 */
 		public function getRequestUrl(): IRequestUrl;
+
+		/**
+		 * @param IPostList $postList
+		 *
+		 * @return $this
+		 */
+		public function setPostList(IPostList $postList);
+
+		/**
+		 * @return IPostList
+		 */
+		public function getPostList(): IPostList;
 
 		/**
 		 * @return string
@@ -26,42 +38,6 @@
 		 * @return bool
 		 */
 		public function isMethod($method);
-
-		/**
-		 * @return IPostList
-		 */
-		public function getPostList();
-
-		/**
-		 * @param IPostList $postList
-		 *
-		 * @return $this
-		 */
-		public function setPostList(IPostList $postList);
-
-		/**
-		 * @return IHeaderList
-		 */
-		public function getHeaderList();
-
-		/**
-		 * @param IHeaderList $headerList
-		 *
-		 * @return $this
-		 */
-		public function setHeaderList(IHeaderList $headerList);
-
-		/**
-		 * @return ICookieList
-		 */
-		public function getCookieList();
-
-		/**
-		 * @param ICookieList $cookieList
-		 *
-		 * @return $this
-		 */
-		public function setCookieList(ICookieList $cookieList);
 
 		/**
 		 * @return null|string
@@ -87,16 +63,4 @@
 		 * @return bool
 		 */
 		public function isAjax();
-
-		/**
-		 * @param IBody|null $body
-		 *
-		 * @return IHttpRequest
-		 */
-		public function setBody(IBody $body = null): IHttpRequest;
-
-		/**
-		 * @return IBody|null
-		 */
-		public function getBody();
 	}

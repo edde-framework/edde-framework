@@ -87,7 +87,7 @@
 				$this->httpResponse->setCode($code);
 			}
 			if ($target) {
-				$this->httpResponse->contentType($target);
+				$this->httpResponse->setContentType($target);
 				$this->responseManager->setMime('http+' . $target);
 			}
 			$this->responseManager->response(new Response($mime, $response));
