@@ -80,7 +80,7 @@
 			$mime = $this->headerList->getContentType($this->headerList->getAccept());
 			foreach ($this->serviceList as $service) {
 				if ($service->match($this->requestUrl)) {
-					$this->httpResponse->contentType($mime);
+					$this->httpResponse->setContentType($mime);
 					$this->responseManager->setMime($mime = ('http+' . $mime));
 					return new Request($mime, get_class($service), $this->httpRequest->getMethod(), $this->requestUrl->getQuery());
 				}

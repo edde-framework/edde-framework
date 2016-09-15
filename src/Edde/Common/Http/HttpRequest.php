@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\ICookieList;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttpRequest;
@@ -11,30 +10,21 @@
 	use Edde\Api\Http\IPostList;
 	use Edde\Api\Http\IRequestUrl;
 	use Edde\Api\Url\IUrl;
-	use Edde\Common\AbstractObject;
 	use Edde\Common\Url\Url;
 
-	class HttpRequest extends AbstractObject implements IHttpRequest {
+	class HttpRequest extends AbstractHttp implements IHttpRequest {
 		/**
 		 * @var IRequestUrl
 		 */
 		protected $requestUrl;
 		/**
-		 * @var string
-		 */
-		protected $method;
-		/**
 		 * @var IPostList
 		 */
 		protected $postList;
 		/**
-		 * @var IHeaderList
+		 * @var string
 		 */
-		protected $headerList;
-		/**
-		 * @var ICookieList
-		 */
-		protected $cookieList;
+		protected $method;
 		/**
 		 * @var string|null
 		 */
@@ -43,8 +33,6 @@
 		 * @var string|null
 		 */
 		protected $remoteHost;
-		protected $body;
-		protected $hasBody = false;
 		/**
 		 * @var IHttpResponse
 		 */
@@ -60,9 +48,8 @@
 		 * @param ICookieList $cookieList
 		 */
 		public function __construct(IPostList $postList, IHeaderList $headerList, ICookieList $cookieList) {
+			parent::__construct($headerList, $cookieList);
 			$this->postList = $postList;
-			$this->headerList = $headerList;
-			$this->cookieList = $cookieList;
 		}
 
 		public function getRequestUrl(): IRequestUrl {
@@ -71,6 +58,15 @@
 
 		public function setRequestUrl(IRequestUrl $requestUrl): HttpRequest {
 			$this->requestUrl = $requestUrl;
+			return $this;
+		}
+
+		public function getPostList(): IPostList {
+			return $this->postList;
+		}
+
+		public function setPostList(IPostList $postList) {
+			$this->postList = $postList;
 			return $this;
 		}
 
@@ -85,33 +81,6 @@
 
 		public function isMethod($method) {
 			return strcasecmp($this->method, $method) === 0;
-		}
-
-		public function getPostList() {
-			return $this->postList;
-		}
-
-		public function setPostList(IPostList $postList) {
-			$this->postList = $postList;
-			return $this;
-		}
-
-		public function getHeaderList() {
-			return $this->headerList;
-		}
-
-		public function setHeaderList(IHeaderList $headerList) {
-			$this->headerList = $headerList;
-			return $this;
-		}
-
-		public function getCookieList() {
-			return $this->cookieList;
-		}
-
-		public function setCookieList(ICookieList $cookieList) {
-			$this->cookieList = $cookieList;
-			return $this;
 		}
 
 		public function getRemoteAddress() {
@@ -148,14 +117,5 @@
 
 		public function isAjax() {
 			return $this->headerList->get('X-Requested-With') === 'XMLHttpRequest';
-		}
-
-		public function getBody() {
-			return $this->body;
-		}
-
-		public function setBody(IBody $body = null): IHttpRequest {
-			$this->body = $body;
-			return $this;
 		}
 	}
