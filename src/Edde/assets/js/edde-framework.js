@@ -1,7 +1,7 @@
 var Edde = {
 	Event: {
-		listen: function (element, event, handler) {
-			$(element).on(event, handler);
+		listen: function (event, handler) {
+			$(document).on(event, handler);
 		},
 		event: function (event) {
 			$(document).trigger(event);
