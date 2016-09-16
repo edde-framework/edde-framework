@@ -3,16 +3,15 @@
 
 	namespace Edde\Common\Web;
 
-	use Edde\Api\Container\ILazyInject;
+	use Edde\Api\File\IFile;
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Resource\IResourceList;
 	use Edde\Api\Resource\Storage\IFileStorage;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Common\Cache\CacheTrait;
-	use Edde\Common\Resource\ResourceList;
 	use Edde\Common\Usable\UsableTrait;
 
-	class JavaScriptCompiler extends ResourceList implements IJavaScriptCompiler, ILazyInject {
+	class JavaScriptCompiler extends AbstractCompiler implements IJavaScriptCompiler {
 		use UsableTrait;
 		use CacheTrait;
 
@@ -42,17 +41,16 @@
 			return $pathList;
 		}
 
-		public function compile(IResourceList $resourceList) {
+		public function compile(IResourceList $resourceList): IFile {
 			$this->use();
 			$content = [];
-			if (($resource = $this->cache->load($cacheId = $resourceList->getResourceName())) === null) {
+			if (($file = $this->cache->load($cacheId = $resourceList->getResourceName())) === null) {
 				foreach ($resourceList as $resource) {
-					$current = $resource->get();
-					$content[] = $current;
+					$content[] = $resource->get();
 				}
-				$this->cache->save($cacheId, $resource = $this->fileStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.js', implode(";\n", $content))));
+				$this->cache->save($cacheId, $file = $this->fileStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.js', implode(";\n", $content))));
 			}
-			return $resource;
+			return $file;
 		}
 
 		protected function prepare() {
