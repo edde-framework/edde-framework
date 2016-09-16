@@ -9,6 +9,7 @@
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Html\TemplateViewControl;
+	use Edde\Framework;
 	use Tracy\Debugger;
 
 	class EddeControl extends TemplateViewControl {
@@ -24,6 +25,10 @@
 		 * @var ICacheStorage
 		 */
 		protected $cacheStorage;
+		/**
+		 * @var Framework
+		 */
+		protected $framework;
 		/**
 		 * @var IHtmlControl
 		 */
@@ -41,6 +46,14 @@
 			$this->cacheStorage = $cacheStorage;
 		}
 
+		public function lazyFramework(Framework $framework) {
+			$this->framework = $framework;
+		}
+
+		public function getVersion() {
+			return $this->framework->getVersionString();
+		}
+
 		public function handleOnUpgrade() {
 			$this->use();
 			try {
@@ -49,14 +62,14 @@
 					->getVersion()));
 			} catch (EddeException $e) {
 				Debugger::log($e);
-				$this->message('error', $e->getMessage());
+				$this->message('alert', $e->getMessage());
 			}
 			$this->response();
 		}
 
 		protected function message(string $class, string $message) {
 			$this->message->javascript('message', __DIR__ . '/template/js/message.js')
-				->stylesheet(__DIR__ . '/template/js/message.css')
+				->stylesheet(__DIR__ . '/template/css/message.css')
 				->addClass($class)
 				->setText($message)
 				->dirty();
@@ -70,7 +83,7 @@
 				$this->message('success', 'crates has been rebuilt');
 			} catch (EddeException $e) {
 				Debugger::log($e);
-				$this->message('error', $e->getMessage());
+				$this->message('alert', $e->getMessage());
 			}
 			$this->response();
 		}
@@ -83,7 +96,7 @@
 				$this->message('success', 'cache has been wiped out');
 			} catch (EddeException $e) {
 				Debugger::log($e);
-				$this->message('error', $e->getMessage());
+				$this->message('alert', $e->getMessage());
 			}
 			$this->response();
 		}
