@@ -14,7 +14,6 @@
 	class JavaScriptCompiler extends AbstractCompiler implements IJavaScriptCompiler {
 		use UsableTrait;
 		use CacheTrait;
-
 		/**
 		 * @var IFileStorage
 		 */

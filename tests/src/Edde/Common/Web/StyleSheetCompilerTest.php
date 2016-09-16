@@ -23,6 +23,7 @@
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Upgrade\UpgradeManager;
+	use Edde\Common\Url\Url;
 	use Edde\Ext\Cache\FileCacheStorage;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
@@ -88,6 +89,7 @@
 			$resourceList->addResource(new File(__DIR__ . '/assets/css/font-awesome.css'));
 			$resourceList->addResource(new File(__DIR__ . '/assets/css/font-awesome.min.css'));
 			$resourceList->addResource(new File(__DIR__ . '/assets/css/simple-css.css'));
+			$resourceList->addResource(new File(__DIR__ . '/assets/css/foundation.min.css'));
 
 			$resource = $styleSheetCompiler->compile($resourceList);
 
@@ -98,12 +100,17 @@
 			self::assertArrayHasKey('url', $urlList);
 			$count = 0;
 			foreach (array_unique($urlList['url']) as $url) {
-				$count++;
-				$url = str_replace([
+				$url = Url::create(str_replace([
 					'"',
 					"'",
-				], null, $url);
-				self::assertFileExists(__DIR__ . '/' . $url);
+				], null, $url));
+				if (in_array($url->getScheme(), [
+					'data',
+				], true)) {
+					continue;
+				}
+				$count++;
+				self::assertFileExists(__DIR__ . '/' . $url->getPath());
 			}
 			self::assertEquals(5, $count);
 		}

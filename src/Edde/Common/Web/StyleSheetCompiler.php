@@ -19,7 +19,14 @@
 	class StyleSheetCompiler extends AbstractCompiler implements IStyleSheetCompiler {
 		use UsableTrait;
 		use CacheTrait;
-
+		/**
+		 * ignored url schemes
+		 *
+		 * @var array
+		 */
+		static private $schemeList = [
+			'data',
+		];
 		/**
 		 * @var IFileStorage
 		 */
@@ -57,19 +64,22 @@
 					}
 					$current = $resource->get();
 					$urlList = StringUtils::matchAll($current, "~url\\((?<url>.*?)\\)~", true);
-					$rresourcePath = $source = $resource->getUrl()
+					$resourcePath = $source = $resource->getUrl()
 						->getPath();
-					$rresourcePath = dirname($rresourcePath);
+					$resourcePath = dirname($resourcePath);
 					foreach (empty($urlList) ? [] : array_unique($urlList['url']) as $item) {
 						$url = Url::create(str_replace([
 							'"',
 							"'",
 						], null, $item));
+						if (in_array($url->getScheme(), self::$schemeList, true)) {
+							continue;
+						}
 						if (isset($pathList[$path = $url->getPath()])) {
 							$current = str_replace($item, '"' . $pathList[$path] . '"', $current);
 							continue;
 						}
-						if (($file = FileUtils::realpath($rresourcePath . '/' . $path)) === false) {
+						if (($file = FileUtils::realpath($resourcePath . '/' . $path)) === false) {
 							throw new WebException(sprintf('Cannot locate css [%s] resource [%s] on the filesystem.', $source, $urlList));
 						}
 						$current = str_replace($item, '"' . ($pathList[$path] = $this->fileStorage->store(new File($file))
