@@ -3,9 +3,11 @@
 
 	namespace Edde\Common\Translator;
 
+	use Edde\Api\Container\IContainer;
 	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Translator\TranslatorException;
 	use Edde\Common\Translator\Dictionary\CsvDictionary;
+	use Edde\Ext\Container\ContainerFactory;
 	use Foo\Bar\DummyDictionary;
 	use Foo\Bar\EmptyDictionary;
 	use phpunit\framework\TestCase;
@@ -13,6 +15,10 @@
 	require_once(__DIR__ . '/assets/assets.php');
 
 	class TranslatorTest extends TestCase {
+		/**
+		 * @var IContainer
+		 */
+		protected $container;
 		/**
 		 * @var ITranslator
 		 */
@@ -53,14 +59,18 @@
 		}
 
 		public function testCsvDictionary() {
-			$this->translator->registerDictionary($csvDictionary = new CsvDictionary());
+			$this->translator->registerDictionary($csvDictionary = $this->container->create(CsvDictionary::class));
 			$csvDictionary->addFile(__DIR__ . '/assets/en.csv');
 			$csvDictionary->addFile(__DIR__ . '/assets/cs.csv');
 			$this->translator->setLanguage('en');
 			self::assertEquals('english foo', $this->translator->translate('foo'));
+			self::assertEquals('czech foo', $this->translator->translate('foo', 'cs'));
 		}
 
 		protected function setUp() {
+			$this->container = $container = ContainerFactory::create([
+				ITranslator::class => Translator::class,
+			]);
 			$this->translator = new Translator();
 		}
 	}
