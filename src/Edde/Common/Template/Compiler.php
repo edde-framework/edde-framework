@@ -121,6 +121,9 @@
 					return $item;
 				}
 			}
+			if (empty($value)) {
+				return var_export($value, true);
+			}
 			if ($value[0] === '@') {
 				return '[$this->root, ' . $this->delimite(substr($value, 1)) . ']';
 			}

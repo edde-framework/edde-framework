@@ -34,7 +34,7 @@
 		protected function getAttributeList(INode $node, ICompiler $compiler) {
 			$attributeList = [];
 			foreach ($node->getAttributeList() as $name => $value) {
-				$attributeList[$name] = $compiler->delimite($value);
+				$attributeList[$name] = $compiler->delimite((string)$value);
 			}
 			return $attributeList;
 		}
