@@ -3,9 +3,8 @@
 
 	namespace Edde\Common\Web;
 
-	use Edde\Api\Container\ILazyInject;
+	use Edde\Api\File\IFile;
 	use Edde\Api\File\ITempDirectory;
-	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceList;
 	use Edde\Api\Resource\Storage\IFileStorage;
 	use Edde\Api\Web\IStyleSheetCompiler;
@@ -13,12 +12,11 @@
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
-	use Edde\Common\Resource\ResourceList;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Url\Url;
 	use Edde\Common\Usable\UsableTrait;
 
-	class StyleSheetCompiler extends ResourceList implements IStyleSheetCompiler, ILazyInject {
+	class StyleSheetCompiler extends AbstractCompiler implements IStyleSheetCompiler {
 		use UsableTrait;
 		use CacheTrait;
 
@@ -48,20 +46,20 @@
 			return $pathList;
 		}
 
-		public function compile(IResourceList $resourceList): IResource {
+		public function compile(IResourceList $resourceList): IFile {
 			$this->use();
 			$content = [];
 			$pathList = [];
-			if (($resource = $this->cache->load($cacheId = $resourceList->getResourceName())) === null) {
+			if (($file = $this->cache->load($cacheId = $resourceList->getResourceName())) === null) {
 				foreach ($resourceList as $resource) {
 					if ($resource->isAvailable() === false) {
 						throw new WebException(sprintf('Cannot compile stylesheets: resource [%s] is not available (does not exists?).', (string)$resource->getUrl()));
 					}
 					$current = $resource->get();
 					$urlList = StringUtils::matchAll($current, "~url\\((?<url>.*?)\\)~", true);
-					$resourcePath = $source = $resource->getUrl()
+					$rresourcePath = $source = $resource->getUrl()
 						->getPath();
-					$resourcePath = dirname($resourcePath);
+					$rresourcePath = dirname($rresourcePath);
 					foreach (empty($urlList) ? [] : array_unique($urlList['url']) as $item) {
 						$url = Url::create(str_replace([
 							'"',
@@ -71,17 +69,17 @@
 							$current = str_replace($item, '"' . $pathList[$path] . '"', $current);
 							continue;
 						}
-						if (($file = FileUtils::realpath($resourcePath . '/' . $path)) === false) {
+						if (($file = FileUtils::realpath($rresourcePath . '/' . $path)) === false) {
 							throw new WebException(sprintf('Cannot locate css [%s] resource [%s] on the filesystem.', $source, $urlList));
 						}
-						$resource = $this->fileStorage->store(new File($file));
-						$current = str_replace($item, '"' . ($pathList[$path] = $resource->getRelativePath()) . '"', $current);
+						$current = str_replace($item, '"' . ($pathList[$path] = $this->fileStorage->store(new File($file))
+								->getRelativePath()) . '"', $current);
 					}
 					$content[] = $current;
 				}
-				$this->cache->save($cacheId, $resource = $this->fileStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.css', implode("\n", $content))));
+				$this->cache->save($cacheId, $file = $this->fileStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.css', implode("\n", $content))));
 			}
-			return $resource;
+			return $file;
 		}
 
 		protected function prepare() {
