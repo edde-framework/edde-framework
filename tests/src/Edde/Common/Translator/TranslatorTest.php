@@ -5,6 +5,7 @@
 
 	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Translator\TranslatorException;
+	use Edde\Common\Translator\Dictionary\CsvDictionary;
 	use Foo\Bar\DummyDictionary;
 	use Foo\Bar\EmptyDictionary;
 	use phpunit\framework\TestCase;
@@ -49,6 +50,14 @@
 				$translator->setLanguage('en');
 			});
 			self::assertEquals('foo.en', $this->translator->translate('foo'));
+		}
+
+		public function testCsvDictionary() {
+			$this->translator->registerDictionary($csvDictionary = new CsvDictionary());
+			$csvDictionary->addFile(__DIR__ . '/assets/en.csv');
+			$csvDictionary->addFile(__DIR__ . '/assets/cs.csv');
+			$this->translator->setLanguage('en');
+			self::assertEquals('english foo', $this->translator->translate('foo'));
 		}
 
 		protected function setUp() {

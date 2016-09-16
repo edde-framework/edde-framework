@@ -18,10 +18,10 @@
 		 */
 		protected $language;
 
-		public function translate(string $id): string {
+		public function translate(string $id, string $language = null): string {
 			$this->use();
 			foreach ($this->dictionaryList as $dictionary) {
-				if (($string = $dictionary->translate($id, $this->language)) !== null) {
+				if (($string = $dictionary->translate($id, $language ?: $this->language)) !== null) {
 					return $string;
 				}
 			}
