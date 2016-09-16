@@ -35,7 +35,7 @@
 		public function testEmptyDictionaryException() {
 			$this->expectException(TranslatorException::class);
 			$this->expectExceptionMessage('Cannot translate [foo]; the given id is not available in no dictionary.');
-			$this->translator->registerDitionary(new EmptyDictionary());
+			$this->translator->registerDictionary(new EmptyDictionary());
 			$this->translator->onSetup(function (ITranslator $translator) {
 				$translator->setLanguage('en');
 			});
@@ -43,8 +43,8 @@
 		}
 
 		public function testDummyDictionary() {
-			$this->translator->registerDitionary(new EmptyDictionary());
-			$this->translator->registerDitionary(new DummyDictionary());
+			$this->translator->registerDictionary(new EmptyDictionary());
+			$this->translator->registerDictionary(new DummyDictionary());
 			$this->translator->onSetup(function (ITranslator $translator) {
 				$translator->setLanguage('en');
 			});

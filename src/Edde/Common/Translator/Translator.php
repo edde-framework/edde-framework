@@ -33,7 +33,7 @@
 			return $this;
 		}
 
-		public function registerDitionary(IDictionary $dictionary): ITranslator {
+		public function registerDictionary(IDictionary $dictionary): ITranslator {
 			$this->dictionaryList[] = $dictionary;
 			return $this;
 		}

@@ -13,7 +13,7 @@
 		 *
 		 * @return ITranslator
 		 */
-		public function registerDitionary(IDictionary $dictionary): ITranslator;
+		public function registerDictionary(IDictionary $dictionary): ITranslator;
 
 		/**
 		 * language can be set in a runtime
