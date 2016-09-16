@@ -1,4 +1,5 @@
 <control>
+	<div dummy-attribute=""/>
 	<div id="first-one" class="simple node"/>
 	<div id="2">
 		<div id="3">

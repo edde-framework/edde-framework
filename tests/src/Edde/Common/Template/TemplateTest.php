@@ -81,6 +81,7 @@
 		<title></title>
 	</head>
 	<body>
+		<div dummy-attribute=""></div>
 		<div id="first-one" class="simple node"></div>
 		<div id="2">
 			<div id="3">
