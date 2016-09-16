@@ -13,7 +13,7 @@
 		 *
 		 * @return ITranslator
 		 */
-		public function registerDitionary(IDictionary $dictionary): ITranslator;
+		public function registerDictionary(IDictionary $dictionary): ITranslator;
 
 		/**
 		 * language can be set in a runtime
@@ -28,8 +28,9 @@
 		 * try to translate a string
 		 *
 		 * @param string $id
+		 * @param string|null $language
 		 *
 		 * @return string
 		 */
-		public function translate(string $id): string;
+		public function translate(string $id, string $language = null): string;
 	}

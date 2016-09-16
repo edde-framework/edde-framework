@@ -23,11 +23,11 @@
 		/**
 		 * @var bool
 		 */
-		private $autoClose = true;
+		protected $autoClose = true;
 		/**
 		 * @var resource
 		 */
-		private $handle;
+		protected $handle;
 
 		/**
 		 * @param string|IUrl $file
