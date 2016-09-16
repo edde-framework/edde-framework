@@ -18,10 +18,20 @@
 		 */
 		protected $language;
 
-		public function translate(string $id, string $language = null): string {
+		public function translate(string $id, array $parameterList = [], string $language = null): string {
 			$this->use();
 			foreach ($this->dictionaryList as $dictionary) {
-				if (($string = $dictionary->translate($id, $language ?: $this->language)) !== null) {
+				if (($string = $dictionary->translate($id, $parameterList, $language ?: $this->language)) !== null) {
+					return $string;
+				}
+			}
+			throw new TranslatorException(sprintf('Cannot translate [%s]; the given id is not available in no dictionary.', $id));
+		}
+
+		public function translatef(string $id, array $parameterList = null, string $language = null): string {
+			$this->use();
+			foreach ($this->dictionaryList as $dictionary) {
+				if (($string = $dictionary->translatef($id, $parameterList, $language ?: $this->language)) !== null) {
 					return $string;
 				}
 			}
