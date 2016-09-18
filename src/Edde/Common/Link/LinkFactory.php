@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Link;
 
+	use Edde\Api\Http\IHostUrl;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Api\Link\LinkException;
@@ -10,7 +11,7 @@
 
 	class LinkFactory extends AbstractUsable implements ILinkFactory {
 		/**
-		 * @var \Edde\Api\Http\IHostUrl
+		 * @var IHostUrl
 		 */
 		protected $hostUrl;
 		/**
@@ -19,9 +20,9 @@
 		protected $linkGeneratorList = [];
 
 		/**
-		 * @param \Edde\Api\Http\IHostUrl $hostUrl
+		 * @param IHostUrl $hostUrl
 		 */
-		public function __construct(\Edde\Api\Http\IHostUrl $hostUrl) {
+		public function __construct(IHostUrl $hostUrl) {
 			$this->hostUrl = $hostUrl;
 		}
 
@@ -30,10 +31,10 @@
 			return $this;
 		}
 
-		public function generate($generate, ...$parameterList) {
+		public function link($generate, ...$parameterList) {
 			$this->use();
 			foreach ($this->linkGeneratorList as $linkGenerator) {
-				if (($url = $linkGenerator->generate($generate, ...$parameterList)) !== null) {
+				if (($url = $linkGenerator->link($generate, ...$parameterList)) !== null) {
 					return $url;
 				}
 			}

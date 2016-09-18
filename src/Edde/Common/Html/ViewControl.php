@@ -121,7 +121,7 @@
 		 */
 		public function redirect($redirect) {
 			$this->use();
-			$this->responseManager->response(new Response('redirect', $this->linkFactory->generate($redirect)));
+			$this->responseManager->response(new Response('redirect', $this->linkFactory->link($redirect)));
 			return $this;
 		}
 
