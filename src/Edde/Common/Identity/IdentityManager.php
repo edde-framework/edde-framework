@@ -15,6 +15,9 @@
 
 	class IdentityManager extends AbstractUsable implements IIdentityManager {
 		use SessionTrait;
+
+		const SESSION_IDENTITY = 'identity';
+
 		/**
 		 * @var IStorage
 		 */
@@ -53,16 +56,26 @@
 
 		public function update(): IIdentityManager {
 			$this->use();
-			$this->session->set('identity', $this->identity());
+			$this->session->set(self::SESSION_IDENTITY, $this->identity());
 			return $this;
 		}
 
 		public function identity(): IIdentity {
 			$this->use();
 			if ($this->identity === null) {
-				$this->identity = $this->session->get('identity', new Identity());
+				$this->identity = $this->session->get(self::SESSION_IDENTITY, new Identity());
 			}
 			return $this->identity;
+		}
+
+		public function reset(bool $hard = true): IIdentityManager {
+			$this->use();
+			$this->session->set(self::SESSION_IDENTITY, null);
+			if ($hard) {
+				$this->identity->setMetaList([]);
+				$this->identity->setName('');
+			}
+			return $this;
 		}
 
 		protected function prepare() {
