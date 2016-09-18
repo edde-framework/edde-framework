@@ -72,17 +72,12 @@
 			return $this;
 		}
 
-		public function addAttribute($attribute, $value) {
+		public function addAttribute(string $attribute, $value) {
 			$this->use();
-			$attributeList = $this->getAttributeList();
+			$attributeList = $this->node->getAttributeList();
 			$attributeList[$attribute][] = $value;
 			$this->node->setAttributeList($attributeList);
 			return $this;
-		}
-
-		public function getAttributeList(): array {
-			$this->use();
-			return $this->node->getAttributeList();
 		}
 
 		public function javascript(string $class = null, string $file = null): IHtmlControl {
@@ -113,7 +108,8 @@
 			return $this->getAttribute('id', '');
 		}
 
-		public function getAttribute(string $name, string $default = '') {
+		public function getAttribute(string $name, $default = '') {
+			$this->use();
 			return $this->node->getAttribute($name, $default);
 		}
 
@@ -144,18 +140,44 @@
 			return $this->node->hasAttribute($attribute);
 		}
 
-		public function addClass($class) {
+		public function toggleClass(string $class, bool $enable = null) {
+			$this->use();
+			$hasClass = $this->hasClass($class);
+			if ($enable === null) {
+				if ($hasClass === false) {
+					$this->addClass($class);
+					return $this;
+				}
+				$this->removeClass($class);
+			} else if ($enable && $hasClass === false) {
+				$this->addClass($class);
+			} else if ($enable === false && $hasClass === true) {
+				$this->removeClass($class);
+			}
+			return $this;
+		}
+
+		public function hasClass(string $class) {
+			return in_array($class, $this->getClassList(), true);
+		}
+
+		public function getClassList() {
+			return $this->getAttribute('class', []);
+		}
+
+		public function addClass(string $class) {
 			$this->addAttribute('class', $class);
 			return $this;
 		}
 
-		public function hasClass($class) {
-			$classList = $this->getClassList();
-			return isset($classList[$class]);
-		}
-
-		public function getClassList() {
-			return $this->getAttribute('class');
+		public function removeClass(string $class) {
+			$this->use();
+			$diff = array_diff($this->getClassList(), [$class]);
+			$this->node->removeAttribute('class');
+			if (empty($diff) === false) {
+				$this->node->setAttribute('class', $diff);
+			}
+			return $this;
 		}
 
 		public function render() {
@@ -204,6 +226,11 @@
 		public function getTag() {
 			$this->use();
 			return $this->node->getMeta('tag');
+		}
+
+		public function getAttributeList(): array {
+			$this->use();
+			return $this->node->getAttributeList();
 		}
 
 		public function isPair() {

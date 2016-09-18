@@ -93,6 +93,12 @@
 			return $this->attributeList[$name] ?? $default;
 		}
 
+		public function removeAttribute(string $name): INode {
+			$this->attributeNamespaceList = [];
+			unset($this->attributeList[$name]);
+			return $this;
+		}
+
 		public function hasAttributeList(string $namespace): bool {
 			$this->getAttributeList($namespace);
 			return empty($this->attributeNamespaceList[$namespace]) === false;

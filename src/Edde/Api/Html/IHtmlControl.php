@@ -88,11 +88,11 @@
 		 * return attribute by the given namw
 		 *
 		 * @param string $name
-		 * @param string $default
+		 * @param mixed $default
 		 *
 		 * @return mixed
 		 */
-		public function getAttribute(string $name, string $default = '');
+		public function getAttribute(string $name, $default = '');
 
 		/**
 		 * add single html attribute to an array (for example class)
@@ -102,7 +102,7 @@
 		 *
 		 * @return $this
 		 */
-		public function addAttribute($attribute, $value);
+		public function addAttribute(string $attribute, $value);
 
 		/**
 		 * has the given html attribute value? (is present and is not null)
@@ -127,7 +127,7 @@
 		 *
 		 * @return $this
 		 */
-		public function addClass($class);
+		public function addClass(string $class);
 
 		/**
 		 * is the given class present in this control?
@@ -136,7 +136,7 @@
 		 *
 		 * @return bool
 		 */
-		public function hasClass($class);
+		public function hasClass(string $class);
 
 		/**
 		 * return current list of classes

@@ -78,6 +78,15 @@
 		public function getAttribute($name, $default = null);
 
 		/**
+		 * remove the given attribute from list
+		 *
+		 * @param string $name
+		 *
+		 * @return INode
+		 */
+		public function removeAttribute(string $name): INode;
+
+		/**
 		 * replace current attribute list by the given one
 		 *
 		 * @param array $attributeList
