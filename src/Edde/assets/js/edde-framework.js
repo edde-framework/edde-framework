@@ -38,6 +38,7 @@ var Edde = {
 			}).done(function (data) {
 				Edde.Event.event('edde.on-ajax-done');
 				if (data.redirect) {
+					Edde.Event.event('edde.redirect');
 					window.location.replace(data.redirect);
 					return;
 				}
