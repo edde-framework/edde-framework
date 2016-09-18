@@ -22,4 +22,11 @@
 		 * @return IIdentity
 		 */
 		public function identity(): IIdentity;
+
+		/**
+		 * update session data with current identity
+		 *
+		 * @return IIdentityManager
+		 */
+		public function update(): IIdentityManager;
 	}
