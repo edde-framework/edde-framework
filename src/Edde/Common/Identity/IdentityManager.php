@@ -51,6 +51,12 @@
 			}
 		}
 
+		public function update(): IIdentityManager {
+			$this->use();
+			$this->session->set('identity', $this->identity());
+			return $this;
+		}
+
 		public function identity(): IIdentity {
 			$this->use();
 			if ($this->identity === null) {
