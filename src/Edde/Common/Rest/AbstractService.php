@@ -93,4 +93,8 @@
 			$this->responseManager->response(new Response($mime, $response));
 			return $this;
 		}
+
+		public function generate($generate, ...$parameterList) {
+			return null;
+		}
 	}
