@@ -6,6 +6,7 @@
 	use Edde\Api\Control\ControlException;
 	use Edde\Common\Control\Event\DoneEvent;
 	use Edde\Common\Control\Event\HandleEvent;
+	use Edde\Common\Html\Tag\DivControl;
 	use phpunit\framework\TestCase;
 
 	require_once(__DIR__ . '/assets/assets.php');
@@ -51,5 +52,44 @@
 		public function testDummyHandle() {
 			$control = new \TestControl();
 			self::assertEquals('dumyyyy', $control->handle('dummy', []));
+		}
+
+		public function testToggleClass() {
+			$control = new DivControl();
+			$control->toggleClass('foo');
+			self::assertEquals('<div class="foo"></div>
+', $control->render());
+			$control->toggleClass('foo');
+			self::assertEquals('<div></div>
+', $control->render());
+			$control->toggleClass('foo');
+			self::assertEquals('<div class="foo"></div>
+', $control->render());
+			$control->toggleClass('foo', true);
+			self::assertEquals('<div class="foo"></div>
+', $control->render());
+			$control->toggleClass('foo', false);
+			self::assertEquals('<div></div>
+', $control->render());
+		}
+
+		public function testToggleClass2() {
+			$control = new DivControl();
+			$control->toggleClass('foo');
+			$control->toggleClass('bar');
+			self::assertEquals('<div class="foo bar"></div>
+', $control->render());
+			$control->toggleClass('foo');
+			self::assertEquals('<div class="bar"></div>
+', $control->render());
+			$control->toggleClass('foo');
+			self::assertEquals('<div class="bar foo"></div>
+', $control->render());
+			$control->toggleClass('foo', true);
+			self::assertEquals('<div class="bar foo"></div>
+', $control->render());
+			$control->toggleClass('foo', false);
+			self::assertEquals('<div class="bar"></div>
+', $control->render());
 		}
 	}
