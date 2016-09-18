@@ -36,7 +36,6 @@ var Edde = {
 				console.log(e);
 				alert('General server error; this should be fixed by a developer.');
 			}).done(function (data) {
-				Edde.Event.event('edde.on-ajax-done');
 				if (data.redirect) {
 					Edde.Event.event('edde.redirect');
 					window.location.replace(data.redirect);
@@ -67,6 +66,7 @@ var Edde = {
 						}
 					});
 				}
+				Edde.Event.event('edde.on-ajax-done');
 			}).always(function () {
 				Edde.Event.event('edde.on-ajax-always');
 			});
