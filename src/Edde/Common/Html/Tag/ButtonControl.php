@@ -46,7 +46,7 @@
 		}
 
 		public function setAction($action) {
-			$this->setAttribute('data-action', $this->linkFactory->generate($action));
+			$this->setAttribute('data-action', $this->linkFactory->link($action));
 			return $this;
 		}
 

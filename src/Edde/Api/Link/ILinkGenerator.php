@@ -15,5 +15,5 @@
 		 *
 		 * @return string|null if null is returned, next generator will be used
 		 */
-		public function generate($generate, ...$parameterList);
+		public function link($generate, ...$parameterList);
 	}

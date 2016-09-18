@@ -89,12 +89,12 @@
 			return null;
 		}
 
-		public function generate($generate, ...$parameterList) {
+		public function link($generate, ...$parameterList) {
 			$this->use();
 			if (is_string($generate) === false || isset($this->serviceList[$generate]) === false) {
 				return null;
 			}
-			return $this->serviceList[$generate]->generate($generate, ...$parameterList);
+			return $this->serviceList[$generate]->link($generate, ...$parameterList);
 		}
 
 		protected function prepare() {

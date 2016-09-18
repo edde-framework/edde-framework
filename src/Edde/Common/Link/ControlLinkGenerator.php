@@ -16,7 +16,7 @@
 			$this->hostUrl = $hostUrl;
 		}
 
-		public function generate($generate, ...$parameterList) {
+		public function link($generate, ...$parameterList) {
 			if (is_array($generate) === false || count($generate) !== 2) {
 				return null;
 			}

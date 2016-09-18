@@ -94,7 +94,7 @@
 			return $this;
 		}
 
-		public function generate($generate, ...$parameterList) {
+		public function link($generate, ...$parameterList) {
 			return null;
 		}
 	}
