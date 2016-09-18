@@ -9,11 +9,12 @@
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Http\IRequestUrl;
+	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Api\Rest\IService;
 	use Edde\Common\Application\Request;
 	use Edde\Common\Router\AbstractRouter;
 
-	class RestRouter extends AbstractRouter {
+	class RestRouter extends AbstractRouter implements ILinkGenerator {
 		/**
 		 * @var IRequestUrl
 		 */
@@ -71,7 +72,7 @@
 		}
 
 		public function registerService(IService $service) {
-			$this->serviceList[] = $service;
+			$this->serviceList[get_class($service)] = $service;
 			return $this;
 		}
 
@@ -86,6 +87,14 @@
 				}
 			}
 			return null;
+		}
+
+		public function generate($generate, ...$parameterList) {
+			$this->use();
+			if (is_string($generate) === false || isset($this->serviceList[$generate]) === false) {
+				return null;
+			}
+			return $this->serviceList[$generate]->generate($generate, ...$parameterList);
 		}
 
 		protected function prepare() {
