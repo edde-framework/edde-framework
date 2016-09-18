@@ -11,7 +11,7 @@
 		}
 
 		public function getVersion() {
-			return '2.2.0.112';
+			return '2.2.0.116';
 		}
 
 		public function getCodename() {
