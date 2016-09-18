@@ -8,6 +8,7 @@
 	use Edde\Api\Identity\IAuthenticatorManager;
 	use Edde\Api\Identity\IAuthorizator;
 	use Edde\Api\Identity\IIdentity;
+	use Edde\Api\Identity\IIdentityManager;
 	use Edde\Common\Session\SessionTrait;
 	use Edde\Common\Usable\AbstractUsable;
 
@@ -17,6 +18,10 @@
 		 * @var IIdentity
 		 */
 		protected $identity;
+		/**
+		 * @var IIdentityManager
+		 */
+		protected $identityManager;
 		/**
 		 * @var IAuthorizator
 		 */
@@ -32,6 +37,10 @@
 
 		public function lazyIdentity(IIdentity $identity) {
 			$this->identity = $identity;
+		}
+
+		public function lazyIdentityManager(IIdentityManager $identityManager) {
+			$this->identityManager = $identityManager;
 		}
 
 		public function lazyAutorizator(IAuthorizator $authorizator) {
@@ -72,9 +81,9 @@
 			if (empty($currentList)) {
 				$this->identity->setAuthenticated(true);
 				$this->authorizator->authorize($this->identity);
-				$this->reset();
+				$this->session->set('flow', null);
 			}
-			$this->session->set('identity', $this->identity);
+			$this->identityManager->update();
 			return $this;
 		}
 
@@ -87,19 +96,19 @@
 			return $this;
 		}
 
-		public function reset(): IAuthenticatorManager {
-			$this->use();
-			$this->session->set('flow', null);
-			$this->session->set('identity', null);
-			return $this;
-		}
-
 		public function select(string $flow): IAuthenticatorManager {
 			$this->reset();
 			if (isset($this->flowList[$flow]) === false) {
 				throw new AuthenticatorException(sprintf('Requested unknown flow [%s]; did you registered it?', $flow));
 			}
 			$this->session->set('flow', $this->flowList[$flow]);
+			return $this;
+		}
+
+		public function reset(): IAuthenticatorManager {
+			$this->use();
+			$this->session->set('flow', null);
+			$this->identityManager->reset(true);
 			return $this;
 		}
 

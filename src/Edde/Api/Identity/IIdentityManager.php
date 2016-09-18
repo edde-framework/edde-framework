@@ -29,4 +29,13 @@
 		 * @return IIdentityManager
 		 */
 		public function update(): IIdentityManager;
+
+		/**
+		 * reset current identity to default state (drop current session data); hard reset will clear data of current
+		 *
+		 * @param bool $hard if true, data in current identity will be reset too
+		 *
+		 * @return IIdentityManager
+		 */
+		public function reset(bool $hard = true): IIdentityManager;
 	}
