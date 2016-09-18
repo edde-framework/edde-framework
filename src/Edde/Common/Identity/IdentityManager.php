@@ -71,6 +71,7 @@
 		public function reset(bool $hard = true): IIdentityManager {
 			$this->use();
 			$this->session->set(self::SESSION_IDENTITY, null);
+			$this->identity();
 			if ($hard) {
 				$this->identity->setMetaList([]);
 				$this->identity->setName('');
