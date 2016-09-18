@@ -8,6 +8,10 @@ var Edde = {
 		}
 	},
 	Utils: {
+		redirect: function (url) {
+			Edde.Event.event('edde.redirect');
+			window.location.href = url;
+		},
 		class: function (name, func) {
 			setTimeout(function () {
 				$('[data-class="' + name + '"]').each(function (i, element) {
@@ -38,8 +42,7 @@ var Edde = {
 			}).done(function (data) {
 				Edde.Event.event('edde.on-ajax-done');
 				if (data.redirect) {
-					Edde.Event.event('edde.redirect');
-					window.location.replace(data.redirect);
+					Edde.Utils.redirect(data.redirect);
 					return;
 				}
 				if (data.javaScript) {
