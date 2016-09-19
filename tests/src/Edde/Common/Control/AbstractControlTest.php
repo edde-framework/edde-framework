@@ -26,10 +26,10 @@
 			self::assertSame($controlList, iterator_to_array($control));
 
 			$eventList = [];
-			$control->listen(HandleEvent::class, function (HandleEvent $handleEvent) use (&$eventList) {
+			$control->listen(function (HandleEvent $handleEvent) use (&$eventList) {
 				$eventList[] = get_class($handleEvent);
 			});
-			$control->listen(DoneEvent::class, function (DoneEvent $doneEvent) use (&$eventList) {
+			$control->listen(function (DoneEvent $doneEvent) use (&$eventList) {
 				$eventList[] = get_class($doneEvent);
 			});
 			self::assertEquals('poofoo', $control->handle('someMethod', [

@@ -157,7 +157,7 @@
 					ISchemaFactory::class => SchemaFactory::class,
 					ISchemaManager::class => SchemaManager::class,
 					IRootDirectory::class => function () {
-						throw new RuntimeException(sprintf('If you want use root directory [%s], you must register it to the container!', IRootDirectory::class));
+						throw new RuntimeException(sprintf('If you want use root directory [%s], you must rregister it to the container!', IRootDirectory::class));
 					},
 					ITempDirectory::class => function (IRootDirectory $rootDirectory) {
 						return $rootDirectory->directory('temp', TempDirectory::class);

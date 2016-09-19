@@ -22,24 +22,24 @@
 
 		public function handler(IHandler $handler): IEventBus {
 			if ($this->isUsed()) {
-				$this->register($handler);
+				$this->listen($handler);
 				return $this;
 			}
 			$this->handlerList[] = $handler;
 			return $this;
 		}
 
-		public function register($register): IEventBus {
-			if (($register instanceof IHandler) === false) {
-				$register = HandlerFactory::handler($register);
+		public function listen($listen): IEventBus {
+			if (($listen instanceof IHandler) === false) {
+				$listen = HandlerFactory::handler($listen);
 			}
-			foreach ($register as $event => $callable) {
-				$this->listen($event, $callable);
+			foreach ($listen as $event => $callable) {
+				$this->register($event, $callable);
 			}
 			return $this;
 		}
 
-		public function listen(string $event, callable $handler): IEventBus {
+		public function register(string $event, callable $handler): IEventBus {
 			$this->listenList[$event][] = $handler;
 			return $this;
 		}
@@ -57,7 +57,7 @@
 
 		protected function prepare() {
 			foreach ($this->handlerList as $handler) {
-				$this->register($handler);
+				$this->listen($handler);
 			}
 		}
 	}

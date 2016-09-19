@@ -39,10 +39,10 @@
 			$this->request->method = 'executeThisMethod';
 			$this->request->parameters = ['poo' => 'return this as result'];
 			$eventList = [];
-			$this->application->listen(StartEvent::class, function (StartEvent $startEvent) use (&$eventList) {
+			$this->application->listen(function (StartEvent $startEvent) use (&$eventList) {
 				$eventList[] = get_class($startEvent);
 			});
-			$this->application->listen(FinishEvent::class, function (FinishEvent $finishEvent) use (&$eventList) {
+			$this->application->listen(function (FinishEvent $finishEvent) use (&$eventList) {
 				$eventList[] = get_class($finishEvent);
 			});
 			self::assertEquals('return this as result', $this->application->run());
