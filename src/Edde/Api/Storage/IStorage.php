@@ -5,6 +5,7 @@
 
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Query\IQuery;
+	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Usable\IUsable;
 
 	/**
@@ -18,7 +19,7 @@
 		 *
 		 * @return IStorage
 		 */
-		public function start($exclusive = false): IStorage;
+		public function start(bool $exclusive = false): IStorage;
 
 		/**
 		 * commit a transaciton
@@ -42,6 +43,15 @@
 		 * @return mixed
 		 */
 		public function execute(IQuery $query);
+
+		/**
+		 * execute native query and return native result; this method should not be commonly used
+		 *
+		 * @param IStaticQuery $staticQuery
+		 *
+		 * @return mixed
+		 */
+		public function native(IStaticQuery $staticQuery);
 
 		/**
 		 * try to store the given crate

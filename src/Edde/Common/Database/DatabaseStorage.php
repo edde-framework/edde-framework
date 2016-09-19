@@ -11,6 +11,7 @@
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\Node\INodeQuery;
 	use Edde\Api\Query\IQuery;
+	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Storage\StorageException;
 	use Edde\Common\Node\NodeQuery;
@@ -52,7 +53,7 @@
 			$this->transaction = 0;
 		}
 
-		public function start($exclusive = false): IStorage {
+		public function start(bool $exclusive = false): IStorage {
 			$this->use();
 			if ($this->transaction++ > 0) {
 				if ($exclusive === false) {
@@ -125,6 +126,15 @@
 			$this->use();
 			try {
 				return $this->driver->execute($query);
+			} catch (PDOException $e) {
+				throw new DriverException(sprintf('Driver [%s] execution failed: %s.', get_class($this->driver), $e->getMessage()), 0, $e);
+			}
+		}
+
+		public function native(IStaticQuery $staticQuery) {
+			$this->use();
+			try {
+				return $this->driver->native($staticQuery);
 			} catch (PDOException $e) {
 				throw new DriverException(sprintf('Driver [%s] execution failed: %s.', get_class($this->driver), $e->getMessage()), 0, $e);
 			}
