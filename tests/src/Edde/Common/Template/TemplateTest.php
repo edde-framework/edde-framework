@@ -24,10 +24,8 @@
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\ContainerControl;
-	use Edde\Common\Html\Macro\ControlMacro;
 	use Edde\Common\Html\Macro\TemplateMacro;
 	use Edde\Common\Html\Tag\DivControl;
-	use Edde\Common\Html\TemplateControl;
 	use Edde\Common\Http\HostUrl;
 	use Edde\Common\Link\ControlLinkGenerator;
 	use Edde\Common\Link\LinkFactory;
@@ -665,16 +663,6 @@
 ', $this->control->render());
 		}
 
-		public function testCustomControl() {
-			$control = $this->container->create(TemplateControl::class);
-			$control->setTemplate(__DIR__ . '/assets/template/custom.xml');
-			$control->dirty();
-			self::assertEquals('	<div class="will-use-custom-control">
-			<div class="hello" attr="foo">custom control</div>
-	</div>
-', $control->render());
-		}
-
 		public function testRequire() {
 			/** @var $template IHtmlTemplate */
 			self::assertInstanceOf(IHtmlTemplate::class, $template = $this->templateManager->template(__DIR__ . '/assets/template/require.xml', $this->control));
@@ -924,7 +912,6 @@
 			$this->templateManager = $this->container->create(ITemplateManager::class);
 			$this->templateManager->onSetup(function (ITemplateManager $templateManager) {
 				$templateManager->registerMacroList(TemplateMacro::macroList($this->container));
-				$templateManager->registerMacroList([new ControlMacro('custom-control', \CustomControl::class)]);
 			});
 			$this->control = $this->container->create(\TestDocument::class);
 		}
