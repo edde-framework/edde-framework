@@ -238,6 +238,13 @@
 			return $this->node->getMeta('pair', true);
 		}
 
+		protected function placeholder(string $id) {
+			$this->addControl($this->createControl(PlaceholderControl::class)
+				->setId($id)
+				->dirty());
+			return $this;
+		}
+
 		public function createControl(string $control, ...$parameterList): IHtmlControl {
 			return $this->container->create($control, ...$parameterList);
 		}
