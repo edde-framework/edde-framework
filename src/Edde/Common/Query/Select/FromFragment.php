@@ -55,6 +55,13 @@
 			return $this->selectQuery->where();
 		}
 
+		/**
+		 * @return OrderFragment
+		 */
+		public function order() {
+			return $this->selectQuery->order();
+		}
+
 		protected function prepare() {
 			$this->joinFragment = new JoinFragment($this->node);
 		}

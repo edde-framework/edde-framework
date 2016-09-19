@@ -25,6 +25,10 @@
 		 * @var WhereExpressionFragment
 		 */
 		protected $whereExpressionFragment;
+		/**
+		 * @var OrderFragment
+		 */
+		protected $orderFragment;
 
 		/**
 		 * @return SelectFragment
@@ -50,6 +54,14 @@
 			return $this->whereExpressionFragment;
 		}
 
+		/**
+		 * @return OrderFragment
+		 */
+		public function order() {
+			$this->use();
+			return $this->orderFragment;
+		}
+
 		public function getNode() {
 			if ($this->selectNode === null) {
 				throw new QueryException(sprintf('Empty select query has no sense; please start with %s::select() method.', self::class));
@@ -63,9 +75,11 @@
 				$selectListNode = new Node('select'),
 				$fromListNode = new Node('from'),
 				$whereNode = new Node('where'),
+				$orderNode = new Node('order'),
 			]);
 			$this->selectPropertyFragment = new SelectFragment($selectListNode, $this);
 			$this->fromPropertyFragment = new FromFragment($fromListNode, $this);
 			$this->whereExpressionFragment = new WhereExpressionFragment($whereNode, $this);
+			$this->orderFragment = new OrderFragment($orderNode, $this);
 		}
 	}

@@ -35,6 +35,10 @@
 		/**
 		 * @var INodeQuery
 		 */
+		protected $orderNodeQuery;
+		/**
+		 * @var INodeQuery
+		 */
 		protected $createSchemaNodeQuery;
 
 		public function create(IQuery $query) {
@@ -65,6 +69,7 @@
 			$this->selectNodeQuery = new NodeQuery('/select-query/select/*');
 			$this->fromNodeQuery = new NodeQuery('/select-query/from/*');
 			$this->whereNodeQuery = new NodeQuery('/select-query/where/*');
+			$this->orderNodeQuery = new NodeQuery('/select-query/order/*');
 
 			$this->createSchemaNodeQuery = new NodeQuery('/create-schema-query/*');
 		}
@@ -133,6 +138,12 @@
 				$selectQuery[] = $where->getQuery();
 				$parameterList = array_merge($parameterList, $where->getParameterList());
 			}
+			if ($this->orderNodeQuery->isEmpty($node) === false) {
+				$selectQuery[] = 'ORDER BY';
+				$order = $this->formatOrder($node);
+				$selectQuery[] = $order->getQuery();
+				$parameterList = array_merge($parameterList, $order->getParameterList());
+			}
 			return new StaticQuery(implode(' ', $selectQuery), $parameterList);
 		}
 
@@ -186,6 +197,20 @@
 				$where = "($where)";
 			}
 			return new StaticQuery($where, $parameterList);
+		}
+
+		protected function formatOrder(INode $node) {
+			$parameterList = [];
+			$orderList = [];
+			foreach ($this->orderNodeQuery->filter($node) as $orderNode) {
+				$staticQuery = $this->fragment($orderNode);
+				$orderList[] = $staticQuery->getQuery() . ' ' . (in_array($order = $orderNode->getAttribute('order'), [
+						'asc',
+						'desc',
+					], true) ? strtoupper($order) : 'ASC');
+				$parameterList = array_merge($parameterList, $staticQuery->getParameterList());
+			}
+			return new StaticQuery(implode(', ', $orderList), $parameterList);
 		}
 
 		protected function formatAll(INode $node) {
