@@ -22,7 +22,7 @@
 			$this->upgradeManager = $upgradeManager;
 		}
 
-		public function getObjectPropertyList(): array {
-			return $this->objectPropertyList;
+		public function getUpgradeManager(): IUpgradeManager {
+			return $this->upgradeManager;
 		}
 	}
