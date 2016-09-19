@@ -33,7 +33,7 @@
 			$this->storage = $storage;
 		}
 
-		public function registerUpgrade(IUpgrade $upgrade, $force = false): IUpgradeManager {
+		public function registerUpgrade(IUpgrade $upgrade, bool $force = false): IUpgradeManager {
 			$version = $upgrade->getVersion();
 			if ($force === false && isset($this->upgradeList[$version])) {
 				throw new UpgradeException(sprintf('Cannot register upgrade [%s] with version [%s] - version is already present.', get_class($upgrade), $version));

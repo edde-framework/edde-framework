@@ -18,7 +18,7 @@
 		 *
 		 * @return IUpgradeManager
 		 */
-		public function registerUpgrade(IUpgrade $upgrade, $force = false): IUpgradeManager;
+		public function registerUpgrade(IUpgrade $upgrade, bool $force = false): IUpgradeManager;
 
 		/**
 		 * set current application version; if ommitted, upgrade will run from the first upgrade
