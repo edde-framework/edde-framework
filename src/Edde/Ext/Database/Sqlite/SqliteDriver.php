@@ -11,7 +11,6 @@
 	use Edde\Common\Storage\UniqueException;
 	use Edde\Common\Storage\UnknownSourceException;
 	use PDO;
-	use PDOStatement;
 
 	class SqliteDriver extends AbstractDriver {
 		/**
@@ -26,10 +25,6 @@
 		 * @var IStaticQueryFactory
 		 */
 		protected $staticQueryFactory;
-		/**
-		 * @var PDOStatement[]
-		 */
-		protected $statementList = [];
 
 		/**
 		 * @param string $dsn
@@ -81,11 +76,8 @@
 		public function native(IStaticQuery $staticQuery) {
 			$this->use();
 			try {
-				if (isset($this->statementList[$sql = $staticQuery->getQuery()]) === false) {
-					$this->statementList[$sql] = $statement = $this->pdo->prepare($sql);
-					$statement->setFetchMode(PDO::FETCH_ASSOC);
-				}
-				$statement = $this->statementList[$sql];
+				$statement = $this->pdo->prepare($staticQuery->getQuery());
+				$statement->setFetchMode(PDO::FETCH_ASSOC);
 				$statement->execute($staticQuery->getParameterList());
 				return $statement;
 			} catch (\PDOException $exception) {
@@ -100,7 +92,6 @@
 
 		public function close() {
 			$this->pdo = null;
-			$this->statementList = [];
 			return $this;
 		}
 
