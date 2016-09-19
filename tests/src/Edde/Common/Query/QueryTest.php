@@ -29,6 +29,7 @@
 					'alias' => null,
 				])),
 				new Node('where'),
+				new Node('order'),
 			]);
 			/**
 			 * this fucking foreach must be here because every node has set level, so it was failing
