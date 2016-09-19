@@ -33,6 +33,7 @@ var Edde = {
 				url: url,
 				method: 'POST',
 				data: parameterList ? JSON.stringify(parameterList) : {},
+				timeout: 10000,
 				contentType: 'application/json',
 				dataType: 'json'
 			}).fail(function (e) {
