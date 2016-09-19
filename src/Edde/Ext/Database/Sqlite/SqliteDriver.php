@@ -7,6 +7,7 @@
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQueryFactory;
 	use Edde\Common\Database\AbstractDriver;
+	use Edde\Common\Storage\UnknownSourceException;
 	use PDO;
 	use PDOStatement;
 
@@ -72,14 +73,21 @@
 
 		public function execute(IQuery $query) {
 			$this->use();
-			$staticQuery = $this->staticQueryFactory->create($query);
-			if (isset($this->statementList[$sql = $staticQuery->getQuery()]) === false) {
-				$this->statementList[$sql] = $statement = $this->pdo->prepare($sql);
-				$statement->setFetchMode(PDO::FETCH_ASSOC);
+			try {
+				$staticQuery = $this->staticQueryFactory->create($query);
+				if (isset($this->statementList[$sql = $staticQuery->getQuery()]) === false) {
+					$this->statementList[$sql] = $statement = $this->pdo->prepare($sql);
+					$statement->setFetchMode(PDO::FETCH_ASSOC);
+				}
+				$statement = $this->statementList[$sql];
+				$statement->execute($staticQuery->getParameterList());
+				return $statement;
+			} catch (\PDOException $exception) {
+				if (strpos($exception->getMessage(), 'no such table') !== false) {
+					throw new UnknownSourceException($exception->getMessage(), 0, $exception);
+				}
+				throw $exception;
 			}
-			$statement = $this->statementList[$sql];
-			$statement->execute($staticQuery->getParameterList());
-			return $statement;
 		}
 
 		public function close() {

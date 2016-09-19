@@ -150,6 +150,17 @@
 			$this->storage->commit();
 		}
 
+		public function testSourceException() {
+			$this->expectException(UnknownSourceException::class);
+			$this->expectExceptionMessage('SQLSTATE[HY000]: General error: 1 no such table: unknown source');
+			$selectQuery = new SelectQuery();
+			$selectQuery->select()
+				->all()
+				->from()
+				->source('unknown source');
+			$this->storage->execute($selectQuery);
+		}
+
 		protected function setUp() {
 			$container = ContainerFactory::create([
 				IResourceManager::class => ResourceManager::class,
