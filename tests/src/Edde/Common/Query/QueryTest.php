@@ -41,4 +41,18 @@
 			self::assertEmpty($staticQuery->getParameterList());
 			self::assertEquals('SELECT "a" FROM "foo"', $staticQuery->getQuery());
 		}
+
+		public function testQueryOrder() {
+			$selectQuery = new SelectQuery();
+			$selectQuery->select()
+				->all()
+				->from()
+				->source('foo')
+				->order()
+				->desc()
+				->property('bar');
+			$sqlQueyrFactory = new SqlQueryFactory();
+			$staticQuery = $sqlQueyrFactory->create($selectQuery);
+			self::assertEquals('SELECT * FROM "foo" ORDER BY "bar" DESC', $staticQuery->getQuery());
+		}
 	}
