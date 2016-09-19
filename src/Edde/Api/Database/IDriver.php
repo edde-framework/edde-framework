@@ -4,6 +4,7 @@
 	namespace Edde\Api\Database;
 
 	use Edde\Api\Query\IQuery;
+	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Usable\IUsable;
 	use PDOStatement;
 
@@ -63,4 +64,13 @@
 		 * @return PDOStatement
 		 */
 		public function execute(IQuery $query);
+
+		/**
+		 * execute native query
+		 *
+		 * @param IStaticQuery $staticQuery
+		 *
+		 * @return mixed
+		 */
+		public function native(IStaticQuery $staticQuery);
 	}

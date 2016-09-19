@@ -5,6 +5,7 @@
 
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Query\IQuery;
+	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Query\IStaticQueryFactory;
 	use Edde\Common\Database\AbstractDriver;
 	use Edde\Common\Storage\UniqueException;
@@ -74,8 +75,12 @@
 
 		public function execute(IQuery $query) {
 			$this->use();
+			return $this->native($this->staticQueryFactory->create($query));
+		}
+
+		public function native(IStaticQuery $staticQuery) {
+			$this->use();
 			try {
-				$staticQuery = $this->staticQueryFactory->create($query);
 				if (isset($this->statementList[$sql = $staticQuery->getQuery()]) === false) {
 					$this->statementList[$sql] = $statement = $this->pdo->prepare($sql);
 					$statement->setFetchMode(PDO::FETCH_ASSOC);
