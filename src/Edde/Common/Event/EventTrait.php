@@ -22,18 +22,18 @@
 			return $this->traitEventBus->handler($handler);
 		}
 
-		public function register($register): IEventBus {
+		public function listen($listen): IEventBus {
 			if ($this->traitEventBus === null) {
 				$this->traitEventBus = new EventBus();
 			}
-			return $this->traitEventBus->register($register);
+			return $this->traitEventBus->listen($listen);
 		}
 
-		public function listen(string $event, callable $handler): IEventBus {
+		public function register(string $event, callable $handler): IEventBus {
 			if ($this->traitEventBus === null) {
 				$this->traitEventBus = new EventBus();
 			}
-			return $this->traitEventBus->listen($event, $handler);
+			return $this->traitEventBus->register($event, $handler);
 		}
 
 		public function event(IEvent $event): IEventBus {

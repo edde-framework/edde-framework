@@ -7,9 +7,15 @@
 	use Edde\Api\Upgrade\IUpgrade;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Upgrade\UpgradeException;
+	use Edde\Common\Event\EventTrait;
+	use Edde\Common\Upgrade\Event\OnUpgradeEvent;
+	use Edde\Common\Upgrade\Event\UpgradeEndEvent;
+	use Edde\Common\Upgrade\Event\UpgradeFailEvent;
+	use Edde\Common\Upgrade\Event\UpgradeStartEvent;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class UpgradeManager extends AbstractUsable implements IUpgradeManager {
+		use EventTrait;
 		/**
 		 * @var IStorage
 		 */
@@ -18,12 +24,16 @@
 		 * @var IUpgrade[]
 		 */
 		protected $upgradeList = [];
+		/**
+		 * @var string
+		 */
+		protected $currentVersion;
 
 		public function lazyStorage(IStorage $storage) {
 			$this->storage = $storage;
 		}
 
-		public function registerUpgrade(IUpgrade $upgrade, $force = false) {
+		public function registerUpgrade(IUpgrade $upgrade, $force = false): IUpgradeManager {
 			$version = $upgrade->getVersion();
 			if ($force === false && isset($this->upgradeList[$version])) {
 				throw new UpgradeException(sprintf('Cannot register upgrade [%s] with version [%s] - version is already present.', get_class($upgrade), $version));
@@ -32,16 +42,25 @@
 			return $this;
 		}
 
-		public function getUpgradeList() {
+		public function setCurrentVersion(string $currentVersion = null): IUpgradeManager {
+			$this->use();
+			if ($currentVersion && isset($this->upgradeList[$currentVersion]) === false) {
+				throw new UpgradeException(sprintf('Setting unknown current version [%s].', $currentVersion));
+			}
+			$this->currentVersion = $currentVersion;
+			return $this;
+		}
+
+		public function getUpgradeList(): array {
 			$this->use();
 			return $this->upgradeList;
 		}
 
-		public function upgrade() {
+		public function upgrade(): IUpgrade {
 			return $this->upgradeTo();
 		}
 
-		public function upgradeTo($version = null) {
+		public function upgradeTo(string $version = null): IUpgrade {
 			$this->use();
 			if ($version === null) {
 				end($this->upgradeList);
@@ -53,24 +72,38 @@
 			if (isset($this->upgradeList[$version]) === false) {
 				throw new UpgradeException(sprintf('Cannot run upgrade - unknown upgrade version [%s].', $version));
 			}
-			$upgrade = null;
+			$last = null;
 			try {
 				$this->storage->start();
-				foreach ($this->upgradeList as $upgrade) {
+				$this->event(new UpgradeStartEvent($this));
+				$upgradeList = $this->currentVersion ? array_slice($this->upgradeList, $index = array_search($this->currentVersion, array_keys($this->upgradeList), true) + 1, null, true) : $this->upgradeList;
+				if (isset($index) && $index >= count($this->upgradeList)) {
+					throw new CurrentVersionException(sprintf('Version [%s] is current; no upgrades has been run.', $this->currentVersion));
+				}
+				foreach ($upgradeList as $upgrade) {
+					$this->event($onUpgradeEvent = new OnUpgradeEvent($this, $upgrade));
+					if ($onUpgradeEvent->isSuppressed()) {
+						continue;
+					}
+					$last = $upgrade;
 					$upgrade->upgrade();
 					if ($upgrade->getVersion() === $version) {
 						break;
 					}
 				}
+				$this->event(new UpgradeEndEvent($this));
 				$this->storage->commit();
 			} catch (\Exception $e) {
+				if ($last) {
+					$this->event(new UpgradeFailEvent($this, $last));
+				}
 				$this->storage->rollback();
 				throw $e;
 			}
-			if ($upgrade === null) {
+			if ($last === null) {
 				throw new UpgradeException(sprintf('No upgrades has been run for version [%s].', $version));
 			}
-			return $upgrade;
+			return $last;
 		}
 
 		protected function prepare() {

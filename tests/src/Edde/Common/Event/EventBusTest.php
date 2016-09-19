@@ -24,7 +24,7 @@
 		protected $eventBus;
 
 		public function testCommon() {
-			$this->eventBus->listen(SomeEvent::class, function (SomeEvent $someEvent) {
+			$this->eventBus->register(SomeEvent::class, function (SomeEvent $someEvent) {
 				$someEvent->flag = true;
 			});
 			$this->eventBus->event($someEvent = new SomeEvent());
@@ -75,7 +75,7 @@
 			 * only for "event bus activation" (->use() is not formally available)
 			 */
 			$this->eventBus->event(new DummyEvent());
-			$this->eventBus->register(function (DummyEvent $dummyEvent) use (&$flag) {
+			$this->eventBus->listen(function (DummyEvent $dummyEvent) use (&$flag) {
 				$flag = true;
 			});
 			self::assertFalse($flag);

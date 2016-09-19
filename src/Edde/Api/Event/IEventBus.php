@@ -17,6 +17,15 @@
 		public function handler(IHandler $handler): IEventBus;
 
 		/**
+		 * register the given "something" as event listener (input should be converted into single listen() calls)
+		 *
+		 * @param $listen
+		 *
+		 * @return IEventBus
+		 */
+		public function listen($listen): IEventBus;
+
+		/**
 		 * register event handler
 		 *
 		 * @param string $event
@@ -24,16 +33,7 @@
 		 *
 		 * @return IEventBus
 		 */
-		public function listen(string $event, callable $handler): IEventBus;
-
-		/**
-		 * register the given "something" as event listener (input should be converted into single listen() calls)
-		 *
-		 * @param $register
-		 *
-		 * @return IEventBus
-		 */
-		public function register($register): IEventBus;
+		public function register(string $event, callable $handler): IEventBus;
 
 		/**
 		 * emit an event to all it's listeners; it should NOT do any magic
