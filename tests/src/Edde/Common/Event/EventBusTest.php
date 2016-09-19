@@ -5,6 +5,7 @@
 
 	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEventBus;
+	use Edde\Common\Event\Handler\CallableHandler;
 	use Edde\Common\Event\Handler\ReflectionHandler;
 	use Foo\Bar\AnotherEvent;
 	use Foo\Bar\DummyEvent;
@@ -56,6 +57,30 @@
 			self::assertTrue($event->flag);
 			$someUsefullClass->event($event = new DummyEvent());
 			self::assertFalse($event->flag);
+		}
+
+		public function testCallableHandler() {
+			$flag = false;
+			$this->eventBus->handler(new CallableHandler(function (DummyEvent $dummyEvent) use (&$flag) {
+				$flag = true;
+			}));
+			self::assertFalse($flag);
+			$this->eventBus->event(new DummyEvent());
+			self::assertTrue($flag);
+		}
+
+		public function testCallableHandler2() {
+			$flag = false;
+			/**
+			 * only for "event bus activation" (->use() is not formally available)
+			 */
+			$this->eventBus->event(new DummyEvent());
+			$this->eventBus->register(function (DummyEvent $dummyEvent) use (&$flag) {
+				$flag = true;
+			});
+			self::assertFalse($flag);
+			$this->eventBus->event(new DummyEvent());
+			self::assertTrue($flag, 'Event was not called.');
 		}
 
 		protected function setUp() {

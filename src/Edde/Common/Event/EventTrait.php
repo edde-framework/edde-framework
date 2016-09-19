@@ -5,6 +5,7 @@
 
 	use Edde\Api\Event\IEvent;
 	use Edde\Api\Event\IEventBus;
+	use Edde\Api\Event\IHandler;
 
 	trait EventTrait {
 		/**
@@ -14,18 +15,25 @@
 		 */
 		protected $traitEventBus;
 
+		public function handler(IHandler $handler): IEventBus {
+			if ($this->traitEventBus === null) {
+				$this->traitEventBus = new EventBus();
+			}
+			return $this->traitEventBus->handler($handler);
+		}
+
+		public function register($register): IEventBus {
+			if ($this->traitEventBus === null) {
+				$this->traitEventBus = new EventBus();
+			}
+			return $this->traitEventBus->register($register);
+		}
+
 		public function listen(string $event, callable $handler): IEventBus {
 			if ($this->traitEventBus === null) {
 				$this->traitEventBus = new EventBus();
 			}
 			return $this->traitEventBus->listen($event, $handler);
-		}
-
-		public function handler($handler): IEventBus {
-			if ($this->traitEventBus === null) {
-				$this->traitEventBus = new EventBus();
-			}
-			return $this->traitEventBus->handler($handler);
 		}
 
 		public function event(IEvent $event): IEventBus {

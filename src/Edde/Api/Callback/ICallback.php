@@ -10,14 +10,16 @@
 		/**
 		 * @return callable
 		 */
-		public function getCallback();
+		public function getCallback(): callable;
 
 		/**
 		 * return array of dependencies (parameter list)
 		 *
 		 * @return IParameter[]
 		 */
-		public function getParameterList();
+		public function getParameterList(): array;
+
+		public function getParameterCount(): int;
 
 		/**
 		 * @param array ...$parameterList
