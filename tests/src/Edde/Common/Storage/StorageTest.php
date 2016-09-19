@@ -161,6 +161,22 @@
 			$this->storage->execute($selectQuery);
 		}
 
+		public function testUniqueException() {
+			$this->expectException(UniqueException::class);
+			$this->expectExceptionMessage('SQLSTATE[23000]: Integrity constraint violation: 19 UNIQUE constraint failed: Group.name');
+			$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema('Group')));
+			$this->storage->store($this->crateFactory->crate(Crate::class, 'Group', null)
+				->put([
+					'guid' => sha1(random_bytes(64)),
+					'name' => 'root',
+				]))
+				->store($this->crateFactory->crate(Crate::class, 'Group', null)
+					->put([
+						'guid' => sha1(random_bytes(64)),
+						'name' => 'root',
+					]));
+		}
+
 		protected function setUp() {
 			$container = ContainerFactory::create([
 				IResourceManager::class => ResourceManager::class,

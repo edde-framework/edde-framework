@@ -7,6 +7,7 @@
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQueryFactory;
 	use Edde\Common\Database\AbstractDriver;
+	use Edde\Common\Storage\UniqueException;
 	use Edde\Common\Storage\UnknownSourceException;
 	use PDO;
 	use PDOStatement;
@@ -83,8 +84,10 @@
 				$statement->execute($staticQuery->getParameterList());
 				return $statement;
 			} catch (\PDOException $exception) {
-				if (strpos($exception->getMessage(), 'no such table') !== false) {
+				if (strpos($message = $exception->getMessage(), 'no such table') !== false) {
 					throw new UnknownSourceException($exception->getMessage(), 0, $exception);
+				} else if (strpos($message, 'UNIQUE constraint failed') !== false) {
+					throw new UniqueException($exception->getMessage(), 0, $exception);
 				}
 				throw $exception;
 			}
