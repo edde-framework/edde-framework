@@ -7,7 +7,7 @@
 	use Edde\Common\Storage\AbstractStorage;
 
 	class DummyStorage extends AbstractStorage {
-		public function start($exclusive = false): IStorage {
+		public function start(bool $exclusive = false): IStorage {
 			return $this;
 		}
 

@@ -18,7 +18,7 @@
 		 *
 		 * @return IStorage
 		 */
-		public function start($exclusive = false): IStorage;
+		public function start(bool $exclusive = false): IStorage;
 
 		/**
 		 * commit a transaciton

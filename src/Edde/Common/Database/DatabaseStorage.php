@@ -52,7 +52,7 @@
 			$this->transaction = 0;
 		}
 
-		public function start($exclusive = false): IStorage {
+		public function start(bool $exclusive = false): IStorage {
 			$this->use();
 			if ($this->transaction++ > 0) {
 				if ($exclusive === false) {
