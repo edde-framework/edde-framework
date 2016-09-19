@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Sandbox\Upgrade;
+	namespace Edde\Ext\Upgrade;
 
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Crate\ICrateFactory;
