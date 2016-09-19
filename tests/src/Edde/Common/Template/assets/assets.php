@@ -5,7 +5,6 @@
 	use Edde\Common\Html\Tag\ButtonControl;
 	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Html\Tag\SpanControl;
-	use Edde\Common\Html\TemplateControl;
 
 	class TestDocument extends DocumentControl {
 		/**
@@ -93,16 +92,5 @@
 
 		public function getAnotherValue() {
 			return 'another-item-value ' . $this->item;
-		}
-	}
-
-	class CustomControl extends TemplateControl {
-		public function getAttr() {
-			return 'foo';
-		}
-
-		protected function prepare() {
-			parent::prepare();
-			$this->setTemplate(__DIR__ . '/template/custom-control.xml');
 		}
 	}
