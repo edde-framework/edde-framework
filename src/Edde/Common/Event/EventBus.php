@@ -6,10 +6,10 @@
 	use Edde\Api\Event\IEvent;
 	use Edde\Api\Event\IEventBus;
 	use Edde\Api\Event\IHandler;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Usable\AbstractUsable;
 	use Edde\Common\Usable\UsableTrait;
 
-	class EventBus extends AbstractObject implements IEventBus {
+	class EventBus extends AbstractUsable implements IEventBus {
 		use UsableTrait;
 		/**
 		 * @var callable[][]
@@ -20,8 +20,27 @@
 		 */
 		protected $handlerList = [];
 
-		public function handler($handler): IEventBus {
+		public function handler(IHandler $handler): IEventBus {
+			if ($this->isUsed()) {
+				$this->register($handler);
+				return $this;
+			}
 			$this->handlerList[] = $handler;
+			return $this;
+		}
+
+		public function register($register): IEventBus {
+			if (($register instanceof IHandler) === false) {
+				$register = HandlerFactory::handler($register);
+			}
+			foreach ($register as $event => $callable) {
+				$this->listen($event, $callable);
+			}
+			return $this;
+		}
+
+		public function listen(string $event, callable $handler): IEventBus {
+			$this->listenList[$event][] = $handler;
 			return $this;
 		}
 
@@ -38,14 +57,7 @@
 
 		protected function prepare() {
 			foreach ($this->handlerList as $handler) {
-				foreach ($handler as $event => $callable) {
-					$this->listen($event, $callable);
-				}
+				$this->register($handler);
 			}
-		}
-
-		public function listen(string $event, callable $handler): IEventBus {
-			$this->listenList[$event][] = $handler;
-			return $this;
 		}
 	}

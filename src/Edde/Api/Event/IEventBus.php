@@ -8,6 +8,15 @@
 	 */
 	interface IEventBus {
 		/**
+		 * deffered event handler
+		 *
+		 * @param IHandler $handler
+		 *
+		 * @return IEventBus
+		 */
+		public function handler(IHandler $handler): IEventBus;
+
+		/**
 		 * register event handler
 		 *
 		 * @param string $event
@@ -17,7 +26,14 @@
 		 */
 		public function listen(string $event, callable $handler): IEventBus;
 
-		public function handler($handler): IEventBus;
+		/**
+		 * register the given "something" as event listener (input should be converted into single listen() calls)
+		 *
+		 * @param $register
+		 *
+		 * @return IEventBus
+		 */
+		public function register($register): IEventBus;
 
 		/**
 		 * emit an event to all it's listeners; it should NOT do any magic

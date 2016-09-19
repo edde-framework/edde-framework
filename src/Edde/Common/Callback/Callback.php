@@ -4,7 +4,6 @@
 	namespace Edde\Common\Callback;
 
 	use Edde\Api\Callback\ICallback;
-	use Edde\Api\Callback\IParameter;
 	use Edde\Common\AbstractObject;
 
 	class Callback extends AbstractObject implements ICallback {
@@ -12,6 +11,7 @@
 		 * @var callable
 		 */
 		protected $callback;
+		protected $parameterList = null;
 
 		/**
 		 * @param callable $callback
@@ -20,15 +20,19 @@
 			$this->callback = $callback;
 		}
 
-		public function getCallback() {
+		public function getCallback(): callable {
 			return $this->callback;
 		}
 
-		/**
-		 * @return IParameter[]
-		 */
-		public function getParameterList() {
-			return CallbackUtils::getParameterList($this->callback);
+		public function getParameterCount(): int {
+			return count($this->getParameterList());
+		}
+
+		public function getParameterList(): array {
+			if ($this->parameterList === null) {
+				$this->parameterList = CallbackUtils::getParameterList($this->callback);
+			}
+			return $this->parameterList;
 		}
 
 		public function __invoke(...$parameterList) {
