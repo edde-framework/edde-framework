@@ -4,8 +4,8 @@
 	namespace Edde\Common\Html\Macro;
 
 	use Edde\Api\Node\INode;
-	use Edde\Api\Resource\Storage\IStorageDirectory;
 	use Edde\Api\Template\ICompiler;
+	use Edde\Common\File\HomeDirectoryTrait;
 	use Edde\Common\Template\AbstractMacro;
 	use Edde\Common\Usable\UsableTrait;
 
@@ -14,20 +14,17 @@
 	 */
 	class ControlMacro extends AbstractMacro {
 		use UsableTrait;
-		/**
-		 * @var IStorageDirectory
-		 */
-		protected $storageDirectory;
+		use HomeDirectoryTrait;
 
 		public function __construct() {
 			parent::__construct('control');
 		}
 
-		public function lazyStorageDirectory(IStorageDirectory $storageDirectory) {
-			$this->storageDirectory = $storageDirectory;
-		}
-
 		public function macro(INode $macro, ICompiler $compiler) {
+			$this->use();
+			$file = $this->homeDirectory->file(sha1($compiler->getSource()
+					->getPath() . '.php'));
+			$file->write("foo");
 			foreach ($macro->getNodeList() as $node) {
 				$compiler->macro($node);
 			}
@@ -35,5 +32,6 @@
 		}
 
 		protected function prepare() {
+			$this->home('.template');
 		}
 	}

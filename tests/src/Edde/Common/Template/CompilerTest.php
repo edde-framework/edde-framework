@@ -5,11 +5,13 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Converter\IConverterManager;
+	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\File\File;
+	use Edde\Common\File\RootDirectory;
 	use Edde\Common\Html\Macro\ControlMacro;
 	use Edde\Common\Html\Macro\HtmlMacro;
 	use Edde\Common\Resource\ResourceManager;
@@ -51,6 +53,7 @@
 				IResourceManager::class => ResourceManager::class,
 				IConverterManager::class => ConverterManager::class,
 				IXmlParser::class => XmlParser::class,
+				IRootDirectory::class => new RootDirectory(__DIR__ . '/temp'),
 			]);
 			/** @var $converterManager IConverterManager */
 			$converterManager = $this->container->create(IConverterManager::class);
