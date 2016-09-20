@@ -1,27 +1,13 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Query\Select;
+	namespace Edde\Common\Query\Where;
 
-	use Edde\Api\Node\INode;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractFragment;
 
 	class WhereExpressionFragment extends AbstractFragment {
-		/**
-		 * @var SelectQuery
-		 */
-		protected $selectQuery;
 		protected $relation = 'and';
-
-		/**
-		 * @param INode $whereNode
-		 * @param SelectQuery $selectQuery
-		 */
-		public function __construct(INode $whereNode, SelectQuery $selectQuery) {
-			parent::__construct($whereNode);
-			$this->selectQuery = $selectQuery;
-		}
 
 		/**
 		 * @return WhereFragment
@@ -34,7 +20,7 @@
 			$this->node->addNode($node = new Node($name, null, [
 				'relation' => $this->relation,
 			]));
-			return new WhereFragment($node, $this, $this->selectQuery);
+			return new WhereFragment($node, $this);
 		}
 
 		/**
@@ -116,6 +102,6 @@
 			$this->node->addNode($groupNode = new Node('where-group', null, [
 				'relation' => $this->relation,
 			]));
-			return new self($groupNode, $this->selectQuery);
+			return new self($groupNode);
 		}
 	}

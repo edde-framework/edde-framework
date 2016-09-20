@@ -95,6 +95,7 @@
 			}
 			$schema = $crate->getSchema();
 			$selectQuery = new SelectQuery();
+			$identifierList = [];
 			foreach ($crate->getIdentifierList() as $property) {
 				$schemaProperty = $property->getSchemaProperty();
 				$selectQuery->select()
@@ -102,23 +103,30 @@
 					->where()
 					->eq()
 					->property($schemaProperty->getName())
-					->parameter($property->get());
+					->parameter($value = $property->get());
+				$identifierList[$schemaProperty->getName()] = $value;
 			}
 			$selectQuery->from()
 				->source($schema->getSchemaName());
 			foreach ($this->execute($selectQuery) as $count) {
 				break;
 			}
-			$name = InsertQuery::class;
-			if (((int)reset($count)) > 0) {
-				$name = UpdateQuery::class;
-			}
 			$source = [];
 			foreach ($crate->getDirtyList() as $property) {
 				$schemaProperty = $property->getSchemaProperty();
 				$source[$schemaProperty->getName()] = $property->get();
 			}
-			$this->execute(new $name($schema, $source));
+			$query = new InsertQuery($schema, $source);
+			if (((int)reset($count)) > 0) {
+				$query = new UpdateQuery($schema, $source);
+				$where = $query->where();
+				foreach ($identifierList as $name => $value) {
+					$where->eq()
+						->property($name)
+						->parameter($value);
+				}
+			}
+			$this->execute($query);
 			return $this;
 		}
 

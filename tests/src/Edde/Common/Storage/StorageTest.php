@@ -87,6 +87,33 @@
 			self::assertEquals(2, $count);
 		}
 
+		public function testUpdate() {
+			$this->storage->start();
+			$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema('Group')));
+			$this->storage->store($rootGroup = $this->crateFactory->crate(Crate::class, 'Group', null)
+				->put([
+					'guid' => sha1(random_bytes(64)),
+					'name' => 'root',
+				]));
+			$selectQuery = new SelectQuery();
+			$selectQuery->select()
+				->all()
+				->from()
+				->source('Group')
+				->where()
+				->eq()
+				->property('guid')
+				->parameter($rootGroup->get('guid'));
+			$load = $this->storage->load(Crate::class, $selectQuery, 'Group');
+			self::assertEquals($rootGroup->get('guid'), $load->get('guid'));
+			$rootGroup->set('name', 'The Epic Godness');
+			$this->storage->store($rootGroup);
+			$load = $this->storage->load(Crate::class, $selectQuery, 'Group');
+			self::assertEquals($rootGroup->get('guid'), $load->get('guid'));
+			self::assertEquals('The Epic Godness', $load->get('name'));
+			$this->storage->commit();
+		}
+
 		public function testComplexStorable() {
 			$this->storage->start();
 			$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema('Group')));
