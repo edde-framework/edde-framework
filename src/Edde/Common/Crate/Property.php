@@ -70,7 +70,7 @@
 			$value = $this->schemaProperty->setterFilter($this->schemaProperty->filter($value));
 			$this->dirty = false;
 			$this->current = null;
-			if ($this->value !== $value) {
+			if ($this->schemaProperty->isDirty($this->value, $value)) {
 				$this->dirty = true;
 				$this->current = $value;
 			}

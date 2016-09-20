@@ -99,4 +99,14 @@
 		 * @return mixed
 		 */
 		public function getterFilter($value);
+
+		/**
+		 * tells if the values are different but respects property type (e.g. "100" === 100 when property is int/float)
+		 *
+		 * @param mixed $current
+		 * @param mixed $value
+		 *
+		 * @return bool
+		 */
+		public function isDirty($current, $value): bool;
 	}
