@@ -6,5 +6,5 @@
 	/**
 	 * Inline macro is executed over some "root" macro.
 	 */
-	interface IInline {
+	interface IInline extends IMacro {
 	}

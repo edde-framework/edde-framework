@@ -9,6 +9,7 @@
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\CompilerException;
 	use Edde\Api\Template\ICompiler;
+	use Edde\Api\Template\IInline;
 	use Edde\Api\Template\IMacro;
 	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Usable\AbstractUsable;
@@ -33,9 +34,17 @@
 		 */
 		protected $compileList = [];
 		/**
+		 * @var IInline[]
+		 */
+		protected $compileInlineList = [];
+		/**
 		 * @var IMacro[]
 		 */
 		protected $macroList = [];
+		/**
+		 * @var IInline[]
+		 */
+		protected $macroInlineList = [];
 		/**
 		 * stack of compiled files (when compiler is reused)
 		 *
@@ -69,8 +78,18 @@
 			return $this;
 		}
 
+		public function registerCompileInlineMacro(IInline $inline): ICompiler {
+			$this->compileInlineList[$inline->getName()] = $inline;
+			return $this;
+		}
+
 		public function registerMacro(IMacro $macro): ICompiler {
 			$this->macroList[$macro->getName()] = $macro;
+			return $this;
+		}
+
+		public function registerInlineMacro(IInline $inline): ICompiler {
+			$this->macroInlineList[$inline->getName()] = $inline;
 			return $this;
 		}
 
@@ -93,6 +112,14 @@
 			if (isset($this->macroList[$name = $macro->getName()]) === false) {
 				throw new CompilerException(sprintf('Unknown macro [%s].', $macro->getPath()));
 			}
+			if (empty($this->macroInlineList) === false) {
+				foreach ($macro->getAttributeList() as $k => $v) {
+					if (isset($this->macroInlineList[$k])) {
+						$this->macroInlineList[$k]->macro($macro, $this);
+						$macro->removeAttribute($k);
+					}
+				}
+			}
 			return $this->macroList[$name]->macro($macro, $this);
 		}
 
@@ -100,6 +127,13 @@
 			$this->use();
 			$this->stack->push($source);
 			foreach (NodeIterator::recursive($source = $this->resourceManager->resource($source), true) as $node) {
+				if (empty($this->compileInlineList) === false) {
+					foreach ($node->getAttributeList() as $k => $v) {
+						if (isset($this->compileInlineList[$k])) {
+							$this->compileInlineList[$k]->macro($node, $this);
+						}
+					}
+				}
 				if (isset($this->compileList[$name = $node->getName()])) {
 					$this->execute($node);
 				}

@@ -18,6 +18,13 @@
 		public function registerCompileMacro(IMacro $macro): ICompiler;
 
 		/**
+		 * @param IInline $inline
+		 *
+		 * @return ICompiler
+		 */
+		public function registerCompileInlineMacro(IInline $inline): ICompiler;
+
+		/**
 		 * "runtime macro" - those should generate runtime
 		 *
 		 * @param IMacro $macro
@@ -25,6 +32,13 @@
 		 * @return ICompiler
 		 */
 		public function registerMacro(IMacro $macro): ICompiler;
+
+		/**
+		 * @param IInline $inline
+		 *
+		 * @return ICompiler
+		 */
+		public function registerInlineMacro(IInline $inline): ICompiler;
 
 		/**
 		 * execute macro in compile time

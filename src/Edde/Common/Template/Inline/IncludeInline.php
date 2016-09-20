@@ -1,19 +1,16 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Template\Macro;
+	namespace Edde\Common\Template\Inline;
 
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\Template\AbstractMacro;
+	use Edde\Common\Template\AbstractInline;
 
-	/**
-	 * Compile time include macro.
-	 */
-	class IncludeMacro extends AbstractMacro {
+	class IncludeInline extends AbstractInline {
 		/**
 		 * @var IRootDirectory
 		 */
@@ -28,7 +25,7 @@
 		}
 
 		public function macro(INode $macro, ICompiler $compiler) {
-			$macro->addNodeList($this->include($this->attribute($macro, 'src'), $macro, $compiler->getCurrent(), $compiler), true);
+			$macro->addNodeList($this->include($this->attribute($macro, $this->getName()), $macro, $compiler->getCurrent(), $compiler), true);
 		}
 
 		protected function include (string $src, INode $macro, IFile $source, ICompiler $compiler) {

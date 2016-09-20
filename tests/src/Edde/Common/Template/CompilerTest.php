@@ -13,6 +13,8 @@
 	use Edde\Common\Html\Macro\ControlMacro;
 	use Edde\Common\Html\Macro\HtmlMacro;
 	use Edde\Common\Resource\ResourceManager;
+	use Edde\Common\Template\Inline\BlockInline;
+	use Edde\Common\Template\Inline\IncludeInline;
 	use Edde\Common\Template\Macro\BlockMacro;
 	use Edde\Common\Template\Macro\IncludeMacro;
 	use Edde\Common\Template\Macro\UseMacro;
@@ -34,6 +36,9 @@
 			$compiler->registerCompileMacro($this->container->inject(new UseMacro()));
 			$compiler->registerCompileMacro($this->container->inject(new IncludeMacro()));
 			$compiler->registerCompileMacro($this->container->inject(new BlockMacro()));
+
+			$compiler->registerCompileInlineMacro($this->container->inject(new BlockInline()));
+			$compiler->registerCompileInlineMacro($this->container->inject(new IncludeInline()));
 
 			$compiler->registerMacro($this->container->inject(new ControlMacro()));
 			$compiler->registerMacro($this->container->inject(new HtmlMacro('div')));
