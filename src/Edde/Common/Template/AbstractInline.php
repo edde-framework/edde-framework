@@ -8,8 +8,8 @@
 	use Edde\Api\Template\MacroException;
 
 	abstract class AbstractInline extends AbstractMacro implements IInline {
-		public function attribute(INode $macro, string $name) {
-			if (($attribute = $macro->getAttribute($name)) === null) {
+		public function attribute(INode $macro, string $name = null) {
+			if (($attribute = $macro->getAttribute($name = $name ?: $this->getName())) === null) {
 				throw new MacroException(sprintf('Missing attribute [%s] in macro node [%s].', $name, $macro->getPath()));
 			}
 			$macro->removeAttribute($name);

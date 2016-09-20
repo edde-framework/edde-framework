@@ -15,7 +15,7 @@
 
 		public function macro(INode $macro, ICompiler $compiler) {
 			$blockList = $compiler->getValue('block-list', []);
-			if (isset($blockList[$id = $this->attribute($macro, $this->getName())])) {
+			if (isset($blockList[$id = $this->attribute($macro)])) {
 				throw new MacroException(sprintf('Block id [%d] has been already defined.', $id));
 			}
 			$blockList[$id] = [$macro];
