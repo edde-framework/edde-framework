@@ -1,4 +1,0 @@
-<control>
-	<div class="simple-div" x:include="./simple-include.xml"/>
-	<x:include src="./another-include.xml"/>
-</control>

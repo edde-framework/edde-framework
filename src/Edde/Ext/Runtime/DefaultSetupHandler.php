@@ -66,7 +66,6 @@
 	use Edde\Common\EddeDirectory;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\Converter\HtmlConverter;
-	use Edde\Common\Html\Macro\TemplateMacro;
 	use Edde\Common\Http\HostUrl;
 	use Edde\Common\Http\HttpRequestFactory;
 	use Edde\Common\Http\HttpResponse;
@@ -213,9 +212,6 @@
 					$converterManager->registerConverter($container->create(HtmlConverter::class));
 					$converterManager->registerConverter($container->create(HttpConverter::class));
 					$converterManager->registerConverter($container->create(RedirectConverter::class));
-				})
-				->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
-					$templateManager->registerMacroList(TemplateMacro::macroList($container));
 				});
 		}
 	}
