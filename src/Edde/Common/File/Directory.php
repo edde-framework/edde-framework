@@ -85,7 +85,7 @@
 
 		public function directory(string $directory, string $class = null): IDirectory {
 			$class = $class ?: Directory::class;
-			return new $class($this->getDirectory() . '/' . $directory);
+			return new $class($this->directory . '/' . $directory);
 		}
 
 		public function parent(): IDirectory {
