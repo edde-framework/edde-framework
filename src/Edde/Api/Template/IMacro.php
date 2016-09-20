@@ -3,24 +3,27 @@
 
 	namespace Edde\Api\Template;
 
+	use Edde\Api\Container\ILazyInject;
+	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 
 	/**
 	 * Macro is operating over whole Node.
 	 */
-	interface IMacro {
+	interface IMacro extends ILazyInject {
 		/**
-		 * return list of supported macros
-		 *
-		 * @return string[]
+		 * @return string
 		 */
-		public function getMacroList(): array;
+		public function getName(): string;
 
 		/**
 		 * execute this macro
 		 *
 		 * @param INode $node
+		 * @param IFile $source
 		 * @param ICompiler $compiler
+		 *
+		 * @return
 		 */
-		public function macro(INode $node, ICompiler $compiler);
+		public function macro(INode $node, IFile $source, ICompiler $compiler);
 	}

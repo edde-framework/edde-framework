@@ -3,23 +3,29 @@
 
 	namespace Edde\Common\Template;
 
+	use Edde\Api\Node\INode;
 	use Edde\Api\Template\IMacro;
+	use Edde\Api\Template\MacroException;
 	use Edde\Common\AbstractObject;
 
 	abstract class AbstractMacro extends AbstractObject implements IMacro {
 		/**
-		 * @var string[]
+		 * @var string
 		 */
-		protected $macroList = [];
+		protected $name;
 
-		/**
-		 * @param string[] $macroList
-		 */
-		public function __construct(array $macroList) {
-			$this->macroList = $macroList;
+		public function __construct(string $name) {
+			$this->name = $name;
 		}
 
-		public function getMacroList(): array {
-			return $this->macroList;
+		public function getName(): string {
+			return $this->name;
+		}
+
+		public function attribute(INode $node, string $name) {
+			if (($attribute = $node->getAttribute($name)) === null) {
+				throw new MacroException(sprintf('Missing attribute [%s] in macro node [%s].', $name, $node->getPath()));
+			}
+			return $attribute;
 		}
 	}

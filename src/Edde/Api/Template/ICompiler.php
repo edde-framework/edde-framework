@@ -4,6 +4,7 @@
 	namespace Edde\Api\Template;
 
 	use Edde\Api\Container\ILazyInject;
+	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 
 	interface ICompiler extends ILazyInject {
@@ -28,9 +29,11 @@
 		/**
 		 * compile source into node; node is the final result
 		 *
+		 * @param IFile $source
+		 *
 		 * @return INode
 		 */
-		public function compile(): INode;
+		public function compile(IFile $source): INode;
 
 		/**
 		 * execute whole compilation process: compile + template building (generating)
