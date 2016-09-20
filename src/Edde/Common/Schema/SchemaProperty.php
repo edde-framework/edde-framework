@@ -187,6 +187,11 @@
 		}
 
 		public function isDirty($current, $value): bool {
+			if ($current === null && $value === null) {
+				return false;
+			} else if (($current === null && $value !== null) || ($current !== null && $value === null)) {
+				return true;
+			}
 			if ($this->isArray()) {
 				$diff = array_diff($current, $value);
 				return empty($diff) === false;
