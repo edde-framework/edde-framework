@@ -215,6 +215,8 @@
 					return abs($current - $value) > abs(($current - $value) / $value);
 				case 'string':
 					return (string)$current !== (string)$value;
+				case 'bool':
+					return filter_var($current, FILTER_VALIDATE_BOOLEAN) !== filter_var($value, FILTER_VALIDATE_BOOLEAN);
 				default:
 					return $current !== $value;
 			}

@@ -18,5 +18,8 @@
 			$property = new SchemaProperty($schema, 'foo', 'string[]');
 			$property->array();
 			self::assertFalse($property->isDirty(['100'], ['100']), 'string array is dirty');
+			$property = new SchemaProperty($schema, 'foo', 'bool');
+			self::assertFalse($property->isDirty('on', true), 'bool check is dirty');
+			self::assertFalse($property->isDirty('on', '1'), 'bool check is dirty');
 		}
 	}
