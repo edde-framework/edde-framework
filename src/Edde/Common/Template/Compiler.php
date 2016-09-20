@@ -109,7 +109,13 @@
 		}
 
 		public function macro(INode $macro) {
-			if (isset($this->macroList[$name = $macro->getName()]) === false) {
+			if (isset($this->compileList[$name = $macro->getName()])) {
+				foreach ($macro->getNodeList() as $node) {
+					$this->macro($node);
+				}
+				return null;
+			}
+			if (isset($this->macroList[$name]) === false) {
 				throw new CompilerException(sprintf('Unknown macro [%s].', $macro->getPath()));
 			}
 			if (empty($this->macroInlineList) === false) {

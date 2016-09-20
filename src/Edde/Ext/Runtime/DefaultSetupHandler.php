@@ -45,7 +45,6 @@
 	use Edde\Api\Session\IFingerprint;
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Storage\IStorage;
-	use Edde\Api\Template\ITemplateDirectory;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
@@ -81,7 +80,6 @@
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Session\DummyFingerprint;
 	use Edde\Common\Session\SessionManager;
-	use Edde\Common\Template\TemplateDirectory;
 	use Edde\Common\Template\TemplateManager;
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Common\Web\JavaScriptCompiler;
@@ -166,9 +164,6 @@
 					},
 					IStorageDirectory::class => function (IRootDirectory $rootDirectory) {
 						return $rootDirectory->directory('.storage', StorageDirectory::class);
-					},
-					ITemplateDirectory::class => functioN (IStorageDirectory $storageDirectory) {
-						return $storageDirectory->directory('template', TemplateDirectory::class);
 					},
 					ICryptEngine::class => CryptEngine::class,
 					IFileStorage::class => FileStorage::class,
