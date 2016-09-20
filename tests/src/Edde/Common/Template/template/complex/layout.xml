@@ -1,5 +1,18 @@
 <control>
-	<div value="hello world!"/>
+	<div value="hello world!">
+		<div>
+			<div class="hidden div"/>
+		</div>
+		<div/>
+		<div>
+			<div/>
+			<div/>
+			<div class="foo div"/>
+			<div>
+				<div class="poo div"/>
+			</div>
+		</div>
+	</div>
 
 	<!-- use template as source for block definitions -->
 	<t:use src="./block-foo.xml"/>

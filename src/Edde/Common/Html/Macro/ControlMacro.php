@@ -35,17 +35,20 @@
 			$this->write(sprintf('class %s extends %s {', $class, AbstractHtmlTemplate::class), 1);
 			$this->write(sprintf("public function snippet(%s \$root, string \$snippet = null): %s {", IHtmlControl::class, IHtmlControl::class), 2);
 			$this->write(sprintf("\$break = 2048;
-			while (true) {
+			\$done = false;
+			while (\$done !== true) {
 				if (\$break-- <=0) {
 					throw new %s('Template has executed safety break.');
 				}
 				switch (\$snippet) {
 					case null:", TemplateException::class), 3);
 			foreach ($macro->getNodeList() as $node) {
-				$file->write(sprintf("// call snippet %s\n", $node->getMeta('id')));
+				$this->write(sprintf("\$snippet = %s;", var_export($node->getMeta('id'), true)), 6);
+				break;
 			}
-			$this->write("break;\n", 5);
 			$this->compile();
+			$this->write("\$done = true;", 6);
+			$this->write("break 2;\n", 6);
 			$this->write(sprintf("default:
 						throw new %s(sprintf('Requested unknown snippet [%%s].', \$snippet));
 				}", TemplateException::class), 5);

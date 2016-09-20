@@ -24,7 +24,9 @@
 		}
 
 		public function onMacro(INode $macro) {
+			$this->write("break;\n", 6);
+			$this->write(sprintf('/** %s */', $macro->getPath()), 5);
 			$this->write(sprintf('case %s:', var_export($macro->getMeta('id'), true)), 5);
-			$this->write("break;\n", 5);
+			$this->compile();
 		}
 	}

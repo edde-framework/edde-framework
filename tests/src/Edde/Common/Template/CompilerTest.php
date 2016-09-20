@@ -57,7 +57,7 @@
 			})($file);
 			$class = str_replace('.php', '', $file->getName());
 			$template = $this->container->inject(new $class());
-			$template->snippet();
+			$template->snippet($this->container->inject(new DivControl()));
 		}
 
 		protected function setUp() {
