@@ -193,9 +193,15 @@
 		public function isDirty($current, $value): bool {
 			switch ($this->type) {
 				case 'int':
-					return (int)$current !== $value;
+					$current = (int)$current;
+					$value = (int)$value;
+					return $current !== $value;
 				case 'float':
-					return abs(($float = (float)$current) - $value) > abs(($float - $value) / $value);
+					$current = (float)$current;
+					$value = (float)$value;
+					return abs($current - $value) > abs(($current - $value) / $value);
+				case 'string':
+					return (string)$current !== (string)$value;
 				default:
 					return $current !== $value;
 			}
