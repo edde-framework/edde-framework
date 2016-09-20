@@ -55,7 +55,14 @@
 		 *
 		 * @return bool
 		 */
-		public function isDirty();
+		public function isDirty(): bool;
+
+		/**
+		 * return true, when property is null (without applying filters)
+		 *
+		 * @return bool
+		 */
+		public function isEmpty(): bool;
 
 		/**
 		 * forgot current value

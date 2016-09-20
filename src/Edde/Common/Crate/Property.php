@@ -81,8 +81,17 @@
 			return $this->value;
 		}
 
-		public function isDirty() {
+		public function isDirty(): bool {
 			return $this->dirty;
+		}
+
+		public function isEmpty(): bool {
+			if ($this->dirty && $this->current === null) {
+				return true;
+			} else if ($this->dirty === false && $this->value === null) {
+				return true;
+			}
+			return false;
 		}
 
 		public function reset() {
