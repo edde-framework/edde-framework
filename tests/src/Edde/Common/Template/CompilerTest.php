@@ -11,6 +11,7 @@
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\File\File;
 	use Edde\Common\Resource\ResourceManager;
+	use Edde\Common\Template\Macro\BlockMacro;
 	use Edde\Common\Template\Macro\IncludeMacro;
 	use Edde\Common\Template\Macro\UseMacro;
 	use Edde\Common\Xml\XmlParser;
@@ -29,6 +30,7 @@
 			$compiler = $this->container->inject(new Compiler(new File(__DIR__ . '/template/complex/layout.xml')));
 			$compiler->registerCompileMacro($this->container->inject(new UseMacro()));
 			$compiler->registerCompileMacro($this->container->inject(new IncludeMacro()));
+			$compiler->registerCompileMacro($this->container->inject(new BlockMacro()));
 			$compiler->template();
 		}
 

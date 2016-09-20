@@ -4,7 +4,6 @@
 	namespace Edde\Api\Template;
 
 	use Edde\Api\Container\ILazyInject;
-	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 
 	/**
@@ -19,11 +18,8 @@
 		/**
 		 * execute this macro
 		 *
-		 * @param INode $node
-		 * @param IFile $source
+		 * @param INode $macro
 		 * @param ICompiler $compiler
-		 *
-		 * @return
 		 */
-		public function macro(INode $node, IFile $source, ICompiler $compiler);
+		public function macro(INode $macro, ICompiler $compiler);
 	}

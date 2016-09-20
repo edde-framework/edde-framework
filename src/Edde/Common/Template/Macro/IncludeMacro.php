@@ -15,6 +15,6 @@
 			parent::__construct('t:include');
 		}
 
-		public function macro(INode $node, IFile $source, ICompiler $compiler) {
+		public function macro(INode $macro, ICompiler $compiler) {
 		}
 	}

@@ -22,9 +22,9 @@
 			return $this->name;
 		}
 
-		public function attribute(INode $node, string $name) {
-			if (($attribute = $node->getAttribute($name)) === null) {
-				throw new MacroException(sprintf('Missing attribute [%s] in macro node [%s].', $name, $node->getPath()));
+		public function attribute(INode $macro, string $name) {
+			if (($attribute = $macro->getAttribute($name)) === null) {
+				throw new MacroException(sprintf('Missing attribute [%s] in macro node [%s].', $name, $macro->getPath()));
 			}
 			return $attribute;
 		}

@@ -36,6 +36,20 @@
 		public function compile(IFile $source): INode;
 
 		/**
+		 * return the original source file
+		 *
+		 * @return IFile
+		 */
+		public function getSource(): IFile;
+
+		/**
+		 * if there are embedded templates, this method return current template file
+		 *
+		 * @return IFile
+		 */
+		public function getCurrent(): IFile;
+
+		/**
 		 * execute whole compilation process: compile + template building (generating)
 		 *
 		 * @param INode $template source node (prepared from compile)
@@ -43,4 +57,24 @@
 		 * @return mixed
 		 */
 		public function template(INode $template = null);
+
+		/**
+		 * add a value to compiler context
+		 *
+		 * @param string $name
+		 * @param mixed $value
+		 *
+		 * @return ICompiler
+		 */
+		public function setValue(string $name, $value): ICompiler;
+
+		/**
+		 * retrieve the given value from compiler's context
+		 *
+		 * @param string $name
+		 * @param null $default
+		 *
+		 * @return mixed
+		 */
+		public function getValue(string $name, $default = null);
 	}
