@@ -27,6 +27,20 @@
 		public function registerMacro(IMacro $macro): ICompiler;
 
 		/**
+		 * execute macro in compile time
+		 *
+		 * @param INode $macro
+		 */
+		public function execute(INode $macro);
+
+		/**
+		 * execute macro in "runtime"
+		 *
+		 * @param INode $macro
+		 */
+		public function macro(INode $macro);
+
+		/**
 		 * compile source into node; node is the final result
 		 *
 		 * @param IFile $source
@@ -48,6 +62,13 @@
 		 * @return IFile
 		 */
 		public function getCurrent(): IFile;
+
+		/**
+		 * layout is the root (first file - getSource() === getCurrent())
+		 *
+		 * @return bool
+		 */
+		public function isLayout(): bool;
 
 		/**
 		 * execute whole compilation process: compile + template building (generating)

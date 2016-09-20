@@ -26,7 +26,7 @@
 		}
 
 		public function macro(INode $macro, ICompiler $compiler) {
-			$macro->addNode($compiler->compile(new File($this->getFile($this->attribute($macro, 'src'), $compiler->getCurrent(), $macro))));
+			$compiler->compile(new File($this->getFile($this->attribute($macro, 'src'), $compiler->getCurrent(), $macro)));
 		}
 
 		protected function getFile(string $src, IFile $source, INode $macro): string {

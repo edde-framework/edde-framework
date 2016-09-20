@@ -10,6 +10,7 @@
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\File\File;
+	use Edde\Common\Html\Macro\HtmlMacro;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Template\Macro\BlockMacro;
 	use Edde\Common\Template\Macro\IncludeMacro;
@@ -31,6 +32,7 @@
 			$compiler->registerCompileMacro($this->container->inject(new UseMacro()));
 			$compiler->registerCompileMacro($this->container->inject(new IncludeMacro()));
 			$compiler->registerCompileMacro($this->container->inject(new BlockMacro()));
+			$compiler->registerCompileMacro($this->container->inject(new HtmlMacro('div')));
 			$compiler->template();
 		}
 

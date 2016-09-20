@@ -77,8 +77,23 @@
 		public function template(INode $template = null) {
 			$this->use();
 			$this->context = [];
-			$template = $template ?: $this->compile($this->source);
-			return $this->macroList[$name = $template->getName()]->macro($template, $this);
+			try {
+				return $this->macro($template ?: $this->compile($this->source));
+			} catch (\Exception $exception) {
+				$stackList = [];
+				while ($this->stack->isEmpty() === false) {
+					$stackList[] = $this->stack->pop()
+						->getPath();
+				}
+				throw new CompilerException(sprintf("Template compilation failed: %s\nTemplate file stack:\n%s", $exception->getMessage(), implode(",\n", $stackList)), 0, $exception);
+			}
+		}
+
+		public function macro(INode $macro) {
+			if (isset($this->macroList[$name = $macro->getName()]) === false) {
+				throw new CompilerException(sprintf('Unknown macro [%s].', $macro->getPath()));
+			}
+			return $this->macroList[$name]->macro($macro, $this);
 		}
 
 		public function compile(IFile $source): INode {
@@ -86,21 +101,22 @@
 			$this->stack->push($source);
 			foreach (NodeIterator::recursive($source = $this->resourceManager->resource($source), true) as $node) {
 				if (isset($this->compileList[$name = $node->getName()])) {
-					$this->compileList[$name]->macro($node, $this);
+					$this->execute($node);
 				}
 			}
-			foreach (NodeIterator::recursive($source) as $node) {
+			foreach (NodeIterator::recursive($source, true) as $node) {
 				if (isset($this->compileList[$node->getName()]) || isset($this->macroList[$node->getName()])) {
 					continue;
 				}
-				if ($this->stack->count() <= 1) {
-					throw new CompilerException(sprintf('Unknown macro [%s] in template [%s].', $node->getPath(), $this->source->getPath()));
-				}
-				throw new CompilerException(sprintf('Unknown macro [%s] in template [%s] of root template [%s].', $node->getPath(), $this->stack->top()
-					->getPath(), $this->source->getPath()));
+				throw new CompilerException(sprintf('Unknown macro [%s].', $node->getPath()));
 			}
+
 			$this->stack->pop();
 			return $source;
+		}
+
+		public function execute(INode $macro) {
+			return $this->compileList[$name = $macro->getName()]->macro($macro, $this);
 		}
 
 		public function getSource(): IFile {
@@ -109,6 +125,10 @@
 
 		public function getCurrent(): IFile {
 			return $this->stack->top();
+		}
+
+		public function isLayout(): bool {
+			return $this->stack->count() === 1;
 		}
 
 		public function setValue(string $name, $value): ICompiler {

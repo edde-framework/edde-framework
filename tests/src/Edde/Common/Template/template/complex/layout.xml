@@ -2,7 +2,7 @@
 	<!-- use template as source for block definitions -->
 	<t:use src="./block-foo.xml"/>
 
-	<t:block src="deep-block"/>
+	<t:include src="deep-block"/>
 
 	<!-- use include as in place expansion of the given template -->
 	<t:include src="./include-foo.xml"/>

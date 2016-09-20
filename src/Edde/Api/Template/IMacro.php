@@ -7,7 +7,7 @@
 	use Edde\Api\Node\INode;
 
 	/**
-	 * Macro is operating over whole Node.
+	 * HtmlMacro is operating over whole Node.
 	 */
 	interface IMacro extends ILazyInject {
 		/**
