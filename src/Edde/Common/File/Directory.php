@@ -71,8 +71,11 @@
 		}
 
 		public function delete(): IDirectory {
-			$this->use();
-			FileUtils::delete($this->directory);
+			try {
+				$this->use();
+				FileUtils::delete($this->directory);
+			} catch (RealPathException $exception) {
+			}
 			return $this;
 		}
 
