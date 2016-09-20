@@ -189,4 +189,15 @@
 			}
 			return $value;
 		}
+
+		public function isDirty($current, $value): bool {
+			switch ($this->type) {
+				case 'int':
+					return (int)$current !== $value;
+				case 'float':
+					return abs(($float = (float)$current) - $value) > abs(($float - $value) / $value);
+				default:
+					return $current !== $value;
+			}
+		}
 	}
