@@ -6,7 +6,6 @@ variables:
 stages:
     - test
     - compile
-#    - doc
     - package
     - deploy
 
@@ -31,26 +30,11 @@ compile:
         - master
         - tags
 
-#doc:
-#    stage: doc
-#    script:
-#        - apt-get -yqq update && apt-get -yqq upgrade && apt-get -yqq install zlib1g-dev
-#        - docker-php-ext-install zip
-#        - php bin/apigen.phar generate
-#    artifacts:
-#        name: $PROJECT-$CI_BUILD_REF_NAME.doc
-#        paths:
-#            - doc/
-#    only:
-#        - master
-#        - tags
-
 package:
     stage: package
     script: /bin/true
     dependencies:
         - compile
-#        - doc
     artifacts:
         name: $PROJECT-$CI_BUILD_REF_NAME.package
         paths:
@@ -68,7 +52,6 @@ deploy:
         - curl -X POST -F token=$COMPOSER_TOKEN -F ref=master $COMPOSER_TRIGGER
     dependencies:
         - compile
-#        - doc
     only:
         - master
         - tags
