@@ -3,8 +3,6 @@ variables:
     PAGE_TRIGGER: https://gitlab.com/api/v3/projects/1386646/trigger/builds
     COMPOSER_TRIGGER: https://gitlab.com/api/v3/projects/1351549/trigger/builds
 
-image: php:7.0
-
 stages:
     - test
     - compile
@@ -12,15 +10,9 @@ stages:
     - package
     - deploy
 
-#before_script:
-#        - echo "[Date]" > /usr/local/etc/php/conf.d/date.ini
-#        - echo "date.timezone = Europe/Prague" > /usr/local/etc/php/conf.d/date.ini
-
 test:
     stage: test
     script:
-#        - pecl install xdebug
-#        - echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini
         - php bin/phpunit.phar --coverage-text --colors=never
     artifacts:
         name: $PROJECT-$CI_BUILD_REF_NAME-failed
