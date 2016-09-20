@@ -1,0 +1,3 @@
+<control>
+	<div t:block="deep-block" value="foo"/>
+</control>

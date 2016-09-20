@@ -3,5 +3,41 @@
 
 	namespace Edde\Api\Template;
 
-	interface ICompiler {
+	use Edde\Api\Container\ILazyInject;
+	use Edde\Api\Node\INode;
+
+	interface ICompiler extends ILazyInject {
+		/**
+		 * add a compile time macro
+		 *
+		 * @param IMacro $macro
+		 *
+		 * @return ICompiler
+		 */
+		public function registerCompileMacro(IMacro $macro): ICompiler;
+
+		/**
+		 * "runtime macro" - those should generate runtime
+		 *
+		 * @param IMacro $macro
+		 *
+		 * @return ICompiler
+		 */
+		public function registerMacro(IMacro $macro): ICompiler;
+
+		/**
+		 * compile source into node; node is the final result
+		 *
+		 * @return INode
+		 */
+		public function compile(): INode;
+
+		/**
+		 * execute whole compilation process: compile + template building (generating)
+		 *
+		 * @param INode $template source node (prepared from compile)
+		 *
+		 * @return mixed
+		 */
+		public function template(INode $template = null);
 	}
