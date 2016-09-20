@@ -255,7 +255,7 @@
 		public function update(): ICrate {
 			foreach ($this->propertyList as $property) {
 				$schemaProperty = $property->getSchemaProperty();
-				if ($property->isDirty() === false && $schemaProperty->hasGenerator()) {
+				if ($property->isEmpty() && $schemaProperty->hasGenerator()) {
 					$property->set($schemaProperty->generator());
 				}
 			}
