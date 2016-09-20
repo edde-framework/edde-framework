@@ -127,10 +127,6 @@
 			return $this->unique;
 		}
 
-		public function isArray(): bool {
-			return $this->array;
-		}
-
 		public function setGenerator(IFilter $generator) {
 			$this->generator = $generator;
 			return $this;
@@ -191,11 +187,34 @@
 		}
 
 		public function isDirty($current, $value): bool {
+			if ($current === null && $value === null) {
+				return false;
+			} else if (($current === null && $value !== null) || ($current !== null && $value === null)) {
+				return true;
+			}
+			if ($this->isArray()) {
+				$diff = array_diff($current, $value);
+				return empty($diff) === false;
+			}
+			return $this->diff($current, $value);
+		}
+
+		public function isArray(): bool {
+			return $this->array;
+		}
+
+		protected function diff($current, $value) {
 			switch ($this->type) {
 				case 'int':
-					return (int)$current !== $value;
+					$current = (int)$current;
+					$value = (int)$value;
+					return $current !== $value;
 				case 'float':
-					return abs(($float = (float)$current) - $value) > abs(($float - $value) / $value);
+					$current = (float)$current;
+					$value = (float)$value;
+					return abs($current - $value) > abs(($current - $value) / $value);
+				case 'string':
+					return (string)$current !== (string)$value;
 				default:
 					return $current !== $value;
 			}
