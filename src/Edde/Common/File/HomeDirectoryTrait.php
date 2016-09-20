@@ -23,8 +23,9 @@
 		public function home(string $home, IDirectory $root = null) {
 			$this->lazy('homeDirectory', function () use ($home, $root) {
 				$root = $root ?: $this->rootDirectory;
-				$this->homeDirectory = $root->directory($home);
-				$this->homeDirectory->create();
+				$homeDirectory = $root->directory($home);
+				$homeDirectory->create();
+				return $homeDirectory;
 			});
 		}
 	}
