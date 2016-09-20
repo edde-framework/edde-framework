@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Query\Select;
+	namespace Edde\Common\Query\Where;
 
 	use Edde\Api\Node\INode;
 	use Edde\Common\Node\Node;
@@ -12,20 +12,14 @@
 		 * @var WhereExpressionFragment
 		 */
 		protected $whereExpressionFragment;
-		/**
-		 * @var SelectQuery
-		 */
-		protected $selectQuery;
 
 		/**
 		 * @param INode $whereNode
 		 * @param WhereExpressionFragment $whereExpressionFragment
-		 * @param SelectQuery $selectQuery
 		 */
-		public function __construct(INode $whereNode, WhereExpressionFragment $whereExpressionFragment, SelectQuery $selectQuery) {
+		public function __construct(INode $whereNode, WhereExpressionFragment $whereExpressionFragment) {
 			parent::__construct($whereNode);
 			$this->whereExpressionFragment = $whereExpressionFragment;
-			$this->selectQuery = $selectQuery;
 		}
 
 		/**

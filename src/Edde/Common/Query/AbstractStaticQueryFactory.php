@@ -40,6 +40,14 @@
 		 * @var INodeQuery
 		 */
 		protected $createSchemaNodeQuery;
+		/**
+		 * @var INodeQuery
+		 */
+		protected $updateQueryNodeQuery;
+		/**
+		 * @var INodeQuery
+		 */
+		protected $updateQueryWhereNodeQuery;
 
 		public function create(IQuery $query) {
 			$this->use();
@@ -72,6 +80,8 @@
 			$this->orderNodeQuery = new NodeQuery('/select-query/order/*');
 
 			$this->createSchemaNodeQuery = new NodeQuery('/create-schema-query/*');
+			$this->updateQueryNodeQuery = new NodeQuery('/update-query/update/*');
+			$this->updateQueryWhereNodeQuery = new NodeQuery('/update-query/where/*');
 		}
 
 		protected function formatDeleteQuery(INode $node) {
@@ -88,14 +98,64 @@
 			$nameList = [];
 			$columnList = [];
 			foreach ($node->getNodeList() as $insertNode) {
-				$parameter = sha1($name = $insertNode->getName());
-				$parameterList[$parameter] = $insertNode->getValue();
+				$parameterList[$parameter = sha1($name = $insertNode->getName())] = $insertNode->getValue();
 				$nameList[] = $this->delimite($name);
 				$columnList[] = ':' . $parameter;
 			}
 			$sql = 'INSERT INTO ' . $this->delimite($node->getValue()) . ' (';
 			$sql .= implode(',', $nameList) . ') VALUES (';
 			return new StaticQuery($sql . implode(', ', $columnList) . ')', $parameterList);
+		}
+
+		protected function formatUpdateQuery(INode $node) {
+			$this->use();
+			$parameterList = [];
+			$updateQuery[] = 'UPDATE ' . $this->delimite($node->getValue()) . ' SET';
+			$updateList = [];
+			foreach ($this->updateQueryNodeQuery->filter($node) as $updateNode) {
+				$parameterList[$parameter = sha1($name = $updateNode->getName())] = $updateNode->getValue();
+				$updateList[] = $this->delimite($name) . ' = :' . $parameter;
+			}
+			$updateQuery[] = implode(', ', $updateList);
+			if ($this->updateQueryWhereNodeQuery->isEmpty($node) === false) {
+				$updateQuery[] = 'WHERE';
+				$where = $this->formatWhere($node, $this->updateQueryWhereNodeQuery);
+				$updateQuery[] = $where->getQuery();
+				$parameterList = array_merge($parameterList, $where->getParameterList());
+			}
+			return new StaticQuery(implode(' ', $updateQuery), $parameterList);
+		}
+
+		/**
+		 * @param INode $node
+		 * @param INodeQuery $nodeQuery
+		 *
+		 * @return IStaticQuery
+		 */
+		protected function formatWhere(INode $node, INodeQuery $nodeQuery = null) {
+			$nodeQuery = $nodeQuery ?: $this->whereNodeQuery;
+			return $this->formatWhereList($nodeQuery->filter($node));
+		}
+
+		protected function formatWhereList($iterator, $group = false) {
+			$whereList = [];
+			$parameterList = [];
+			/** @var $whereNode INode */
+			foreach ($iterator as $whereNode) {
+				$staticQuery = $this->fragment($whereNode);
+				$whereList[] = ' ' . strtoupper($whereNode->getAttribute('relation', 'and')) . ' ';
+				$whereList[] = $staticQuery->getQuery();
+				$parameterList = array_merge($parameterList, $staticQuery->getParameterList());
+			}
+			/**
+			 * throw away first member of the array which is dummy relation
+			 */
+			array_shift($whereList);
+			$where = implode('', $whereList);
+			if ($group) {
+				$where = "($where)";
+			}
+			return new StaticQuery($where, $parameterList);
 		}
 
 		protected function formatCreateSchemaQuery(INode $node) {
@@ -167,36 +227,6 @@
 				$parameterList = array_merge($parameterList, $staticQuery->getParameterList());
 			}
 			return new StaticQuery(implode(', ', $fromList), $parameterList);
-		}
-
-		/**
-		 * @param INode $node
-		 *
-		 * @return IStaticQuery
-		 */
-		protected function formatWhere(INode $node) {
-			return $this->formatWhereList($this->whereNodeQuery->filter($node));
-		}
-
-		protected function formatWhereList($iterator, $group = false) {
-			$whereList = [];
-			$parameterList = [];
-			/** @var $whereNode INode */
-			foreach ($iterator as $whereNode) {
-				$staticQuery = $this->fragment($whereNode);
-				$whereList[] = ' ' . strtoupper($whereNode->getAttribute('relation', 'and')) . ' ';
-				$whereList[] = $staticQuery->getQuery();
-				$parameterList = array_merge($parameterList, $staticQuery->getParameterList());
-			}
-			/**
-			 * throw away first member of the array which is dummy relation
-			 */
-			array_shift($whereList);
-			$where = implode('', $whereList);
-			if ($group) {
-				$where = "($where)";
-			}
-			return new StaticQuery($where, $parameterList);
 		}
 
 		protected function formatOrder(INode $node) {

@@ -7,6 +7,7 @@
 	use Edde\Api\Query\QueryException;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractQuery;
+	use Edde\Common\Query\Where\WhereExpressionFragment;
 
 	class SelectQuery extends AbstractQuery {
 		/**
@@ -79,7 +80,7 @@
 			]);
 			$this->selectPropertyFragment = new SelectFragment($selectListNode, $this);
 			$this->fromPropertyFragment = new FromFragment($fromListNode, $this);
-			$this->whereExpressionFragment = new WhereExpressionFragment($whereNode, $this);
+			$this->whereExpressionFragment = new WhereExpressionFragment($whereNode);
 			$this->orderFragment = new OrderFragment($orderNode, $this);
 		}
 	}
