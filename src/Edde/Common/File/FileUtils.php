@@ -215,7 +215,7 @@
 		static public function realpath($path, $required = true) {
 			if (($real = realpath($path)) === false) {
 				if ($required) {
-					throw new FileException(sprintf('Cannot get real path from given string [%s].', $path));
+					throw new RealPathException(sprintf('Cannot get real path from given string [%s].', $path));
 				}
 				$real = $path;
 			}
