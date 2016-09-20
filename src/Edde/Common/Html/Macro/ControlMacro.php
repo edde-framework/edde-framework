@@ -38,15 +38,11 @@
 			\$stack->push(\$parent = \$root);
 			switch (\$snippet) {
 				case null:", TemplateException::class), 3);
-			foreach ($macro->getNodeList() as $node) {
-				$this->write('// reference to the first control', 6);
-				$this->write(sprintf("\$snippet = %s;", var_export($node->getMeta('id'), true)), 5);
-				break;
-			}
 			$this->compile();
-			$this->write(sprintf("default:
-						throw new %s(sprintf('Requested unknown snippet [%%s].', \$snippet));
-				}", TemplateException::class), 4);
+			$this->write(sprintf("break;
+				default:
+					throw new %s(sprintf('Requested unknown snippet [%%s].', \$snippet));
+			}", TemplateException::class), 5);
 			$this->write("return \$root;", 3);
 			$this->write('}', 2);
 			$this->write('}', 1);
