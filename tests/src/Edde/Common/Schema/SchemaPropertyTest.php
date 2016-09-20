@@ -15,5 +15,8 @@
 			self::assertTrue($property->isDirty(3.141592, 3.141593), 'float is NOT dirty!');
 			$property = new SchemaProperty($schema, 'foo');
 			self::assertFalse($property->isDirty('100', 100), 'integer string is dirty');
+			$property = new SchemaProperty($schema, 'foo', 'string[]');
+			$property->array();
+			self::assertFalse($property->isDirty(['100'], ['100']), 'string array is dirty');
 		}
 	}

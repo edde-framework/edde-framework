@@ -127,10 +127,6 @@
 			return $this->unique;
 		}
 
-		public function isArray(): bool {
-			return $this->array;
-		}
-
 		public function setGenerator(IFilter $generator) {
 			$this->generator = $generator;
 			return $this;
@@ -191,6 +187,18 @@
 		}
 
 		public function isDirty($current, $value): bool {
+			if ($this->isArray()) {
+				$diff = array_diff($current, $value);
+				return empty($diff) === false;
+			}
+			return $this->diff($current, $value);
+		}
+
+		public function isArray(): bool {
+			return $this->array;
+		}
+
+		protected function diff($current, $value) {
 			switch ($this->type) {
 				case 'int':
 					$current = (int)$current;
