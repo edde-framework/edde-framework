@@ -1,4 +1,6 @@
 <control>
+	<div value="hello world!"/>
+
 	<!-- use template as source for block definitions -->
 	<t:use src="./block-foo.xml"/>
 

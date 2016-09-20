@@ -4,6 +4,7 @@
 	namespace Edde\Common\Template;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResourceManager;
@@ -23,6 +24,10 @@
 		 * @var IResourceManager
 		 */
 		protected $resourceManager;
+		/**
+		 * @var ICryptEngine
+		 */
+		protected $cryptEngine;
 		/**
 		 * @var IFile
 		 */
@@ -71,6 +76,10 @@
 
 		public function lazyResourceManager(IResourceManager $resourceManager) {
 			$this->resourceManager = $resourceManager;
+		}
+
+		public function lazyCryptEngine(ICryptEngine $cryptEngine) {
+			$this->cryptEngine = $cryptEngine;
 		}
 
 		public function registerCompileMacro(IMacro $macro): ICompiler {
@@ -146,6 +155,10 @@
 			}
 			foreach (NodeIterator::recursive($source, true) as $node) {
 				if (isset($this->compileList[$node->getName()]) || isset($this->macroList[$node->getName()])) {
+					/**
+					 * general id of any macro; macros can use it as unique macro reference
+					 */
+					$node->setMeta('id', $this->cryptEngine->guid());
 					continue;
 				}
 				throw new CompilerException(sprintf('Unknown macro [%s].', $node->getPath()));

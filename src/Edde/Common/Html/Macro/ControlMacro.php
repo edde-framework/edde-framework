@@ -3,16 +3,17 @@
 
 	namespace Edde\Common\Html\Macro;
 
+	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Template\ICompiler;
+	use Edde\Api\Template\TemplateException;
 	use Edde\Common\File\HomeDirectoryTrait;
-	use Edde\Common\Template\AbstractMacro;
+	use Edde\Common\Html\AbstractHtmlTemplate;
 	use Edde\Common\Usable\UsableTrait;
 
 	/**
 	 * Root control macro for template generation.
 	 */
-	class ControlMacro extends AbstractMacro {
+	class ControlMacro extends AbstractHtmlMacro {
 		use UsableTrait;
 		use HomeDirectoryTrait;
 
@@ -20,15 +21,40 @@
 			parent::__construct('control');
 		}
 
-		public function macro(INode $macro, ICompiler $compiler) {
-			$this->use();
-			$file = $this->homeDirectory->file(sha1($compiler->getSource()
-					->getPath() . '.php'));
-			$file->write("foo");
-			foreach ($macro->getNodeList() as $node) {
-				$compiler->macro($node);
+		public function onMacro(INode $macro) {
+			if ($macro->isRoot() === false) {
+				return null;
 			}
-			return true;
+			$this->use();
+			$source = $this->compiler->getSource();
+			$this->compiler->setValue('file', $file = $this->homeDirectory->file(($class = 'Template_' . sha1($source->getPath())) . '.php'));
+			$file->openForWrite();
+			$file->enableWriteCache();
+			$this->write('<?php');
+			$this->write("declare(strict_types = 1);\n", 1);
+			$this->write(sprintf('class %s extends %s {', $class, AbstractHtmlTemplate::class), 1);
+			$this->write(sprintf("public function snippet(%s \$root, string \$snippet = null): %s {", IHtmlControl::class, IHtmlControl::class), 2);
+			$this->write(sprintf("\$break = 2048;
+			while (true) {
+				if (\$break-- <=0) {
+					throw new %s('Template has executed safety break.');
+				}
+				switch (\$snippet) {
+					case null:", TemplateException::class), 3);
+			foreach ($macro->getNodeList() as $node) {
+				$file->write(sprintf("// call snippet %s\n", $node->getMeta('id')));
+			}
+			$this->write("break;\n", 5);
+			$this->compile();
+			$this->write(sprintf("default:
+						throw new %s(sprintf('Requested unknown snippet [%%s].', \$snippet));
+				}", TemplateException::class), 5);
+			$this->write('}', 3);
+			$this->write("return \$root;", 3);
+			$this->write('}', 2);
+			$this->write('}', 1);
+			$file->close();
+			return $file;
 		}
 
 		protected function prepare() {

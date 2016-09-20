@@ -4,6 +4,7 @@
 	namespace Edde\Common\Template;
 
 	use Edde\Api\Node\INode;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\AbstractObject;
@@ -27,5 +28,8 @@
 				throw new MacroException(sprintf('Missing attribute [%s] in macro node [%s].', $name, $macro->getPath()));
 			}
 			return $attribute;
+		}
+
+		protected function write(ICompiler $compiler, string $write) {
 		}
 	}

@@ -3,40 +3,14 @@
 
 	namespace Edde\Api\Html;
 
-	use Edde\Api\Control\IControl;
 	use Edde\Api\Template\ITemplate;
 
 	interface IHtmlTemplate extends ITemplate {
 		/**
-		 * build up a target control with this template
+		 * @param IHtmlControl $root
+		 * @param string|null $snippet
 		 *
-		 * @return IHtmlTemplate
+		 * @return IHtmlControl input root is also output
 		 */
-		public function template(): IHtmlTemplate;
-
-		/**
-		 * add a dependant template file
-		 *
-		 * @param string[] $importList
-		 *
-		 * @return IHtmlTemplate
-		 */
-		public function import(...$importList): IHtmlTemplate;
-
-		/**
-		 * return array of lambdas for controls
-		 *
-		 * @return callable[]
-		 */
-		public function getControlList(): array;
-
-		/**
-		 * apply named block on a root control
-		 *
-		 * @param string $name
-		 * @param IControl $root
-		 *
-		 * @return IControl
-		 */
-		public function snippet(string $name, IControl $root): IControl;
+		public function snippet(IHtmlControl $root, string $snippet = null): IHtmlControl;
 	}
