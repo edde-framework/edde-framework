@@ -1,15 +1,15 @@
 <control>
 	<div value="hello world!">
-		<div>
+		<div class="first">
 			<div class="hidden div"/>
 		</div>
-		<div/>
-		<div>
-			<div/>
-			<div/>
-			<div class="foo div"/>
-			<div>
-				<div class="poo div"/>
+		<div class="second"/>
+		<div class="third">
+			<div class="inner-one"/>
+			<div class="inner-two"/>
+			<div class="inner-three"/>
+			<div class="inner-four">
+				<div class="deep-one"/>
 			</div>
 		</div>
 	</div>

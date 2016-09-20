@@ -57,7 +57,10 @@
 			})($file);
 			$class = str_replace('.php', '', $file->getName());
 			$template = $this->container->inject(new $class());
-			$template->snippet($this->container->inject(new DivControl()));
+			$template->snippet($this->container->inject($div = new DivControl()));
+			$div->addClass('root');
+			$div->dirty();
+			self::assertEquals('', $div->render());
 		}
 
 		protected function setUp() {
