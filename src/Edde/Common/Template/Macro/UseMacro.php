@@ -8,7 +8,6 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\File\File;
 	use Edde\Common\Template\AbstractMacro;
 
 	class UseMacro extends AbstractMacro {
@@ -26,15 +25,15 @@
 		}
 
 		public function macro(INode $macro, ICompiler $compiler) {
-			$compiler->compile(new File($this->getFile($this->attribute($macro, 'src'), $compiler->getCurrent(), $macro)));
+			$compiler->compile($this->file($this->attribute($macro, 'src'), $compiler->getCurrent(), $macro));
 		}
 
-		protected function getFile(string $src, IFile $source, INode $macro): string {
+		protected function file(string $src, IFile $source, INode $macro): IFile {
 			if (strpos($src, '/') === 0) {
-				return $this->rootDirectory->filename(substr($src, 1));
+				return $this->rootDirectory->file(substr($src, 1));
 			} else if (strpos($src, './') === 0) {
 				return $source->getDirectory()
-					->filename(substr($src, 2));
+					->file(substr($src, 2));
 			}
 			throw new MacroException(sprintf('Unknown "src" attribute value [%s] of macro [%s].', $src, $macro->getPath()));
 		}

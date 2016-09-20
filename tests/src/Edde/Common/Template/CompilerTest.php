@@ -10,6 +10,7 @@
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\File\File;
+	use Edde\Common\Html\Macro\ControlMacro;
 	use Edde\Common\Html\Macro\HtmlMacro;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Template\Macro\BlockMacro;
@@ -29,10 +30,14 @@
 		public function testCompile() {
 			/** @var $compiler ICompiler */
 			$compiler = $this->container->inject(new Compiler(new File(__DIR__ . '/template/complex/layout.xml')));
+
 			$compiler->registerCompileMacro($this->container->inject(new UseMacro()));
 			$compiler->registerCompileMacro($this->container->inject(new IncludeMacro()));
 			$compiler->registerCompileMacro($this->container->inject(new BlockMacro()));
-			$compiler->registerCompileMacro($this->container->inject(new HtmlMacro('div')));
+
+			$compiler->registerMacro($this->container->inject(new ControlMacro()));
+			$compiler->registerMacro($this->container->inject(new HtmlMacro('div')));
+
 			$compiler->template();
 		}
 
