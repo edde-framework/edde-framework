@@ -35,7 +35,7 @@
 		 */
 		protected $container;
 
-		public function testCompile() {
+		public function testComplex() {
 			/** @var $compiler ICompiler */
 			$compiler = $this->container->inject(new Compiler(new File(__DIR__ . '/template/complex/layout.xml')));
 
@@ -82,6 +82,15 @@
 		<div class="deepness-of-a-deep">foo</div>
 	</div>
 	<div class="poo-class">poo</div>
+</div>
+', $div->render());
+			$template->snippet($this->container->inject($div = new DivControl()), 'deep-block');
+			$div->addClass('root');
+			$div->dirty();
+			self::assertEquals('<div class="root">
+	<div class="really-deep-div-here">
+		<div class="deepness-of-a-deep"></div>
+	</div>
 </div>
 ', $div->render());
 		}
