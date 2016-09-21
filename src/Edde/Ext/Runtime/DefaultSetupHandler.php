@@ -45,6 +45,7 @@
 	use Edde\Api\Session\IFingerprint;
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Storage\IStorage;
+	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
@@ -96,6 +97,7 @@
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Router\RestRouter;
 	use Edde\Ext\Router\SimpleRouter;
+	use Edde\Ext\Template\DefaultMacroSet;
 	use Edde\Framework;
 
 	class DefaultSetupHandler extends SetupHandler {
@@ -180,6 +182,9 @@
 					IConverterManager::class => ConverterManager::class,
 					IUpgradeManager::class => UpgradeManager::class,
 					ITemplateManager::class => TemplateManager::class,
+					IMacroSet::class => function (IContainer $container) {
+						return DefaultMacroSet::factory($container);
+					},
 					IStyleSheetCompiler::class => StyleSheetCompiler::class,
 					IJavaScriptCompiler::class => JavaScriptCompiler::class,
 					IXmlParser::class => XmlParser::class,
