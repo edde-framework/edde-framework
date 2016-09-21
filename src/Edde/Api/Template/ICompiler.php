@@ -9,6 +9,15 @@
 
 	interface ICompiler extends ILazyInject {
 		/**
+		 * use the given macroset
+		 *
+		 * @param IMacroSet $macroSet
+		 *
+		 * @return ICompiler
+		 */
+		public function set(IMacroSet $macroSet): ICompiler;
+
+		/**
 		 * "runtime macro" - those should generate runtime
 		 *
 		 * @param IMacro $macro

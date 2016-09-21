@@ -14,18 +14,12 @@
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\File\File;
 	use Edde\Common\File\RootDirectory;
-	use Edde\Common\Html\Macro\ControlMacro;
-	use Edde\Common\Html\Macro\HtmlMacro;
 	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Resource\ResourceManager;
-	use Edde\Common\Template\Inline\BlockInline;
-	use Edde\Common\Template\Inline\IncludeInline;
-	use Edde\Common\Template\Macro\BlockMacro;
-	use Edde\Common\Template\Macro\IncludeMacro;
-	use Edde\Common\Template\Macro\UseMacro;
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Converter\XmlConverter;
+	use Edde\Ext\Template\DefaultMacroSet;
 	use phpunit\framework\TestCase;
 
 	class CompilerTest extends TestCase {
@@ -36,15 +30,7 @@
 
 		public function testComplex() {
 			$this->container->inject($compiler = new Compiler(new File(__DIR__ . '/template/complex/layout.xml')));
-
-			$compiler->registerMacro($this->container->inject(new UseMacro()));
-			$compiler->registerMacro($this->container->inject(new IncludeMacro()));
-			$compiler->registerMacro($this->container->inject(new BlockMacro()));
-			$compiler->registerMacro($this->container->inject(new ControlMacro()));
-			$compiler->registerMacro($this->container->inject(new HtmlMacro('div', DivControl::class)));
-
-			$compiler->registerInline($this->container->inject(new BlockInline()));
-			$compiler->registerInline($this->container->inject(new IncludeInline()));
+			$compiler->set(DefaultMacroSet::factory($this->container));
 
 			/** @var $file IFile */
 			self::assertInstanceOf(IFile::class, $file = $compiler->template([new File(__DIR__ . '/template/complex/to-be-used.xml')]));

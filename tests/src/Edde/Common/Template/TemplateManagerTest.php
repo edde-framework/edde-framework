@@ -3,10 +3,12 @@
 
 	namespace Edde\Common\Template;
 
+	use Edde\Api\Container\IContainer;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Resource\IResourceManager;
+	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Converter\ConverterManager;
@@ -16,6 +18,7 @@
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Converter\XmlConverter;
+	use Edde\Ext\Template\DefaultMacroSet;
 	use phpunit\framework\TestCase;
 
 	class TemplateManagerTest extends TestCase {
@@ -25,7 +28,9 @@
 		protected $templateManager;
 
 		public function testCommon() {
-			$template = $this->templateManager->template(__DIR__ . '/template/complex/layout.xml');
+			$template = $this->templateManager->template(__DIR__ . '/template/complex/layout.xml', [
+				__DIR__ . '/template/complex/to-be-used.xml',
+			]);
 		}
 
 		protected function setUp() {
@@ -36,6 +41,9 @@
 				IXmlParser::class => XmlParser::class,
 				IRootDirectory::class => new RootDirectory(__DIR__ . '/temp'),
 				ICryptEngine::class => CryptEngine::class,
+				IMacroSet::class => function (IContainer $container) {
+					return DefaultMacroSet::factory($container);
+				},
 			]);
 			/** @var $converterManager IConverterManager */
 			$converterManager = $container->create(IConverterManager::class);

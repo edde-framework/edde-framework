@@ -12,6 +12,7 @@
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IInline;
 	use Edde\Api\Template\IMacro;
+	use Edde\Api\Template\IMacroSet;
 	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Usable\AbstractUsable;
 
@@ -70,6 +71,16 @@
 
 		public function lazyCryptEngine(ICryptEngine $cryptEngine) {
 			$this->cryptEngine = $cryptEngine;
+		}
+
+		public function set(IMacroSet $macroSet): ICompiler {
+			foreach ($macroSet->getMacroList() as $macro) {
+				$this->registerMacro($macro);
+			}
+			foreach ($macroSet->getInlineList() as $inline) {
+				$this->registerInline($inline);
+			}
+			return $this;
 		}
 
 		public function registerMacro(IMacro $macro): ICompiler {

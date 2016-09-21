@@ -3,18 +3,20 @@
 
 	namespace Edde\Api\Template;
 
-	interface IMacroSet {
-		/**
-		 * compile time macros (only values will be used)
-		 *
-		 * @return IMacro[]
-		 */
-		public function getCompileList(): array;
+	use Edde\Api\Usable\IUsable;
 
+	interface IMacroSet extends IUsable {
 		/**
-		 *
+		 * return set of macros
 		 *
 		 * @return IMacro[]
 		 */
 		public function getMacroList(): array;
+
+		/**
+		 * return list of inline macros
+		 *
+		 * @return IInline[]
+		 */
+		public function getInlineList(): array;
 	}
