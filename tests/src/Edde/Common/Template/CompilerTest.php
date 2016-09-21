@@ -14,6 +14,7 @@
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\File\File;
 	use Edde\Common\File\RootDirectory;
+	use Edde\Common\Html\AbstractHtmlTemplate;
 	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Xml\XmlParser;
@@ -34,12 +35,7 @@
 
 			/** @var $file IFile */
 			self::assertInstanceOf(IFile::class, $file = $compiler->template([new File(__DIR__ . '/template/complex/to-be-used.xml')]));
-			(function (IFile $file) {
-				require_once($file->getUrl()
-					->getAbsoluteUrl());
-			})($file);
-			$class = str_replace('.php', '', $file->getName());
-			$template = $this->container->inject(new $class());
+			$template = AbstractHtmlTemplate::template($file, $this->container);
 			$template->snippet($this->container->inject($div = new DivControl()));
 			$div->addClass('root');
 			$div->dirty();

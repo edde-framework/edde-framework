@@ -504,14 +504,6 @@
 			self::assertEquals(8, $node->getTreeSize());
 		}
 
-		public function testClone() {
-			$this->expectException(NodeException::class);
-			$this->expectExceptionMessage('Clone is not supported on the [Edde\Common\Node\Node].');
-			$node = new Node();
-			/** @noinspection PhpExpressionResultUnusedInspection */
-			clone $node;
-		}
-
 		public function testAccept() {
 			$this->expectException(NodeException::class);
 			$this->expectExceptionMessage('Current node [Edde\Common\Node\AlphaNode] doesn\'t accept given node [Edde\Common\Node\BetaNode].');
