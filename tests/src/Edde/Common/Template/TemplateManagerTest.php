@@ -97,6 +97,14 @@
 			sort($cssList);
 			sort($pathList);
 			self::assertEquals($cssList, $pathList);
+			/**
+			 * contorls can generate javascript with proprietary path, so it is not easy to test it
+			 *
+			 * at least this is most simple test for executed javascript
+			 *
+			 * 2 is for 1 button and 1 for explicit js macro
+			 */
+			self::assertCount(2, $this->javaScriptList->getPathList());
 		}
 
 		protected function setUp() {

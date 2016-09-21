@@ -26,6 +26,7 @@
 	<t:include src="block-from-imported-template"/>
 
 	<css src="./foo/bar/boo.css"/>
+	<js src="./some/javascript.js"/>
 
 	<button m:action="action-on-the-root()"/>
 	<button m:action="@action-on-the-current-contol()"/>

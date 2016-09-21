@@ -9,6 +9,7 @@
 	use Edde\Common\Html\Macro\ControlMacro;
 	use Edde\Common\Html\Macro\CssMacro;
 	use Edde\Common\Html\Macro\HtmlMacro;
+	use Edde\Common\Html\Macro\JsMacro;
 	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Html\Tag\SpanControl;
 	use Edde\Common\Template\Inline\BlockInline;
@@ -28,6 +29,7 @@
 					$container->inject(new BlockMacro()),
 					$container->inject(new ControlMacro()),
 					$container->inject(new CssMacro()),
+					$container->inject(new JsMacro()),
 					$container->inject(new HtmlMacro('div', DivControl::class)),
 					$container->inject(new HtmlMacro('span', SpanControl::class)),
 					$container->inject(new ButtonMacro()),
