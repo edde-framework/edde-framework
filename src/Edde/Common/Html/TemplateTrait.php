@@ -38,7 +38,7 @@
 			$this->request = $request;
 		}
 
-		public function template(string $layout = null, ...$importList) {
+		public function template(string $layout = null, array $snippetList = null, array $importList = []) {
 			$this->check();
 			if ($layout === null) {
 				$reflectionClass = new \ReflectionClass($this);
@@ -59,7 +59,7 @@
 					$importList[] = $action;
 				}
 			}
-			$this->snippet($layout, null, $importList);
+			$this->snippet($layout, $snippetList, $importList);
 			return $this;
 		}
 
