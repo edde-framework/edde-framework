@@ -28,7 +28,7 @@
 		}
 
 		public function macro(INode $macro, ICompiler $compiler) {
-			$macro->addNodeList($this->include($this->attribute($macro, 'src'), $macro, $compiler->getCurrent(), $compiler), true);
+			$macro->addNodeList($this->include($this->attribute($macro, 'src'), $macro, $compiler->getCurrent(), $compiler));
 		}
 
 		protected function include (string $src, INode $macro, IFile $source, ICompiler $compiler) {

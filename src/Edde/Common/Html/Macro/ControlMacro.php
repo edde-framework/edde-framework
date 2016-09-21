@@ -24,6 +24,7 @@
 
 		public function onMacro(INode $macro) {
 			if ($macro->isRoot() === false) {
+				$this->compile();
 				return null;
 			}
 			$this->use();
@@ -39,6 +40,8 @@
 			\$stack->push(\$parent = \$root);
 			switch (\$snippet) {
 				case null:", TemplateException::class), 3);
+			$this->compile();
+			$this->write('break;', 5);
 			foreach (NodeIterator::recursive($macro) as $node) {
 				if (($id = $node->getMeta('id')) === null) {
 					continue;

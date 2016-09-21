@@ -1,3 +1,3 @@
 <control>
-	<div value="poo"/>
+	<div class="poo-class" value="poo"/>
 </control>
