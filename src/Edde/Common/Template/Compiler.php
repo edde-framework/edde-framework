@@ -155,10 +155,6 @@
 			}
 			foreach (NodeIterator::recursive($source, true) as $node) {
 				if (isset($this->compileList[$node->getName()]) || isset($this->macroList[$node->getName()])) {
-					/**
-					 * general id of any macro; macros can use it as unique macro reference
-					 */
-					$node->setMeta('id', $this->cryptEngine->guid());
 					continue;
 				}
 				throw new CompilerException(sprintf('Unknown macro [%s].', $node->getPath()));

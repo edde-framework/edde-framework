@@ -8,6 +8,7 @@
 	use Edde\Api\Template\TemplateException;
 	use Edde\Common\File\HomeDirectoryTrait;
 	use Edde\Common\Html\AbstractHtmlTemplate;
+	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Usable\UsableTrait;
 
 	/**
@@ -38,11 +39,18 @@
 			\$stack->push(\$parent = \$root);
 			switch (\$snippet) {
 				case null:", TemplateException::class), 3);
-			$this->compile();
-			$this->write(sprintf("break;
-				default:
+			foreach (NodeIterator::recursive($macro) as $node) {
+				if (($id = $node->getMeta('id')) === null) {
+					continue;
+				}
+				$this->write(sprintf('case %s:', var_export($id, true)), 4);
+				$this->write(sprintf('// %s', $node->getPath()), 5);
+				$this->compiler->macro($node);
+				$this->write('break;', 5);
+			}
+			$this->write(sprintf("default:
 					throw new %s(sprintf('Requested unknown snippet [%%s].', \$snippet));
-			}", TemplateException::class), 5);
+			}", TemplateException::class), 4);
 			$this->write("return \$root;", 3);
 			$this->write('}', 2);
 			$this->write('}', 1);

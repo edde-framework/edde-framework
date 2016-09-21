@@ -20,5 +20,6 @@
 			}
 			$blockList[$id] = [$macro];
 			$compiler->setValue('block-list', $blockList);
+			$macro->setMeta('id', $id);
 		}
 	}

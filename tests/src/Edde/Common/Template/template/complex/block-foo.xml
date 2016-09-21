@@ -4,6 +4,6 @@
 		<div>bar</div>
 	</t:block>
 	<t:include src="moo"/>
-	<div n:block="foobar"/>
+	<div t:block="foobar"/>
 	<t:include src="./included.xml"/>
 </control>

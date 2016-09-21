@@ -1,5 +1,5 @@
 <control>
-	<div value="hello world!">
+	<div value="hello world!" t:block="hello-world">
 		<div class="first">
 			<div class="hidden div"/>
 		</div>
