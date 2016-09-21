@@ -28,4 +28,10 @@
 			}
 			return $attribute;
 		}
+
+		public function extract(INode $macro, string $name) {
+			$attribute = $macro->getAttribute($name);
+			$macro->removeAttribute($name);
+			return $attribute;
+		}
 	}

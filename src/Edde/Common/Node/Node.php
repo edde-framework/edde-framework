@@ -182,4 +182,24 @@
 		public function accept(IAbstractNode $abstractNode) {
 			return $abstractNode instanceof INode;
 		}
+
+		public function __clone() {
+			parent::__clone();
+			$this->attributeNamespaceList = [];
+			foreach ($this->attributeList as $k => &$v) {
+				if (is_object($v)) {
+					$v = clone $v;
+				}
+			}
+			unset($v);
+			foreach ($this->metaList as $k => &$v) {
+				if (is_object($v)) {
+					$v = clone $v;
+				}
+			}
+			unset($v);
+			if (is_object($this->value)) {
+				$this->value = clone $this->value;
+			}
+		}
 	}

@@ -60,7 +60,30 @@
 			$template->snippet($this->container->inject($div = new DivControl()));
 			$div->addClass('root');
 			$div->dirty();
-			self::assertEquals('', $div->render());
+			self::assertEquals('<div class="root">
+	<div>
+		<div class="first">
+			<div class="hidden div"></div>
+		</div>
+		<div class="second"></div>
+		<div class="third">
+			<div class="inner-one"></div>
+			<div class="inner-two"></div>
+			<div class="inner-three"></div>
+			<div class="inner-four">
+				<div class="deep-one"></div>
+			</div>
+		</div>
+	</div>
+	<div class="really-deep-div-here">
+		<div class="deepness-of-a-deep">foo</div>
+	</div>
+	<div class="really-deep-div-here">
+		<div class="deepness-of-a-deep">foo</div>
+	</div>
+	<div class="poo-class">poo</div>
+</div>
+', $div->render());
 		}
 
 		protected function setUp() {
