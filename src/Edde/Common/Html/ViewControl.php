@@ -131,7 +131,7 @@
 			return $this;
 		}
 
-		public function render() {
+		public function render(int $indent = 0) {
 			$this->use();
 			if ($this->styleSheetList->isEmpty() === false) {
 				$this->head->addStyleSheet($this->styleSheetCompiler->compile($this->styleSheetList)
@@ -142,7 +142,7 @@
 					->getRelativePath());
 			}
 			$this->dirty();
-			return parent::render();
+			return parent::render($indent);
 		}
 
 		protected function prepare() {

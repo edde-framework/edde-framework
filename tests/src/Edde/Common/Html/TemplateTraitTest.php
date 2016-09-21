@@ -39,9 +39,9 @@
 			 */
 			$control->template();
 			$control->dirty();
-			self::assertEquals('	<div class="foo-bar"></div>
-	<span>hello world!</span>
-	<div class="bar-foo"></div>
+			self::assertEquals('<div class="foo-bar"></div>
+<span>hello world!</span>
+<div class="bar-foo"></div>
 ', $control->render());
 		}
 

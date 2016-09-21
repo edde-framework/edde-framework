@@ -153,9 +153,11 @@
 		/**
 		 * execute output rendering of this control - return string version of this control
 		 *
+		 * @param int $indent indent modifier when "parent" control is not rendered
+		 *
 		 * @return string
 		 */
-		public function render();
+		public function render(int $indent = 0);
 
 		/**
 		 * load client script based on a current class name
