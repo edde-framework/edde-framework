@@ -13,6 +13,7 @@
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
+	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crypt\CryptEngine;
@@ -96,6 +97,7 @@
 				ITempDirectory::class => function (IRootDirectory $rootDirectory) {
 					return new TempDirectory($rootDirectory->getDirectory());
 				},
+				IStyleSheetCompiler::class => ResourceList::class,
 				IJavaScriptCompiler::class => ResourceList::class,
 				IHostUrl::class => HostUrl::create('http://localhost/foo/bar?a=1'),
 				ILinkFactory::class => function (IContainer $container, IHostUrl $hostUrl) {
