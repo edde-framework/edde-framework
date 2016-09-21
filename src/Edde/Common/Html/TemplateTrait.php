@@ -59,12 +59,7 @@
 					$importList[] = $action;
 				}
 			}
-			/** @var $control IHtmlView */
-			/** @var $template IHtmlTemplate */
-			$control = $this;
-			$template = $this->templateManager->template($layout, $control);
-			$template->import(...$importList);
-			$template->template();
+			$this->snippet($layout, null, $importList);
 			return $this;
 		}
 
@@ -79,14 +74,14 @@
 			return dirname($reflectionClass->getFileName()) . '/template/' . StringUtils::recamel($this->request->getMethod()) . '.xml';
 		}
 
-		public function snippet(string $file, string ...$snippetList) {
+		public function snippet(string $file, array $snippetList = null, array $importList = []) {
 			$this->check();
 			/** @var $control IHtmlView */
 			/** @var $template IHtmlTemplate */
 			$control = $this;
-			$template = $this->templateManager->template($file = $file ?: $this->getActionTemplateFile(), $control);
-			foreach ($snippetList as $snippet) {
-				$template->snippet($snippet, $control);
+			$template = AbstractHtmlTemplate::template($this->templateManager->template($file, $importList), $this->container);
+			foreach ($snippetList ?: [null] as $snippet) {
+				$template->snippet($control, $snippet);
 			}
 			return $this;
 		}
