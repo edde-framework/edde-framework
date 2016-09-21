@@ -7,6 +7,7 @@
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Html\Macro\ButtonMacro;
 	use Edde\Common\Html\Macro\ControlMacro;
+	use Edde\Common\Html\Macro\CssMacro;
 	use Edde\Common\Html\Macro\HtmlMacro;
 	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Html\Tag\SpanControl;
@@ -26,6 +27,7 @@
 					$container->inject(new IncludeMacro()),
 					$container->inject(new BlockMacro()),
 					$container->inject(new ControlMacro()),
+					$container->inject(new CssMacro()),
 					$container->inject(new HtmlMacro('div', DivControl::class)),
 					$container->inject(new HtmlMacro('span', SpanControl::class)),
 					$container->inject(new ButtonMacro()),

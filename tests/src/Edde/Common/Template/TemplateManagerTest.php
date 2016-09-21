@@ -10,13 +10,16 @@
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Http\IHostUrl;
 	use Edde\Api\Link\ILinkFactory;
+	use Edde\Api\Resource\IResourceList;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
+	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crypt\CryptEngine;
+	use Edde\Common\File\File;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\AbstractHtmlTemplate;
@@ -41,6 +44,14 @@
 		 * @var ITemplateManager
 		 */
 		protected $templateManager;
+		/**
+		 * @var IResourceList
+		 */
+		protected $styleSheetList;
+		/**
+		 * @var IResourceList
+		 */
+		protected $javaScriptList;
 
 		public function testCommon() {
 			$file = $this->templateManager->template(__DIR__ . '/template/complex/layout.xml', [
@@ -78,6 +89,14 @@
 	<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button just-useless-button-here"></div>
 </div>
 ', $div->render());
+			$cssList = [
+				(new File(__DIR__ . '/template/complex/foo/bar/boo.css'))->getUrl()
+					->getAbsoluteUrl(),
+			];
+			$pathList = $this->styleSheetList->getPathList();
+			sort($cssList);
+			sort($pathList);
+			self::assertEquals($cssList, $pathList);
 		}
 
 		protected function setUp() {
@@ -94,6 +113,7 @@
 				ITempDirectory::class => function (IRootDirectory $rootDirectory) {
 					return new TempDirectory($rootDirectory->getDirectory());
 				},
+				IStyleSheetCompiler::class => ResourceList::class,
 				IJavaScriptCompiler::class => ResourceList::class,
 				IHostUrl::class => HostUrl::create('http://localhost/foo/bar?a=1'),
 				ILinkFactory::class => function (IContainer $container, IHostUrl $hostUrl) {
@@ -106,7 +126,7 @@
 			$converterManager = $container->create(IConverterManager::class);
 			$converterManager->registerConverter($container->inject(new XmlConverter()));
 			$this->templateManager = $container->create(ITemplateManager::class);
-			$this->templateManager->onSetup(function (ITemplateManager $templateManager) {
-			});
+			$this->styleSheetList = $container->create(IStyleSheetCompiler::class);
+			$this->javaScriptList = $container->create(IJavaScriptCompiler::class);
 		}
 	}
