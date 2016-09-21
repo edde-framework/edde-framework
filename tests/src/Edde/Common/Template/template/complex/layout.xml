@@ -22,4 +22,13 @@
 
 	<!-- use include as in place expansion of the given template -->
 	<t:include src="./include-foo.xml"/>
+
+	<t:include src="block-from-imported-template"/>
+
+	<!--<loop src="loop-from-root()">-->
+	<!--<t:include src="deep-block"/>-->
+	<!--</loop>-->
+	<!--<loop src="@loop-from-local-control()">-->
+	<!--<t:include src="./include-foo.xml"/>-->
+	<!--</loop>-->
 </control>

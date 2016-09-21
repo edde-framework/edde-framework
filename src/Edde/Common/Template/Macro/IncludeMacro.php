@@ -20,7 +20,7 @@
 		protected $rootDirectory;
 
 		public function __construct() {
-			parent::__construct('t:include');
+			parent::__construct('t:include', true);
 		}
 
 		public function lazyRootDirectory(IRootDirectory $rootDirectory) {

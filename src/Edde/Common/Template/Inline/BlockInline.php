@@ -10,7 +10,7 @@
 
 	class BlockInline extends AbstractInline {
 		public function __construct() {
-			parent::__construct('t:block');
+			parent::__construct('t:block', true);
 		}
 
 		public function macro(INode $macro, ICompiler $compiler) {

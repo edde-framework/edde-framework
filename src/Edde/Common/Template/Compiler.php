@@ -33,23 +33,13 @@
 		 */
 		protected $source;
 		/**
-		 * pre process (compile-time) macros
-		 *
-		 * @var IMacro[]
-		 */
-		protected $compileList = [];
-		/**
-		 * @var IInline[]
-		 */
-		protected $compileInlineList = [];
-		/**
 		 * @var IMacro[]
 		 */
 		protected $macroList = [];
 		/**
 		 * @var IInline[]
 		 */
-		protected $macroInlineList = [];
+		protected $inlineList = [];
 		/**
 		 * stack of compiled files (when compiler is reused)
 		 *
@@ -82,31 +72,24 @@
 			$this->cryptEngine = $cryptEngine;
 		}
 
-		public function registerCompileMacro(IMacro $macro): ICompiler {
-			$this->compileList[$macro->getName()] = $macro;
-			return $this;
-		}
-
-		public function registerCompileInlineMacro(IInline $inline): ICompiler {
-			$this->compileInlineList[$inline->getName()] = $inline;
-			return $this;
-		}
-
 		public function registerMacro(IMacro $macro): ICompiler {
 			$this->macroList[$macro->getName()] = $macro;
 			return $this;
 		}
 
-		public function registerInlineMacro(IInline $inline): ICompiler {
-			$this->macroInlineList[$inline->getName()] = $inline;
+		public function registerInline(IInline $inline): ICompiler {
+			$this->inlineList[$inline->getName()] = $inline;
 			return $this;
 		}
 
-		public function template(INode $template = null) {
+		public function template(array $importList = []) {
 			$this->use();
 			$this->context = [];
 			try {
-				return $this->macro($template ?: $this->compile($this->source));
+				foreach ($importList as $import) {
+					$this->compile($import);
+				}
+				return $this->macro($this->compile($this->source));
 			} catch (\Exception $exception) {
 				$stackList = [];
 				while ($this->stack->isEmpty() === false) {
@@ -117,55 +100,54 @@
 			}
 		}
 
-		public function macro(INode $macro) {
-			if (isset($this->compileList[$name = $macro->getName()])) {
-				foreach ($macro->getNodeList() as $node) {
-					$this->macro($node);
-				}
-				return null;
-			}
-			if (isset($this->macroList[$name]) === false) {
-				throw new CompilerException(sprintf('Unknown macro [%s].', $macro->getPath()));
-			}
-			if (empty($this->macroInlineList) === false) {
-				foreach ($macro->getAttributeList() as $k => $v) {
-					if (isset($this->macroInlineList[$k])) {
-						$this->macroInlineList[$k]->macro($macro, $this);
-						$macro->removeAttribute($k);
-					}
-				}
-			}
-			return $this->macroList[$name]->macro($macro, $this);
-		}
-
 		public function compile(IFile $source): INode {
 			$this->use();
 			$this->stack->push($source);
 			foreach (NodeIterator::recursive($source = $this->resourceManager->resource($source), true) as $node) {
-				if (empty($this->compileInlineList) === false) {
+				if (empty($this->inlineList) === false) {
 					foreach ($node->getAttributeList() as $k => $v) {
-						if (isset($this->compileInlineList[$k])) {
-							$this->compileInlineList[$k]->macro($node, $this);
+						if (isset($this->inlineList[$k]) && $this->inlineList[$k]->isCompile()) {
+							$this->inlineList[$k]->macro($node, $this);
 						}
 					}
 				}
-				if (isset($this->compileList[$name = $node->getName()])) {
+				if (isset($this->macroList[$name = $node->getName()]) && $this->macroList[$name]->isCompile()) {
 					$this->execute($node);
 				}
 			}
 			foreach (NodeIterator::recursive($source, true) as $node) {
-				if (isset($this->compileList[$node->getName()]) || isset($this->macroList[$node->getName()])) {
+				if (isset($this->macroList[$node->getName()])) {
 					continue;
 				}
 				throw new CompilerException(sprintf('Unknown macro [%s].', $node->getPath()));
 			}
-
 			$this->stack->pop();
 			return $source;
 		}
 
 		public function execute(INode $macro) {
-			return $this->compileList[$name = $macro->getName()]->macro($macro, $this);
+			return $this->macroList[$name = $macro->getName()]->macro($macro, $this);
+		}
+
+		public function macro(INode $macro) {
+			if (isset($this->macroList[$name = $macro->getName()]) === false) {
+				throw new CompilerException(sprintf('Unknown macro [%s].', $macro->getPath()));
+			}
+			if ($this->macroList[$name]->isCompile()) {
+				foreach ($macro->getNodeList() as $node) {
+					$this->macro($node);
+				}
+				return null;
+			}
+			if (empty($this->inlineList) === false) {
+				foreach ($macro->getAttributeList() as $k => $v) {
+					if (isset($this->inlineList[$k])) {
+						$this->inlineList[$k]->macro($macro, $this);
+						$macro->removeAttribute($k);
+					}
+				}
+			}
+			return $this->macroList[$name]->macro($macro, $this);
 		}
 
 		public function getSource(): IFile {

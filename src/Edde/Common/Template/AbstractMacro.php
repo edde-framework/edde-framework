@@ -13,13 +13,26 @@
 		 * @var string
 		 */
 		protected $name;
+		/**
+		 * @var bool
+		 */
+		protected $compile;
 
-		public function __construct(string $name) {
+		public function __construct(string $name, bool $compile = true) {
 			$this->name = $name;
+			$this->compile = $compile;
 		}
 
 		public function getName(): string {
 			return $this->name;
+		}
+
+		public function isRuntime(): bool {
+			return $this->isCompile() === false;
+		}
+
+		public function isCompile(): bool {
+			return $this->compile === true;
 		}
 
 		public function attribute(INode $macro, string $name) {

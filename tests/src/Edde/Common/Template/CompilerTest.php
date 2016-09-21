@@ -9,7 +9,6 @@
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Resource\IResourceManager;
-	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crypt\CryptEngine;
@@ -36,21 +35,19 @@
 		protected $container;
 
 		public function testComplex() {
-			/** @var $compiler ICompiler */
-			$compiler = $this->container->inject(new Compiler(new File(__DIR__ . '/template/complex/layout.xml')));
+			$this->container->inject($compiler = new Compiler(new File(__DIR__ . '/template/complex/layout.xml')));
 
-			$compiler->registerCompileMacro($this->container->inject(new UseMacro()));
-			$compiler->registerCompileMacro($this->container->inject(new IncludeMacro()));
-			$compiler->registerCompileMacro($this->container->inject(new BlockMacro()));
-
-			$compiler->registerCompileInlineMacro($this->container->inject(new BlockInline()));
-			$compiler->registerCompileInlineMacro($this->container->inject(new IncludeInline()));
-
+			$compiler->registerMacro($this->container->inject(new UseMacro()));
+			$compiler->registerMacro($this->container->inject(new IncludeMacro()));
+			$compiler->registerMacro($this->container->inject(new BlockMacro()));
 			$compiler->registerMacro($this->container->inject(new ControlMacro()));
 			$compiler->registerMacro($this->container->inject(new HtmlMacro('div', DivControl::class)));
 
+			$compiler->registerInline($this->container->inject(new BlockInline()));
+			$compiler->registerInline($this->container->inject(new IncludeInline()));
+
 			/** @var $file IFile */
-			self::assertInstanceOf(IFile::class, $file = $compiler->template());
+			self::assertInstanceOf(IFile::class, $file = $compiler->template([new File(__DIR__ . '/template/complex/to-be-used.xml')]));
 			(function (IFile $file) {
 				require_once($file->getUrl()
 					->getAbsoluteUrl());
@@ -82,6 +79,7 @@
 		<div class="deepness-of-a-deep">foo</div>
 	</div>
 	<div class="poo-class">poo</div>
+	<div class="used-div-here"></div>
 </div>
 ', $div->render());
 			$template->snippet($this->container->inject($div = new DivControl()), 'deep-block');

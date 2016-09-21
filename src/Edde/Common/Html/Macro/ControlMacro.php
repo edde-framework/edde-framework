@@ -19,7 +19,7 @@
 		use HomeDirectoryTrait;
 
 		public function __construct() {
-			parent::__construct('control');
+			parent::__construct('control', false);
 		}
 
 		public function onMacro(INode $macro) {

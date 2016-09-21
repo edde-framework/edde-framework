@@ -19,7 +19,7 @@
 		 * @param string $control
 		 */
 		public function __construct(string $name, string $control) {
-			parent::__construct($name);
+			parent::__construct($name, false);
 			$this->control = $control;
 		}
 

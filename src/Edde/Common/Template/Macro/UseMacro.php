@@ -17,7 +17,7 @@
 		protected $rootDirectory;
 
 		public function __construct() {
-			parent::__construct('t:use');
+			parent::__construct('t:use', true);
 		}
 
 		public function lazyRootDirectory(IRootDirectory $rootDirectory) {

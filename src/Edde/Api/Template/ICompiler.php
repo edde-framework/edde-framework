@@ -9,22 +9,6 @@
 
 	interface ICompiler extends ILazyInject {
 		/**
-		 * add a compile time macro
-		 *
-		 * @param IMacro $macro
-		 *
-		 * @return ICompiler
-		 */
-		public function registerCompileMacro(IMacro $macro): ICompiler;
-
-		/**
-		 * @param IInline $inline
-		 *
-		 * @return ICompiler
-		 */
-		public function registerCompileInlineMacro(IInline $inline): ICompiler;
-
-		/**
 		 * "runtime macro" - those should generate runtime
 		 *
 		 * @param IMacro $macro
@@ -38,7 +22,7 @@
 		 *
 		 * @return ICompiler
 		 */
-		public function registerInlineMacro(IInline $inline): ICompiler;
+		public function registerInline(IInline $inline): ICompiler;
 
 		/**
 		 * execute macro in compile time
@@ -85,13 +69,13 @@
 		public function isLayout(): bool;
 
 		/**
-		 * execute whole compilation process: compile + template building (generating)
+		 * build a final template; import list can contain additional set of templates (loaded before the main one)
 		 *
-		 * @param INode $template source node (prepared from compile)
+		 * @param IFile[] $importList
 		 *
 		 * @return mixed
 		 */
-		public function template(INode $template = null);
+		public function template(array $importList = []);
 
 		/**
 		 * add a value to compiler context
