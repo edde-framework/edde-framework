@@ -25,6 +25,10 @@
 
 	<t:include src="block-from-imported-template"/>
 
+	<button m:action="action-on-the-root()"/>
+	<button m:action="@action-on-the-current-contol()"/>
+	<button class="just-useless-button-here"/>
+
 	<!--<loop src="loop-from-root()">-->
 	<!--<t:include src="deep-block"/>-->
 	<!--</loop>-->

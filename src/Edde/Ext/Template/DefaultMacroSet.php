@@ -5,6 +5,7 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Html\Macro\ButtonMacro;
 	use Edde\Common\Html\Macro\ControlMacro;
 	use Edde\Common\Html\Macro\HtmlMacro;
 	use Edde\Common\Html\Tag\DivControl;
@@ -27,6 +28,7 @@
 					$container->inject(new ControlMacro()),
 					$container->inject(new HtmlMacro('div', DivControl::class)),
 					$container->inject(new HtmlMacro('span', SpanControl::class)),
+					$container->inject(new ButtonMacro()),
 				]);
 				$macroSet->setInlineList([
 					$container->inject(new BlockInline()),

@@ -7,15 +7,24 @@
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\File\ITempDirectory;
+	use Edde\Api\Http\IHostUrl;
+	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\File\RootDirectory;
+	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\AbstractHtmlTemplate;
 	use Edde\Common\Html\Tag\DivControl;
+	use Edde\Common\Http\HostUrl;
+	use Edde\Common\Link\ControlLinkGenerator;
+	use Edde\Common\Link\LinkFactory;
+	use Edde\Common\Resource\ResourceList;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Ext\Container\ContainerFactory;
@@ -64,6 +73,9 @@
 	</div>
 	<div class="poo-class">poo</div>
 	<div class="used-div-here"></div>
+	<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="http://localhost/foo/bar?a=1&control=Edde%5CCommon%5CHtml%5CTag%5CDivControl&action=action-on-the-root"></div>
+	<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="http://localhost/foo/bar?a=1&control=Edde%5CCommon%5CHtml%5CTag%5CButtonControl&action=%40action-on-the-current-contol"></div>
+	<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button just-useless-button-here"></div>
 </div>
 ', $div->render());
 		}
@@ -78,6 +90,16 @@
 				ICryptEngine::class => CryptEngine::class,
 				IMacroSet::class => function (IContainer $container) {
 					return DefaultMacroSet::factory($container);
+				},
+				ITempDirectory::class => function (IRootDirectory $rootDirectory) {
+					return new TempDirectory($rootDirectory->getDirectory());
+				},
+				IJavaScriptCompiler::class => ResourceList::class,
+				IHostUrl::class => HostUrl::create('http://localhost/foo/bar?a=1'),
+				ILinkFactory::class => function (IContainer $container, IHostUrl $hostUrl) {
+					$linkFactory = new LinkFactory($hostUrl);
+					$linkFactory->registerLinkGenerator($container->inject(new ControlLinkGenerator()));
+					return $linkFactory;
 				},
 			]);
 			/** @var $converterManager IConverterManager */

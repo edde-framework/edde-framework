@@ -42,10 +42,15 @@
 				case null:", TemplateException::class), 3);
 			$this->compile();
 			$this->write('break;', 5);
+			$caseList = [];
 			foreach (NodeIterator::recursive($macro) as $node) {
 				if (($id = $node->getMeta('id')) === null) {
 					continue;
 				}
+				if (isset($caseList[$id])) {
+					continue;
+				}
+				$caseList[$id] = $id;
 				$this->write(sprintf('case %s:', var_export($id, true)), 4);
 				$this->write(sprintf('// %s', $node->getPath()), 5);
 				$this->compiler->macro($node);
