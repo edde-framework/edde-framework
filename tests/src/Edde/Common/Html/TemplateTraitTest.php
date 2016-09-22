@@ -9,6 +9,7 @@
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Resource\IResourceManager;
+	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Xml\IXmlParser;
@@ -55,6 +56,9 @@
 				ICryptEngine::class => CryptEngine::class,
 				IMacroSet::class => function (IContainer $container) {
 					return DefaultMacroSet::macroSet($container);
+				},
+				IHelperSet::class => function (IContainer $container) {
+					return DefaultMacroSet::helperSet($container);
 				},
 				IRequest::class => function () {
 					return new Request('foo', 'bar', 'method', []);
