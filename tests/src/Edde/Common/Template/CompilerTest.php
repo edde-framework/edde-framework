@@ -76,6 +76,12 @@
 	<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="http://localhost/foo/bar?a=1&control=Edde%5CCommon%5CHtml%5CTag%5CButtonControl&action=%40action-on-the-current-contol"></div>
 	<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button just-useless-button-here"></div>
 	<div class="edde-placeholder" id="foo"></div>
+	<h1>foo1</h1>
+	<h2>foo2</h2>
+	<h3 class="foo3-with-class">foo3</h3>
+	<h4>foo4</h4>
+	<h5>foo5</h5>
+	<h6>foo6</h6>
 </div>
 ', $div->render());
 			$template->snippet($this->container->inject($div = new DivControl()), 'deep-block');

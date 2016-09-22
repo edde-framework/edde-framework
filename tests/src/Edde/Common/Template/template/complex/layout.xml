@@ -34,6 +34,13 @@
 
 	<placeholder id="foo"/>
 
+	<h1 value="foo1"/>
+	<h2 value="foo2"/>
+	<h3 class="foo3-with-class" value="foo3"/>
+	<h4 value="foo4"/>
+	<h5 value="foo5"/>
+	<h6 value="foo6"/>
+
 	<!--<loop src="loop-from-root()">-->
 	<!--<t:include src="deep-block"/>-->
 	<!--</loop>-->

@@ -8,6 +8,7 @@
 	use Edde\Common\Html\Macro\ButtonMacro;
 	use Edde\Common\Html\Macro\ControlMacro;
 	use Edde\Common\Html\Macro\CssMacro;
+	use Edde\Common\Html\Macro\HeaderMacro;
 	use Edde\Common\Html\Macro\HtmlMacro;
 	use Edde\Common\Html\Macro\JsMacro;
 	use Edde\Common\Html\PlaceholderControl;
@@ -34,6 +35,12 @@
 					$container->inject(new HtmlMacro('div', DivControl::class)),
 					$container->inject(new HtmlMacro('span', SpanControl::class)),
 					$container->inject(new HtmlMacro('placeholder', PlaceholderControl::class)),
+					$container->inject(new HeaderMacro('h1')),
+					$container->inject(new HeaderMacro('h2')),
+					$container->inject(new HeaderMacro('h3')),
+					$container->inject(new HeaderMacro('h4')),
+					$container->inject(new HeaderMacro('h5')),
+					$container->inject(new HeaderMacro('h6')),
 					$container->inject(new ButtonMacro()),
 				]);
 				$macroSet->setInlineList([
