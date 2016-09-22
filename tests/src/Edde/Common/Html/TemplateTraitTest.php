@@ -54,7 +54,7 @@
 				IRootDirectory::class => new RootDirectory(__DIR__ . '/temp'),
 				ICryptEngine::class => CryptEngine::class,
 				IMacroSet::class => function (IContainer $container) {
-					return DefaultMacroSet::factory($container);
+					return DefaultMacroSet::macroSet($container);
 				},
 				IRequest::class => function () {
 					return new Request('foo', 'bar', 'method', []);

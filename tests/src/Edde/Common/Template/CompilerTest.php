@@ -10,11 +10,13 @@
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Http\IHostUrl;
+	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Xml\IXmlParser;
+	use Edde\Common\AssetsDirectory;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\File\File;
@@ -41,7 +43,8 @@
 
 		public function testComplex() {
 			$this->container->inject($compiler = new Compiler(new File(__DIR__ . '/template/complex/layout.xml')));
-			$compiler->registerMacroSet(DefaultMacroSet::factory($this->container));
+			$compiler->registerMacroSet(DefaultMacroSet::macroSet($this->container));
+			$compiler->registerHelperSet(DefaultMacroSet::helperSet($this->container));
 
 			/** @var $file IFile */
 			self::assertInstanceOf(IFile::class, $file = $compiler->template([new File(__DIR__ . '/template/complex/to-be-used.xml')]));
@@ -101,6 +104,7 @@
 				IConverterManager::class => ConverterManager::class,
 				IXmlParser::class => XmlParser::class,
 				IRootDirectory::class => new RootDirectory(__DIR__ . '/temp'),
+				IAssetsDirectory::class => new AssetsDirectory(__DIR__ . '/../../../../../src/Edde/assets'),
 				ITempDirectory::class => function (IRootDirectory $rootDirectory) {
 					return new TempDirectory($rootDirectory->getDirectory());
 				},

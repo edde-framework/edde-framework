@@ -45,6 +45,7 @@
 	use Edde\Api\Session\IFingerprint;
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Storage\IStorage;
+	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Upgrade\IUpgradeManager;
@@ -183,7 +184,10 @@
 					IUpgradeManager::class => UpgradeManager::class,
 					ITemplateManager::class => TemplateManager::class,
 					IMacroSet::class => function (IContainer $container) {
-						return DefaultMacroSet::factory($container);
+						return DefaultMacroSet::macroSet($container);
+					},
+					IHelperSet::class => function (IContainer $container) {
+						return DefaultMacroSet::helperSet();
 					},
 					IStyleSheetCompiler::class => StyleSheetCompiler::class,
 					IJavaScriptCompiler::class => JavaScriptCompiler::class,

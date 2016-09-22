@@ -9,14 +9,17 @@
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Http\IHostUrl;
+	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResourceList;
 	use Edde\Api\Resource\IResourceManager;
+	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Xml\IXmlParser;
+	use Edde\Common\AssetsDirectory;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\File\File;
@@ -97,6 +100,8 @@
 </div>
 ', $div->render());
 			$cssList = [
+				(new File(__DIR__ . '/../../../../../src/Edde/assets/css/foundation.min.css'))->getUrl()
+					->getAbsoluteUrl(),
 				(new File(__DIR__ . '/template/complex/foo/bar/boo.css'))->getUrl()
 					->getAbsoluteUrl(),
 			];
@@ -121,9 +126,13 @@
 				IConverterManager::class => ConverterManager::class,
 				IXmlParser::class => XmlParser::class,
 				IRootDirectory::class => new RootDirectory(__DIR__ . '/temp'),
+				IAssetsDirectory::class => new AssetsDirectory(__DIR__ . '/../../../../../src/Edde/assets'),
 				ICryptEngine::class => CryptEngine::class,
 				IMacroSet::class => function (IContainer $container) {
-					return DefaultMacroSet::factory($container);
+					return DefaultMacroSet::macroSet($container);
+				},
+				IHelperSet::class => function (IContainer $container) {
+					return DefaultMacroSet::helperSet($container);
 				},
 				ITempDirectory::class => function (IRootDirectory $rootDirectory) {
 					return new TempDirectory($rootDirectory->getDirectory());

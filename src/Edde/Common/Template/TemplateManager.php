@@ -4,6 +4,7 @@
 	namespace Edde\Common\Template;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Common\Cache\CacheTrait;
@@ -20,6 +21,10 @@
 		 * @var IMacroSet
 		 */
 		protected $macroSet;
+		/**
+		 * @var IHelperSet
+		 */
+		protected $helperSet;
 
 		public function lazyContainer(IContainer $container) {
 			$this->container = $container;
@@ -29,12 +34,17 @@
 			$this->macroSet = $macroSet;
 		}
 
+		public function lazyHelperSet(IHelperSet $helperSet) {
+			$this->helperSet = $helperSet;
+		}
+
 		public function template(string $template, array $importList = []) {
 			$this->container->inject($compiler = new Compiler(new File($template)));
 			foreach ($importList as &$import) {
 				$import = new File($import);
 			}
 			$compiler->registerMacroSet($this->macroSet);
+			$compiler->registerHelperSet($this->helperSet);
 			return $compiler->template($importList);
 		}
 

@@ -4,6 +4,8 @@
 	namespace Edde\Ext\Template;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Template\IHelperSet;
+	use Edde\Api\Template\IMacroSet;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Html\Macro\ButtonMacro;
 	use Edde\Common\Html\Macro\ControlMacro;
@@ -14,6 +16,8 @@
 	use Edde\Common\Html\PlaceholderControl;
 	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Html\Tag\SpanControl;
+	use Edde\Common\Template\Helper\EddeAssetHelper;
+	use Edde\Common\Template\HelperSet;
 	use Edde\Common\Template\Inline\BlockInline;
 	use Edde\Common\Template\Inline\IncludeInline;
 	use Edde\Common\Template\Macro\BlockMacro;
@@ -22,7 +26,7 @@
 	use Edde\Common\Template\MacroSet;
 
 	class DefaultMacroSet extends AbstractObject {
-		static public function factory(IContainer $container) {
+		static public function macroSet(IContainer $container): IMacroSet {
 			$macroSet = new MacroSet();
 			$macroSet->onSetup(function (MacroSet $macroSet) use ($container) {
 				$macroSet->setMacroList([
@@ -49,5 +53,13 @@
 				]);
 			});
 			return $macroSet;
+		}
+
+		static public function helperSet(IContainer $container): IHelperSet {
+			$helperSet = new HelperSet();
+			$helperSet->onSetup(function (IHelperSet $helperSet) use ($container) {
+				$helperSet->registerHelper($container->inject(new EddeAssetHelper()));
+			});
+			return $helperSet;
 		}
 	}

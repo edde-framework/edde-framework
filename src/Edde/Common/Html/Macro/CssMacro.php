@@ -6,7 +6,7 @@
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Template\MacroException;
+	use Edde\Common\File\File;
 
 	class CssMacro extends AbstractHtmlMacro {
 		/**
@@ -34,6 +34,6 @@
 				return $source->getDirectory()
 					->file(substr($src, 2));
 			}
-			throw new MacroException(sprintf('Unknown "src" attribute value [%s] of macro [%s].', $src, $macro->getPath()));
+			return new File($src);
 		}
 	}

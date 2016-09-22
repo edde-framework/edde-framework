@@ -28,6 +28,8 @@
 	<css src="./foo/bar/boo.css"/>
 	<js src="./some/javascript.js"/>
 
+	<css src="edde://css/foundation.min.css"/>
+
 	<button m:action="action-on-the-root()"/>
 	<button m:action="@action-on-the-current-contol()"/>
 	<button class="just-useless-button-here"/>

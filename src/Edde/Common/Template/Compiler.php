@@ -120,10 +120,13 @@
 				}
 				return $this->runtimeMacro($this->compile($this->source));
 			} catch (\Exception $exception) {
-				$stackList = [];
+				$stackList = [
+					$this->source->getPath() => $this->source->getPath(),
+				];
 				while ($this->stack->isEmpty() === false) {
-					$stackList[] = $this->stack->pop()
+					$path = $this->stack->pop()
 						->getPath();
+					$stackList[$path] = $path;
 				}
 				throw new CompilerException(sprintf("Template compilation failed: %s\nTemplate file stack:\n%s", $exception->getMessage(), implode(",\n", $stackList)), 0, $exception);
 			}
@@ -191,8 +194,10 @@
 						foreach ($attributeList as $k => &$v) {
 							$v = $helper->helper($v);
 						}
+						unset($v);
 					}
 				}
+				$macro->setAttributeList($attributeList);
 			}
 			return $this->macroList[$name]->macro($macro, $this);
 		}
