@@ -23,7 +23,7 @@
 		}
 
 		protected function onMacro() {
-			$this->write(sprintf('$this->styleSheetList->addFile(%s);', var_export($this->file($this->attribute($this->macro, 'src'), $this->compiler->getSource(), $this->macro)
+			$this->write(sprintf('$this->styleSheetList->addFile(%s);', var_export($this->file($this->attribute('src'), $this->compiler->getSource(), $this->macro)
 				->getPath(), true)), 5);
 		}
 

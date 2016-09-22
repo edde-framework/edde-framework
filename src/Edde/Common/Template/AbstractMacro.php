@@ -29,9 +29,12 @@
 		 * @var ICompiler
 		 */
 		protected $compiler;
+		/**
+		 * @var IHelperSet
+		 */
 		protected $helperSet;
 
-		public function __construct(string $name, bool $compile = true) {
+		public function __construct(string $name, bool $compile) {
 			$this->name = $name;
 			$this->compile = $compile;
 		}
@@ -58,13 +61,6 @@
 			return $this->helperSet;
 		}
 
-		public function attribute(INode $macro, string $name) {
-			if (($attribute = $macro->getAttribute($name)) === null) {
-				throw new MacroException(sprintf('Missing attribute [%s] in macro node [%s].', $name, $macro->getPath()));
-			}
-			return $attribute;
-		}
-
 		public function extract(INode $macro, string $name) {
 			$attribute = $macro->getAttribute($name);
 			$macro->removeAttribute($name);
@@ -78,6 +74,13 @@
 		}
 
 		abstract protected function onMacro();
+
+		protected function attribute(string $name) {
+			if (($attribute = $this->macro->getAttribute($name)) === null) {
+				throw new MacroException(sprintf('Missing attribute [%s] in macro node [%s].', $name, $this->macro->getPath()));
+			}
+			return $attribute;
+		}
 
 		protected function prepare() {
 		}

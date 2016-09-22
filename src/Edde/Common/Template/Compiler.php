@@ -98,11 +98,6 @@
 			return $this;
 		}
 
-		public function registerHelperSet(IHelperSet $helperSet): ICompiler {
-			$this->helperSetList[] = $helperSet;
-			return $this;
-		}
-
 		public function template(array $importList = []) {
 			$this->use();
 			$this->context = [];
@@ -217,12 +212,21 @@
 		public function getVariable(string $name, $default = null) {
 			if (isset($this->context[$name]) === false) {
 				$this->context[$name] = $default;
-				return $this->context[$name];
 			}
 			return $this->context[$name];
 		}
 
 		protected function prepare() {
 			$this->stack = new \SplStack();
+			foreach ($this->macroList as $macro) {
+				if ($macro->hasHelperSet()) {
+					$this->registerHelperSet($macro->getHelperSet());
+				}
+			}
+		}
+
+		public function registerHelperSet(IHelperSet $helperSet): ICompiler {
+			$this->helperSetList[] = $helperSet;
+			return $this;
 		}
 	}

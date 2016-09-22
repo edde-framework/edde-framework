@@ -35,6 +35,8 @@
 	use Edde\Ext\Template\DefaultMacroSet;
 	use phpunit\framework\TestCase;
 
+	require_once(__DIR__ . '/assets.php');
+
 	class CompilerTest extends TestCase {
 		/**
 		 * @var IContainer
@@ -49,7 +51,7 @@
 			/** @var $file IFile */
 			self::assertInstanceOf(IFile::class, $file = $compiler->template([new File(__DIR__ . '/template/complex/to-be-used.xml')]));
 			$template = AbstractHtmlTemplate::template($file, $this->container);
-			$template->snippet($this->container->inject($div = new DivControl()));
+			$template->snippet($this->container->inject($div = new \SomeCoolControl()));
 			$div->addClass('root');
 			$div->dirty();
 			self::assertEquals('<div class="root">
@@ -75,7 +77,7 @@
 	</div>
 	<div class="poo-class">poo</div>
 	<div class="used-div-here"></div>
-	<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="http://localhost/foo/bar?a=1&control=Edde%5CCommon%5CHtml%5CTag%5CDivControl&action=action-on-the-root"></div>
+	<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="http://localhost/foo/bar?a=1&control=SomeCoolControl&action=action-on-the-root"></div>
 	<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="http://localhost/foo/bar?a=1&control=Edde%5CCommon%5CHtml%5CTag%5CButtonControl&action=%40action-on-the-current-contol"></div>
 	<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button just-useless-button-here"></div>
 	<div class="edde-placeholder" id="foo"></div>

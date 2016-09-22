@@ -24,7 +24,7 @@
 		}
 
 		public function onMacro() {
-			$this->compiler->compile($this->file($this->attribute($this->macro, 'src'), $this->compiler->getCurrent(), $this->macro));
+			$this->compiler->compile($this->file($this->attribute('src'), $this->compiler->getCurrent(), $this->macro));
 		}
 
 		protected function file(string $src, IFile $source, INode $macro): IFile {

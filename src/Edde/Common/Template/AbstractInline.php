@@ -3,16 +3,15 @@
 
 	namespace Edde\Common\Template;
 
-	use Edde\Api\Node\INode;
 	use Edde\Api\Template\IInline;
 	use Edde\Api\Template\MacroException;
 
 	abstract class AbstractInline extends AbstractMacro implements IInline {
-		public function attribute(INode $macro, string $name = null) {
-			if (($attribute = $macro->getAttribute($name = $name ?: $this->getName())) === null) {
-				throw new MacroException(sprintf('Missing attribute [%s] in macro node [%s].', $name, $macro->getPath()));
+		protected function attribute(string $name = null) {
+			if (($attribute = $this->macro->getAttribute($name = $name ?: $this->getName())) === null) {
+				throw new MacroException(sprintf('Missing attribute [%s] in macro node [%s].', $name, $this->macro->getPath()));
 			}
-			$macro->removeAttribute($name);
+			$this->macro->removeAttribute($name);
 			return $attribute;
 		}
 	}

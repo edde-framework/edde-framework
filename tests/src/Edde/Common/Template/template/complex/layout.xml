@@ -43,10 +43,14 @@
 	<h5 value="foo5"/>
 	<h6 value="foo6"/>
 
-	<!--<loop src="loop-from-root()">-->
-	<!--<t:include src="deep-block"/>-->
-	<!--</loop>-->
+	<loop src=".loop-from-root()">
+		<div class="$:">
+			<t:include src="deep-block"/>
+		</div>
+	</loop>
 	<!--<loop src="@loop-from-local-control()">-->
+	<!--<div class="$:->getClass()">-->
 	<!--<t:include src="./include-foo.xml"/>-->
+	<!--</div>-->
 	<!--</loop>-->
 </control>
