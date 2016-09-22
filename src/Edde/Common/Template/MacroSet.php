@@ -24,7 +24,15 @@
 		}
 
 		public function setMacroList(array $macroList) {
-			$this->macroList = $macroList;
+			$this->macroList = [];
+			foreach ($macroList as $macro) {
+				$this->registerMacro($macro);
+			}
+			return $this;
+		}
+
+		public function registerMacro(IMacro $macro): IMacroSet {
+			$this->macroList[$macro->getName()] = $macro;
 			return $this;
 		}
 
@@ -34,7 +42,15 @@
 		}
 
 		public function setInlineList(array $inlineList) {
-			$this->inlineList = $inlineList;
+			$this->inlineList = [];
+			foreach ($inlineList as $inline) {
+				$this->registerInline($inline);
+			}
+			return $this;
+		}
+
+		public function registerInline(IInline $inline): IMacroSet {
+			$this->inlineList[$inline->getName()] = $inline;
 			return $this;
 		}
 
