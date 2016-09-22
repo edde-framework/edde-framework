@@ -7,7 +7,6 @@
 	use Edde\Api\Template\TemplateException;
 	use Edde\Common\File\HomeDirectoryTrait;
 	use Edde\Common\Html\AbstractHtmlTemplate;
-	use Edde\Common\Node\NodeIterator;
 
 	/**
 	 * Root control macro for template generation.
@@ -40,20 +39,6 @@
 			$this->compile();
 			$this->write('break;', 5);
 			$caseList = [null];
-
-			foreach (NodeIterator::recursive($this->macro) as $node) {
-				if (($id = $node->getMeta('id')) === null) {
-					continue;
-				}
-				if (isset($caseList[$id])) {
-					continue;
-				}
-				$caseList[$id] = $id;
-				$this->write(sprintf('case %s:', var_export($id, true)), 4);
-				$this->write(sprintf('// %s', $node->getPath()), 5);
-				$this->compiler->runtimeMacro($node);
-				$this->write('break;', 5);
-			}
 			foreach ($this->compiler->getVariable('block-list', []) as $nodeList) {
 				foreach ($nodeList as $node) {
 					if (isset($caseList[$id = $node->getMeta('id')])) {
