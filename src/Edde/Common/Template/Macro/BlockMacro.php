@@ -3,8 +3,6 @@
 
 	namespace Edde\Common\Template\Macro;
 
-	use Edde\Api\Node\INode;
-	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Template\AbstractMacro;
 
@@ -13,12 +11,12 @@
 			parent::__construct('t:block', true);
 		}
 
-		public function macro(INode $macro, ICompiler $compiler) {
-			$blockList = $compiler->getValue('block-list', []);
-			if (isset($blockList[$id = $this->attribute($macro, 'id')])) {
+		public function onMacro() {
+			$blockList = $this->compiler->getVariable('block-list', []);
+			if (isset($blockList[$id = $this->attribute($this->macro, 'id')])) {
 				throw new MacroException(sprintf('Block id [%d] has been already defined.', $id));
 			}
-			$blockList[$id] = $macro->getNodeList();
-			$compiler->setValue('block-list', $blockList);
+			$blockList[$id] = $this->macro->getNodeList();
+			$this->compiler->setVariable('block-list', $blockList);
 		}
 	}

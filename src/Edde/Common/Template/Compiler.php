@@ -10,6 +10,7 @@
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\CompilerException;
 	use Edde\Api\Template\ICompiler;
+	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IInline;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\IMacroSet;
@@ -42,6 +43,10 @@
 		 */
 		protected $inlineList = [];
 		/**
+		 * @var IHelperSet[]
+		 */
+		protected $helperSetList = [];
+		/**
 		 * stack of compiled files (when compiler is reused)
 		 *
 		 * @var \SplStack
@@ -73,7 +78,7 @@
 			$this->cryptEngine = $cryptEngine;
 		}
 
-		public function set(IMacroSet $macroSet): ICompiler {
+		public function registerMacroSet(IMacroSet $macroSet): ICompiler {
 			foreach ($macroSet->getMacroList() as $macro) {
 				$this->registerMacro($macro);
 			}
@@ -93,6 +98,11 @@
 			return $this;
 		}
 
+		public function registerHelperSet(IHelperSet $helperSet): ICompiler {
+			$this->helperSetList[] = $helperSet;
+			return $this;
+		}
+
 		public function template(array $importList = []) {
 			$this->use();
 			$this->context = [];
@@ -100,7 +110,7 @@
 				foreach ($importList as $import) {
 					$this->compile($import);
 				}
-				return $this->macro($this->compile($this->source));
+				return $this->runtimeMacro($this->compile($this->source));
 			} catch (\Exception $exception) {
 				$stackList = [];
 				while ($this->stack->isEmpty() === false) {
@@ -122,8 +132,8 @@
 						}
 					}
 				}
-				if (isset($this->macroList[$name = $node->getName()]) && $this->macroList[$name]->isCompile()) {
-					$this->execute($node);
+				if (isset($this->macroList[$name = $node->getName()])) {
+					$this->compileMacro($node);
 				}
 			}
 			foreach (NodeIterator::recursive($source, true) as $node) {
@@ -136,17 +146,20 @@
 			return $source;
 		}
 
-		public function execute(INode $macro) {
-			return $this->macroList[$name = $macro->getName()]->macro($macro, $this);
+		public function compileMacro(INode $macro) {
+			if ($this->macroList[$name = $macro->getName()]->isRuntime()) {
+				return null;
+			}
+			return $this->macroList[$name]->macro($macro, $this);
 		}
 
-		public function macro(INode $macro) {
+		public function runtimeMacro(INode $macro) {
 			if (isset($this->macroList[$name = $macro->getName()]) === false) {
 				throw new CompilerException(sprintf('Unknown macro [%s].', $macro->getPath()));
 			}
 			if ($this->macroList[$name]->isCompile()) {
 				foreach ($macro->getNodeList() as $node) {
-					$this->macro($node);
+					$this->runtimeMacro($node);
 				}
 				return null;
 			}
@@ -155,6 +168,16 @@
 					if (isset($this->inlineList[$k])) {
 						$this->inlineList[$k]->macro($macro, $this);
 						$macro->removeAttribute($k);
+					}
+				}
+			}
+			$attributeList = $macro->getAttributeList();
+			if (empty($attributeList) === false) {
+				foreach ($this->helperSetList as $helperSet) {
+					foreach ($helperSet->getHelperList() as $helper) {
+						foreach ($attributeList as $k => &$v) {
+							$v = $helper->helper($v);
+						}
 					}
 				}
 			}
@@ -173,12 +196,12 @@
 			return $this->stack->count() === 1;
 		}
 
-		public function setValue(string $name, $value): ICompiler {
+		public function setVariable(string $name, $value): ICompiler {
 			$this->context[$name] = $value;
 			return $this;
 		}
 
-		public function getValue(string $name, $default = null) {
+		public function getVariable(string $name, $default = null) {
 			if (isset($this->context[$name]) === false) {
 				$this->context[$name] = $default;
 				return $this->context[$name];

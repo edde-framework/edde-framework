@@ -30,6 +30,16 @@
 		public function getName(): string;
 
 		/**
+		 * @return bool
+		 */
+		public function hasHelperSet(): bool;
+
+		/**
+		 * @return IHelperSet
+		 */
+		public function getHelperSet(): IHelperSet;
+
+		/**
 		 * execute this macro
 		 *
 		 * @param INode $macro

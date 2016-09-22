@@ -24,9 +24,9 @@
 			$this->rootDirectory = $rootDirectory;
 		}
 
-		public function macro(INode $macro, ICompiler $compiler) {
-			foreach ($this->include($this->attribute($macro), $macro, $compiler->getCurrent(), $compiler) as $node) {
-				$macro->addNode(clone $node);
+		public function onMacro() {
+			foreach ($this->include($this->attribute($this->macro), $this->macro, $this->compiler->getCurrent(), $this->compiler) as $node) {
+				$this->macro->addNode(clone $node);
 			}
 		}
 
@@ -41,7 +41,7 @@
 						->file(substr($src, 2))),
 				];
 			}
-			$blockList = $compiler->getValue('block-list', []);
+			$blockList = $compiler->getVariable('block-list', []);
 			if (isset($blockList[$src]) === false) {
 				throw new MacroException(sprintf('Unknown include [%s] in macro [%s]; an include may be a file reference of an existing block reference.', $src, $macro->getPath()));
 			}

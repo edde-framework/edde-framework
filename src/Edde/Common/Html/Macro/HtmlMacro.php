@@ -23,15 +23,15 @@
 			$this->control = $control;
 		}
 
-		public function onMacro(INode $macro) {
-			$this->write(sprintf('/** %s */', $macro->getPath()), 5);
+		public function onMacro() {
+			$this->write(sprintf('/** %s */', $this->macro->getPath()), 5);
 			$this->write('$parent = $stack->top();', 5);
 			$this->write(sprintf('$parent->addControl($control = $this->container->create(%s));', var_export($this->control, true)), 5);
-			if (($value = $this->extract($macro, 'value')) !== null) {
+			if (($value = $this->extract($this->macro, 'value')) !== null) {
 				$this->write(sprintf('$control->setText(%s);', var_export($value, true)), 5);
 			}
-			$this->onControl($macro);
-			$attributeList = $macro->getAttributeList();
+			$this->onControl($this->macro);
+			$attributeList = $this->macro->getAttributeList();
 			if (empty($attributeList) === false) {
 				$this->write(sprintf('$control->setAttributeList(%s);', var_export($attributeList, true)), 5);
 			}

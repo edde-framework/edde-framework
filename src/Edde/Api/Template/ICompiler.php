@@ -15,7 +15,7 @@
 		 *
 		 * @return ICompiler
 		 */
-		public function set(IMacroSet $macroSet): ICompiler;
+		public function registerMacroSet(IMacroSet $macroSet): ICompiler;
 
 		/**
 		 * "runtime macro" - those should generate runtime
@@ -38,14 +38,14 @@
 		 *
 		 * @param INode $macro
 		 */
-		public function execute(INode $macro);
+		public function compileMacro(INode $macro);
 
 		/**
 		 * execute macro in "runtime"
 		 *
 		 * @param INode $macro
 		 */
-		public function macro(INode $macro);
+		public function runtimeMacro(INode $macro);
 
 		/**
 		 * compile source into node; node is the final result
@@ -94,7 +94,7 @@
 		 *
 		 * @return ICompiler
 		 */
-		public function setValue(string $name, $value): ICompiler;
+		public function setVariable(string $name, $value): ICompiler;
 
 		/**
 		 * retrieve the given value from compiler's context
@@ -104,5 +104,5 @@
 		 *
 		 * @return mixed
 		 */
-		public function getValue(string $name, $default = null);
+		public function getVariable(string $name, $default = null);
 	}

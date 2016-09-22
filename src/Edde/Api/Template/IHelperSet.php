@@ -3,10 +3,12 @@
 
 	namespace Edde\Api\Template;
 
+	use Edde\Api\Usable\IUsable;
+
 	/**
 	 * Set of helpers.
 	 */
-	interface IHelperSet {
+	interface IHelperSet extends IUsable {
 		/**
 		 * @param IHelper $helper
 		 *

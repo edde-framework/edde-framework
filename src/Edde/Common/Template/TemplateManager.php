@@ -34,7 +34,7 @@
 			foreach ($importList as &$import) {
 				$import = new File($import);
 			}
-			$compiler->set($this->macroSet);
+			$compiler->registerMacroSet($this->macroSet);
 			return $compiler->template($importList);
 		}
 

@@ -41,7 +41,7 @@
 
 		public function testComplex() {
 			$this->container->inject($compiler = new Compiler(new File(__DIR__ . '/template/complex/layout.xml')));
-			$compiler->set(DefaultMacroSet::factory($this->container));
+			$compiler->registerMacroSet(DefaultMacroSet::factory($this->container));
 
 			/** @var $file IFile */
 			self::assertInstanceOf(IFile::class, $file = $compiler->template([new File(__DIR__ . '/template/complex/to-be-used.xml')]));
@@ -83,7 +83,7 @@
 			$div->dirty();
 			self::assertEquals('<div class="root">
 	<div class="really-deep-div-here">
-		<div class="deepness-of-a-deep"></div>
+		<div class="deepness-of-a-deep">foo</div>
 	</div>
 </div>
 ', $div->render());

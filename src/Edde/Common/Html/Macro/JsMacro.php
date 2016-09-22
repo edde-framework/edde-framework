@@ -22,8 +22,8 @@
 			$this->rootDirectory = $rootDirectory;
 		}
 
-		protected function onMacro(INode $macro) {
-			$this->write(sprintf('$this->javaScriptList->addFile(%s);', var_export($this->file($this->attribute($macro, 'src'), $this->compiler->getSource(), $macro)
+		protected function onMacro() {
+			$this->write(sprintf('$this->javaScriptList->addFile(%s);', var_export($this->file($this->attribute($this->macro, 'src'), $this->compiler->getSource(), $this->macro)
 				->getPath(), true)), 5);
 		}
 
