@@ -25,11 +25,18 @@
 			}
 			$this->use();
 			$source = $this->compiler->getSource();
-			$this->compiler->setVariable('file', $file = $this->homeDirectory->file(($class = 'Template_' . sha1($source->getPath())) . '.php'));
+			$this->compiler->setVariable('file', $file = $this->homeDirectory->file(($class = 'Template_' . $this->compiler->getVariable('name')) . '.php'));
 			$file->openForWrite();
 			$file->enableWriteCache();
 			$this->write('<?php');
 			$this->write("declare(strict_types = 1);\n", 1);
+			$this->write('/**', 1);
+			$this->write(sprintf(' * @generated at %s', (new \DateTime())->format('Y-m-d H:i:s')), 1);
+			$this->write(' * automagically generated template file from the following source list:', 1);
+			foreach ($this->compiler->getVariable('name-list') as $name) {
+				$this->write(sprintf(' *   - %s', $name), 1);
+			}
+			$this->write(' */', 1);
 			$this->write(sprintf('class %s extends %s {', $class, AbstractHtmlTemplate::class), 1);
 			$this->write(sprintf("public function snippet(%s \$root, string \$snippet = null): %s {", IHtmlControl::class, IHtmlControl::class), 2);
 			$this->write(sprintf("\$stack = new SplStack();
@@ -39,17 +46,17 @@
 			$this->compile();
 			$this->write('break;', 5);
 			$caseList = [null];
-			foreach ($this->compiler->getVariable('block-list', []) as $nodeList) {
+			foreach ($this->compiler->getVariable('block-list', []) as $id => $nodeList) {
+				if (isset($caseList[$id])) {
+					continue;
+				}
+				$caseList[$id] = $id;
+				$this->write(sprintf('case %s:', var_export($id, true)), 4);
 				foreach ($nodeList as $node) {
-					if (isset($caseList[$id = $node->getMeta('id')])) {
-						continue;
-					}
-					$caseList[$id] = $id;
-					$this->write(sprintf('case %s:', var_export($id, true)), 4);
 					$this->write(sprintf('// %s', $node->getPath()), 5);
 					$this->compiler->runtimeMacro($node);
-					$this->write('break;', 5);
 				}
+				$this->write('break;', 5);
 			}
 			$this->write(sprintf("default:
 					throw new %s(sprintf('Requested unknown snippet [%%s].', \$snippet));

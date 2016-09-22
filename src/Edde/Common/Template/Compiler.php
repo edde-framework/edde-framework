@@ -107,6 +107,14 @@
 			$this->use();
 			$this->context = [];
 			try {
+				$nameList = [
+					$this->source->getPath(),
+				];
+				foreach ($importList as $import) {
+					$nameList[] = $import->getPath();
+				}
+				$this->setVariable('name', sha1(implode(',', $nameList)));
+				$this->setVariable('name-list', $nameList);
 				foreach ($importList as $import) {
 					$this->compile($import);
 				}
@@ -119,6 +127,11 @@
 				}
 				throw new CompilerException(sprintf("Template compilation failed: %s\nTemplate file stack:\n%s", $exception->getMessage(), implode(",\n", $stackList)), 0, $exception);
 			}
+		}
+
+		public function setVariable(string $name, $value): ICompiler {
+			$this->context[$name] = $value;
+			return $this;
 		}
 
 		public function compile(IFile $source): INode {
@@ -194,11 +207,6 @@
 
 		public function isLayout(): bool {
 			return $this->stack->count() === 1;
-		}
-
-		public function setVariable(string $name, $value): ICompiler {
-			$this->context[$name] = $value;
-			return $this;
 		}
 
 		public function getVariable(string $name, $default = null) {
