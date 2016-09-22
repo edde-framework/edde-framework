@@ -87,6 +87,7 @@
 	<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="http://localhost/foo/bar?a=1&control=Edde%5CCommon%5CHtml%5CTag%5CDivControl&action=action-on-the-root"></div>
 	<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="http://localhost/foo/bar?a=1&control=Edde%5CCommon%5CHtml%5CTag%5CButtonControl&action=%40action-on-the-current-contol"></div>
 	<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button just-useless-button-here"></div>
+	<div class="edde-placeholder" id="foo"></div>
 </div>
 ', $div->render());
 			$cssList = [

@@ -10,6 +10,7 @@
 	use Edde\Common\Html\Macro\CssMacro;
 	use Edde\Common\Html\Macro\HtmlMacro;
 	use Edde\Common\Html\Macro\JsMacro;
+	use Edde\Common\Html\PlaceholderControl;
 	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Html\Tag\SpanControl;
 	use Edde\Common\Template\Inline\BlockInline;
@@ -32,6 +33,7 @@
 					$container->inject(new JsMacro()),
 					$container->inject(new HtmlMacro('div', DivControl::class)),
 					$container->inject(new HtmlMacro('span', SpanControl::class)),
+					$container->inject(new HtmlMacro('placeholder', PlaceholderControl::class)),
 					$container->inject(new ButtonMacro()),
 				]);
 				$macroSet->setInlineList([
