@@ -18,6 +18,9 @@
 	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Usable\AbstractUsable;
 
+	/**
+	 * Default implementation of template compiler.
+	 */
 	class Compiler extends AbstractUsable implements ICompiler {
 		/**
 		 * @var IContainer
@@ -141,7 +144,7 @@
 		public function compile(IFile $source): INode {
 			$this->use();
 			$this->stack->push($source);
-			foreach (NodeIterator::recursive($source = $this->resourceManager->resource($source), true) as $node) {
+			foreach (NodeIterator::recursive($root = $this->resourceManager->resource($source), true) as $node) {
 				if (empty($this->inlineList) === false) {
 					foreach ($node->getAttributeList() as $k => $v) {
 						if (isset($this->inlineList[$k]) && $this->inlineList[$k]->isCompile()) {
@@ -153,14 +156,14 @@
 					$this->compileMacro($node);
 				}
 			}
-			foreach (NodeIterator::recursive($source, true) as $node) {
+			foreach (NodeIterator::recursive($root, true) as $node) {
 				if (isset($this->macroList[$node->getName()])) {
 					continue;
 				}
 				throw new CompilerException(sprintf('Unknown macro [%s].', $node->getPath()));
 			}
 			$this->stack->pop();
-			return $source;
+			return $root;
 		}
 
 		public function compileMacro(INode $macro) {
@@ -216,7 +219,7 @@
 			foreach ($this->helperSetList as $helperSet) {
 				foreach ($helperSet->getHelperList() as $helper) {
 					if (($result = $helper->helper($value)) !== null) {
-						break;
+						break 2;
 					}
 				}
 			}

@@ -27,20 +27,9 @@
 			$this->write(sprintf('/** %s */', $this->macro->getPath()), 5);
 			$this->write('$parent = $stack->top();', 5);
 			$this->write(sprintf('$parent->addControl($control = $this->container->create(%s));', var_export($this->control, true)), 5);
-			if (($value = $this->extract($this->macro, 'value', $this->macro->isLeaf() ? $this->macro->getValue() : null)) !== null) {
-				$this->write(sprintf('$control->setText(%s);', var_export($value, true)), 5);
-			}
+			$this->writeTextValue();
 			$this->onControl($this->macro);
-			$attributeList = $this->getAttributeList(function ($value) {
-				return var_export($value, true);
-			});
-			if (empty($attributeList) === false) {
-				$attributes = [];
-				foreach ($attributeList as $k => $v) {
-					$attributes[] = var_export($k, true) . ' => ' . $v;
-				}
-				$this->write(sprintf('$control->setAttributeList([%s]);', implode(', ', $attributes)), 5);
-			}
+			$this->writeAttributeList();
 			$this->write('$stack->push($control);', 5);
 			$this->compile();
 			$this->write('$stack->pop();', 5);

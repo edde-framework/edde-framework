@@ -22,7 +22,7 @@
 	</div>
 	<div class="row">
 		<div class="large-12 columns">
-			<h5 value="get-version()"/>
+			<h5 value=".get-version()"/>
 		</div>
 	</div>
 	<div class="row">

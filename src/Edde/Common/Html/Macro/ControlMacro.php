@@ -24,7 +24,6 @@
 				return null;
 			}
 			$this->use();
-			$source = $this->compiler->getSource();
 			$this->compiler->setVariable('file', $file = $this->homeDirectory->file(($class = 'Template_' . $this->compiler->getVariable('name')) . '.php'));
 			$file->openForWrite();
 			$file->enableWriteCache();
@@ -40,9 +39,11 @@
 			$this->write(sprintf('class %s extends %s {', $class, AbstractHtmlTemplate::class), 1);
 			$this->write(sprintf("public function snippet(%s \$root, string \$snippet = null): %s {", IHtmlControl::class, IHtmlControl::class), 2);
 			$this->write(sprintf("\$stack = new SplStack();
-			\$stack->push(\$parent = \$root);
+			\$stack->push(\$control = \$parent = \$root);
 			switch (\$snippet) {
 				case null:", TemplateException::class), 3);
+			$this->writeTextValue();
+			$this->writeAttributeList();
 			$this->compile();
 			$this->write('break;', 5);
 			$caseList = $this->compiler->getVariable($caseListId = (static::class . '/cast-list'), [null]);

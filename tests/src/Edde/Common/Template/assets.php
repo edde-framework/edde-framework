@@ -17,6 +17,14 @@
 				})();
 			}
 		}
+
+		public function rootMethodCall() {
+			return 'ou-yay!';
+		}
+
+		public function currentMethodCall() {
+			return 'yahoo!';
+		}
 	}
 
 	class AnotherCoolControl extends DivControl {

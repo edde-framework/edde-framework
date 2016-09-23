@@ -1,4 +1,4 @@
-<control>
+<control foo="@current-method-call()" title="foo">
 	<div t:block="hello-world">
 		<div class="first">
 			<div class="hidden div"/>
@@ -40,7 +40,7 @@
 	<h2 value="foo2"/>
 	<h3 class="foo3-with-class" value="foo3"/>
 	<h4 value="foo4"/>
-	<h5 value="foo5"/>
+	<h5 value="foo5" class=".root-method-call()"/>
 	<h6 value="foo6"/>
 
 	<loop src=".loop-from-root()">

@@ -7,6 +7,7 @@
 	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Html\Helper\MethodHelper;
 	use Edde\Common\Html\Macro\ButtonMacro;
 	use Edde\Common\Html\Macro\ControlMacro;
 	use Edde\Common\Html\Macro\CssMacro;
@@ -25,7 +26,17 @@
 	use Edde\Common\Template\Macro\UseMacro;
 	use Edde\Common\Template\MacroSet;
 
+	/**
+	 * Factory class for default macro and helper set creation.
+	 */
 	class DefaultMacroSet extends AbstractObject {
+		/**
+		 * factory method for default set of macros; they are created on demand (when requested macro list)
+		 *
+		 * @param IContainer $container
+		 *
+		 * @return IMacroSet
+		 */
 		static public function macroSet(IContainer $container): IMacroSet {
 			$macroSet = new MacroSet();
 			$macroSet->onSetup(function (MacroSet $macroSet) use ($container) {
@@ -56,8 +67,18 @@
 			return $macroSet;
 		}
 
+		/**
+		 * factory method for default set of helpers; they are created on demand (when requested)
+		 *
+		 * @param IContainer $container
+		 *
+		 * @return IHelperSet
+		 */
 		static public function helperSet(IContainer $container): IHelperSet {
 			$helperSet = new HelperSet();
+			$helperSet->onSetup(function (IHelperSet $helperSet) use ($container) {
+				$helperSet->registerHelper($container->inject(new MethodHelper()));
+			});
 			return $helperSet;
 		}
 	}

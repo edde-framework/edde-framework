@@ -38,8 +38,11 @@
 	use Edde\Ext\Template\DefaultMacroSet;
 	use phpunit\framework\TestCase;
 
-	require_once(__DIR__ . '/assets.php');
+	require_once __DIR__ . '/assets.php';
 
+	/**
+	 * Test covering all template features from "real world" usage.
+	 */
 	class TemplateManagerTest extends TestCase {
 		/**
 		 * @var IContainer
@@ -66,7 +69,7 @@
 			$template->snippet($div = new \SomeCoolControl());
 			$div->addClass('root');
 			$div->dirty();
-			self::assertEquals('<div class="root">
+			self::assertEquals('<div foo="yahoo!" title="foo" class="root">
 	<div>
 		<div class="first">
 			<div class="hidden div"></div>
@@ -97,7 +100,7 @@
 	<h2>foo2</h2>
 	<h3 class="foo3-with-class">foo3</h3>
 	<h4>foo4</h4>
-	<h5>foo5</h5>
+	<h5 class="ou-yay!">foo5</h5>
 	<h6>foo6</h6>
 	<div class="upper-loop-key0" empty-attribute=""></div>
 	<div class="wrap">
