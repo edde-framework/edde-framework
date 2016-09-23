@@ -6,6 +6,9 @@
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Template\AbstractInline;
 
+	/**
+	 * Inline support for block macro.
+	 */
 	class BlockInline extends AbstractInline {
 		public function __construct() {
 			parent::__construct('t:block', true);
@@ -13,7 +16,7 @@
 
 		public function onMacro() {
 			$blockList = $this->compiler->getVariable('block-list', []);
-			if (isset($blockList[$id = $this->attribute()])) {
+			if (isset($blockList[$id = $this->attribute(null, false)])) {
 				throw new MacroException(sprintf('Block id [%d] has been already defined.', $id));
 			}
 			$blockList[$id] = [$this->macro];

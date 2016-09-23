@@ -10,6 +10,9 @@
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Template\AbstractInline;
 
+	/**
+	 * Inline support for include macro.
+	 */
 	class IncludeInline extends AbstractInline {
 		/**
 		 * @var IRootDirectory
@@ -25,7 +28,7 @@
 		}
 
 		public function onMacro() {
-			foreach ($this->include($this->attribute(), $this->macro, $this->compiler->getCurrent(), $this->compiler) as $node) {
+			foreach ($this->include($this->attribute(null, false), $this->macro, $this->compiler->getCurrent(), $this->compiler) as $node) {
 				$this->macro->addNode(clone $node);
 			}
 		}

@@ -9,6 +9,9 @@
 	use Edde\Api\Node\INode;
 	use Edde\Common\File\File;
 
+	/**
+	 * Css support macro; this will generate item to styleSheetList property in abstract template.
+	 */
 	class CssMacro extends AbstractHtmlMacro {
 		/**
 		 * @var IRootDirectory
@@ -33,7 +36,6 @@
 		}
 
 		protected function onMacro() {
-
 			$this->write(sprintf('$this->styleSheetList->addFile(%s);', var_export($this->file($this->attribute('src'), $this->compiler->getSource(), $this->macro)
 				->getPath(), true)), 5);
 		}

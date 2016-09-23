@@ -39,10 +39,6 @@
 			$this->compile = $compile;
 		}
 
-		public function getName(): string {
-			return $this->name;
-		}
-
 		public function isRuntime(): bool {
 			return $this->isCompile() === false;
 		}
@@ -75,11 +71,16 @@
 
 		abstract protected function onMacro();
 
-		protected function attribute(string $name, bool $helper = true) {
+		protected function attribute(string $name = null, bool $helper = true) {
+			$name = $name ?: $this->getName();
 			if (($attribute = $this->macro->getAttribute($name)) === null) {
 				throw new MacroException(sprintf('Missing attribute [%s] in macro node [%s].', $name, $this->macro->getPath()));
 			}
 			return ($helper && $filter = $this->compiler->helper($attribute)) ? $filter : $attribute;
+		}
+
+		public function getName(): string {
+			return $this->name;
 		}
 
 		protected function getAttributeList(callable $default = null): array {
