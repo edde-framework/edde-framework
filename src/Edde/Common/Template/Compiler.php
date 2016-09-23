@@ -15,6 +15,7 @@
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Common\Node\NodeIterator;
+	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Usable\AbstractUsable;
 
 	class Compiler extends AbstractUsable implements ICompiler {
@@ -115,6 +116,9 @@
 				}
 				return $this->runtimeMacro($this->compile($this->source));
 			} catch (\Exception $exception) {
+				/**
+				 * Ugly hack to set exception message without messing with a trace.
+				 */
 				$stackList = [
 					$this->source->getPath() => $this->source->getPath(),
 				];
@@ -123,7 +127,8 @@
 						->getPath();
 					$stackList[$path] = $path;
 				}
-				throw new CompilerException(sprintf("Template compilation failed: %s\nTemplate file stack:\n%s", $exception->getMessage(), implode(",\n", $stackList)), 0, $exception);
+				ReflectionUtils::setProperty($exception, 'message', sprintf("Template compilation failed: %s\nTemplate file stack:\n%s", $exception->getMessage(), implode(",\n", $stackList)));
+				throw $exception;
 			}
 		}
 

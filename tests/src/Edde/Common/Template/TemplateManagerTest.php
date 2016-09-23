@@ -26,6 +26,7 @@
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\AbstractHtmlTemplate;
+	use Edde\Common\Html\Macro\HtmlMacro;
 	use Edde\Common\Http\HostUrl;
 	use Edde\Common\Link\ControlLinkGenerator;
 	use Edde\Common\Link\LinkFactory;
@@ -98,6 +99,113 @@
 	<h4>foo4</h4>
 	<h5>foo5</h5>
 	<h6>foo6</h6>
+	<div class="upper-loop-key0" empty-attribute=""></div>
+	<div class="wrap">
+		<div class="inner-loop-key-0" some-attribute="upper-loop-key0" root-key="upper-loop-key0">
+			<div class="really-deep-div-here">
+				<div class="deepness-of-a-deep">foo</div>
+			</div>
+		</div>
+		<div class="inner-loop-key-1" some-attribute="upper-loop-key0" root-key="upper-loop-key0">
+			<div class="really-deep-div-here">
+				<div class="deepness-of-a-deep">foo</div>
+			</div>
+		</div>
+		<div class="inner-loop-key-2" some-attribute="upper-loop-key0" root-key="upper-loop-key0">
+			<div class="really-deep-div-here">
+				<div class="deepness-of-a-deep">foo</div>
+			</div>
+		</div>
+		<div class="inner-loop-key-3" some-attribute="upper-loop-key0" root-key="upper-loop-key0">
+			<div class="really-deep-div-here">
+				<div class="deepness-of-a-deep">foo</div>
+			</div>
+		</div>
+	</div>
+	<div class="upper-loop-key0">foo</div>
+	<div class="upper-loop-key0">foo</div>
+	<div class="upper-loop-key0">foo</div>
+	<div class="upper-loop-key1" empty-attribute=""></div>
+	<div class="wrap">
+		<div class="inner-loop-key-0" some-attribute="upper-loop-key1" root-key="upper-loop-key1">
+			<div class="really-deep-div-here">
+				<div class="deepness-of-a-deep">foo</div>
+			</div>
+		</div>
+		<div class="inner-loop-key-1" some-attribute="upper-loop-key1" root-key="upper-loop-key1">
+			<div class="really-deep-div-here">
+				<div class="deepness-of-a-deep">foo</div>
+			</div>
+		</div>
+		<div class="inner-loop-key-2" some-attribute="upper-loop-key1" root-key="upper-loop-key1">
+			<div class="really-deep-div-here">
+				<div class="deepness-of-a-deep">foo</div>
+			</div>
+		</div>
+		<div class="inner-loop-key-3" some-attribute="upper-loop-key1" root-key="upper-loop-key1">
+			<div class="really-deep-div-here">
+				<div class="deepness-of-a-deep">foo</div>
+			</div>
+		</div>
+	</div>
+	<div class="upper-loop-key1">foo</div>
+	<div class="upper-loop-key1">foo</div>
+	<div class="upper-loop-key1">foo</div>
+	<div class="upper-loop-key2" empty-attribute=""></div>
+	<div class="wrap">
+		<div class="inner-loop-key-0" some-attribute="upper-loop-key2" root-key="upper-loop-key2">
+			<div class="really-deep-div-here">
+				<div class="deepness-of-a-deep">foo</div>
+			</div>
+		</div>
+		<div class="inner-loop-key-1" some-attribute="upper-loop-key2" root-key="upper-loop-key2">
+			<div class="really-deep-div-here">
+				<div class="deepness-of-a-deep">foo</div>
+			</div>
+		</div>
+		<div class="inner-loop-key-2" some-attribute="upper-loop-key2" root-key="upper-loop-key2">
+			<div class="really-deep-div-here">
+				<div class="deepness-of-a-deep">foo</div>
+			</div>
+		</div>
+		<div class="inner-loop-key-3" some-attribute="upper-loop-key2" root-key="upper-loop-key2">
+			<div class="really-deep-div-here">
+				<div class="deepness-of-a-deep">foo</div>
+			</div>
+		</div>
+	</div>
+	<div class="upper-loop-key2">foo</div>
+	<div class="upper-loop-key2">foo</div>
+	<div class="upper-loop-key2">foo</div>
+	<div>
+		<div class="clazz-[0]-here" root="clazz-[0]-here" super-root="clazz-[0]-here">
+			<div class="poo-class">poo</div>
+		</div>
+		<div class="clazz-[1]-here" root="clazz-[0]-here" super-root="clazz-[0]-here">
+			<div class="poo-class">poo</div>
+		</div>
+		<div class="clazz-[2]-here" root="clazz-[0]-here" super-root="clazz-[0]-here">
+			<div class="poo-class">poo</div>
+		</div>
+		<div class="clazz-[0]-here" root="clazz-[1]-here" super-root="clazz-[1]-here">
+			<div class="poo-class">poo</div>
+		</div>
+		<div class="clazz-[1]-here" root="clazz-[1]-here" super-root="clazz-[1]-here">
+			<div class="poo-class">poo</div>
+		</div>
+		<div class="clazz-[2]-here" root="clazz-[1]-here" super-root="clazz-[1]-here">
+			<div class="poo-class">poo</div>
+		</div>
+		<div class="clazz-[0]-here" root="clazz-[2]-here" super-root="clazz-[2]-here">
+			<div class="poo-class">poo</div>
+		</div>
+		<div class="clazz-[1]-here" root="clazz-[2]-here" super-root="clazz-[2]-here">
+			<div class="poo-class">poo</div>
+		</div>
+		<div class="clazz-[2]-here" root="clazz-[2]-here" super-root="clazz-[2]-here">
+			<div class="poo-class">poo</div>
+		</div>
+	</div>
 </div>
 ', $div->render());
 			$cssList = [
@@ -130,7 +238,11 @@
 				IAssetsDirectory::class => new AssetsDirectory(__DIR__ . '/../../../../../src/Edde/assets'),
 				ICryptEngine::class => CryptEngine::class,
 				IMacroSet::class => function (IContainer $container) {
-					return DefaultMacroSet::macroSet($container);
+					$macroSet = DefaultMacroSet::macroSet($container);
+					$macroSet->onSetup(function (IMacroSet $macroSet) use ($container) {
+						$macroSet->registerMacro($container->inject(new HtmlMacro('custom-control', \AnotherCoolControl::class)));
+					});
+					return $macroSet;
 				},
 				IHelperSet::class => function (IContainer $container) {
 					return DefaultMacroSet::helperSet($container);

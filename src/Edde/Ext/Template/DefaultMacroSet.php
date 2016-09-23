@@ -17,7 +17,6 @@
 	use Edde\Common\Html\PlaceholderControl;
 	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Html\Tag\SpanControl;
-	use Edde\Common\Template\Helper\EddeAssetHelper;
 	use Edde\Common\Template\HelperSet;
 	use Edde\Common\Template\Inline\BlockInline;
 	use Edde\Common\Template\Inline\IncludeInline;
@@ -59,9 +58,6 @@
 
 		static public function helperSet(IContainer $container): IHelperSet {
 			$helperSet = new HelperSet();
-			$helperSet->onSetup(function (IHelperSet $helperSet) use ($container) {
-				$helperSet->registerHelper($container->inject(new EddeAssetHelper()));
-			});
 			return $helperSet;
 		}
 	}
