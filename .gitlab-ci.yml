@@ -29,6 +29,7 @@ compile:
     only:
         - master
         - tags
+        - /^\d+\.\d+$/
 
 package:
     stage: package
@@ -44,6 +45,7 @@ package:
     only:
         - master
         - tags
+        - /^\d+\.\d+$/
 
 deploy:
     stage: deploy
@@ -55,3 +57,4 @@ deploy:
     only:
         - master
         - tags
+        - /^\d+\.\d+$/
