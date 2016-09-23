@@ -9,6 +9,30 @@
 		}
 
 		public function loopOverLoopFromRoot() {
-			return [];
+			for ($i = 0; $i < 3; $i++) {
+				yield 'upper-loop-key' . $i => (function () {
+					for ($i = 0; $i < 4; $i++) {
+						yield 'inner-loop-key-' . $i => 'inner-loop-value-' . $i;
+					}
+				})();
+			}
+		}
+	}
+
+	class AnotherCoolControl extends DivControl {
+		public function loopFromLocalControl() {
+			for ($i = 0; $i < 3; $i++) {
+				yield 'foobarpoo-' . $i => new class($i) {
+					protected $i;
+
+					public function __construct($i) {
+						$this->i = $i;
+					}
+
+					public function getClass() {
+						return 'clazz-[' . $this->i . ']-here';
+					}
+				};
+			}
 		}
 	}
