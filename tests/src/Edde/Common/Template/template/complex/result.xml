@@ -1,6 +1,8 @@
 <div foo="yahoo!" title="foo" class="root">
 	<div>cha!</div>
 	<div>even bigger cha!</div>
+	<div>ou-yay!</div>
+	<h1>ou-yay!</h1>
 	<div>
 		<div class="first">
 			<div class="hidden div"></div>
