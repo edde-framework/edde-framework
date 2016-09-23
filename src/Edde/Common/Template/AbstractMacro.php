@@ -61,8 +61,8 @@
 			return $this->helperSet;
 		}
 
-		public function extract(INode $macro, string $name) {
-			$attribute = $macro->getAttribute($name);
+		public function extract(INode $macro, string $name, $default = null) {
+			$attribute = $macro->getAttribute($name, $default);
 			$macro->removeAttribute($name);
 			return $attribute;
 		}
