@@ -5,9 +5,13 @@
 
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Template\IHelper;
+	use Edde\Api\Template\MacroException;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\HelperSet;
 
+	/**
+	 * Macro for loop support.
+	 */
 	class LoopMacro extends AbstractHtmlMacro implements IHelper {
 		/**
 		 * @var ICryptEngine
@@ -23,10 +27,11 @@
 		}
 
 		public function helper($value, ...$parameterList) {
-			if ($this->compiler) {
-				/** @var $stack \SplStack */
-				$stack = $this->compiler->getVariable(static::class);
+			if ($this->compiler === null) {
+				return null;
 			}
+			/** @var $stack \SplStack */
+			$stack = $this->compiler->getVariable(static::class);
 			if ($value === null) {
 				return null;
 			} else if ($value === '$:') {
@@ -43,10 +48,14 @@
 				} else if ($jump === '.') {
 					$jump = $stack->count();
 				}
+				$loop = null;
 				foreach ($stack as $loop) {
 					if ($jump-- <= 0) {
 						break;
 					}
+				}
+				if ($loop === null) {
+					throw new MacroException(sprintf('There are no loops for macro [%s].', $this->macro->getPath()));
 				}
 				list($key, $value) = $loop;
 				if ($type === '#') {
@@ -68,16 +77,19 @@
 			} else if ($jump === '.') {
 				$jump = $stack->count();
 			}
+			$loop = null;
 			foreach ($stack as $loop) {
 				if ($jump-- <= 0) {
 					break;
 				}
 			}
+			if ($loop === null) {
+				throw new MacroException(sprintf('There are no loops for macro [%s].', $this->macro->getPath()));
+			}
 			return '$' . $variable . $loop[(int)$value];
 		}
 
 		protected function onMacro() {
-			$src = $this->attribute('src');
 			/** @var $stack \SplStack */
 			$stack = $this->compiler->getVariable(static::class, new \SplStack());
 			$loop = [
@@ -85,7 +97,7 @@
 				$value = str_replace('-', '_', $this->cryptEngine->guid()),
 			];
 			$this->write('$control = $stack->top();', 5);
-			$this->write(sprintf('foreach(%s as $key_%s => $value_%s) {', $this->loop($src), $key, $value), 5);
+			$this->write(sprintf('foreach(%s as $key_%s => $value_%s) {', $this->loop($this->attribute('src', false)), $key, $value), 5);
 			$stack->push($loop);
 			$this->compile();
 			$stack->pop();

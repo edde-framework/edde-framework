@@ -9,6 +9,7 @@
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Html\Helper\MethodHelper;
 	use Edde\Common\Html\Macro\ButtonMacro;
+	use Edde\Common\Html\Macro\CallMacro;
 	use Edde\Common\Html\Macro\ControlMacro;
 	use Edde\Common\Html\Macro\CssMacro;
 	use Edde\Common\Html\Macro\HeaderMacro;
@@ -46,6 +47,7 @@
 					$container->inject(new BlockMacro()),
 					$container->inject(new ControlMacro()),
 					$container->inject(new LoopMacro()),
+					$container->inject(new CallMacro()),
 					$container->inject(new CssMacro()),
 					$container->inject(new JsMacro()),
 					$container->inject(new HtmlMacro('div', DivControl::class)),

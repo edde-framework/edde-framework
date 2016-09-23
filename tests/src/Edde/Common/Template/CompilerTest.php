@@ -46,6 +46,11 @@
 		 * @var IContainer
 		 */
 		protected $container;
+		protected $flag = false;
+
+		public function call() {
+			$this->flag = true;
+		}
 
 		public function testComplex() {
 			$this->container->inject($compiler = new Compiler(new File(__DIR__ . '/template/complex/layout.xml')));
@@ -57,9 +62,12 @@
 			self::assertInstanceOf(IFile::class, $file = $compiler->template([new File(__DIR__ . '/template/complex/to-be-used.xml')]));
 			$template = AbstractHtmlTemplate::template($file, $this->container);
 			$template->snippet($this->container->inject($div = new \SomeCoolControl()));
+			self::assertTrue($this->flag, "template didn't called service method call()");
 			$div->addClass('root');
 			$div->dirty();
 			self::assertEquals('<div foo="yahoo!" title="foo" class="root">
+	<div>cha!</div>
+	<div>even bigger cha!</div>
 	<div>
 		<div class="first">
 			<div class="hidden div"></div>
@@ -222,6 +230,7 @@
 				ITempDirectory::class => function (IRootDirectory $rootDirectory) {
 					return new TempDirectory($rootDirectory->getDirectory());
 				},
+				'\SomeService\From\Container' => $this,
 				IStyleSheetCompiler::class => ResourceList::class,
 				IJavaScriptCompiler::class => ResourceList::class,
 				IHostUrl::class => HostUrl::create('http://localhost/foo/bar?a=1'),

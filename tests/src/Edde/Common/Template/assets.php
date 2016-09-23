@@ -25,6 +25,16 @@
 		public function currentMethodCall() {
 			return 'yahoo!';
 		}
+
+		public function middleLocalMethodCall() {
+			$this->addControl($this->createControl(DivControl::class)
+				->setText('cha!'));
+		}
+
+		public function middleRootMethodCall() {
+			$this->addControl($this->createControl(DivControl::class)
+				->setText('even bigger cha!'));
+		}
 	}
 
 	class AnotherCoolControl extends DivControl {

@@ -60,16 +60,23 @@
 		 * @var IResourceList
 		 */
 		protected $javaScriptList;
+		protected $flag = false;
+
+		public function call() {
+			$this->flag = true;
+		}
 
 		public function testCommon() {
 			$file = $this->templateManager->template(__DIR__ . '/template/complex/layout.xml', [
 				__DIR__ . '/template/complex/to-be-used.xml',
 			]);
 			$template = AbstractHtmlTemplate::template($file, $this->container);
-			$template->snippet($div = new \SomeCoolControl());
+			$template->snippet($this->container->inject($div = new \SomeCoolControl()));
 			$div->addClass('root');
 			$div->dirty();
 			self::assertEquals('<div foo="yahoo!" title="foo" class="root">
+	<div>cha!</div>
+	<div>even bigger cha!</div>
 	<div>
 		<div class="first">
 			<div class="hidden div"></div>
@@ -240,6 +247,7 @@
 				IRootDirectory::class => new RootDirectory(__DIR__ . '/temp'),
 				IAssetsDirectory::class => new AssetsDirectory(__DIR__ . '/../../../../../src/Edde/assets'),
 				ICryptEngine::class => CryptEngine::class,
+				'\SomeService\From\Container' => $this,
 				IMacroSet::class => function (IContainer $container) {
 					$macroSet = DefaultMacroSet::macroSet($container);
 					$macroSet->onSetup(function (IMacroSet $macroSet) use ($container) {

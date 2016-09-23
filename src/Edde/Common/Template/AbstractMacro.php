@@ -75,11 +75,11 @@
 
 		abstract protected function onMacro();
 
-		protected function attribute(string $name) {
+		protected function attribute(string $name, bool $helper = true) {
 			if (($attribute = $this->macro->getAttribute($name)) === null) {
 				throw new MacroException(sprintf('Missing attribute [%s] in macro node [%s].', $name, $this->macro->getPath()));
 			}
-			return $attribute;
+			return ($helper && $filter = $this->compiler->helper($attribute)) ? $filter : $attribute;
 		}
 
 		protected function getAttributeList(callable $default = null): array {

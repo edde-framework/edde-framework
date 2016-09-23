@@ -1,4 +1,8 @@
 <control foo="@current-method-call()" title="foo">
+	<call method="\SomeService\From\Container::call()"/>
+	<call method="@middle-local-method-call()"/>
+	<call method=".middle-root-method-call()"/>
+
 	<div t:block="hello-world">
 		<div class="first">
 			<div class="hidden div"/>
