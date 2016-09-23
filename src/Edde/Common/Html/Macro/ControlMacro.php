@@ -57,11 +57,11 @@
 					$this->compiler->runtimeMacro($node);
 				}
 				$this->write('break;', 5);
+				$this->compiler->setVariable($caseListId, $caseList);
 			}
 			$this->write(sprintf("default:
 					throw new %s(sprintf('Requested unknown snippet [%%s].', \$snippet));
 			}", TemplateException::class), 4);
-			$this->compiler->setVariable($caseListId, $caseList);
 			$this->write("return \$root;", 3);
 			$this->write('}', 2);
 			$this->write('}', 1);
