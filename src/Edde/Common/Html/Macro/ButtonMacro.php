@@ -12,7 +12,7 @@
 		}
 
 		protected function onControl(INode $macro) {
-			if (($action = $this->extract($macro, 'm:action', null, false)) !== null) {
+			if (($action = $this->extract($macro, 'action', null, false)) !== null) {
 				$this->write(sprintf('$control->setAction(%s);', $this->action($action)), 5);
 			}
 		}
