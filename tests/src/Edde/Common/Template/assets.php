@@ -7,4 +7,8 @@
 		public function loopFromRoot() {
 			return [];
 		}
+
+		public function loopOverLoopFromRoot() {
+			return [];
+		}
 	}

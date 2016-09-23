@@ -182,18 +182,6 @@
 					}
 				}
 			}
-			$attributeList = $macro->getAttributeList();
-			if (empty($attributeList) === false) {
-				foreach ($this->helperSetList as $helperSet) {
-					foreach ($helperSet->getHelperList() as $helper) {
-						foreach ($attributeList as $k => &$v) {
-							$v = $helper->helper($v);
-						}
-						unset($v);
-					}
-				}
-				$macro->setAttributeList($attributeList);
-			}
 			return $this->macroList[$name]->macro($macro, $this);
 		}
 
@@ -214,6 +202,19 @@
 				$this->context[$name] = $default;
 			}
 			return $this->context[$name];
+		}
+
+		public function helper(string $value) {
+			$this->use();
+			$result = null;
+			foreach ($this->helperSetList as $helperSet) {
+				foreach ($helperSet->getHelperList() as $helper) {
+					if (($result = $helper->helper($value)) !== null) {
+						break;
+					}
+				}
+			}
+			return $result;
 		}
 
 		protected function prepare() {

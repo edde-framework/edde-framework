@@ -105,4 +105,13 @@
 		 * @return mixed
 		 */
 		public function getVariable(string $name, $default = null);
+
+		/**
+		 * execute all available helpers agains the given value of attribute
+		 *
+		 * @param string $value
+		 *
+		 * @return string|null
+		 */
+		public function helper(string $value);
 	}

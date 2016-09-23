@@ -16,7 +16,7 @@
 
 		public function helper($value, ...$parameterList) {
 			if (strpos($value, 'edde://') === false) {
-				return $value;
+				return null;
 			}
 			return $this->assetsDirectory->filename(str_replace('edde://', '', $value));
 		}

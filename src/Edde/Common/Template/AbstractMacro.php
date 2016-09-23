@@ -82,6 +82,16 @@
 			return $attribute;
 		}
 
+		protected function getAttributeList(callable $default = null): array {
+			$attributeList = [];
+			foreach ($this->macro->getAttributeList() as $k => &$v) {
+				$v = ($value = $this->compiler->helper($v)) !== null ? $value : ($default ? $default($v) : $v);
+				$attributeList[$k] = $v;
+			}
+			unset($v);
+			return $attributeList;
+		}
+
 		protected function prepare() {
 		}
 	}

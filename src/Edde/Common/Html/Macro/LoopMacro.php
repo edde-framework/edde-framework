@@ -32,25 +32,31 @@
 					->top();
 				return '$key_' . $key;
 			}
-			return $value;
+			return null;
 		}
 
 		protected function onMacro() {
 			$src = $this->attribute('src');
 			/** @var $stack \SplStack */
 			$stack = $this->compiler->getVariable(static::class, new \SplStack());
-			$stack->push([
+			$loop = [
 				$key = str_replace('-', '_', $this->cryptEngine->guid()),
 				$value = str_replace('-', '_', $this->cryptEngine->guid()),
-			]);
+			];
 			$this->write(sprintf('foreach(%s as $key_%s => $value_%s) {', $this->loop($src), $key, $value), 5);
+			$stack->push($loop);
 			$this->compile();
+			$stack->pop();
 			$this->write('}', 5);
 		}
 
 		protected function loop(string $src) {
 			if ($src[0] === '.') {
 				return '$root->' . StringUtils::camelize(substr($src, 1), null, true);
+			} else if ($src === '$:') {
+				list($key, $value) = $this->compiler->getVariable(static::class)
+					->top();
+				return '$value_' . $value;
 			}
 			return var_export($src, true);
 		}

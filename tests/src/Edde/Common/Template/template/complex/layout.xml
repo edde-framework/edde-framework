@@ -48,6 +48,15 @@
 			<t:include src="deep-block"/>
 		</div>
 	</loop>
+	<loop src=".loop-over-loop-from-root()">
+		<div class="$#"/>
+		<loop src="$:">
+			<div class="$:">
+				<t:include src="deep-block"/>
+			</div>
+		</loop>
+		<div class="$#" value="foo"/>
+	</loop>
 	<!--<loop src="@loop-from-local-control()">-->
 	<!--<div class="$:->getClass()">-->
 	<!--<t:include src="./include-foo.xml"/>-->

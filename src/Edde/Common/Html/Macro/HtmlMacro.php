@@ -31,9 +31,15 @@
 				$this->write(sprintf('$control->setText(%s);', var_export($value, true)), 5);
 			}
 			$this->onControl($this->macro);
-			$attributeList = $this->macro->getAttributeList();
+			$attributeList = $this->getAttributeList(function ($value) {
+				return var_export($value, true);
+			});
 			if (empty($attributeList) === false) {
-				$this->write(sprintf('$control->setAttributeList(%s);', var_export($attributeList, true)), 5);
+				$attributes = [];
+				foreach ($attributeList as $k => $v) {
+					$attributes[] = var_export($k, true) . ' => ' . $v;
+				}
+				$this->write(sprintf('$control->setAttributeList([%s]);', implode(', ', $attributes)), 5);
 			}
 			$this->write('$stack->push($control);', 5);
 			$this->compile();
