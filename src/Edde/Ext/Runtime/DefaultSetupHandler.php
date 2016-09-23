@@ -187,7 +187,7 @@
 						return DefaultMacroSet::macroSet($container);
 					},
 					IHelperSet::class => function (IContainer $container) {
-						return DefaultMacroSet::helperSet();
+						return DefaultMacroSet::helperSet($container);
 					},
 					IStyleSheetCompiler::class => StyleSheetCompiler::class,
 					IJavaScriptCompiler::class => JavaScriptCompiler::class,
