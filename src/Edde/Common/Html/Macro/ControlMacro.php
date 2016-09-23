@@ -51,13 +51,13 @@
 					continue;
 				}
 				$caseList[$id] = $id;
+				$this->compiler->setVariable($caseListId, $caseList);
 				$this->write(sprintf('case %s:', var_export($id, true)), 4);
 				foreach ($nodeList as $node) {
 					$this->write(sprintf('// %s', $node->getPath()), 5);
 					$this->compiler->runtimeMacro($node);
 				}
 				$this->write('break;', 5);
-				$this->compiler->setVariable($caseListId, $caseList);
 			}
 			$this->write(sprintf("default:
 					throw new %s(sprintf('Requested unknown snippet [%%s].', \$snippet));
