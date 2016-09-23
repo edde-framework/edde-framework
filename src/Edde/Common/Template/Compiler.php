@@ -112,7 +112,8 @@
 				$this->setVariable('name', sha1(implode(',', $nameList)));
 				$this->setVariable('name-list', $nameList);
 				foreach ($importList as $import) {
-					$this->compile($import);
+					$this->compile($import)
+						->setMeta('included', true);
 				}
 				return $this->runtimeMacro($this->compile($this->source));
 			} catch (\Exception $exception) {

@@ -19,7 +19,7 @@
 		}
 
 		public function onMacro() {
-			if ($this->macro->isRoot() === false) {
+			if ($this->macro->isRoot() === false || $this->macro->getMeta('included', false)) {
 				$this->compile();
 				return null;
 			}
