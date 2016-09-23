@@ -12,7 +12,7 @@
 	abstract class AbstractHtmlMacro extends AbstractMacro {
 		protected function writeTextValue() {
 			if (($value = $this->extract($this->macro, 'value', $this->macro->isLeaf() ? $this->macro->getValue() : null)) !== null) {
-				$this->write(sprintf('$control->setText(%s);', var_export($value, true)), 5);
+				$this->write(sprintf('$control->setText(%s);', ($helper = $this->compiler->helper($value)) ? $helper : var_export($value, true)), 5);
 			}
 		}
 

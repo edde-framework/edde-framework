@@ -4,6 +4,7 @@
 	namespace Edde\Common\Html\Macro;
 
 	use Edde\Api\Html\IHtmlControl;
+	use Edde\Api\Node\INode;
 	use Edde\Api\Template\TemplateException;
 	use Edde\Common\File\HomeDirectoryTrait;
 	use Edde\Common\Html\AbstractHtmlTemplate;
@@ -47,6 +48,7 @@
 			$this->compile();
 			$this->write('break;', 5);
 			$caseList = $this->compiler->getVariable($caseListId = (static::class . '/cast-list'), [null]);
+			/** @var $nodeList INode[] */
 			foreach ($this->compiler->getVariable('block-list', []) as $id => $nodeList) {
 				if (isset($caseList[$id])) {
 					continue;

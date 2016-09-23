@@ -61,10 +61,10 @@
 			return $this->helperSet;
 		}
 
-		public function extract(INode $macro, string $name, $default = null) {
+		public function extract(INode $macro, string $name, $default = null, bool $helper = true) {
 			$attribute = $macro->getAttribute($name, $default);
 			$macro->removeAttribute($name);
-			return $attribute;
+			return ($helper && $filter = $this->compiler->helper($attribute)) ? $filter : $attribute;
 		}
 
 		public function macro(INode $macro, ICompiler $compiler) {

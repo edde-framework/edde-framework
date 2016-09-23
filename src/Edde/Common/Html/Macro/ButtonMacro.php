@@ -12,16 +12,20 @@
 		}
 
 		protected function onControl(INode $macro) {
-			if (($action = $this->extract($macro, 'm:action')) !== null) {
+			if (($action = $this->extract($macro, 'm:action', null, false)) !== null) {
 				$this->write(sprintf('$control->setAction(%s);', $this->action($action)), 5);
 			}
 		}
 
 		protected function action(string $action) {
-			if ($action[0] !== '@' && substr($action, -2) === '()') {
-				return sprintf('[$root, %s]', var_export(str_replace('()', '', $action), true));
-			} else if ($action[0] === '@' && substr($action, -2) === '()') {
-				return sprintf('[$control, %s]', var_export(str_replace('()', '', $action), true));
+			if (substr($action, -2) === '()') {
+				$type = $action[0];
+				$action = var_export(str_replace('()', '', substr($action, 1)), true);
+				if ($type === '.') {
+					return sprintf('[$root, %s]', $action);
+				} else if ($type === '@') {
+					return sprintf('[$control, %s]', $action);
+				}
 			}
 			return var_export($action, true);
 		}
