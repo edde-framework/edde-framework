@@ -23,7 +23,9 @@
 		}
 
 		public function helper($value, ...$parameterList) {
-			if ($value === '$:') {
+			if ($value === null) {
+				return null;
+			} else if ($value === '$:') {
 				list($key, $value) = $this->compiler->getVariable(static::class)
 					->top();
 				return '$value_' . $value;
@@ -31,8 +33,28 @@
 				list($key, $value) = $this->compiler->getVariable(static::class)
 					->top();
 				return '$key_' . $key;
+			} else if ($match = StringUtils::match($value, '~\$:(?<jump>.*+)~', true)) {
+				return $this->jump($match['jump'], 'value_', true);
+			} else if ($match = StringUtils::match($value, '~\$\#(?<jump>.*+)~', true)) {
+				return $this->jump($match['jump'], 'key_', false);
 			}
 			return null;
+		}
+
+		protected function jump($jump, $variable, bool $value) {
+			/** @var $stack \SplStack */
+			$stack = $this->compiler->getVariable(static::class);
+			if ($jump === '-') {
+				$jump = 1;
+			} else if ($jump === '$') {
+				$jump = $stack->count();
+			}
+			foreach ($stack as $loop) {
+				if ($jump-- <= 0) {
+					break;
+				}
+			}
+			return '$' . $variable . $loop[(int)$value];
 		}
 
 		protected function onMacro() {

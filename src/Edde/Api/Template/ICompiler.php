@@ -113,5 +113,5 @@
 		 *
 		 * @return string|null
 		 */
-		public function helper(string $value);
+		public function helper($value);
 	}

@@ -49,9 +49,9 @@
 		</div>
 	</loop>
 	<loop src=".loop-over-loop-from-root()">
-		<div class="$#"/>
+		<div class="$#" empty-attribute=""/>
 		<loop src="$:">
-			<div class="$:">
+			<div class="$:" some-attribute="$#1" root-key="$#$">
 				<t:include src="deep-block"/>
 			</div>
 		</loop>

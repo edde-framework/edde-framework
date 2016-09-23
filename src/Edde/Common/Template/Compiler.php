@@ -204,7 +204,7 @@
 			return $this->context[$name];
 		}
 
-		public function helper(string $value) {
+		public function helper($value) {
 			$this->use();
 			$result = null;
 			foreach ($this->helperSetList as $helperSet) {
