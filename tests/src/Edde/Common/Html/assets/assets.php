@@ -1,7 +1,9 @@
 <?php
 	declare(strict_types = 1);
 
+	use Edde\Common\Html\AbstractHtmlControl;
 	use Edde\Common\Html\Tag\DivControl;
+	use Edde\Common\Html\TemplateTrait;
 	use Edde\Common\Html\ViewControl;
 
 	class MyLittleCuteView extends ViewControl {
@@ -21,4 +23,8 @@
 		public function templateSnippet(DivControl $divControl) {
 			$divControl->dirty();
 		}
+	}
+
+	class SomeTemplatedControl extends AbstractHtmlControl {
+		use TemplateTrait;
 	}

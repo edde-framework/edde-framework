@@ -1,5 +1,0 @@
-<control>
-	<div m:loop="loop()" class="$#">
-		<div m:loop="$:" value="$:"/>
-	</div>
-</control>

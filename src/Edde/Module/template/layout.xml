@@ -17,17 +17,17 @@
 	</div>
 	<div class="row">
 		<div class="large-12 columns">
-			<h1>Edde Framework Setup Control</h1>
+			<h1 value="Edde Framework Setup Control"/>
 		</div>
 	</div>
 	<div class="row">
 		<div class="large-12 columns">
-			<h5 value="get-version()"/>
+			<h5 value=".get-version()"/>
 		</div>
 	</div>
 	<div class="row">
 		<div class="large-12 columns">
-			<include src="content"/>
+			<t:include src="content"/>
 		</div>
 	</div>
 </control>

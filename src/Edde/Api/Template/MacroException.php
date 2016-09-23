@@ -3,5 +3,5 @@
 
 	namespace Edde\Api\Template;
 
-	class MacroException extends TemplateException {
+	class MacroException extends CompilerException {
 	}

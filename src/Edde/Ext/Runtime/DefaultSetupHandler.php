@@ -45,7 +45,8 @@
 	use Edde\Api\Session\IFingerprint;
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Storage\IStorage;
-	use Edde\Api\Template\ITemplateDirectory;
+	use Edde\Api\Template\IHelperSet;
+	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
@@ -66,7 +67,6 @@
 	use Edde\Common\EddeDirectory;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\Converter\HtmlConverter;
-	use Edde\Common\Html\Macro\TemplateMacro;
 	use Edde\Common\Http\HostUrl;
 	use Edde\Common\Http\HttpRequestFactory;
 	use Edde\Common\Http\HttpResponse;
@@ -82,7 +82,6 @@
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Session\DummyFingerprint;
 	use Edde\Common\Session\SessionManager;
-	use Edde\Common\Template\TemplateDirectory;
 	use Edde\Common\Template\TemplateManager;
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Common\Web\JavaScriptCompiler;
@@ -99,6 +98,7 @@
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Router\RestRouter;
 	use Edde\Ext\Router\SimpleRouter;
+	use Edde\Ext\Template\DefaultMacroSet;
 	use Edde\Framework;
 
 	class DefaultSetupHandler extends SetupHandler {
@@ -168,9 +168,6 @@
 					IStorageDirectory::class => function (IRootDirectory $rootDirectory) {
 						return $rootDirectory->directory('.storage', StorageDirectory::class);
 					},
-					ITemplateDirectory::class => functioN (IStorageDirectory $storageDirectory) {
-						return $storageDirectory->directory('template', TemplateDirectory::class);
-					},
 					ICryptEngine::class => CryptEngine::class,
 					IFileStorage::class => FileStorage::class,
 					IDriver::class => function (IStorageDirectory $storageDirectory) {
@@ -186,6 +183,12 @@
 					IConverterManager::class => ConverterManager::class,
 					IUpgradeManager::class => UpgradeManager::class,
 					ITemplateManager::class => TemplateManager::class,
+					IMacroSet::class => function (IContainer $container) {
+						return DefaultMacroSet::macroSet($container);
+					},
+					IHelperSet::class => function (IContainer $container) {
+						return DefaultMacroSet::helperSet($container);
+					},
 					IStyleSheetCompiler::class => StyleSheetCompiler::class,
 					IJavaScriptCompiler::class => JavaScriptCompiler::class,
 					IXmlParser::class => XmlParser::class,
@@ -213,9 +216,6 @@
 					$converterManager->registerConverter($container->create(HtmlConverter::class));
 					$converterManager->registerConverter($container->create(HttpConverter::class));
 					$converterManager->registerConverter($container->create(RedirectConverter::class));
-				})
-				->onSetup(ITemplateManager::class, function (IContainer $container, ITemplateManager $templateManager) {
-					$templateManager->registerMacroList(TemplateMacro::macroList($container));
 				});
 		}
 	}

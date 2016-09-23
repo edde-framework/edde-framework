@@ -181,11 +181,24 @@
 		 *
 		 * @param string $string
 		 * @param string|null $separator
+		 * @param bool $lowerFirst
 		 *
 		 * @return string
 		 */
-		static public function camelize(string $string, string $separator = null): string {
-			return str_replace('~', null, mb_convert_case(str_replace($separator ?: self::$SEPARATOR_LIST, '~', mb_strtolower(implode('~', preg_split('~(?=[A-Z])~', $string, -1, PREG_SPLIT_NO_EMPTY)))), MB_CASE_TITLE, 'UTF-8'));
+		static public function camelize(string $string, string $separator = null, bool $lowerFirst = false): string {
+			$string = str_replace('~', null, mb_convert_case(str_replace($separator ?: self::$SEPARATOR_LIST, '~', mb_strtolower(implode('~', preg_split('~(?=[A-Z])~', $string, -1, PREG_SPLIT_NO_EMPTY)))), MB_CASE_TITLE, 'UTF-8'));
+			return $lowerFirst ? self::firstLower($string) : $string;
+		}
+
+		/**
+		 * convert first character to lower case
+		 *
+		 * @param string $string
+		 *
+		 * @return string
+		 */
+		static public function firstLower(string $string): string {
+			return self::lower(self::substring($string, 0, 1)) . self::substring($string, 1);
 		}
 
 		/**
@@ -388,17 +401,6 @@
 		 */
 		static public function upper(string $string): string {
 			return mb_strtoupper($string, 'UTF-8');
-		}
-
-		/**
-		 * convert first character to lower case
-		 *
-		 * @param string $string
-		 *
-		 * @return string
-		 */
-		static public function firstLower(string $string): string {
-			return self::lower(self::substring($string, 0, 1)) . self::substring($string, 1);
 		}
 
 		/**

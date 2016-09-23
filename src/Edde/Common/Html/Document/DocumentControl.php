@@ -47,9 +47,9 @@
 			return true;
 		}
 
-		public function render() {
+		public function render(int $indent = 0) {
 			$this->use();
-			return "<!DOCTYPE html>\n" . parent::render();
+			return "<!DOCTYPE html>\n" . parent::render($indent);
 		}
 
 		/**

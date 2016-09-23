@@ -224,6 +224,9 @@
 		}
 
 		public function __clone() {
-			throw new NodeException(sprintf('Clone is not supported on the [%s].', static::class));
+			foreach ($this->nodeList as &$node) {
+				$node = clone $node;
+			}
+			unset($node);
 		}
 	}

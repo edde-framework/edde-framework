@@ -3,79 +3,96 @@
 
 	namespace Edde\Common\Template;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
+	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Usable\UsableTrait;
 
-	abstract class AbstractMacro extends AbstractObject implements IMacro, ILazyInject {
+	abstract class AbstractMacro extends AbstractObject implements IMacro {
+		use UsableTrait;
 		/**
-		 * @var array
+		 * @var string
 		 */
-		protected $macroList = [];
-
+		protected $name;
 		/**
-		 * @param array $macroList
+		 * @var bool
 		 */
-		public function __construct(array $macroList) {
-			$this->macroList = $macroList;
+		protected $compile;
+		/**
+		 * @var INode
+		 */
+		protected $macro;
+		/**
+		 * @var ICompiler
+		 */
+		protected $compiler;
+		/**
+		 * @var IHelperSet
+		 */
+		protected $helperSet;
+
+		public function __construct(string $name, bool $compile) {
+			$this->name = $name;
+			$this->compile = $compile;
 		}
 
-		public function getMacroList(): array {
-			return $this->macroList;
+		public function isRuntime(): bool {
+			return $this->isCompile() === false;
 		}
 
-		public function variable(string $string, ICompiler $compiler) {
-			return null;
+		public function isCompile(): bool {
+			return $this->compile === true;
 		}
 
-		protected function getAttributeList(INode $node, ICompiler $compiler) {
-			$attributeList = [];
-			foreach ($node->getAttributeList() as $name => $value) {
-				$attributeList[$name] = $compiler->delimite((string)$value);
+		public function hasHelperSet(): bool {
+			$this->use();
+			return $this->helperSet !== null;
+		}
+
+		public function getHelperSet(): IHelperSet {
+			$this->use();
+			return $this->helperSet;
+		}
+
+		public function extract(INode $macro, string $name, $default = null, bool $helper = true) {
+			$attribute = $macro->getAttribute($name, $default);
+			$macro->removeAttribute($name);
+			return ($helper && $filter = $this->compiler->helper($attribute)) ? $filter : $attribute;
+		}
+
+		public function macro(INode $macro, ICompiler $compiler) {
+			$this->macro = $macro;
+			$this->compiler = $compiler;
+			return $this->onMacro();
+		}
+
+		abstract protected function onMacro();
+
+		protected function attribute(string $name = null, bool $helper = true) {
+			$name = $name ?: $this->getName();
+			if (($attribute = $this->macro->getAttribute($name)) === null) {
+				throw new MacroException(sprintf('Missing attribute [%s] in macro node [%s].', $name, $this->macro->getPath()));
 			}
+			return ($helper && $filter = $this->compiler->helper($attribute)) ? $filter : $attribute;
+		}
+
+		public function getName(): string {
+			return $this->name;
+		}
+
+		protected function getAttributeList(callable $default = null): array {
+			$attributeList = [];
+			foreach ($this->macro->getAttributeList() as $k => &$v) {
+				$v = ($value = $this->compiler->helper($v)) !== null ? $value : ($default ? $default($v) : $v);
+				$attributeList[$k] = $v;
+			}
+			unset($v);
 			return $attributeList;
 		}
 
-		protected function element(INode $element, ICompiler $compiler) {
-			foreach ($element->getNodeList() as $node) {
-				$compiler->macro($node, $node);
-			}
-		}
-
-		protected function checkLeaf(INode $macro, INode $element) {
-			if ($element->isLeaf() === false) {
-				throw new MacroException(sprintf('Macro [%s] in [%s] must not have children.', $macro->getName(), $element->getPath()));
-			}
-		}
-
-		protected function checkNotLeaf(INode $macro, INode $element) {
-			if ($element->isLeaf()) {
-				throw new MacroException(sprintf('Macro [%s] in [%s] must have children nodes.', $macro->getName(), $element->getPath()));
-			}
-		}
-
-		protected function checkAttribute(INode $macro, INode $element, ...$attributeList) {
-			foreach ($attributeList as $attribute) {
-				if ($macro->hasAttribute($attribute) === false) {
-					throw new MacroException(sprintf('Missing attribute "%s" in macro [%s] at [%s].', $attribute, $macro->getName(), $element->getPath()));
-				}
-			}
-		}
-
-		protected function checkElementAttribute(INode $macro, INode $element, ...$attributeList) {
-			foreach ($attributeList as $attribute) {
-				if ($element->hasAttribute($attribute) === false) {
-					throw new MacroException(sprintf('Missing attribute "%s" in element [%s] for macro [%s].', $attribute, $element->getPath(), $macro->getName()));
-				}
-			}
-		}
-
-		protected function checkValue(INode $macro, INode $element) {
-			if ($macro->getValue() === null) {
-				throw new MacroException(sprintf('Missing value of macro [%s] at [%s].', $macro->getName(), $element->getPath()));
-			}
+		protected function prepare() {
 		}
 	}

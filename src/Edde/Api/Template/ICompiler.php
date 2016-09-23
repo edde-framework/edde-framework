@@ -3,11 +3,23 @@
 
 	namespace Edde\Api\Template;
 
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 
-	interface ICompiler {
+	interface ICompiler extends ILazyInject {
 		/**
+		 * use the given macroset
+		 *
+		 * @param IMacroSet $macroSet
+		 *
+		 * @return ICompiler
+		 */
+		public function registerMacroSet(IMacroSet $macroSet): ICompiler;
+
+		/**
+		 * "runtime macro" - those should generate runtime
+		 *
 		 * @param IMacro $macro
 		 *
 		 * @return ICompiler
@@ -15,59 +27,117 @@
 		public function registerMacro(IMacro $macro): ICompiler;
 
 		/**
-		 * @param IMacro[] $macroList
+		 * @param IInline $inline
 		 *
 		 * @return ICompiler
 		 */
-		public function registerMacroList(array $macroList): ICompiler;
+		public function registerInline(IInline $inline): ICompiler;
 
 		/**
-		 * return source template file
+		 * execute macro in compile time
+		 *
+		 * @param INode $macro
+		 */
+		public function compileMacro(INode $macro);
+
+		/**
+		 * execute macro in "runtime"
+		 *
+		 * @param INode $macro
+		 */
+		public function runtimeMacro(INode $macro);
+
+		/**
+		 * compile source into node; node is the final result
+		 *
+		 * @param IFile $source
+		 *
+		 * @return INode
+		 */
+		public function compile(IFile $source): INode;
+
+		/**
+		 * return the original source file
 		 *
 		 * @return IFile
 		 */
 		public function getSource(): IFile;
 
 		/**
-		 * return destination (php) template file
+		 * if there are embedded templates, this method return current template file
 		 *
 		 * @return IFile
 		 */
-		public function getDestination(): IFile;
+		public function getCurrent(): IFile;
 
 		/**
-		 * @return string
+		 * layout is the root (first file - getSource() === getCurrent())
+		 *
+		 * @return bool
 		 */
-		public function getName(): string;
+		public function isLayout(): bool;
 
 		/**
-		 * process php value (evaluates function call/variable/...)
+		 * build a final template; import list can contain additional set of templates (loaded before the main one)
+		 *
+		 * @param IFile[] $importList
+		 *
+		 * @return mixed
+		 */
+		public function template(array $importList = []);
+
+		/**
+		 * add a value to compiler context
+		 *
+		 * @param string $name
+		 * @param mixed $value
+		 *
+		 * @return ICompiler
+		 */
+		public function setVariable(string $name, $value): ICompiler;
+
+		/**
+		 * retrieve the given value from compiler's context
+		 *
+		 * @param string $name
+		 * @param null $default
+		 *
+		 * @return mixed
+		 */
+		public function getVariable(string $name, $default = null);
+
+		/**
+		 * execute all available helpers agains the given value of attribute
 		 *
 		 * @param string $value
 		 *
-		 * @return string
+		 * @return string|null
 		 */
-		public function delimite(string $value): string;
+		public function helper($value);
 
 		/**
-		 * translate file path to real file path (relative/absolute to root/absolute/...)
+		 * block under the given id
 		 *
-		 * @param string $file
+		 * @param string $name
+		 * @param array $nodeList
 		 *
-		 * @return string
+		 * @return ICompiler
 		 */
-		public function file(string $file): string;
+		public function block(string $name, array $nodeList): ICompiler;
 
 		/**
-		 * return reference to an Edde default asset
+		 * return list of nodes by the given block name
 		 *
-		 * @param string $asset
+		 * @param string $name
 		 *
-		 * @return string
+		 * @return array
 		 */
-		public function asset(string $asset): string;
+		public function getBlock(string $name): array;
 
-		public function compile(): IFile;
-
-		public function macro(INode $macro, INode $element);
+		/**
+		 * retrieve list of registered blocks
+		 *
+		 * @return array
+		 */
+		public function getBlockList(): array;
 	}

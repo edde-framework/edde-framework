@@ -3,32 +3,47 @@
 
 	namespace Edde\Api\Template;
 
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Node\INode;
 
-	interface IMacro {
+	/**
+	 * HtmlMacro is operating over whole Node.
+	 */
+	interface IMacro extends ILazyInject {
 		/**
-		 * return list of supported macro names (node names)
+		 * compile time macros can modify node tree before compilation
 		 *
-		 * @return array
+		 * @return bool
 		 */
-		public function getMacroList(): array;
+		public function isCompile(): bool;
 
 		/**
-		 * if the macro knows the given input value, it should convert it to the proper php snippet
+		 * runtime macro will be executed over precomputed node tree
 		 *
-		 * @param string $string
-		 * @param ICompiler $compiler
-		 *
-		 * @return null|string
+		 * @return bool
 		 */
-		public function variable(string $string, ICompiler $compiler);
+		public function isRuntime(): bool;
 
 		/**
-		 * @param INode $macro input macro
-		 * @param INode $element input element (source node); this can sometimes be same as input macro
-		 * @param ICompiler $compiler
-		 *
-		 * @return IMacro
+		 * @return string
 		 */
-		public function macro(INode $macro, INode $element, ICompiler $compiler);
+		public function getName(): string;
+
+		/**
+		 * @return bool
+		 */
+		public function hasHelperSet(): bool;
+
+		/**
+		 * @return IHelperSet
+		 */
+		public function getHelperSet(): IHelperSet;
+
+		/**
+		 * execute this macro
+		 *
+		 * @param INode $macro
+		 * @param ICompiler $compiler
+		 */
+		public function macro(INode $macro, ICompiler $compiler);
 	}

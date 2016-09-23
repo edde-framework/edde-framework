@@ -1,3 +1,0 @@
-<control>
-	<button class="$:" action="@$#" m:loop="get-item-list()"/>
-</control>

@@ -3,67 +3,41 @@
 
 	namespace Edde\Common\Html\Macro;
 
-	use Edde\Api\Control\IControl;
 	use Edde\Api\File\IFile;
-	use Edde\Api\Node\INode;
-	use Edde\Api\Template\ICompiler;
 	use Edde\Common\Template\AbstractMacro;
 
+	/**
+	 * Abstract class for all html package based macros.
+	 */
 	abstract class AbstractHtmlMacro extends AbstractMacro {
-		public function lambda(INode $macro, INode $element, ICompiler $compiler) {
-			$this->start($macro, $element, $compiler);
-			$this->dependencies($macro, $compiler);
-			$this->end($macro, $element, $compiler);
-		}
-
-		protected function start(INode $macro, INode $element, ICompiler $compiler) {
-			$destination = $compiler->getDestination();
-			$destination->write(sprintf("
-			/**
-			 * context: %s
-			 * macro: %s
-			 * element: %s
-			 */\n", static::class, $macro->getPath(), $element->getPath()));
-			$destination->write(sprintf("\t\t\t\$this->controlList[%s] = function(%s \$root): %s {\n", $compiler->delimite($macro->getMeta('control')), IControl::class, IControl::class));
-			$destination->write("\t\t\t\t\$control = \$root;\n");
-		}
-
-		protected function dependencies(INode $macro, ICompiler $compiler) {
-			$destination = $compiler->getDestination();
-			foreach ($macro->getNodeList() as $node) {
-				$destination->write(sprintf("\t\t\t\t/** %s */\n", $node->getPath()));
-				$destination->write(sprintf("\t\t\t\t\$last = \$this->controlList[%s](\$control);\n", $compiler->delimite($node->getMeta('control'))));
+		protected function writeTextValue() {
+			if (($value = $this->extract($this->macro, 'value', $this->macro->isLeaf() ? $this->macro->getValue() : null, false)) !== null) {
+				$this->write(sprintf('$control->setText(%s);', ($helper = $this->compiler->helper($value)) ? $helper : var_export($value, true)), 5);
 			}
 		}
 
-		protected function end(INode $macro, INode $element, ICompiler $compiler, $chilren = true) {
-			$destination = $compiler->getDestination();
-			$destination->write("\t\t\t\treturn \$control;\n");
-			$destination->write("\t\t\t};\n");
-			$chilren ? $this->element($macro, $compiler) : null;
+		protected function write(string $write, int $indents = null) {
+			/** @var $file IFile */
+			$file = $this->compiler->getVariable('file');
+			$file->write(($indents ? str_repeat("\t", $indents) : '') . $write . "\n");
 		}
 
-		protected function writeTextValue(INode $root, IFile $destination, ICompiler $compiler) {
-			if ($root->isLeaf() && ($text = $root->getValue($this->extractAttribute($root, 'value'))) !== null) {
-				$destination->write(sprintf("\t\t\t\t\$control->setText(%s);\n", $compiler->delimite($text)));
-			}
-		}
-
-		protected function extractAttribute(INode $node, string $name) {
-			$attributeList = $node->getAttributeList();
-			$value = $node->getAttribute($name);
-			unset($attributeList[$name]);
-			$node->setAttributeList($attributeList);
-			return $value;
-		}
-
-		protected function writeAttributeList(array $attributeList, IFile $destination) {
+		protected function writeAttributeList() {
+			$attributeList = $this->getAttributeList(function ($value) {
+				return var_export($value, true);
+			});
 			if (empty($attributeList) === false) {
-				$export = [];
-				foreach ($attributeList as $name => $value) {
-					$export[] = "'" . $name . "' => " . $value;
+				$attributes = [];
+				foreach ($attributeList as $k => $v) {
+					$attributes[] = var_export($k, true) . ' => ' . $v;
 				}
-				$destination->write(sprintf("\t\t\t\t\$control->setAttributeList([%s]);\n", implode(', ', $export)));
+				$this->write(sprintf('$control->setAttributeList([%s]);', implode(', ', $attributes)), 5);
+			}
+		}
+
+		protected function compile() {
+			foreach ($this->macro->getNodeList() as $node) {
+				$this->compiler->runtimeMacro($node);
 			}
 		}
 	}

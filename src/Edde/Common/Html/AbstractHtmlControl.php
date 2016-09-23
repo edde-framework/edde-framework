@@ -180,17 +180,17 @@
 			return $this;
 		}
 
-		public function render() {
+		public function render(int $indent = 0) {
 			$this->use();
 			$content = [];
 			/** @var $control IHtmlControl */
 			if (($tag = $this->getTag()) === null) {
 				foreach ($this->getControlList() as $control) {
-					$content[] = $control->render();
+					$content[] = $control->render(-1);
 				}
 				return implode('', $content);
 			}
-			$content[] = $indent = str_repeat("\t", $this->node->getLevel());
+			$content[] = $indent = str_repeat("\t", $this->node->getLevel() + $indent);
 			$content[] = '<' . $this->getTag();
 			foreach ($this->getAttributeList() as $name => $list) {
 				if (is_array($list)) {

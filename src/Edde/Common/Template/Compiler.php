@@ -3,174 +3,263 @@
 
 	namespace Edde\Common\Template;
 
+	use Edde\Api\Container\IContainer;
+	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\File\IFile;
-	use Edde\Api\File\IRootDirectory;
-	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\CompilerException;
 	use Edde\Api\Template\ICompiler;
+	use Edde\Api\Template\IHelperSet;
+	use Edde\Api\Template\IInline;
 	use Edde\Api\Template\IMacro;
+	use Edde\Api\Template\IMacroSet;
+	use Edde\Api\Template\MacroException;
 	use Edde\Common\Node\NodeIterator;
-	use Edde\Common\Strings\StringUtils;
+	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Usable\AbstractUsable;
 
+	/**
+	 * Default implementation of template compiler.
+	 */
 	class Compiler extends AbstractUsable implements ICompiler {
 		/**
-		 * @var INode
+		 * @var IContainer
 		 */
-		protected $root;
-		/**
-		 * @var IRootDirectory
-		 */
-		protected $rootDirectory;
-		/**
-		 * @var IAssetsDirectory
-		 */
-		protected $assetsDirectory;
-		/**
-		 * @var IFile
-		 */
-		protected $source;
-		/**
-		 * @var IFile
-		 */
-		protected $destination;
-		/**
-		 * @var string
-		 */
-		protected $name;
+		protected $container;
 		/**
 		 * @var IResourceManager
 		 */
 		protected $resourceManager;
 		/**
+		 * @var ICryptEngine
+		 */
+		protected $cryptEngine;
+		/**
+		 * @var IFile
+		 */
+		protected $source;
+		/**
 		 * @var IMacro[]
 		 */
 		protected $macroList = [];
+		/**
+		 * @var IInline[]
+		 */
+		protected $inlineList = [];
+		/**
+		 * @var IHelperSet[]
+		 */
+		protected $helperSetList = [];
+		/**
+		 * stack of compiled files (when compiler is reused)
+		 *
+		 * @var \SplStack
+		 */
+		protected $stack;
+		/**
+		 * variable context between macros (any macro should NOT hold a context)
+		 *
+		 * @var array
+		 */
+		protected $context = [];
 
 		/**
-		 * @param INode $root
-		 * @param IRootDirectory $rootDirectory
-		 * @param IAssetsDirectory $assetsDirectory
 		 * @param IFile $source
-		 * @param IFile $destination
-		 * @param string $name
 		 */
-		public function __construct(INode $root, IRootDirectory $rootDirectory, IAssetsDirectory $assetsDirectory, IFile $source, IFile $destination, string $name) {
-			$this->root = $root;
-			$this->rootDirectory = $rootDirectory;
-			$this->assetsDirectory = $assetsDirectory;
+		public function __construct(IFile $source) {
 			$this->source = $source;
-			$this->destination = $destination;
-			$this->name = $name;
+		}
+
+		public function lazyContainer(IContainer $container) {
+			$this->container = $container;
+		}
+
+		public function lazyResourceManager(IResourceManager $resourceManager) {
+			$this->resourceManager = $resourceManager;
+		}
+
+		public function lazyCryptEngine(ICryptEngine $cryptEngine) {
+			$this->cryptEngine = $cryptEngine;
+		}
+
+		public function registerMacroSet(IMacroSet $macroSet): ICompiler {
+			foreach ($macroSet->getMacroList() as $macro) {
+				$this->registerMacro($macro);
+			}
+			foreach ($macroSet->getInlineList() as $inline) {
+				$this->registerInline($inline);
+			}
+			return $this;
 		}
 
 		public function registerMacro(IMacro $macro): ICompiler {
-			$this->macroList[] = $macro;
+			$this->macroList[$macro->getName()] = $macro;
 			return $this;
 		}
 
-		public function registerMacroList(array $macroList): ICompiler {
-			$this->macroList = array_merge($this->macroList, $macroList);
+		public function registerInline(IInline $inline): ICompiler {
+			$this->inlineList[$inline->getName()] = $inline;
 			return $this;
+		}
+
+		public function template(array $importList = []) {
+			$this->use();
+			$this->context = [];
+			try {
+				$nameList = [
+					$this->source->getPath(),
+				];
+				foreach ($importList as $import) {
+					$nameList[] = $import->getPath();
+				}
+				$this->setVariable('name', sha1(implode(',', $nameList)));
+				$this->setVariable('name-list', $nameList);
+				foreach ($importList as $import) {
+					$this->compile($import)
+						->setMeta('included', true);
+				}
+				return $this->runtimeMacro($this->compile($this->source));
+			} catch (\Exception $exception) {
+				/**
+				 * Ugly hack to set exception message without messing with a trace.
+				 */
+				$stackList = [
+					$this->source->getPath() => $this->source->getPath(),
+				];
+				while ($this->stack->isEmpty() === false) {
+					$path = $this->stack->pop()
+						->getPath();
+					$stackList[$path] = $path;
+				}
+				ReflectionUtils::setProperty($exception, 'message', sprintf("Template compilation failed: %s\nTemplate file stack:\n%s", $exception->getMessage(), implode(",\n", $stackList)));
+				throw $exception;
+			}
+		}
+
+		public function setVariable(string $name, $value): ICompiler {
+			$this->context[$name] = $value;
+			return $this;
+		}
+
+		public function compile(IFile $source): INode {
+			$this->use();
+			$this->stack->push($source);
+			foreach (NodeIterator::recursive($root = $this->resourceManager->resource($source), true) as $node) {
+				if (empty($this->inlineList) === false) {
+					foreach ($node->getAttributeList() as $k => $v) {
+						if (isset($this->inlineList[$k]) && $this->inlineList[$k]->isCompile()) {
+							$this->inlineList[$k]->macro($node, $this);
+						}
+					}
+				}
+				if (isset($this->macroList[$name = $node->getName()])) {
+					$this->compileMacro($node);
+				}
+			}
+			foreach (NodeIterator::recursive($root, true) as $node) {
+				if (isset($this->macroList[$node->getName()])) {
+					continue;
+				}
+				throw new CompilerException(sprintf('Unknown macro [%s].', $node->getPath()));
+			}
+			$this->stack->pop();
+			return $root;
+		}
+
+		public function compileMacro(INode $macro) {
+			if ($this->macroList[$name = $macro->getName()]->isRuntime()) {
+				return null;
+			}
+			return $this->macroList[$name]->macro($macro, $this);
+		}
+
+		public function runtimeMacro(INode $macro) {
+			if (isset($this->macroList[$name = $macro->getName()]) === false) {
+				throw new CompilerException(sprintf('Unknown macro [%s].', $macro->getPath()));
+			}
+			if ($this->macroList[$name]->isCompile()) {
+				foreach ($macro->getNodeList() as $node) {
+					$this->runtimeMacro($node);
+				}
+				return null;
+			}
+			if (empty($this->inlineList) === false) {
+				foreach ($macro->getAttributeList() as $k => $v) {
+					if (isset($this->inlineList[$k]) && $this->inlineList[$k]->isRuntime()) {
+						$this->inlineList[$k]->macro($macro, $this);
+						$macro->removeAttribute($k);
+					}
+				}
+			}
+			return $this->macroList[$name]->macro($macro, $this);
 		}
 
 		public function getSource(): IFile {
 			return $this->source;
 		}
 
-		public function getDestination(): IFile {
-			return $this->destination;
+		public function getCurrent(): IFile {
+			return $this->stack->top();
 		}
 
-		public function getName(): string {
-			return $this->name;
+		public function isLayout(): bool {
+			return $this->stack->count() === 1;
 		}
 
-		public function compile(): IFile {
+		public function helper($value) {
 			$this->use();
-			$this->destination->enableWriteCache(3);
-			try {
-				$this->macro($this->root, $this->root);
-			} catch (CompilerException $e) {
-				throw new CompilerException(sprintf('Compilation of template [%s] failed: %s', (string)$this->source->getUrl(), $e->getMessage()), 0, $e);
-			}
-			$this->destination->close();
-			return $this->destination;
-		}
-
-		public function macro(INode $macro, INode $element) {
-			if (isset($this->macroList[$name = $macro->getName()]) === false) {
-				throw new CompilerException(sprintf('Unknown macro [%s] in [%s].', $macro->getName(), $element->getPath()));
-			}
-			if ($macro->getMeta('inline', false)) {
-				foreach (NodeIterator::recursive($macro) as $node) {
-					if ($node->getMeta('inline', false) === false) {
-						$element = $node;
-						break;
+			$result = null;
+			foreach ($this->helperSetList as $helperSet) {
+				foreach ($helperSet->getHelperList() as $helper) {
+					if (($result = $helper->helper($value)) !== null) {
+						break 2;
 					}
 				}
 			}
-			$this->macroList[$name]->macro($macro, $element, $this);
+			return $result;
 		}
 
-		public function delimite(string $value): string {
-			foreach ($this->macroList as $macro) {
-				if (($item = $macro->variable($value, $this)) !== null) {
-					return $item;
-				}
+		public function block(string $name, array $nodeList): ICompiler {
+			$blockList = $this->getBlockList();
+			if (isset($blockList[$name])) {
+				throw new MacroException(sprintf('Block id [%s] has been already defined.', $name));
 			}
-			if (empty($value)) {
-				return var_export($value, true);
-			}
-			if ($value[0] === '@') {
-				return '[$this->root, ' . $this->delimite(substr($value, 1)) . ']';
-			}
-			if (strpos($value, 'edde://', 0) !== false) {
-				return var_export($this->asset(str_replace('edde://', '', $value)), true);
-			}
-			if (strpos($value, './') === 0) {
-				return var_export($this->file(substr($value, 2)), true);
-			}
-			if ($value[0] === '/') {
-				return var_export($this->file($value), true);
-			}
-			if (strpos($value, '->', 0) !== false) {
-				return '->' . StringUtils::firstLower(StringUtils::camelize(substr($value, 2)));
-			}
-			if (strrpos($value, '(') !== false && StringUtils::webalize($method = str_replace([
-					'(',
-					')',
-				], '', $value)) === $method
-			) {
-				return '$this->' . StringUtils::firstLower(StringUtils::camelize($value));
-			}
-			if ($value[0] === '$') {
-				return '$' . StringUtils::firstLower(StringUtils::camelize(substr($value, 1)));
-			}
-			return var_export($value, true);
+			$blockList[$name] = $nodeList;
+			$this->setVariable(static::class . '/block-list', $blockList);
+			return $this;
 		}
 
-		public function asset(string $asset): string {
-			return $this->assetsDirectory->filename($asset);
+		public function getBlockList(): array {
+			return $this->getVariable(static::class . '/block-list', []);
 		}
 
-		public function file(string $file): string {
-			if ($file[0] === '/') {
-				return $this->rootDirectory->filename($file);
+		public function getVariable(string $name, $default = null) {
+			if (isset($this->context[$name]) === false) {
+				$this->context[$name] = $default;
 			}
-			return $this->source->getDirectory()
-				->filename($file);
+			return $this->context[$name];
+		}
+
+		public function getBlock(string $name): array {
+			$blockList = $this->getVariable(self::class . '/block-list', []);
+			if (isset($blockList[$name]) === false) {
+				throw new MacroException(sprintf('Requested unknown block [%s].', $name));
+			}
+			return $blockList[$name];
 		}
 
 		protected function prepare() {
-			$macroList = $this->macroList;
-			$this->macroList = [];
-			foreach ($macroList as $macro) {
-				foreach ($macro->getMacroList() as $name) {
-					$this->macroList[$name] = $macro;
+			$this->stack = new \SplStack();
+			foreach ($this->macroList as $macro) {
+				if ($macro->hasHelperSet()) {
+					$this->registerHelperSet($macro->getHelperSet());
 				}
 			}
+		}
+
+		public function registerHelperSet(IHelperSet $helperSet): ICompiler {
+			$this->helperSetList[] = $helperSet;
+			return $this;
 		}
 	}
