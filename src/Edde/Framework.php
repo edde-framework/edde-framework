@@ -5,6 +5,9 @@
 
 	use Edde\Common\AbstractObject;
 
+	/**
+	 * Information about framework hidden in this class.
+	 */
 	class Framework extends AbstractObject {
 		public function getVersionString() {
 			return $this->getVersion() . ' - ' . $this->getCodename();
