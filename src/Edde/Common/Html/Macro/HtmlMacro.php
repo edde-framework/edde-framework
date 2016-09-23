@@ -27,7 +27,7 @@
 			$this->write(sprintf('/** %s */', $this->macro->getPath()), 5);
 			$this->write('$parent = $stack->top();', 5);
 			$this->write(sprintf('$parent->addControl($control = $this->container->create(%s));', var_export($this->control, true)), 5);
-			if (($value = $this->extract($this->macro, 'value', $this->macro->getValue())) !== null) {
+			if (($value = $this->extract($this->macro, 'value', $this->macro->isLeaf() ? $this->macro->getValue() : null)) !== null) {
 				$this->write(sprintf('$control->setText(%s);', var_export($value, true)), 5);
 			}
 			$this->onControl($this->macro);
