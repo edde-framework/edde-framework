@@ -45,7 +45,7 @@
 				case null:", TemplateException::class), 3);
 			$this->compile();
 			$this->write('break;', 5);
-			$caseList = [null];
+			$caseList = $this->compiler->getVariable($caseListId = (static::class . '/cast-list'), [null]);
 			foreach ($this->compiler->getVariable('block-list', []) as $id => $nodeList) {
 				if (isset($caseList[$id])) {
 					continue;
@@ -61,6 +61,7 @@
 			$this->write(sprintf("default:
 					throw new %s(sprintf('Requested unknown snippet [%%s].', \$snippet));
 			}", TemplateException::class), 4);
+			$this->compiler->setVariable($caseListId, $caseList);
 			$this->write("return \$root;", 3);
 			$this->write('}', 2);
 			$this->write('}', 1);
