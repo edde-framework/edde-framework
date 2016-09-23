@@ -7,7 +7,6 @@
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
-	use Edde\Api\Template\MacroException;
 	use Edde\Common\Template\AbstractInline;
 
 	/**
@@ -44,10 +43,6 @@
 						->file(substr($src, 2))),
 				];
 			}
-			$blockList = $compiler->getVariable('block-list', []);
-			if (isset($blockList[$src]) === false) {
-				throw new MacroException(sprintf('Unknown include [%s] in macro [%s]; an include may be a file reference of an existing block reference.', $src, $macro->getPath()));
-			}
-			return $blockList[$src];
+			return $this->compiler->getBlock($src);
 		}
 	}

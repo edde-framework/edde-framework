@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Template\Macro;
 
-	use Edde\Api\Template\MacroException;
 	use Edde\Common\Template\AbstractMacro;
 
 	class BlockMacro extends AbstractMacro {
@@ -12,11 +11,6 @@
 		}
 
 		public function onMacro() {
-			$blockList = $this->compiler->getVariable('block-list', []);
-			if (isset($blockList[$id = $this->attribute('id')])) {
-				throw new MacroException(sprintf('Block id [%d] has been already defined.', $id));
-			}
-			$blockList[$id] = $this->macro->getNodeList();
-			$this->compiler->setVariable('block-list', $blockList);
+			$this->compiler->block($this->attribute('id'), $this->macro->getNodeList());
 		}
 	}

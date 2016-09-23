@@ -14,6 +14,7 @@
 	use Edde\Api\Template\IInline;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\IMacroSet;
+	use Edde\Api\Template\MacroException;
 	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Usable\AbstractUsable;
@@ -185,7 +186,7 @@
 			}
 			if (empty($this->inlineList) === false) {
 				foreach ($macro->getAttributeList() as $k => $v) {
-					if (isset($this->inlineList[$k])) {
+					if (isset($this->inlineList[$k]) && $this->inlineList[$k]->isRuntime()) {
 						$this->inlineList[$k]->macro($macro, $this);
 						$macro->removeAttribute($k);
 					}
@@ -206,13 +207,6 @@
 			return $this->stack->count() === 1;
 		}
 
-		public function getVariable(string $name, $default = null) {
-			if (isset($this->context[$name]) === false) {
-				$this->context[$name] = $default;
-			}
-			return $this->context[$name];
-		}
-
 		public function helper($value) {
 			$this->use();
 			$result = null;
@@ -224,6 +218,35 @@
 				}
 			}
 			return $result;
+		}
+
+		public function block(string $name, array $nodeList): ICompiler {
+			$blockList = $this->getBlockList();
+			if (isset($blockList[$name])) {
+				throw new MacroException(sprintf('Block id [%s] has been already defined.', $name));
+			}
+			$blockList[$name] = $nodeList;
+			$this->setVariable(static::class . '/block-list', $blockList);
+			return $this;
+		}
+
+		public function getBlockList(): array {
+			return $this->getVariable(static::class . '/block-list', []);
+		}
+
+		public function getVariable(string $name, $default = null) {
+			if (isset($this->context[$name]) === false) {
+				$this->context[$name] = $default;
+			}
+			return $this->context[$name];
+		}
+
+		public function getBlock(string $name): array {
+			$blockList = $this->getVariable(self::class . '/block-list', []);
+			if (isset($blockList[$name]) === false) {
+				throw new MacroException(sprintf('Requested unknown block [%s].', $name));
+			}
+			return $blockList[$name];
 		}
 
 		protected function prepare() {

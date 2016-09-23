@@ -75,6 +75,15 @@
 	</div>
 </div>
 ', $div->render());
+			$template->snippet($this->container->inject($div = new DivControl()), 'the-name-of-this-snippet');
+			$div->addClass('root');
+			$div->dirty();
+			self::assertEquals('<div class="root">
+	<div class="thie-piece-will-not-be-visible">
+		<div class="foo"></div>
+	</div>
+</div>
+', $div->render());
 		}
 
 		protected function setUp() {

@@ -114,4 +114,30 @@
 		 * @return string|null
 		 */
 		public function helper($value);
+
+		/**
+		 * block under the given id
+		 *
+		 * @param string $name
+		 * @param array $nodeList
+		 *
+		 * @return ICompiler
+		 */
+		public function block(string $name, array $nodeList): ICompiler;
+
+		/**
+		 * return list of nodes by the given block name
+		 *
+		 * @param string $name
+		 *
+		 * @return array
+		 */
+		public function getBlock(string $name): array;
+
+		/**
+		 * retrieve list of registered blocks
+		 *
+		 * @return array
+		 */
+		public function getBlockList(): array;
 	}

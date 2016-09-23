@@ -45,11 +45,16 @@
 				case null:", TemplateException::class), 3);
 			$this->writeTextValue();
 			$this->writeAttributeList();
-			$this->compile();
+			foreach ($this->macro->getNodeList() as $node) {
+				if ($node->getMeta('snippet', false)) {
+					continue;
+				}
+				$this->compiler->runtimeMacro($node);
+			}
 			$this->write('break;', 5);
 			$caseList = $this->compiler->getVariable($caseListId = (static::class . '/cast-list'), [null]);
 			/** @var $nodeList INode[] */
-			foreach ($this->compiler->getVariable('block-list', []) as $id => $nodeList) {
+			foreach ($this->compiler->getBlockList() as $id => $nodeList) {
 				if (isset($caseList[$id])) {
 					continue;
 				}

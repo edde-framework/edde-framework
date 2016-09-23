@@ -43,6 +43,10 @@
 
 	<placeholder id="foo"/>
 
+	<div class="thie-piece-will-not-be-visible" m:snippet="the-name-of-this-snippet">
+		<div class="foo"/>
+	</div>
+
 	<h1 value="foo1"/>
 	<h2 value="foo2"/>
 	<h3 class="foo3-with-class" value="foo3"/>
