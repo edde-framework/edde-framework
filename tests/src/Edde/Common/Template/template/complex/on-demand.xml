@@ -1,6 +1,6 @@
 <control>
 	<span class="Hey, I'm alive!"/>
-	<div>
+	<div t:block="whoo-whaa">
 		<div class="hello there!"/>
 	</div>
 	<t:include src="./include-foo.xml"/>

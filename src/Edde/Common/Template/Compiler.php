@@ -83,6 +83,9 @@
 			$this->cryptEngine = $cryptEngine;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function registerMacroSet(IMacroSet $macroSet): ICompiler {
 			foreach ($macroSet->getMacroList() as $macro) {
 				$this->registerMacro($macro);
@@ -93,16 +96,26 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function registerMacro(IMacro $macro): ICompiler {
 			$this->macroList[$macro->getName()] = $macro;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function registerInline(IInline $inline): ICompiler {
 			$this->inlineList[$inline->getName()] = $inline;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws \Exception
+		 */
 		public function template(array $importList = []) {
 			$this->use();
 			$this->context = [];
@@ -137,11 +150,18 @@
 			}
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function setVariable(string $name, $value): ICompiler {
 			$this->context[$name] = $value;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws CompilerException
+		 */
 		public function compile(IFile $source): INode {
 			$this->use();
 			$this->stack->push($source);
@@ -167,6 +187,9 @@
 			return $root;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function compileMacro(INode $macro) {
 			if ($this->macroList[$name = $macro->getName()]->isRuntime()) {
 				return null;
@@ -174,6 +197,10 @@
 			return $this->macroList[$name]->macro($macro, $this);
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws CompilerException
+		 */
 		public function runtimeMacro(INode $macro) {
 			if (isset($this->macroList[$name = $macro->getName()]) === false) {
 				throw new CompilerException(sprintf('Unknown macro [%s].', $macro->getPath()));
@@ -195,18 +222,30 @@
 			return $this->macroList[$name]->macro($macro, $this);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getSource(): IFile {
 			return $this->source;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getCurrent(): IFile {
 			return $this->stack->top();
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isLayout(): bool {
 			return $this->stack->count() === 1;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function helper($value) {
 			$this->use();
 			$result = null;
@@ -220,6 +259,10 @@
 			return $result;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws MacroException
+		 */
 		public function block(string $name, array $nodeList): ICompiler {
 			$blockList = $this->getBlockList();
 			if (isset($blockList[$name])) {
@@ -230,10 +273,16 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getBlockList(): array {
 			return $this->getVariable(static::class . '/block-list', []);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getVariable(string $name, $default = null) {
 			if (isset($this->context[$name]) === false) {
 				$this->context[$name] = $default;
@@ -241,6 +290,10 @@
 			return $this->context[$name];
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws MacroException
+		 */
 		public function getBlock(string $name): array {
 			$blockList = $this->getVariable(self::class . '/block-list', []);
 			if (isset($blockList[$name]) === false) {
@@ -249,6 +302,9 @@
 			return $blockList[$name];
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 			$this->stack = new \SplStack();
 			foreach ($this->macroList as $macro) {
