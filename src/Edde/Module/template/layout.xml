@@ -27,7 +27,7 @@
 	</div>
 	<div class="row">
 		<div class="large-12 columns">
-			<t:include src="content"/>
+			<m:use src="content"/>
 		</div>
 	</div>
 </control>
