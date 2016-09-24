@@ -1,4 +1,8 @@
 <control foo="@current-method-call()" title="foo">
+	<div class="this-will-be0loaded-on-demand">
+		<include src="./on-demand.xml"/>
+	</div>
+
 	<call method="\SomeService\From\Container::call()"/>
 	<call method="@middle-local-method-call()"/>
 	<call method=".middle-root-method-call()"/>
