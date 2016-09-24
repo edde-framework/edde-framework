@@ -71,6 +71,7 @@
 
 	<button action=".action-on-the-root()"/>
 	<button action="@action-on-the-current-contol()"/>
+	<button action=":action-on-the-current-contol()"/>
 	<button class="just-useless-button-here"/>
 
 	<placeholder id="foo"/>

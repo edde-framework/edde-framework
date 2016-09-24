@@ -31,6 +31,8 @@
 					return sprintf('[$root, %s]', $action);
 				} else if ($type === '@') {
 					return sprintf('[$control, %s]', $action);
+				} else if ($type === ':') {
+					return sprintf('[$control->getRoot(), %s]', $action);
 				}
 			}
 			return var_export($action, true);
