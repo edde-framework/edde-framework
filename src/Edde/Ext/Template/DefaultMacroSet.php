@@ -18,6 +18,7 @@
 	use Edde\Common\Html\Macro\JsMacro;
 	use Edde\Common\Html\Macro\LoadMacro;
 	use Edde\Common\Html\Macro\LoopMacro;
+	use Edde\Common\Html\Macro\UseMacro;
 	use Edde\Common\Html\PlaceholderControl;
 	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Html\Tag\SpanControl;
@@ -50,6 +51,7 @@
 					$container->inject(new IncludeMacro()),
 					$container->inject(new BlockMacro()),
 					$container->inject(new LoopMacro()),
+					$container->inject(new UseMacro()),
 					$container->inject(new CallMacro()),
 					$container->inject(new CssMacro()),
 					$container->inject(new JsMacro()),

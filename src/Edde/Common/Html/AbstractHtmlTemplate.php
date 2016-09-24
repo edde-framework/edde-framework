@@ -6,9 +6,11 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\File\IFile;
+	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlTemplate;
 	use Edde\Api\Resource\IResourceList;
 	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Template\TemplateException;
 	use Edde\Api\Url\IUrl;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
@@ -34,6 +36,10 @@
 		 * @var IResourceList
 		 */
 		protected $javaScriptList;
+		/**
+		 * @var IHtmlTemplate[]
+		 */
+		protected $embeddedList = [];
 
 		/**
 		 * @param IFile $file
@@ -76,5 +82,27 @@
 		 */
 		public function lazyJavaScriptList(IJavaScriptCompiler $javaScriptList) {
 			$this->javaScriptList = $javaScriptList;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function embedd(IHtmlTemplate $htmlTemplate): IHtmlTemplate {
+			foreach ($htmlTemplate->getBlockList() as $block) {
+				$this->embeddedList[$block] = $htmlTemplate;
+			}
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws TemplateException
+		 */
+		public function block(IHtmlControl $htmlControl, string $name): IHtmlControl {
+			if (isset($this->embeddedList[$name]) === false) {
+				throw new TemplateException(sprintf('Requested unknown embedded block [%s] for control [%s; %s].', $name, get_class($htmlControl), $htmlControl->getNode()
+					->getPath()));
+			}
+			return $this->embeddedList[$name]->snippet($htmlControl, $name);
 		}
 	}

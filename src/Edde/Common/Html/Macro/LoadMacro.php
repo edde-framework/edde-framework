@@ -33,7 +33,7 @@
 		}
 
 		protected function onMacro() {
-			$this->write(sprintf('$template = self::template($this->templateManager->template(%s), $this->container);', ($helper = $this->compiler->helper($src = $this->attribute('src', false))) ? $helper : $this->load($src)), 5);
+			$this->write(sprintf('$this->embedd($template = self::template($this->templateManager->template(%s), $this->container));', ($helper = $this->compiler->helper($src = $this->attribute('src', false))) ? $helper : $this->load($src)), 5);
 			$this->write('$template->snippet($stack->top());', 5);
 		}
 

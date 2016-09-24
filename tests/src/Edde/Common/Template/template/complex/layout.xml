@@ -20,6 +20,10 @@
 		<m:load src="./on-demand.xml"/>
 	</div>
 
+	<m:use src="deep-block"/>
+	<m:use src="whoo-whaa"/>
+	<m:use src="block-from-imported-template"/>
+
 	<call method="\SomeService\From\Container::call()"/>
 	<call method="@middle-local-method-call()"/>
 	<call method=".middle-root-method-call()"/>
