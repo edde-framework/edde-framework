@@ -109,6 +109,8 @@
 				return '$root->' . StringUtils::camelize(substr($src, 1), null, true);
 			} else if ($src[0] === '@') {
 				return '$control->' . StringUtils::camelize(substr($src, 1), null, true);
+			} else if ($src[0] === ':') {
+				return '$control->getRoot()->' . StringUtils::camelize(substr($src, 1), null, true);
 			} else if ($src === '$:') {
 				list($key, $value) = $this->compiler->getVariable(static::class)
 					->top();
