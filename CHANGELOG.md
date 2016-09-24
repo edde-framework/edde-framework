@@ -1,1 +1,1 @@
-// changelog will be maintained after a first release
+// changelog will be maintained after the first release
