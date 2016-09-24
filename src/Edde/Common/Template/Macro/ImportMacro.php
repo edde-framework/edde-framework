@@ -9,16 +9,25 @@
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Template\AbstractMacro;
 
+	/**
+	 * Import macro will load the given template in compile time.
+	 */
 	class ImportMacro extends AbstractMacro {
 		/**
 		 * @var IRootDirectory
 		 */
 		protected $rootDirectory;
 
+		/**
+		 * "Real programmers don't comment their code. If it was hard to write, it should be hard to understand."
+		 */
 		public function __construct() {
 			parent::__construct('t:import', true);
 		}
 
+		/**
+		 * @param IRootDirectory $rootDirectory
+		 */
 		public function lazyRootDirectory(IRootDirectory $rootDirectory) {
 			$this->rootDirectory = $rootDirectory;
 		}
