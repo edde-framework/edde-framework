@@ -50,18 +50,30 @@
 			return $container->inject(new $class());
 		}
 
+		/**
+		 * @param IContainer $container
+		 */
 		public function lazyContainer(IContainer $container) {
 			$this->container = $container;
 		}
 
+		/**
+		 * @param ITemplateManager $templateManager
+		 */
 		public function lazyTemplateManager(ITemplateManager $templateManager) {
 			$this->templateManager = $templateManager;
 		}
 
+		/**
+		 * @param IStyleSheetCompiler $styleSheetList
+		 */
 		public function lazyStyleSheetList(IStyleSheetCompiler $styleSheetList) {
 			$this->styleSheetList = $styleSheetList;
 		}
 
+		/**
+		 * @param IJavaScriptCompiler $javaScriptList
+		 */
 		public function lazyJavaScriptList(IJavaScriptCompiler $javaScriptList) {
 			$this->javaScriptList = $javaScriptList;
 		}
