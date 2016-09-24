@@ -4,5 +4,4 @@
 		<div class="hello there!"/>
 	</div>
 	<t:include src="./include-foo.xml"/>
-	<t:include src="block-from-imported-template"/>
 </control>

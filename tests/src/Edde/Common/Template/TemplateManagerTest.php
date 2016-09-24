@@ -27,6 +27,7 @@
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\AbstractHtmlTemplate;
 	use Edde\Common\Html\Macro\HtmlMacro;
+	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Http\HostUrl;
 	use Edde\Common\Link\ControlLinkGenerator;
 	use Edde\Common\Link\LinkFactory;
@@ -93,6 +94,25 @@
 			 * 2 is for 1 button and 1 for explicit js macro
 			 */
 			self::assertCount(2, $this->javaScriptList->getPathList());
+
+			$template->snippet($this->container->inject($div = new DivControl()), 'deep-block');
+			$div->addClass('root');
+			$div->dirty();
+			self::assertEquals('<div class="root">
+	<div class="really-deep-div-here">
+		<div class="deepness-of-a-deep">foo</div>
+	</div>
+</div>
+', $div->render());
+			$template->snippet($this->container->inject($div = new DivControl()), 'the-name-of-this-snippet');
+			$div->addClass('root');
+			$div->dirty();
+			self::assertEquals('<div class="root">
+	<div class="thie-piece-will-not-be-visible">
+		<div class="foo"></div>
+	</div>
+</div>
+', $div->render());
 		}
 
 		protected function setUp() {

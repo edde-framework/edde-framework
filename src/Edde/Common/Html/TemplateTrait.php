@@ -12,6 +12,9 @@
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Common\Strings\StringUtils;
 
+	/**
+	 * Template trait can be used by any html control; it gives simple way to load a template (or snippet) with some little magic around.
+	 */
 	trait TemplateTrait {
 		/**
 		 * @var IContainer
