@@ -73,10 +73,10 @@
 				__DIR__ . '/template/complex/to-be-used.xml',
 			]);
 			$template = AbstractHtmlTemplate::template($file, $this->container);
-			$template->snippet($this->container->inject($div = new \SomeCoolControl()));
-			$div->addClass('root');
-			$div->dirty();
-			self::assertEquals(file_get_contents(__DIR__ . '/template/complex/result.xml'), $div->render());
+			$template->snippet($this->container->inject($control = new \SomeCoolControl()));
+			$control->addClass('root');
+			$control->dirty();
+			self::assertEquals(file_get_contents(__DIR__ . '/template/complex/result.xml'), $control->render());
 			$cssList = [
 				(new File(__DIR__ . '/../../../../../src/Edde/assets/css/foundation.min.css'))->getUrl()
 					->getAbsoluteUrl(),
@@ -96,24 +96,24 @@
 			 */
 			self::assertCount(2, $this->javaScriptList->getPathList());
 
-			$template->snippet($this->container->inject($div = new DivControl()), 'deep-block');
-			$div->addClass('root');
-			$div->dirty();
+			$template->snippet($this->container->inject($control = new \SomeCoolControl()), 'deep-block');
+			$control->addClass('root');
+			$control->dirty();
 			self::assertEquals('<div class="root">
 	<div class="really-deep-div-here">
-		<div class="deepness-of-a-deep">foo</div>
+		<div class="deepness-of-a-deep" something="ou-yay!">foo</div>
 	</div>
 </div>
-', $div->render());
-			$template->snippet($this->container->inject($div = new DivControl()), 'the-name-of-this-snippet');
-			$div->addClass('root');
-			$div->dirty();
+', $control->render());
+			$template->snippet($this->container->inject($control = new DivControl()), 'the-name-of-this-snippet');
+			$control->addClass('root');
+			$control->dirty();
 			self::assertEquals('<div class="root">
 	<div class="thie-piece-will-not-be-visible">
 		<div class="foo"></div>
 	</div>
 </div>
-', $div->render());
+', $control->render());
 			$template->snippet($this->container->inject($containerControl = new ContainerControl()), 'beast-on-demand');
 			$containerControl->dirty();
 			self::assertEquals('<div class="this-will-be-loaded-on-demand">
