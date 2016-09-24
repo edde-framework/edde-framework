@@ -5,12 +5,23 @@
 
 	use Edde\Common\Html\AbstractHtmlControl;
 
+	/**
+	 * Script tag support.
+	 */
 	class JavaScriptControl extends AbstractHtmlControl {
+		/** @noinspection PhpMissingParentCallCommonInspection */
+		/**
+		 * @inheritdoc
+		 */
 		public function getTag() {
 			return 'script';
 		}
 
-		public function isPair() {
+		/** @noinspection PhpMissingParentCallCommonInspection */
+		/**
+		 * @inheritdoc
+		 */
+		public function isPair(): bool {
 			return true;
 		}
 

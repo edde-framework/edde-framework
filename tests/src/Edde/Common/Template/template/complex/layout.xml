@@ -9,6 +9,16 @@
 		-->
 		<m:load src="./on-demand.xml"/>
 	</div>
+	<div class="this-will-be-loaded-on-demand" m:snippet="beast-on-demand">
+		<!--
+			m:load will load the given template on demand; it supports
+			relative file reference (./ prefix) and "absolute" path reference from
+			application root (/ prefix)
+
+			the template will be executed on root snippet call (a snippet without a name)
+		-->
+		<m:load src="./on-demand.xml"/>
+	</div>
 
 	<call method="\SomeService\From\Container::call()"/>
 	<call method="@middle-local-method-call()"/>

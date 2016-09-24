@@ -5,8 +5,15 @@
 
 	use Edde\Api\Html\IHtmlControl;
 
+	/**
+	 * Html control without a representation.
+	 */
 	class ContainerControl extends AbstractHtmlControl {
-		public function render(int $indent = 0) {
+		/** @noinspection PhpMissingParentCallCommonInspection */
+		/**
+		 * @inheritdoc
+		 */
+		public function render(int $indent = 0): string {
 			$this->use();
 			$renderList = [];
 			/** @var $control IHtmlControl */

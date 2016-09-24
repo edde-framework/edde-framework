@@ -10,7 +10,7 @@
 			return 'title';
 		}
 
-		public function isPair() {
+		public function isPair(): bool {
 			return true;
 		}
 

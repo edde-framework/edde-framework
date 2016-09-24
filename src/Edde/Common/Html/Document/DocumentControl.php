@@ -39,15 +39,26 @@
 			return $this->body;
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
+		/**
+		 * @inheritdoc
+		 */
 		public function getTag() {
 			return 'html';
 		}
 
-		public function isPair() {
+		/** @noinspection PhpMissingParentCallCommonInspection */
+		/**
+		 * @inheritdoc
+		 */
+		public function isPair(): bool {
 			return true;
 		}
 
-		public function render(int $indent = 0) {
+		/**
+		 * @inheritdoc
+		 */
+		public function render(int $indent = 0): string {
 			$this->use();
 			return "<!DOCTYPE html>\n" . parent::render($indent);
 		}
@@ -65,6 +76,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 			parent::prepare();
 			parent::addControl($this->head = $this->createControl(HeadControl::class));

@@ -131,7 +131,10 @@
 			return $this;
 		}
 
-		public function render(int $indent = 0) {
+		/**
+		 * @inheritdoc
+		 */
+		public function render(int $indent = 0): string {
 			$this->use();
 			if ($this->styleSheetList->isEmpty() === false) {
 				$this->head->addStyleSheet($this->styleSheetCompiler->compile($this->styleSheetList)
@@ -145,6 +148,9 @@
 			return parent::render($indent);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 			parent::prepare();
 			$this->styleSheetList = $this->styleSheetCompiler;

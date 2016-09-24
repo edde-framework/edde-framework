@@ -40,7 +40,7 @@
 		 *
 		 * @return bool
 		 */
-		public function isPair();
+		public function isPair(): bool;
 
 		/**
 		 * set a html id
@@ -157,7 +157,7 @@
 		 *
 		 * @return string
 		 */
-		public function render(int $indent = 0);
+		public function render(int $indent = 0): string;
 
 		/**
 		 * load client script based on a current class name
