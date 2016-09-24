@@ -63,13 +63,14 @@
 				$this->compiler->runtimeMacro($node);
 			}
 			$this->write('break;', 5);
-			$caseList = $this->compiler->getVariable($caseListId = (static::class . '/cast-list'), [null]);
+			$caseList = $this->compiler->getVariable($caseListId = (static::class . '/cast-list'), [null => null]);
 			/** @var $nodeList INode[] */
 			foreach ($this->compiler->getBlockList() as $id => $nodeList) {
 				if (isset($caseList[$id])) {
 					continue;
 				}
 				$caseList[$id] = $id;
+				/** @noinspection DisconnectedForeachInstructionInspection */
 				$this->compiler->setVariable($caseListId, $caseList);
 				$this->write(sprintf('case %s:', var_export($id, true)), 4);
 				foreach ($nodeList as $node) {
@@ -82,6 +83,11 @@
 					throw new %s(sprintf('Requested unknown snippet [%%s].', \$snippet));
 			}", TemplateException::class), 4);
 			$this->write("return \$root;", 3);
+			$this->write('}', 2);
+			$this->write('');
+			$this->write('public function getBlockList(): array {', 2);
+			unset($caseList[null]);
+			$this->write('return ' . var_export(array_keys($caseList), true) . ';', 3);
 			$this->write('}', 2);
 			$this->write('}', 1);
 			$file->close();
