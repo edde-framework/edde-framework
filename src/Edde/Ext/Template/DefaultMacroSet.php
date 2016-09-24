@@ -16,6 +16,7 @@
 	use Edde\Common\Html\Macro\HeaderMacro;
 	use Edde\Common\Html\Macro\HtmlMacro;
 	use Edde\Common\Html\Macro\JsMacro;
+	use Edde\Common\Html\Macro\LoadMacro;
 	use Edde\Common\Html\Macro\LoopMacro;
 	use Edde\Common\Html\PlaceholderControl;
 	use Edde\Common\Html\Tag\DivControl;
@@ -24,8 +25,8 @@
 	use Edde\Common\Template\Inline\BlockInline;
 	use Edde\Common\Template\Inline\IncludeInline;
 	use Edde\Common\Template\Macro\BlockMacro;
+	use Edde\Common\Template\Macro\ImportMacro;
 	use Edde\Common\Template\Macro\IncludeMacro;
-	use Edde\Common\Template\Macro\UseMacro;
 	use Edde\Common\Template\MacroSet;
 
 	/**
@@ -43,10 +44,11 @@
 			$macroSet = new MacroSet();
 			$macroSet->onSetup(function (MacroSet $macroSet) use ($container) {
 				$macroSet->setMacroList([
-					$container->inject(new UseMacro()),
+					$container->inject(new ControlMacro()),
+					$container->inject(new ImportMacro()),
+					$container->inject(new LoadMacro()),
 					$container->inject(new IncludeMacro()),
 					$container->inject(new BlockMacro()),
-					$container->inject(new ControlMacro()),
 					$container->inject(new LoopMacro()),
 					$container->inject(new CallMacro()),
 					$container->inject(new CssMacro()),

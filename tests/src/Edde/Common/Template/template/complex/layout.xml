@@ -1,4 +1,25 @@
 <control foo="@current-method-call()" title="foo">
+	<div class="this-will-be-loaded-on-demand">
+		<!--
+			m:load will load the given template on demand; it supports
+			relative file reference (./ prefix) and "absolute" path reference from
+			application root (/ prefix)
+
+			the template will be executed on root snippet call (a snippet without a name)
+		-->
+		<m:load src="./on-demand.xml"/>
+	</div>
+	<div class="this-will-be-loaded-on-demand" m:snippet="beast-on-demand">
+		<!--
+			m:load will load the given template on demand; it supports
+			relative file reference (./ prefix) and "absolute" path reference from
+			application root (/ prefix)
+
+			the template will be executed on root snippet call (a snippet without a name)
+		-->
+		<m:load src="./on-demand.xml"/>
+	</div>
+
 	<call method="\SomeService\From\Container::call()"/>
 	<call method="@middle-local-method-call()"/>
 	<call method=".middle-root-method-call()"/>
@@ -21,9 +42,16 @@
 		</div>
 	</div>
 
-	<!-- use template as source for block definitions -->
-	<t:use src="./block-foo.xml"/>
+	<!--
+		t:import macro executes the given template but do not modify the current node tree;
+		this is useful for loading external block definitions (t:block macros)
+	-->
+	<t:import src="./block-foo.xml"/>
 
+	<!--
+		t:include macro will include the given source in the current node tree, so node tree
+		will be modified and executed in compile time
+	-->
 	<t:include src="deep-block"/>
 	<t:include src="deep-block"/>
 

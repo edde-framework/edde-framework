@@ -8,6 +8,13 @@
 	 * control side.
 	 */
 	class CallMacro extends AbstractHtmlMacro {
+		/**
+		 * I once got an especially helpful reply to a question I asked on Microsoft's on-line tech support service. I wrote back to thank them for a complete and concise reply, and said how much I appreciated it.
+		 *
+		 * The next day I had a response:
+		 *
+		 * "We are looking into the problem and will contact you with a solution as soon as possible."
+		 */
 		public function __construct() {
 			parent::__construct('call', false);
 		}

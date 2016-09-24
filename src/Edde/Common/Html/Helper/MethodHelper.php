@@ -20,7 +20,7 @@
 			if ($match = StringUtils::match($value, '~^(?<type>\.|@)(?<method>[a-z0-9-]+)\(\)$~', true, true)) {
 				$control = [
 					'.' => '$root',
-					'@' => '$control',
+					'@' => '$stack->top()',
 				];
 				return sprintf('%s->%s()', $control[$match['type']], StringUtils::camelize($match['method'], null, true));
 			} else if ($match = StringUtils::match($value, '~^(?<class>(\\\\[a-zA-Z0-9_]+)+)::(?<method>[a-zA-Z_]+)\(\)$~', true, true)) {

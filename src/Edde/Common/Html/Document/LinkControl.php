@@ -10,7 +10,7 @@
 			return 'link';
 		}
 
-		public function isPair() {
+		public function isPair(): bool {
 			return false;
 		}
 	}

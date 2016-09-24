@@ -17,7 +17,7 @@
 			return $this;
 		}
 
-		public function isPair() {
+		public function isPair(): bool {
 			return false;
 		}
 

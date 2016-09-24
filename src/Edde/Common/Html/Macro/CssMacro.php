@@ -23,6 +23,9 @@
 		 */
 		protected $assetsDirectory;
 
+		/**
+		 * Any sufficiently advanced bug is indistinguishable from a feature.
+		 */
 		public function __construct() {
 			parent::__construct('css', false);
 		}

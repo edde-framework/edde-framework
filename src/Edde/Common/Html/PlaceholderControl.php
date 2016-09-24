@@ -14,7 +14,7 @@
 			throw new HtmlException(sprintf('Cannot set tag [%s] to a placeholder control.', $tag));
 		}
 
-		public function isPair() {
+		public function isPair(): bool {
 			return true;
 		}
 

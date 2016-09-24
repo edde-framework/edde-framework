@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Html\Macro;
 
+	use Edde\Api\File\IFile;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\TemplateException;
@@ -15,10 +16,18 @@
 	class ControlMacro extends AbstractHtmlMacro {
 		use HomeDirectoryTrait;
 
+		/**
+		 * Base 8 is just like base 10, if you are missing two fingers.
+		 */
 		public function __construct() {
 			parent::__construct('control', false);
 		}
 
+		/**
+		 * Execute template generation; this is "entry point" macro for template support over html controls.
+		 *
+		 * @return IFile
+		 */
 		public function onMacro() {
 			if ($this->macro->isRoot() === false || $this->macro->getMeta('included', false)) {
 				$this->compile();
@@ -33,7 +42,9 @@
 			$this->write('/**', 1);
 			$this->write(sprintf(' * @generated at %s', (new \DateTime())->format('Y-m-d H:i:s')), 1);
 			$this->write(' * automagically generated template file from the following source list:', 1);
-			foreach ($this->compiler->getVariable('name-list') as $name) {
+			/** @var $nameList array */
+			$nameList = $this->compiler->getVariable('name-list', []);
+			foreach ($nameList as $name) {
 				$this->write(sprintf(' *   - %s', $name), 1);
 			}
 			$this->write(' */', 1);

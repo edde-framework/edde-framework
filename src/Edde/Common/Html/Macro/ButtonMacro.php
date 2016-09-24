@@ -6,7 +6,13 @@
 	use Edde\Api\Node\INode;
 	use Edde\Common\Html\Tag\ButtonControl;
 
+	/**
+	 * Special case of Control macro for button control support.
+	 */
 	class ButtonMacro extends HtmlMacro {
+		/**
+		 * BASIC is to computer programming as "qwerty" is to typing.
+		 */
 		public function __construct() {
 			parent::__construct('button', ButtonControl::class);
 		}

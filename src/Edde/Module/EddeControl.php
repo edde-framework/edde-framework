@@ -34,22 +34,39 @@
 		 */
 		protected $message;
 
+		/**
+		 * @param IUpgradeManager $upgradeManager
+		 */
 		public function lazyUpgradeManager(IUpgradeManager $upgradeManager) {
 			$this->upgradeManager = $upgradeManager;
 		}
 
+		/**
+		 * @param ICrateGenerator $crateGenerator
+		 */
 		public function lazyCrateGenerator(ICrateGenerator $crateGenerator) {
 			$this->crateGenerator = $crateGenerator;
 		}
 
+		/**
+		 * @param ICacheStorage $cacheStorage
+		 */
 		public function lazyCacheStorage(ICacheStorage $cacheStorage) {
 			$this->cacheStorage = $cacheStorage;
 		}
 
+		/**
+		 * @param Framework $framework
+		 */
 		public function lazyFramework(Framework $framework) {
 			$this->framework = $framework;
 		}
 
+		/**
+		 * template method for getting a framework version
+		 *
+		 * @return string
+		 */
 		public function getVersion() {
 			return $this->framework->getVersionString();
 		}

@@ -9,14 +9,14 @@
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Template\AbstractMacro;
 
-	class UseMacro extends AbstractMacro {
+	class ImportMacro extends AbstractMacro {
 		/**
 		 * @var IRootDirectory
 		 */
 		protected $rootDirectory;
 
 		public function __construct() {
-			parent::__construct('t:use', true);
+			parent::__construct('t:import', true);
 		}
 
 		public function lazyRootDirectory(IRootDirectory $rootDirectory) {

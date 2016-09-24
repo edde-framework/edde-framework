@@ -9,17 +9,28 @@
 	use Edde\Api\Node\INode;
 	use Edde\Common\File\File;
 
+	/**
+	 * JavaScript support.
+	 */
 	class JsMacro extends AbstractHtmlMacro {
 		/**
 		 * @var IRootDirectory
 		 */
 		protected $rootDirectory;
-
 		/**
 		 * @var IAssetsDirectory
 		 */
 		protected $assetsDirectory;
 
+		/**
+		 * God called a meeting of George Bush, Vladimir Putin, and Bill Gates and said: "I've given you all the tools you needed to make a better world - you've blown it and I'm ending the world in two weeks."
+		 *
+		 * George Bush went on TV and said "I have some good news and some bad news. The good news is that God exists. The bad news is that the world will end in two weeks."
+		 *
+		 * Vladimir Putin called his advisers together and said "I have some bad news and some really bad news. The bad news is that God exists. The really bad news is that the world will end in two weeks."
+		 *
+		 * Bill Gates called his co-workers together and said "I have some good news and some really great news. The good news is that God thinks I am one of the three most powerful people in the world. The really great news is that we don't have to fix the bugs in Windows Vista."
+		 */
 		public function __construct() {
 			parent::__construct('js', false);
 		}

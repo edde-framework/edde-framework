@@ -5,12 +5,23 @@
 
 	use Edde\Common\Html\AbstractHtmlControl;
 
+	/**
+	 * Body html tag.
+	 */
 	class BodyControl extends AbstractHtmlControl {
+		/** @noinspection PhpMissingParentCallCommonInspection */
+		/**
+		 * @inheritdoc
+		 */
 		public function getTag() {
 			return 'body';
 		}
 
-		public function isPair() {
+		/** @noinspection PhpMissingParentCallCommonInspection */
+		/**
+		 * @inheritdoc
+		 */
+		public function isPair(): bool {
 			return true;
 		}
 	}

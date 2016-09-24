@@ -9,6 +9,10 @@
 	 * Inline support for block macro.
 	 */
 	class BlockInline extends AbstractInline {
+		/**
+		 * "The question of whether computers can think is just like the question of whether submarines can swim."
+		 * - Edsger W. Dijkstra
+		 */
 		public function __construct() {
 			parent::__construct('t:block', true);
 		}

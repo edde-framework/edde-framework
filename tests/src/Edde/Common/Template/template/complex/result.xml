@@ -1,4 +1,11 @@
 <div foo="yahoo!" title="foo" class="root">
+	<div class="this-will-be-loaded-on-demand">
+		<span class="Hey, I'm alive!"></span>
+		<div>
+			<div class="hello there!"></div>
+		</div>
+		<div class="poo-class">poo</div>
+	</div>
 	<div>cha!</div>
 	<div>even bigger cha!</div>
 	<div>ou-yay!</div>

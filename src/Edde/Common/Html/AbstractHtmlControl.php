@@ -180,7 +180,10 @@
 			return $this;
 		}
 
-		public function render(int $indent = 0) {
+		/**
+		 * @inheritdoc
+		 */
+		public function render(int $indent = 0): string {
 			$this->use();
 			$content = [];
 			/** @var $control IHtmlControl */
@@ -190,7 +193,7 @@
 				}
 				return implode('', $content);
 			}
-			$content[] = $indent = str_repeat("\t", $this->node->getLevel() + $indent);
+			$content[] = $indentantion = str_repeat("\t", $this->node->getLevel() + $indent);
 			$content[] = '<' . $this->getTag();
 			foreach ($this->getAttributeList() as $name => $list) {
 				if (is_array($list)) {
@@ -204,25 +207,28 @@
 			$newline = "\n";
 			if (($value = $this->node->getValue()) !== null) {
 				$newline = null;
-				$indent = null;
+				$indentantion = null;
 				$content[] = $value;
 			}
 			if ($this->node->isLeaf() && $this->isPair() === true) {
 				$newline = null;
-				$indent = null;
+				$indentantion = null;
 			}
 			$content[] = $newline;
 			foreach ($this->getControlList() as $control) {
 				if ($control->isDirty()) {
-					$content[] = $control->render();
+					$content[] = $control->render($indent);
 				}
 			}
 			if ($this->isPair()) {
-				$content[] = $indent . '</' . $this->getTag() . ">\n";
+				$content[] = $indentantion . '</' . $this->getTag() . ">\n";
 			}
 			return implode('', $content);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getTag() {
 			$this->use();
 			return $this->node->getMeta('tag');
@@ -233,7 +239,10 @@
 			return $this->node->getAttributeList();
 		}
 
-		public function isPair() {
+		/**
+		 * @inheritdoc
+		 */
+		public function isPair(): bool {
 			$this->use();
 			return $this->node->getMeta('pair', true);
 		}
