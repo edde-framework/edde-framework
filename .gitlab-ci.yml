@@ -5,8 +5,8 @@ variables:
 
 stages:
     - test
-    - compile
-    - package
+#    - compile
+#    - package
     - deploy
 
 test:
@@ -52,8 +52,8 @@ deploy:
     script:
         - curl -X POST -F token=$PAGE_TOKEN -F ref=master $PAGE_TRIGGER
         - curl -X POST -F token=$COMPOSER_TOKEN -F ref=master $COMPOSER_TRIGGER
-    dependencies:
-        - compile
+#    dependencies:
+#        - compile
     only:
         - master
         - tags
