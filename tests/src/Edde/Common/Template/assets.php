@@ -44,6 +44,14 @@
 			$divControl->addClass('passed-03');
 		}
 
+		public function gimmeSomeIterator() {
+			return [
+				'class-a',
+				'class-b',
+				'class-c',
+			];
+		}
+
 		public function loopFromRoot() {
 			return [];
 		}

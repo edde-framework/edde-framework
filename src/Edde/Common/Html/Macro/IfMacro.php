@@ -6,14 +6,16 @@
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
+	use Edde\Api\Template\IHelper;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Strings\StringUtils;
+	use Edde\Common\Template\HelperSet;
 
 	/**
 	 * Condition macro support.
 	 */
-	class IfMacro extends AbstractHtmlMacro {
+	class IfMacro extends AbstractHtmlMacro implements IHelper {
 		/**
 		 * @var ICryptEngine
 		 */
@@ -31,6 +33,38 @@
 		 */
 		public function lazyCryptEngine(ICryptEngine $cryptEngine) {
 			$this->cryptEngine = $cryptEngine;
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws MacroException
+		 */
+		public function helper(INode $macro, ICompiler $compiler, $value, ...$parameterList) {
+			/** @var $stack \SplStack */
+			$stack = $compiler->getVariable(static::class);
+			if ($value === null) {
+				return null;
+			} else if ($value === '?:') {
+				return '$if_' . $stack->top();
+			} else if ($match = StringUtils::match($value, '~\?:(?<jump>\$|\.|\d+)?(\->(?<call>[a-z0-9-]+\(\)))?~', true, true)) {
+				$jump = $match['jump'] ?? 0;
+				if ($jump === '$') {
+					$jump = 1;
+				} else if ($jump === '.') {
+					$jump = $stack->count();
+				}
+				$loop = null;
+				foreach ($stack as $loop) {
+					if ($jump-- <= 0) {
+						break;
+					}
+				}
+				if ($loop === null) {
+					throw new MacroException(sprintf('There are no loops for macro [%s].', $macro->getPath()));
+				}
+				return '$if_' . $loop . (isset($match['call']) ? '->' . StringUtils::camelize($match['call'], null, true) : '');
+			}
+			return null;
 		}
 
 		/**
@@ -64,5 +98,11 @@
 				return sprintf('%s->%s()', self::$reference[$type], $src);
 			}
 			return sprintf('%s::getProperty(%s, %s)', ReflectionUtils::class, self::$reference[$type], var_export($src, true));
+		}
+
+		protected function prepare() {
+			parent::prepare();
+			$this->helperSet = new HelperSet();
+			$this->helperSet->registerHelper($this);
 		}
 	}

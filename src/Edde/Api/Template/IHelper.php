@@ -3,6 +3,8 @@
 
 	namespace Edde\Api\Template;
 
+	use Edde\Api\Node\INode;
+
 	/**
 	 * Helper is used for attribute value filtering.
 	 */
@@ -10,11 +12,12 @@
 		/**
 		 * when null is returned, next helper should be executed
 		 *
+		 * @param INode $macro
 		 * @param ICompiler $compiler
 		 * @param mixed $value
 		 * @param array ...$parameterList
 		 *
 		 * @return mixed|null
 		 */
-		public function helper(ICompiler $compiler, $value, ...$parameterList);
+		public function helper(INode $macro, ICompiler $compiler, $value, ...$parameterList);
 	}

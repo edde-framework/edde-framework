@@ -34,7 +34,11 @@
 			$this->cryptEngine = $cryptEngine;
 		}
 
-		public function helper(ICompiler $compiler, $value, ...$parameterList) {
+		/**
+		 * @inheritdoc
+		 * @throws MacroException
+		 */
+		public function helper(INode $macro, ICompiler $compiler, $value, ...$parameterList) {
 			/** @var $stack \SplStack */
 			$stack = $compiler->getVariable(static::class);
 			if ($value === null) {
@@ -60,7 +64,7 @@
 					}
 				}
 				if ($loop === null) {
-					throw new MacroException(sprintf('There are no loops for macro [%s].', $this->macro->getPath()));
+					throw new MacroException(sprintf('There are no loops for macro [%s].', $macro->getPath()));
 				}
 				list($key, $value) = $loop;
 				if ($type === '#') {
@@ -83,7 +87,8 @@
 				$value = str_replace('-', '_', $this->cryptEngine->guid()),
 			];
 			$this->write($compiler, '$control = $stack->top();', 5);
-			$this->write($compiler, sprintf('foreach(%s as $key_%s => $value_%s) {', $this->loop($compiler, $this->attribute($macro, $compiler, 'src', false)), $key, $value), 5);
+			$src = $this->attribute($macro, $compiler, 'src', false);
+			$this->write($compiler, sprintf('foreach(%s as $key_%s => $value_%s) {', ($helper = $compiler->helper($macro, $src)) ? $helper : $this->loop($compiler, $src), $key, $value), 5);
 			$stack->push($loop);
 			foreach ($macro->getNodeList() as $node) {
 				$compiler->runtimeMacro($node);
@@ -93,12 +98,9 @@
 		}
 
 		protected function loop(ICompiler $compiler, string $src) {
-			if ($src[0] === '.') {
-				return '$root->' . StringUtils::camelize(substr($src, 1), null, true);
-			} else if ($src[0] === '@') {
-				return '$control->' . StringUtils::camelize(substr($src, 1), null, true);
-			} else if ($src[0] === ':') {
-				return '$control->getRoot()->' . StringUtils::camelize(substr($src, 1), null, true);
+			$type = $src[0];
+			if (isset(self::$reference[$type])) {
+				return sprintf('%s->%s', self::$reference[$type], StringUtils::camelize(substr($src, 1), null, true));
 			} else if ($src === '$:') {
 				list($key, $value) = $compiler->getVariable(static::class)
 					->top();

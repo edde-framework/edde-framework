@@ -31,6 +31,11 @@
 	<span class="I'll see this one()">
 		<div class="foo"></div>
 	</span>
+	<div class="strange-if-usecase">
+		<span class="class-a"></span>
+		<span class="class-b"></span>
+		<span class="class-c"></span>
+	</div>
 	<span class="included-variable">
 		<div class="foo-bar"></div>
 		<div class="boo-far">

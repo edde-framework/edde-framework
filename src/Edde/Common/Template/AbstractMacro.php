@@ -125,7 +125,7 @@
 			if (($attribute = $macro->getAttribute($name)) === null) {
 				throw new MacroException(sprintf('Missing attribute [%s] in macro node [%s].', $name, $macro->getPath()));
 			}
-			return ($helper && $filter = $compiler->helper($attribute)) ? $filter : $attribute;
+			return ($helper && $filter = $compiler->helper($macro, $attribute)) ? $filter : $attribute;
 		}
 
 		/**
@@ -140,7 +140,7 @@
 		protected function getAttributeList(INode $macro, ICompiler $compiler, callable $default = null): array {
 			$attributeList = [];
 			foreach ($macro->getAttributeList() as $k => &$v) {
-				$v = ($value = $compiler->helper($v)) !== null ? $value : ($default ? $default($v) : $v);
+				$v = ($value = $compiler->helper($macro, $v)) !== null ? $value : ($default ? $default($v) : $v);
 				$attributeList[$k] = $v;
 			}
 			unset($v);
