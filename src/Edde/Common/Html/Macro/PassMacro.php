@@ -32,15 +32,10 @@
 			$target = str_replace('()', '', $target);
 			$type = $target[0];
 			$target = StringUtils::camelize(substr($target, 1), null, true);
-			$reference = [
-				'.' => '$root',
-				'@' => '$control',
-				':' => '$control->getRoot()',
-			];
 			if ($func === false) {
-				$this->write($compiler, sprintf('%s::setProperty(%s, %s, $control);', ReflectionUtils::class, $reference[$type], var_export($target, true)), 5);
+				$this->write($compiler, sprintf('%s::setProperty(%s, %s, $control);', ReflectionUtils::class, self::$reference[$type], var_export($target, true)), 5);
 				return;
 			}
-			$this->write($compiler, sprintf('%s->%s($control);', $reference[$type], $target), 5);
+			$this->write($compiler, sprintf('%s->%s($control);', self::$reference[$type], $target), 5);
 		}
 	}

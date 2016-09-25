@@ -255,12 +255,12 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function helper($value) {
+		public function helper(INode $macro, $value) {
 			$this->use();
 			$result = null;
 			foreach ($this->helperSetList as $helperSet) {
 				foreach ($helperSet->getHelperList() as $helper) {
-					if (($result = $helper->helper($this, $value)) !== null) {
+					if (($result = $helper->helper($macro, $this, $value)) !== null) {
 						break 2;
 					}
 				}

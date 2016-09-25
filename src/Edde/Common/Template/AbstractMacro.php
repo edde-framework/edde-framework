@@ -95,10 +95,18 @@
 		 *
 		 * @return mixed|null|string
 		 */
-		public function extract(INode $macro, string $name, $default = null) {
+		public function extract(INode $macro, string $name = null, $default = null) {
+			$name = $name ?: $this->getName();
 			$attribute = $macro->getAttribute($name, $default);
 			$macro->removeAttribute($name);
 			return $attribute;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getName(): string {
+			return $this->name;
 		}
 
 		/**
@@ -117,14 +125,7 @@
 			if (($attribute = $macro->getAttribute($name)) === null) {
 				throw new MacroException(sprintf('Missing attribute [%s] in macro node [%s].', $name, $macro->getPath()));
 			}
-			return ($helper && $filter = $compiler->helper($attribute)) ? $filter : $attribute;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getName(): string {
-			return $this->name;
+			return ($helper && $filter = $compiler->helper($macro, $attribute)) ? $filter : $attribute;
 		}
 
 		/**
@@ -139,7 +140,7 @@
 		protected function getAttributeList(INode $macro, ICompiler $compiler, callable $default = null): array {
 			$attributeList = [];
 			foreach ($macro->getAttributeList() as $k => &$v) {
-				$v = ($value = $compiler->helper($v)) !== null ? $value : ($default ? $default($v) : $v);
+				$v = ($value = $compiler->helper($macro, $v)) !== null ? $value : ($default ? $default($v) : $v);
 				$attributeList[$k] = $v;
 			}
 			unset($v);

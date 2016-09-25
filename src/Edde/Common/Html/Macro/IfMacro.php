@@ -8,23 +8,24 @@
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelper;
 	use Edde\Api\Template\MacroException;
+	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\HelperSet;
 
 	/**
-	 * Macro for loop support.
+	 * Condition macro support.
 	 */
-	class LoopMacro extends AbstractHtmlMacro implements IHelper {
+	class IfMacro extends AbstractHtmlMacro implements IHelper {
 		/**
 		 * @var ICryptEngine
 		 */
 		protected $cryptEngine;
 
 		/**
-		 * You never finish a program, you just stop working on it.
+		 * MS-DOS is like the US railroad system. It's there, but people just ignore it and find other ways of getting where they want to go.
 		 */
 		public function __construct() {
-			parent::__construct('loop', false);
+			parent::__construct('if', false);
 		}
 
 		/**
@@ -43,15 +44,10 @@
 			$stack = $compiler->getVariable(static::class);
 			if ($value === null) {
 				return null;
-			} else if ($value === '$:') {
-				list($key, $value) = $stack->top();
-				return '$value_' . $value;
-			} else if ($value === '$#') {
-				list($key, $value) = $stack->top();
-				return '$key_' . $key;
-			} else if ($match = StringUtils::match($value, '~\$(?<type>:|#)(?<jump>\$|\.|\d+)?(\->(?<call>[a-z0-9-]+\(\)))?~', true, true)) {
+			} else if ($value === '?:') {
+				return '$if_' . $stack->top();
+			} else if ($match = StringUtils::match($value, '~\?:(?<jump>\$|\.|\d+)?(\->(?<call>[a-z0-9-]+\(\)))?~', true, true)) {
 				$jump = $match['jump'] ?? 0;
-				$type = $match['type'];
 				if ($jump === '$') {
 					$jump = 1;
 				} else if ($jump === '.') {
@@ -66,11 +62,7 @@
 				if ($loop === null) {
 					throw new MacroException(sprintf('There are no loops for macro [%s].', $macro->getPath()));
 				}
-				list($key, $value) = $loop;
-				if ($type === '#') {
-					return '$key_' . $key;
-				}
-				return '$value_' . $value . (isset($match['call']) ? '->' . StringUtils::camelize($match['call'], null, true) : '');
+				return '$if_' . $loop . (isset($match['call']) ? '->' . StringUtils::camelize($match['call'], null, true) : '');
 			}
 			return null;
 		}
@@ -82,14 +74,9 @@
 		public function macro(INode $macro, ICompiler $compiler) {
 			/** @var $stack \SplStack */
 			$stack = $compiler->getVariable(static::class, new \SplStack());
-			$loop = [
-				$key = str_replace('-', '_', $this->cryptEngine->guid()),
-				$value = str_replace('-', '_', $this->cryptEngine->guid()),
-			];
-			$this->write($compiler, '$control = $stack->top();', 5);
-			$src = $this->attribute($macro, $compiler, 'src', false);
-			$this->write($compiler, sprintf('foreach(%s as $key_%s => $value_%s) {', ($helper = $compiler->helper($macro, $src)) ? $helper : $this->loop($compiler, $src), $key, $value), 5);
-			$stack->push($loop);
+			$if = str_replace('-', '_', $this->cryptEngine->guid());
+			$this->write($compiler, sprintf('if($if_%s = %s) {', $if, $this->if($this->attribute($macro, $compiler, 'src', false))), 5);
+			$stack->push($if);
 			foreach ($macro->getNodeList() as $node) {
 				$compiler->runtimeMacro($node);
 			}
@@ -97,16 +84,20 @@
 			$this->write($compiler, '}', 5);
 		}
 
-		protected function loop(ICompiler $compiler, string $src) {
+		/**
+		 * @param string $src
+		 *
+		 * @return string
+		 */
+		protected function if (string $src): string {
+			$func = substr($src, -2) === '()';
+			$src = str_replace('()', '', $src);
 			$type = $src[0];
-			if (isset(self::$reference[$type])) {
-				return sprintf('%s->%s', self::$reference[$type], StringUtils::camelize(substr($src, 1), null, true));
-			} else if ($src === '$:') {
-				list($key, $value) = $compiler->getVariable(static::class)
-					->top();
-				return '$value_' . $value;
+			$src = StringUtils::camelize(substr($src, 1), null, true);
+			if ($func) {
+				return sprintf('%s->%s()', self::$reference[$type], $src);
 			}
-			return var_export($src, true);
+			return sprintf('%s::getProperty(%s, %s)', ReflectionUtils::class, self::$reference[$type], var_export($src, true));
 		}
 
 		protected function prepare() {

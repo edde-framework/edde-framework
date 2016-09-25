@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Html\Helper;
 
+	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\AbstractHelper;
@@ -14,7 +15,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function helper(ICompiler $compiler, $value, ...$parameterList) {
+		public function helper(INode $macro, ICompiler $compiler, $value, ...$parameterList) {
 			if ($value === null) {
 				return null;
 			}

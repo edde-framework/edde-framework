@@ -109,11 +109,12 @@
 		/**
 		 * execute all available helpers agains the given value of attribute
 		 *
+		 * @param INode $macro
 		 * @param string $value
 		 *
-		 * @return string|null
+		 * @return null|string
 		 */
-		public function helper($value);
+		public function helper(INode $macro, $value);
 
 		/**
 		 * block under the given id

@@ -17,6 +17,16 @@
 		 * @var SpanControl
 		 */
 		public $includedVariable;
+		protected $trueVariableReference = true;
+		protected $falseVariableReference = false;
+
+		public function trueMethod() {
+			return true;
+		}
+
+		public function falseMethod() {
+			return false;
+		}
 
 		public function spanMethodCall(SpanControl $spanControl) {
 			$this->spanControl = $spanControl;
@@ -32,6 +42,14 @@
 
 		public function passChild3(DivControl $divControl) {
 			$divControl->addClass('passed-03');
+		}
+
+		public function gimmeSomeIterator() {
+			return [
+				'class-a',
+				'class-b',
+				'class-c',
+			];
 		}
 
 		public function loopFromRoot() {

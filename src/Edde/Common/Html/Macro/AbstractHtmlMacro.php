@@ -12,6 +12,12 @@
 	 * Abstract class for all html package based macros.
 	 */
 	abstract class AbstractHtmlMacro extends AbstractMacro {
+		static protected $reference = [
+			':' => '$control->getRoot()',
+			'.' => '$root',
+			'@' => '$control',
+		];
+
 		/**
 		 * write (export) text value from macro node
 		 *
@@ -20,7 +26,7 @@
 		 */
 		protected function writeTextValue(INode $macro, ICompiler $compiler) {
 			if (($value = $this->extract($macro, 'value', $macro->isLeaf() ? $macro->getValue() : null)) !== null) {
-				$this->write($compiler, sprintf('$control->setText(%s);', ($helper = $compiler->helper($value)) ? $helper : var_export($value, true)), 5);
+				$this->write($compiler, sprintf('$control->setText(%s);', ($helper = $compiler->helper($macro, $value)) ? $helper : var_export($value, true)), 5);
 			}
 		}
 

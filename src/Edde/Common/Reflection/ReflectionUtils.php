@@ -19,12 +19,32 @@
 		 *
 		 * @throws ReflectionException
 		 */
-		static public function setProperty($object, $property, $value) {
+		static public function setProperty($object, string $property, $value) {
 			try {
 				$reflectionClass = new \ReflectionClass($object);
 				$reflectionProperty = $reflectionClass->getProperty($property);
 				$reflectionProperty->setAccessible(true);
 				$reflectionProperty->setValue($object, $value);
+			} catch (\ReflectionException $exception) {
+				throw new ReflectionException(sprintf('Property [%s::$%s] does not exists.', get_class($object), $property));
+			}
+		}
+
+		/**
+		 * bypass visibility and reads the given property of the given object
+		 *
+		 * @param $object
+		 * @param $property
+		 *
+		 * @return mixed
+		 * @throws ReflectionException
+		 */
+		static public function getProperty($object, string $property) {
+			try {
+				$reflectionClass = new \ReflectionClass($object);
+				$reflectionProperty = $reflectionClass->getProperty($property);
+				$reflectionProperty->setAccessible(true);
+				return $reflectionProperty->getValue($object);
 			} catch (\ReflectionException $exception) {
 				throw new ReflectionException(sprintf('Property [%s::$%s] does not exists.', get_class($object), $property));
 			}

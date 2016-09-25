@@ -23,6 +23,6 @@
 		 * @throws MacroException
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
-			$this->write($compiler, sprintf('$this->block($stack->top(), %s);', ($helper = $compiler->helper($src = $this->attribute($macro, $compiler, 'src', false))) ? $helper : var_export($src, true)), 5);
+			$this->write($compiler, sprintf('$this->block($stack->top(), %s);', ($helper = $compiler->helper($macro, $src = $this->attribute($macro, $compiler, 'src', false))) ? $helper : var_export($src, true)), 5);
 		}
 	}

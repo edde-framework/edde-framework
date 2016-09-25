@@ -31,12 +31,7 @@
 			if (substr($action, -2) === '()') {
 				$type = $action[0];
 				$action = var_export(str_replace('()', '', substr($action, 1)), true);
-				$reference = [
-					'.' => '$root',
-					'@' => '$control',
-					':' => '$control->getRoot()',
-				];
-				return sprintf('[%s, %s]', $reference[$type], $action);
+				return sprintf('[%s, %s]', self::$reference[$type], $action);
 			}
 			return var_export($action, true);
 		}

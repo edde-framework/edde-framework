@@ -8,6 +8,22 @@
 		<div class="child-03"/>
 	</span>
 
+	<span class="I'll see this one" m:if=":true-variable-reference">
+		<div class="foo"/>
+	</span>
+	<span class="This one will not pass" m:if=":false-variable-reference"/>
+
+	<span class="I'll see this one()" m:if=":true-method()">
+		<div class="foo"/>
+	</span>
+	<span class="This one will not pass()" m:if=":false-method()"/>
+
+	<div class="strange-if-usecase" m:if=":gimme-some-iterator()">
+		<loop src="?:">
+			<span class="$:"/>
+		</loop>
+	</div>
+
 	<span class="included-variable" t:include="./pass-include.xml" m:pass=":included-variable"/>
 
 	<span class="foo" m:pass=":span-method-call()"/>
