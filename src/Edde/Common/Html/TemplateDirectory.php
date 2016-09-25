@@ -3,10 +3,11 @@
 
 	namespace Edde\Common\Html;
 
+	use Edde\Api\Html\ITemplateDirectory;
 	use Edde\Common\File\Directory;
 
 	/**
 	 * Default template directory.
 	 */
-	class TemplateDirectory extends Directory {
+	class TemplateDirectory extends Directory implements ITemplateDirectory {
 	}
