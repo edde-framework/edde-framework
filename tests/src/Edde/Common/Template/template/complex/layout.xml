@@ -1,4 +1,8 @@
 <control foo="@current-method-call()" title="foo">
+	<schema name="foo" schema="Bar\Foo\Fart\Poo"/>
+
+	<div m:schema="foo.property-here"/>
+
 	<switch src=":gimme-a-switch()">
 		<case name="foo">
 			<div class="foo-case"/>
