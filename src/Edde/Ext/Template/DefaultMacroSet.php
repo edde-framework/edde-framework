@@ -16,6 +16,8 @@
 	use Edde\Common\Html\Inline\SchemaInline;
 	use Edde\Common\Html\Inline\SnippetInline;
 	use Edde\Common\Html\Inline\SwitchInline;
+	use Edde\Common\Html\Input\PasswordControl;
+	use Edde\Common\Html\Input\TextControl;
 	use Edde\Common\Html\Macro\ButtonMacro;
 	use Edde\Common\Html\Macro\CallMacro;
 	use Edde\Common\Html\Macro\CaseMacro;
@@ -32,8 +34,22 @@
 	use Edde\Common\Html\Macro\SwitchMacro;
 	use Edde\Common\Html\Macro\UseMacro;
 	use Edde\Common\Html\PlaceholderControl;
+	use Edde\Common\Html\Tag\BlockquoteControl;
+	use Edde\Common\Html\Tag\CaptionControl;
+	use Edde\Common\Html\Tag\ColumnControl;
+	use Edde\Common\Html\Tag\ColumnGroupControl;
 	use Edde\Common\Html\Tag\DivControl;
+	use Edde\Common\Html\Tag\ImgControl;
+	use Edde\Common\Html\Tag\ParagraphControl;
+	use Edde\Common\Html\Tag\SectionControl;
 	use Edde\Common\Html\Tag\SpanControl;
+	use Edde\Common\Html\Tag\TableBodyControl;
+	use Edde\Common\Html\Tag\TableCellControl;
+	use Edde\Common\Html\Tag\TableControl;
+	use Edde\Common\Html\Tag\TableFootControl;
+	use Edde\Common\Html\Tag\TableHeadControl;
+	use Edde\Common\Html\Tag\TableHeaderControl;
+	use Edde\Common\Html\Tag\TableRowControl;
 	use Edde\Common\Template\HelperSet;
 	use Edde\Common\Template\Inline\BlockInline;
 	use Edde\Common\Template\Inline\IncludeInline;
@@ -74,7 +90,23 @@
 					$container->inject(new PassMacro()),
 					$container->inject(new HtmlMacro('div', DivControl::class)),
 					$container->inject(new HtmlMacro('span', SpanControl::class)),
+					$container->inject(new HtmlMacro('p', ParagraphControl::class)),
+					$container->inject(new HtmlMacro('img', ImgControl::class)),
+					$container->inject(new HtmlMacro('text', TextControl::class)),
+					$container->inject(new HtmlMacro('password', PasswordControl::class)),
 					$container->inject(new HtmlMacro('placeholder', PlaceholderControl::class)),
+					$container->inject(new HtmlMacro('table', TableControl::class)),
+					$container->inject(new HtmlMacro('thead', TableHeadControl::class)),
+					$container->inject(new HtmlMacro('tbody', TableBodyControl::class)),
+					$container->inject(new HtmlMacro('tfoot', TableFootControl::class)),
+					$container->inject(new HtmlMacro('td', TableCellControl::class)),
+					$container->inject(new HtmlMacro('tr', TableRowControl::class)),
+					$container->inject(new HtmlMacro('th', TableHeaderControl::class)),
+					$container->inject(new HtmlMacro('caption', CaptionControl::class)),
+					$container->inject(new HtmlMacro('col', ColumnControl::class)),
+					$container->inject(new HtmlMacro('colgroup', ColumnGroupControl::class)),
+					$container->inject(new HtmlMacro('blockquote', BlockquoteControl::class)),
+					$container->inject(new HtmlMacro('section', SectionControl::class)),
 					$container->inject(new HeaderMacro('h1')),
 					$container->inject(new HeaderMacro('h2')),
 					$container->inject(new HeaderMacro('h3')),
