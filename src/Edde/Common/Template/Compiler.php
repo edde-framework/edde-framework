@@ -155,16 +155,17 @@
 				}
 				return $this->runtimeMacro($this->compile($this->source));
 			} catch (\Exception $exception) {
+				$root = $this->rootDirectory->getDirectory();
 				/**
 				 * Ugly hack to set exception message without messing with a trace.
 				 */
 				$stackList = [
-					$this->source->getPath() => $this->source->getPath(),
+					$this->source->getPath() => $this->source->getRelativePath($root),
 				];
 				/** @var $file IFile */
 				while ($this->stack->isEmpty() === false) {
 					$file = $this->stack->pop();
-					$stackList[$file->getPath()] = $file->getRelativePath($this->rootDirectory->getDirectory());
+					$stackList[$file->getPath()] = $file->getRelativePath($root);
 				}
 				ReflectionUtils::setProperty($exception, 'message', sprintf("Template compilation failed: %s\nTemplate file stack:\n%s", $exception->getMessage(), implode(",\n", array_reverse($stackList, true))));
 				throw $exception;
