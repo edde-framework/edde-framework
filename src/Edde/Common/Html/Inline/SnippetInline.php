@@ -3,6 +3,9 @@
 
 	namespace Edde\Common\Html\Inline;
 
+	use Edde\Api\Node\INode;
+	use Edde\Api\Template\ICompiler;
+
 	/**
 	 * Snippet is piece of template which can be called without any other dependencies.
 	 */
@@ -18,10 +21,13 @@
 			parent::__construct('m:snippet', true);
 		}
 
-		protected function onMacro() {
-			$this->macro->setMeta('snippet', true);
-			$this->compiler->block($this->extract($this->macro, $this->getName(), null, false), [
-				$this->macro,
+		/**
+		 * @inheritdoc
+		 */
+		public function macro(INode $macro, ICompiler $compiler) {
+			$macro->setMeta('snippet', true);
+			$compiler->block($this->extract($macro, $this->getName(), null, false), [
+				$macro,
 			]);
 		}
 	}
