@@ -19,6 +19,7 @@
 			parent::__construct('m:schema', true);
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws MacroException

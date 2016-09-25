@@ -21,6 +21,7 @@
 			parent::__construct('m:snippet', true);
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 */

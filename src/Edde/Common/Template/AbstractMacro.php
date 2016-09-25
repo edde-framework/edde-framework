@@ -111,6 +111,18 @@
 		}
 
 		/**
+		 * @inheritdoc
+		 */
+		public function compile(INode $macro, ICompiler $compiler) {
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function macro(INode $macro, ICompiler $compiler) {
+		}
+
+		/**
 		 * return attribute from the given macro; throws exception if the attribute is not present
 		 *
 		 * @param INode $macro

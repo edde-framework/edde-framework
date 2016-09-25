@@ -19,6 +19,7 @@
 			parent::__construct('m:loop', true);
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws MacroException

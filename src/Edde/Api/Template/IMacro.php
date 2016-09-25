@@ -39,7 +39,15 @@
 		public function getHelperSet(): IHelperSet;
 
 		/**
-		 * execute this macro
+		 * executed in compile time
+		 *
+		 * @param INode $macro
+		 * @param ICompiler $compiler
+		 */
+		public function compile(INode $macro, ICompiler $compiler);
+
+		/**
+		 * executed in runtime phase
 		 *
 		 * @param INode $macro
 		 * @param ICompiler $compiler

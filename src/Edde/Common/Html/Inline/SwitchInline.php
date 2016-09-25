@@ -21,6 +21,7 @@
 			parent::__construct('m:switch', true);
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws MacroException

@@ -25,6 +25,7 @@
 			parent::__construct('m:case', true);
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws MacroException

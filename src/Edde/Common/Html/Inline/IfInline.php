@@ -21,6 +21,7 @@
 			parent::__construct('m:if', true);
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws MacroException

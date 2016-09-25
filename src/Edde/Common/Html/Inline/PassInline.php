@@ -18,6 +18,7 @@
 			parent::__construct('m:pass', true);
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 */
