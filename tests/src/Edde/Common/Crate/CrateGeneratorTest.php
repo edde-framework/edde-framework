@@ -59,7 +59,7 @@
 				ICrateDirectory::class => function () {
 					return $this->crateDirectory = new CrateDirectory(__DIR__ . '/temp');
 				},
-				ICacheFactory::class => DummyCacheFactory::class,
+				ICacheFactory::class => new DummyCacheFactory(),
 			]);
 
 			$this->schemaManager = $container->create(ISchemaManager::class);
