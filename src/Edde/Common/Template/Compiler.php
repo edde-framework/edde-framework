@@ -6,6 +6,7 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\File\IFile;
+	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\CompilerException;
@@ -35,6 +36,10 @@
 		 * @var ICryptEngine
 		 */
 		protected $cryptEngine;
+		/**
+		 * @var IRootDirectory
+		 */
+		protected $rootDirectory;
 		/**
 		 * @var IFile
 		 */
@@ -93,6 +98,13 @@
 		}
 
 		/**
+		 * @param IRootDirectory $rootDirectory
+		 */
+		public function lazyRootDirectory(IRootDirectory $rootDirectory) {
+			$this->rootDirectory = $rootDirectory;
+		}
+
+		/**
 		 * @inheritdoc
 		 */
 		public function registerMacroSet(IMacroSet $macroSet): ICompiler {
@@ -143,16 +155,17 @@
 				}
 				return $this->runtimeMacro($this->compile($this->source));
 			} catch (\Exception $exception) {
+				$root = $this->rootDirectory->getDirectory();
 				/**
 				 * Ugly hack to set exception message without messing with a trace.
 				 */
 				$stackList = [
-					$this->source->getPath() => $this->source->getPath(),
+					$this->source->getPath() => $this->source->getRelativePath($root),
 				];
+				/** @var $file IFile */
 				while ($this->stack->isEmpty() === false) {
-					$path = $this->stack->pop()
-						->getPath();
-					$stackList[$path] = $path;
+					$file = $this->stack->pop();
+					$stackList[$file->getPath()] = $file->getRelativePath($root);
 				}
 				ReflectionUtils::setProperty($exception, 'message', sprintf("Template compilation failed: %s\nTemplate file stack:\n%s", $exception->getMessage(), implode(",\n", array_reverse($stackList, true))));
 				throw $exception;
