@@ -83,7 +83,7 @@
 				$value = str_replace('-', '_', $this->cryptEngine->guid()),
 			];
 			$this->write($compiler, '$control = $stack->top();', 5);
-			$this->write($compiler, sprintf('foreach(%s as $key_%s => $value_%s) {', $this->loop($this->attribute($macro, $compiler, 'src', false), $compiler), $key, $value), 5);
+			$this->write($compiler, sprintf('foreach(%s as $key_%s => $value_%s) {', $this->loop($compiler, $this->attribute($macro, $compiler, 'src', false)), $key, $value), 5);
 			$stack->push($loop);
 			foreach ($macro->getNodeList() as $node) {
 				$compiler->runtimeMacro($node);
@@ -92,7 +92,7 @@
 			$this->write($compiler, '}', 5);
 		}
 
-		protected function loop(string $src, ICompiler $compiler) {
+		protected function loop(ICompiler $compiler, string $src) {
 			if ($src[0] === '.') {
 				return '$root->' . StringUtils::camelize(substr($src, 1), null, true);
 			} else if ($src[0] === '@') {

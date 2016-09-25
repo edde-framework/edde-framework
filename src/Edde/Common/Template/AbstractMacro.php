@@ -95,10 +95,18 @@
 		 *
 		 * @return mixed|null|string
 		 */
-		public function extract(INode $macro, string $name, $default = null) {
+		public function extract(INode $macro, string $name = null, $default = null) {
+			$name = $name ?: $this->getName();
 			$attribute = $macro->getAttribute($name, $default);
 			$macro->removeAttribute($name);
 			return $attribute;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getName(): string {
+			return $this->name;
 		}
 
 		/**
@@ -118,13 +126,6 @@
 				throw new MacroException(sprintf('Missing attribute [%s] in macro node [%s].', $name, $macro->getPath()));
 			}
 			return ($helper && $filter = $compiler->helper($attribute)) ? $filter : $attribute;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getName(): string {
-			return $this->name;
 		}
 
 		/**

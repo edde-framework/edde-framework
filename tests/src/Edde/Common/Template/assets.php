@@ -17,6 +17,16 @@
 		 * @var SpanControl
 		 */
 		public $includedVariable;
+		protected $trueVariableReference = true;
+		protected $falseVariableReference = false;
+
+		public function trueMethod() {
+			return true;
+		}
+
+		public function falseMethod() {
+			return false;
+		}
 
 		public function spanMethodCall(SpanControl $spanControl) {
 			$this->spanControl = $spanControl;

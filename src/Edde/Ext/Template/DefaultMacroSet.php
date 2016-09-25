@@ -8,6 +8,7 @@
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Html\Helper\MethodHelper;
+	use Edde\Common\Html\Inline\IfInline;
 	use Edde\Common\Html\Inline\PassChildInline;
 	use Edde\Common\Html\Inline\PassInline;
 	use Edde\Common\Html\Inline\SnippetInline;
@@ -17,6 +18,7 @@
 	use Edde\Common\Html\Macro\CssMacro;
 	use Edde\Common\Html\Macro\HeaderMacro;
 	use Edde\Common\Html\Macro\HtmlMacro;
+	use Edde\Common\Html\Macro\IfMacro;
 	use Edde\Common\Html\Macro\JsMacro;
 	use Edde\Common\Html\Macro\LoadMacro;
 	use Edde\Common\Html\Macro\LoopMacro;
@@ -59,6 +61,7 @@
 					$container->inject(new CssMacro()),
 					$container->inject(new JsMacro()),
 					$container->inject(new PassMacro()),
+					$container->inject(new IfMacro()),
 					$container->inject(new HtmlMacro('div', DivControl::class)),
 					$container->inject(new HtmlMacro('span', SpanControl::class)),
 					$container->inject(new HtmlMacro('placeholder', PlaceholderControl::class)),
@@ -76,6 +79,7 @@
 					$container->inject(new SnippetInline()),
 					$container->inject(new PassInline()),
 					$container->inject(new PassChildInline()),
+					$container->inject(new IfInline()),
 				]);
 			});
 			return $macroSet;

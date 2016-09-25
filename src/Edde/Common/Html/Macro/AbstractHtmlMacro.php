@@ -12,6 +12,12 @@
 	 * Abstract class for all html package based macros.
 	 */
 	abstract class AbstractHtmlMacro extends AbstractMacro {
+		static protected $reference = [
+			':' => '$control->getRoot()',
+			'.' => '$root',
+			'@' => '$control',
+		];
+
 		/**
 		 * write (export) text value from macro node
 		 *
