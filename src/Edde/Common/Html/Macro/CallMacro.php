@@ -3,6 +3,9 @@
 
 	namespace Edde\Common\Html\Macro;
 
+	use Edde\Api\Node\INode;
+	use Edde\Api\Template\ICompiler;
+
 	/**
 	 * This macro enables code execution from control "in the middle of template" - for example delegated control creation moved on the
 	 * control side.
@@ -19,7 +22,10 @@
 			parent::__construct('call', false);
 		}
 
-		protected function onMacro() {
-			$this->write($this->attribute('method') . ';', 5);
+		/**
+		 * @inheritdoc
+		 */
+		public function macro(INode $macro, ICompiler $compiler) {
+			$this->write($compiler, $this->attribute($macro, $compiler, 'method') . ';', 5);
 		}
 	}

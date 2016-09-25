@@ -3,6 +3,9 @@
 
 	namespace Edde\Common\Template\Inline;
 
+	use Edde\Api\Node\INode;
+	use Edde\Api\Template\ICompiler;
+	use Edde\Api\Template\MacroException;
 	use Edde\Common\Template\AbstractInline;
 
 	/**
@@ -17,7 +20,11 @@
 			parent::__construct('t:block', true);
 		}
 
-		public function onMacro() {
-			$this->compiler->block($this->attribute(null, false), [$this->macro]);
+		/**
+		 * @inheritdoc
+		 * @throws MacroException
+		 */
+		public function macro(INode $macro, ICompiler $compiler) {
+			$compiler->block($this->attribute($macro, $compiler, null, false), [$macro]);
 		}
 	}

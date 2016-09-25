@@ -3,10 +3,13 @@
 
 	namespace Edde\Common\Html\Macro;
 
+	use Edde\Api\File\FileException;
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Node\INode;
+	use Edde\Api\Template\ICompiler;
+	use Edde\Api\Template\MacroException;
 	use Edde\Common\File\File;
 
 	/**
@@ -35,20 +38,40 @@
 			parent::__construct('js', false);
 		}
 
+		/**
+		 * @param IRootDirectory $rootDirectory
+		 */
 		public function lazyRootDirectory(IRootDirectory $rootDirectory) {
 			$this->rootDirectory = $rootDirectory;
 		}
 
+		/**
+		 * @param IAssetsDirectory $assetsDirectory
+		 */
 		public function lazyAssetsDirectory(IAssetsDirectory $assetsDirectory) {
 			$this->assetsDirectory = $assetsDirectory;
 		}
 
-		protected function onMacro() {
-			$this->write(sprintf('$this->javaScriptList->addFile(%s);', var_export($this->file($this->attribute('src'), $this->compiler->getSource(), $this->macro)
+		/**
+		 * @inheritdoc
+		 * @throws MacroException
+		 * @throws FileException
+		 */
+		public function macro(INode $macro, ICompiler $compiler) {
+			$this->write($compiler, sprintf('$this->javaScriptList->addFile(%s);', var_export($this->file($this->attribute($macro, $compiler, 'src'), $compiler->getSource())
 				->getPath(), true)), 5);
 		}
 
-		protected function file(string $src, IFile $source, INode $macro): IFile {
+		/**
+		 * include file from the given source
+		 *
+		 * @param string $src
+		 * @param IFile $source
+		 *
+		 * @return IFile
+		 * @throws FileException
+		 */
+		protected function file(string $src, IFile $source): IFile {
 			if (strpos($src, '/') === 0) {
 				return $this->rootDirectory->file(substr($src, 1));
 			} else if (strpos($src, './') === 0) {

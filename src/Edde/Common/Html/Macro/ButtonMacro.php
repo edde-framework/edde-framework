@@ -4,6 +4,7 @@
 	namespace Edde\Common\Html\Macro;
 
 	use Edde\Api\Node\INode;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Common\Html\Tag\ButtonControl;
 
 	/**
@@ -17,9 +18,9 @@
 			parent::__construct('button', ButtonControl::class);
 		}
 
-		protected function onControl(INode $macro) {
-			if (($action = $this->extract($macro, 'action', null, false)) !== null) {
-				$this->write(sprintf('$control->setAction(%s);', $this->action($action)), 5);
+		protected function onControl(INode $macro, ICompiler $compiler) {
+			if (($action = $this->extract($macro, $compiler, 'action', null, false)) !== null) {
+				$this->write($compiler, sprintf('$control->setAction(%s);', $this->action($action)), 5);
 			}
 		}
 

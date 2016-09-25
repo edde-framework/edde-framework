@@ -22,7 +22,7 @@
 		 * @inheritdoc
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
-			$target = $this->extract($macro, $this->getName(), null, false);
+			$target = $this->extract($macro, $compiler, $this->getName(), null, false);
 			foreach ($macro->getNodeList() as $node) {
 				$nodeList = [$node];
 				while ($node->getMeta('root', false) && $node->isLeaf() === false) {

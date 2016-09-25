@@ -19,7 +19,7 @@
 		 * @param ICompiler $compiler
 		 */
 		protected function writeTextValue(INode $macro, ICompiler $compiler) {
-			if (($value = $this->extract($macro, 'value', $macro->isLeaf() ? $macro->getValue() : null, false)) !== null) {
+			if (($value = $this->extract($macro, $compiler, 'value', $macro->isLeaf() ? $macro->getValue() : null, false)) !== null) {
 				$this->write($compiler, sprintf('$control->setText(%s);', ($helper = $compiler->helper($value)) ? $helper : var_export($value, true)), 5);
 			}
 		}
@@ -40,10 +40,11 @@
 		/**
 		 * export attribute list
 		 *
+		 * @param INode $macro
 		 * @param ICompiler $compiler
 		 */
-		protected function writeAttributeList(ICompiler $compiler) {
-			$attributeList = $this->getAttributeList(function ($value) {
+		protected function writeAttributeList(INode $macro, ICompiler $compiler) {
+			$attributeList = $this->getAttributeList($macro, $compiler, function ($value) {
 				return var_export($value, true);
 			});
 			if (empty($attributeList) === false) {

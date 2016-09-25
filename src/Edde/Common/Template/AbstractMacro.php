@@ -25,14 +25,6 @@
 		 */
 		protected $compile;
 		/**
-		 * @var INode
-		 */
-		protected $macro;
-		/**
-		 * @var ICompiler
-		 */
-		protected $compiler;
-		/**
 		 * @var IHelperSet
 		 */
 		protected $helperSet;
@@ -98,42 +90,58 @@
 		 * extract an attribute and remove it from attribute list
 		 *
 		 * @param INode $macro
+		 * @param ICompiler $compiler
 		 * @param string $name
 		 * @param null $default
 		 * @param bool $helper
 		 *
 		 * @return mixed|null|string
 		 */
-		public function extract(INode $macro, string $name, $default = null, bool $helper = true) {
+		public function extract(INode $macro, ICompiler $compiler, string $name, $default = null, bool $helper = true) {
 			$attribute = $macro->getAttribute($name, $default);
 			$macro->removeAttribute($name);
-			return ($helper && $filter = $this->compiler->helper($attribute)) ? $filter : $attribute;
+			return ($helper && $filter = $compiler->helper($attribute)) ? $filter : $attribute;
 		}
 
-		public function macro(INode $macro, ICompiler $compiler) {
-			$this->macro = $macro;
-			$this->compiler = $compiler;
-			return $this->onMacro();
-		}
-
-		abstract protected function onMacro();
-
-		protected function attribute(string $name = null, bool $helper = true) {
+		/**
+		 * return attribute from the given macro; throws exception if the attribute is not present
+		 *
+		 * @param INode $macro
+		 * @param ICompiler $compiler
+		 * @param string|null $name
+		 * @param bool $helper
+		 *
+		 * @return mixed
+		 * @throws MacroException
+		 */
+		protected function attribute(INode $macro, ICompiler $compiler, string $name = null, bool $helper = true) {
 			$name = $name ?: $this->getName();
-			if (($attribute = $this->macro->getAttribute($name)) === null) {
-				throw new MacroException(sprintf('Missing attribute [%s] in macro node [%s].', $name, $this->macro->getPath()));
+			if (($attribute = $macro->getAttribute($name)) === null) {
+				throw new MacroException(sprintf('Missing attribute [%s] in macro node [%s].', $name, $macro->getPath()));
 			}
-			return ($helper && $filter = $this->compiler->helper($attribute)) ? $filter : $attribute;
+			return ($helper && $filter = $compiler->helper($attribute)) ? $filter : $attribute;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getName(): string {
 			return $this->name;
 		}
 
-		protected function getAttributeList(callable $default = null): array {
+		/**
+		 * return attribute list
+		 *
+		 * @param INode $macro
+		 * @param ICompiler $compiler
+		 * @param callable|null $default
+		 *
+		 * @return array
+		 */
+		protected function getAttributeList(INode $macro, ICompiler $compiler, callable $default = null): array {
 			$attributeList = [];
-			foreach ($this->macro->getAttributeList() as $k => &$v) {
-				$v = ($value = $this->compiler->helper($v)) !== null ? $value : ($default ? $default($v) : $v);
+			foreach ($macro->getAttributeList() as $k => &$v) {
+				$v = ($value = $compiler->helper($v)) !== null ? $value : ($default ? $default($v) : $v);
 				$attributeList[$k] = $v;
 			}
 			unset($v);

@@ -5,7 +5,9 @@
 
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
+	use Edde\Api\Template\MacroException;
 	use Edde\Common\Template\AbstractMacro;
 
 	/**
@@ -32,18 +34,31 @@
 			$this->rootDirectory = $rootDirectory;
 		}
 
-		public function onMacro() {
-			foreach ($this->include($source = $this->attribute('src'), $this->compiler->getCurrent(), $this->compiler) as $node) {
+		/**
+		 * @inheritdoc
+		 * @throws MacroException
+		 */
+		public function macro(INode $macro, ICompiler $compiler) {
+			foreach ($this->include($source = $this->attribute($macro, $compiler, 'src'), $compiler->getCurrent(), $compiler) as $node) {
 				$node = clone $node;
 				/**
 				 * mark virtual node root
 				 */
 				$node->setMeta('root', true);
 				$node->setMeta('source', $source);
-				$this->macro->addNode($node);
+				$macro->addNode($node);
 			}
 		}
 
+		/**
+		 * compute and execute include from the given source
+		 *
+		 * @param string $src
+		 * @param IFile $source
+		 * @param ICompiler $compiler
+		 *
+		 * @return array
+		 */
 		protected function include (string $src, IFile $source, ICompiler $compiler) {
 			if (strpos($src, '/') === 0) {
 				return [
@@ -55,6 +70,6 @@
 						->file(substr($src, 2))),
 				];
 			}
-			return $this->compiler->getBlock($src);
+			return $compiler->getBlock($src);
 		}
 	}
