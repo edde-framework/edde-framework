@@ -81,7 +81,7 @@
 
 		public function testCommon() {
 			$styleSheetCompiler = new StyleSheetCompiler();
-			$styleSheetCompiler->lazyFileStorage($fileStorage = new AssetStorage(new RootDirectory(__DIR__), new StorageDirectory(__DIR__ . '/public')));
+			$styleSheetCompiler->lazyAssetStorage($assetStorage = new AssetStorage(new RootDirectory(__DIR__), new StorageDirectory(__DIR__ . '/public')));
 			$styleSheetCompiler->lazyTempDirectory($this->tempDirectory);
 			$styleSheetCompiler->lazyCacheFactory(new CacheFactory(__DIR__, new FileCacheStorage(new CacheDirectory(__DIR__ . '/temp'))));
 			$styleSheetCompiler->cache();
