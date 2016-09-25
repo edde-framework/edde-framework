@@ -1,4 +1,20 @@
 <control foo="@current-method-call()" title="foo">
+	<switch src=":gimme-a-switch()">
+		<case name="foo">
+			<div class="foo-case"/>
+		</case>
+		<case name="foo">
+			<div class="foo-case2"/>
+		</case>
+		<case name="bar">
+			<div class="foo-case3"/>
+		</case>
+	</switch>
+	<div class="inline-switch" m:switch=":gimme-a-switch()">
+		<div class="foo-case" m:case="foo"/>
+		<div class="foo-case2" m:case="foo"/>
+		<div class="foo-case3" m:case="poo"/>
+	</div>
 	<span class="double-include" t:include="./double-pass-include.xml"/>
 	<span class="pass-child 01" t:include="./pass-include.xml" m:pass-child=":pass-child()"/>
 	<span class="pass-child 02" t:include="./double-pass-include.xml" m:pass-child=":pass-child2()"/>

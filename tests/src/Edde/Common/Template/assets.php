@@ -83,6 +83,10 @@
 			$this->addControl($this->createControl(DivControl::class)
 				->setText('even bigger cha!'));
 		}
+
+		public function gimmeASwitch() {
+			return 'foo';
+		}
 	}
 
 	class AnotherCoolControl extends DivControl {
