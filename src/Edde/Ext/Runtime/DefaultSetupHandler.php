@@ -56,6 +56,7 @@
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Application\Application;
 	use Edde\Common\Application\ResponseManager;
+	use Edde\Common\Asset\AssetDirectory;
 	use Edde\Common\Asset\AssetStorage;
 	use Edde\Common\Asset\StorageDirectory;
 	use Edde\Common\AssetsDirectory;
@@ -166,7 +167,7 @@
 						throw new RuntimeException(sprintf('If you want use root directory [%s], you must rregister it to the container!', IRootDirectory::class));
 					},
 					IAssetDirectory::class => function (IRootDirectory $rootDirectory) {
-						return $rootDirectory->directory('.assets');
+						return $rootDirectory->directory('.assets', AssetDirectory::class);
 					},
 					ITempDirectory::class => function (IRootDirectory $rootDirectory) {
 						return $rootDirectory->directory('temp', TempDirectory::class);
