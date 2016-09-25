@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Template;
 
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelperSet;
@@ -14,7 +15,7 @@
 	/**
 	 * Base macro for all template macros.
 	 */
-	abstract class AbstractMacro extends AbstractObject implements IMacro {
+	abstract class AbstractMacro extends AbstractObject implements IMacro, ILazyInject {
 		use UsableTrait;
 		/**
 		 * @var string
