@@ -166,7 +166,7 @@
 				IResourceManager::class => ResourceManager::class,
 				IConverterManager::class => ConverterManager::class,
 				IXmlParser::class => XmlParser::class,
-				IRootDirectory::class => new RootDirectory(__DIR__ . '/temp'),
+				IRootDirectory::class => new RootDirectory(__DIR__),
 				IAssetsDirectory::class => new AssetsDirectory(__DIR__ . '/../../../../../src/Edde/assets'),
 				ICryptEngine::class => CryptEngine::class,
 				'\SomeService\From\Container' => $this,
@@ -181,7 +181,7 @@
 					return DefaultMacroSet::helperSet($container);
 				},
 				ITempDirectory::class => function (IRootDirectory $rootDirectory) {
-					return $rootDirectory->directory('.', TempDirectory::class)
+					return $rootDirectory->directory('temp', TempDirectory::class)
 						->create();
 				},
 				ITemplateDirectory::class => function (ITempDirectory $tempDirectory) {
