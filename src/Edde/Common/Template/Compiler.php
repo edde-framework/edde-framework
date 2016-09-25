@@ -71,14 +71,23 @@
 			$this->source = $source;
 		}
 
+		/**
+		 * @param IContainer $container
+		 */
 		public function lazyContainer(IContainer $container) {
 			$this->container = $container;
 		}
 
+		/**
+		 * @param IResourceManager $resourceManager
+		 */
 		public function lazyResourceManager(IResourceManager $resourceManager) {
 			$this->resourceManager = $resourceManager;
 		}
 
+		/**
+		 * @param ICryptEngine $cryptEngine
+		 */
 		public function lazyCryptEngine(ICryptEngine $cryptEngine) {
 			$this->cryptEngine = $cryptEngine;
 		}
@@ -251,7 +260,7 @@
 			$result = null;
 			foreach ($this->helperSetList as $helperSet) {
 				foreach ($helperSet->getHelperList() as $helper) {
-					if (($result = $helper->helper($value)) !== null) {
+					if (($result = $helper->helper($this, $value)) !== null) {
 						break 2;
 					}
 				}

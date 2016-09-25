@@ -3,6 +3,9 @@
 
 	namespace Edde\Common\Html\Macro;
 
+	use Edde\Api\Node\INode;
+	use Edde\Api\Template\ICompiler;
+	use Edde\Api\Template\MacroException;
 	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Strings\StringUtils;
 
@@ -19,8 +22,12 @@
 			parent::__construct('pass', false);
 		}
 
-		protected function onMacro() {
-			$target = $this->attribute('target', false);
+		/**
+		 * @inheritdoc
+		 * @throws MacroException
+		 */
+		public function macro(INode $macro, ICompiler $compiler) {
+			$target = $this->attribute($macro, $compiler, 'target', false);
 			$func = substr($target, -2) === '()';
 			$target = str_replace('()', '', $target);
 			$type = $target[0];
@@ -31,9 +38,9 @@
 				':' => '$control->getRoot()',
 			];
 			if ($func === false) {
-				$this->write(sprintf('%s::setProperty(%s, %s, $control);', ReflectionUtils::class, $reference[$type], var_export($target, true)), 5);
+				$this->write($compiler, sprintf('%s::setProperty(%s, %s, $control);', ReflectionUtils::class, $reference[$type], var_export($target, true)), 5);
 				return;
 			}
-			$this->write(sprintf('%s->%s($control);', $reference[$type], $target), 5);
+			$this->write($compiler, sprintf('%s->%s($control);', $reference[$type], $target), 5);
 		}
 	}

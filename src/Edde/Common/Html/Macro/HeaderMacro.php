@@ -4,6 +4,7 @@
 	namespace Edde\Common\Html\Macro;
 
 	use Edde\Api\Node\INode;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Common\Html\HeaderControl;
 
 	/**
@@ -14,7 +15,7 @@
 			parent::__construct($header, HeaderControl::class);
 		}
 
-		protected function onControl(INode $macro) {
-			$this->write(sprintf('$control->setTag(%s);', var_export($this->getName(), true)), 5);
+		protected function onControl(INode $macro, ICompiler $compiler) {
+			$this->write($compiler, sprintf('$control->setTag(%s);', var_export($this->getName(), true)), 5);
 		}
 	}

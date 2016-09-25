@@ -96,7 +96,7 @@
 
 			self::assertInstanceOf(SpanControl::class, $control->includedVariable);
 			$control->includedVariable->dirty();
-			self::assertEquals('<span>
+			self::assertEquals('<span class="included-variable">
 	<div class="foo-bar"></div>
 	<div class="boo-far">
 		<span class="poo">hello!</span>

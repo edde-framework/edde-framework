@@ -26,6 +26,10 @@
 			$divControl->addClass('passed');
 		}
 
+		public function passChild2(DivControl $divControl) {
+			$divControl->addClass('passed-02');
+		}
+
 		public function passChild3(DivControl $divControl) {
 			$divControl->addClass('passed-03');
 		}

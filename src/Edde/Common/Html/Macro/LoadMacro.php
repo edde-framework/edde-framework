@@ -4,6 +4,9 @@
 	namespace Edde\Common\Html\Macro;
 
 	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\Node\INode;
+	use Edde\Api\Template\ICompiler;
+	use Edde\Api\Template\MacroException;
 
 	/**
 	 * Load macro adds support for loading templates on demand.
@@ -32,23 +35,28 @@
 			$this->rootDirectory = $rootDirectory;
 		}
 
-		protected function onMacro() {
-			$this->write(sprintf('$this->embedd($template = self::template($this->templateManager->template(%s), $this->container));', ($helper = $this->compiler->helper($src = $this->attribute('src', false))) ? $helper : $this->load($src)), 5);
-			$this->write('$template->snippet($stack->top());', 5);
+		/**
+		 * @inheritdoc
+		 * @throws MacroException
+		 */
+		public function macro(INode $macro, ICompiler $compiler) {
+			$this->write($compiler, sprintf('$this->embedd($template = self::template($this->templateManager->template(%s), $this->container));', ($helper = $compiler->helper($src = $this->attribute($macro, $compiler, 'src', false))) ? $helper : $this->load($src, $compiler)), 5);
+			$this->write($compiler, '$template->snippet($stack->top());', 5);
 		}
 
 		/**
 		 * compute path from macro's source attribute
 		 *
 		 * @param string $src
+		 * @param ICompiler $compiler
 		 *
 		 * @return string
 		 */
-		protected function load(string $src) {
+		protected function load(string $src, ICompiler $compiler) {
 			if (strpos($src, '/') === 0) {
 				$src = $this->rootDirectory->filename(substr($src, 1));
 			} else if (strpos($src, './') === 0) {
-				$src = $this->compiler->getSource()
+				$src = $compiler->getSource()
 					->getDirectory()
 					->filename(substr($src, 2));
 			}

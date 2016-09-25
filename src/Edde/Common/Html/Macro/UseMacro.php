@@ -3,6 +3,10 @@
 
 	namespace Edde\Common\Html\Macro;
 
+	use Edde\Api\Node\INode;
+	use Edde\Api\Template\ICompiler;
+	use Edde\Api\Template\MacroException;
+
 	/**
 	 * Use macro can be used as a block reference "on demand" (similar to t:include macro).
 	 */
@@ -14,7 +18,11 @@
 			parent::__construct('m:use', false);
 		}
 
-		protected function onMacro() {
-			$this->write(sprintf('$this->block($stack->top(), %s);', ($helper = $this->compiler->helper($src = $this->attribute('src', false))) ? $helper : var_export($src, true)), 5);
+		/**
+		 * @inheritdoc
+		 * @throws MacroException
+		 */
+		public function macro(INode $macro, ICompiler $compiler) {
+			$this->write($compiler, sprintf('$this->block($stack->top(), %s);', ($helper = $compiler->helper($src = $this->attribute($macro, $compiler, 'src', false))) ? $helper : var_export($src, true)), 5);
 		}
 	}

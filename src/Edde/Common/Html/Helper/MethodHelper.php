@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Html\Helper;
 
+	use Edde\Api\Template\ICompiler;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\AbstractHelper;
 
@@ -10,7 +11,10 @@
 	 * This helper will translate "standard" call format into methods reffering to root or current control; it also supports container call reference.
 	 */
 	class MethodHelper extends AbstractHelper {
-		public function helper($value, ...$parameterList) {
+		/**
+		 * @inheritdoc
+		 */
+		public function helper(ICompiler $compiler, $value, ...$parameterList) {
 			if ($value === null) {
 				return null;
 			}

@@ -1,17 +1,31 @@
 <div foo="yahoo!" title="foo" class="root">
-	<span class="pass-child">
+	<span class="double-include">
+		<div class="foo-bar"></div>
+		<div class="boo-far">
+			<span class="poo">hello!</span>
+		</div>
+		<div class="foo-foo"></div>
+	</span>
+	<span class="pass-child 01">
 		<div class="foo-bar passed"></div>
 		<div class="boo-far passed">
 			<span class="poo">hello!</span>
 		</div>
 		<div class="foo-foo passed"></div>
 	</span>
-	<span class="pass-child">
+	<span class="pass-child 02">
+		<div class="foo-bar passed-02"></div>
+		<div class="boo-far passed-02">
+			<span class="poo">hello!</span>
+		</div>
+		<div class="foo-foo passed-02"></div>
+	</span>
+	<span class="pass-child 03">
 		<div class="child-01 passed-03"></div>
 		<div class="child-02 passed-03"></div>
 		<div class="child-03 passed-03"></div>
 	</span>
-	<span>
+	<span class="included-variable">
 		<div class="foo-bar"></div>
 		<div class="boo-far">
 			<span class="poo">hello!</span>

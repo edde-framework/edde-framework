@@ -10,10 +10,11 @@
 		/**
 		 * when null is returned, next helper should be executed
 		 *
+		 * @param ICompiler $compiler
 		 * @param mixed $value
 		 * @param array ...$parameterList
 		 *
 		 * @return mixed|null
 		 */
-		public function helper($value, ...$parameterList);
+		public function helper(ICompiler $compiler, $value, ...$parameterList);
 	}

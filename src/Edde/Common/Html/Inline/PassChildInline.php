@@ -3,6 +3,8 @@
 
 	namespace Edde\Common\Html\Inline;
 
+	use Edde\Api\Node\INode;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Common\Node\Node;
 
 	/**
@@ -16,9 +18,12 @@
 			parent::__construct('m:pass-child', true);
 		}
 
-		protected function onMacro() {
-			$target = $this->extract($this->macro, $this->getName(), null, false);
-			foreach ($this->macro->getNodeList() as $node) {
+		/**
+		 * @inheritdoc
+		 */
+		public function macro(INode $macro, ICompiler $compiler) {
+			$target = $this->extract($macro, $this->getName(), null);
+			foreach ($macro->getNodeList() as $node) {
 				$nodeList = [$node];
 				while ($node->getMeta('root', false) && $node->isLeaf() === false) {
 					$nodeList = $node->getNodeList();

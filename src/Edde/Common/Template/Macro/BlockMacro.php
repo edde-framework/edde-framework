@@ -3,6 +3,9 @@
 
 	namespace Edde\Common\Template\Macro;
 
+	use Edde\Api\Node\INode;
+	use Edde\Api\Template\ICompiler;
+	use Edde\Api\Template\MacroException;
 	use Edde\Common\Template\AbstractMacro;
 
 	class BlockMacro extends AbstractMacro {
@@ -10,7 +13,11 @@
 			parent::__construct('t:block', true);
 		}
 
-		public function onMacro() {
-			$this->compiler->block($this->attribute('id'), $this->macro->getNodeList());
+		/**
+		 * @inheritdoc
+		 * @throws MacroException
+		 */
+		public function macro(INode $macro, ICompiler $compiler) {
+			$compiler->block($this->attribute($macro, $compiler, 'id'), $macro->getNodeList());
 		}
 	}

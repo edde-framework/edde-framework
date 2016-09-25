@@ -6,6 +6,7 @@
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Node\INode;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Template\AbstractMacro;
 
@@ -32,10 +33,24 @@
 			$this->rootDirectory = $rootDirectory;
 		}
 
-		public function onMacro() {
-			$this->compiler->compile($this->file($this->attribute('src'), $this->compiler->getCurrent(), $this->macro));
+		/**
+		 * @inheritdoc
+		 * @throws MacroException
+		 */
+		public function macro(INode $macro, ICompiler $compiler) {
+			$compiler->compile($this->file($this->attribute($macro, $compiler, 'src'), $compiler->getCurrent(), $macro));
 		}
 
+		/**
+		 * execute compilation from the given source
+		 *
+		 * @param string $src
+		 * @param IFile $source
+		 * @param INode $macro
+		 *
+		 * @return IFile
+		 * @throws MacroException
+		 */
 		protected function file(string $src, IFile $source, INode $macro): IFile {
 			if (strpos($src, '/') === 0) {
 				return $this->rootDirectory->file(substr($src, 1));

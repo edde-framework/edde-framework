@@ -4,6 +4,7 @@
 	namespace Edde\Common\Html\Macro;
 
 	use Edde\Api\Node\INode;
+	use Edde\Api\Template\ICompiler;
 
 	/**
 	 * Common stuff control macro.
@@ -23,18 +24,23 @@
 			$this->control = $control;
 		}
 
-		public function onMacro() {
-			$this->write(sprintf('/** %s */', $this->macro->getPath()), 5);
-			$this->write('$parent = $stack->top();', 5);
-			$this->write(sprintf('$parent->addControl($control = $this->container->create(%s));', var_export($this->control, true)), 5);
-			$this->writeTextValue();
-			$this->onControl($this->macro);
-			$this->writeAttributeList();
-			$this->write('$stack->push($control);', 5);
-			$this->compile();
-			$this->write('$stack->pop();', 5);
+		/**
+		 * @inheritdoc
+		 */
+		public function macro(INode $macro, ICompiler $compiler) {
+			$this->write($compiler, sprintf('/** %s */', $macro->getPath()), 5);
+			$this->write($compiler, '$parent = $stack->top();', 5);
+			$this->write($compiler, sprintf('$parent->addControl($control = $this->container->create(%s));', var_export($this->control, true)), 5);
+			$this->writeTextValue($macro, $compiler);
+			$this->onControl($macro, $compiler);
+			$this->writeAttributeList($macro, $compiler);
+			$this->write($compiler, '$stack->push($control);', 5);
+			foreach ($macro->getNodeList() as $node) {
+				$compiler->runtimeMacro($node);
+			}
+			$this->write($compiler, '$stack->pop();', 5);
 		}
 
-		protected function onControl(INode $macro) {
+		protected function onControl(INode $macro, ICompiler $compiler) {
 		}
 	}
