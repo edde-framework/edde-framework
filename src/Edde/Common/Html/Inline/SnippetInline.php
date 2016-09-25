@@ -18,14 +18,14 @@
 		 * Proudly she replied, "Asterisk, asterisk, asterisk, asterisk, asterisk!"
 		 */
 		public function __construct() {
-			parent::__construct('m:snippet', true);
+			parent::__construct('m:snippet');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 */
-		public function macro(INode $macro, ICompiler $compiler) {
+		public function compile(INode $macro, ICompiler $compiler) {
 			$macro->setMeta('snippet', true);
 			$compiler->block($this->extract($macro, $this->getName()), [
 				$macro,

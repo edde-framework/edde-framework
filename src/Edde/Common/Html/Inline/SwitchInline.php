@@ -18,7 +18,7 @@
 		 * - Anonymous
 		 */
 		public function __construct() {
-			parent::__construct('m:switch', true);
+			parent::__construct('m:switch');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
@@ -26,7 +26,7 @@
 		 * @inheritdoc
 		 * @throws MacroException
 		 */
-		public function macro(INode $macro, ICompiler $compiler) {
+		public function compile(INode $macro, ICompiler $compiler) {
 			$macro->switch(new Node('switch', null, ['src' => $this->extract($macro)]));
 		}
 	}

@@ -34,18 +34,18 @@
 		public function registerInline(IInline $inline): ICompiler;
 
 		/**
-		 * execute macro in compile time
+		 * execute compile macro
 		 *
 		 * @param INode $macro
 		 */
-		public function compileMacro(INode $macro);
+		public function compile(INode $macro);
 
 		/**
 		 * execute macro in "runtime"
 		 *
 		 * @param INode $macro
 		 */
-		public function runtimeMacro(INode $macro);
+		public function macro(INode $macro);
 
 		/**
 		 * compile source into node; node is the final result
@@ -54,7 +54,7 @@
 		 *
 		 * @return INode
 		 */
-		public function compile(IFile $source): INode;
+		public function file(IFile $source): INode;
 
 		/**
 		 * return the original source file

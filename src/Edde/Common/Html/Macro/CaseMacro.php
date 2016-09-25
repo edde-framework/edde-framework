@@ -26,7 +26,7 @@
 		 * The Project Manager looks at where the other two had been standing and rubs his chin in thought. Then he tells the Genie, "I'd like those two back in the office after lunch."
 		 */
 		public function __construct() {
-			parent::__construct('case', false);
+			parent::__construct('case');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
@@ -39,7 +39,7 @@
 				->top();
 			$this->write($compiler, sprintf('if($switch_%s === %s) {', $switch, var_export($this->attribute($macro, $compiler, 'name', false), true)), 5);
 			foreach ($macro->getNodeList() as $node) {
-				$compiler->runtimeMacro($node);
+				$compiler->macro($node);
 			}
 			$this->write($compiler, '}', 5);
 		}

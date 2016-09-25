@@ -20,7 +20,7 @@
 		 * "We are looking into the problem and will contact you with a solution as soon as possible."
 		 */
 		public function __construct() {
-			parent::__construct('call', false);
+			parent::__construct('call');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */

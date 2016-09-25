@@ -16,7 +16,7 @@
 		 * Compaq is considering changing the command "Press Any Key" to "Press Return Key" because of the many calls asking where the "Any" key is.
 		 */
 		public function __construct() {
-			parent::__construct('m:loop', true);
+			parent::__construct('m:loop');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
@@ -24,7 +24,7 @@
 		 * @inheritdoc
 		 * @throws MacroException
 		 */
-		public function macro(INode $macro, ICompiler $compiler) {
+		public function compile(INode $macro, ICompiler $compiler) {
 			$macro->switch(new Node('loop', null, ['src' => $this->extract($macro)]));
 		}
 	}

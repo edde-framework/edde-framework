@@ -30,7 +30,7 @@
 		 * Any sufficiently advanced bug is indistinguishable from a feature.
 		 */
 		public function __construct() {
-			parent::__construct('css', null);
+			parent::__construct('css');
 		}
 
 		/**
@@ -52,14 +52,9 @@
 		 * @throws FileException
 		 * @throws MacroException
 		 */
-		public function macro(INode $macro, ICompiler $compiler) {
-			if ($macro->getMeta('css', true)) {
-				$macro->setMeta('css', false);
-				$macro->setAttribute('src', $this->file($this->attribute($macro, $compiler, 'src', false), $compiler->getCurrent())
-					->getPath());
-				return;
-			}
-			$this->write($compiler, sprintf('$this->styleSheetList->addFile(%s);', var_export($this->attribute($macro, $compiler, 'src', false), true)), 5);
+		public function compile(INode $macro, ICompiler $compiler) {
+			$macro->setAttribute('src', $this->file($this->attribute($macro, $compiler, 'src', false), $compiler->getCurrent())
+				->getPath());
 		}
 
 		/**
@@ -81,5 +76,14 @@
 				return $this->assetsDirectory->file(str_replace('edde://', '', $src));
 			}
 			return new File($src);
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 * @throws MacroException
+		 */
+		public function macro(INode $macro, ICompiler $compiler) {
+			$this->write($compiler, sprintf('$this->styleSheetList->addFile(%s);', var_export($this->attribute($macro, $compiler, 'src', false), true)), 5);
 		}
 	}

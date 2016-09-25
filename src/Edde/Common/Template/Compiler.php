@@ -150,10 +150,10 @@
 				$this->setVariable('name', sha1(implode(',', $nameList)));
 				$this->setVariable('name-list', $nameList);
 				foreach ($importList as $import) {
-					$this->compile($import)
+					$this->file($import)
 						->setMeta('included', true);
 				}
-				return $this->runtimeMacro($this->compile($this->source));
+				return $this->macro($this->file($this->source));
 			} catch (\Exception $exception) {
 				$root = $this->rootDirectory->getDirectory();
 				/**
@@ -184,27 +184,23 @@
 		 * @inheritdoc
 		 * @throws CompilerException
 		 */
-		public function compile(IFile $source): INode {
+		public function file(IFile $source): INode {
 			$this->use();
 			$this->stack->push($source);
 			foreach (NodeIterator::recursive($root = $this->resourceManager->resource($source), true) as $node) {
-				if (empty($this->inlineList) === false) {
-					foreach ($node->getAttributeList() as $k => $v) {
-						if (isset($this->inlineList[$k]) && $this->inlineList[$k]->isCompile()) {
-							$this->inlineList[$k]->macro($node, $this);
-						}
+				foreach ($node->getAttributeList() as $k => $v) {
+					if (isset($this->inlineList[$k])) {
+						$this->inlineList[$k]->compile($node, $this);
 					}
 				}
-				if (isset($this->macroList[$name = $node->getName()])) {
-					$this->compileMacro($node);
-				}
+				$this->compile($node);
 			}
-			foreach (NodeIterator::recursive($root, true) as $node) {
-				if (isset($this->macroList[$node->getName()])) {
-					continue;
-				}
-				throw new CompilerException(sprintf('Unknown macro [%s].', $node->getPath()));
-			}
+//			foreach (NodeIterator::recursive($root, true) as $node) {
+//				if (isset($this->macroList[$node->getName()])) {
+//					continue;
+//				}
+//				throw new CompilerException(sprintf('Unknown macro [%s].', $node->getPath()));
+//			}
 			$this->stack->pop();
 			return $root;
 		}
@@ -212,30 +208,21 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function compileMacro(INode $macro) {
-			if ($this->macroList[$name = $macro->getName()]->isCompile()) {
-				return $this->macroList[$name]->macro($macro, $this);
-			}
-			return null;
+		public function compile(INode $macro) {
+			return $this->macroList[$macro->getName()]->compile($macro, $this);
 		}
 
 		/**
 		 * @inheritdoc
 		 * @throws CompilerException
 		 */
-		public function runtimeMacro(INode $macro) {
+		public function macro(INode $macro) {
 			if (isset($this->macroList[$name = $macro->getName()]) === false) {
 				throw new CompilerException(sprintf('Unknown macro [%s].', $macro->getPath()));
 			}
-			if ($this->macroList[$name]->isCompile()) {
-				foreach ($macro->getNodeList() as $node) {
-					$this->runtimeMacro($node);
-				}
-				return null;
-			}
 			if (empty($this->inlineList) === false) {
 				foreach ($macro->getAttributeList() as $k => $v) {
-					if (isset($this->inlineList[$k]) && $this->inlineList[$k]->isRuntime()) {
+					if (isset($this->inlineList[$k])) {
 						$this->inlineList[$k]->macro($macro, $this);
 						$macro->removeAttribute($k);
 					}

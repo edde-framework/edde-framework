@@ -23,7 +23,7 @@
 		 * "Real programmers don't comment their code. If it was hard to write, it should be hard to understand."
 		 */
 		public function __construct() {
-			parent::__construct('t:import', true);
+			parent::__construct('t:import');
 		}
 
 		/**
@@ -37,8 +37,8 @@
 		 * @inheritdoc
 		 * @throws MacroException
 		 */
-		public function macro(INode $macro, ICompiler $compiler) {
-			$compiler->compile($this->file($this->attribute($macro, $compiler, 'src'), $compiler->getCurrent(), $macro));
+		public function compile(INode $macro, ICompiler $compiler) {
+			$compiler->file($this->file($this->attribute($macro, $compiler, 'src'), $compiler->getCurrent(), $macro));
 		}
 
 		/**

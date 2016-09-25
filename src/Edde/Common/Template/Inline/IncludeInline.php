@@ -23,7 +23,7 @@
 		 * MIPS: Meaningless Indicator of Processor Speed.
 		 */
 		public function __construct() {
-			parent::__construct('t:include', true);
+			parent::__construct('t:include');
 		}
 
 		/**
@@ -37,7 +37,7 @@
 		 * @inheritdoc
 		 * @throws MacroException
 		 */
-		public function macro(INode $macro, ICompiler $compiler) {
+		public function compile(INode $macro, ICompiler $compiler) {
 			/** @var $node INode */
 			foreach ($this->include($source = $this->attribute($macro, $compiler, null, false), $compiler->getCurrent(), $compiler) as $node) {
 				$node = clone $node;
@@ -62,11 +62,11 @@
 		protected function include (string $src, IFile $source, ICompiler $compiler) {
 			if (strpos($src, '/') === 0) {
 				return [
-					$compiler->compile($this->rootDirectory->file(substr($src, 1))),
+					$compiler->file($this->rootDirectory->file(substr($src, 1))),
 				];
 			} else if (strpos($src, './') === 0) {
 				return [
-					$compiler->compile($source->getDirectory()
+					$compiler->file($source->getDirectory()
 						->file(substr($src, 2))),
 				];
 			}

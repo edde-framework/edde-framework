@@ -15,14 +15,14 @@
 		 * Profanity is the one language that all programmers know best.
 		 */
 		public function __construct() {
-			parent::__construct('m:pass-child', true);
+			parent::__construct('m:pass-child');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 */
-		public function macro(INode $macro, ICompiler $compiler) {
+		public function compile(INode $macro, ICompiler $compiler) {
 			$target = $this->extract($macro, $this->getName(), null);
 			foreach ($macro->getNodeList() as $node) {
 				$nodeList = [$node];

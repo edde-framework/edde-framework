@@ -19,7 +19,7 @@
 		 * Software: "A product that if you play with it long enough, it works."
 		 */
 		public function __construct() {
-			parent::__construct('pass', false);
+			parent::__construct('pass');
 		}
 
 		/**

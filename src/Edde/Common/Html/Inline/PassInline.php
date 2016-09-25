@@ -15,14 +15,14 @@
 		 * Hardware: The parts of a computer system that can be kicked.
 		 */
 		public function __construct() {
-			parent::__construct('m:pass', true);
+			parent::__construct('m:pass');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 */
-		public function macro(INode $macro, ICompiler $compiler) {
+		public function compile(INode $macro, ICompiler $compiler) {
 			$macro->prepend(new Node('pass', null, ['target' => $this->extract($macro)]));
 		}
 	}
