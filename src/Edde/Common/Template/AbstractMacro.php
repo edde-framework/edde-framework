@@ -90,17 +90,15 @@
 		 * extract an attribute and remove it from attribute list
 		 *
 		 * @param INode $macro
-		 * @param ICompiler $compiler
 		 * @param string $name
 		 * @param null $default
-		 * @param bool $helper
 		 *
 		 * @return mixed|null|string
 		 */
-		public function extract(INode $macro, ICompiler $compiler, string $name, $default = null, bool $helper = true) {
+		public function extract(INode $macro, string $name, $default = null) {
 			$attribute = $macro->getAttribute($name, $default);
 			$macro->removeAttribute($name);
-			return ($helper && $filter = $compiler->helper($attribute)) ? $filter : $attribute;
+			return $attribute;
 		}
 
 		/**

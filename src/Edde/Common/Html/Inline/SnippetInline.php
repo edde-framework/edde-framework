@@ -26,7 +26,7 @@
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
 			$macro->setMeta('snippet', true);
-			$compiler->block($this->extract($macro, $compiler, $this->getName(), null, false), [
+			$compiler->block($this->extract($macro, $this->getName()), [
 				$macro,
 			]);
 		}

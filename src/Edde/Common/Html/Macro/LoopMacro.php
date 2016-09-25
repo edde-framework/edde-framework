@@ -20,6 +20,9 @@
 		 */
 		protected $cryptEngine;
 
+		/**
+		 * You never finish a program, you just stop working on it.
+		 */
 		public function __construct() {
 			parent::__construct('loop', false);
 		}
@@ -82,7 +85,9 @@
 			$this->write($compiler, '$control = $stack->top();', 5);
 			$this->write($compiler, sprintf('foreach(%s as $key_%s => $value_%s) {', $this->loop($this->attribute($macro, $compiler, 'src', false), $compiler), $key, $value), 5);
 			$stack->push($loop);
-			$this->compile($macro, $compiler);
+			foreach ($macro->getNodeList() as $node) {
+				$compiler->runtimeMacro($node);
+			}
 			$stack->pop();
 			$this->write($compiler, '}', 5);
 		}

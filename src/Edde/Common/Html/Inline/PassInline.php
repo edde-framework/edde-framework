@@ -22,6 +22,6 @@
 		 * @inheritdoc
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
-			$macro->prepend(new Node('pass', null, ['target' => $this->extract($macro, $compiler, $this->getName(), null, false)]));
+			$macro->prepend(new Node('pass', null, ['target' => $this->extract($macro, $this->getName())]));
 		}
 	}

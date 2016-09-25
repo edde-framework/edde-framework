@@ -28,7 +28,9 @@
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
 			if ($macro->isRoot() === false || $macro->getMeta('included', false)) {
-				$this->compile($macro, $compiler);
+				foreach ($macro->getNodeList() as $node) {
+					$compiler->runtimeMacro($node);
+				}
 				return null;
 			}
 			$this->use();

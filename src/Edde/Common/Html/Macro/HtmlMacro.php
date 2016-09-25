@@ -35,7 +35,9 @@
 			$this->onControl($macro, $compiler);
 			$this->writeAttributeList($macro, $compiler);
 			$this->write($compiler, '$stack->push($control);', 5);
-			$this->compile($macro, $compiler);
+			foreach ($macro->getNodeList() as $node) {
+				$compiler->runtimeMacro($node);
+			}
 			$this->write($compiler, '$stack->pop();', 5);
 		}
 

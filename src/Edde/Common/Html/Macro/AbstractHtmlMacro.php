@@ -19,7 +19,7 @@
 		 * @param ICompiler $compiler
 		 */
 		protected function writeTextValue(INode $macro, ICompiler $compiler) {
-			if (($value = $this->extract($macro, $compiler, 'value', $macro->isLeaf() ? $macro->getValue() : null, false)) !== null) {
+			if (($value = $this->extract($macro, 'value', $macro->isLeaf() ? $macro->getValue() : null)) !== null) {
 				$this->write($compiler, sprintf('$control->setText(%s);', ($helper = $compiler->helper($value)) ? $helper : var_export($value, true)), 5);
 			}
 		}
@@ -53,18 +53,6 @@
 					$attributes[] = var_export($k, true) . ' => ' . $v;
 				}
 				$this->write($compiler, sprintf('$control->setAttributeList([%s]);', implode(', ', $attributes)), 5);
-			}
-		}
-
-		/**
-		 * compile child nodes of the given macro
-		 *
-		 * @param INode $macro
-		 * @param ICompiler $compiler
-		 */
-		protected function compile(INode $macro, ICompiler $compiler) {
-			foreach ($macro->getNodeList() as $node) {
-				$compiler->runtimeMacro($node);
 			}
 		}
 	}
