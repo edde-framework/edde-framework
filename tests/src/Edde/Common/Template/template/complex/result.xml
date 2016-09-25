@@ -1,4 +1,24 @@
 <div foo="yahoo!" title="foo" class="root">
+	<span class="pass-child">
+		<div class="foo-bar passed"></div>
+		<div class="boo-far passed">
+			<span class="poo">hello!</span>
+		</div>
+		<div class="foo-foo passed"></div>
+	</span>
+	<span class="pass-child">
+		<div class="child-01 passed-03"></div>
+		<div class="child-02 passed-03"></div>
+		<div class="child-03 passed-03"></div>
+	</span>
+	<span>
+		<div class="foo-bar"></div>
+		<div class="boo-far">
+			<span class="poo">hello!</span>
+		</div>
+		<div class="foo-foo"></div>
+	</span>
+	<span class="foo"></span>
 	<div class="this-will-be-loaded-on-demand">
 		<span class="Hey, I'm alive!"></span>
 		<div>

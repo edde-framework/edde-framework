@@ -1,5 +1,17 @@
 <control foo="@current-method-call()" title="foo">
-	<div class="this-will-be-loaded-on-demand">
+	<span class="pass-child" t:include="./pass-include.xml" m:pass-child=":pass-child()"/>
+	<!--<span class="pass-child" t:include="./double-pass-include.xml" m:pass-child=":pass-child2()"/>-->
+	<span class="pass-child" m:pass-child=":pass-child3()">
+		<div class="child-01"/>
+		<div class="child-02"/>
+		<div class="child-03"/>
+	</span>
+
+	<span t:include="./pass-include.xml" m:pass=":included-variable"/>
+
+	<span class="foo" m:pass=":span-method-call()"/>
+
+	<div class="this-will-be-loaded-on-demand" m:pass=":some-variable">
 		<!--
 			m:load will load the given template on demand; it supports
 			relative file reference (./ prefix) and "absolute" path reference from

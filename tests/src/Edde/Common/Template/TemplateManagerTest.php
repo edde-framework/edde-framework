@@ -29,6 +29,7 @@
 	use Edde\Common\Html\ContainerControl;
 	use Edde\Common\Html\Macro\HtmlMacro;
 	use Edde\Common\Html\Tag\DivControl;
+	use Edde\Common\Html\Tag\SpanControl;
 	use Edde\Common\Http\HostUrl;
 	use Edde\Common\Link\ControlLinkGenerator;
 	use Edde\Common\Link\LinkFactory;
@@ -76,6 +77,34 @@
 			$template->snippet($this->container->inject($control = new \SomeCoolControl()));
 			$control->addClass('root');
 			$control->dirty();
+
+			self::assertInstanceOf(DivControl::class, $control->someVariable);
+			$control->someVariable->dirty();
+			self::assertEquals('<div class="this-will-be-loaded-on-demand">
+	<span class="Hey, I\'m alive!"></span>
+	<div>
+		<div class="hello there!"></div>
+	</div>
+	<div class="poo-class">poo</div>
+</div>
+', $control->someVariable->render(-1));
+
+			self::assertInstanceOf(SpanControl::class, $control->spanControl);
+			$control->spanControl->dirty();
+			self::assertEquals('<span class="foo"></span>
+', $control->spanControl->render(-1));
+
+			self::assertInstanceOf(SpanControl::class, $control->includedVariable);
+			$control->includedVariable->dirty();
+			self::assertEquals('<span>
+	<div class="foo-bar"></div>
+	<div class="boo-far">
+		<span class="poo">hello!</span>
+	</div>
+	<div class="foo-foo"></div>
+</span>
+', $control->includedVariable->render(-1));
+
 			self::assertEquals(file_get_contents(__DIR__ . '/template/complex/result.xml'), $control->render());
 			$cssList = [
 				(new File(__DIR__ . '/../../../../../src/Edde/assets/css/foundation.min.css'))->getUrl()

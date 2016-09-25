@@ -4,9 +4,7 @@
 	namespace Edde\Common\Cache;
 
 	use Edde\Api\Cache\ICache;
-	use Edde\Api\Cache\ICacheNode;
 	use Edde\Api\Cache\ICacheStorage;
-	use Edde\Api\Cache\IInvalidator;
 	use Edde\Common\AbstractObject;
 
 	/**
@@ -38,8 +36,8 @@
 			return $this->save($name, call_user_func_array($callback, $parameterList));
 		}
 
-		public function load($id, $default = null, IInvalidator $invalidator = null) {
-			if (($value = $this->cacheStorage->load($this->cacheId($id))) === null || ($invalidator && $value instanceof ICacheNode && $invalidator->isValid($value) === false)) {
+		public function load($id, $default = null) {
+			if (($value = $this->cacheStorage->load($this->cacheId($id))) === null) {
 				return is_callable($default) ? call_user_func($default) : $default;
 			}
 			return $value;
@@ -52,10 +50,6 @@
 		public function save($id, $source) {
 			$this->cacheStorage->save($this->cacheId($id), $source);
 			return $source;
-		}
-
-		public function cache($id, ICacheNode $cacheNode) {
-			return $this->save($id, $cacheNode);
 		}
 
 		public function invalidate() {

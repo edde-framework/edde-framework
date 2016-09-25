@@ -32,6 +32,11 @@
 			throw new ConverterException(sprintf('Cannot convert unsupported type [%s] to [%s] in [%s].', is_object($source) ? get_class($source) : gettype($source), $target, static::class));
 		}
 
+		/**
+		 * @param string $target
+		 *
+		 * @throws ConverterException
+		 */
 		protected function exception(string $target) {
 			throw new ConverterException(sprintf('Unsuported conversion in [%s] from [%s] to [%s].', static::class, implode(', ', $this->mimeList), $target));
 		}
