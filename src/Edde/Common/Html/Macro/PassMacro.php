@@ -24,13 +24,16 @@
 			$func = substr($target, -2) === '()';
 			$target = str_replace('()', '', $target);
 			$type = $target[0];
-			$target = var_export(StringUtils::camelize(substr($target, 1), null, true), true);
-			if ($type === '.') {
-				$this->write(sprintf('%s::setProperty($root, %s, $control);', ReflectionUtils::class, $target), 5);
-			} else if ($type === '@') {
-				$this->write(sprintf('%s::setProperty($control, %s, $control);', ReflectionUtils::class, $target), 5);
-			} else if ($type === ':') {
-				$this->write(sprintf('%s::setProperty($control->getRoot(), %s, $control);', ReflectionUtils::class, $target), 5);
+			$target = StringUtils::camelize(substr($target, 1), null, true);
+			$reference = [
+				'.' => '$root',
+				'@' => '$control',
+				':' => '$control->getRoot()',
+			];
+			if ($func === false) {
+				$this->write(sprintf('%s::setProperty(%s, %s, $control);', ReflectionUtils::class, $reference[$type], var_export($target, true)), 5);
+				return;
 			}
+			$this->write(sprintf('%s->%s($control);', $reference[$type], $target), 5);
 		}
 	}

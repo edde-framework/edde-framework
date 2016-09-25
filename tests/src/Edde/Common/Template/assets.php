@@ -2,12 +2,21 @@
 	declare(strict_types = 1);
 
 	use Edde\Common\Html\Tag\DivControl;
+	use Edde\Common\Html\Tag\SpanControl;
 
 	class SomeCoolControl extends DivControl {
 		/**
 		 * @var DivControl
 		 */
 		public $someVariable;
+		/**
+		 * @var SpanControl
+		 */
+		public $spanControl;
+
+		public function spanMethodCall(SpanControl $spanControl) {
+			$this->spanControl = $spanControl;
+		}
 
 		public function loopFromRoot() {
 			return [];

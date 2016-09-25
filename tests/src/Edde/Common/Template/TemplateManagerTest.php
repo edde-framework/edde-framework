@@ -29,6 +29,7 @@
 	use Edde\Common\Html\ContainerControl;
 	use Edde\Common\Html\Macro\HtmlMacro;
 	use Edde\Common\Html\Tag\DivControl;
+	use Edde\Common\Html\Tag\SpanControl;
 	use Edde\Common\Http\HostUrl;
 	use Edde\Common\Link\ControlLinkGenerator;
 	use Edde\Common\Link\LinkFactory;
@@ -86,6 +87,10 @@
 	<div class="poo-class">poo</div>
 </div>
 ', $control->someVariable->render(-1));
+			self::assertInstanceOf(SpanControl::class, $control->spanControl);
+			$control->spanControl->dirty();
+			self::assertEquals('<span class="foo"></span>
+', $control->spanControl->render(-1));
 			self::assertEquals(file_get_contents(__DIR__ . '/template/complex/result.xml'), $control->render());
 			$cssList = [
 				(new File(__DIR__ . '/../../../../../src/Edde/assets/css/foundation.min.css'))->getUrl()

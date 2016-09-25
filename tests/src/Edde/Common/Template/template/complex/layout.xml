@@ -1,4 +1,6 @@
 <control foo="@current-method-call()" title="foo">
+	<span class="foo" m:pass=":span-method-call()"/>
+
 	<div class="this-will-be-loaded-on-demand" m:pass=":some-variable">
 		<!--
 			m:load will load the given template on demand; it supports
