@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Template;
 
+	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Crypt\ICryptEngine;
@@ -36,6 +37,7 @@
 	use Edde\Common\Resource\ResourceList;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Xml\XmlParser;
+	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Converter\XmlConverter;
 	use Edde\Ext\Template\DefaultMacroSet;
@@ -157,6 +159,7 @@
 
 		protected function setUp() {
 			$this->container = $container = ContainerFactory::create([
+				ICacheStorage::class => new InMemoryCacheStorage(),
 				ITemplateManager::class => TemplateManager::class,
 				IResourceManager::class => ResourceManager::class,
 				IConverterManager::class => ConverterManager::class,

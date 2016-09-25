@@ -5,6 +5,7 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\File\FileException;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\ITemplateManager;
@@ -56,6 +57,11 @@
 		 * @throws FileException
 		 */
 		public function template(string $template, array $importList = []) {
+			$this->use();
+			if ($result = $this->cache->load($cacheId = $template . implode(',', $importList))) {
+				return $result;
+			}
+			/** @var $compiler ICompiler */
 			$this->container->inject($compiler = new Compiler(new File($template)));
 			foreach ($importList as &$import) {
 				$import = new File($import);
@@ -63,7 +69,7 @@
 			unset($import);
 			$compiler->registerMacroSet($this->macroSet);
 			$compiler->registerHelperSet($this->helperSet);
-			return $compiler->template($importList);
+			return $this->cache->save($cacheId, $compiler->template($importList));
 		}
 
 		/**
