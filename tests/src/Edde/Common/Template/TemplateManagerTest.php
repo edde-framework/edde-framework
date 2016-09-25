@@ -181,7 +181,8 @@
 					return DefaultMacroSet::helperSet($container);
 				},
 				ITempDirectory::class => function (IRootDirectory $rootDirectory) {
-					return new TempDirectory($rootDirectory->getDirectory());
+					return $rootDirectory->directory('.', TempDirectory::class)
+						->create();
 				},
 				ITemplateDirectory::class => function (ITempDirectory $tempDirectory) {
 					return $tempDirectory->directory('.', TemplateDirectory::class);
