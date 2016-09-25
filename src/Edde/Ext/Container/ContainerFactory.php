@@ -4,6 +4,7 @@
 	namespace Edde\Ext\Container;
 
 	use Edde\Api\Cache\ICacheFactory;
+	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependencyFactory;
 	use Edde\Api\Container\IFactoryManager;
@@ -19,11 +20,11 @@
 	 * Simple factory for "handy" container creation.
 	 */
 	class ContainerFactory extends AbstractObject {
-		static public function create(array $factoryList = []) {
+		static public function create(array $factoryList = []): IContainer {
 			$factoryManager = new FactoryManager();
 			$factoryManager->registerFactoryFallback(FactoryFactory::createFallback());
 			$factoryManager->registerFactoryList($factoryList);
-			$container = new Container($factoryManager, $dependencyFactory = new DependencyFactory($factoryManager, $cacheFactory = new CacheFactory(__NAMESPACE__, new DevNullCacheStorage())), $cacheFactory);
+			$container = new Container($factoryManager, $dependencyFactory = new DependencyFactory($factoryManager, $cacheFactory = $factoryList[ICacheFactory::class] ?? new CacheFactory(__NAMESPACE__, $factoryList[ICacheStorage::class] ?? new DevNullCacheStorage())), $cacheFactory);
 			$factoryManager->registerFactoryList([
 				IContainer::class => $container,
 				IFactoryManager::class => $factoryManager,
