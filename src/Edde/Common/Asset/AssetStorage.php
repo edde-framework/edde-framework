@@ -10,7 +10,6 @@
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\ResourceException;
-	use Edde\Common\File\Directory;
 	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\Usable\AbstractUsable;
@@ -49,7 +48,7 @@
 		public function store(IResource $resource) {
 			$this->use();
 			$url = $resource->getUrl();
-			$directory = new Directory($this->assetDirectory->getDirectory() . '/' . sha1(dirname($url->getPath())));
+			$directory = $this->assetDirectory->directory(sha1(dirname($url->getPath())));
 			try {
 				$directory->create();
 			} catch (DirectoryException $e) {
