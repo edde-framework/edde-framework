@@ -9,6 +9,7 @@
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Html\Helper\MethodHelper;
 	use Edde\Common\Html\Inline\IfInline;
+	use Edde\Common\Html\Inline\LoopInline;
 	use Edde\Common\Html\Inline\PassChildInline;
 	use Edde\Common\Html\Inline\PassInline;
 	use Edde\Common\Html\Inline\SnippetInline;
@@ -50,18 +51,18 @@
 			$macroSet = new MacroSet();
 			$macroSet->onSetup(function (MacroSet $macroSet) use ($container) {
 				$macroSet->setMacroList([
-					$container->inject(new ControlMacro()),
 					$container->inject(new ImportMacro()),
 					$container->inject(new LoadMacro()),
 					$container->inject(new IncludeMacro()),
-					$container->inject(new BlockMacro()),
 					$container->inject(new LoopMacro()),
+					$container->inject(new IfMacro()),
 					$container->inject(new UseMacro()),
+					$container->inject(new ControlMacro()),
+					$container->inject(new BlockMacro()),
 					$container->inject(new CallMacro()),
 					$container->inject(new CssMacro()),
 					$container->inject(new JsMacro()),
 					$container->inject(new PassMacro()),
-					$container->inject(new IfMacro()),
 					$container->inject(new HtmlMacro('div', DivControl::class)),
 					$container->inject(new HtmlMacro('span', SpanControl::class)),
 					$container->inject(new HtmlMacro('placeholder', PlaceholderControl::class)),
@@ -74,12 +75,13 @@
 					$container->inject(new ButtonMacro()),
 				]);
 				$macroSet->setInlineList([
+					$container->inject(new LoopInline()),
+					$container->inject(new IfInline()),
 					$container->inject(new BlockInline()),
 					$container->inject(new IncludeInline()),
 					$container->inject(new SnippetInline()),
 					$container->inject(new PassInline()),
 					$container->inject(new PassChildInline()),
-					$container->inject(new IfInline()),
 				]);
 			});
 			return $macroSet;

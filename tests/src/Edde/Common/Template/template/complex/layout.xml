@@ -19,9 +19,7 @@
 	<span class="This one will not pass()" m:if=":false-method()"/>
 
 	<div class="strange-if-usecase" m:if=":gimme-some-iterator()">
-		<loop src="?:">
-			<span class="$:"/>
-		</loop>
+		<span m:loop="?:" class="$:"/>
 	</div>
 
 	<span class="included-variable" t:include="./pass-include.xml" m:pass=":included-variable"/>
