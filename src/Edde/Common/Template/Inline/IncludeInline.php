@@ -33,12 +33,19 @@
 		}
 
 		public function onMacro() {
-			foreach ($this->include($this->attribute(null, false), $this->macro, $this->compiler->getCurrent(), $this->compiler) as $node) {
-				$this->macro->addNode(clone $node);
+			/** @var $node INode */
+			foreach ($this->include($source = $this->attribute(null, false), $this->compiler->getCurrent(), $this->compiler) as $node) {
+				$node = clone $node;
+				/**
+				 * mark virtual node root
+				 */
+				$node->setMeta('root', true);
+				$node->setMeta('source', $source);
+				$this->macro->addNode($node);
 			}
 		}
 
-		protected function include (string $src, INode $macro, IFile $source, ICompiler $compiler) {
+		protected function include (string $src, IFile $source, ICompiler $compiler) {
 			if (strpos($src, '/') === 0) {
 				return [
 					$compiler->compile($this->rootDirectory->file(substr($src, 1))),

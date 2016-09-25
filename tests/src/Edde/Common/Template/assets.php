@@ -22,6 +22,14 @@
 			$this->spanControl = $spanControl;
 		}
 
+		public function passChild(DivControl $divControl) {
+			$divControl->addClass('passed');
+		}
+
+		public function passChild3(DivControl $divControl) {
+			$divControl->addClass('passed-03');
+		}
+
 		public function loopFromRoot() {
 			return [];
 		}

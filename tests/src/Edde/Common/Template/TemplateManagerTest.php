@@ -98,6 +98,10 @@
 			$control->includedVariable->dirty();
 			self::assertEquals('<span>
 	<div class="foo-bar"></div>
+	<div class="boo-far">
+		<span class="poo">hello!</span>
+	</div>
+	<div class="foo-foo"></div>
 </span>
 ', $control->includedVariable->render(-1));
 

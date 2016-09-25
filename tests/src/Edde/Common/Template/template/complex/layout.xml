@@ -1,4 +1,12 @@
 <control foo="@current-method-call()" title="foo">
+	<span class="pass-child" t:include="./pass-include.xml" m:pass-child=":pass-child()"/>
+	<!--<span class="pass-child" t:include="./double-pass-include.xml" m:pass-child=":pass-child2()"/>-->
+	<span class="pass-child" m:pass-child=":pass-child3()">
+		<div class="child-01"/>
+		<div class="child-02"/>
+		<div class="child-03"/>
+	</span>
+
 	<span t:include="./pass-include.xml" m:pass=":included-variable"/>
 
 	<span class="foo" m:pass=":span-method-call()"/>

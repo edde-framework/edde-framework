@@ -1,3 +1,7 @@
-<control>
+<control id="pass-include.xml">
 	<div class="foo-bar"/>
+	<div class="boo-far">
+		<span class="poo">hello!</span>
+	</div>
+	<div class="foo-foo"/>
 </control>

@@ -8,6 +8,7 @@
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Html\Helper\MethodHelper;
+	use Edde\Common\Html\Inline\PassChildInline;
 	use Edde\Common\Html\Inline\PassInline;
 	use Edde\Common\Html\Inline\SnippetInline;
 	use Edde\Common\Html\Macro\ButtonMacro;
@@ -74,6 +75,7 @@
 					$container->inject(new IncludeInline()),
 					$container->inject(new SnippetInline()),
 					$container->inject(new PassInline()),
+					$container->inject(new PassChildInline()),
 				]);
 			});
 			return $macroSet;
