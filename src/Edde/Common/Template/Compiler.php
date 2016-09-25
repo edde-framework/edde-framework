@@ -195,12 +195,6 @@
 				}
 				$this->compile($node);
 			}
-//			foreach (NodeIterator::recursive($root, true) as $node) {
-//				if (isset($this->macroList[$node->getName()])) {
-//					continue;
-//				}
-//				throw new CompilerException(sprintf('Unknown macro [%s].', $node->getPath()));
-//			}
 			$this->stack->pop();
 			return $root;
 		}

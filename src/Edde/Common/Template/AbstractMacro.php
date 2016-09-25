@@ -102,6 +102,9 @@
 		 * @inheritdoc
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
+			foreach ($macro->getNodeList() as $node) {
+				$compiler->macro($node);
+			}
 		}
 
 		/**

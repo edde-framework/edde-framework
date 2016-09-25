@@ -1,4 +1,6 @@
 <control foo="@current-method-call()" title="foo">
+	<t:include src="./pass-include.xml"/>
+
 	<css src="./foo/bar/boo.css"/>
 	<schema name="foo" schema="Bar\Foo\Fart\Poo"/>
 
