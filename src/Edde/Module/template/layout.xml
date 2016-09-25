@@ -5,7 +5,7 @@
 	<js src="edde://js/jquery.js"/>
 	<js src="edde://js/edde-framework.js"/>
 
-	<div id="message" class="callout" m:snippet="message" m:pass="message"/>
+	<div id="message" class="callout" m:snippet="message" m:pass=":message"/>
 
 	<div class="row">
 		<div class="large-12" value="&nbsp;"/>
