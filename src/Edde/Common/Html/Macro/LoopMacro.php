@@ -24,7 +24,7 @@
 		 * You never finish a program, you just stop working on it.
 		 */
 		public function __construct() {
-			parent::__construct('loop', false);
+			parent::__construct('loop');
 		}
 
 		/**
@@ -91,7 +91,7 @@
 			$this->write($compiler, sprintf('foreach(%s as $key_%s => $value_%s) {', ($helper = $compiler->helper($macro, $src)) ? $helper : $this->loop($compiler, $src), $key, $value), 5);
 			$stack->push($loop);
 			foreach ($macro->getNodeList() as $node) {
-				$compiler->runtimeMacro($node);
+				$compiler->macro($node);
 			}
 			$stack->pop();
 			$this->write($compiler, '}', 5);

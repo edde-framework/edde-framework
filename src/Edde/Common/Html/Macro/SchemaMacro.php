@@ -17,14 +17,14 @@
 		 * - Seymour Cray
 		 */
 		public function __construct() {
-			parent::__construct('schema', true);
+			parent::__construct('schema');
 		}
 
 		/**
 		 * @inheritdoc
 		 * @throws MacroException
 		 */
-		public function macro(INode $macro, ICompiler $compiler) {
+		public function compile(INode $macro, ICompiler $compiler) {
 			$schemaList = $compiler->getVariable(static::class, []);
 			$schemaList[$this->attribute($macro, $compiler, 'name', false)] = $this->attribute($macro, $compiler, 'schema', false);
 			$compiler->setVariable(static::class, $schemaList);

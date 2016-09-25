@@ -22,10 +22,6 @@
 		 */
 		protected $name;
 		/**
-		 * @var bool
-		 */
-		protected $compile;
-		/**
 		 * @var IHelperSet
 		 */
 		protected $helperSet;
@@ -50,25 +46,11 @@
 		 * The master coughed and shifted his position slightly. "The lesson is over for today," he said.
 		 *
 		 * @param string $name
-		 * @param bool $compile
+		 *
+		 * @internal param bool $compile
 		 */
-		public function __construct(string $name, bool $compile) {
+		public function __construct(string $name) {
 			$this->name = $name;
-			$this->compile = $compile;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function isRuntime(): bool {
-			return $this->isCompile() === false;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function isCompile(): bool {
-			return $this->compile === true;
 		}
 
 		/**
@@ -108,6 +90,21 @@
 		 */
 		public function getName(): string {
 			return $this->name;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function compile(INode $macro, ICompiler $compiler) {
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function macro(INode $macro, ICompiler $compiler) {
+			foreach ($macro->getNodeList() as $node) {
+				$compiler->macro($node);
+			}
 		}
 
 		/**

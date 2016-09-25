@@ -25,7 +25,7 @@
 		 * So, he pushes 1, then he pushes 2, and starts looking for the Enter...
 		 */
 		public function __construct() {
-			parent::__construct('switch', false);
+			parent::__construct('switch');
 		}
 
 		/**
@@ -46,7 +46,7 @@
 			$this->write($compiler, sprintf('$switch_%s = %s;', $switch, $this->switch($this->attribute($macro, $compiler, 'src', false))), 5);
 			$stack->push($switch);
 			foreach ($macro->getNodeList() as $node) {
-				$compiler->runtimeMacro($node);
+				$compiler->macro($node);
 			}
 			$stack->pop();
 		}

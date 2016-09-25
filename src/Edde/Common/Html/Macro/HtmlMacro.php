@@ -20,7 +20,7 @@
 		 * @param string $control
 		 */
 		public function __construct(string $name, string $control) {
-			parent::__construct($name, false);
+			parent::__construct($name);
 			$this->control = $control;
 		}
 
@@ -36,7 +36,7 @@
 			$this->writeAttributeList($macro, $compiler);
 			$this->write($compiler, '$stack->push($control);', 5);
 			foreach ($macro->getNodeList() as $node) {
-				$compiler->runtimeMacro($node);
+				$compiler->macro($node);
 			}
 			$this->write($compiler, '$stack->pop();', 5);
 		}

@@ -1,4 +1,9 @@
 <div foo="yahoo!" title="foo" class="root">
+	<div class="foo-bar"></div>
+	<div class="boo-far">
+		<span class="poo">hello!</span>
+	</div>
+	<div class="foo-foo"></div>
 	<div data-schema="Bar\Foo\Fart\Poo" data-property="property-here"></div>
 	<div class="foo-case"></div>
 	<div class="foo-case2"></div>

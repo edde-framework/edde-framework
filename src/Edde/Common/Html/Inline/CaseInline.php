@@ -22,14 +22,15 @@
 		 * Replies the software engineer, "Now, let's just restart the engine, and maybe the problem will go away by itself."
 		 */
 		public function __construct() {
-			parent::__construct('m:case', true);
+			parent::__construct('m:case');
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws MacroException
 		 */
-		public function macro(INode $macro, ICompiler $compiler) {
+		public function compile(INode $macro, ICompiler $compiler) {
 			$macro->switch(new Node('case', null, ['name' => $this->extract($macro)]));
 		}
 	}

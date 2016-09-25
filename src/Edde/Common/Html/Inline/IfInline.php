@@ -18,14 +18,15 @@
 		 * A: None, because it can't be done. It's a hardware problem.
 		 */
 		public function __construct() {
-			parent::__construct('m:if', true);
+			parent::__construct('m:if');
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws MacroException
 		 */
-		public function macro(INode $macro, ICompiler $compiler) {
+		public function compile(INode $macro, ICompiler $compiler) {
 			$macro->switch(new Node('if', null, ['src' => $this->extract($macro)]));
 		}
 	}

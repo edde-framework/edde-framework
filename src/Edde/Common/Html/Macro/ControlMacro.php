@@ -23,7 +23,7 @@
 		 * Base 8 is just like base 10, if you are missing two fingers.
 		 */
 		public function __construct() {
-			parent::__construct('control', false);
+			parent::__construct('control');
 		}
 
 		/**
@@ -39,7 +39,7 @@
 		public function macro(INode $macro, ICompiler $compiler) {
 			if ($macro->isRoot() === false || $macro->getMeta('included', false)) {
 				foreach ($macro->getNodeList() as $node) {
-					$compiler->runtimeMacro($node);
+					$compiler->macro($node);
 				}
 				return null;
 			}
@@ -71,7 +71,7 @@
 				if ($node->getMeta('snippet', false)) {
 					continue;
 				}
-				$compiler->runtimeMacro($node);
+				$compiler->macro($node);
 			}
 			$this->write($compiler, 'break;', 5);
 			$caseList = $compiler->getVariable($caseListId = (static::class . '/cast-list'), [null => null]);
@@ -86,7 +86,7 @@
 				$this->write($compiler, sprintf('case %s:', var_export($id, true)), 4);
 				foreach ($nodeList as $node) {
 					$this->write($compiler, sprintf('// %s', $node->getPath()), 5);
-					$compiler->runtimeMacro($node);
+					$compiler->macro($node);
 				}
 				/** @noinspection DisconnectedForeachInstructionInspection */
 				$this->write($compiler, 'break;', 5);

@@ -17,14 +17,14 @@
 		 * - Edsger W. Dijkstra
 		 */
 		public function __construct() {
-			parent::__construct('t:block', true);
+			parent::__construct('t:block');
 		}
 
 		/**
 		 * @inheritdoc
 		 * @throws MacroException
 		 */
-		public function macro(INode $macro, ICompiler $compiler) {
+		public function compile(INode $macro, ICompiler $compiler) {
 			$compiler->block($this->attribute($macro, $compiler, null, false), [$macro]);
 		}
 	}

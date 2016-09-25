@@ -25,7 +25,7 @@
 		 * MS-DOS is like the US railroad system. It's there, but people just ignore it and find other ways of getting where they want to go.
 		 */
 		public function __construct() {
-			parent::__construct('if', false);
+			parent::__construct('if');
 		}
 
 		/**
@@ -78,7 +78,7 @@
 			$this->write($compiler, sprintf('if($if_%s = %s) {', $if, $this->if($this->attribute($macro, $compiler, 'src', false))), 5);
 			$stack->push($if);
 			foreach ($macro->getNodeList() as $node) {
-				$compiler->runtimeMacro($node);
+				$compiler->macro($node);
 			}
 			$stack->pop();
 			$this->write($compiler, '}', 5);

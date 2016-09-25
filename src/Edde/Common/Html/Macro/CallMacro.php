@@ -5,6 +5,7 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
+	use Edde\Api\Template\MacroException;
 
 	/**
 	 * This macro enables code execution from control "in the middle of template" - for example delegated control creation moved on the
@@ -19,11 +20,13 @@
 		 * "We are looking into the problem and will contact you with a solution as soon as possible."
 		 */
 		public function __construct() {
-			parent::__construct('call', false);
+			parent::__construct('call');
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
+		 * @throws MacroException
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
 			$this->write($compiler, $this->attribute($macro, $compiler, 'method') . ';', 5);

@@ -35,7 +35,7 @@
 		 * Bill Gates called his co-workers together and said "I have some good news and some really great news. The good news is that God thinks I am one of the three most powerful people in the world. The really great news is that we don't have to fix the bugs in Windows Vista."
 		 */
 		public function __construct() {
-			parent::__construct('js', false);
+			parent::__construct('js');
 		}
 
 		/**
@@ -57,9 +57,9 @@
 		 * @throws MacroException
 		 * @throws FileException
 		 */
-		public function macro(INode $macro, ICompiler $compiler) {
-			$this->write($compiler, sprintf('$this->javaScriptList->addFile(%s);', var_export($this->file($this->attribute($macro, $compiler, 'src'), $compiler->getSource())
-				->getPath(), true)), 5);
+		public function compile(INode $macro, ICompiler $compiler) {
+			$macro->setAttribute('src', $this->file($this->attribute($macro, $compiler, 'src', false), $compiler->getCurrent())
+				->getPath());
 		}
 
 		/**
@@ -81,5 +81,14 @@
 				return $this->assetsDirectory->file(str_replace('edde://', '', $src));
 			}
 			return new File($src);
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws MacroException
+		 * @throws FileException
+		 */
+		public function macro(INode $macro, ICompiler $compiler) {
+			$this->write($compiler, sprintf('$this->javaScriptList->addFile(%s);', var_export($this->attribute($macro, $compiler, 'src', false), true)), 5);
 		}
 	}
