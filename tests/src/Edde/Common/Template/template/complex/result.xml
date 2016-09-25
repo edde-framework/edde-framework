@@ -7,6 +7,13 @@
 		<div class="foo-foo passed"></div>
 	</span>
 	<span class="pass-child">
+		<div class="foo-bar passed"></div>
+		<div class="boo-far passed">
+			<span class="poo">hello!</span>
+		</div>
+		<div class="foo-foo passed"></div>
+	</span>
+	<span class="pass-child">
 		<div class="child-01 passed-03"></div>
 		<div class="child-02 passed-03"></div>
 		<div class="child-03 passed-03"></div>
