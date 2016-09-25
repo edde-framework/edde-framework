@@ -3,9 +3,10 @@
 
 	namespace Edde\Common\Asset;
 
+	use Edde\Api\Asset\IAssetDirectory;
 	use Edde\Api\Asset\IAssetStorage;
-	use Edde\Api\Asset\IStorageDirectory;
 	use Edde\Api\File\DirectoryException;
+	use Edde\Api\File\FileException;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\ResourceException;
@@ -27,36 +28,45 @@
 		/**
 		 * storage dir; path to store incoming files
 		 *
-		 * @var IStorageDirectory
+		 * @var IAssetDirectory
 		 */
-		protected $storageDirectory;
+		protected $assetDirectory;
 
 		/**
 		 * @param IRootDirectory $rootDirectory
-		 * @param IStorageDirectory $storageDirectory
+		 * @param IAssetDirectory $assetDirectory
 		 */
-		public function __construct(IRootDirectory $rootDirectory, IStorageDirectory $storageDirectory) {
+		public function __construct(IRootDirectory $rootDirectory, IAssetDirectory $assetDirectory) {
 			$this->rootDirectory = $rootDirectory;
-			$this->storageDirectory = $storageDirectory;
+			$this->assetDirectory = $assetDirectory;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws ResourceException
+		 * @throws FileException
+		 */
 		public function store(IResource $resource) {
 			$this->use();
 			$url = $resource->getUrl();
-			$directory = new Directory($this->storageDirectory->getDirectory() . '/' . sha1(dirname($url->getPath())));
+			$directory = new Directory($this->assetDirectory->getDirectory() . '/' . sha1(dirname($url->getPath())));
 			try {
 				$directory->create();
 			} catch (DirectoryException $e) {
 				throw new ResourceException(sprintf('Cannot create store folder [%s] for the resource [%s].', $directory, $url), 0, $e);
 			}
 			FileUtils::copy($url->getAbsoluteUrl(), $file = $directory->filename($url->getResourceName()));
-			return new File($file, dirname($this->storageDirectory->getDirectory()));
+			return new File($file, dirname($this->assetDirectory->getDirectory()));
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws ResourceException
+		 */
 		protected function prepare() {
-			$this->storageDirectory->create();
-			if (strpos($this->storageDirectory->getDirectory(), $this->rootDirectory->getDirectory()) === false) {
-				throw new ResourceException(sprintf('Storage path [%s] is not in the given root [%s].', $this->storageDirectory, $this->rootDirectory));
+			$this->assetDirectory->create();
+			if (strpos($this->assetDirectory->getDirectory(), $this->rootDirectory->getDirectory()) === false) {
+				throw new ResourceException(sprintf('Storage path [%s] is not in the given root [%s].', $this->assetDirectory, $this->rootDirectory));
 			}
 		}
 	}
