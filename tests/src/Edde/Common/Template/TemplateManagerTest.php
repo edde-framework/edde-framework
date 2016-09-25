@@ -9,6 +9,7 @@
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\File\ITempDirectory;
+	use Edde\Api\Html\ITemplateDirectory;
 	use Edde\Api\Http\IHostUrl;
 	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Link\ILinkFactory;
@@ -31,6 +32,7 @@
 	use Edde\Common\Html\Macro\HtmlMacro;
 	use Edde\Common\Html\Tag\DivControl;
 	use Edde\Common\Html\Tag\SpanControl;
+	use Edde\Common\Html\TemplateDirectory;
 	use Edde\Common\Http\HostUrl;
 	use Edde\Common\Link\ControlLinkGenerator;
 	use Edde\Common\Link\LinkFactory;
@@ -180,6 +182,9 @@
 				},
 				ITempDirectory::class => function (IRootDirectory $rootDirectory) {
 					return new TempDirectory($rootDirectory->getDirectory());
+				},
+				ITemplateDirectory::class => function (ITempDirectory $tempDirectory) {
+					return $tempDirectory->directory('.', TemplateDirectory::class);
 				},
 				IStyleSheetCompiler::class => ResourceList::class,
 				IJavaScriptCompiler::class => ResourceList::class,

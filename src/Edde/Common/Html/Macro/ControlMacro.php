@@ -4,23 +4,33 @@
 	namespace Edde\Common\Html\Macro;
 
 	use Edde\Api\Html\IHtmlControl;
+	use Edde\Api\Html\ITemplateDirectory;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\TemplateException;
-	use Edde\Common\File\HomeDirectoryTrait;
 	use Edde\Common\Html\AbstractHtmlTemplate;
 
 	/**
 	 * Root control macro for template generation.
 	 */
 	class ControlMacro extends AbstractHtmlMacro {
-		use HomeDirectoryTrait;
+		/**
+		 * @var ITemplateDirectory
+		 */
+		protected $templateDirectory;
 
 		/**
 		 * Base 8 is just like base 10, if you are missing two fingers.
 		 */
 		public function __construct() {
 			parent::__construct('control', false);
+		}
+
+		/**
+		 * @param ITemplateDirectory $templateDirectory
+		 */
+		public function lazyTemplateDirectory(ITemplateDirectory $templateDirectory) {
+			$this->templateDirectory = $templateDirectory;
 		}
 
 		/**
@@ -34,7 +44,7 @@
 				return null;
 			}
 			$this->use();
-			$compiler->setVariable('file', $file = $this->homeDirectory->file(($class = 'Template_' . $compiler->getVariable('name')) . '.php'));
+			$compiler->setVariable('file', $file = $this->templateDirectory->file(($class = 'Template_' . $compiler->getVariable('name')) . '.php'));
 			$file->openForWrite();
 			$file->enableWriteCache();
 			$this->write($compiler, '<?php');
@@ -94,9 +104,5 @@
 			$this->write($compiler, '}', 1);
 			$file->close();
 			return $file;
-		}
-
-		protected function prepare() {
-			$this->home('.template');
 		}
 	}

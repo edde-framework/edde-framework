@@ -23,6 +23,7 @@
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\File\ITempDirectory;
+	use Edde\Api\Html\ITemplateDirectory;
 	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\ICookieList;
 	use Edde\Api\Http\IHeaderList;
@@ -70,6 +71,7 @@
 	use Edde\Common\EddeDirectory;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\Converter\HtmlConverter;
+	use Edde\Common\Html\TemplateDirectory;
 	use Edde\Common\Http\HostUrl;
 	use Edde\Common\Http\HttpRequestFactory;
 	use Edde\Common\Http\HttpResponse;
@@ -173,7 +175,10 @@
 						return $tempDirectory->directory('cache', CacheDirectory::class);
 					},
 					IStorageDirectory::class => function (IAssetDirectory $assetDirectory) {
-						return $assetDirectory->directory('.', StorageDirectory::class);
+						return $assetDirectory->directory('storage', StorageDirectory::class);
+					},
+					ITemplateDirectory::class => function (IAssetDirectory $assetDirectory) {
+						return $assetDirectory->directory('template', TemplateDirectory::class);
 					},
 					ICryptEngine::class => CryptEngine::class,
 					IAssetStorage::class => AssetStorage::class,

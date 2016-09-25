@@ -8,6 +8,7 @@
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\Html\ITemplateDirectory;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacroSet;
@@ -25,7 +26,7 @@
 	use Edde\Ext\Template\DefaultMacroSet;
 	use phpunit\framework\TestCase;
 
-	require_once(__DIR__ . '/assets/assets.php');
+	require_once __DIR__ . '/assets/assets.php';
 
 	class TemplateTraitTest extends TestCase {
 		/**
@@ -53,6 +54,10 @@
 				IConverterManager::class => ConverterManager::class,
 				IXmlParser::class => XmlParser::class,
 				IRootDirectory::class => new RootDirectory(__DIR__ . '/temp'),
+				ITemplateDirectory::class => function (IRootDirectory $rootDirectory) {
+					return $rootDirectory->directory('.', TemplateDirectory::class)
+						->create();
+				},
 				ICryptEngine::class => CryptEngine::class,
 				IMacroSet::class => function (IContainer $container) {
 					return DefaultMacroSet::macroSet($container);
