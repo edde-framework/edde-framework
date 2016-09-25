@@ -6,6 +6,7 @@
 	use Edde\Common\Html\TemplateTrait;
 	use Edde\Common\Html\ViewControl;
 
+	/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 	class MyLittleCuteView extends ViewControl {
 		/**
 		 * @var DivControl
@@ -25,6 +26,7 @@
 		}
 	}
 
+	/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 	class SomeTemplatedControl extends AbstractHtmlControl {
 		use TemplateTrait;
 	}

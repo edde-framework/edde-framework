@@ -3,13 +3,12 @@
 
 	namespace Edde\Api\Template;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Node\INode;
 
 	/**
 	 * HtmlMacro is operating over whole Node.
 	 */
-	interface IMacro extends ILazyInject {
+	interface IMacro {
 		/**
 		 * compile time macros can modify node tree before compilation
 		 *
