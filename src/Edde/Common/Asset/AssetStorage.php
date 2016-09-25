@@ -85,7 +85,7 @@
 			if (strpos($this->assetDirectory->getDirectory(), $this->rootDirectory->getDirectory()) === false) {
 				throw new ResourceException(sprintf('Asset path [%s] is not in the given root [%s].', $this->assetDirectory, $this->rootDirectory));
 			}
-			if (strpos($this->storageDirectory->getDirectory(), $this->rootDirectory->getDirectory()) === false) {
+			if (strpos($this->storageDirectory->getDirectory(), $this->assetDirectory->getDirectory()) === false) {
 				throw new ResourceException(sprintf('Storage path [%s] is not in the given root [%s].', $this->storageDirectory, $this->rootDirectory));
 			}
 		}
