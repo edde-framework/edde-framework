@@ -52,7 +52,7 @@
 		 * @param string $name
 		 * @param bool $compile
 		 */
-		public function __construct(string $name, bool $compile) {
+		public function __construct(string $name, $compile) {
 			$this->name = $name;
 			$this->compile = $compile;
 		}
@@ -61,14 +61,14 @@
 		 * @inheritdoc
 		 */
 		public function isRuntime(): bool {
-			return $this->isCompile() === false;
+			return $this->isCompile() === false || $this->compile === null;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function isCompile(): bool {
-			return $this->compile === true;
+			return $this->compile === true || $this->compile === null;
 		}
 
 		/**

@@ -30,7 +30,7 @@
 		 * Any sufficiently advanced bug is indistinguishable from a feature.
 		 */
 		public function __construct() {
-			parent::__construct('css', false);
+			parent::__construct('css', null);
 		}
 
 		/**
@@ -53,8 +53,13 @@
 		 * @throws MacroException
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
-			$this->write($compiler, sprintf('$this->styleSheetList->addFile(%s);', var_export($this->file($this->attribute($macro, $compiler, 'src'), $compiler->getSource())
-				->getPath(), true)), 5);
+			if ($macro->getMeta('css', true)) {
+				$macro->setMeta('css', false);
+				$macro->setAttribute('src', $this->file($this->attribute($macro, $compiler, 'src', false), $compiler->getCurrent())
+					->getPath());
+				return;
+			}
+			$this->write($compiler, sprintf('$this->styleSheetList->addFile(%s);', var_export($this->attribute($macro, $compiler, 'src', false), true)), 5);
 		}
 
 		/**
