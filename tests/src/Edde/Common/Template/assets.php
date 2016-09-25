@@ -13,6 +13,10 @@
 		 * @var SpanControl
 		 */
 		public $spanControl;
+		/**
+		 * @var SpanControl
+		 */
+		public $includedVariable;
 
 		public function spanMethodCall(SpanControl $spanControl) {
 			$this->spanControl = $spanControl;

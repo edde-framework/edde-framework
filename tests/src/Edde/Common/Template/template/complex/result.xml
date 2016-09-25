@@ -1,4 +1,7 @@
 <div foo="yahoo!" title="foo" class="root">
+	<span>
+		<div class="foo-bar"></div>
+	</span>
 	<span class="foo"></span>
 	<div class="this-will-be-loaded-on-demand">
 		<span class="Hey, I'm alive!"></span>

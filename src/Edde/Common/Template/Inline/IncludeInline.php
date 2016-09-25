@@ -18,10 +18,16 @@
 		 */
 		protected $rootDirectory;
 
+		/**
+		 * MIPS: Meaningless Indicator of Processor Speed.
+		 */
 		public function __construct() {
 			parent::__construct('t:include', true);
 		}
 
+		/**
+		 * @param IRootDirectory $rootDirectory
+		 */
 		public function lazyRootDirectory(IRootDirectory $rootDirectory) {
 			$this->rootDirectory = $rootDirectory;
 		}
