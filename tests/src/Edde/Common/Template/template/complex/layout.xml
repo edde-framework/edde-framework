@@ -1,4 +1,5 @@
 <control foo="@current-method-call()" title="foo">
+	<css src="./foo/bar/boo.css"/>
 	<schema name="foo" schema="Bar\Foo\Fart\Poo"/>
 
 	<div m:schema="foo.property-here"/>
@@ -111,7 +112,6 @@
 
 	<t:include src="block-from-imported-template"/>
 
-	<css src="./foo/bar/boo.css"/>
 	<js src="./some/javascript.js"/>
 
 	<css src="edde://css/foundation.min.css"/>

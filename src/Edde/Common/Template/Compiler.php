@@ -213,10 +213,10 @@
 		 * @inheritdoc
 		 */
 		public function compileMacro(INode $macro) {
-			if ($this->macroList[$name = $macro->getName()]->isRuntime()) {
-				return null;
+			if ($this->macroList[$name = $macro->getName()]->isCompile()) {
+				return $this->macroList[$name]->macro($macro, $this);
 			}
-			return $this->macroList[$name]->macro($macro, $this);
+			return null;
 		}
 
 		/**
