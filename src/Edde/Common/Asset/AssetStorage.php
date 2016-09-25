@@ -1,14 +1,14 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Resource\Storage;
+	namespace Edde\Common\Asset;
 
+	use Edde\Api\Asset\IAssetStorage;
+	use Edde\Api\Asset\IStorageDirectory;
 	use Edde\Api\File\DirectoryException;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\ResourceException;
-	use Edde\Api\Resource\Storage\IFileStorage;
-	use Edde\Api\Resource\Storage\IStorageDirectory;
 	use Edde\Common\File\Directory;
 	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
@@ -17,7 +17,7 @@
 	/**
 	 * Simple and uniform way how to handle file storing.
 	 */
-	class FileStorage extends AbstractUsable implements IFileStorage {
+	class AssetStorage extends AbstractUsable implements IAssetStorage {
 		/**
 		 * application root directory; it is used for relative path computation
 		 *

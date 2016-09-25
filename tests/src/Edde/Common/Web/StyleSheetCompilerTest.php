@@ -9,6 +9,8 @@
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Upgrade\IUpgradeManager;
+	use Edde\Common\Asset\AssetStorage;
+	use Edde\Common\Asset\StorageDirectory;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Database\DatabaseStorage;
@@ -17,8 +19,6 @@
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Resource\ResourceList;
-	use Edde\Common\Resource\Storage\FileStorage;
-	use Edde\Common\Resource\Storage\StorageDirectory;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Strings\StringUtils;
@@ -81,7 +81,7 @@
 
 		public function testCommon() {
 			$styleSheetCompiler = new StyleSheetCompiler();
-			$styleSheetCompiler->lazyFileStorage($fileStorage = new FileStorage(new RootDirectory(__DIR__), new StorageDirectory(__DIR__ . '/public')));
+			$styleSheetCompiler->lazyFileStorage($fileStorage = new AssetStorage(new RootDirectory(__DIR__), new StorageDirectory(__DIR__ . '/public')));
 			$styleSheetCompiler->lazyTempDirectory($this->tempDirectory);
 			$styleSheetCompiler->lazyCacheFactory(new CacheFactory(__DIR__, new FileCacheStorage(new CacheDirectory(__DIR__ . '/temp'))));
 			$styleSheetCompiler->cache();
