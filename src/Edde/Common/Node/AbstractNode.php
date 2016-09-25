@@ -36,7 +36,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getRoot() {
+		public function getRoot(): IAbstractNode {
 			$parent = $this;
 			foreach ($this->getParentList() as $parent) {
 				;
@@ -47,7 +47,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getParentList(IAbstractNode $root = null) {
+		public function getParentList(IAbstractNode $root = null): array {
 			$parent = $this->getParent();
 			$parentList[] = $root ?: $parent;
 			while ($parent && $parent !== $root) {
@@ -68,7 +68,7 @@
 		 * @inheritdoc
 		 * @throws NodeException
 		 */
-		public function setParent(IAbstractNode $abstractNode = null) {
+		public function setParent(IAbstractNode $abstractNode = null): IAbstractNode {
 			if ($abstractNode !== null && $abstractNode->accept($this) === false) {
 				throw new NodeException(sprintf("Cannot set parent for [%s]: parent [%s] doesn't accept this node.", static::class, get_class($abstractNode)));
 			}
@@ -80,7 +80,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function isChild() {
+		public function isChild(): bool {
 			return $this->getParent() !== null;
 		}
 
@@ -88,7 +88,7 @@
 		 * @inheritdoc
 		 * @throws NodeException
 		 */
-		public function addNodeList($nodeList, $move = false) {
+		public function addNodeList($nodeList, bool $move = false) {
 			foreach ($nodeList as $node) {
 				$this->addNode($node, $move);
 			}
@@ -99,7 +99,7 @@
 		 * @inheritdoc
 		 * @throws NodeException
 		 */
-		public function addNode(IAbstractNode $abstractNode, $move = false) {
+		public function addNode(IAbstractNode $abstractNode, bool $move = false): IAbstractNode {
 			if ($this->accept($abstractNode) === false) {
 				throw new NodeException(sprintf("Current node [%s] doesn't accept given node [%s].", static::class, get_class($abstractNode)));
 			}
@@ -118,7 +118,15 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function prepend(IAbstractNode $abstractNode): IAbstractNode {
+		public function prepend(IAbstractNode $abstractNode, bool $move = false): IAbstractNode {
+			/** @var $parent IAbstractNode */
+			$parent = $abstractNode->getParent();
+			if ($move || $parent === null) {
+				if ($parent) {
+					$parent->removeNode($abstractNode);
+				}
+				$abstractNode->setParent($this);
+			}
 			$this->nodeList = array_merge([$abstractNode], $this->nodeList);
 			return $this;
 		}
@@ -127,7 +135,7 @@
 		 * @inheritdoc
 		 * @throws NodeException
 		 */
-		public function pushNode(IAbstractNode $abstractNode) {
+		public function pushNode(IAbstractNode $abstractNode): IAbstractNode {
 			if ($this->accept($abstractNode) === false) {
 				throw new NodeException(sprintf("Current node [%s] doesn't accept given node [%s].", static::class, get_class($abstractNode)));
 			}
@@ -139,7 +147,7 @@
 		 * @inheritdoc
 		 * @throws NodeException
 		 */
-		public function moveNodeList(IAbstractNode $sourceNode, $move = false) {
+		public function moveNodeList(IAbstractNode $sourceNode, bool $move = false): IAbstractNode {
 			foreach ($sourceNode->getNodeList() as $node) {
 				$sourceNode->removeNode($node);
 				$this->addNode($node, $move);
@@ -151,12 +159,12 @@
 		 * @inheritdoc
 		 * @throws NodeException
 		 */
-		public function removeNode(IAbstractNode $abstractNode) {
+		public function removeNode(IAbstractNode $abstractNode): IAbstractNode {
 			foreach ($this->nodeList as $index => $node) {
 				if ($node === $abstractNode) {
 					$node->setParent(null);
 					unset($this->nodeList[$index]);
-					return;
+					return $this;
 				}
 			}
 			throw new NodeException('The given node is not in current node list.');
@@ -165,7 +173,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function clearNodeList() {
+		public function clearNodeList(): IAbstractNode {
 			foreach ($this->nodeList as $node) {
 				$node->setParent(null);
 			}
@@ -176,7 +184,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getAncestorList() {
+		public function getAncestorList(): array {
 			$ancestorList = [];
 			$node = $this;
 			while ($parent = $node->getParent()) {
@@ -189,7 +197,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getLevel() {
+		public function getLevel(): int {
 			if ($this->level !== null) {
 				return $this->level;
 			}
@@ -205,7 +213,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getTreeHeight() {
+		public function getTreeHeight(): int {
 			if ($this->isLeaf()) {
 				return 0;
 			}
@@ -219,7 +227,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function isLeaf() {
+		public function isLeaf(): bool {
 			return count($this->nodeList) === 0;
 		}
 
@@ -239,14 +247,14 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function isRoot() {
+		public function isRoot(): bool {
 			return $this->getParent() === null;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function getTreeSize() {
+		public function getTreeSize(): int {
 			$size = 1;
 			foreach ($this->nodeList as $node) {
 				$size += $node->getTreeSize();
@@ -257,7 +265,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getNodeCount() {
+		public function getNodeCount(): int {
 			return count($this->nodeList);
 		}
 
@@ -276,7 +284,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getNodeList() {
+		public function getNodeList(): array {
 			return $this->nodeList;
 		}
 
@@ -284,7 +292,7 @@
 		 * @inheritdoc
 		 * @throws NodeException
 		 */
-		public function setNodeList($nodeList, $move = false) {
+		public function setNodeList($nodeList, bool $move = false): IAbstractNode {
 			$this->nodeList = [];
 			foreach ($nodeList as $node) {
 				$this->addNode($node, $move);

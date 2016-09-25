@@ -1,5 +1,5 @@
 <control foo="@current-method-call()" title="foo">
-	<div class="this-will-be-loaded-on-demand">
+	<div class="this-will-be-loaded-on-demand" m:pass=":some-variable">
 		<!--
 			m:load will load the given template on demand; it supports
 			relative file reference (./ prefix) and "absolute" path reference from

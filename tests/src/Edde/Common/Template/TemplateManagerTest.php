@@ -76,6 +76,16 @@
 			$template->snippet($this->container->inject($control = new \SomeCoolControl()));
 			$control->addClass('root');
 			$control->dirty();
+			self::assertInstanceOf(DivControl::class, $control->someVariable);
+			$control->someVariable->dirty();
+			self::assertEquals('<div class="this-will-be-loaded-on-demand">
+	<span class="Hey, I\'m alive!"></span>
+	<div>
+		<div class="hello there!"></div>
+	</div>
+	<div class="poo-class">poo</div>
+</div>
+', $control->someVariable->render(-1));
 			self::assertEquals(file_get_contents(__DIR__ . '/template/complex/result.xml'), $control->render());
 			$cssList = [
 				(new File(__DIR__ . '/../../../../../src/Edde/assets/css/foundation.min.css'))->getUrl()

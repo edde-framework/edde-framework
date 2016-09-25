@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Cache;
 
 	use phpunit\framework\TestCase;
@@ -26,8 +28,5 @@
 				return 'foo';
 			}));
 			self::assertEquals(1, $count);
-			$cacheNode = new CacheNode('foo', 'bar', ['boo' => 'far']);
-			self::assertSame($cacheNode, $cache->cache('boofaa', $cacheNode));
-			self::assertEquals($cacheNode, $cache->load('boofaa'));
 		}
 	}

@@ -4,6 +4,11 @@
 	use Edde\Common\Html\Tag\DivControl;
 
 	class SomeCoolControl extends DivControl {
+		/**
+		 * @var DivControl
+		 */
+		public $someVariable;
+
 		public function loopFromRoot() {
 			return [];
 		}

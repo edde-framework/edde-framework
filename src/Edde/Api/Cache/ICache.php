@@ -29,25 +29,14 @@
 		public function save($id, $save);
 
 		/**
-		 * cache whole given node (with subtree)
-		 *
-		 * @param string $id
-		 * @param ICacheNode $cacheNode
-		 *
-		 * @return ICacheNode
-		 */
-		public function cache($id, ICacheNode $cacheNode);
-
-		/**
 		 * load value be the id - if the value doesn't exists, default is returned
 		 *
 		 * @param string $id
 		 * @param mixed|null $default
-		 * @param IInvalidator $invalidator
 		 *
 		 * @return mixed
 		 */
-		public function load($id, $default = null, IInvalidator $invalidator = null);
+		public function load($id, $default = null);
 
 		/**
 		 * manual invalidation of whole cache
