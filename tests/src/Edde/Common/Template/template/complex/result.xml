@@ -1,4 +1,5 @@
 <div foo="yahoo!" title="foo" class="root">
+	<div data-schema="Bar\Foo\Fart\Poo" data-property="property-here"></div>
 	<div class="foo-case"></div>
 	<div class="foo-case2"></div>
 	<div class="inline-switch">

@@ -13,6 +13,7 @@
 	use Edde\Common\Html\Inline\LoopInline;
 	use Edde\Common\Html\Inline\PassChildInline;
 	use Edde\Common\Html\Inline\PassInline;
+	use Edde\Common\Html\Inline\SchemaInline;
 	use Edde\Common\Html\Inline\SnippetInline;
 	use Edde\Common\Html\Inline\SwitchInline;
 	use Edde\Common\Html\Macro\ButtonMacro;
@@ -27,6 +28,7 @@
 	use Edde\Common\Html\Macro\LoadMacro;
 	use Edde\Common\Html\Macro\LoopMacro;
 	use Edde\Common\Html\Macro\PassMacro;
+	use Edde\Common\Html\Macro\SchemaMacro;
 	use Edde\Common\Html\Macro\SwitchMacro;
 	use Edde\Common\Html\Macro\UseMacro;
 	use Edde\Common\Html\PlaceholderControl;
@@ -68,6 +70,7 @@
 					$container->inject(new CallMacro()),
 					$container->inject(new CssMacro()),
 					$container->inject(new JsMacro()),
+					$container->inject(new SchemaMacro()),
 					$container->inject(new PassMacro()),
 					$container->inject(new HtmlMacro('div', DivControl::class)),
 					$container->inject(new HtmlMacro('span', SpanControl::class)),
@@ -90,6 +93,7 @@
 					$container->inject(new SnippetInline()),
 					$container->inject(new PassInline()),
 					$container->inject(new PassChildInline()),
+					$container->inject(new SchemaInline()),
 				]);
 			});
 			return $macroSet;
