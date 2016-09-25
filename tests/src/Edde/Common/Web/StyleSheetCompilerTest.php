@@ -3,16 +3,20 @@
 
 	namespace Edde\Common\Web;
 
+	use Edde\Api\Asset\IAssetDirectory;
+	use Edde\Api\Asset\IAssetStorage;
+	use Edde\Api\Asset\IStorageDirectory;
 	use Edde\Api\Database\IDriver;
+	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Upgrade\IUpgradeManager;
+	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Asset\AssetDirectory;
 	use Edde\Common\Asset\AssetStorage;
-	use Edde\Common\Cache\CacheDirectory;
-	use Edde\Common\Cache\CacheFactory;
+	use Edde\Common\Asset\StorageDirectory;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
@@ -24,13 +28,16 @@
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Common\Url\Url;
-	use Edde\Ext\Cache\FileCacheStorage;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Upgrade\InitialStorageUpgrade;
 	use phpunit\framework\TestCase;
 
 	class StyleSheetCompilerTest extends TestCase {
+		/**
+		 * @var IStyleSheetCompiler
+		 */
+		protected $styleSheetCompiler;
 		/**
 		 * @var ITempDirectory
 		 */
@@ -65,7 +72,14 @@
 				IDriver::class => function () {
 					return $this->sqliteDriver = new SqliteDriver('sqlite:' . $this->getDatabaseFileName());
 				},
+				IAssetStorage::class => AssetStorage::class,
+				IRootDirectory::class => new RootDirectory(__DIR__),
+				IAssetDirectory::class => new AssetDirectory(__DIR__ . '/public'),
+				IStorageDirectory::class => new StorageDirectory(__DIR__ . '/public'),
+				ITempDirectory::class => $this->tempDirectory,
+				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 			]);
+			$this->styleSheetCompiler = $container->create(IStyleSheetCompiler::class);
 			$this->storage = $container->create(IStorage::class);
 			$this->schemaManager = $container->create(ISchemaManager::class);
 			$this->upgradeManager = $container->create(IUpgradeManager::class);
@@ -80,11 +94,7 @@
 		}
 
 		public function testCommon() {
-			$styleSheetCompiler = new StyleSheetCompiler();
-			$styleSheetCompiler->lazyAssetStorage($assetStorage = new AssetStorage(new RootDirectory(__DIR__), new AssetDirectory(__DIR__ . '/public')));
-			$styleSheetCompiler->lazyTempDirectory($this->tempDirectory);
-			$styleSheetCompiler->lazyCacheFactory(new CacheFactory(__DIR__, new FileCacheStorage(new CacheDirectory(__DIR__ . '/temp'))));
-			$styleSheetCompiler->cache();
+			$styleSheetCompiler = $this->styleSheetCompiler;
 			$resourceList = new ResourceList();
 			$resourceList->addResource(new File(__DIR__ . '/assets/css/font-awesome.css'));
 			$resourceList->addResource(new File(__DIR__ . '/assets/css/font-awesome.min.css'));

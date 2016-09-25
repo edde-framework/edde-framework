@@ -5,6 +5,7 @@
 
 	use Edde\Api\Asset\IAssetDirectory;
 	use Edde\Api\Asset\IAssetStorage;
+	use Edde\Api\Asset\IStorageDirectory;
 	use Edde\Api\File\DirectoryException;
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IRootDirectory;
@@ -30,14 +31,30 @@
 		 * @var IAssetDirectory
 		 */
 		protected $assetDirectory;
+		/**
+		 * @var IStorageDirectory
+		 */
+		protected $storageDirectory;
 
 		/**
 		 * @param IRootDirectory $rootDirectory
+		 */
+		public function lazyRootDirectory(IRootDirectory $rootDirectory) {
+			$this->rootDirectory = $rootDirectory;
+		}
+
+		/**
 		 * @param IAssetDirectory $assetDirectory
 		 */
-		public function __construct(IRootDirectory $rootDirectory, IAssetDirectory $assetDirectory) {
-			$this->rootDirectory = $rootDirectory;
+		public function lazyAssetDirectory(IAssetDirectory $assetDirectory) {
 			$this->assetDirectory = $assetDirectory;
+		}
+
+		/**
+		 * @param IStorageDirectory $storageDirectory
+		 */
+		public function lazyStorageDirectory(IStorageDirectory $storageDirectory) {
+			$this->storageDirectory = $storageDirectory;
 		}
 
 		/**
@@ -48,7 +65,7 @@
 		public function store(IResource $resource) {
 			$this->use();
 			$url = $resource->getUrl();
-			$directory = $this->assetDirectory->directory(sha1(dirname($url->getPath())));
+			$directory = $this->storageDirectory->directory(sha1(dirname($url->getPath())));
 			try {
 				$directory->create();
 			} catch (DirectoryException $e) {
@@ -64,8 +81,12 @@
 		 */
 		protected function prepare() {
 			$this->assetDirectory->create();
+			$this->storageDirectory->create();
 			if (strpos($this->assetDirectory->getDirectory(), $this->rootDirectory->getDirectory()) === false) {
-				throw new ResourceException(sprintf('Storage path [%s] is not in the given root [%s].', $this->assetDirectory, $this->rootDirectory));
+				throw new ResourceException(sprintf('Asset path [%s] is not in the given root [%s].', $this->assetDirectory, $this->rootDirectory));
+			}
+			if (strpos($this->storageDirectory->getDirectory(), $this->assetDirectory->getDirectory()) === false) {
+				throw new ResourceException(sprintf('Storage path [%s] is not in the given root [%s].', $this->storageDirectory, $this->rootDirectory));
 			}
 		}
 	}
