@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Api\Resource\Storage;
+	namespace Edde\Api\Asset;
 
 	use Edde\Api\File\IDirectory;
 

@@ -7,6 +7,9 @@
 	use Edde\Api\Application\IErrorControl;
 	use Edde\Api\Application\IRequest;
 	use Edde\Api\Application\IResponseManager;
+	use Edde\Api\Asset\IAssetDirectory;
+	use Edde\Api\Asset\IAssetStorage;
+	use Edde\Api\Asset\IStorageDirectory;
 	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Cache\ICacheStorage;
@@ -36,8 +39,6 @@
 	use Edde\Api\IEddeDirectory;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResourceManager;
-	use Edde\Api\Resource\Storage\IFileStorage;
-	use Edde\Api\Resource\Storage\IStorageDirectory;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Runtime\RuntimeException;
 	use Edde\Api\Schema\ISchemaFactory;
@@ -54,6 +55,8 @@
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Application\Application;
 	use Edde\Common\Application\ResponseManager;
+	use Edde\Common\Asset\AssetStorage;
+	use Edde\Common\Asset\StorageDirectory;
 	use Edde\Common\AssetsDirectory;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
@@ -74,8 +77,6 @@
 	use Edde\Common\Identity\IdentityManager;
 	use Edde\Common\Link\LinkFactory;
 	use Edde\Common\Resource\ResourceManager;
-	use Edde\Common\Resource\Storage\FileStorage;
-	use Edde\Common\Resource\Storage\StorageDirectory;
 	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\SetupHandler;
 	use Edde\Common\Schema\SchemaFactory;
@@ -101,6 +102,9 @@
 	use Edde\Ext\Template\DefaultMacroSet;
 	use Edde\Framework;
 
+	/**
+	 * Default application configuration; this shold be base for all setups.
+	 */
 	class DefaultSetupHandler extends SetupHandler {
 		static public function create(ICacheFactory $cacheFactory = null, array $factoryList = []) {
 			return parent::create($cacheFactory ?: new CacheFactory(__DIR__, new InMemoryCacheStorage()))
@@ -159,24 +163,27 @@
 					IRootDirectory::class => function () {
 						throw new RuntimeException(sprintf('If you want use root directory [%s], you must rregister it to the container!', IRootDirectory::class));
 					},
+					IAssetDirectory::class => function (IRootDirectory $rootDirectory) {
+						return $rootDirectory->directory('.assets');
+					},
 					ITempDirectory::class => function (IRootDirectory $rootDirectory) {
 						return $rootDirectory->directory('temp', TempDirectory::class);
 					},
 					ICacheDirectory::class => function (ITempDirectory $tempDirectory) {
 						return $tempDirectory->directory('cache', CacheDirectory::class);
 					},
-					IStorageDirectory::class => function (IRootDirectory $rootDirectory) {
-						return $rootDirectory->directory('.storage', StorageDirectory::class);
+					IStorageDirectory::class => function (IAssetDirectory $assetDirectory) {
+						return $assetDirectory->directory('.', StorageDirectory::class);
 					},
 					ICryptEngine::class => CryptEngine::class,
-					IFileStorage::class => FileStorage::class,
-					IDriver::class => function (IStorageDirectory $storageDirectory) {
-						return new SqliteDriver('sqlite:' . $storageDirectory->filename('storage.sqlite'));
+					IAssetStorage::class => AssetStorage::class,
+					IDriver::class => function (IAssetDirectory $assetDirectory) {
+						return new SqliteDriver('sqlite:' . $assetDirectory->filename('storage.sqlite'));
 					},
 					ICrateGenerator::class => CrateGenerator::class,
 					ICrateFactory::class => CrateFactory::class,
-					ICrateDirectory::class => function (IStorageDirectory $storageDirectory) {
-						return $storageDirectory->directory('crate', CrateDirectory::class);
+					ICrateDirectory::class => function (IAssetDirectory $assetDirectory) {
+						return $assetDirectory->directory('crate', CrateDirectory::class);
 					},
 					IStorage::class => DatabaseStorage::class,
 					IResourceManager::class => ResourceManager::class,
