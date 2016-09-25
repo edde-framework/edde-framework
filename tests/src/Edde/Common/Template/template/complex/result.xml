@@ -1,4 +1,10 @@
 <div foo="yahoo!" title="foo" class="root">
+	<div class="foo-case"></div>
+	<div class="foo-case2"></div>
+	<div class="inline-switch">
+		<div class="foo-case"></div>
+		<div class="foo-case2"></div>
+	</div>
 	<span class="double-include">
 		<div class="foo-bar"></div>
 		<div class="boo-far">

@@ -8,13 +8,16 @@
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Html\Helper\MethodHelper;
+	use Edde\Common\Html\Inline\CaseInline;
 	use Edde\Common\Html\Inline\IfInline;
 	use Edde\Common\Html\Inline\LoopInline;
 	use Edde\Common\Html\Inline\PassChildInline;
 	use Edde\Common\Html\Inline\PassInline;
 	use Edde\Common\Html\Inline\SnippetInline;
+	use Edde\Common\Html\Inline\SwitchInline;
 	use Edde\Common\Html\Macro\ButtonMacro;
 	use Edde\Common\Html\Macro\CallMacro;
+	use Edde\Common\Html\Macro\CaseMacro;
 	use Edde\Common\Html\Macro\ControlMacro;
 	use Edde\Common\Html\Macro\CssMacro;
 	use Edde\Common\Html\Macro\HeaderMacro;
@@ -24,6 +27,7 @@
 	use Edde\Common\Html\Macro\LoadMacro;
 	use Edde\Common\Html\Macro\LoopMacro;
 	use Edde\Common\Html\Macro\PassMacro;
+	use Edde\Common\Html\Macro\SwitchMacro;
 	use Edde\Common\Html\Macro\UseMacro;
 	use Edde\Common\Html\PlaceholderControl;
 	use Edde\Common\Html\Tag\DivControl;
@@ -56,6 +60,8 @@
 					$container->inject(new IncludeMacro()),
 					$container->inject(new LoopMacro()),
 					$container->inject(new IfMacro()),
+					$container->inject(new SwitchMacro()),
+					$container->inject(new CaseMacro()),
 					$container->inject(new UseMacro()),
 					$container->inject(new ControlMacro()),
 					$container->inject(new BlockMacro()),
@@ -77,6 +83,8 @@
 				$macroSet->setInlineList([
 					$container->inject(new LoopInline()),
 					$container->inject(new IfInline()),
+					$container->inject(new SwitchInline()),
+					$container->inject(new CaseInline()),
 					$container->inject(new BlockInline()),
 					$container->inject(new IncludeInline()),
 					$container->inject(new SnippetInline()),
