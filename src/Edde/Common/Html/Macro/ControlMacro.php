@@ -105,4 +105,9 @@
 			$file->close();
 			return $file;
 		}
+
+		protected function prepare() {
+			parent::prepare();
+			$this->templateDirectory->create();
+		}
 	}
