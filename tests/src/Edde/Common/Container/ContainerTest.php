@@ -5,6 +5,7 @@
 
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\IContainer;
+	use Edde\Common\Container\Factory\CascadeFactory;
 	use Edde\Common\ContainerTest\AlphaDependencyClass;
 	use Edde\Common\ContainerTest\BetaDependencyClass;
 	use Edde\Common\ContainerTest\LazyInjectTraitClass;
@@ -13,10 +14,15 @@
 	use Edde\Common\ContainerTest\SimpleDependency;
 	use Edde\Common\ContainerTest\SimpleUnknownDependency;
 	use Edde\Ext\Container\ContainerFactory;
+	use Fallback\Foo\Bar\FooBar;
+	use Fallback\Foo\Bar\IFooBar;
 	use phpunit\framework\TestCase;
 
-	require_once(__DIR__ . '/assets.php');
+	require_once __DIR__ . '/assets.php';
 
+	/**
+	 * Tests related to dependency container.
+	 */
 	class ContainerTest extends TestCase {
 		/**
 		 * @var IContainer
@@ -40,6 +46,20 @@
 			$this->expectException(ContainerException::class);
 			$this->expectExceptionMessage('Lazy inject missmatch: parameter [$betaDependencyClass] of method [Edde\Common\ContainerTest\LazyMissmatch::lazyDependency()] must have a property [Edde\Common\ContainerTest\LazyMissmatch::$betaDependencyClass] with the same name as the paramete (for example protected $betaDependencyClass).');
 			$this->container->create(LazyMissmatch::class);
+		}
+
+		public function testCascade() {
+			$this->container->registerFactory(IFooBar::class, new CascadeFactory(IFooBar::class, 'FooBar', [
+				'Fallback\{foo}\Bar\{class}',
+				'Fallback\{foo}\Bar\{class}Service',
+				'Fallback\{foo}\{class}',
+				'Fallback\{foo}\{class}Service',
+			], function () {
+				return [
+					'foo' => 'Foo',
+				];
+			}));
+			self::assertInstanceOf(FooBar::class, $instance = $this->container->create(IFooBar::class));
 		}
 
 		protected function setUp() {
