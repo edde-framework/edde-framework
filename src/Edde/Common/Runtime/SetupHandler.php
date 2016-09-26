@@ -66,6 +66,9 @@
 				ICacheFactory::class => $this->cacheFactory,
 			]);
 			$factoryManager->registerFactoryList($this->factoryList);
+			foreach ($factoryManager->getFactoryList() as $factory) {
+				$this->container->inject($factory);
+			}
 			return $this->container;
 		}
 	}

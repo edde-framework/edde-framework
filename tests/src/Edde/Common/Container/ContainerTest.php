@@ -10,9 +10,11 @@
 	use Edde\Common\ContainerTest\BetaDependencyClass;
 	use Edde\Common\ContainerTest\LazyInjectTraitClass;
 	use Edde\Common\ContainerTest\LazyMissmatch;
+	use Edde\Common\ContainerTest\OnlySomeString;
 	use Edde\Common\ContainerTest\SimpleClass;
 	use Edde\Common\ContainerTest\SimpleDependency;
 	use Edde\Common\ContainerTest\SimpleUnknownDependency;
+	use Edde\Common\Strings\StringUtils;
 	use Edde\Ext\Container\ContainerFactory;
 	use Fallback\Foo\Bar\FooBar;
 	use Fallback\Foo\Bar\IFooBar;
@@ -49,16 +51,18 @@
 		}
 
 		public function testCascade() {
-			$this->container->registerFactory(IFooBar::class, new CascadeFactory([
-				'Fallback\{foo}\Bar\{class}',
-				'Fallback\{foo}\Bar\{class}Service',
-				'Fallback\{foo}\{class}',
-				'Fallback\{foo}\{class}Service',
-			], function () {
+			$this->container->registerFactory(IFooBar::class, $this->container->inject(new CascadeFactory(function (OnlySomeString $onlySomeString, string $name) {
+				if (interface_exists($name)) {
+					$name = substr(StringUtils::extract($name, '\\', -1), 1);
+				}
+				$foo = $onlySomeString->gimmeString();
 				return [
-					'foo' => 'Foo',
+					"Fallback\\$foo\\Bar\\$name",
+					"Fallback\\$foo\\Bar\\{$name}Service",
+					"Fallback\\$foo\\$name",
+					"Fallback\\$foo\\{$name}Service",
 				];
-			}));
+			})));
 			self::assertInstanceOf(FooBar::class, $instance = $this->container->create(IFooBar::class));
 		}
 

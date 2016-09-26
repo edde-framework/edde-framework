@@ -39,4 +39,11 @@
 		 * @throws FactoryException
 		 */
 		public function getFactory(string $name): IFactory;
+
+		/**
+		 * return registered set of factories
+		 *
+		 * @return array
+		 */
+		public function getFactoryList(): array;
 	}
