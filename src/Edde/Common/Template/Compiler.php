@@ -16,7 +16,6 @@
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Usable\AbstractUsable;
 
@@ -187,23 +186,39 @@
 		public function file(IFile $source): INode {
 			$this->use();
 			$this->stack->push($source);
-			foreach (NodeIterator::recursive($root = $this->resourceManager->resource($source), true) as $node) {
-				foreach ($node->getAttributeList() as $k => $v) {
-					if (isset($this->inlineList[$k])) {
-						$this->inlineList[$k]->compile($node, $this);
-					}
-				}
-				$this->compile($node);
-			}
+			$this->compile($root = $this->resourceManager->resource($source));
 			$this->stack->pop();
 			return $root;
 		}
 
 		/**
 		 * @inheritdoc
+		 * @throws CompilerException
 		 */
 		public function compile(INode $macro) {
-			return $this->macroList[$macro->getName()]->compile($macro, $this);
+			return $this->run($macro, __FUNCTION__);
+		}
+
+		/**
+		 * @param INode $macro
+		 * @param string $method
+		 *
+		 * @return mixed
+		 * @throws CompilerException
+		 */
+		protected function run(INode $macro, string $method) {
+			if (isset($this->macroList[$name = $macro->getName()]) === false) {
+				throw new CompilerException(sprintf('Unknown macro [%s].', $macro->getPath()));
+			}
+			if (empty($this->inlineList) === false) {
+				foreach ($macro->getAttributeList() as $k => $v) {
+					if (isset($this->inlineList[$k])) {
+						$this->inlineList[$k]->{$method}($macro, $this);
+						$macro->removeAttribute($k);
+					}
+				}
+			}
+			return $this->macroList[$name]->{$method}($macro, $this);
 		}
 
 		/**
@@ -211,18 +226,7 @@
 		 * @throws CompilerException
 		 */
 		public function macro(INode $macro) {
-			if (isset($this->macroList[$name = $macro->getName()]) === false) {
-				throw new CompilerException(sprintf('Unknown macro [%s].', $macro->getPath()));
-			}
-			if (empty($this->inlineList) === false) {
-				foreach ($macro->getAttributeList() as $k => $v) {
-					if (isset($this->inlineList[$k])) {
-						$this->inlineList[$k]->macro($macro, $this);
-						$macro->removeAttribute($k);
-					}
-				}
-			}
-			return $this->macroList[$name]->macro($macro, $this);
+			return $this->run($macro, __FUNCTION__);
 		}
 
 		/**

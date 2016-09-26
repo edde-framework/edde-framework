@@ -25,12 +25,30 @@
 		public function getHelperSet(): IHelperSet;
 
 		/**
+		 * (optional) inline version of this macro
+		 *
+		 * @param INode $macro
+		 * @param ICompiler $compiler
+		 */
+		public function compileInline(INode $macro, ICompiler $compiler);
+
+		/**
 		 * executed in compile time
 		 *
 		 * @param INode $macro
 		 * @param ICompiler $compiler
 		 */
 		public function compile(INode $macro, ICompiler $compiler);
+
+		/**
+		 * (optional) inline version of this macro
+		 *
+		 * @param INode $macro
+		 * @param ICompiler $compiler
+		 *
+		 * @return mixed
+		 */
+		public function macroInline(INode $macro, ICompiler $compiler);
 
 		/**
 		 * executed in runtime phase

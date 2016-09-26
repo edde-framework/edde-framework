@@ -95,7 +95,22 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function compileInline(INode $macro, ICompiler $compiler) {
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function compile(INode $macro, ICompiler $compiler) {
+			foreach ($macro->getNodeList() as $node) {
+				$compiler->compile($node);
+			}
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function macroInline(INode $macro, ICompiler $compiler) {
 		}
 
 		/**
