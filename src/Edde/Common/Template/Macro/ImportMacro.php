@@ -23,7 +23,7 @@
 		 * "Real programmers don't comment their code. If it was hard to write, it should be hard to understand."
 		 */
 		public function __construct() {
-			parent::__construct('t:import');
+			parent::__construct('import');
 		}
 
 		/**
@@ -33,6 +33,7 @@
 			$this->rootDirectory = $rootDirectory;
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws MacroException

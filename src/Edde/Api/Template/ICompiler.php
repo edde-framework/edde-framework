@@ -18,6 +18,14 @@
 		public function registerMacroSet(IMacroSet $macroSet): ICompiler;
 
 		/**
+		 * register the given helper set
+		 *
+		 * @param IHelperSet $helperSet
+		 *
+		 * @return ICompiler
+		 */
+		public function registerHelperSet(IHelperSet $helperSet): ICompiler;
+		/**
 		 * "runtime macro" - those should generate runtime
 		 *
 		 * @param IMacro $macro
@@ -25,13 +33,6 @@
 		 * @return ICompiler
 		 */
 		public function registerMacro(IMacro $macro): ICompiler;
-
-		/**
-		 * @param IInline $inline
-		 *
-		 * @return ICompiler
-		 */
-		public function registerInline(IInline $inline): ICompiler;
 
 		/**
 		 * execute compile macro

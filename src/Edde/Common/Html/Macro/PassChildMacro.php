@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Html\Inline;
+	namespace Edde\Common\Html\Macro;
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
@@ -10,21 +10,22 @@
 	/**
 	 * Shortcut for multiple nodes injection into some method (variable pass makes no sense).
 	 */
-	class PassChildInline extends AbstractHtmlInline {
+	class PassChildMacro extends AbstractHtmlMacro {
 		/**
 		 * Profanity is the one language that all programmers know best.
 		 */
 		public function __construct() {
-			parent::__construct('m:pass-child');
+			parent::__construct('pass-child');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 */
-		public function compile(INode $macro, ICompiler $compiler) {
-			$target = $this->extract($macro, $this->getName(), null);
+		public function compileInline(INode $macro, ICompiler $compiler) {
+			$target = $this->extract($macro, self::COMPILE_PREFIX . $this->getName(), null);
 			foreach ($macro->getNodeList() as $node) {
+				/** @var $nodeList INode[] */
 				$nodeList = [$node];
 				while ($node->getMeta('root', false) && $node->isLeaf() === false) {
 					$nodeList = $node->getNodeList();

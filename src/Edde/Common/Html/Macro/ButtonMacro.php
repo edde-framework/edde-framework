@@ -27,6 +27,11 @@
 			}
 		}
 
+		/**
+		 * @param string $action
+		 *
+		 * @return mixed|string
+		 */
 		protected function action(string $action) {
 			if (substr($action, -2) === '()') {
 				$type = $action[0];

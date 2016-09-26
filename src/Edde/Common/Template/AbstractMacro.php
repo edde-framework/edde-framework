@@ -17,6 +17,8 @@
 	 */
 	abstract class AbstractMacro extends AbstractObject implements IMacro, ILazyInject {
 		use UsableTrait;
+		const COMPILE_PREFIX = 't:';
+		const RUNTIME_PREFIX = 'm:';
 		/**
 		 * @var string
 		 */
@@ -95,7 +97,22 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function compileInline(INode $macro, ICompiler $compiler) {
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function compile(INode $macro, ICompiler $compiler) {
+			foreach ($macro->getNodeList() as $node) {
+				$compiler->compile($node);
+			}
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function macroInline(INode $macro, ICompiler $compiler) {
 		}
 
 		/**

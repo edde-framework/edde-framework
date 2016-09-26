@@ -24,7 +24,7 @@
 		 * If a program is useless, it must be documented.
 		 */
 		public function __construct() {
-			parent::__construct('t:include');
+			parent::__construct('include');
 		}
 
 		/**
@@ -34,12 +34,14 @@
 			$this->rootDirectory = $rootDirectory;
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws MacroException
 		 */
-		public function compile(INode $macro, ICompiler $compiler) {
-			foreach ($this->include($source = $this->attribute($macro, $compiler, 'src'), $compiler->getCurrent(), $compiler) as $node) {
+		public function compileInline(INode $macro, ICompiler $compiler) {
+			/** @var $node INode */
+			foreach ($this->include($source = $this->extract($macro, 't:' . $this->getName()), $compiler->getCurrent(), $compiler) as $node) {
 				$node = clone $node;
 				/**
 				 * mark virtual node root
@@ -49,6 +51,8 @@
 				$macro->addNode($node);
 			}
 		}
+
+		/** @noinspection PhpMissingParentCallCommonInspection */
 
 		/**
 		 * compute and execute include from the given source
@@ -71,5 +75,21 @@
 				];
 			}
 			return $compiler->getBlock($src);
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws MacroException
+		 */
+		public function compile(INode $macro, ICompiler $compiler) {
+			foreach ($this->include($source = $this->attribute($macro, $compiler, 'src'), $compiler->getCurrent(), $compiler) as $node) {
+				$node = clone $node;
+				/**
+				 * mark virtual node root
+				 */
+				$node->setMeta('root', true);
+				$node->setMeta('source', $source);
+				$macro->addNode($node);
+			}
 		}
 	}

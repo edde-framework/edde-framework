@@ -8,14 +8,26 @@
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Template\AbstractMacro;
 
+	/**
+	 * Named block definition macro; defined block can be reffered later.
+	 */
 	class BlockMacro extends AbstractMacro {
 		/**
 		 * It is better to "release and patch" than not to release at all.
 		 */
 		public function __construct() {
-			parent::__construct('t:block');
+			parent::__construct('block');
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws MacroException
+		 */
+		public function compileInline(INode $macro, ICompiler $compiler) {
+			$compiler->block($this->extract($macro, 't:' . $this->getName()), [$macro]);
+		}
+
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws MacroException

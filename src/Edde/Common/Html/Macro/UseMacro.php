@@ -15,9 +15,10 @@
 		 * If God had intended Man to program, we would be born with USB ports.
 		 */
 		public function __construct() {
-			parent::__construct('m:use');
+			parent::__construct('use');
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws MacroException

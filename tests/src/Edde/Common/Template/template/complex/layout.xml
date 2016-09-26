@@ -1,10 +1,10 @@
 <control foo="@current-method-call()" title="foo">
-	<t:include src="./pass-include.xml"/>
+	<include src="./pass-include.xml"/>
 
 	<css src="./foo/bar/boo.css"/>
 	<schema name="foo" schema="Bar\Foo\Fart\Poo"/>
 
-	<div m:schema="foo.property-here"/>
+	<div t:schema="foo.property-here"/>
 
 	<switch src=":gimme-a-switch()">
 		<case name="foo">
@@ -17,39 +17,39 @@
 			<div class="foo-case3"/>
 		</case>
 	</switch>
-	<div class="inline-switch" m:switch=":gimme-a-switch()">
-		<div class="foo-case" m:case="foo"/>
-		<div class="foo-case2" m:case="foo"/>
-		<div class="foo-case3" m:case="poo"/>
+	<div class="inline-switch" t:switch=":gimme-a-switch()">
+		<div class="foo-case" t:case="foo"/>
+		<div class="foo-case2" t:case="foo"/>
+		<div class="foo-case3" t:case="poo"/>
 	</div>
 	<span class="double-include" t:include="./double-pass-include.xml"/>
-	<span class="pass-child 01" t:include="./pass-include.xml" m:pass-child=":pass-child()"/>
-	<span class="pass-child 02" t:include="./double-pass-include.xml" m:pass-child=":pass-child2()"/>
-	<span class="pass-child 03" m:pass-child=":pass-child3()">
+	<span class="pass-child 01" t:include="./pass-include.xml" t:pass-child=":pass-child()"/>
+	<span class="pass-child 02" t:include="./double-pass-include.xml" t:pass-child=":pass-child2()"/>
+	<span class="pass-child 03" t:pass-child=":pass-child3()">
 		<div class="child-01"/>
 		<div class="child-02"/>
 		<div class="child-03"/>
 	</span>
 
-	<span class="I'll see this one" m:if=":true-variable-reference">
+	<span class="I'll see this one" t:if=":true-variable-reference">
 		<div class="foo"/>
 	</span>
-	<span class="This one will not pass" m:if=":false-variable-reference"/>
+	<span class="This one will not pass" t:if=":false-variable-reference"/>
 
-	<span class="I'll see this one()" m:if=":true-method()">
+	<span class="I'll see this one()" t:if=":true-method()">
 		<div class="foo"/>
 	</span>
-	<span class="This one will not pass()" m:if=":false-method()"/>
+	<span class="This one will not pass()" t:if=":false-method()"/>
 
-	<div class="strange-if-usecase" m:if=":gimme-some-iterator()">
-		<span m:loop="?:" class="$:"/>
+	<div class="strange-if-usecase" t:if=":gimme-some-iterator()">
+		<span t:loop="?:" class="$:"/>
 	</div>
 
-	<span class="included-variable" t:include="./pass-include.xml" m:pass=":included-variable"/>
+	<span class="included-variable" t:include="./pass-include.xml" t:pass=":included-variable"/>
 
-	<span class="foo" m:pass=":span-method-call()"/>
+	<span class="foo" t:pass=":span-method-call()"/>
 
-	<div class="this-will-be-loaded-on-demand" m:pass=":some-variable">
+	<div class="this-will-be-loaded-on-demand" t:pass=":some-variable">
 		<!--
 			m:load will load the given template on demand; it supports
 			relative file reference (./ prefix) and "absolute" path reference from
@@ -59,7 +59,7 @@
 		-->
 		<m:load src="./on-demand.xml"/>
 	</div>
-	<div class="this-will-be-loaded-on-demand" m:snippet="beast-on-demand">
+	<div class="this-will-be-loaded-on-demand" t:snippet="beast-on-demand">
 		<!--
 			m:load will load the given template on demand; it supports
 			relative file reference (./ prefix) and "absolute" path reference from
@@ -70,9 +70,9 @@
 		<m:load src="./on-demand.xml"/>
 	</div>
 
-	<m:use src="deep-block"/>
-	<m:use src="whoo-whaa"/>
-	<m:use src="block-from-imported-template"/>
+	<use src="deep-block"/>
+	<use src="whoo-whaa"/>
+	<use src="block-from-imported-template"/>
 
 	<call method="\SomeService\From\Container::call()"/>
 	<call method="@middle-local-method-call()"/>
@@ -97,22 +97,22 @@
 	</div>
 
 	<!--
-		t:import macro executes the given template but do not modify the current node tree;
+		import macro executes the given template but do not modify the current node tree;
 		this is useful for loading external block definitions (t:block macros)
 	-->
-	<t:import src="./block-foo.xml"/>
+	<import src="./block-foo.xml"/>
 
 	<!--
 		t:include macro will include the given source in the current node tree, so node tree
 		will be modified and executed in compile time
 	-->
-	<t:include src="deep-block"/>
-	<t:include src="deep-block"/>
+	<include src="deep-block"/>
+	<include src="deep-block"/>
 
 	<!-- use include as in place expansion of the given template -->
-	<t:include src="./include-foo.xml"/>
+	<include src="./include-foo.xml"/>
 
-	<t:include src="block-from-imported-template"/>
+	<include src="block-from-imported-template"/>
 
 	<js src="./some/javascript.js"/>
 
@@ -125,7 +125,7 @@
 
 	<placeholder id="foo"/>
 
-	<div class="thie-piece-will-not-be-visible" m:snippet="the-name-of-this-snippet">
+	<div class="thie-piece-will-not-be-visible" t:snippet="the-name-of-this-snippet">
 		<div class="foo"/>
 	</div>
 
@@ -138,7 +138,7 @@
 
 	<loop src=".loop-from-root()">
 		<div class="$:">
-			<t:include src="deep-block"/>
+			<include src="deep-block"/>
 		</div>
 	</loop>
 	<loop src=".loop-over-loop-from-root()">
@@ -146,7 +146,7 @@
 		<div class="wrap">
 			<loop src="$:">
 				<div class="$#" some-attribute="$#1" root-key="$#.">
-					<t:include src="deep-block"/>
+					<include src="deep-block"/>
 				</div>
 			</loop>
 		</div>
@@ -161,7 +161,7 @@
 		<loop src="@loop-from-local-control()">
 			<loop src="@loop-from-local-control()">
 				<div class="$:->get-class()" root="$:.->get-class()" super-root="$:1->get-class()">
-					<t:include src="./include-foo.xml"/>
+					<include src="./include-foo.xml"/>
 				</div>
 			</loop>
 		</loop>

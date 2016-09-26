@@ -21,20 +21,4 @@
 		 * @return IMacro[]
 		 */
 		public function getMacroList(): array;
-
-		/**
-		 * register a inline macro
-		 *
-		 * @param IInline $inline
-		 *
-		 * @return IMacroSet
-		 */
-		public function registerInline(IInline $inline): IMacroSet;
-
-		/**
-		 * return list of inline macros
-		 *
-		 * @return IInline[]
-		 */
-		public function getInlineList(): array;
 	}
