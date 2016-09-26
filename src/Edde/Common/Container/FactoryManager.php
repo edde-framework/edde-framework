@@ -49,7 +49,11 @@
 				throw new FactoryException(sprintf('Requested unknown factory [%s].', $name));
 			}
 			if (isset($this->factoryList[$name])) {
-				return $this->handleList[$name] = $this->factoryList[$name];
+				$factory = $this->factoryList[$name];
+				if ($factory->canHandle($name) === false) {
+					throw new FactoryException(sprintf('Requested factory cannot handle identifier [%s].', $name));
+				}
+				return $this->handleList[$name] = $factory;
 			}
 			foreach ($this->factoryList as $factory) {
 				if ($factory->canHandle($name)) {

@@ -10,7 +10,7 @@
 	use Edde\Ext\Container\ContainerFactory;
 	use phpunit\framework\TestCase;
 
-	require_once(__DIR__ . '/../assets.php');
+	require_once __DIR__ . '/../assets.php';
 
 	class CallbackFactoryTest extends TestCase {
 		/**

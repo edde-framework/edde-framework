@@ -67,7 +67,7 @@
 			}
 			$this->dependencyList[$name] = true;
 			$factory = $this->factoryManager->getFactory($name);
-			foreach ($factory->getParameterList() as $parameter) {
+			foreach ($factory->getParameterList($name) as $parameter) {
 				if ($parameter->hasClass() === false) {
 					continue;
 				}

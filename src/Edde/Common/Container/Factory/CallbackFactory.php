@@ -36,7 +36,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getParameterList() {
+		public function getParameterList(string $name = null): array {
 			if ($this->parameterList === null) {
 				$this->parameterList = CallbackUtils::getParameterList($this->callback);
 			}

@@ -6,6 +6,9 @@
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
 
+	/**
+	 * Factory for holding already existing instances.
+	 */
 	class InstanceFactory extends AbstractFactory {
 		/**
 		 * @param string $name
@@ -19,7 +22,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getParameterList() {
+		public function getParameterList(string $name = null): array {
 			/**
 			 * instance is already living, so no parameters are needed
 			 */
