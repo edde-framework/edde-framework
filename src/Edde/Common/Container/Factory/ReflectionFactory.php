@@ -17,7 +17,7 @@
 		 */
 		protected $class;
 		/**
-		 * @var IParameter[]
+		 * @var IParameter[][]
 		 */
 		protected $parameterList;
 
@@ -35,11 +35,11 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getParameterList() {
-			if ($this->parameterList === null) {
-				$this->parameterList = CallbackUtils::getParameterList($this->class);
+		public function getParameterList(string $name = null): array {
+			if (isset($this->parameterList[$name]) === false) {
+				$this->parameterList[$name] = CallbackUtils::getParameterList($name ?: $this->class);
 			}
-			return $this->parameterList;
+			return $this->parameterList[$name];
 		}
 
 		/**

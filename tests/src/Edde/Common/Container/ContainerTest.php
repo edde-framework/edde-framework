@@ -49,7 +49,7 @@
 		}
 
 		public function testCascade() {
-			$this->container->registerFactory(IFooBar::class, new CascadeFactory(IFooBar::class, 'FooBar', [
+			$this->container->registerFactory(IFooBar::class, new CascadeFactory([
 				'Fallback\{foo}\Bar\{class}',
 				'Fallback\{foo}\Bar\{class}Service',
 				'Fallback\{foo}\{class}',

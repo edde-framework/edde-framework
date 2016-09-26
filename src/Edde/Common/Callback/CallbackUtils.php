@@ -17,7 +17,7 @@
 		 *
 		 * @return IParameter[]
 		 */
-		static public function getParameterList($callback) {
+		static public function getParameterList($callback): array {
 			$reflection = self::getReflection($callback);
 			$dependencyList = [];
 			foreach ($reflection->getParameters() as $reflectionParameter) {

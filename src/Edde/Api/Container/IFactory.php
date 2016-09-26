@@ -51,9 +51,11 @@
 		/**
 		 * return list of required parameters for this factory
 		 *
+		 * @param string $name
+		 *
 		 * @return IParameter[]
 		 */
-		public function getParameterList();
+		public function getParameterList(string $name = null): array;
 
 		/**
 		 * callback of this method should be called when instance of this factory is created
