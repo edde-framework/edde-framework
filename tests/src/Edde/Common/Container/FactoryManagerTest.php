@@ -8,6 +8,9 @@
 	use Edde\Common\Container\Factory\InstanceFactory;
 	use phpunit\framework\TestCase;
 
+	/**
+	 * Test suite for FactoryManager.
+	 */
 	class FactoryManagerTest extends TestCase {
 		/**
 		 * @var IFactoryManager
