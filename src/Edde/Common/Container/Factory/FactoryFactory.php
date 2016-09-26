@@ -7,6 +7,9 @@
 	use Edde\Api\Container\IFactory;
 	use Edde\Common\AbstractObject;
 
+	/**
+	 * Utility class for "abstract" factory creation (it hides concrete factories on the background).
+	 */
 	class FactoryFactory extends AbstractObject {
 		/**
 		 * @param array $factoryList
@@ -64,7 +67,7 @@
 				if (class_exists($name) === false) {
 					return null;
 				}
-				return FactoryFactory::create($name, $name, $singleton);
+				return self::create($name, $name, $singleton);
 			};
 		}
 	}
