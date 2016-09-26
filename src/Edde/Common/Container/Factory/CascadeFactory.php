@@ -4,6 +4,7 @@
 	namespace Edde\Common\Container\Factory;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Common\Callback\CallbackUtils;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Usable\UsableTrait;
 
@@ -72,11 +73,12 @@
 			return null;
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 */
 		public function getParameterList(string $name = null): array {
-			return parent::getParameterList($this->discover($name));
+			return CallbackUtils::getParameterList($this->discover($name));
 		}
 
 		/**

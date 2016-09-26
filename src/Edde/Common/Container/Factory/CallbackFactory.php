@@ -38,7 +38,7 @@
 		 */
 		public function getParameterList(string $name = null): array {
 			if ($this->parameterList === null) {
-				$this->parameterList = CallbackUtils::getParameterList($name ?: $this->callback);
+				$this->parameterList = CallbackUtils::getParameterList($this->callback);
 			}
 			return $this->parameterList;
 		}
