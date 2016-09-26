@@ -12,7 +12,6 @@
 	use Edde\Api\Template\CompilerException;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelperSet;
-	use Edde\Api\Template\IInline;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\MacroException;
@@ -47,10 +46,6 @@
 		 * @var IMacro[]
 		 */
 		protected $macroList = [];
-		/**
-		 * @var IInline[]
-		 */
-		protected $inlineList = [];
 		/**
 		 * @var IHelperSet[]
 		 */
@@ -110,9 +105,6 @@
 			foreach ($macroSet->getMacroList() as $macro) {
 				$this->registerMacro($macro);
 			}
-			foreach ($macroSet->getInlineList() as $inline) {
-				$this->registerInline($inline);
-			}
 			return $this;
 		}
 
@@ -120,15 +112,13 @@
 		 * @inheritdoc
 		 */
 		public function registerMacro(IMacro $macro): ICompiler {
-			$this->macroList[$macro->getName()] = $macro;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function registerInline(IInline $inline): ICompiler {
-			$this->inlineList[$inline->getName()] = $inline;
+			$this->macroList[$name = $macro->getName()] = $macro;
+			if (isset($this->macroList[$compile = ('m:' . $name)]) === false) {
+				$this->macroList[$compile] = $macro;
+			}
+			if (isset($this->macroList[$compile = ('t:' . $name)]) === false) {
+				$this->macroList[$compile] = $macro;
+			}
 			return $this;
 		}
 
@@ -196,26 +186,24 @@
 		 * @throws CompilerException
 		 */
 		public function compile(INode $macro) {
-			return $this->run($macro, __FUNCTION__);
+			return $this->run($macro, __FUNCTION__, 't');
 		}
 
 		/**
 		 * @param INode $macro
 		 * @param string $method
+		 * @param string $inline
 		 *
 		 * @return mixed
 		 * @throws CompilerException
 		 */
-		protected function run(INode $macro, string $method) {
+		protected function run(INode $macro, string $method, string $inline) {
 			if (isset($this->macroList[$name = $macro->getName()]) === false) {
 				throw new CompilerException(sprintf('Unknown macro [%s].', $macro->getPath()));
 			}
-			if (empty($this->inlineList) === false) {
-				foreach ($macro->getAttributeList() as $k => $v) {
-					if (isset($this->inlineList[$k])) {
-						$this->inlineList[$k]->{$method}($macro, $this);
-						$macro->removeAttribute($k);
-					}
+			foreach ($macro->getAttributeList() as $k => $v) {
+				if (isset($this->macroList[$k]) && strpos($k, $inline . ':') === 0) {
+					$this->macroList[$k]->{$method . 'Inline'}($macro, $this);
 				}
 			}
 			return $this->macroList[$name]->{$method}($macro, $this);
@@ -226,7 +214,7 @@
 		 * @throws CompilerException
 		 */
 		public function macro(INode $macro) {
-			return $this->run($macro, __FUNCTION__);
+			return $this->run($macro, __FUNCTION__, 'm');
 		}
 
 		/**
@@ -272,9 +260,6 @@
 		 */
 		public function block(string $name, array $nodeList): ICompiler {
 			$blockList = $this->getBlockList();
-			if (isset($blockList[$name])) {
-				throw new MacroException(sprintf('Block id [%s] has been already defined.', $name));
-			}
 			$blockList[$name] = $nodeList;
 			$this->setVariable(static::class . '/block-list', $blockList);
 			return $this;
@@ -321,6 +306,9 @@
 			}
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function registerHelperSet(IHelperSet $helperSet): ICompiler {
 			$this->helperSetList[] = $helperSet;
 			return $this;

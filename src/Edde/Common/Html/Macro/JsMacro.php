@@ -52,6 +52,7 @@
 			$this->assetsDirectory = $assetsDirectory;
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws MacroException
@@ -83,6 +84,7 @@
 			return new File($src);
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws MacroException

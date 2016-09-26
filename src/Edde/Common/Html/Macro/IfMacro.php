@@ -8,6 +8,7 @@
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelper;
 	use Edde\Api\Template\MacroException;
+	use Edde\Common\Node\Node;
 	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\HelperSet;
@@ -67,6 +68,14 @@
 			return null;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
+		public function compileInline(INode $macro, ICompiler $compiler) {
+			$macro->switch(new Node('if', null, ['src' => $this->extract($macro, 't:' . $this->getName())]));
+		}
+
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws MacroException

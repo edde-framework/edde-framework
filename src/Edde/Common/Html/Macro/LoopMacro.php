@@ -8,6 +8,7 @@
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelper;
 	use Edde\Api\Template\MacroException;
+	use Edde\Common\Node\Node;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\HelperSet;
 
@@ -32,6 +33,13 @@
 		 */
 		public function lazyCryptEngine(ICryptEngine $cryptEngine) {
 			$this->cryptEngine = $cryptEngine;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function compileInline(INode $macro, ICompiler $compiler) {
+			$macro->switch(new Node('loop', null, ['src' => $this->extract($macro, 't:' . $this->getName())]));
 		}
 
 		/**
@@ -75,6 +83,7 @@
 			return null;
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws MacroException
@@ -97,6 +106,12 @@
 			$this->write($compiler, '}', 5);
 		}
 
+		/**
+		 * @param ICompiler $compiler
+		 * @param string $src
+		 *
+		 * @return mixed|string
+		 */
 		protected function loop(ICompiler $compiler, string $src) {
 			$type = $src[0];
 			if (isset(self::$reference[$type])) {

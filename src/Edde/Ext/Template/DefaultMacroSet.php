@@ -8,14 +8,6 @@
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Html\Helper\MethodHelper;
-	use Edde\Common\Html\Inline\CaseInline;
-	use Edde\Common\Html\Inline\IfInline;
-	use Edde\Common\Html\Inline\LoopInline;
-	use Edde\Common\Html\Inline\PassChildInline;
-	use Edde\Common\Html\Inline\PassInline;
-	use Edde\Common\Html\Inline\SchemaInline;
-	use Edde\Common\Html\Inline\SnippetInline;
-	use Edde\Common\Html\Inline\SwitchInline;
 	use Edde\Common\Html\Input\PasswordControl;
 	use Edde\Common\Html\Input\TextControl;
 	use Edde\Common\Html\Macro\ButtonMacro;
@@ -29,8 +21,10 @@
 	use Edde\Common\Html\Macro\JsMacro;
 	use Edde\Common\Html\Macro\LoadMacro;
 	use Edde\Common\Html\Macro\LoopMacro;
+	use Edde\Common\Html\Macro\PassChildMacro;
 	use Edde\Common\Html\Macro\PassMacro;
 	use Edde\Common\Html\Macro\SchemaMacro;
+	use Edde\Common\Html\Macro\SnippetMacro;
 	use Edde\Common\Html\Macro\SwitchMacro;
 	use Edde\Common\Html\Macro\UseMacro;
 	use Edde\Common\Html\PlaceholderControl;
@@ -51,8 +45,6 @@
 	use Edde\Common\Html\Tag\TableHeaderControl;
 	use Edde\Common\Html\Tag\TableRowControl;
 	use Edde\Common\Template\HelperSet;
-	use Edde\Common\Template\Inline\BlockInline;
-	use Edde\Common\Template\Inline\IncludeInline;
 	use Edde\Common\Template\Macro\BlockMacro;
 	use Edde\Common\Template\Macro\ImportMacro;
 	use Edde\Common\Template\Macro\IncludeMacro;
@@ -88,6 +80,8 @@
 					$container->inject(new JsMacro()),
 					$container->inject(new SchemaMacro()),
 					$container->inject(new PassMacro()),
+					$container->inject(new PassChildMacro()),
+					$container->inject(new SnippetMacro()),
 					$container->inject(new HtmlMacro('div', DivControl::class)),
 					$container->inject(new HtmlMacro('span', SpanControl::class)),
 					$container->inject(new HtmlMacro('p', ParagraphControl::class)),
@@ -114,18 +108,6 @@
 					$container->inject(new HeaderMacro('h5')),
 					$container->inject(new HeaderMacro('h6')),
 					$container->inject(new ButtonMacro()),
-				]);
-				$macroSet->setInlineList([
-					$container->inject(new LoopInline()),
-					$container->inject(new IfInline()),
-					$container->inject(new SwitchInline()),
-					$container->inject(new CaseInline()),
-					$container->inject(new BlockInline()),
-					$container->inject(new IncludeInline()),
-					$container->inject(new SnippetInline()),
-					$container->inject(new PassInline()),
-					$container->inject(new PassChildInline()),
-					$container->inject(new SchemaInline()),
 				]);
 			});
 			return $macroSet;

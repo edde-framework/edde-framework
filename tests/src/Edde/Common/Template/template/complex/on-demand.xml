@@ -3,5 +3,5 @@
 	<div t:block="whoo-whaa">
 		<div class="hello there!"/>
 	</div>
-	<t:include src="./include-foo.xml"/>
+	<include src="./include-foo.xml"/>
 </control>
