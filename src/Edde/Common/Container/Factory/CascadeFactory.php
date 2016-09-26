@@ -4,37 +4,39 @@
 	namespace Edde\Common\Container\Factory;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Common\Callback\CallbackUtils;
-	use Edde\Common\Strings\StringUtils;
-	use Edde\Common\Usable\UsableTrait;
 
 	/**
 	 * Magical implementation of callback search mechanism based on "class exists".
 	 */
-	class CascadeFactory extends ClassFactory {
-		use UsableTrait;
-		/**
-		 * @var array
-		 */
-		protected $sourceList;
+	class CascadeFactory extends ClassFactory implements ILazyInject {
 		/**
 		 * @var callable
 		 */
-		protected $parameterCallback;
-		protected $parameters = [];
+		protected $source;
+		/**
+		 * @var IContainer
+		 */
+		protected $container;
 
 		/**
 		 * "The primary purpose of the DATA statement is to give names to constants; instead of referring to pi as 3.141592653589793 at every appearance, the variable PI can be given that value with a DATA statement and used instead of the longer form of the constant. This also simplifies modifying the program, should the value of pi change."
 		 *
 		 * -- FORTRAN manual for Xerox Computers
 		 *
-		 * @param array $sourceList
-		 * @param callable $parameterCallback
+		 * @param callable $source
 		 */
-		public function __construct(array $sourceList, callable $parameterCallback = null) {
+		public function __construct(callable $source) {
 			parent::__construct();
-			$this->sourceList = $sourceList;
-			$this->parameterCallback = $parameterCallback;
+			$this->source = $source;
+		}
+
+		/**
+		 * @param IContainer $container
+		 */
+		public function lazyContainer(IContainer $container) {
+			$this->container = $container;
 		}
 
 		/**
@@ -53,20 +55,9 @@
 		 * @return string|null
 		 */
 		protected function discover(string $name) {
-			$this->use();
-			$parameterList = $this->parameters;
-			if (interface_exists($name)) {
-				$name = substr(StringUtils::extract($name, '\\', -1), 1);
-			}
-			$parameterList['class'] = $name;
-			$parameters = [];
-			foreach ($parameterList as $k => $v) {
-				$parameters['{' . $k . '}'] = $v;
-			}
-			$from = array_keys($parameters);
-			$to = array_values($parameters);
-			foreach ($this->sourceList as $source) {
-				if (class_exists($source = str_replace($from, $to, $source))) {
+			/** @noinspection ForeachSourceInspection */
+			foreach ($this->container->call($this->source, $name) as $source) {
+				if (class_exists($source)) {
 					return $source;
 				}
 			}
@@ -86,9 +77,5 @@
 		 */
 		public function factory(string $name, array $parameterList, IContainer $container) {
 			return parent::factory($this->discover($name), $parameterList, $container);
-		}
-
-		protected function prepare() {
-			$this->parameters = $this->parameterCallback ? call_user_func($this->parameterCallback) : [];
 		}
 	}

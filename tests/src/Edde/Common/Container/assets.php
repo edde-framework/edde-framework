@@ -127,6 +127,12 @@
 			public function lazyDependency(BetaDependencyClass $betaDependencyClass) {
 			}
 		}
+
+		class OnlySomeString {
+			public function gimmeString() {
+				return 'Foo';
+			}
+		}
 	}
 
 	namespace Fallback\Foo\Bar {

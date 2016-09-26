@@ -77,4 +77,11 @@
 			}
 			return false;
 		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getFactoryList(): array {
+			return $this->factoryList;
+		}
 	}
