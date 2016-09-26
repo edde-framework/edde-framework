@@ -20,7 +20,7 @@
 		protected $container;
 
 		public function testCommon() {
-			$factory = new ClassFactory('name', TestCommonClass::class, false, false);
+			$factory = new ReflectionFactory('name', TestCommonClass::class, false, false);
 			self::assertEquals('name', $factory->getName());
 			self::assertEquals([
 				'foo' => new Parameter('foo', null, false),
@@ -46,7 +46,7 @@
 		}
 
 		public function testCloneable() {
-			$factory = new ClassFactory('name', TestCommonClass::class, false, true);
+			$factory = new ReflectionFactory('name', TestCommonClass::class, false, true);
 			self::assertTrue($factory->isCloneable());
 			self::assertFalse($factory->isSingleton());
 			self::assertNotEquals($alpha = $factory->create('name', [
@@ -61,7 +61,7 @@
 		}
 
 		public function testSingleton() {
-			$factory = new ClassFactory('name', TestCommonClass::class);
+			$factory = new ReflectionFactory('name', TestCommonClass::class);
 			self::assertFalse($factory->isCloneable());
 			self::assertTrue($factory->isSingleton());
 			self::assertEquals($factory->create('name', [

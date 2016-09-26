@@ -5,18 +5,27 @@
 
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Container\DependencyException;
+	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IDependencyFactory;
 	use Edde\Api\Container\IFactoryManager;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Usable\AbstractUsable;
 
+	/**
+	 * Dependency factory is responsible for static dependency analysis.
+	 */
 	class DependencyFactory extends AbstractUsable implements IDependencyFactory {
 		use CacheTrait;
 		/**
 		 * @var IFactoryManager
 		 */
 		protected $factoryManager;
+		/**
+		 * stack for checking circular dependencies
+		 *
+		 * @var array
+		 */
 		protected $dependencyList = [];
 
 		/**
@@ -28,7 +37,12 @@
 			$this->cacheFactory = $cacheFactory;
 		}
 
-		public function create($name) {
+		/**
+		 * @inheritdoc
+		 * @throws DependencyException
+		 * @throws FactoryException
+		 */
+		public function create(string $name): IDependency {
 			$this->use();
 			if ($dependency = $this->cache->load($cacheId = ('dependency-list/' . $name))) {
 				return $dependency;
@@ -37,7 +51,14 @@
 			return $this->cache->save($cacheId, $dependency);
 		}
 
-		protected function build($name, IDependency $root) {
+		/**
+		 * @param string $name
+		 * @param IDependency $root
+		 *
+		 * @throws DependencyException
+		 * @throws FactoryException
+		 */
+		protected function build(string $name, IDependency $root) {
 			if ($this->factoryManager->hasFactory($name) === false) {
 				return;
 			}
@@ -56,6 +77,9 @@
 			unset($this->dependencyList[$name]);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 			$this->cache();
 		}

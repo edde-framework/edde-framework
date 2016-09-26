@@ -16,5 +16,5 @@
 		 *
 		 * @return IDependency
 		 */
-		public function create($name);
+		public function create(string $name): IDependency;
 	}

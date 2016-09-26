@@ -4,15 +4,19 @@
 	namespace Edde\Common\Runtime;
 
 	use Edde\Api\Cache\ICacheFactory;
+	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependencyFactory;
 	use Edde\Api\Container\IFactoryManager;
+	use Edde\Api\Runtime\ISetupHandler;
 	use Edde\Api\Runtime\RuntimeException;
 	use Edde\Common\Container\Container;
 	use Edde\Common\Container\DependencyFactory;
-	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Container\FactoryManager;
 
+	/**
+	 * Default setup handler implementation; it has hard bare bones.
+	 */
 	class SetupHandler extends AbstractSetupHandler {
 		/**
 		 * @var ICacheFactory
@@ -30,13 +34,26 @@
 			$this->cacheFactory = $cacheFactory;
 		}
 
-		static public function create(ICacheFactory $cacheFactory, array $factoryList = []) {
+		/**
+		 * factory method for a new setup handler with defaults
+		 *
+		 * @param ICacheFactory $cacheFactory
+		 * @param array $factoryList
+		 *
+		 * @return ISetupHandler
+		 * @throws FactoryException
+		 */
+		static public function create(ICacheFactory $cacheFactory, array $factoryList = []): ISetupHandler {
 			$setupHandler = new self($cacheFactory);
 			$setupHandler->registerFactoryList($factoryList);
-			$setupHandler->registerFactoryFallback(FactoryFactory::createFallback());
 			return $setupHandler;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws RuntimeException
+		 * @throws FactoryException
+		 */
 		public function createContainer(): IContainer {
 			if ($this->container) {
 				throw new RuntimeException(sprintf('Cannot run [%s()] multiple times; something is wrong!', __METHOD__));
@@ -49,9 +66,6 @@
 				ICacheFactory::class => $this->cacheFactory,
 			]);
 			$factoryManager->registerFactoryList($this->factoryList);
-			if ($this->factoryFallback) {
-				$factoryManager->registerFactoryFallback($this->factoryFallback);
-			}
 			return $this->container;
 		}
 	}

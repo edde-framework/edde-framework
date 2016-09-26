@@ -19,6 +19,9 @@
 		 */
 		protected $cache;
 
+		/**
+		 * @param ICacheFactory $cacheFactory
+		 */
 		public function lazyCacheFactory(ICacheFactory $cacheFactory) {
 			$this->cacheFactory = $cacheFactory;
 		}

@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Runtime;
 
+	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Runtime\ISetupHandler;
@@ -11,52 +12,41 @@
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Container\Factory\FactoryFactory;
 
+	/**
+	 * Common class for all setup handlers.
+	 */
 	abstract class AbstractSetupHandler extends AbstractObject implements ISetupHandler {
 		/**
 		 * @var IFactory[]
 		 */
 		protected $factoryList = [];
-		/**
-		 * @var callable
-		 */
-		protected $factoryFallback;
 
+		/**
+		 * @inheritdoc
+		 * @throws FactoryException
+		 */
 		public function registerFactoryList(array $fatoryList): ISetupHandler {
 			$this->factoryList = FactoryFactory::createList(array_merge($this->factoryList, $fatoryList));
 			return $this;
 		}
 
-		public function registerFactoryFallback(callable $callback): ISetupHandler {
-			$this->factoryFallback = $callback;
-			return $this;
-		}
-
-		public function onSetup(string $name, callable $onSetup): ISetupHandler {
+		/**
+		 * @inheritdoc
+		 * @throws RuntimeException
+		 */
+		public function deffered(string $name, callable $onSetup): ISetupHandler {
 			if (isset($this->factoryList[$name]) === false) {
-				return $this;
+				throw new RuntimeException(sprintf('Cannot use deffered setup on unknown factory [%s].', $name));
 			}
-			$this->onFactorySetup($this->factoryList[$name], $onSetup);
-			return $this;
-		}
-
-		private function onFactorySetup(IFactory $factory, callable $callback) {
-			$factory->onSetup(function (IContainer $container, $instance) use ($callback) {
+			$this->factoryList[$name]->onSetup(function (IContainer $container, $instance) use ($onSetup) {
 				if (($instance instanceof IUsable) === false) {
 					throw new RuntimeException(sprintf('Deffered class must implement [%s] interface.', IUsable::class));
 				}
 				/** @var $instance IUsable */
-				$instance->onSetup(function () use ($container, $callback, $instance) {
-					return $container->call($callback, $instance);
+				$instance->onSetup(function () use ($container, $onSetup, $instance) {
+					return $container->call($onSetup, $instance);
 				});
 			});
-		}
-
-		protected function factory($class, callable $onSetup) {
-			return [
-				$class,
-				function (IFactory $factory) use ($onSetup) {
-					$this->onFactorySetup($factory, $onSetup);
-				},
-			];
+			return $this;
 		}
 	}

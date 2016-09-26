@@ -41,6 +41,7 @@
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Router\IRouterService;
+	use Edde\Api\Runtime\ISetupHandler;
 	use Edde\Api\Runtime\RuntimeException;
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
@@ -109,7 +110,11 @@
 	 * Default application configuration; this shold be base for all setups.
 	 */
 	class DefaultSetupHandler extends SetupHandler {
-		static public function create(ICacheFactory $cacheFactory = null, array $factoryList = []) {
+		/**
+		 * @inheritdoc
+		 * @throws RuntimeException
+		 */
+		static public function create(ICacheFactory $cacheFactory = null, array $factoryList = []): ISetupHandler {
 			return parent::create($cacheFactory ?: new CacheFactory(__DIR__, new InMemoryCacheStorage()))
 				->registerFactoryList(array_merge([
 					Framework::class,
@@ -217,10 +222,10 @@
 
 					RestRouter::class,
 				], $factoryList))
-				->onSetup(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
+				->deffered(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
 					$routerService->registerRouter($container->create(SimpleRouter::class));
 				})
-				->onSetup(IConverterManager::class, function (IContainer $container, IConverterManager $converterManager) {
+				->deffered(IConverterManager::class, function (IContainer $container, IConverterManager $converterManager) {
 					$converterManager->registerConverter($container->create(XmlConverter::class));
 					$converterManager->registerConverter($container->create(ArrayConverter::class));
 					$converterManager->registerConverter($container->create(JsonConverter::class));

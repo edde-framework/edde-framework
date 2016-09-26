@@ -5,10 +5,10 @@
 
 	use Edde\Common\Autoloader;
 
-	require_once(__DIR__ . '/Common/Autoloader.php');
+	require_once __DIR__ . '/Common/Autoloader.php';
 
 	/**
-	 * I hate magic constants, but this one is needed hell encapsulated into the system; no ona should use this or The God will kill... no, there will be no
+	 * I hate magic constants, but this one is needed hell encapsulated into the system; no one should use this or The God will kill... no, there will be no
 	 * cute kittens at that time; Th God will make suicide.
 	 */
 	define('EDDE_ROOT_DIRECTORY', __DIR__);

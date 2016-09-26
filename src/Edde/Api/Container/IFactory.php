@@ -14,7 +14,7 @@
 		 *
 		 * @return string
 		 */
-		public function getName();
+		public function getName(): string;
 
 		/**
 		 * switch singleton flag of this factory; should be used only in the configuration time
@@ -65,6 +65,15 @@
 		public function onSetup(callable $callback);
 
 		/**
+		 * is this factory able to handle the given identifier?
+		 *
+		 * @param string $name
+		 *
+		 * @return bool
+		 */
+		public function canHandle(string $name): bool;
+
+		/**
 		 * create instance from this factory; container should used for injecting dependencies
 		 *
 		 * @param string $name
@@ -73,5 +82,5 @@
 		 *
 		 * @return mixed
 		 */
-		public function create($name, array $parameterList, IContainer $container);
+		public function create(string $name, array $parameterList, IContainer $container);
 	}

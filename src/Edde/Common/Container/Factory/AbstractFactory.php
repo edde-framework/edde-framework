@@ -8,6 +8,9 @@
 	use Edde\Api\Container\IFactory;
 	use Edde\Common\AbstractObject;
 
+	/**
+	 * Basic implementation for all dependency factories.
+	 */
 	abstract class AbstractFactory extends AbstractObject implements IFactory {
 		/**
 		 * @var string
@@ -29,26 +32,45 @@
 		protected $lock = false;
 
 		/**
+		 * Obsolete: Any computer you own.
+		 *
 		 * @param string $name
 		 * @param bool $singleton
 		 * @param bool $cloneable
 		 */
-		public function __construct($name, $singleton = true, $cloneable = false) {
+		public function __construct(string $name, bool $singleton = true, bool $cloneable = false) {
 			$this->name = $name;
 			$this->singleton = $singleton;
 			$this->cloneable = $cloneable;
 		}
 
-		public function getName() {
+		/**
+		 * @inheritdoc
+		 */
+		public function getName(): string {
 			return $this->name;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function onSetup(callable $callback) {
 			$this->onSetupList[] = $callback;
 			return $this;
 		}
 
-		public function create($name, array $parameterList, IContainer $container) {
+		/**
+		 * @inheritdoc
+		 */
+		public function canHandle(string $name): bool {
+			return $this->name === $name;
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws FactoryException
+		 */
+		public function create(string $name, array $parameterList, IContainer $container) {
 			if ($this->instance !== null) {
 				if ($this->isCloneable()) {
 					return clone $this->instance;
@@ -62,36 +84,66 @@
 			}
 			try {
 				$this->lock = true;
-				$container->inject($this->instance = $this->factory($parameterList, $container));
+				$container->inject($this->instance = $this->factory($name, $parameterList, $container));
 				$this->setup($this->instance, $container);
 				$this->lock = false;
 				return $this->instance;
 			} catch (\Exception $e) {
 				$this->lock = false;
+				/** @noinspection ExceptionsAnnotatingAndHandlingInspection */
 				throw $e;
 			}
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isCloneable(): bool {
 			return $this->cloneable;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function setCloneable(bool $cloneable) {
 			$this->cloneable = $cloneable;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isSingleton(): bool {
 			return $this->singleton;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function setSingleton(bool $singleton) {
 			$this->singleton = $singleton;
 			return $this;
 		}
 
-		abstract public function factory(array $parameterList, IContainer $container);
+		/**
+		 * execute factory method with all required parameters already provided
+		 *
+		 * @param string $name
+		 * @param array $parameterList
+		 * @param IContainer $container
+		 *
+		 * @return mixed
+		 */
+		abstract public function factory(string $name, array $parameterList, IContainer $container);
 
+		/**
+		 * execute setup callbacks on registered callbacks
+		 *
+		 * @param mixed $instance
+		 * @param IContainer $container
+		 *
+		 * @return mixed
+		 */
 		protected function setup($instance, IContainer $container) {
 			foreach ($this->onSetupList as $callback) {
 				$container->call($callback, $instance);

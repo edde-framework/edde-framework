@@ -14,6 +14,9 @@
 	use Edde\Common\Application\Event\FinishEvent;
 	use Edde\Common\Application\Event\StartEvent;
 
+	/**
+	 * Default application implementation.
+	 */
 	class Application extends AbstractApplication {
 		/**
 		 * @var IRequest
@@ -36,26 +39,44 @@
 		 */
 		protected $errorControl;
 
+		/**
+		 * @param IRequest $request
+		 */
 		public function lazyRoute(IRequest $request) {
 			$this->request = $request;
 		}
 
+		/**
+		 * @param IResponseManager $responseManager
+		 */
 		public function lazyResponseManager(IResponseManager $responseManager) {
 			$this->responseManager = $responseManager;
 		}
 
+		/**
+		 * @param IConverterManager $converterManager
+		 */
 		public function lazyConverterManager(IConverterManager $converterManager) {
 			$this->converterManager = $converterManager;
 		}
 
+		/**
+		 * @param IContainer $container
+		 */
 		public function lazyContainer(IContainer $container) {
 			$this->container = $container;
 		}
 
+		/**
+		 * @param IErrorControl $errorControl
+		 */
 		public function lazyErrorControl(IErrorControl $errorControl) {
 			$this->errorControl = $errorControl;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function run() {
 			try {
 				$this->use();
@@ -73,6 +94,9 @@
 			}
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 		}
 	}

@@ -9,44 +9,68 @@
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Container\Factory\FactoryFactory;
 
+	/**
+	 * Default implementation of a factory manager.
+	 */
 	class FactoryManager extends AbstractObject implements IFactoryManager {
 		/**
 		 * @var IFactory[]
 		 */
 		protected $factoryList = [];
-		/**
-		 * @var callable
-		 */
-		protected $factoryFallback;
+		protected $handleList = [];
 
-		public function registerFactoryList(array $factoryList) {
+		/**
+		 * @inheritdoc
+		 * @throws FactoryException
+		 */
+		public function registerFactoryList(array $factoryList): IFactoryManager {
 			foreach (FactoryFactory::createList($factoryList) as $name => $factory) {
 				$this->registerFactory($name, $factory);
 			}
 			return $this;
 		}
 
-		public function registerFactory($name, IFactory $factory) {
+		/**
+		 * @inheritdoc
+		 */
+		public function registerFactory(string $name, IFactory $factory): IFactoryManager {
 			$this->factoryList[$name] = $factory;
 			return $this;
 		}
 
-		public function registerFactoryFallback(callable $callback) {
-			$this->factoryFallback = $callback;
-			return $this;
-		}
-
-		public function getFactory($name) {
+		/**
+		 * @inheritdoc
+		 */
+		public function getFactory(string $name): IFactory {
+			if (isset($this->handleList[$name])) {
+				return $this->handleList[$name];
+			}
 			if ($this->hasFactory($name) === false) {
-				if ($this->factoryFallback && ($factory = call_user_func($this->factoryFallback, $name)) !== null) {
-					return $this->factoryList[$name] = $factory;
-				}
 				throw new FactoryException(sprintf('Requested unknown factory [%s].', $name));
 			}
-			return $this->factoryList[$name];
+			if (isset($this->factoryList[$name])) {
+				return $this->handleList[$name] = $this->factoryList[$name];
+			}
+			foreach ($this->factoryList as $factory) {
+				if ($factory->canHandle($name)) {
+					return $this->handleList[$name] = $factory;
+				}
+			}
+			throw new FactoryException(sprintf('Some strange bug here for factory [%s].', $name));
 		}
 
-		public function hasFactory($name) {
-			return isset($this->factoryList[$name]);
+		/**
+		 * @inheritdoc
+		 */
+		public function hasFactory(string $name): bool {
+			if (isset($this->factoryList[$name])) {
+				return true;
+			}
+			foreach ($this->factoryList as $factory) {
+				if ($factory->canHandle($name)) {
+					return true;
+				}
+			}
+			return false;
 		}
 	}

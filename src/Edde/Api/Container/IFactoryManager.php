@@ -13,30 +13,23 @@
 		 * @param string $name
 		 * @param IFactory $factory
 		 *
-		 * @return $this
+		 * @return IFactoryManager
 		 */
-		public function registerFactory($name, IFactory $factory);
+		public function registerFactory(string $name, IFactory $factory): IFactoryManager;
 
 		/**
 		 * @param IFactory[] $factoryList
 		 *
-		 * @return $this
+		 * @return IFactoryManager
 		 */
-		public function registerFactoryList(array $factoryList);
-
-		/**
-		 * @param callable $callback
-		 *
-		 * @return $this
-		 */
-		public function registerFactoryFallback(callable $callback);
+		public function registerFactoryList(array $factoryList): IFactoryManager;
 
 		/**
 		 * @param string $name
 		 *
 		 * @return bool
 		 */
-		public function hasFactory($name);
+		public function hasFactory(string $name): bool;
 
 		/**
 		 * @param string $name
@@ -45,5 +38,5 @@
 		 *
 		 * @throws FactoryException
 		 */
-		public function getFactory($name);
+		public function getFactory(string $name): IFactory;
 	}

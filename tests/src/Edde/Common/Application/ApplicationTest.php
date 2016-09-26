@@ -10,11 +10,11 @@
 	use Edde\Api\Control\IControl;
 	use Edde\Common\Application\Event\FinishEvent;
 	use Edde\Common\Application\Event\StartEvent;
-	use Edde\Common\Container\Factory\ClassFactory;
+	use Edde\Common\Container\Factory\ReflectionFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use phpunit\framework\TestCase;
 
-	require_once(__DIR__ . '/assets/assets.php');
+	require_once __DIR__ . '/assets/assets.php';
 
 	class ApplicationTest extends TestCase {
 		/**
@@ -78,7 +78,7 @@
 				IRequest::class => function () {
 					return new \SomeRequest();
 				},
-				\SomeControl::class => new ClassFactory(\SomeControl::class, \SomeControl::class, true),
+				\SomeControl::class => new ReflectionFactory(\SomeControl::class, \SomeControl::class, true),
 				IErrorControl::class => \SomeErrorControl::class,
 			]);
 			$this->request = $container->create(IRequest::class);

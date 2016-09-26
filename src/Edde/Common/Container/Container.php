@@ -5,7 +5,9 @@
 
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheFactory;
+	use Edde\Api\Callback\IParameter;
 	use Edde\Api\Container\ContainerException;
+	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IDependencyFactory;
@@ -15,6 +17,9 @@
 	use Edde\Common\Callback\Callback;
 	use Edde\Common\Usable\AbstractUsable;
 
+	/**
+	 * Default implementation of a dependency container.
+	 */
 	class Container extends AbstractUsable implements IContainer {
 		/**
 		 * @var IFactoryManager
@@ -44,15 +49,25 @@
 			$this->cacheFactory = $cacheFactory;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function registerFactory(string $name, IFactory $factory): IContainer {
 			$this->factoryManager->registerFactory($name, $factory);
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function has($name) {
 			return $this->factoryManager->hasFactory($name);
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws ContainerException
+		 */
 		public function inject($instance) {
 			$this->use();
 			if (($reflection = $this->cache->load($cacheId = ('reflection/' . get_class($instance)))) === null) {
@@ -93,14 +108,17 @@
 					'lazy-inject' => $injectList,
 				]);
 			}
+			/** @noinspection ForeachSourceInspection */
 			/** @var $instance ILazyInject */
 			foreach ($reflection['lazy-inject'] as $method) {
+				/** @noinspection ForeachSourceInspection */
 				foreach ($method as $property => $class) {
 					$instance->lazy($property, function () use ($class) {
 						return $this->create($class);
 					});
 				}
 			}
+			/** @noinspection ForeachSourceInspection */
 			foreach ($reflection['method-list'] as $method) {
 				$this->call([
 					$instance,
@@ -110,11 +128,22 @@
 			return $instance;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws FactoryException
+		 */
 		public function create($name, ...$parameterList) {
 			$this->use();
 			return $this->factory($this->dependencyFactory->create($name), $parameterList);
 		}
 
+		/**
+		 * @param IDependency $root
+		 * @param array $parameterList
+		 *
+		 * @return mixed
+		 * @throws FactoryException
+		 */
 		protected function factory(IDependency $root, array $parameterList) {
 			$dependencyList = [];
 			foreach ($root->getDependencyList() as $dependency) {
@@ -127,11 +156,16 @@
 				->create($name, array_merge($dependencyList, $parameterList), $this);
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws FactoryException
+		 */
 		public function call(callable $callable, ...$parameterList) {
 			$this->use();
 			$callback = new Callback($callable);
 			$dependencies = [];
 			$grab = count($dependencyList = $callback->getParameterList()) - count($parameterList);
+			/** @var $dependencyList IParameter[] */
 			foreach ($dependencyList as $dependency) {
 				if ($grab-- <= 0 || $dependency->isOptional() || $dependency->hasClass() === false) {
 					break;
@@ -141,6 +175,9 @@
 			return $callback->invoke(...array_merge($dependencies, $parameterList));
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 			$this->cache = $this->cacheFactory->factory(self::class);
 		}
