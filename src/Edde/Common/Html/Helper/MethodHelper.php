@@ -30,7 +30,7 @@
 				];
 				return sprintf('%s->%s()', $control[$match['type']], StringUtils::camelize($match['method'], null, true));
 			} else if ($match = StringUtils::match($value, '~^(?<class>(\\\\[a-zA-Z0-9_]+)+)::(?<method>[a-zA-Z_]+)\(\)$~', true, true)) {
-				return sprintf('$this->container->create(%s)->%s()', var_export($match['class'], true), $match['method']);
+				return sprintf('$this->container->create(%s)->%s($stack->top())', var_export($match['class'], true), $match['method']);
 			}
 			return null;
 		}
