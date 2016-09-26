@@ -17,10 +17,7 @@
 		 * @var IFactory[]
 		 */
 		protected $factoryList = [];
-		/**
-		 * @var callable
-		 */
-		protected $factoryFallback;
+		protected $handleList = [];
 
 		/**
 		 * @inheritdoc
@@ -44,28 +41,36 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function registerFactoryFallback(callable $callback): IFactoryManager {
-			$this->factoryFallback = $callback;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function getFactory(string $name): IFactory {
+			if (isset($this->handleList[$name])) {
+				return $this->handleList[$name];
+			}
 			if ($this->hasFactory($name) === false) {
-				if ($this->factoryFallback && ($factory = call_user_func($this->factoryFallback, $name)) !== null) {
-					return $this->factoryList[$name] = $factory;
-				}
 				throw new FactoryException(sprintf('Requested unknown factory [%s].', $name));
 			}
-			return $this->factoryList[$name];
+			if (isset($this->factoryList[$name])) {
+				return $this->handleList[$name] = $this->factoryList[$name];
+			}
+			foreach ($this->factoryList as $factory) {
+				if ($factory->canHandle($name)) {
+					return $this->handleList[$name] = $factory;
+				}
+			}
+			throw new FactoryException(sprintf('Some strange bug here for factory [%s].', $name));
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function hasFactory(string $name): bool {
-			return isset($this->factoryList[$name]);
+			if (isset($this->factoryList[$name])) {
+				return true;
+			}
+			foreach ($this->factoryList as $factory) {
+				if ($factory->canHandle($name)) {
+					return true;
+				}
+			}
+			return false;
 		}
 	}

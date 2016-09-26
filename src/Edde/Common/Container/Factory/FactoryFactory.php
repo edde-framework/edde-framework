@@ -22,9 +22,13 @@
 			$singleton = true;
 			foreach ($factoryList as $name => $factory) {
 				if (is_string($name) === false) {
-					$name = $factory;
-					$singleton = false;
+					$name = 'anonymous-' . $name;
+					if ($factory instanceof IFactory === false) {
+						$name = $factory;
+						$singleton = false;
+					}
 				}
+				$name = (string)$name;
 				$factories[$name] = self::create($name, $factory, $singleton);
 				$singleton = true;
 			}
@@ -40,11 +44,11 @@
 		 * @return IFactory
 		 * @throws FactoryException
 		 */
-		static public function create($name, $factory, $singleton = true, $cloneable = false): IFactory {
+		static public function create(string $name, $factory, bool $singleton = true, bool $cloneable = false): IFactory {
 			if (is_callable($factory)) {
 				return new CallbackFactory($name, $factory, $singleton, $cloneable);
 			} else if (is_string($factory) && class_exists($factory)) {
-				return new ClassFactory($name, $factory, $singleton, $cloneable);
+				return new ReflectionFactory($name, $factory, $singleton, $cloneable);
 			} else if ($factory instanceof IFactory) {
 				return $factory;
 			} else if (is_object($factory)) {
@@ -54,20 +58,5 @@
 				return $instance;
 			}
 			throw new FactoryException(sprintf('Cannot handle [%s] factory, unknown $factory type.', $name));
-		}
-
-		/**
-		 * @param bool $singleton is default class from callback singleton?
-		 *
-		 * @return callable
-		 * @throws FactoryException
-		 */
-		static public function createFallback($singleton = false): callable {
-			return function ($name) use ($singleton) {
-				if (class_exists($name) === false) {
-					return null;
-				}
-				return self::create($name, $name, $singleton);
-			};
 		}
 	}

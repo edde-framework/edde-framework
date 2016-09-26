@@ -9,7 +9,7 @@
 	/**
 	 * Magical implementation of callback search mechanism based on "class exists".
 	 */
-	class CascadeFactory extends ClassFactory {
+	class CascadeFactory extends ReflectionFactory {
 		use UsableTrait;
 		/**
 		 * @var array
@@ -30,23 +30,32 @@
 		 * @param array $sourceList
 		 * @param callable $parameterCallback
 		 */
-		public function __construct($name, $class, array $sourceList, callable $parameterCallback = null) {
-			parent::__construct($name, false, false);
+		public function __construct(string $name, string $class, array $sourceList, callable $parameterCallback = null) {
+			parent::__construct($name, $class, false, false);
 			$this->class = $class;
 			$this->sourceList = $sourceList;
 			$this->parameterCallback = $parameterCallback;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getParameterList() {
 			$this->use();
 			return parent::getParameterList();
 		}
 
-		public function factory(array $parameterList, IContainer $container) {
+		/**
+		 * @inheritdoc
+		 */
+		public function factory(string $name, array $parameterList, IContainer $container) {
 			$this->use();
-			return parent::factory($parameterList, $container);
+			return parent::factory($name, $parameterList, $container);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 			$parameterList = [];
 			foreach (array_merge($this->parameterCallback ? call_user_func($this->parameterCallback) : [], ['class' => $this->class]) as $k => $v) {

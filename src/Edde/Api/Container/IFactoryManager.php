@@ -25,13 +25,6 @@
 		public function registerFactoryList(array $factoryList): IFactoryManager;
 
 		/**
-		 * @param callable $callback
-		 *
-		 * @return IFactoryManager
-		 */
-		public function registerFactoryFallback(callable $callback): IFactoryManager;
-
-		/**
 		 * @param string $name
 		 *
 		 * @return bool
