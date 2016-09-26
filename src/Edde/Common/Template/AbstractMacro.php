@@ -17,6 +17,8 @@
 	 */
 	abstract class AbstractMacro extends AbstractObject implements IMacro, ILazyInject {
 		use UsableTrait;
+		const COMPILE_PREFIX = 't:';
+		const RUNTIME_PREFIX = 'm:';
 		/**
 		 * @var string
 		 */

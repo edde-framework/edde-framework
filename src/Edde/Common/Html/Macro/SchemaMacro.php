@@ -27,7 +27,7 @@
 		 */
 		public function compileInline(INode $macro, ICompiler $compiler) {
 			$schemaList = $compiler->getVariable(static::class);
-			list($schema, $property) = explode('.', $this->extract($macro, 't:' . $this->getName()));
+			list($schema, $property) = explode('.', $this->extract($macro, self::COMPILE_PREFIX . $this->getName()));
 			if (isset($schemaList[$schema]) === false) {
 				throw new MacroException(sprintf('Unknown attribute schema [%s] on [%s].', $schema, $macro->getPath()));
 			}

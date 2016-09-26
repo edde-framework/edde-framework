@@ -39,7 +39,7 @@
 		 * @inheritdoc
 		 */
 		public function compileInline(INode $macro, ICompiler $compiler) {
-			$macro->switch(new Node('loop', null, ['src' => $this->extract($macro, 't:' . $this->getName())]));
+			$macro->switch(new Node('loop', null, ['src' => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
 		}
 
 		/**

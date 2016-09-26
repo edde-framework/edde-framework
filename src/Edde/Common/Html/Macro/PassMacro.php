@@ -27,7 +27,7 @@
 		 * @inheritdoc
 		 */
 		public function compileInline(INode $macro, ICompiler $compiler) {
-			$macro->prepend(new Node('pass', null, ['target' => $this->extract($macro, 't:' . $this->getName())]));
+			$macro->prepend(new Node('pass', null, ['target' => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */

@@ -34,7 +34,7 @@
 		 * @inheritdoc
 		 */
 		public function compileInline(INode $macro, ICompiler $compiler) {
-			$macro->switch(new Node('case', null, ['name' => $this->extract($macro, 't:' . $this->getName())]));
+			$macro->switch(new Node('case', null, ['name' => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
