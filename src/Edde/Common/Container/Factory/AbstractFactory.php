@@ -72,20 +72,20 @@
 			}
 		}
 
-		public function isCloneable() {
+		public function isCloneable(): bool {
 			return $this->cloneable;
 		}
 
-		public function setCloneable($cloneable) {
+		public function setCloneable(bool $cloneable) {
 			$this->cloneable = $cloneable;
 			return $this;
 		}
 
-		public function isSingleton() {
+		public function isSingleton(): bool {
 			return $this->singleton;
 		}
 
-		public function setSingleton($singleton) {
+		public function setSingleton(bool $singleton) {
 			$this->singleton = $singleton;
 			return $this;
 		}

@@ -23,14 +23,14 @@
 		 *
 		 * @return $this
 		 */
-		public function setSingleton($singleton);
+		public function setSingleton(bool $singleton);
 
 		/**
 		 * is result of this factory singleton?
 		 *
 		 * @return bool
 		 */
-		public function isSingleton();
+		public function isSingleton(): bool;
 
 		/**
 		 * switch cloneable flag; should be set only in the configuration time
@@ -39,14 +39,14 @@
 		 *
 		 * @return $this
 		 */
-		public function setCloneable($cloneable);
+		public function setCloneable(bool $cloneable);
 
 		/**
 		 * is result of this factory clone?
 		 *
 		 * @return bool
 		 */
-		public function isCloneable();
+		public function isCloneable(): bool;
 
 		/**
 		 * return list of required parameters for this factory
