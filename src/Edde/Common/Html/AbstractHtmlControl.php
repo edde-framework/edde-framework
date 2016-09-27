@@ -93,14 +93,14 @@
 		 * @throws FileException
 		 */
 		public function javascript(string $class, string $file = null): IHtmlControl {
-			$this->setAttribute('data-class', $class = str_replace('\\', '.', $class ?: static::class));
-			$reflectionClass = new \ReflectionClass($this);
+			$this->setAttribute('data-class', $name = str_replace('\\', '.', $class));
+			$reflectionClass = new \ReflectionClass($class);
 			$javascript = new File(str_replace('.php', '.js', $reflectionClass->getFileName()));
 			if ($file !== null) {
 				$javascript = new File($file);
 			}
-			$javascript = $this->tempDirectory->save(sha1($class . '-js') . '.js', $source = $javascript->get());
-			$javascript->save(sprintf("Edde.Utils.class('" . $class . "', %s);", $source));
+			$javascript = $this->tempDirectory->save(sha1($name . '-js') . '.js', $source = $javascript->get());
+			$javascript->save(sprintf("Edde.Utils.class('" . $name . "', %s);", $source));
 			$this->javaScriptCompiler->addResource($javascript);
 			return $this;
 		}
