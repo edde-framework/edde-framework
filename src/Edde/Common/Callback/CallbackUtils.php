@@ -30,7 +30,7 @@
 		}
 
 		/**
-		 * @param string|array $callback
+		 * @param string|array|callable $callback
 		 *
 		 * @return ReflectionFunction|ReflectionMethod
 		 */
