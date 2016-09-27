@@ -167,9 +167,11 @@
 		 *
 		 * @return IHtmlControl
 		 */
-		public function javascript(string $class = null, string $file = null): IHtmlControl;
+		public function javascript(string $class, string $file = null): IHtmlControl;
 
 		/**
+		 * @deprecated
+		 *
 		 * @param string|null $file
 		 *
 		 * @return IHtmlControl

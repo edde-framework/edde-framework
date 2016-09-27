@@ -8,7 +8,7 @@
 	class TextControl extends AbstractHtmlControl {
 		protected function prepare() {
 			parent::prepare()
-				->javascript()
+				->javascript(self::class)
 				->setTag('input', false)
 				->addAttributeList([
 					'type' => 'text',

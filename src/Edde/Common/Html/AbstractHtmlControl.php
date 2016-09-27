@@ -4,6 +4,7 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\File\FileException;
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Web\IJavaScriptCompiler;
@@ -60,8 +61,12 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function setAttribute($attribute, $value) {
 			$this->use();
+			/** @noinspection DegradedSwitchInspection */
 			switch ($attribute) {
 				case 'class':
 					$this->addAttribute($attribute, $value);
@@ -72,6 +77,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function addAttribute(string $attribute, $value) {
 			$this->use();
 			$attributeList = $this->node->getAttributeList();
@@ -80,8 +88,12 @@
 			return $this;
 		}
 
-		public function javascript(string $class = null, string $file = null): IHtmlControl {
-			$this->setAttribute('data-class', $class = $class ?: str_replace('\\', '.', static::class));
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 */
+		public function javascript(string $class, string $file = null): IHtmlControl {
+			$this->setAttribute('data-class', $class = str_replace('\\', '.', $class ?: static::class));
 			$reflectionClass = new \ReflectionClass($this);
 			$javascript = new File(str_replace('.php', '.js', $reflectionClass->getFileName()));
 			if ($file !== null) {
@@ -93,6 +105,10 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 */
 		public function stylesheet(string $file = null): IHtmlControl {
 			$reflectionClass = new \ReflectionClass($this);
 			$stylesheet = new File(str_replace('.php', '.css', $reflectionClass->getFileName()));
@@ -103,28 +119,43 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getId(): string {
 			$this->use();
 			return $this->getAttribute('id', '');
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getAttribute(string $name, $default = '') {
 			$this->use();
 			return $this->node->getAttribute($name, $default);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function setText(string $text) {
 			$this->use();
 			$this->node->setValue($text);
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function addAttributeList(array $attributeList): IHtmlControl {
 			$this->use();
 			$this->node->addAttributeList($attributeList);
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function setAttributeList(array $attributeList): IHtmlControl {
 			$this->use();
 			/**
@@ -136,6 +167,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function hasAttribute($attribute) {
 			return $this->node->hasAttribute($attribute);
 		}
@@ -157,14 +191,23 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function hasClass(string $class) {
 			return in_array($class, $this->getClassList(), true);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getClassList() {
 			return $this->getAttribute('class', []);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function addClass(string $class) {
 			$this->addAttribute('class', $class);
 			return $this;
@@ -234,6 +277,9 @@
 			return $this->node->getMeta('tag');
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getAttributeList(): array {
 			$this->use();
 			return $this->node->getAttributeList();
