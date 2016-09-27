@@ -19,6 +19,7 @@
 		 */
 		static public function getArgumentList(array $argv) {
 			$argumentList = [];
+			/** @noinspection ForeachInvariantsInspection */
 			for ($i = 0, $j = count($argv); $i < $j; $i++) {
 				$arg = $argv[$i];
 				if (strpos($arg, '--', 0) === 0) {

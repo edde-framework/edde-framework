@@ -4,7 +4,6 @@
 	namespace Edde\Ext\Application;
 
 	use Edde\Api\Application\IErrorControl;
-	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Router\RouterException;
 	use Edde\Common\Html\TemplateViewControl;
 
@@ -13,14 +12,9 @@
 	 */
 	class ExceptionErrorControl extends TemplateViewControl implements IErrorControl {
 		/**
-		 * @var IHttpRequest
+		 * @inheritdoc
+		 * @throws \Exception
 		 */
-		protected $httpRequest;
-
-		public function lazyHttpRequest(IHttpRequest $httpRequest) {
-			$this->httpRequest = $httpRequest;
-		}
-
 		public function exception(\Exception $e) {
 			if ($this->httpRequest->isAjax()) {
 				throw $e;

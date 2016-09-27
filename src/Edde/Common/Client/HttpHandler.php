@@ -42,36 +42,58 @@
 			$this->curl = $curl;
 		}
 
+		/**
+		 * @param IContainer $container
+		 */
 		public function lazyContainer(IContainer $container) {
 			$this->container = $container;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function authorization(string $authorization): IHttpHandler {
 			$this->header('Authorization', $authorization);
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function header(string $name, string $value): IHttpHandler {
 			$this->httpRequest->getHeaderList()
 				->set($name, $value);
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function keepConnectionAlive(): IHttpHandler {
 			$this->header('Connection', 'keep-alive');
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function content($content, string $mime, string $target): IHttpHandler {
 			$this->httpRequest->setBody($this->container->inject(new Body($content, $mime, $target)));
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function body(IBody $body): IHttpHandler {
 			$this->httpRequest->setBody($this->container->inject($body));
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws ClientException
+		 */
 		public function execute(): IHttpResponse {
 			if ($this->curl === null) {
 				throw new ClientException(sprintf('Cannot execute handler for the url [%s] more than once.', (string)$this->httpRequest->getRequestUrl()));
@@ -89,6 +111,8 @@
 				$options[CURLOPT_POSTFIELDS] = $postList->array();
 			}
 			$headerList = new HeaderList();
+			/** @noinspection PhpUnusedParameterInspection */
+			/** @noinspection PhpDocSignatureInspection */
 			$options[CURLOPT_HEADERFUNCTION] = function ($curl, $header) use ($headerList) {
 				$length = strlen($header);
 				if (($text = trim($header)) !== '' && strpos($header, ':') !== false) {

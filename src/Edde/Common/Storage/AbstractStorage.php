@@ -7,12 +7,16 @@
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Schema\ISchemaManager;
+	use Edde\Api\Schema\SchemaException;
 	use Edde\Api\Storage\EmptyResultException;
 	use Edde\Api\Storage\ICollection;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Query\Select\SelectQuery;
 
+	/**
+	 * Base for all storage implementations.
+	 */
 	abstract class AbstractStorage extends AbstractDeffered implements IStorage {
 		/**
 		 * @var ISchemaManager
@@ -23,14 +27,24 @@
 		 */
 		protected $crateFactory;
 
+		/**
+		 * @param ISchemaManager $schemaManager
+		 */
 		public function lazySchemaManager(ISchemaManager $schemaManager) {
 			$this->schemaManager = $schemaManager;
 		}
 
+		/**
+		 * @param ICrateFactory $crateFactory
+		 */
 		public function lazyCrateFactory(ICrateFactory $crateFactory) {
 			$this->crateFactory = $crateFactory;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws SchemaException
+		 */
 		public function collectionTo(ICrate $crate, string $relation, string $source, string $target, string $crateTo = null): ICollection {
 			$relationSchema = $this->schemaManager->getSchema($relation);
 			$sourceLink = $relationSchema->getLink($source);
@@ -63,6 +77,9 @@
 			return $this->collection($crateTo ?: $targetSchemaName, $selectQuery, $targetSchemaName);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function collection(string $crate, IQuery $query = null, string $schema = null): ICollection {
 			$schema = $schema ?: $crate;
 			if ($query === null) {
@@ -75,6 +92,10 @@
 			return new Collection($crate, $this, $this->crateFactory, $query, $schema);
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws EmptyResultException
+		 */
 		public function getLink(ICrate $crate, string $name): ICrate {
 			$link = $crate->getSchema()
 				->getLink($name);
@@ -96,7 +117,12 @@
 			return $link;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws EmptyResultException
+		 */
 		public function load(string $crate, IQuery $query, string $schema = null): ICrate {
+			/** @noinspection LoopWhichDoesNotLoopInspection */
 			foreach ($this->collection($crate, $query, $schema) as $item) {
 				return $item;
 			}

@@ -649,7 +649,7 @@
 				]),
 			]);
 			$i = 0;
-			foreach (NodeIterator::create($node) as $n) {
+			foreach (new NodeIterator($node) as $n) {
 				$i++;
 			}
 			self::assertEquals(2, $i);

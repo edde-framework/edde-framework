@@ -49,11 +49,18 @@
 			$this->schema = $schema;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getQuery() {
 			return $this->query;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getIterator() {
+			/** @noinspection ForeachSourceInspection */
 			foreach ($this->storage->execute($this->query) as $item) {
 				yield $this->crateFactory->crate($this->crate, $this->schema, (array)$item);
 			}

@@ -13,7 +13,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getTag() {
+		public function getTag(): string {
 			return 'body';
 		}
 

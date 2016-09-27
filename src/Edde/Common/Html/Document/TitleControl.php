@@ -6,7 +6,7 @@
 	use Edde\Common\Html\AbstractHtmlControl;
 
 	class TitleControl extends AbstractHtmlControl {
-		public function getTag() {
+		public function getTag(): string {
 			return 'title';
 		}
 

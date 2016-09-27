@@ -32,14 +32,23 @@
 		 */
 		protected $crateFactory;
 
+		/**
+		 * @param IStorage $storage
+		 */
 		public function lazyStorage(IStorage $storage) {
 			$this->storage = $storage;
 		}
 
+		/**
+		 * @param ISchemaManager $schemaManager
+		 */
 		public function lazySchemaManager(ISchemaManager $schemaManager) {
 			$this->schemaManager = $schemaManager;
 		}
 
+		/**
+		 * @param ICrateFactory $crateFactory
+		 */
 		public function lazyCrateFactory(ICrateFactory $crateFactory) {
 			$this->crateFactory = $crateFactory;
 		}

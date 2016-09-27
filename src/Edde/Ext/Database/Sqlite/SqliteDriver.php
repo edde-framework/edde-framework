@@ -12,6 +12,9 @@
 	use Edde\Common\Storage\UnknownSourceException;
 	use PDO;
 
+	/**
+	 * Sqlite database support.
+	 */
 	class SqliteDriver extends AbstractDriver {
 		/**
 		 * @var PDO
@@ -29,38 +32,57 @@
 		/**
 		 * @param string $dsn
 		 */
-		public function __construct($dsn) {
+		public function __construct(string $dsn) {
 			$this->dsn = $dsn;
 		}
 
-		public function start($exclusive = false) {
+		/**
+		 * @inheritdoc
+		 */
+		public function start(bool $exclusive = false) {
 			$this->use();
 			$this->pdo->beginTransaction();
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function commit() {
 			$this->use();
 			$this->pdo->commit();
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function rollback() {
 			$this->use();
 			$this->pdo->rollBack();
 			return $this;
 		}
 
-		public function delimite($delimite) {
+		/**
+		 * @inheritdoc
+		 */
+		public function delimite(string $delimite): string {
 			return '"' . str_replace('"', '""', $delimite) . '"';
 		}
 
-		public function quote($quote) {
+		/**
+		 * @inheritdoc
+		 */
+		public function quote(string $quote): string {
 			$this->use();
 			return $this->pdo->quote($quote);
 		}
 
-		public function type($type) {
+		/**
+		 * @inheritdoc
+		 * @throws DriverException
+		 */
+		public function type(string $type): string {
 			$this->use();
 			if (isset($this->typeList[$type]) === false) {
 				throw new DriverException(sprintf('Unknown type [%s] for driver [%s].', $type, static::class));
@@ -68,11 +90,23 @@
 			return $this->typeList[$type];
 		}
 
-		public function execute(IQuery $query) {
+		/**
+		 * @inheritdoc
+		 * @throws UniqueException
+		 * @throws UnknownSourceException
+		 * @throws \PDOException
+		 */
+		public function execute(IQuery $query): \PDOStatement {
 			$this->use();
 			return $this->native($this->staticQueryFactory->create($query));
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws UnknownSourceException
+		 * @throws UniqueException
+		 * @throws \PDOException
+		 */
 		public function native(IStaticQuery $staticQuery) {
 			$this->use();
 			try {
@@ -90,11 +124,20 @@
 			}
 		}
 
+		/**
+		 * close this sqlite connection
+		 *
+		 * @return $this
+		 */
 		public function close() {
 			$this->pdo = null;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws DriverException
+		 */
 		protected function prepare() {
 			if (extension_loaded('pdo_sqlite') === false) {
 				throw new DriverException('Sqlite PDO is not available, oops!');

@@ -6,7 +6,7 @@
 	use Edde\Common\Html\AbstractHtmlControl;
 
 	class MetaControl extends AbstractHtmlControl {
-		public function getTag() {
+		public function getTag(): string {
 			return 'meta';
 		}
 

@@ -24,7 +24,7 @@
 		 *
 		 * @return string|null
 		 */
-		public function getTag();
+		public function getTag(): string;
 
 		/**
 		 * set text value of this control (for example <span>$text</span>)

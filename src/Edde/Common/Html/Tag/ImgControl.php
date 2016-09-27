@@ -8,19 +8,29 @@
 	use Edde\Common\Html\AbstractHtmlControl;
 
 	class ImgControl extends AbstractHtmlControl {
-		public function getTag() {
+		/**
+		 * @inheritdoc
+		 */
+		public function getTag(): string {
 			return 'img';
 		}
 
-		public function setSrc($src) {
+		public function setSrc(string $src) {
 			$this->setAttribute('src', $src);
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isPair(): bool {
 			return false;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws HtmlException
+		 */
 		public function addControl(IControl $control) {
 			throw new HtmlException(sprintf('Cannot add control to an image control [%s].', static::class));
 		}

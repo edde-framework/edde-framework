@@ -19,7 +19,7 @@
 		 *
 		 * @return $this
 		 */
-		public function start($exclusive = false);
+		public function start(bool $exclusive = false);
 
 		/**
 		 * commit a transaciton
@@ -40,14 +40,14 @@
 		 *
 		 * @return string
 		 */
-		public function delimite($delimite);
+		public function delimite(string $delimite): string;
 
 		/**
 		 * @param string $quote
 		 *
 		 * @return string
 		 */
-		public function quote($quote);
+		public function quote(string $quote): string;
 
 		/**
 		 * translate common (php) type to the database type (e.g. bool to int, ...)
@@ -56,14 +56,14 @@
 		 *
 		 * @return string
 		 */
-		public function type($type);
+		public function type(string $type): string;
 
 		/**
 		 * @param IQuery $query
 		 *
 		 * @return PDOStatement
 		 */
-		public function execute(IQuery $query);
+		public function execute(IQuery $query): PDOStatement;
 
 		/**
 		 * execute native query

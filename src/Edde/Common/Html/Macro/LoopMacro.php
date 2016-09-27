@@ -52,10 +52,10 @@
 			if ($value === null) {
 				return null;
 			} else if ($value === '$:') {
-				list($key, $value) = $stack->top();
+				list(, $value) = $stack->top();
 				return '$value_' . $value;
 			} else if ($value === '$#') {
-				list($key, $value) = $stack->top();
+				list($key,) = $stack->top();
 				return '$key_' . $key;
 			} else if ($match = StringUtils::match($value, '~\$(?<type>:|#)(?<jump>\$|\.|\d+)?(\->(?<call>[a-z0-9-]+\(\)))?~', true, true)) {
 				$jump = $match['jump'] ?? 0;
@@ -117,7 +117,7 @@
 			if (isset(self::$reference[$type])) {
 				return sprintf('%s->%s', self::$reference[$type], StringUtils::camelize(substr($src, 1), null, true));
 			} else if ($src === '$:') {
-				list($key, $value) = $compiler->getVariable(static::class)
+				list(, $value) = $compiler->getVariable(static::class)
 					->top();
 				return '$value_' . $value;
 			}

@@ -14,6 +14,10 @@
 			return $this;
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
+		/**
+		 * @inheritdoc
+		 */
 		public function read() {
 			if (($line = fgetcsv($this->getHandle(), 0, $this->delimiter)) === false && $this->isAutoClose()) {
 				$this->close();

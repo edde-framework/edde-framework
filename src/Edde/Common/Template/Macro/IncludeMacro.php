@@ -77,6 +77,7 @@
 			return $compiler->getBlock($src);
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws MacroException

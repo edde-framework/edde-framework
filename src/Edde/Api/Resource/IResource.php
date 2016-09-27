@@ -24,7 +24,7 @@
 		 *
 		 * @return string
 		 */
-		public function getRelativePath($base = null);
+		public function getRelativePath(string $base = null);
 
 		/**
 		 * return base path if set
@@ -38,21 +38,21 @@
 		 *
 		 * @return string
 		 */
-		public function getName();
+		public function getName(): string;
 
 		/**
 		 * return mime type of this resource
 		 *
 		 * @return string
 		 */
-		public function getMime();
+		public function getMime(): string;
 
 		/**
 		 * is this resource available? (file exists, ...)
 		 *
 		 * @return bool
 		 */
-		public function isAvailable();
+		public function isAvailable(): bool;
 
 		/**
 		 * return whole content of the URL of this Resource
@@ -60,4 +60,9 @@
 		 * @return string
 		 */
 		public function get();
+
+		/**
+		 * @return \Iterator|\Traversable
+		 */
+		public function getIterator();
 	}

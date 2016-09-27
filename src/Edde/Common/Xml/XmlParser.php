@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Xml;
 
+	use Edde\Api\File\FileException;
 	use Edde\Api\Iterator\IIterator;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Xml\IXmlHandler;
@@ -14,6 +15,9 @@
 	use Edde\Common\Iterator\Iterator;
 	use Edde\Common\Strings\StringUtils;
 
+	/**
+	 * Simple and fast event based xml parser.
+	 */
 	class XmlParser extends AbstractObject implements IXmlParser {
 		const XML_TYPE_WARP = null;
 		const XML_TYPE_OPENTAG = 1;
@@ -25,16 +29,26 @@
 		const XML_TYPE_OPEN_COMMENT = 64;
 		const XML_TYPE_CLOSE_COMMENT = 128;
 
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 * @throws XmlParserException
+		 */
 		public function file(string $file, IXmlHandler $xmlHandler): IXmlParser {
 			return $this->parse(new File($file), $xmlHandler);
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws XmlParserException
+		 */
 		public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParser {
 			$value = '';
 			foreach ($iterator = new Iterator(new ChunkIterator([
 				StringUtils::class,
 				'createIterator',
 			], $resource->getIterator())) as $char) {
+				/** @noinspection DegradedSwitchInspection */
 				switch ($char) {
 					case '<':
 						if ($value !== '') {
@@ -50,6 +64,12 @@
 			return $this;
 		}
 
+		/**
+		 * @param IIterator $iterator
+		 * @param IXmlHandler $xmlHandler
+		 *
+		 * @throws XmlParserException
+		 */
 		protected function parseTag(IIterator $iterator, IXmlHandler $xmlHandler) {
 			$last = null;
 			$name = '';
@@ -116,6 +136,9 @@
 			}
 		}
 
+		/**
+		 * @param IIterator $iterator
+		 */
 		protected function parseComment(IIterator $iterator) {
 			$type = self::XML_TYPE_COMMENT;
 			$close = false;
@@ -143,6 +166,11 @@
 			}
 		}
 
+		/**
+		 * @param IIterator $iterator
+		 *
+		 * @return array
+		 */
 		protected function parseAttributes(IIterator $iterator) {
 			$attributeList = [];
 			foreach ($iterator as $char) {
@@ -158,12 +186,18 @@
 					case ' ':
 						continue 2;
 					default:
+						/** @noinspection SlowArrayOperationsInLoopInspection */
 						$attributeList = array_merge($attributeList, $this->parseAttribute($iterator->setContinue()));
 				}
 			}
 			return $attributeList;
 		}
 
+		/**
+		 * @param IIterator $iterator
+		 *
+		 * @return array
+		 */
 		protected function parseAttribute(IIterator $iterator) {
 			$name = null;
 			$open = false;

@@ -13,7 +13,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getTag() {
+		public function getTag(): string {
 			return 'script';
 		}
 
@@ -25,7 +25,7 @@
 			return true;
 		}
 
-		public function setSrc($src) {
+		public function setSrc(string $src) {
 			$this->setAttribute('src', $src);
 			return $this;
 		}

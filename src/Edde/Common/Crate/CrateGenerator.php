@@ -9,6 +9,7 @@
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrateDirectory;
 	use Edde\Api\Crate\ICrateGenerator;
+	use Edde\Api\File\FileException;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaCollection;
@@ -19,6 +20,9 @@
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\Strings\StringUtils;
 
+	/**
+	 * Simple crate php class generator.
+	 */
 	class CrateGenerator extends AbstractDeffered implements ICrateGenerator {
 		/**
 		 * @var ISchemaManager
@@ -58,6 +62,10 @@
 			$this->factoryManager = $factoryManager;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 */
 		public function generate(bool $force = false): ICrateGenerator {
 			if ($this->isUsed()) {
 				return $this;
@@ -74,7 +82,7 @@
 				}
 				$this->cache->save('crate-list', $crateList);
 			}
-			$loader = $this->crateDirectory->save('loader.php', "<?php
+			$this->crateDirectory->save('loader.php', "<?php
 	Edde\\Common\\Autoloader::register(null, __DIR__, false);	
 ");
 			$this->include();
@@ -82,6 +90,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function compile(ISchema $schema): array {
 			$this->use();
 			$sourceList = [];
@@ -112,6 +123,11 @@
 			return $sourceList;
 		}
 
+		/**
+		 * @param ISchemaProperty $schemaProperty
+		 *
+		 * @return string
+		 */
 		protected function generateSchemaProperty(ISchemaProperty $schemaProperty) {
 			$source[] = $this->generateGetter($schemaProperty);
 			$source[] = $this->generateSetter($schemaProperty);
@@ -122,6 +138,11 @@
 			return implode("\n", $source);
 		}
 
+		/**
+		 * @param ISchemaProperty $schemaProperty
+		 *
+		 * @return string
+		 */
 		protected function generateGetter(ISchemaProperty $schemaProperty) {
 			$source[] = "\t\t/**\n";
 			$type = $schemaProperty->isArray() ? 'array
@@ -134,6 +155,11 @@
 			return implode('', $source);
 		}
 
+		/**
+		 * @param ISchemaProperty $schemaProperty
+		 *
+		 * @return string
+		 */
 		protected function generateSetter(ISchemaProperty $schemaProperty) {
 			$parameter = StringUtils::firstLower($camelized = StringUtils::camelize($propertyName = $schemaProperty->getName()));
 			$source[] = "\t\t/**\n";
@@ -150,6 +176,11 @@
 			return implode('', $source);
 		}
 
+		/**
+		 * @param ISchemaProperty $schemaProperty
+		 *
+		 * @return string
+		 */
 		protected function generateArray(ISchemaProperty $schemaProperty) {
 			$parameter = StringUtils::firstLower($camelized = StringUtils::camelize($propertyName = $schemaProperty->getName()));
 			$source[] = "\t\t/**\n";
@@ -164,6 +195,11 @@
 			return implode('', $source);
 		}
 
+		/**
+		 * @param ISchemaCollection $schemaCollection
+		 *
+		 * @return string
+		 */
 		protected function generateCollection(ISchemaCollection $schemaCollection) {
 			$source[] = '';
 			$source[] = "\t\t/**\n";
@@ -176,6 +212,11 @@
 			return implode('', $source);
 		}
 
+		/**
+		 * @param ISchemaLink $schemaLink
+		 *
+		 * @return string
+		 */
 		protected function generateLink(ISchemaLink $schemaLink) {
 			$targetSchemaName = $schemaLink->getTarget()
 				->getSchema()
@@ -195,13 +236,20 @@
 			return implode('', $source);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function include (): ICrateGenerator {
+			/** @noinspection UnnecessaryParenthesesInspection */
 			(function (IResource $resource) {
-				require_once($resource->getUrl());
+				require_once $resource->getUrl();
 			})($this->crateDirectory->file('loader.php'));
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 			$this->crateDirectory->create();
 			$this->cache = $this->cacheFactory->factory(__NAMESPACE__);

@@ -11,6 +11,9 @@
 	use Edde\Api\Schema\ISchema;
 	use Edde\Common\AbstractObject;
 
+	/**
+	 * Simple (...advanced...) crate implementation.
+	 */
 	class Crate extends AbstractObject implements ICrate {
 		/**
 		 * @var ISchema
@@ -37,6 +40,10 @@
 		 */
 		protected $commit;
 
+		/**
+		 * @inheritdoc
+		 * @throws CrateException
+		 */
 		public function getSchema(): ISchema {
 			if ($this->schema === null) {
 				throw new CrateException(sprintf('Cannot get schema from anonymous crate [%s].', static::class));
@@ -44,15 +51,24 @@
 			return $this->schema;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function setSchema(ISchema $schema): ICrate {
 			$this->schema = $schema;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getPropertyList(): array {
 			return $this->propertyList;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getIdentifierList(): array {
 			if ($this->identifierList === null) {
 				$this->identifierList = [];
@@ -66,6 +82,10 @@
 			return $this->identifierList;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws CrateException
+		 */
 		public function put(array $put, bool $strict = true): ICrate {
 			if ($strict && ($diff = array_diff(array_keys($put), array_keys($this->propertyList))) !== []) {
 				throw new CrateException(sprintf('Setting unknown values [%s] to the crate [%s].', implode(', ', $diff), $this->schema->getSchemaName()));
@@ -79,12 +99,19 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function set(string $name, $value): ICrate {
 			$this->getProperty($name)
 				->set($value);
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws CrateException
+		 */
 		public function getProperty(string $name): IProperty {
 			if ($this->hasProperty($name) === false) {
 				throw new CrateException(sprintf('Unknown value [%s] in crate [%s].', $name, $this->schema->getSchemaName()));
@@ -92,10 +119,17 @@
 			return $this->propertyList[$name];
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function hasProperty(string $name): bool {
 			return isset($this->propertyList[$name]);
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws CrateException
+		 */
 		public function add(string $name, $value, $key = null): ICrate {
 			$property = $this->getProperty($name)
 				->getSchemaProperty();
@@ -112,11 +146,19 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws CrateException
+		 */
 		public function get(string $name, $default = null) {
 			return $this->getProperty($name)
 				->get($default);
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws CrateException
+		 */
 		public function push(array $push, bool $strict = true): ICrate {
 			if ($strict && ($diff = array_diff(array_keys($push), array_keys($this->propertyList))) !== []) {
 				throw new CrateException(sprintf('Setting unknown values [%s] to the crate [%s].', implode(', ', $diff), $this->schema->getSchemaName()));
@@ -135,6 +177,10 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws CrateException
+		 */
 		public function linkTo(array $linkTo): ICrate {
 			foreach ($linkTo as $name => $crate) {
 				$this->link($name, $crate);
@@ -142,6 +188,10 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws CrateException
+		 */
 		public function link(string $name, ICrate $crate): ICrate {
 			if ($this->schema->hasLink($name) === false) {
 				throw new CrateException(sprintf('Crate [%s] has no link [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
@@ -154,6 +204,10 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws CrateException
+		 */
 		public function getLink(string $name) {
 			if ($this->hasLink($name) === false) {
 				throw new CrateException(sprintf('Requested unknown link [%s] on the crate [%s].', $name, $this->schema->getSchemaName()));
@@ -161,10 +215,17 @@
 			return $this->linkList[$name];
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function hasLink(string $name): bool {
 			return isset($this->linkList[$name]);
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws CrateException
+		 */
 		public function collection(string $name, ICollection $collection): ICrate {
 			if ($this->schema->hasCollection($name) === false) {
 				throw new CrateException(sprintf('Crate [%s] has no collection [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
@@ -173,6 +234,10 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws CrateException
+		 */
 		public function getCollection(string $name): ICollection {
 			if ($this->hasCollection($name) === false) {
 				throw new CrateException(sprintf('Requested unknown collection [%s] on the crate [%s].', $name, $this->schema->getSchemaName()));
@@ -180,10 +245,16 @@
 			return $this->collectionList[$name];
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function hasCollection(string $name): bool {
 			return isset($this->collectionList[$name]);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getDirtyList(): array {
 			if ($this->isDirty() === false) {
 				return [];
@@ -199,6 +270,9 @@
 			return $propertyList;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isDirty(): bool {
 			foreach ($this->propertyList as $property) {
 				if ($property->isDirty()) {
@@ -208,6 +282,10 @@
 			return false;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws CrateException
+		 */
 		public function addProperty(IProperty $property, bool $force = false): ICrate {
 			$schemaProperty = $property->getSchemaProperty();
 			if (isset($this->propertyList[$propertyName = $schemaProperty->getName()]) && $force === false) {
@@ -217,6 +295,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function array(): array {
 			$array = [];
 			foreach ($this->propertyList as $name => $property) {
@@ -234,12 +315,17 @@
 			return $array;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws CryptException
+		 */
 		public function commit(callable $callback = null): ICrate {
 			if ($callback === null && $this->commit === null) {
 				throw new CryptException(sprintf('Commit is not available on crate [%s]. It has to be set before calling.', $this->schema->getSchemaName()));
 			}
 			if ($callback === null) {
 				if ($this->isDirty()) {
+					/** @noinspection VariableFunctionsUsageInspection */
 					call_user_func($this->commit, $this);
 				}
 				$this->commit = null;
@@ -252,6 +338,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function update(): ICrate {
 			foreach ($this->propertyList as $property) {
 				$schemaProperty = $property->getSchemaProperty();
