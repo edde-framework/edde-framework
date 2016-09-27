@@ -11,7 +11,7 @@
 		 * @var callable
 		 */
 		protected $callback;
-		protected $parameterList = null;
+		protected $parameterList;
 
 		/**
 		 * @param callable $callback
@@ -20,14 +20,23 @@
 			$this->callback = $callback;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getCallback(): callable {
 			return $this->callback;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getParameterCount(): int {
 			return count($this->getParameterList());
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getParameterList(): array {
 			if ($this->parameterList === null) {
 				$this->parameterList = CallbackUtils::getParameterList($this->callback);
@@ -35,10 +44,16 @@
 			return $this->parameterList;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function __invoke(...$parameterList) {
 			return $this->invoke(...$parameterList);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function invoke(...$parameterList) {
 			return call_user_func_array($this->callback, $parameterList);
 		}

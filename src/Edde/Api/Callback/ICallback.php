@@ -19,6 +19,11 @@
 		 */
 		public function getParameterList(): array;
 
+		/**
+		 * return total number of parameters required by this callback
+		 *
+		 * @return int
+		 */
 		public function getParameterCount(): int;
 
 		/**

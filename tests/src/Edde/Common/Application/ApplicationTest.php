@@ -16,6 +16,9 @@
 
 	require_once __DIR__ . '/assets/assets.php';
 
+	/**
+	 * Tests related to an application. Surprise!
+	 */
 	class ApplicationTest extends TestCase {
 		/**
 		 * @var Application

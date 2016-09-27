@@ -5,7 +5,6 @@
 
 	use Edde\Api\Control\ControlException;
 	use Edde\Api\Control\IControl;
-	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Node\INode;
 	use Edde\Common\Callback\Callback;
 	use Edde\Common\Control\Event\DoneEvent;
@@ -22,11 +21,17 @@
 		 */
 		protected $node;
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getNode() {
 			$this->use();
 			return $this->node;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getRoot() {
 			$this->use();
 			if ($this->node->isRoot()) {
@@ -36,17 +41,26 @@
 				->getMeta('control');
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getParent() {
 			$this->use();
 			$parent = $this->node->getParent();
 			return $parent ? $parent->getMeta('control') : null;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isLeaf(): bool {
 			$this->use();
 			return $this->node->isLeaf();
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function disconnect(): IControl {
 			$this->use();
 			if ($this->node->isRoot() === false) {
@@ -57,9 +71,7 @@
 		}
 
 		/**
-		 * @param IControl[] $controlList
-		 *
-		 * @return $this
+		 * @inheritdoc
 		 */
 		public function addControlList(array $controlList) {
 			foreach ($controlList as $control) {
@@ -68,12 +80,18 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function addControl(IControl $control) {
 			$this->use();
 			$this->node->addNode($control->getNode(), true);
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function dirty(bool $dirty = true): IControl {
 			$this->use();
 			$this->node->setMeta('dirty', $dirty);
@@ -83,6 +101,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getControlList() {
 			$controlList = [];
 			foreach ($this->node->getNodeList() as $node) {
@@ -92,7 +113,7 @@
 		}
 
 		/**
-		 * @return IHtmlControl[]
+		 * @inheritdoc
 		 */
 		public function invalidate(): array {
 			$invalidList = [];
@@ -104,11 +125,17 @@
 			return $invalidList;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isDirty(): bool {
 			$this->use();
 			return $this->node->getMeta('dirty', false);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function handle(string $method, array $parameterList) {
 			$this->event(new HandleEvent($this, $method, $parameterList));
 			$this->event(new DoneEvent($this, $result = $this->execute($method, $parameterList)));
@@ -142,6 +169,9 @@
 			return $callback(...$argumentList);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getIterator() {
 			$this->use();
 			foreach (NodeIterator::recursive($this->node) as $node) {
@@ -149,6 +179,9 @@
 			}
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 			$this->node = new Node();
 			$this->node->setMeta('control', $this);
