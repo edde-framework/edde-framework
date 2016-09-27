@@ -6,9 +6,9 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Api\Runtime\ISetupHandler;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\Deffered\AbstractDeffered;
 
-	class Runtime extends AbstractUsable implements IRuntime {
+	class Runtime extends AbstractDeffered implements IRuntime {
 		/**
 		 * @var ISetupHandler
 		 */

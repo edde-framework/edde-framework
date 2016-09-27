@@ -1,12 +1,12 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Usable;
+	namespace Edde\Common\Deffered;
 
 	/**
 	 * Use this trait where is not possible to use inheritance!
 	 */
-	trait UsableTrait {
+	trait DefferedTrait {
 		/**
 		 * @var bool
 		 */
@@ -14,17 +14,17 @@
 		/**
 		 * @var callable[]
 		 */
-		protected $onSetupList = [];
+		protected $onDefferedList = [];
 		/**
 		 * @var callable[]
 		 */
-		protected $onUseList = [];
+		protected $onSetupList = [];
 
-		public function onSetup(callable $callback) {
+		public function onDeffered(callable $callback) {
 			if ($this->isUsed()) {
-				throw new UsableException(sprintf('Cannot add onSetup callback to already used usable [%s].', static::class));
+				throw new UsableException(sprintf('Cannot add %s::onDeffered() callback to already used class [%s].', static::class, static::class));
 			}
-			$this->onSetupList[] = $callback;
+			$this->onDefferedList[] = $callback;
 			return $this;
 		}
 
@@ -32,11 +32,11 @@
 			return $this->used;
 		}
 
-		public function onUse(callable $callback) {
+		public function onSetup(callable $callback) {
 			if ($this->isUsed()) {
-				throw new UsableException(sprintf('Cannot add onUse callback to already used usable [%s].', static::class));
+				throw new UsableException(sprintf('Cannot add %s::onSetup() callback to already used class [%s].', static::class, static::class));
 			}
-			$this->onUseList[] = $callback;
+			$this->onSetupList[] = $callback;
 			return $this;
 		}
 
@@ -45,18 +45,18 @@
 				$callback($this);
 				return $this;
 			}
-			$this->onUseList[] = $callback;
+			$this->onSetupList[] = $callback;
 			return $this;
 		}
 
 		public function use () {
 			if ($this->used === false) {
 				$this->used = true;
-				foreach ($this->onSetupList as $callback) {
+				foreach ($this->onDefferedList as $callback) {
 					$callback($this);
 				}
 				$this->prepare();
-				foreach ($this->onUseList as $callback) {
+				foreach ($this->onSetupList as $callback) {
 					$callback($this);
 				}
 			}

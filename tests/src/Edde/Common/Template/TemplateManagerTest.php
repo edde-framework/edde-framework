@@ -172,7 +172,7 @@
 				'\SomeService\From\Container' => $this,
 				IMacroSet::class => function (IContainer $container) {
 					$macroSet = DefaultMacroSet::macroSet($container);
-					$macroSet->onSetup(function (IMacroSet $macroSet) use ($container) {
+					$macroSet->onDeffered(function (IMacroSet $macroSet) use ($container) {
 						$macroSet->registerMacro($container->inject(new HtmlMacro('custom-control', \AnotherCoolControl::class)));
 					});
 					return $macroSet;

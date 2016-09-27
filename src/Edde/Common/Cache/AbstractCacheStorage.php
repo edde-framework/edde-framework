@@ -4,7 +4,7 @@
 	namespace Edde\Common\Cache;
 
 	use Edde\Api\Cache\ICacheStorage;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\Deffered\AbstractDeffered;
 
-	abstract class AbstractCacheStorage extends AbstractUsable implements ICacheStorage {
+	abstract class AbstractCacheStorage extends AbstractDeffered implements ICacheStorage {
 	}

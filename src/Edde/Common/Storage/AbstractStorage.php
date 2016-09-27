@@ -10,10 +10,10 @@
 	use Edde\Api\Storage\EmptyResultException;
 	use Edde\Api\Storage\ICollection;
 	use Edde\Api\Storage\IStorage;
+	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Query\Select\SelectQuery;
-	use Edde\Common\Usable\AbstractUsable;
 
-	abstract class AbstractStorage extends AbstractUsable implements IStorage {
+	abstract class AbstractStorage extends AbstractDeffered implements IStorage {
 		/**
 		 * @var ISchemaManager
 		 */

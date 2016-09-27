@@ -15,11 +15,11 @@
 	use Edde\Api\Schema\ISchemaLink;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Schema\ISchemaProperty;
+	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\Strings\StringUtils;
-	use Edde\Common\Usable\AbstractUsable;
 
-	class CrateGenerator extends AbstractUsable implements ICrateGenerator {
+	class CrateGenerator extends AbstractDeffered implements ICrateGenerator {
 		/**
 		 * @var ISchemaManager
 		 */

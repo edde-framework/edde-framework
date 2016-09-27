@@ -3,9 +3,9 @@
 
 	namespace Edde\Api\Cache;
 
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
-	interface ICacheStorage extends IUsable {
+	interface ICacheStorage extends IDeffered {
 		/**
 		 * @param string $id
 		 * @param mixed $save must be serializable

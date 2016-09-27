@@ -4,12 +4,12 @@
 	namespace Edde\Api\Application;
 
 	use Edde\Api\Event\IEventBus;
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
 	/**
 	 * Single application implementation; per project should be exactly one instance (implementation) of this interface.
 	 */
-	interface IApplication extends IUsable, IEventBus {
+	interface IApplication extends IDeffered, IEventBus {
 		/**
 		 * execute main "loop" of application (process the given request)
 		 *

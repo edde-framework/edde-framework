@@ -4,12 +4,12 @@
 	namespace Edde\Api\Identity;
 
 	use Edde\Api\Crate\ICrate;
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
 	/**
 	 * Identity is (usualy) mutable interface holding current state of an identity (user, cron, ...) in an application.
 	 */
-	interface IIdentity extends IUsable {
+	interface IIdentity extends IDeffered {
 		/**
 		 * identity can have optionaly additional data (for example user's row from database)
 		 *

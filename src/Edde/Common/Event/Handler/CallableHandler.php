@@ -7,11 +7,11 @@
 	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEvent;
 	use Edde\Common\Callback\Callback;
+	use Edde\Common\Deffered\DefferedTrait;
 	use Edde\Common\Event\AbstractHandler;
-	use Edde\Common\Usable\UsableTrait;
 
 	class CallableHandler extends AbstractHandler {
-		use UsableTrait;
+		use DefferedTrait;
 		/**
 		 * @var callable
 		 */

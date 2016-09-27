@@ -11,14 +11,14 @@
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\ResourceException;
+	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
-	use Edde\Common\Usable\AbstractUsable;
 
 	/**
 	 * Simple and uniform way how to handle file storing.
 	 */
-	class AssetStorage extends AbstractUsable implements IAssetStorage {
+	class AssetStorage extends AbstractDeffered implements IAssetStorage {
 		/**
 		 * application root directory; it is used for relative path computation
 		 *

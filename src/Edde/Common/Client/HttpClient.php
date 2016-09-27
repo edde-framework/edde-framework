@@ -12,18 +12,18 @@
 	use Edde\Common\Client\Event\HandlerEvent;
 	use Edde\Common\Client\Event\PostEvent;
 	use Edde\Common\Client\Event\RequestEvent;
+	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpRequest;
 	use Edde\Common\Http\PostList;
 	use Edde\Common\Http\RequestUrl;
-	use Edde\Common\Usable\AbstractUsable;
 
 	/**
 	 * Simple http client implementation.
 	 */
-	class HttpClient extends AbstractUsable implements IHttpClient {
+	class HttpClient extends AbstractDeffered implements IHttpClient {
 		use EventTrait;
 		/**
 		 * @var IConverterManager

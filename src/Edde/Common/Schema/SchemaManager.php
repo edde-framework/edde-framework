@@ -7,9 +7,9 @@
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Schema\SchemaException;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\Deffered\AbstractDeffered;
 
-	class SchemaManager extends AbstractUsable implements ISchemaManager {
+	class SchemaManager extends AbstractDeffered implements ISchemaManager {
 		/**
 		 * @var ISchemaFactory
 		 */

@@ -1,11 +1,11 @@
 <?php
-	namespace Edde\Common\Usable;
+	namespace Edde\Common\Deffered;
 
 	use Edde\Common\AbstractObject;
 	use phpunit\framework\TestCase;
 
 	/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
-	class UsableObject extends AbstractUsable {
+	class UsableObject extends AbstractDeffered {
 		public $prepared = false;
 
 		public function takeAction() {
@@ -19,7 +19,7 @@
 
 	/** @noinspection PhpHierarchyChecksInspection */
 	class UsableTraitedObject extends AbstractObject {
-		use UsableTrait;
+		use DefferedTrait;
 
 		public $prepared = false;
 
@@ -97,7 +97,7 @@
 
 		public function testAfterUse() {
 			$this->expectException(UsableException::class);
-			$this->expectExceptionMessage('Cannot add onUse callback to already used usable [Edde\Common\Usable\UsableObject].');
+			$this->expectExceptionMessage('Cannot add onSetup callback to already used usable [Edde\Common\Usable\UsableObject].');
 			$object = new UsableObject();
 			$object->takeAction();
 			$object->onUse(function () {

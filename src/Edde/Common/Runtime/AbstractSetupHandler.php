@@ -8,7 +8,7 @@
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Runtime\ISetupHandler;
 	use Edde\Api\Runtime\RuntimeException;
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Container\Factory\FactoryFactory;
 
@@ -39,11 +39,11 @@
 				throw new RuntimeException(sprintf('Cannot use deffered setup on unknown factory [%s].', $name));
 			}
 			$this->factoryList[$name]->onSetup(function (IContainer $container, $instance) use ($onSetup) {
-				if (($instance instanceof IUsable) === false) {
-					throw new RuntimeException(sprintf('Deffered class must implement [%s] interface.', IUsable::class));
+				if (($instance instanceof IDeffered) === false) {
+					throw new RuntimeException(sprintf('Deffered class must implement [%s] interface.', IDeffered::class));
 				}
-				/** @var $instance IUsable */
-				$instance->onSetup(function () use ($container, $onSetup, $instance) {
+				/** @var $instance IDeffered */
+				$instance->onDeffered(function () use ($container, $onSetup, $instance) {
 					return $container->call($onSetup, $instance);
 				});
 			});

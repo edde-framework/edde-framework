@@ -18,7 +18,7 @@
 		public function registerFactoryList(array $fatoryList): ISetupHandler;
 
 		/**
-		 * attach onSetup handler to a given class/identifier (it must be IUsable)
+		 * attach onDeffered handler to a given class/identifier (it must be IDeffered)
 		 *
 		 * @param string $name
 		 * @param callable $onSetup

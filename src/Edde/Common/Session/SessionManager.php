@@ -8,13 +8,13 @@
 	use Edde\Api\Session\ISession;
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Session\SessionException;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\Deffered\AbstractDeffered;
 
 	/**
 	 * Session manager is... session managing tool ;). It's responsible for whole session lifetime and section
 	 * assigment (and collision preventing).
 	 */
-	class SessionManager extends AbstractUsable implements ISessionManager {
+	class SessionManager extends AbstractDeffered implements ISessionManager {
 		/**
 		 * @var IFingerprint
 		 */

@@ -4,12 +4,12 @@
 	namespace Edde\Api\Upgrade;
 
 	use Edde\Api\Event\IEventBus;
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
 	/**
 	 * This class is responsible for proper application upgrades.
 	 */
-	interface IUpgradeManager extends IUsable, IEventBus {
+	interface IUpgradeManager extends IDeffered, IEventBus {
 		/**
 		 * register the given upgrade under it's version; exception should be thrown if version is already present
 		 *

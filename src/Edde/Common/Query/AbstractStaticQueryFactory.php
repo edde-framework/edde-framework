@@ -9,13 +9,13 @@
 	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Query\IStaticQueryFactory;
 	use Edde\Api\Query\StaticQueryException;
+	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Node\NodeQuery;
 	use Edde\Common\Strings\StringUtils;
-	use Edde\Common\Usable\AbstractUsable;
 	use ReflectionClass;
 	use ReflectionMethod;
 
-	abstract class AbstractStaticQueryFactory extends AbstractUsable implements IStaticQueryFactory {
+	abstract class AbstractStaticQueryFactory extends AbstractDeffered implements IStaticQueryFactory {
 		/**
 		 * @var array
 		 */

@@ -6,12 +6,12 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttpRequestFactory;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\Deffered\AbstractDeffered;
 
 	/**
 	 * Factory for creating IHttpRequests from http input.
 	 */
-	class HttpRequestFactory extends AbstractUsable implements IHttpRequestFactory {
+	class HttpRequestFactory extends AbstractDeffered implements IHttpRequestFactory {
 		/**
 		 * @var IContainer
 		 */

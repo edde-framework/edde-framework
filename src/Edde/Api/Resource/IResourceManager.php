@@ -4,9 +4,9 @@
 	namespace Edde\Api\Resource;
 
 	use Edde\Api\Node\INode;
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
-	interface IResourceManager extends IUsable {
+	interface IResourceManager extends IDeffered {
 		/**
 		 * IResource is created from the given url and then handler is selected based on a mime
 		 *

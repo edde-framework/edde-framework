@@ -7,6 +7,9 @@
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractQuery;
 
+	/**
+	 * IQL implementation of an insert query.
+	 */
 	class InsertQuery extends AbstractQuery {
 		/**
 		 * @var ISchema
@@ -26,6 +29,9 @@
 			$this->insert = $insert;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 			$this->node = new Node('insert-query', $this->schema->getSchemaName());
 			foreach ($this->insert as $name => $value) {

@@ -4,9 +4,9 @@
 	namespace Edde\Api\Router;
 
 	use Edde\Api\Application\IRequest;
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
-	interface IRouter extends IUsable {
+	interface IRouter extends IDeffered {
 		/**
 		 * can this router handle current request (can be arbitrary, e.g. cli run)
 		 *

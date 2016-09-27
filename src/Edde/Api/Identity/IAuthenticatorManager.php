@@ -3,9 +3,9 @@
 
 	namespace Edde\Api\Identity;
 
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
-	interface IAuthenticatorManager extends IUsable {
+	interface IAuthenticatorManager extends IDeffered {
 		/**
 		 * @param IAuthenticator $authenticator
 		 *

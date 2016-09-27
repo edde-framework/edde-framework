@@ -10,12 +10,12 @@
 	use Edde\Common\Callback\Callback;
 	use Edde\Common\Control\Event\DoneEvent;
 	use Edde\Common\Control\Event\HandleEvent;
+	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Node\NodeIterator;
-	use Edde\Common\Usable\AbstractUsable;
 
-	abstract class AbstractControl extends AbstractUsable implements IControl {
+	abstract class AbstractControl extends AbstractDeffered implements IControl {
 		use EventTrait;
 		/**
 		 * @var INode

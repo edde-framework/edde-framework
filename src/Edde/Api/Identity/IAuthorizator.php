@@ -3,12 +3,12 @@
 
 	namespace Edde\Api\Identity;
 
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
 	/**
 	 * Implementation of an ACL mechanism; this should set roles to the given identity.
 	 */
-	interface IAuthorizator extends IUsable {
+	interface IAuthorizator extends IDeffered {
 		/**
 		 * update list of roles (ACL) of the given identity
 		 *

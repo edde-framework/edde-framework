@@ -3,12 +3,12 @@
 
 	namespace Edde\Api\Identity;
 
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
 	/**
 	 * This implementation is resposnible for an identity authentification.
 	 */
-	interface IAuthenticator extends IUsable {
+	interface IAuthenticator extends IDeffered {
 		/**
 		 * name of auth method
 		 *

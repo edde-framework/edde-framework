@@ -6,9 +6,9 @@
 	use Edde\Api\Translator\IDictionary;
 	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Translator\TranslatorException;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\Deffered\AbstractDeffered;
 
-	class Translator extends AbstractUsable implements ITranslator {
+	class Translator extends AbstractDeffered implements ITranslator {
 		/**
 		 * @var IDictionary[]
 		 */

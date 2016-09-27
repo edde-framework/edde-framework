@@ -3,12 +3,12 @@
 
 	namespace Edde\Api\Application;
 
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
 	/**
 	 * Response manager holds current Response (to keep responses immutable).
 	 */
-	interface IResponseManager extends IUsable {
+	interface IResponseManager extends IDeffered {
 		/**
 		 * set the current response
 		 *

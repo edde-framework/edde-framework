@@ -3,9 +3,9 @@
 
 	namespace Edde\Api\File;
 
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
-	interface IDirectoryIterator extends \IteratorAggregate, IUsable {
+	interface IDirectoryIterator extends \IteratorAggregate, IDeffered {
 		/**
 		 * add directory to iterator; only before use
 		 *

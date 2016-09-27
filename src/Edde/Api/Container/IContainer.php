@@ -3,12 +3,12 @@
 
 	namespace Edde\Api\Container;
 
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
 	/**
 	 * Implementation of Dependency Inject Container.
 	 */
-	interface IContainer extends IUsable {
+	interface IContainer extends IDeffered {
 		/**
 		 * quickhand to IFactoryManager
 		 *

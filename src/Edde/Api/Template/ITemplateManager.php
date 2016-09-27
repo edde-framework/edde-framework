@@ -3,9 +3,9 @@
 
 	namespace Edde\Api\Template;
 
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
-	interface ITemplateManager extends IUsable {
+	interface ITemplateManager extends IDeffered {
 		/**
 		 * @param string $template
 		 * @param array $importList compile time templates

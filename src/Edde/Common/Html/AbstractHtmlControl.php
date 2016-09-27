@@ -30,7 +30,7 @@
 		 */
 		protected $tempDirectory;
 
-		public function injectContainer(IContainer $container) {
+		public function lazyContainer(IContainer $container) {
 			$this->container = $container;
 		}
 

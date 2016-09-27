@@ -3,9 +3,9 @@
 
 	namespace Edde\Api\Template;
 
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
-	interface IMacroSet extends IUsable {
+	interface IMacroSet extends IDeffered {
 		/**
 		 * register a macro into the set
 		 *

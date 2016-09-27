@@ -5,13 +5,13 @@
 
 	use Edde\Api\Event\IEventBus;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
 	/**
 	 * Control is general element for transfering incoming request into the internal system service and for
 	 * generating response.
 	 */
-	interface IControl extends IUsable, IEventBus, \IteratorAggregate {
+	interface IControl extends IDeffered, IEventBus, \IteratorAggregate {
 		/**
 		 * return node of this control
 		 *

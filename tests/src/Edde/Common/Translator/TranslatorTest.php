@@ -33,7 +33,7 @@
 		public function testWithoutDictionaryException() {
 			$this->expectException(TranslatorException::class);
 			$this->expectExceptionMessage('Translator needs at least one dictionary. Or The God will kill one cute devil kitten!');
-			$this->translator->onSetup(function (ITranslator $translator) {
+			$this->translator->onDeffered(function (ITranslator $translator) {
 				$translator->setLanguage('en');
 			});
 			$this->translator->use();
@@ -43,7 +43,7 @@
 			$this->expectException(TranslatorException::class);
 			$this->expectExceptionMessage('Cannot translate [foo]; the given id is not available in no dictionary.');
 			$this->translator->registerDictionary(new EmptyDictionary());
-			$this->translator->onSetup(function (ITranslator $translator) {
+			$this->translator->onDeffered(function (ITranslator $translator) {
 				$translator->setLanguage('en');
 			});
 			$this->translator->translate('foo');
@@ -52,7 +52,7 @@
 		public function testDummyDictionary() {
 			$this->translator->registerDictionary(new EmptyDictionary());
 			$this->translator->registerDictionary(new DummyDictionary());
-			$this->translator->onSetup(function (ITranslator $translator) {
+			$this->translator->onDeffered(function (ITranslator $translator) {
 				$translator->setLanguage('en');
 			});
 			self::assertEquals('foo.en', $this->translator->translate('foo'));

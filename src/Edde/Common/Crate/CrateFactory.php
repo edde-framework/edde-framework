@@ -10,9 +10,9 @@
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\Schema\ISchemaManager;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\Deffered\AbstractDeffered;
 
-	class CrateFactory extends AbstractUsable implements ICrateFactory {
+	class CrateFactory extends AbstractDeffered implements ICrateFactory {
 		/**
 		 * @var IContainer
 		 */

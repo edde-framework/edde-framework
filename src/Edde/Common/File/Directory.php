@@ -6,14 +6,14 @@
 	use Edde\Api\File\DirectoryException;
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\File\IFile;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\Deffered\AbstractDeffered;
 	use RecursiveDirectoryIterator;
 	use RecursiveIteratorIterator;
 
 	/**
 	 * Representation of directory on the filesystem.
 	 */
-	class Directory extends AbstractUsable implements IDirectory {
+	class Directory extends AbstractDeffered implements IDirectory {
 		/**
 		 * @var string
 		 */

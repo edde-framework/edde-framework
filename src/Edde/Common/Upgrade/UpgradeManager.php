@@ -7,14 +7,14 @@
 	use Edde\Api\Upgrade\IUpgrade;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Upgrade\UpgradeException;
+	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Upgrade\Event\OnUpgradeEvent;
 	use Edde\Common\Upgrade\Event\UpgradeEndEvent;
 	use Edde\Common\Upgrade\Event\UpgradeFailEvent;
 	use Edde\Common\Upgrade\Event\UpgradeStartEvent;
-	use Edde\Common\Usable\AbstractUsable;
 
-	class UpgradeManager extends AbstractUsable implements IUpgradeManager {
+	class UpgradeManager extends AbstractDeffered implements IUpgradeManager {
 		use EventTrait;
 		/**
 		 * @var IStorage
