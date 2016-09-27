@@ -38,7 +38,7 @@
 			if (isset($this->factoryList[$name]) === false) {
 				throw new RuntimeException(sprintf('Cannot use deffered setup on unknown factory [%s].', $name));
 			}
-			$this->factoryList[$name]->onSetup(function (IContainer $container, $instance) use ($onSetup) {
+			$this->factoryList[$name]->deffered(function (IContainer $container, $instance) use ($onSetup) {
 				if (($instance instanceof IDeffered) === false) {
 					throw new RuntimeException(sprintf('Deffered class must implement [%s] interface.', IDeffered::class));
 				}

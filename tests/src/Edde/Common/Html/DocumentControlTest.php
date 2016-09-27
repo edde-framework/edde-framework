@@ -52,7 +52,7 @@
 		}
 
 		protected function setUp() {
-			$this->documentControl = new DocumentControl();
-			$this->documentControl->injectContainer(ContainerFactory::create());
+			$container = ContainerFactory::create();
+			$this->documentControl = $container->inject(new DocumentControl());
 		}
 	}

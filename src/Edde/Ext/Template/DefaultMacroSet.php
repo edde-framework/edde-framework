@@ -63,7 +63,7 @@
 		 */
 		static public function macroSet(IContainer $container): IMacroSet {
 			$macroSet = new MacroSet();
-			$macroSet->onSetup(function (MacroSet $macroSet) use ($container) {
+			$macroSet->onDeffered(function (MacroSet $macroSet) use ($container) {
 				$macroSet->setMacroList([
 					$container->inject(new ImportMacro()),
 					$container->inject(new LoadMacro()),
@@ -122,7 +122,7 @@
 		 */
 		static public function helperSet(IContainer $container): IHelperSet {
 			$helperSet = new HelperSet();
-			$helperSet->onSetup(function (IHelperSet $helperSet) use ($container) {
+			$helperSet->onDeffered(function (IHelperSet $helperSet) use ($container) {
 				$helperSet->registerHelper($container->inject(new MethodHelper()));
 			});
 			return $helperSet;

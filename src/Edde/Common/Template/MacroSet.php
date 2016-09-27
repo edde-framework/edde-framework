@@ -13,6 +13,9 @@
 		 */
 		protected $macroList = [];
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getMacroList(): array {
 			$this->use();
 			return $this->macroList;
@@ -26,11 +29,17 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function registerMacro(IMacro $macro): IMacroSet {
 			$this->macroList[$macro->getName()] = $macro;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 		}
 	}

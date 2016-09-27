@@ -5,5 +5,5 @@
 
 	use Edde\Api\EddeException;
 
-	class UsableException extends EddeException {
+	class DefferedException extends EddeException {
 	}

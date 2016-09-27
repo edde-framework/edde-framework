@@ -22,7 +22,7 @@
 
 		public function onDeffered(callable $callback) {
 			if ($this->isUsed()) {
-				throw new UsableException(sprintf('Cannot add %s::onDeffered() callback to already used class [%s].', static::class, static::class));
+				throw new DefferedException(sprintf('Cannot add %s::onDeffered() callback to already used class [%s].', static::class, static::class));
 			}
 			$this->onDefferedList[] = $callback;
 			return $this;
@@ -34,7 +34,7 @@
 
 		public function onSetup(callable $callback) {
 			if ($this->isUsed()) {
-				throw new UsableException(sprintf('Cannot add %s::onSetup() callback to already used class [%s].', static::class, static::class));
+				throw new DefferedException(sprintf('Cannot add %s::onSetup() callback to already used class [%s].', static::class, static::class));
 			}
 			$this->onSetupList[] = $callback;
 			return $this;

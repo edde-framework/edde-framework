@@ -34,8 +34,8 @@
 		 * @inheritdoc
 		 * @throws FactoryException
 		 */
-		public function onSetup(callable $callback) {
-			throw new FactoryException(sprintf('Cannot register onSetup handler on [%s]; setup handlers are not supported by this factory.', self::class));
+		public function deffered(callable $callback) {
+			throw new FactoryException(sprintf('Cannot register deffered handler on [%s]; setup handlers are not supported by this factory.', self::class));
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
