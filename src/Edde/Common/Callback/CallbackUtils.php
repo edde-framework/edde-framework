@@ -11,6 +11,9 @@
 	use ReflectionFunction;
 	use ReflectionMethod;
 
+	/**
+	 * Useful set of methods around callable reflections.
+	 */
 	class CallbackUtils extends AbstractObject {
 		/**
 		 * @param callable|string $callback
@@ -27,7 +30,7 @@
 		}
 
 		/**
-		 * @param string $callback
+		 * @param string|array $callback
 		 *
 		 * @return ReflectionFunction|ReflectionMethod
 		 */
