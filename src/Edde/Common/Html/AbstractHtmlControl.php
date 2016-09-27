@@ -94,8 +94,11 @@
 		 */
 		public function javascript(string $class, string $file = null): IHtmlControl {
 			$this->setAttribute('data-class', $name = str_replace('\\', '.', $class));
-			$reflectionClass = new \ReflectionClass($class);
-			$javascript = new File(str_replace('.php', '.js', $reflectionClass->getFileName()));
+			$javascript = null;
+			if (class_exists($class)) {
+				$reflectionClass = new \ReflectionClass($class);
+				$javascript = new File(str_replace('.php', '.js', $reflectionClass->getFileName()));
+			}
 			if ($file !== null) {
 				$javascript = new File($file);
 			}
