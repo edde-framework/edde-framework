@@ -9,6 +9,9 @@
 	use Edde\Common\Collection\AbstractList;
 	use Edde\Common\Usable\UsableTrait;
 
+	/**
+	 * Session section for simple session data manipulation.
+	 */
 	class Session extends AbstractList implements ISession {
 		use UsableTrait;
 		/**
@@ -29,11 +32,17 @@
 			$this->name = $name;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isEmpty(): bool {
 			$this->use();
 			return parent::isEmpty();
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function set(string $name, $value): IList {
 			$this->use();
 			if ($value === null) {
@@ -42,31 +51,50 @@
 			return parent::set($name, $value);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function get(string $name, $default = null) {
 			$this->use();
 			return parent::get($name, $default);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function has(string $name): bool {
 			$this->use();
 			return parent::has($name);
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
+		/**
+		 * @inheritdoc
+		 */
 		public function array(): array {
 			$this->use();
 			return $this->list;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function remove(string $name): IList {
 			$this->use();
 			return parent::remove($name);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getIterator() {
 			$this->use();
 			return parent::getIterator();
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 			$this->list = &$this->sessionManager->session($this->name);
 		}

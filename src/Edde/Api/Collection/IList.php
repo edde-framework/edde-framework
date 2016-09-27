@@ -44,7 +44,7 @@
 		 * @param string $name
 		 * @param string|callable|null $default
 		 *
-		 * @return string
+		 * @return mixed
 		 */
 		public function get(string $name, $default = null);
 
