@@ -29,4 +29,9 @@
 	/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 	class SomeTemplatedControl extends AbstractHtmlControl {
 		use TemplateTrait;
+
+		protected function prepare() {
+			parent::prepare();
+			$this->setTag('foo');
+		}
 	}
