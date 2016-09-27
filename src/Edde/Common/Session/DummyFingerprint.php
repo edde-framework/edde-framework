@@ -10,7 +10,7 @@
 	 * Don't use session id method.
 	 */
 	class DummyFingerprint extends AbstractObject implements IFingerprint {
-		public function generate() {
+		public function fingerprint() {
 			return null;
 		}
 	}

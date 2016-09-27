@@ -12,5 +12,5 @@
 		 *
 		 * @return string|null
 		 */
-		public function generate();
+		public function fingerprint();
 	}
