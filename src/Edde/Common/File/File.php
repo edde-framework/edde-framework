@@ -9,6 +9,9 @@
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\Resource\Resource;
 
+	/**
+	 * File class; this is just file. Simple goold old classic file. Really.
+	 */
 	class File extends Resource implements IFile {
 		/**
 		 * @var int
@@ -39,13 +42,20 @@
 			parent::__construct($file instanceof IUrl ? $file : FileUtils::url($file), $base);
 		}
 
-		public function getName() {
+		/** @noinspection PhpMissingParentCallCommonInspection */
+		/**
+		 * @inheritdoc
+		 */
+		public function getName(): string {
 			if ($this->name === null) {
 				$this->name = $this->url->getResourceName();
 			}
 			return $this->name;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getDirectory(): IDirectory {
 			if ($this->directory === null) {
 				$this->directory = new Directory(dirname($this->getPath()));
@@ -53,19 +63,33 @@
 			return $this->directory;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getPath(): string {
 			return $this->url->getPath();
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getExtension(): string {
 			return $this->url->getExtension();
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 */
 		public function openForAppend(): IFile {
 			$this->open('a');
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 */
 		public function open(string $mode): IFile {
 			if ($this->isOpen()) {
 				throw new FileException(sprintf('Current file [%s] is already opened.', $this->url));
@@ -76,16 +100,26 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isOpen(): bool {
 			return $this->handle !== null;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function enableWriteCache($count = 8): IFile {
 			$this->writeCache = $count;
 			$this->writeCacheIndex = 0;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 */
 		public function delete(): IFile {
 			if ($this->isOpen()) {
 				$this->close();
@@ -94,6 +128,10 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 */
 		public function close(): IFile {
 			$writeCache = $this->writeCache;
 			$this->writeCacheIndex = 2;
@@ -106,6 +144,10 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 */
 		public function write($write): IFile {
 			if ($this->isOpen() === false) {
 				$this->openForWrite();
@@ -126,12 +168,20 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 */
 		public function openForWrite(): IFile {
 			FileUtils::createDir(dirname($this->url->getPath()));
 			$this->open('w+');
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 */
 		public function getHandle() {
 			if ($this->isOpen() === false) {
 				throw new FileException(sprintf('Current file [%s] is not opened or has been already closed.', $this->url->getPath()));
@@ -139,6 +189,10 @@
 			return $this->handle;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 */
 		public function save(string $content): IFile {
 			if ($this->isOpen()) {
 				throw new FileException(sprintf('Cannot write (save) content to aready opened file [%s].', $this->getPath()));
@@ -147,11 +201,20 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 */
 		public function rename(string $rename): IFile {
 			FileUtils::rename($this->url->getPath(), $rename);
 			return $this;
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 */
 		public function getIterator() {
 			if ($this->isOpen() === false) {
 				$this->openForRead();
@@ -163,16 +226,28 @@
 			}
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 */
 		public function openForRead(): IFile {
 			$this->open('r+');
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 */
 		public function rewind(): IFile {
 			rewind($this->getHandle());
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 */
 		public function read() {
 			if (($line = fgets($this->getHandle())) === false && $this->isAutoClose()) {
 				$this->close();
@@ -180,10 +255,16 @@
 			return $line;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isAutoClose(): bool {
 			return $this->autoClose;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function setAutoClose(bool $autoClose = true): IFile {
 			$this->autoClose = $autoClose;
 			return $this;

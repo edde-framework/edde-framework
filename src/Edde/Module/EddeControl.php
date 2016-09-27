@@ -85,6 +85,7 @@
 		}
 
 		protected function message(string $class, string $message) {
+			/** @noinspection PhpDeprecationInspection */
 			$this->message->javascript('message', __DIR__ . '/template/js/message.js')
 				->stylesheet(__DIR__ . '/template/css/message.css')
 				->addClass($class)

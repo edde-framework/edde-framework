@@ -3,6 +3,7 @@
 
 	namespace Edde\Ext\Converter;
 
+	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Xml\IXmlParser;
@@ -10,12 +11,21 @@
 	use Edde\Common\Converter\AbstractConverter;
 	use Edde\Common\Xml\XmlNodeHandler;
 
+	/**
+	 * Xml string sourece to "something" converter.
+	 */
 	class XmlConverter extends AbstractConverter {
 		/**
 		 * @var IXmlParser
 		 */
 		protected $xmlParser;
 
+		/**
+		 * Only 3 things that are infinite
+		 * 1.Human Stupidity
+		 * 2.Universe
+		 * 3.WinRar Trial
+		 */
 		public function __construct() {
 			parent::__construct([
 				'text/xml',
@@ -24,10 +34,19 @@
 			]);
 		}
 
+		/**
+		 * @param IXmlParser $xmlParser
+		 */
 		public function lazyXmlParser(IXmlParser $xmlParser) {
 			$this->xmlParser = $xmlParser;
 		}
 
+		/** @noinspection PhpInconsistentReturnPointsInspection */
+		/**
+		 * @inheritdoc
+		 * @throws XmlParserException
+		 * @throws ConverterException
+		 */
 		public function convert($source, string $target) {
 			$source = $source instanceof IResource ? $source : $this->unsupported($source, $target);
 			try {
@@ -42,6 +61,13 @@
 			$this->exception($target);
 		}
 
+		/**
+		 * @param IResource $resource
+		 * @param INode|null $root
+		 *
+		 * @return INode
+		 * @throws XmlParserException
+		 */
 		public function handle(IResource $resource, INode $root = null): INode {
 			try {
 				$this->xmlParser->parse($resource, $handler = new XmlNodeHandler());

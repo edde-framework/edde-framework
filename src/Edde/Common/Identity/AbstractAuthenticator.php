@@ -6,6 +6,9 @@
 	use Edde\Api\Identity\IAuthenticator;
 	use Edde\Common\Deffered\AbstractDeffered;
 
+	/**
+	 * Abstract implementation for all authenticators.
+	 */
 	abstract class AbstractAuthenticator extends AbstractDeffered implements IAuthenticator {
 		/**
 		 * @var string
@@ -19,6 +22,9 @@
 			$this->name = $name ?: static::class;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getName(): string {
 			return $this->name;
 		}

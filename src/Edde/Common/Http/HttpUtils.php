@@ -134,6 +134,7 @@
 			if (isset($type[1])) {
 				foreach (explode(',', trim($type[1])) as $part) {
 					list($key, $value) = explode('=', $part);
+					/** @noinspection PhpVariableVariableInspection */
 					$stdClass->$key = $value;
 				}
 			}

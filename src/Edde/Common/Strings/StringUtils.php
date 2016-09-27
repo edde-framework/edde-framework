@@ -143,6 +143,7 @@
 				'YB',
 			];
 			$factor = (int)floor((strlen((string)$size) - 1) / 3);
+			/** @noinspection PhpUsageOfSilenceOperatorInspection */
 			return sprintf('%.' . $decimal . 'f %s', $size / pow(1024, $factor), @$sizeList[$factor]);
 		}
 
@@ -220,6 +221,13 @@
 			return $string;
 		}
 
+		/**
+		 * convert the input string to an ascii only string
+		 *
+		 * @param string $string
+		 *
+		 * @return string
+		 */
 		static public function toAscii(string $string): string {
 			$string = preg_replace('~[^\x09\x0A\x0D\x20-\x7E\xA0-\x{2FF}\x{370}-\x{10FFFF}]~u', '', $string);
 			$string = strtr($string, '`\'"^~?', "\x01\x02\x03\x04\x05\x06");
@@ -240,6 +248,7 @@
 				"\x02",
 				"\x04",
 			], $string);
+			/** @noinspection PhpUsageOfSilenceOperatorInspection */
 			$string = @iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $string); // intentionally @
 			$string = str_replace([
 				'`',
@@ -273,7 +282,7 @@
 				return null;
 			}
 			if ($named && is_array($match)) {
-				/** @var $match array */
+				/** @noinspection ForeachSourceInspection */
 				foreach ($match as $k => $v) {
 					if (is_int($k) || ((is_array($trim) || $trim) && empty($v))) {
 						unset($match[$k]);
@@ -286,6 +295,14 @@
 			return $match;
 		}
 
+		/**
+		 * @param $func
+		 * @param $args
+		 *
+		 * @return mixed
+		 * @throws \Exception
+		 * @throws StringException
+		 */
 		static private function pcre($func, $args) {
 			static $messages = [
 				PREG_INTERNAL_ERROR => 'Internal error',
@@ -318,6 +335,7 @@
 		 * @param array|bool|false $trim if array is provided, its used for named parameters defaults
 		 *
 		 * @return array|null
+		 * @throws StringException
 		 */
 		static public function matchAll(string $string, string $pattern, bool $named = false, $trim = false): array {
 			$match = null;
@@ -330,6 +348,7 @@
 				return [];
 			}
 			if ($named) {
+				/** @noinspection ForeachSourceInspection */
 				foreach ($match as $k => $v) {
 					if (is_int($k) || ((is_array($trim) || $trim) && empty($v))) {
 						unset($match[$k]);

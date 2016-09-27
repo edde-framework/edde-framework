@@ -33,6 +33,7 @@
 		 */
 		static public function first(INode $root, $query, $default = null) {
 			$node = null;
+			/** @noinspection LoopWhichDoesNotLoopInspection */
 			foreach (self::node($root, $query) as $node) {
 				break;
 			}

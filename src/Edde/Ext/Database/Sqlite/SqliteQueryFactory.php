@@ -19,15 +19,24 @@
 			$this->driver = $driver;
 		}
 
-		protected function delimite($delimite) {
+		/**
+		 * @inheritdoc
+		 */
+		protected function delimite(string $delimite): string {
 			return $this->driver->delimite($delimite);
 		}
 
-		protected function quote($quote) {
+		/**
+		 * @inheritdoc
+		 */
+		protected function quote(string $quote): string {
 			return $this->driver->quote($quote);
 		}
 
-		protected function type($type) {
+		/**
+		 * @inheritdoc
+		 */
+		protected function type(string $type): string {
 			return $this->driver->type($type);
 		}
 	}

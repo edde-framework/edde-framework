@@ -6,6 +6,7 @@
 	use Edde\Api\Control\ControlException;
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Node\INode;
+	use Edde\Api\Node\NodeException;
 	use Edde\Common\Callback\Callback;
 	use Edde\Common\Control\Event\DoneEvent;
 	use Edde\Common\Control\Event\HandleEvent;
@@ -142,6 +143,13 @@
 			return $result;
 		}
 
+		/**
+		 * @param string $method
+		 * @param array $parameterList
+		 *
+		 * @return mixed
+		 * @throws ControlException
+		 */
 		protected function execute(string $method, array $parameterList) {
 			$argumentList = array_filter($parameterList, function ($key) {
 				return is_int($key);
@@ -171,6 +179,7 @@
 
 		/**
 		 * @inheritdoc
+		 * @throws NodeException
 		 */
 		public function getIterator() {
 			$this->use();

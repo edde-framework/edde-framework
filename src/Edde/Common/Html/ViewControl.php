@@ -10,8 +10,6 @@
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceList;
-	use Edde\Api\Web\IJavaScriptCompiler;
-	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Application\Response;
 	use Edde\Common\File\File;
 	use Edde\Common\Html\Document\DocumentControl;
@@ -31,14 +29,6 @@
 		 */
 		protected $responseManager;
 		/**
-		 * @var IStyleSheetCompiler
-		 */
-		protected $styleSheetCompiler;
-		/**
-		 * @var IJavaScriptCompiler
-		 */
-		protected $javaScriptCompiler;
-		/**
 		 * @var ILinkFactory
 		 */
 		protected $linkFactory;
@@ -51,27 +41,32 @@
 		 */
 		protected $javaScriptList;
 
+		/**
+		 * @param IHttpRequest $httpRequest
+		 */
 		public function lazyHttpRequest(IHttpRequest $httpRequest) {
 			$this->httpRequest = $httpRequest;
 		}
 
+		/**
+		 * @param IResponseManager $responseManager
+		 */
 		public function lazyResponseManager(IResponseManager $responseManager) {
 			$this->responseManager = $responseManager;
 		}
 
-		public function lazyStyleSheetCompiler(IStyleSheetCompiler $styleSheetCompiler) {
-			$this->styleSheetCompiler = $styleSheetCompiler;
-		}
-
-		public function lazyJavaScriptCompiler(IJavaScriptCompiler $javaScriptCompiler) {
-			$this->javaScriptCompiler = $javaScriptCompiler;
-		}
-
+		/**
+		 * @param ILinkFactory $linkFactory
+		 */
 		public function lazyLinkFactory(ILinkFactory $linkFactory) {
 			$this->linkFactory = $linkFactory;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function setAttribute($attribute, $value) {
+			/** @noinspection DegradedSwitchInspection */
 			switch ($attribute) {
 				case 'title':
 					$this->setTitle($value);
@@ -125,6 +120,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function response(): IHtmlView {
 			$this->use();
 			$this->responseManager->response(new Response(IHtmlControl::class, $this));

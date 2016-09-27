@@ -26,6 +26,9 @@
 			$this->cacheStorage = $cacheStorage;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function factory($namespace = null, ICacheStorage $cacheStorage = null) {
 			return new Cache($cacheStorage ?: $this->cacheStorage, $this->namespace . $namespace);
 		}

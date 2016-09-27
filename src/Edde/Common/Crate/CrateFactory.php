@@ -10,8 +10,12 @@
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\Schema\ISchemaManager;
+	use Edde\Api\Schema\SchemaException;
 	use Edde\Common\Deffered\AbstractDeffered;
 
+	/**
+	 * Factory for... creating crates.
+	 */
 	class CrateFactory extends AbstractDeffered implements ICrateFactory {
 		/**
 		 * @var IContainer
@@ -37,6 +41,11 @@
 			$this->crateGenerator = $crateGenerator;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws SchemaException
+		 * @throws CrateException
+		 */
 		public function build(array $crateList): array {
 			$this->use();
 			$crates = [];
@@ -46,6 +55,14 @@
 			return $crates;
 		}
 
+		/**
+		 * @param ICrate $crate
+		 * @param array $source
+		 *
+		 * @return ICrate
+		 * @throws SchemaException
+		 * @throws CrateException
+		 */
 		protected function load(ICrate $crate, array $source) {
 			$schema = $crate->getSchema();
 			foreach ($source as $property => $value) {
@@ -78,15 +95,24 @@
 			return $crate;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function collection(string $schema, string $crate = null): ICollection {
 			$this->use();
 			return $this->container->create(Collection::class, $schema, $crate);
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws SchemaException
+		 * @throws CrateException
+		 */
 		public function crate(string $crate, string $schema = null, array $load = null): ICrate {
 			$this->use();
 			/** @var $crate ICrate */
 			$crate = $this->container->create($crate);
+			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
 			$crate->setSchema($schema = $this->schemaManager->getSchema($schema ?: get_class($crate)));
 			foreach ($schema->getPropertyList() as $schemaProperty) {
 				$crate->addProperty(new Property($schemaProperty));
@@ -97,11 +123,17 @@
 			return $crate;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function include (): ICrateFactory {
 			$this->crateGenerator->include();
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 			$this->crateGenerator->generate();
 		}

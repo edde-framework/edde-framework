@@ -49,10 +49,16 @@
 			return $this;
 		}
 
-		public function getTag() {
+		/**
+		 * @inheritdoc
+		 */
+		public function getTag(): string {
 			return 'head';
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 			parent::prepare();
 			$this->addControl($this->createControl(MetaControl::class)

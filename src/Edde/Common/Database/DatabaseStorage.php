@@ -21,6 +21,9 @@
 	use Edde\Common\Storage\AbstractStorage;
 	use PDOException;
 
+	/**
+	 * Database (persistant) storage implementation.
+	 */
 	class DatabaseStorage extends AbstractStorage implements IDatabaseStorage {
 		/**
 		 * @var IDriver
@@ -53,6 +56,10 @@
 			$this->transaction = 0;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws StorageException
+		 */
 		public function start(bool $exclusive = false): IStorage {
 			$this->use();
 			if ($this->transaction++ > 0) {
@@ -65,6 +72,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function commit(): IStorage {
 			$this->use();
 			if (--$this->transaction <= 0) {
@@ -73,6 +83,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function rollback(): IStorage {
 			$this->use();
 			if ($this->transaction === 0) {
@@ -83,6 +96,11 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws DriverException
+		 * @throws StorageException
+		 */
 		public function store(ICrate $crate): IStorage {
 			$this->use();
 			$schema = $crate->getSchema();
@@ -108,6 +126,8 @@
 			}
 			$selectQuery->from()
 				->source($schema->getSchemaName());
+			/** @noinspection ForeachSourceInspection */
+			/** @noinspection LoopWhichDoesNotLoopInspection */
 			foreach ($this->execute($selectQuery) as $count) {
 				break;
 			}
@@ -130,6 +150,10 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws DriverException
+		 */
 		public function execute(IQuery $query) {
 			$this->use();
 			try {
@@ -139,6 +163,10 @@
 			}
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws DriverException
+		 */
 		public function native(IStaticQuery $staticQuery) {
 			$this->use();
 			try {
@@ -148,6 +176,9 @@
 			}
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 			$this->cache = $this->cacheFactory->factory(static::class);
 			$this->sourceNodeQuery = new NodeQuery('/**/source');

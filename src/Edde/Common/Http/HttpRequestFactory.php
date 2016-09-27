@@ -17,10 +17,16 @@
 		 */
 		protected $container;
 
+		/**
+		 * @param IContainer $container
+		 */
 		public function lazyContainer(IContainer $container) {
 			$this->container = $container;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function create() {
 			return (new HttpRequest(PostList::create($_POST), $headerList = $this->createHeaderList(), CookieList::create($_COOKIE)))->setRequestUrl(RequestUrl::create((isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']))
 				->setMethod($_SERVER['REQUEST_METHOD'] ?? '')
@@ -31,6 +37,9 @@
 				}, $headerList->getContentType())));
 		}
 
+		/**
+		 * @return IHeaderList
+		 */
 		protected function createHeaderList(): IHeaderList {
 			$headers = [];
 			$copy_server = [
@@ -38,6 +47,7 @@
 				'CONTENT_LENGTH' => 'Content-Length',
 				'CONTENT_MD5' => 'Content-Md5',
 			];
+			/** @noinspection ForeachSourceInspection */
 			foreach ($_SERVER as $key => $value) {
 				if (empty($value)) {
 					continue;
@@ -65,6 +75,9 @@
 			return (new HeaderList())->put($headers);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 		}
 	}

@@ -275,7 +275,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getTag() {
+		public function getTag(): string {
 			$this->use();
 			return $this->node->getMeta('tag');
 		}

@@ -3,19 +3,23 @@
 
 	namespace Edde\Common\Resource;
 
+	use Edde\Api\File\FileException;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\ResourceException;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\File\FileUtils;
 
+	/**
+	 * Abstract definition of some "resource".
+	 */
 	class Resource extends AbstractObject implements IResource {
 		/**
 		 * @var IUrl
 		 */
 		protected $url;
 		/**
-		 * @var string
+		 * @var string|null
 		 */
 		protected $base;
 		/**
@@ -42,43 +46,71 @@
 			$this->mime = $mime;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getUrl() {
 			return $this->url;
 		}
 
-		public function getRelativePath($base = null) {
+		/**
+		 * @inheritdoc
+		 * @throws ResourceException
+		 */
+		public function getRelativePath(string $base = null) {
 			if ($this->base === null && $base === null) {
 				throw new ResourceException(sprintf('Cannot compute relative path of a resource [%s]; there is not base path.', $this->url->getPath()));
 			}
+			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
 			if (strpos($path = $this->url->getPath(), $base = $base ?: $this->base) === false) {
 				throw new ResourceException(sprintf('Cannot compute relative path of resource; given base path [%s] is not subset of the current path [%s].', $base, $path));
 			}
 			return str_replace($base, null, $path);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getBase() {
 			return $this->base;
 		}
 
-		public function getName() {
+		/**
+		 * @inheritdoc
+		 */
+		public function getName(): string {
 			return $this->name;
 		}
 
-		public function getMime() {
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 */
+		public function getMime(): string {
 			if ($this->mime === null) {
 				$this->mime = FileUtils::mime($this->url->getAbsoluteUrl());
 			}
 			return $this->mime;
 		}
 
-		public function isAvailable() {
+		/**
+		 * @inheritdoc
+		 */
+		public function isAvailable(): bool {
 			return file_exists($url = $this->url->getAbsoluteUrl()) && is_readable($url);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function get() {
 			return file_get_contents($this->url->getAbsoluteUrl());
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws ResourceException
+		 */
 		public function getIterator() {
 			throw new ResourceException(sprintf('Iterator is not supported on raw [%s].', static::class));
 		}

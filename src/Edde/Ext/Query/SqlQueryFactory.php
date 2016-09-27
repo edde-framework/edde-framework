@@ -5,16 +5,28 @@
 
 	use Edde\Common\Query\AbstractStaticQueryFactory;
 
+	/**
+	 * Simple SQL query factory; it uses "" as delimiter and [] for quoting.
+	 */
 	class SqlQueryFactory extends AbstractStaticQueryFactory {
-		protected function delimite($delimite) {
+		/**
+		 * @inheritdoc
+		 */
+		protected function delimite(string $delimite): string {
 			return '"' . str_replace('"', '""', $delimite) . '"';
 		}
 
-		protected function quote($quote) {
+		/**
+		 * @inheritdoc
+		 */
+		protected function quote(string $quote): string {
 			return "[$quote]";
 		}
 
-		protected function type($type) {
+		/**
+		 * @inheritdoc
+		 */
+		protected function type(string $type): string {
 			return $type;
 		}
 	}

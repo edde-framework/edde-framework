@@ -6,7 +6,10 @@
 	use Edde\Common\Html\AbstractHtmlControl;
 
 	class LinkControl extends AbstractHtmlControl {
-		public function getTag() {
+		/**
+		 * @inheritdoc
+		 */
+		public function getTag(): string {
 			return 'link';
 		}
 

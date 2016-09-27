@@ -3,12 +3,16 @@
 
 	namespace Edde\Common\Html\Converter;
 
+	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Converter\AbstractConverter;
 
+	/**
+	 * IHtmlControl conversion to html output.
+	 */
 	class HtmlConverter extends AbstractConverter {
 		/**
 		 * @var IHttpResponse
@@ -23,30 +27,48 @@
 		 */
 		protected $styleSheetCompiler;
 
+		/**
+		 * HtmlConverter constructor.
+		 */
 		public function __construct() {
 			parent::__construct([
 				IHtmlControl::class,
 			]);
 		}
 
+		/**
+		 * @param IHttpResponse $httpResponse
+		 */
 		public function lazyHttpResponse(IHttpResponse $httpResponse) {
 			$this->httpResponse = $httpResponse;
 		}
 
+		/**
+		 * @param IJavaScriptCompiler $javaScriptCompiler
+		 */
 		public function lazyJavaScriptCompiler(IJavaScriptCompiler $javaScriptCompiler) {
 			$this->javaScriptCompiler = $javaScriptCompiler;
 		}
 
+		/**
+		 * @param IStyleSheetCompiler $styleSheetCompiler
+		 */
 		public function lazyStyleSheetCompiler(IStyleSheetCompiler $styleSheetCompiler) {
 			$this->styleSheetCompiler = $styleSheetCompiler;
 		}
 
+		/** @noinspection PhpInconsistentReturnPointsInspection */
+		/**
+		 * @inheritdoc
+		 * @throws ConverterException
+		 */
 		public function convert($source, string $target) {
 			/** @var $source IHtmlControl */
 			if ($source instanceof IHtmlControl === false) {
 				$this->unsupported($source, $target);
 			}
 			switch ($target) {
+				/** @noinspection PhpMissingBreakStatementInspection */
 				case 'http+application/json':
 					$this->httpResponse->send();
 				case 'application/json':
@@ -73,12 +95,13 @@
 					}
 					echo $json = json_encode($json);
 					return $json;
+				/** @noinspection PhpMissingBreakStatementInspection */
 				case 'http+text/html':
 					$this->httpResponse->send();
 				case 'text/html':
 					echo $render = $source->render();
 					return $render;
 			}
-			return $this->exception($target);
+			$this->exception($target);
 		}
 	}
