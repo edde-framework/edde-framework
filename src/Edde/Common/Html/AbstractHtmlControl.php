@@ -99,7 +99,7 @@
 			if ($file !== null) {
 				$javascript = new File($file);
 			}
-			$javascript = $this->tempDirectory->save(sha1(static::class . '-js') . '.js', $source = $javascript->get());
+			$javascript = $this->tempDirectory->save(sha1($class . '-js') . '.js', $source = $javascript->get());
 			$javascript->save(sprintf("Edde.Utils.class('" . $class . "', %s);", $source));
 			$this->javaScriptCompiler->addResource($javascript);
 			return $this;
