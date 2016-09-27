@@ -10,6 +10,10 @@
 	use Edde\Api\Session\SessionException;
 	use Edde\Common\Usable\AbstractUsable;
 
+	/**
+	 * Session manager is... session managing tool ;). It's responsible for whole session lifetime and section
+	 * assigment (and collision preventing).
+	 */
 	class SessionManager extends AbstractUsable implements ISessionManager {
 		/**
 		 * @var IFingerprint
@@ -28,19 +32,36 @@
 		 */
 		protected $httpResponse;
 
+		/**
+		 * You know you've been online too long when:
+		 *
+		 * Your girlfriend says communication is important to her, so you buy another computer and install an instant messenger so the two of you can chat.
+		 *
+		 * @param IFingerprint $fingerprint
+		 */
 		public function __construct(IFingerprint $fingerprint) {
 			$this->fingerprint = $fingerprint;
 			$this->namespace = 'edde';
 		}
 
+		/**
+		 * @param IHttpResponse $httpResponse
+		 */
 		public function lazyHttpResponse(IHttpResponse $httpResponse) {
 			$this->httpResponse = $httpResponse;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getSession(string $name): ISession {
 			return $this->sessionList[$name] ?? $this->sessionList[$name] = new Session($this, $name);
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws SessionException
+		 */
 		public function &session(string $name): array {
 			$this->use();
 			$this->start();
@@ -49,11 +70,15 @@
 			return $_SESSION[$this->namespace][$name];
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws SessionException
+		 */
 		public function start(): ISessionManager {
 			if ($this->isSession()) {
 				return $this;
 			}
-			if (($fingerprint = $this->fingerprint->generate()) !== null) {
+			if (($fingerprint = $this->fingerprint->fingerprint()) !== null) {
 				session_id($fingerprint);
 			}
 			session_start();
@@ -69,10 +94,17 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isSession(): bool {
 			return session_status() === PHP_SESSION_ACTIVE;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws SessionException
+		 */
 		public function close(): ISessionManager {
 			if ($this->isSession() === false) {
 				throw new SessionException('Session is not running; there is nothing to close.');
@@ -81,6 +113,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 		}
 	}
