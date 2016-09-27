@@ -3,9 +3,9 @@
 
 	namespace Edde\Api\Runtime;
 
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
-	interface IRuntime extends IUsable {
+	interface IRuntime extends IDeffered {
 		public function run(callable $callback);
 
 		/***

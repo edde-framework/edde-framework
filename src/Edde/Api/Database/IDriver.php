@@ -5,13 +5,13 @@
 
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 	use PDOStatement;
 
 	/**
 	 * Custom driver per database engine.
 	 */
-	interface IDriver extends IUsable {
+	interface IDriver extends IDeffered {
 		/**
 		 * start a transaction
 		 *

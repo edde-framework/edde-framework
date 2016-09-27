@@ -4,12 +4,12 @@
 	namespace Edde\Api\Schema;
 
 	use Edde\Api\Node\INode;
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
 	/**
 	 * Simple way how to load and build schemas from abstract source.
 	 */
-	interface ISchemaFactory extends IUsable {
+	interface ISchemaFactory extends IDeffered {
 		/**
 		 * add a schema node
 		 *

@@ -7,9 +7,9 @@
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Api\Link\LinkException;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\Deffered\AbstractDeffered;
 
-	class LinkFactory extends AbstractUsable implements ILinkFactory {
+	class LinkFactory extends AbstractDeffered implements ILinkFactory {
 		/**
 		 * @var IHostUrl
 		 */

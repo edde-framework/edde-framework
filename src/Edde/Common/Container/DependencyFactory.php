@@ -10,12 +10,12 @@
 	use Edde\Api\Container\IDependencyFactory;
 	use Edde\Api\Container\IFactoryManager;
 	use Edde\Common\Cache\CacheTrait;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\Deffered\AbstractDeffered;
 
 	/**
 	 * Dependency factory is responsible for static dependency analysis.
 	 */
-	class DependencyFactory extends AbstractUsable implements IDependencyFactory {
+	class DependencyFactory extends AbstractDeffered implements IDependencyFactory {
 		use CacheTrait;
 		/**
 		 * @var IFactoryManager

@@ -64,7 +64,7 @@
 		 *
 		 * @return $this
 		 */
-		public function onSetup(callable $callback);
+		public function deffered(callable $callback);
 
 		/**
 		 * is this factory able to handle the given identifier?

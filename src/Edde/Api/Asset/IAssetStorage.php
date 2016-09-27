@@ -4,12 +4,12 @@
 	namespace Edde\Api\Asset;
 
 	use Edde\Api\Resource\IResource;
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
 	/**
 	 * General storage for saving application data.
 	 */
-	interface IAssetStorage extends IUsable {
+	interface IAssetStorage extends IDeffered {
 		/**
 		 * save the given resource to the file storage and return a new resource (local resource file)
 		 *

@@ -10,13 +10,13 @@
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Common\Cache\CacheTrait;
+	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\File\File;
-	use Edde\Common\Usable\AbstractUsable;
 
 	/**
 	 * Default implementation of a template manager.
 	 */
-	class TemplateManager extends AbstractUsable implements ITemplateManager {
+	class TemplateManager extends AbstractDeffered implements ITemplateManager {
 		use CacheTrait;
 		/**
 		 * @var IContainer

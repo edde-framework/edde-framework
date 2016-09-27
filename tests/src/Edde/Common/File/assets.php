@@ -2,11 +2,11 @@
 	declare(strict_types = 1);
 
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Deffered\DefferedTrait;
 	use Edde\Common\File\HomeDirectoryTrait;
-	use Edde\Common\Usable\UsableTrait;
 
 	class HomeTest extends AbstractObject {
-		use UsableTrait;
+		use DefferedTrait;
 		use HomeDirectoryTrait;
 		/**
 		 * @var string

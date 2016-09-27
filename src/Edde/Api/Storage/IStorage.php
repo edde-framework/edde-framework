@@ -6,12 +6,12 @@
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
 	/**
 	 * This is abstracted way how to store (serialize) almost any object; storage can be arbitrary technology with ability to understand Edde's IQL.
 	 */
-	interface IStorage extends IUsable {
+	interface IStorage extends IDeffered {
 		/**
 		 * start a transaction
 		 *

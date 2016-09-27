@@ -13,7 +13,7 @@
 		protected $directoryIterator;
 
 		public function testDirectoryIterator() {
-			$this->directoryIterator->onSetup(function (IDirectoryIterator $directoryIterator) {
+			$this->directoryIterator->onDeffered(function (IDirectoryIterator $directoryIterator) {
 				$directoryIterator->addDirectory(new Directory(__DIR__ . '/foo'));
 				$directoryIterator->addDirectory(new Directory(__DIR__ . '/bar'));
 			});

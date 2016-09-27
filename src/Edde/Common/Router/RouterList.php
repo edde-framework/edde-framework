@@ -4,9 +4,9 @@
 	namespace Edde\Common\Router;
 
 	use Edde\Api\Router\IRouter;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\Deffered\AbstractDeffered;
 
-	class RouterList extends AbstractUsable implements IRouter {
+	class RouterList extends AbstractDeffered implements IRouter {
 		/**
 		 * @var IRouter[]
 		 */

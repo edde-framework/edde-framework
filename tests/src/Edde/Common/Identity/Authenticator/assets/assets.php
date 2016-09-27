@@ -6,9 +6,9 @@
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Api\Session\ISession;
 	use Edde\Api\Session\ISessionManager;
+	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Identity\AbstractAuthenticator;
 	use Edde\Common\Session\Session;
-	use Edde\Common\Usable\AbstractUsable;
 
 	class TrustedAuthenticator extends AbstractAuthenticator {
 		public function authenticate(IIdentity $identity, ...$credentials): IAuthenticator {
@@ -39,7 +39,7 @@
 		}
 	}
 
-	class TrustedAuth extends AbstractUsable implements IAuthorizator {
+	class TrustedAuth extends AbstractDeffered implements IAuthorizator {
 		public function authorize(IIdentity $identity): IAuthorizator {
 			return $this;
 		}
@@ -48,7 +48,7 @@
 		}
 	}
 
-	class DummySession extends AbstractUsable implements ISessionManager {
+	class DummySession extends AbstractDeffered implements ISessionManager {
 		protected $session = [];
 
 		public function start(): ISessionManager {

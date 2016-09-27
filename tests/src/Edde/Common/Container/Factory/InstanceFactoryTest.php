@@ -38,9 +38,9 @@
 
 		public function testOnSetup() {
 			$this->expectException(FactoryException::class);
-			$this->expectExceptionMessage('Cannot register onSetup handler on [Edde\Common\Container\Factory\InstanceFactory]; setup handlers are not supported by this factory.');
+			$this->expectExceptionMessage('Cannot register deffered handler on [Edde\Common\Container\Factory\InstanceFactory]; setup handlers are not supported by this factory.');
 			$factory = new InstanceFactory('name', $this);
-			$factory->onSetup(function () {
+			$factory->deffered(function () {
 			});
 		}
 

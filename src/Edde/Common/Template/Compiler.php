@@ -15,13 +15,13 @@
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\MacroException;
+	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Reflection\ReflectionUtils;
-	use Edde\Common\Usable\AbstractUsable;
 
 	/**
 	 * Default implementation of template compiler.
 	 */
-	class Compiler extends AbstractUsable implements ICompiler {
+	class Compiler extends AbstractDeffered implements ICompiler {
 		/**
 		 * @var IContainer
 		 */

@@ -10,11 +10,11 @@
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\SchemaFactoryException;
+	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Filter\BoolFilter;
 	use Edde\Common\Node\NodeQuery;
-	use Edde\Common\Usable\AbstractUsable;
 
-	class SchemaFactory extends AbstractUsable implements ISchemaFactory {
+	class SchemaFactory extends AbstractDeffered implements ISchemaFactory {
 		/**
 		 * @var IContainer
 		 */

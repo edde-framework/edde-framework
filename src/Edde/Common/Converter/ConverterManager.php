@@ -6,9 +6,9 @@
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Converter\IConverter;
 	use Edde\Api\Converter\IConverterManager;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\Deffered\AbstractDeffered;
 
-	class ConverterManager extends AbstractUsable implements IConverterManager {
+	class ConverterManager extends AbstractDeffered implements IConverterManager {
 		/**
 		 * @var IConverter[]
 		 */

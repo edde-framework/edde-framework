@@ -3,9 +3,9 @@
 
 	namespace Edde\Api\Translator;
 
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
-	interface ITranslator extends IUsable {
+	interface ITranslator extends IDeffered {
 		/**
 		 * register source of words
 		 *

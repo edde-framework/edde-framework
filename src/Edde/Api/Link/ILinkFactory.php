@@ -3,13 +3,13 @@
 
 	namespace Edde\Api\Link;
 
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
 	/**
 	 * Abstract tool for generating links from arbitrary input (strings, other classes, ...). This is useful for
 	 * abstracting application from url's.
 	 */
-	interface ILinkFactory extends ILinkGenerator, IUsable {
+	interface ILinkFactory extends ILinkGenerator, IDeffered {
 		/**
 		 * register link a generator
 		 *

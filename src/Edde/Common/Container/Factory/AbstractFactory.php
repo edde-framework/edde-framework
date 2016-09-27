@@ -54,7 +54,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function onSetup(callable $callback) {
+		public function deffered(callable $callback) {
 			$this->onSetupList[] = $callback;
 			return $this;
 		}

@@ -15,12 +15,12 @@
 	use Edde\Api\Container\IFactoryManager;
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Common\Callback\Callback;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\Deffered\AbstractDeffered;
 
 	/**
 	 * Default implementation of a dependency container.
 	 */
-	class Container extends AbstractUsable implements IContainer {
+	class Container extends AbstractDeffered implements IContainer {
 		/**
 		 * @var IFactoryManager
 		 */

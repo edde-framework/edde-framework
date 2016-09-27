@@ -6,9 +6,9 @@
 	use Edde\Api\Event\IEventBus;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Url\IUrl;
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
-	interface IHttpClient extends IUsable, IEventBus {
+	interface IHttpClient extends IDeffered, IEventBus {
 		/**
 		 * do an arbitrary request; the all others are shortcut to this method
 		 *

@@ -4,9 +4,9 @@
 	namespace Edde\Api\Identity;
 
 	use Edde\Api\Crate\ICrate;
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
-	interface IIdentityManager extends IUsable {
+	interface IIdentityManager extends IDeffered {
 		/**
 		 * return identity crate by the given identifier (can be guid, login, ...)
 		 *

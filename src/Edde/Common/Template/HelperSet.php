@@ -5,9 +5,9 @@
 
 	use Edde\Api\Template\IHelper;
 	use Edde\Api\Template\IHelperSet;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\Deffered\AbstractDeffered;
 
-	class HelperSet extends AbstractUsable implements IHelperSet {
+	class HelperSet extends AbstractDeffered implements IHelperSet {
 		/**
 		 * @var IHelper[]
 		 */

@@ -4,12 +4,12 @@
 	namespace Edde\Common\Query\Select;
 
 	use Edde\Api\Node\INode;
+	use Edde\Common\Deffered\DefferedTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractFragment;
-	use Edde\Common\Usable\UsableTrait;
 
 	class FromFragment extends AbstractFragment {
-		use UsableTrait;
+		use DefferedTrait;
 		/**
 		 * @var SelectQuery
 		 */

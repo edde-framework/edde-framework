@@ -3,6 +3,9 @@
 
 	namespace Edde\Common;
 
+	/**
+	 * Simple autoloader class.
+	 */
 	class Autoloader {
 		/**
 		 * @var string
@@ -39,19 +42,27 @@
 			return $autoloader;
 		}
 
-		public function __invoke($class) {
+		/**
+		 * magic executor of class inclusion
+		 *
+		 * @param string $class
+		 *
+		 * @return bool
+		 */
+		public function __invoke(string $class) {
 			if (strpos($class, $this->namespace) === false) {
 				return false;
 			}
-			/** @noinspection PhpIncludeInspection */
 			/** @noinspection PhpUsageOfSilenceOperatorInspection */
-			@include_once(str_replace([
+			/** @noinspection UsingInclusionOnceReturnValueInspection */
+			/** @noinspection UsingInclusionReturnValueInspection */
+			@include_once str_replace([
 				$this->namespace,
 				'\\',
 			], [
 				$this->root ? null : $this->namespace,
 				'/',
-			], $this->path . '/' . $class . '.php'));
+			], $this->path . '/' . $class . '.php');
 			return class_exists($class, false);
 		}
 	}

@@ -9,10 +9,10 @@
 	use Edde\Api\Identity\IAuthorizator;
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Api\Identity\IIdentityManager;
+	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Session\SessionTrait;
-	use Edde\Common\Usable\AbstractUsable;
 
-	class AuthenticatorManager extends AbstractUsable implements IAuthenticatorManager {
+	class AuthenticatorManager extends AbstractDeffered implements IAuthenticatorManager {
 		use SessionTrait;
 		/**
 		 * @var IIdentity

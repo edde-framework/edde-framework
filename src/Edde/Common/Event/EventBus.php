@@ -6,11 +6,14 @@
 	use Edde\Api\Event\IEvent;
 	use Edde\Api\Event\IEventBus;
 	use Edde\Api\Event\IHandler;
-	use Edde\Common\Usable\AbstractUsable;
-	use Edde\Common\Usable\UsableTrait;
+	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Deffered\DefferedTrait;
 
-	class EventBus extends AbstractUsable implements IEventBus {
-		use UsableTrait;
+	/**
+	 * Default simple implementation of an EventBus.
+	 */
+	class EventBus extends AbstractDeffered implements IEventBus {
+		use DefferedTrait;
 		/**
 		 * @var callable[][]
 		 */
@@ -20,6 +23,9 @@
 		 */
 		protected $handlerList = [];
 
+		/**
+		 * @inheritdoc
+		 */
 		public function handler(IHandler $handler): IEventBus {
 			if ($this->isUsed()) {
 				$this->listen($handler);
@@ -29,6 +35,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function listen($listen): IEventBus {
 			if (($listen instanceof IHandler) === false) {
 				$listen = HandlerFactory::handler($listen);
@@ -39,11 +48,17 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function register(string $event, callable $handler): IEventBus {
 			$this->listenList[$event][] = $handler;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function event(IEvent $event): IEventBus {
 			$this->use();
 			if (isset($this->listenList[$name = get_class($event)]) === false) {
@@ -55,6 +70,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 			foreach ($this->handlerList as $handler) {
 				$this->listen($handler);

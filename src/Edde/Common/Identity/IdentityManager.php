@@ -9,11 +9,11 @@
 	use Edde\Api\Identity\IIdentityManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Storage\StorageException;
+	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Query\Select\SelectQuery;
 	use Edde\Common\Session\SessionTrait;
-	use Edde\Common\Usable\AbstractUsable;
 
-	class IdentityManager extends AbstractUsable implements IIdentityManager {
+	class IdentityManager extends AbstractDeffered implements IIdentityManager {
 		use SessionTrait;
 
 		const SESSION_IDENTITY = 'identity';

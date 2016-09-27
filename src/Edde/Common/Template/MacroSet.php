@@ -5,14 +5,17 @@
 
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\IMacroSet;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\Deffered\AbstractDeffered;
 
-	class MacroSet extends AbstractUsable implements IMacroSet {
+	class MacroSet extends AbstractDeffered implements IMacroSet {
 		/**
 		 * @var IMacro[]
 		 */
 		protected $macroList = [];
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getMacroList(): array {
 			$this->use();
 			return $this->macroList;
@@ -26,11 +29,17 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function registerMacro(IMacro $macro): IMacroSet {
 			$this->macroList[$macro->getName()] = $macro;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 		}
 	}

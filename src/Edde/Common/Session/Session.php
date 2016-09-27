@@ -7,13 +7,13 @@
 	use Edde\Api\Session\ISession;
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Common\Collection\AbstractList;
-	use Edde\Common\Usable\UsableTrait;
+	use Edde\Common\Deffered\DefferedTrait;
 
 	/**
 	 * Session section for simple session data manipulation.
 	 */
 	class Session extends AbstractList implements ISession {
-		use UsableTrait;
+		use DefferedTrait;
 		/**
 		 * @var ISessionManager
 		 */

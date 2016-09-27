@@ -3,9 +3,9 @@
 
 	namespace Edde\Api\Schema;
 
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
-	interface ISchema extends IUsable {
+	interface ISchema extends IDeffered {
 		/**
 		 * return only the name of this schema without namespace
 		 *

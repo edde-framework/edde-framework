@@ -7,9 +7,9 @@
 	use Edde\Api\Application\IResponse;
 	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Converter\IConverterManager;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\Deffered\AbstractDeffered;
 
-	class ResponseManager extends AbstractUsable implements IResponseManager {
+	class ResponseManager extends AbstractDeffered implements IResponseManager {
 		/**
 		 * @var IRequest
 		 */

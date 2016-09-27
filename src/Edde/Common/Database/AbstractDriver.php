@@ -5,9 +5,9 @@
 
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Database\IDriver;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\Deffered\AbstractDeffered;
 
-	abstract class AbstractDriver extends AbstractUsable implements IDriver {
+	abstract class AbstractDriver extends AbstractDeffered implements IDriver {
 		/**
 		 * @var string[]
 		 */

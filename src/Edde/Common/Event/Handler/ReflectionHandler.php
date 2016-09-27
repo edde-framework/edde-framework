@@ -5,14 +5,14 @@
 
 	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEvent;
+	use Edde\Common\Deffered\DefferedTrait;
 	use Edde\Common\Event\AbstractHandler;
-	use Edde\Common\Usable\UsableTrait;
 
 	/**
 	 * This should take instance on input and return all methods accepting exactly one IEvent parameter.
 	 */
 	class ReflectionHandler extends AbstractHandler {
-		use UsableTrait;
+		use DefferedTrait;
 		protected $handler;
 
 		protected $methodList = [];

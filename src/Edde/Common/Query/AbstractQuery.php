@@ -5,9 +5,9 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Query\IQuery;
-	use Edde\Common\Usable\AbstractUsable;
+	use Edde\Common\Deffered\AbstractDeffered;
 
-	abstract class AbstractQuery extends AbstractUsable implements IQuery {
+	abstract class AbstractQuery extends AbstractDeffered implements IQuery {
 		/**
 		 * @var INode
 		 */

@@ -3,12 +3,12 @@
 
 	namespace Edde\Api\Container;
 
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
 	/**
 	 * Interface for factories building dependency tree for a class.
 	 */
-	interface IDependencyFactory extends IUsable {
+	interface IDependencyFactory extends IDeffered {
 		/**
 		 * build dependency tree for a given name
 		 *

@@ -6,7 +6,7 @@
 	/**
 	 * Any class can be usable in terms of passive behavior until "touch". This was originally developed from Service interface.
 	 */
-	interface IUsable {
+	interface IDeffered {
 		/**
 		 * callback executed before {@see self::use()}
 		 *
@@ -14,7 +14,7 @@
 		 *
 		 * @return $this
 		 */
-		public function onSetup(callable $callback);
+		public function onDeffered(callable $callback);
 
 		/**
 		 * callback executed after {@see self::use()}
@@ -23,7 +23,7 @@
 		 *
 		 * @return $this
 		 */
-		public function onUse(callable $callback);
+		public function onSetup(callable $callback);
 
 		/**
 		 * general purpose callback executed when usable is loaded (used); if it is already loaded, callback is executed immediately

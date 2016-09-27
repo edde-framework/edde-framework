@@ -8,11 +8,11 @@
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\ResourceManagerException;
+	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\File\File;
 	use Edde\Common\Url\Url;
-	use Edde\Common\Usable\AbstractUsable;
 
-	class ResourceManager extends AbstractUsable implements IResourceManager {
+	class ResourceManager extends AbstractDeffered implements IResourceManager {
 		/**
 		 * @var IConverterManager
 		 */

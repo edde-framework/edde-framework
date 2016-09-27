@@ -3,9 +3,9 @@
 
 	namespace Edde\Api\Converter;
 
-	use Edde\Api\Usable\IUsable;
+	use Edde\Api\Usable\IDeffered;
 
-	interface IConverterManager extends IUsable {
+	interface IConverterManager extends IDeffered {
 		/**
 		 * register a converter
 		 *
