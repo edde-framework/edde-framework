@@ -3,8 +3,8 @@
 
 	namespace Edde\Api\Application;
 
+	use Edde\Api\Deffered\IDeffered;
 	use Edde\Api\Event\IEventBus;
-	use Edde\Api\Usable\IDeffered;
 
 	/**
 	 * Single application implementation; per project should be exactly one instance (implementation) of this interface.

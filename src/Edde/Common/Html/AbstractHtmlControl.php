@@ -3,48 +3,23 @@
 
 	namespace Edde\Common\Html;
 
-	use Edde\Api\Container\IContainer;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\File\FileException;
-	use Edde\Api\File\ITempDirectory;
+	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Html\IHtmlControl;
-	use Edde\Api\Web\IJavaScriptCompiler;
-	use Edde\Api\Web\IStyleSheetCompiler;
+	use Edde\Api\Web\LazyJavaScriptCompilerTrait;
+	use Edde\Api\Web\LazyStyleSheetCompilerTrait;
 	use Edde\Common\Control\AbstractControl;
 	use Edde\Common\File\File;
 
+	/**
+	 * Base class for all html based controls.
+	 */
 	abstract class AbstractHtmlControl extends AbstractControl implements IHtmlControl {
-		/**
-		 * @var IContainer
-		 */
-		protected $container;
-		/**
-		 * @var IJavaScriptCompiler
-		 */
-		protected $javaScriptCompiler;
-		/**
-		 * @var IStyleSheetCompiler
-		 */
-		protected $styleSheetCompiler;
-		/**
-		 * @var ITempDirectory
-		 */
-		protected $tempDirectory;
-
-		public function lazyContainer(IContainer $container) {
-			$this->container = $container;
-		}
-
-		public function lazyJavaScriptCompiler(IJavaScriptCompiler $javaScriptCompiler) {
-			$this->javaScriptCompiler = $javaScriptCompiler;
-		}
-
-		public function lazyStyleSheetCompiler(IStyleSheetCompiler $styleSheetCompiler) {
-			$this->styleSheetCompiler = $styleSheetCompiler;
-		}
-
-		public function lazyTempDirectory(ITempDirectory $tempDirectory) {
-			$this->tempDirectory = $tempDirectory;
-		}
+		use LazyContainerTrait;
+		use LazyJavaScriptCompilerTrait;
+		use LazyStyleSheetCompilerTrait;
+		use LazyTempDirectoryTrait;
 
 		public function setTag(string $tag, bool $pair = true): IHtmlControl {
 			$this->use();

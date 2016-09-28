@@ -23,7 +23,7 @@
 			return $this;
 		}
 
-		public function save($id, $save) {
+		public function save(string $id, $save) {
 			$this->use();
 			$this->memcache->set($id, $save);
 			return $this;

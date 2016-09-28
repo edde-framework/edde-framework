@@ -3,8 +3,8 @@
 
 	namespace Edde\Api\Schema;
 
+	use Edde\Api\Deffered\IDeffered;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Usable\IDeffered;
 
 	/**
 	 * Simple way how to load and build schemas from abstract source.

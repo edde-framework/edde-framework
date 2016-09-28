@@ -3,8 +3,8 @@
 
 	namespace Edde\Api\Upgrade;
 
+	use Edde\Api\Deffered\IDeffered;
 	use Edde\Api\Event\IEventBus;
-	use Edde\Api\Usable\IDeffered;
 
 	/**
 	 * This class is responsible for proper application upgrades.

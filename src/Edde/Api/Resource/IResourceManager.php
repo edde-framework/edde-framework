@@ -3,8 +3,8 @@
 
 	namespace Edde\Api\Resource;
 
+	use Edde\Api\Deffered\IDeffered;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Usable\IDeffered;
 
 	interface IResourceManager extends IDeffered {
 		/**

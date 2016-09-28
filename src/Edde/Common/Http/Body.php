@@ -4,11 +4,12 @@
 	namespace Edde\Common\Http;
 
 	use Edde\Api\Container\ILazyInject;
-	use Edde\Api\Converter\IConverterManager;
+	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Http\IBody;
 	use Edde\Common\AbstractObject;
 
 	class Body extends AbstractObject implements IBody, ILazyInject {
+		use LazyConverterManagerTrait;
 		/**
 		 * @var string|callable
 		 */
@@ -21,19 +22,11 @@
 		 * @var string
 		 */
 		protected $target;
-		/**
-		 * @var IConverterManager
-		 */
-		protected $converterManager;
 
 		public function __construct($body = null, string $mime = '', string $target = '') {
 			$this->body = $body;
 			$this->mime = $mime;
 			$this->target = $target;
-		}
-
-		public function lazyConverterManager(IConverterManager $converterManager) {
-			$this->converterManager = $converterManager;
 		}
 
 		public function convert(string $target = null, string $mime = null) {

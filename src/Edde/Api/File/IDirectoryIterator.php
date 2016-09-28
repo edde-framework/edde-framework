@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\File;
 
-	use Edde\Api\Usable\IDeffered;
+	use Edde\Api\Deffered\IDeffered;
 
 	interface IDirectoryIterator extends \IteratorAggregate, IDeffered {
 		/**

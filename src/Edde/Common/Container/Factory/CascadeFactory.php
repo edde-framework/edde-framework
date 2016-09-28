@@ -5,20 +5,18 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\ILazyInject;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Common\Callback\CallbackUtils;
 
 	/**
 	 * Magical implementation of callback search mechanism based on "class exists".
 	 */
 	class CascadeFactory extends ClassFactory implements ILazyInject {
+		use LazyContainerTrait;
 		/**
 		 * @var callable
 		 */
 		protected $source;
-		/**
-		 * @var IContainer
-		 */
-		protected $container;
 		protected $nameList = [];
 
 		/**
@@ -31,13 +29,6 @@
 		public function __construct(callable $source) {
 			parent::__construct();
 			$this->source = $source;
-		}
-
-		/**
-		 * @param IContainer $container
-		 */
-		public function lazyContainer(IContainer $container) {
-			$this->container = $container;
 		}
 
 		/**

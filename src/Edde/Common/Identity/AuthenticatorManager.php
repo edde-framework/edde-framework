@@ -6,26 +6,17 @@
 	use Edde\Api\Identity\AuthenticatorException;
 	use Edde\Api\Identity\IAuthenticator;
 	use Edde\Api\Identity\IAuthenticatorManager;
-	use Edde\Api\Identity\IAuthorizator;
-	use Edde\Api\Identity\IIdentity;
-	use Edde\Api\Identity\IIdentityManager;
+	use Edde\Api\Identity\LazyAuthorizatorTrait;
+	use Edde\Api\Identity\LazyIdentityManagerTrait;
+	use Edde\Api\Identity\LazyIdentityTrait;
 	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Session\SessionTrait;
 
 	class AuthenticatorManager extends AbstractDeffered implements IAuthenticatorManager {
+		use LazyIdentityTrait;
+		use LazyIdentityManagerTrait;
+		use LazyAuthorizatorTrait;
 		use SessionTrait;
-		/**
-		 * @var IIdentity
-		 */
-		protected $identity;
-		/**
-		 * @var IIdentityManager
-		 */
-		protected $identityManager;
-		/**
-		 * @var IAuthorizator
-		 */
-		protected $authorizator;
 		/**
 		 * @var IAuthenticator[]
 		 */
@@ -34,18 +25,6 @@
 		 * @var string[][]
 		 */
 		protected $flowList = [];
-
-		public function lazyIdentity(IIdentity $identity) {
-			$this->identity = $identity;
-		}
-
-		public function lazyIdentityManager(IIdentityManager $identityManager) {
-			$this->identityManager = $identityManager;
-		}
-
-		public function lazyAutorizator(IAuthorizator $authorizator) {
-			$this->authorizator = $authorizator;
-		}
 
 		public function registerAuthenticator(IAuthenticator $authenticator): IAuthenticatorManager {
 			$this->authenticatorList[$authenticator->getName()] = $authenticator;

@@ -3,10 +3,10 @@
 
 	namespace Edde\Common\Schema;
 
-	use Edde\Api\Container\IContainer;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\INodeQuery;
-	use Edde\Api\Resource\IResourceManager;
+	use Edde\Api\Resource\LazyResourceManagerTrait;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\SchemaFactoryException;
@@ -15,14 +15,8 @@
 	use Edde\Common\Node\NodeQuery;
 
 	class SchemaFactory extends AbstractDeffered implements ISchemaFactory {
-		/**
-		 * @var IContainer
-		 */
-		protected $container;
-		/**
-		 * @var IResourceManager
-		 */
-		protected $resourceManager;
+		use LazyContainerTrait;
+		use LazyResourceManagerTrait;
 		/**
 		 * @var INode[]
 		 */
@@ -51,14 +45,6 @@
 		 * @var INodeQuery
 		 */
 		protected $linkNodeQuery;
-
-		public function lazyContainer(IContainer $container) {
-			$this->container = $container;
-		}
-
-		public function lazyResourceManager(IResourceManager $resourceManager) {
-			$this->resourceManager = $resourceManager;
-		}
 
 		public function load(string $file): INode {
 			$this->addSchemaNode($node = $this->resourceManager->file($file));

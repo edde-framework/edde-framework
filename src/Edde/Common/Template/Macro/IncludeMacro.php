@@ -4,7 +4,7 @@
 	namespace Edde\Common\Template\Macro;
 
 	use Edde\Api\File\IFile;
-	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
@@ -14,10 +14,7 @@
 	 * Compile time include macro.
 	 */
 	class IncludeMacro extends AbstractMacro {
-		/**
-		 * @var IRootDirectory
-		 */
-		protected $rootDirectory;
+		use LazyRootDirectoryTrait;
 
 		/**
 		 * If a program is useful, it must be changed.
@@ -25,13 +22,6 @@
 		 */
 		public function __construct() {
 			parent::__construct('include');
-		}
-
-		/**
-		 * @param IRootDirectory $rootDirectory
-		 */
-		public function lazyRootDirectory(IRootDirectory $rootDirectory) {
-			$this->rootDirectory = $rootDirectory;
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */

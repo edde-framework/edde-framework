@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Html\Macro;
 
-	use Edde\Api\Crypt\ICryptEngine;
+	use Edde\Api\Crypt\LazyCryptEngineTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelper;
@@ -17,23 +17,13 @@
 	 * Condition macro support.
 	 */
 	class IfMacro extends AbstractHtmlMacro implements IHelper {
-		/**
-		 * @var ICryptEngine
-		 */
-		protected $cryptEngine;
+		use LazyCryptEngineTrait;
 
 		/**
 		 * MS-DOS is like the US railroad system. It's there, but people just ignore it and find other ways of getting where they want to go.
 		 */
 		public function __construct() {
 			parent::__construct('if');
-		}
-
-		/**
-		 * @param ICryptEngine $cryptEngine
-		 */
-		public function lazyCryptEngine(ICryptEngine $cryptEngine) {
-			$this->cryptEngine = $cryptEngine;
 		}
 
 		/**

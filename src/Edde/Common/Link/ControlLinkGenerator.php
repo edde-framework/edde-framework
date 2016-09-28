@@ -3,18 +3,11 @@
 
 	namespace Edde\Common\Link;
 
-	use Edde\Api\Http\IHostUrl;
+	use Edde\Api\Http\LazyHostUrlTrait;
 	use Edde\Common\Url\Url;
 
 	class ControlLinkGenerator extends AbstractLinkGenerator {
-		/**
-		 * @var IHostUrl
-		 */
-		protected $hostUrl;
-
-		public function lazyHostUrl(IHostUrl $hostUrl) {
-			$this->hostUrl = $hostUrl;
-		}
+		use LazyHostUrlTrait;
 
 		public function link($generate, ...$parameterList) {
 			if (is_array($generate) === false || count($generate) !== 2) {

@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Link;
 
-	use Edde\Api\Usable\IDeffered;
+	use Edde\Api\Deffered\IDeffered;
 
 	/**
 	 * Abstract tool for generating links from arbitrary input (strings, other classes, ...). This is useful for

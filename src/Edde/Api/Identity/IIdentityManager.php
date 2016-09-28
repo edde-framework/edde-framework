@@ -4,7 +4,7 @@
 	namespace Edde\Api\Identity;
 
 	use Edde\Api\Crate\ICrate;
-	use Edde\Api\Usable\IDeffered;
+	use Edde\Api\Deffered\IDeffered;
 
 	interface IIdentityManager extends IDeffered {
 		/**

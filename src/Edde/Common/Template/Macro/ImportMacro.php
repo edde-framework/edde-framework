@@ -4,7 +4,7 @@
 	namespace Edde\Common\Template\Macro;
 
 	use Edde\Api\File\IFile;
-	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
@@ -14,23 +14,13 @@
 	 * Import macro will load the given template in compile time.
 	 */
 	class ImportMacro extends AbstractMacro {
-		/**
-		 * @var IRootDirectory
-		 */
-		protected $rootDirectory;
+		use LazyRootDirectoryTrait;
 
 		/**
 		 * "Real programmers don't comment their code. If it was hard to write, it should be hard to understand."
 		 */
 		public function __construct() {
 			parent::__construct('import');
-		}
-
-		/**
-		 * @param IRootDirectory $rootDirectory
-		 */
-		public function lazyRootDirectory(IRootDirectory $rootDirectory) {
-			$this->rootDirectory = $rootDirectory;
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */

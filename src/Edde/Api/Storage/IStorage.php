@@ -4,9 +4,9 @@
 	namespace Edde\Api\Storage;
 
 	use Edde\Api\Crate\ICrate;
+	use Edde\Api\Deffered\IDeffered;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
-	use Edde\Api\Usable\IDeffered;
 
 	/**
 	 * This is abstracted way how to store (serialize) almost any object; storage can be arbitrary technology with ability to understand Edde's IQL.

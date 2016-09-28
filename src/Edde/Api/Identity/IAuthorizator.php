@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Identity;
 
-	use Edde\Api\Usable\IDeffered;
+	use Edde\Api\Deffered\IDeffered;
 
 	/**
 	 * Implementation of an ACL mechanism; this should set roles to the given identity.

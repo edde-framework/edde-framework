@@ -3,28 +3,19 @@
 
 	namespace Edde\Module;
 
-	use Edde\Api\Cache\ICacheStorage;
-	use Edde\Api\Crate\ICrateGenerator;
+	use Edde\Api\Cache\LazyCacheStorageTrait;
+	use Edde\Api\Crate\LazyCrateGeneratorTrait;
 	use Edde\Api\EddeException;
 	use Edde\Api\Html\IHtmlControl;
-	use Edde\Api\Upgrade\IUpgradeManager;
+	use Edde\Api\Upgrade\LazyUpgradeManagerTrait;
 	use Edde\Common\Html\TemplateViewControl;
 	use Edde\Framework;
 	use Tracy\Debugger;
 
 	class EddeControl extends TemplateViewControl {
-		/**
-		 * @var IUpgradeManager
-		 */
-		protected $upgradeManager;
-		/**
-		 * @var ICrateGenerator
-		 */
-		protected $crateGenerator;
-		/**
-		 * @var ICacheStorage
-		 */
-		protected $cacheStorage;
+		use LazyCrateGeneratorTrait;
+		use LazyUpgradeManagerTrait;
+		use LazyCacheStorageTrait;
 		/**
 		 * @var Framework
 		 */
@@ -33,27 +24,6 @@
 		 * @var IHtmlControl
 		 */
 		protected $message;
-
-		/**
-		 * @param IUpgradeManager $upgradeManager
-		 */
-		public function lazyUpgradeManager(IUpgradeManager $upgradeManager) {
-			$this->upgradeManager = $upgradeManager;
-		}
-
-		/**
-		 * @param ICrateGenerator $crateGenerator
-		 */
-		public function lazyCrateGenerator(ICrateGenerator $crateGenerator) {
-			$this->crateGenerator = $crateGenerator;
-		}
-
-		/**
-		 * @param ICacheStorage $cacheStorage
-		 */
-		public function lazyCacheStorage(ICacheStorage $cacheStorage) {
-			$this->cacheStorage = $cacheStorage;
-		}
 
 		/**
 		 * @param Framework $framework

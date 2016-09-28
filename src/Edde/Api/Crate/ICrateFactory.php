@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Crate;
 
-	use Edde\Api\Usable\IDeffered;
+	use Edde\Api\Deffered\IDeffered;
 
 	/**
 	 * This mechanism is inteded to use as conversion from an input data to crates.

@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Runtime;
 
-	use Edde\Api\Usable\IDeffered;
+	use Edde\Api\Deffered\IDeffered;
 
 	interface IRuntime extends IDeffered {
 		public function run(callable $callback);

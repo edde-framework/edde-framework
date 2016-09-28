@@ -12,9 +12,9 @@
 		 *
 		 * @param ISchema $schema
 		 *
-		 * @return $this
+		 * @return ISchemaManager
 		 */
-		public function addSchema(ISchema $schema);
+		public function addSchema(ISchema $schema): ISchemaManager;
 
 		/**
 		 * is there schema with this name? - name must be full schema name including namespace
@@ -23,7 +23,7 @@
 		 *
 		 * @return bool
 		 */
-		public function hasSchema($schema);
+		public function hasSchema(string $schema): bool;
 
 		/**
 		 * return schema by name; name must be full schema name
@@ -34,12 +34,12 @@
 		 *
 		 * @throws SchemaException
 		 */
-		public function getSchema($schema);
+		public function getSchema(string $schema): ISchema;
 
 		/**
 		 * return list of all available schemas
 		 *
 		 * @return ISchema[]
 		 */
-		public function getSchemaList();
+		public function getSchemaList(): array;
 	}

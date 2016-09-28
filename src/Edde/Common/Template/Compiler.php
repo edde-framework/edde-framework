@@ -3,12 +3,12 @@
 
 	namespace Edde\Common\Template;
 
-	use Edde\Api\Container\IContainer;
-	use Edde\Api\Crypt\ICryptEngine;
+	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Crypt\LazyCryptEngineTrait;
 	use Edde\Api\File\IFile;
-	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Resource\IResourceManager;
+	use Edde\Api\Resource\LazyResourceManagerTrait;
 	use Edde\Api\Template\CompilerException;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelperSet;
@@ -22,22 +22,10 @@
 	 * Default implementation of template compiler.
 	 */
 	class Compiler extends AbstractDeffered implements ICompiler {
-		/**
-		 * @var IContainer
-		 */
-		protected $container;
-		/**
-		 * @var IResourceManager
-		 */
-		protected $resourceManager;
-		/**
-		 * @var ICryptEngine
-		 */
-		protected $cryptEngine;
-		/**
-		 * @var IRootDirectory
-		 */
-		protected $rootDirectory;
+		use LazyContainerTrait;
+		use LazyResourceManagerTrait;
+		use LazyCryptEngineTrait;
+		use LazyRootDirectoryTrait;
 		/**
 		 * @var IFile
 		 */
@@ -68,34 +56,6 @@
 		 */
 		public function __construct(IFile $source) {
 			$this->source = $source;
-		}
-
-		/**
-		 * @param IContainer $container
-		 */
-		public function lazyContainer(IContainer $container) {
-			$this->container = $container;
-		}
-
-		/**
-		 * @param IResourceManager $resourceManager
-		 */
-		public function lazyResourceManager(IResourceManager $resourceManager) {
-			$this->resourceManager = $resourceManager;
-		}
-
-		/**
-		 * @param ICryptEngine $cryptEngine
-		 */
-		public function lazyCryptEngine(ICryptEngine $cryptEngine) {
-			$this->cryptEngine = $cryptEngine;
-		}
-
-		/**
-		 * @param IRootDirectory $rootDirectory
-		 */
-		public function lazyRootDirectory(IRootDirectory $rootDirectory) {
-			$this->rootDirectory = $rootDirectory;
 		}
 
 		/**

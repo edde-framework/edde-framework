@@ -4,7 +4,7 @@
 	namespace Edde\Common\Deffered;
 
 	use Edde\Api\Container\ILazyInject;
-	use Edde\Api\Usable\IDeffered;
+	use Edde\Api\Deffered\IDeffered;
 	use Edde\Common\AbstractObject;
 
 	/**

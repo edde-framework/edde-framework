@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Identity;
 
-	use Edde\Api\Usable\IDeffered;
+	use Edde\Api\Deffered\IDeffered;
 
 	/**
 	 * This implementation is resposnible for an identity authentification.

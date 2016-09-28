@@ -5,27 +5,18 @@
 
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Html\IHtmlControl;
-	use Edde\Api\Http\IHttpResponse;
-	use Edde\Api\Web\IJavaScriptCompiler;
-	use Edde\Api\Web\IStyleSheetCompiler;
+	use Edde\Api\Http\LazyHttpResponseTrait;
+	use Edde\Api\Web\LazyJavaScriptCompilerTrait;
+	use Edde\Api\Web\LazyStyleSheetCompilerTrait;
 	use Edde\Common\Converter\AbstractConverter;
 
 	/**
 	 * IHtmlControl conversion to html output.
 	 */
 	class HtmlConverter extends AbstractConverter {
-		/**
-		 * @var IHttpResponse
-		 */
-		protected $httpResponse;
-		/**
-		 * @var IJavaScriptCompiler
-		 */
-		protected $javaScriptCompiler;
-		/**
-		 * @var IStyleSheetCompiler
-		 */
-		protected $styleSheetCompiler;
+		use LazyHttpResponseTrait;
+		use LazyJavaScriptCompilerTrait;
+		use LazyStyleSheetCompilerTrait;
 
 		/**
 		 * HtmlConverter constructor.
@@ -34,27 +25,6 @@
 			parent::__construct([
 				IHtmlControl::class,
 			]);
-		}
-
-		/**
-		 * @param IHttpResponse $httpResponse
-		 */
-		public function lazyHttpResponse(IHttpResponse $httpResponse) {
-			$this->httpResponse = $httpResponse;
-		}
-
-		/**
-		 * @param IJavaScriptCompiler $javaScriptCompiler
-		 */
-		public function lazyJavaScriptCompiler(IJavaScriptCompiler $javaScriptCompiler) {
-			$this->javaScriptCompiler = $javaScriptCompiler;
-		}
-
-		/**
-		 * @param IStyleSheetCompiler $styleSheetCompiler
-		 */
-		public function lazyStyleSheetCompiler(IStyleSheetCompiler $styleSheetCompiler) {
-			$this->styleSheetCompiler = $styleSheetCompiler;
 		}
 
 		/** @noinspection PhpInconsistentReturnPointsInspection */

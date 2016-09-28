@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Converter;
 
-	use Edde\Api\Usable\IDeffered;
+	use Edde\Api\Deffered\IDeffered;
 
 	interface IConverterManager extends IDeffered {
 		/**

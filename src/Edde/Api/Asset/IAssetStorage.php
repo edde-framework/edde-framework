@@ -3,8 +3,8 @@
 
 	namespace Edde\Api\Asset;
 
+	use Edde\Api\Deffered\IDeffered;
 	use Edde\Api\Resource\IResource;
-	use Edde\Api\Usable\IDeffered;
 
 	/**
 	 * General storage for saving application data.

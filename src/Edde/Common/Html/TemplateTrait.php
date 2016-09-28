@@ -3,43 +3,22 @@
 
 	namespace Edde\Common\Html;
 
-	use Edde\Api\Application\IRequest;
-	use Edde\Api\Container\IContainer;
+	use Edde\Api\Application\LazyRequestTrait;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Html\HtmlException;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlTemplate;
 	use Edde\Api\Html\IHtmlView;
-	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Template\LazyTemplateManagerTrait;
 	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Template trait can be used by any html control; it gives simple way to load a template (or snippet) with some little magic around.
 	 */
 	trait TemplateTrait {
-		/**
-		 * @var IContainer
-		 */
-		protected $container;
-		/**
-		 * @var ITemplateManager
-		 */
-		protected $templateManager;
-		/**
-		 * @var IRequest
-		 */
-		protected $request;
-
-		public function lazyContainer(IContainer $container) {
-			$this->container = $container;
-		}
-
-		public function lazyTemplateManager(ITemplateManager $templateManager) {
-			$this->templateManager = $templateManager;
-		}
-
-		public function lazyRequest(IRequest $request) {
-			$this->request = $request;
-		}
+		use LazyContainerTrait;
+		use LazyTemplateManagerTrait;
+		use LazyRequestTrait;
 
 		public function template(string $layout = null, array $snippetList = null, array $importList = []) {
 			$this->check();

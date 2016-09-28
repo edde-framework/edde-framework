@@ -14,8 +14,8 @@
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaCollection;
 	use Edde\Api\Schema\ISchemaLink;
-	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Schema\ISchemaProperty;
+	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\Strings\StringUtils;
@@ -24,10 +24,7 @@
 	 * Simple crate php class generator.
 	 */
 	class CrateGenerator extends AbstractDeffered implements ICrateGenerator {
-		/**
-		 * @var ISchemaManager
-		 */
-		protected $schemaManager;
+		use LazySchemaManagerTrait;
 		/**
 		 * @var ICrateDirectory
 		 */
@@ -50,13 +47,11 @@
 		protected $parent;
 
 		/**
-		 * @param ISchemaManager $schemaManager
 		 * @param ICrateDirectory $crateDirectory
 		 * @param ICacheFactory $cacheFactory
 		 * @param IFactoryManager $factoryManager
 		 */
-		public function __construct(ISchemaManager $schemaManager, ICrateDirectory $crateDirectory, ICacheFactory $cacheFactory, IFactoryManager $factoryManager) {
-			$this->schemaManager = $schemaManager;
+		public function __construct(ICrateDirectory $crateDirectory, ICacheFactory $cacheFactory, IFactoryManager $factoryManager) {
 			$this->crateDirectory = $crateDirectory;
 			$this->cacheFactory = $cacheFactory;
 			$this->factoryManager = $factoryManager;

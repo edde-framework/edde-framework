@@ -3,15 +3,15 @@
 
 	namespace Edde\Ext\Router;
 
-	use Edde\Api\Application\IResponseManager;
-	use Edde\Api\Crate\ICrateFactory;
-	use Edde\Api\Http\IBody;
-	use Edde\Api\Http\IHeaderList;
-	use Edde\Api\Http\IHttpRequest;
-	use Edde\Api\Http\IHttpResponse;
-	use Edde\Api\Http\IPostList;
-	use Edde\Api\Http\IRequestUrl;
-	use Edde\Api\Runtime\IRuntime;
+	use Edde\Api\Application\LazyResponseManagerTrait;
+	use Edde\Api\Crate\LazyCrateFactoryTrait;
+	use Edde\Api\Http\LazyBodyTrait;
+	use Edde\Api\Http\LazyHeaderListTrait;
+	use Edde\Api\Http\LazyHttpRequestTrait;
+	use Edde\Api\Http\LazyHttpResponseTrait;
+	use Edde\Api\Http\LazyPostListTrait;
+	use Edde\Api\Http\LazyRequestUrlTrait;
+	use Edde\Api\Runtime\LazyRuntimeTrait;
 	use Edde\Common\Application\Request;
 	use Edde\Common\Router\AbstractRouter;
 	use Edde\Common\Strings\StringUtils;
@@ -22,82 +22,19 @@
 	 * Only difference is for GET/POST -> action/handle method mapping.
 	 */
 	class SimpleRouter extends AbstractRouter {
-		/**
-		 * @var IRuntime
-		 */
-		protected $runtime;
-		/**
-		 * @var IRequestUrl
-		 */
-		protected $requestUrl;
-		/**
-		 * @var IHeaderList
-		 */
-		protected $headerList;
-		/**
-		 * @var IPostList
-		 */
-		protected $postList;
-		/**
-		 * @var IBody
-		 */
-		protected $body;
-		/**
-		 * @var ICrateFactory
-		 */
-		protected $crateFactory;
-		/**
-		 * @var IHttpRequest
-		 */
-		protected $httpRequest;
-		/**
-		 * @var IHttpResponse
-		 */
-		protected $httpResponse;
-		/**
-		 * @var IResponseManager
-		 */
-		protected $responseManager;
+		use LazyResponseManagerTrait;
+		use LazyBodyTrait;
+		use LazyRequestUrlTrait;
+		use LazyHeaderListTrait;
+		use LazyPostListTrait;
+		use LazyHttpRequestTrait;
+		use LazyHttpResponseTrait;
+		use LazyRuntimeTrait;
+		use LazyCrateFactoryTrait;
 
 		/**
-		 * @param IRuntime $runtime
+		 * @inheritdoc
 		 */
-		public function lazyRuntime(IRuntime $runtime) {
-			$this->runtime = $runtime;
-		}
-
-		public function lazyRequestUrl(IRequestUrl $requestUrl) {
-			$this->requestUrl = $requestUrl;
-		}
-
-		public function lazyHeaderList(IHeaderList $headerList) {
-			$this->headerList = $headerList;
-		}
-
-		public function lazyPostList(IPostList $postList) {
-			$this->postList = $postList;
-		}
-
-		public function lazyBody(IBody $body) {
-			$this->body = $body;
-		}
-
-		public function lazyCrateFactory(ICrateFactory $crateFactory) {
-			$this->crateFactory = $crateFactory;
-		}
-
-		public function lazyHttpRequest(IHttpRequest $httpRequest) {
-			$this->httpRequest = $httpRequest;
-		}
-
-		public function lazyHttpResponse(IHttpResponse $httpResponse) {
-			$this->httpResponse = $httpResponse;
-		}
-
-		public function lazyResponseManager(IResponseManager $responseManager) {
-			$this->responseManager = $responseManager;
-		}
-
 		public function createRequest() {
 			$this->use();
 			if ($this->runtime->isConsoleMode()) {
@@ -132,6 +69,9 @@
 			return new Request($mime, $class, $method, array_merge($parameterList, $crateList));
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 		}
 	}

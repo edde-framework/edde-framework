@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Schema;
 
-	use Edde\Api\Usable\IDeffered;
+	use Edde\Api\Deffered\IDeffered;
 
 	interface ISchema extends IDeffered {
 		/**

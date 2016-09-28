@@ -4,7 +4,7 @@
 	namespace Edde\Common\Html\Macro;
 
 	use Edde\Api\Html\IHtmlControl;
-	use Edde\Api\Html\ITemplateDirectory;
+	use Edde\Api\Html\LazyTemplateDirectoryTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\TemplateException;
@@ -14,10 +14,7 @@
 	 * Root control macro for template generation.
 	 */
 	class ControlMacro extends AbstractHtmlMacro {
-		/**
-		 * @var ITemplateDirectory
-		 */
-		protected $templateDirectory;
+		use LazyTemplateDirectoryTrait;
 
 		/**
 		 * Base 8 is just like base 10, if you are missing two fingers.
@@ -26,13 +23,7 @@
 			parent::__construct('control');
 		}
 
-		/**
-		 * @param ITemplateDirectory $templateDirectory
-		 */
-		public function lazyTemplateDirectory(ITemplateDirectory $templateDirectory) {
-			$this->templateDirectory = $templateDirectory;
-		}
-
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 */

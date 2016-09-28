@@ -3,8 +3,11 @@
 
 	namespace Edde\Api\Cache;
 
-	use Edde\Api\Usable\IDeffered;
+	use Edde\Api\Deffered\IDeffered;
 
+	/**
+	 * Cache storage implementation.
+	 */
 	interface ICacheStorage extends IDeffered {
 		/**
 		 * @param string $id
@@ -12,7 +15,7 @@
 		 *
 		 * @return mixed returns input $save
 		 */
-		public function save($id, $save);
+		public function save(string $id, $save);
 
 		/**
 		 * @param string $id

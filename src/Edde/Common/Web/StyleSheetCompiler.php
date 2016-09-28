@@ -4,7 +4,7 @@
 	namespace Edde\Common\Web;
 
 	use Edde\Api\File\IFile;
-	use Edde\Api\File\ITempDirectory;
+	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Resource\IResourceList;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Web\WebException;
@@ -15,6 +15,7 @@
 	use Edde\Common\Url\Url;
 
 	class StyleSheetCompiler extends AbstractCompiler implements IStyleSheetCompiler {
+		use LazyTempDirectoryTrait;
 		use DefferedTrait;
 		/**
 		 * ignored url schemes
@@ -24,17 +25,6 @@
 		static private $schemeList = [
 			'data',
 		];
-		/**
-		 * @var ITempDirectory
-		 */
-		protected $tempDirectory;
-
-		/**
-		 * @param ITempDirectory $tempDirectory
-		 */
-		public function lazyTempDirectory(ITempDirectory $tempDirectory) {
-			$this->tempDirectory = $tempDirectory;
-		}
 
 		public function compile(IResourceList $resourceList): IFile {
 			$this->use();

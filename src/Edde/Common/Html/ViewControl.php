@@ -3,11 +3,11 @@
 
 	namespace Edde\Common\Html;
 
-	use Edde\Api\Application\IResponseManager;
+	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlView;
-	use Edde\Api\Http\IHttpRequest;
-	use Edde\Api\Link\ILinkFactory;
+	use Edde\Api\Http\LazyHttpRequestTrait;
+	use Edde\Api\Link\LazyLinkFactoryTrait;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceList;
 	use Edde\Common\Application\Response;
@@ -19,19 +19,10 @@
 	 * Formal root control for displaying page with some shorthands.
 	 */
 	class ViewControl extends DocumentControl implements IHtmlView {
+		use LazyResponseManagerTrait;
+		use LazyHttpRequestTrait;
+		use LazyLinkFactoryTrait;
 		use TemplateTrait;
-		/**
-		 * @var IHttpRequest
-		 */
-		protected $httpRequest;
-		/**
-		 * @var IResponseManager
-		 */
-		protected $responseManager;
-		/**
-		 * @var ILinkFactory
-		 */
-		protected $linkFactory;
 		/**
 		 * @var IResourceList
 		 */
@@ -40,27 +31,6 @@
 		 * @var IResourceList
 		 */
 		protected $javaScriptList;
-
-		/**
-		 * @param IHttpRequest $httpRequest
-		 */
-		public function lazyHttpRequest(IHttpRequest $httpRequest) {
-			$this->httpRequest = $httpRequest;
-		}
-
-		/**
-		 * @param IResponseManager $responseManager
-		 */
-		public function lazyResponseManager(IResponseManager $responseManager) {
-			$this->responseManager = $responseManager;
-		}
-
-		/**
-		 * @param ILinkFactory $linkFactory
-		 */
-		public function lazyLinkFactory(ILinkFactory $linkFactory) {
-			$this->linkFactory = $linkFactory;
-		}
 
 		/**
 		 * @inheritdoc

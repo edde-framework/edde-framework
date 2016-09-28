@@ -3,9 +3,9 @@
 
 	namespace Edde\Api\Control;
 
+	use Edde\Api\Deffered\IDeffered;
 	use Edde\Api\Event\IEventBus;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Usable\IDeffered;
 
 	/**
 	 * Control is general element for transfering incoming request into the internal system service and for

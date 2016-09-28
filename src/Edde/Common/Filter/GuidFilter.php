@@ -4,21 +4,17 @@
 	namespace Edde\Common\Filter;
 
 	use Edde\Api\Container\ILazyInject;
-	use Edde\Api\Crypt\ICryptEngine;
+	use Edde\Api\Crypt\LazyCryptEngineTrait;
 
 	/**
 	 * Generate guid; if the value is set, it is used as a seed.
 	 */
 	class GuidFilter extends AbstractFilter implements ILazyInject {
+		use LazyCryptEngineTrait;
+
 		/**
-		 * @var ICryptEngine
+		 * @inheritdoc
 		 */
-		protected $cryptEngine;
-
-		public function lazyCryptEngine(ICryptEngine $cryptEngine) {
-			$this->cryptEngine = $cryptEngine;
-		}
-
 		public function filter($value, ...$parameterList) {
 			return $this->cryptEngine->guid($value);
 		}

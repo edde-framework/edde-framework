@@ -3,17 +3,14 @@
 
 	namespace Edde\Ext\Converter;
 
-	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Common\Converter\AbstractConverter;
 
 	/**
 	 * Basic http converter; it will convert http+text/plain and http+callback to output.
 	 */
 	class HttpConverter extends AbstractConverter {
-		/**
-		 * @var IHttpResponse
-		 */
-		protected $httpResponse;
+		use LazyHttpResponseTrait;
 
 		public function __construct() {
 			parent::__construct([
@@ -21,10 +18,6 @@
 				'string',
 				'callback',
 			]);
-		}
-
-		public function lazyHttpResponse(IHttpResponse $httpResponse) {
-			$this->httpResponse = $httpResponse;
 		}
 
 		public function convert($source, string $target) {

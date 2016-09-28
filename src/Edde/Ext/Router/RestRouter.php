@@ -3,38 +3,23 @@
 
 	namespace Edde\Ext\Router;
 
-	use Edde\Api\Application\IResponseManager;
+	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Crate\ICrateFactory;
-	use Edde\Api\Http\IHeaderList;
-	use Edde\Api\Http\IHttpRequest;
-	use Edde\Api\Http\IHttpResponse;
-	use Edde\Api\Http\IRequestUrl;
+	use Edde\Api\Http\LazyHeaderListTrait;
+	use Edde\Api\Http\LazyHttpRequestTrait;
+	use Edde\Api\Http\LazyHttpResponseTrait;
+	use Edde\Api\Http\LazyRequestUrlTrait;
 	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Api\Rest\IService;
 	use Edde\Common\Application\Request;
 	use Edde\Common\Router\AbstractRouter;
 
 	class RestRouter extends AbstractRouter implements ILinkGenerator {
-		/**
-		 * @var IRequestUrl
-		 */
-		protected $requestUrl;
-		/**
-		 * @var IHeaderList
-		 */
-		protected $headerList;
-		/**
-		 * @var IHttpRequest
-		 */
-		protected $httpRequest;
-		/**
-		 * @var IHttpResponse
-		 */
-		protected $httpResponse;
-		/**
-		 * @var IResponseManager
-		 */
-		protected $responseManager;
+		use LazyResponseManagerTrait;
+		use LazyRequestUrlTrait;
+		use LazyHeaderListTrait;
+		use LazyHttpRequestTrait;
+		use LazyHttpResponseTrait;
 		/**
 		 * @var ICrateFactory
 		 */
@@ -43,26 +28,6 @@
 		 * @var IService[]
 		 */
 		protected $serviceList = [];
-
-		public function lazyRequestUrl(IRequestUrl $requestUrl) {
-			$this->requestUrl = $requestUrl;
-		}
-
-		public function lazyHeaderList(IHeaderList $headerList) {
-			$this->headerList = $headerList;
-		}
-
-		public function lazyHttpRequest(IHttpRequest $httpRequest) {
-			$this->httpRequest = $httpRequest;
-		}
-
-		public function lazyHttpResponse(IHttpResponse $httpResponse) {
-			$this->httpResponse = $httpResponse;
-		}
-
-		public function lazyResponseManager(IResponseManager $responseManager) {
-			$this->responseManager = $responseManager;
-		}
 
 		public function registerServiceList(array $serviceList) {
 			foreach ($serviceList as $service) {

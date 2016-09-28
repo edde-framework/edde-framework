@@ -3,15 +3,19 @@
 
 	namespace Edde\Common\Rest;
 
-	use Edde\Api\Application\IResponseManager;
-	use Edde\Api\Http\IBody;
-	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Application\LazyResponseManagerTrait;
+	use Edde\Api\Http\LazyBodyTrait;
+	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Api\Rest\IService;
 	use Edde\Common\Application\Response;
 	use Edde\Common\Control\AbstractControl;
 	use Edde\Common\Strings\StringUtils;
 
 	abstract class AbstractService extends AbstractControl implements IService {
+		use LazyResponseManagerTrait;
+		use LazyBodyTrait;
+		use LazyHttpResponseTrait;
+
 		const OK_CREATED = 201;
 
 		const ERROR_NOT_FOUND = 404;
@@ -24,30 +28,6 @@
 			'PATCH',
 			'DELETE',
 		];
-		/**
-		 * @var IBody
-		 */
-		protected $body;
-		/**
-		 * @var IHttpResponse
-		 */
-		protected $httpResponse;
-		/**
-		 * @var IResponseManager
-		 */
-		protected $responseManager;
-
-		public function lazyBody(IBody $body) {
-			$this->body = $body;
-		}
-
-		public function lazyHttpResponse(IHttpResponse $httpResponse) {
-			$this->httpResponse = $httpResponse;
-		}
-
-		public function lazyResponseManager(IResponseManager $responseManager) {
-			$this->responseManager = $responseManager;
-		}
 
 		public function execute(string $method, array $parameterList) {
 			$methodList = $this->getMethodList();

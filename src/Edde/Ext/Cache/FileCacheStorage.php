@@ -22,7 +22,7 @@
 			$this->namespace = $namespace;
 		}
 
-		public function save($id, $save) {
+		public function save(string $id, $save) {
 			$this->use();
 			$file = $this->file($id);
 			if ($save === null) {

@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Html\Macro;
 
-	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
@@ -12,10 +12,7 @@
 	 * Load macro adds support for loading templates on demand.
 	 */
 	class LoadMacro extends AbstractHtmlMacro {
-		/**
-		 * @var IRootDirectory
-		 */
-		protected $rootDirectory;
+		use LazyRootDirectoryTrait;
 
 		/**
 		 * An artist, a lawyer, and a computer scientist are discussing the merits of a extra-marital affair over coffee one afternoon.
@@ -28,13 +25,7 @@
 			parent::__construct('m:load');
 		}
 
-		/**
-		 * @param IRootDirectory $rootDirectory
-		 */
-		public function lazyRootDirectory(IRootDirectory $rootDirectory) {
-			$this->rootDirectory = $rootDirectory;
-		}
-
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws MacroException

@@ -5,11 +5,11 @@
 
 	use Edde\Api\Application\ApplicationException;
 	use Edde\Api\Application\IErrorControl;
-	use Edde\Api\Application\IRequest;
-	use Edde\Api\Application\IResponseManager;
-	use Edde\Api\Container\IContainer;
+	use Edde\Api\Application\LazyRequestTrait;
+	use Edde\Api\Application\LazyResponseManagerTrait;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Control\IControl;
-	use Edde\Api\Converter\IConverterManager;
+	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Common\Application\Event\ErrorEvent;
 	use Edde\Common\Application\Event\FinishEvent;
 	use Edde\Common\Application\Event\StartEvent;
@@ -18,54 +18,14 @@
 	 * Default application implementation.
 	 */
 	class Application extends AbstractApplication {
-		/**
-		 * @var IRequest
-		 */
-		protected $request;
-		/**
-		 * @var IResponseManager
-		 */
-		protected $responseManager;
-		/**
-		 * @var IConverterManager
-		 */
-		protected $converterManager;
-		/**
-		 * @var IContainer
-		 */
-		protected $container;
+		use LazyContainerTrait;
+		use LazyConverterManagerTrait;
+		use LazyResponseManagerTrait;
+		use LazyRequestTrait;
 		/**
 		 * @var IErrorControl
 		 */
 		protected $errorControl;
-
-		/**
-		 * @param IRequest $request
-		 */
-		public function lazyRoute(IRequest $request) {
-			$this->request = $request;
-		}
-
-		/**
-		 * @param IResponseManager $responseManager
-		 */
-		public function lazyResponseManager(IResponseManager $responseManager) {
-			$this->responseManager = $responseManager;
-		}
-
-		/**
-		 * @param IConverterManager $converterManager
-		 */
-		public function lazyConverterManager(IConverterManager $converterManager) {
-			$this->converterManager = $converterManager;
-		}
-
-		/**
-		 * @param IContainer $container
-		 */
-		public function lazyContainer(IContainer $container) {
-			$this->container = $container;
-		}
 
 		/**
 		 * @param IErrorControl $errorControl

@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Translator;
 
-	use Edde\Api\Usable\IDeffered;
+	use Edde\Api\Deffered\IDeffered;
 
 	interface ITranslator extends IDeffered {
 		/**

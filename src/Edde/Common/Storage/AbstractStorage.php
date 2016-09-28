@@ -4,9 +4,9 @@
 	namespace Edde\Common\Storage;
 
 	use Edde\Api\Crate\ICrate;
-	use Edde\Api\Crate\ICrateFactory;
+	use Edde\Api\Crate\LazyCrateFactoryTrait;
 	use Edde\Api\Query\IQuery;
-	use Edde\Api\Schema\ISchemaManager;
+	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Api\Schema\SchemaException;
 	use Edde\Api\Storage\EmptyResultException;
 	use Edde\Api\Storage\ICollection;
@@ -18,28 +18,8 @@
 	 * Base for all storage implementations.
 	 */
 	abstract class AbstractStorage extends AbstractDeffered implements IStorage {
-		/**
-		 * @var ISchemaManager
-		 */
-		protected $schemaManager;
-		/**
-		 * @var ICrateFactory
-		 */
-		protected $crateFactory;
-
-		/**
-		 * @param ISchemaManager $schemaManager
-		 */
-		public function lazySchemaManager(ISchemaManager $schemaManager) {
-			$this->schemaManager = $schemaManager;
-		}
-
-		/**
-		 * @param ICrateFactory $crateFactory
-		 */
-		public function lazyCrateFactory(ICrateFactory $crateFactory) {
-			$this->crateFactory = $crateFactory;
-		}
+		use LazySchemaManagerTrait;
+		use LazyCrateFactoryTrait;
 
 		/**
 		 * @inheritdoc

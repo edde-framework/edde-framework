@@ -21,6 +21,7 @@
 	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Database\IDriver;
+	use Edde\Api\Event\IEventBus;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Html\ITemplateDirectory;
@@ -71,6 +72,7 @@
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\EddeDirectory;
+	use Edde\Common\Event\EventBus;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\Converter\HtmlConverter;
 	use Edde\Common\Html\TemplateDirectory;
@@ -101,7 +103,6 @@
 	use Edde\Ext\Converter\RedirectConverter;
 	use Edde\Ext\Converter\XmlConverter;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
-	use Edde\Ext\Router\RestRouter;
 	use Edde\Ext\Router\SimpleRouter;
 	use Edde\Ext\Template\DefaultMacroSet;
 	use Edde\Framework;
@@ -219,8 +220,7 @@
 					IIdentity::class => function (IIdentityManager $identityManager) {
 						return $identityManager->identity();
 					},
-
-					RestRouter::class,
+					IEventBus::class => EventBus::class,
 				], $factoryList))
 				->deffered(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
 					$routerService->registerRouter($container->create(SimpleRouter::class));
