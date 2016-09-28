@@ -42,7 +42,7 @@
 		public function use ();
 
 		/**
-		 * is usable already used?
+		 * has been deffered already used (prepared)?
 		 *
 		 * @return bool
 		 */

@@ -8,7 +8,7 @@
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\ICrateFactory;
-	use Edde\Api\Crate\ICrateGenerator;
+	use Edde\Api\Crate\LazyCrateGeneratorTrait;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Api\Schema\SchemaException;
 	use Edde\Common\Deffered\AbstractDeffered;
@@ -19,17 +19,7 @@
 	class CrateFactory extends AbstractDeffered implements ICrateFactory {
 		use LazySchemaManagerTrait;
 		use LazyContainerTrait;
-		/**
-		 * @var ICrateGenerator
-		 */
-		protected $crateGenerator;
-
-		/**
-		 * @param ICrateGenerator $crateGenerator
-		 */
-		public function __construct(ICrateGenerator $crateGenerator) {
-			$this->crateGenerator = $crateGenerator;
-		}
+		use LazyCrateGeneratorTrait;
 
 		/**
 		 * @inheritdoc
