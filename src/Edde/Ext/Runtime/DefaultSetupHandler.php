@@ -19,6 +19,7 @@
 	use Edde\Api\Crate\ICrateDirectory;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crate\ICrateGenerator;
+	use Edde\Api\Crate\ICrateLoader;
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\Event\IEventBus;
@@ -84,6 +85,7 @@
 	use Edde\Common\Link\LinkFactory;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Router\RouterService;
+	use Edde\Common\Runtime\Event\BootstrapEvent;
 	use Edde\Common\Runtime\SetupHandler;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
@@ -234,6 +236,10 @@
 					$converterManager->registerConverter($container->create(HtmlConverter::class));
 					$converterManager->registerConverter($container->create(HttpConverter::class));
 					$converterManager->registerConverter($container->create(RedirectConverter::class));
+				})
+				->listen(function (BootstrapEvent $bootstrapEvent) {
+					$container = $bootstrapEvent->getContainer();
+					spl_autoload_register($container->create(ICrateLoader::class));
 				});
 		}
 	}

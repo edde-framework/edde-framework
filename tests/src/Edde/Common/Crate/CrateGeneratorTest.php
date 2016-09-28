@@ -6,8 +6,8 @@
 	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Crate\ICrateDirectory;
 	use Edde\Api\Crate\ICrateGenerator;
+	use Edde\Api\Crate\ICrateLoader;
 	use Edde\Api\File\ITempDirectory;
-	use Edde\Api\Resource\IResource;
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Common\Cache\DummyCacheFactory;
@@ -19,8 +19,11 @@
 	use Foo\Bar\Row2Schema;
 	use phpunit\framework\TestCase;
 
-	require_once(__DIR__ . '/assets/schema.php');
+	require_once __DIR__ . '/assets/schema.php';
 
+	/**
+	 * Crate generator related tests.
+	 */
 	class CrateGeneratorTest extends TestCase {
 		/**
 		 * @var ISchemaManager
@@ -35,18 +38,14 @@
 		 */
 		protected $crateDirectory;
 
-		public function testSimpleCrate() {
+		public function testCommon() {
 			foreach ($this->schemaManager->getSchemaList() as $schema) {
-				$crateList = $this->crateGenerator->compile($schema);
-				foreach ($crateList as $name => $source) {
-					(function (IResource $resource) {
-						require_once($resource->getUrl());
-					})($this->crateDirectory->save(sha1($name) . '.php', $source));
-					self::assertTrue(class_exists($name));
-					$reflectionClass = new \ReflectionClass($name);
-					foreach ($schema->getMeta('implements', []) as $meta) {
-						self::assertContains($meta, $reflectionClass->getInterfaceNames());
-					}
+				$name = $schema->getSchemaName();
+				self::assertTrue(class_exists($name));
+				$reflectionClass = new \ReflectionClass($name);
+				/** @noinspection ForeachSourceInspection */
+				foreach ($schema->getMeta('implements', []) as $meta) {
+					self::assertContains($meta, $reflectionClass->getInterfaceNames());
 				}
 			}
 		}
@@ -57,17 +56,19 @@
 				ISchemaFactory::class => SchemaFactory::class,
 				ICrateGenerator::class => CrateGenerator::class,
 				ICrateDirectory::class => function () {
-					return $this->crateDirectory = new CrateDirectory(__DIR__ . '/temp');
+					return new CrateDirectory(__DIR__ . '/temp');
 				},
 				ICacheFactory::class => new DummyCacheFactory(),
+				ICrateLoader::class => CrateLoader::class,
 			]);
-
 			$this->schemaManager = $container->create(ISchemaManager::class);
 			$this->schemaManager->addSchema($header = new Header2Schema());
 			$this->schemaManager->addSchema($item = new Item2Schema());
 			$this->schemaManager->addSchema(new Row2Schema($header, $item));
 			$this->crateGenerator = $container->create(ICrateGenerator::class);
+			$this->crateDirectory = $container->create(ICrateDirectory::class);
 			$this->crateDirectory->purge();
+			spl_autoload_register($container->create(ICrateLoader::class));
 		}
 
 		protected function tearDown() {

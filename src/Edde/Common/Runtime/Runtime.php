@@ -7,7 +7,7 @@
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Api\Runtime\ISetupHandler;
 	use Edde\Common\Deffered\AbstractDeffered;
-	use Edde\Common\Runtime\Event\Bootstrap;
+	use Edde\Common\Runtime\Event\BootstrapEvent;
 	use Edde\Common\Runtime\Event\ExceptionEvent;
 	use Edde\Common\Runtime\Event\ShutdownEvent;
 
@@ -56,7 +56,7 @@
 		 */
 		public function run(callable $callback) {
 			$this->use();
-			$this->setupHandler->event(new Bootstrap($this->container));
+			$this->setupHandler->event(new BootstrapEvent($this->container));
 			try {
 				$result = $this->container->call($callback);
 				$this->setupHandler->event(new ShutdownEvent($this->container));

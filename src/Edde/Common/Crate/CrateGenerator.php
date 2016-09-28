@@ -4,11 +4,10 @@
 	namespace Edde\Common\Crate;
 
 	use Edde\Api\Cache\ICache;
-	use Edde\Api\Cache\ICacheFactory;
-	use Edde\Api\Container\IFactoryManager;
+	use Edde\Api\Cache\LazyCacheFactoryTrait;
 	use Edde\Api\Crate\ICollection;
-	use Edde\Api\Crate\ICrateDirectory;
 	use Edde\Api\Crate\ICrateGenerator;
+	use Edde\Api\Crate\LazyCrateDirectoryTrait;
 	use Edde\Api\File\FileException;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Schema\ISchema;
@@ -25,18 +24,8 @@
 	 */
 	class CrateGenerator extends AbstractDeffered implements ICrateGenerator {
 		use LazySchemaManagerTrait;
-		/**
-		 * @var ICrateDirectory
-		 */
-		protected $crateDirectory;
-		/**
-		 * @var ICacheFactory
-		 */
-		protected $cacheFactory;
-		/**
-		 * @var IFactoryManager
-		 */
-		protected $factoryManager;
+		use LazyCacheFactoryTrait;
+		use LazyCrateDirectoryTrait;
 		/**
 		 * @var ICache
 		 */
@@ -45,17 +34,6 @@
 		 * @var string
 		 */
 		protected $parent;
-
-		/**
-		 * @param ICrateDirectory $crateDirectory
-		 * @param ICacheFactory $cacheFactory
-		 * @param IFactoryManager $factoryManager
-		 */
-		public function __construct(ICrateDirectory $crateDirectory, ICacheFactory $cacheFactory, IFactoryManager $factoryManager) {
-			$this->crateDirectory = $crateDirectory;
-			$this->cacheFactory = $cacheFactory;
-			$this->factoryManager = $factoryManager;
-		}
 
 		/**
 		 * @inheritdoc
@@ -81,7 +59,6 @@
 	Edde\\Common\\Autoloader::register(null, __DIR__, false);	
 ");
 			$this->include();
-			$this->factoryManager->registerFactoryList($crateList);
 			return $this;
 		}
 
