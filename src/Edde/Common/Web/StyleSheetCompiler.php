@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Web;
 
+	use Edde\Api\File\FileException;
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Resource\IResourceList;
@@ -10,9 +11,13 @@
 	use Edde\Api\Web\WebException;
 	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
+	use Edde\Common\Strings\StringException;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Url\Url;
 
+	/**
+	 * Compiler for stylesheets.
+	 */
 	class StyleSheetCompiler extends AbstractCompiler implements IStyleSheetCompiler {
 		use LazyTempDirectoryTrait;
 		/**
@@ -24,6 +29,12 @@
 			'data',
 		];
 
+		/**
+		 * @inheritdoc
+		 * @throws WebException
+		 * @throws StringException
+		 * @throws FileException
+		 */
 		public function compile(IResourceList $resourceList): IFile {
 			$this->use();
 			$content = [];
@@ -58,7 +69,7 @@
 					}
 					$content[] = $current;
 				}
-				$this->cache->save($cacheId, $file = $this->assetStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.css', implode("\n", $content))));
+				$this->cache->save($cacheId, $file = $this->assetStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.css', $this->filter(implode("\n", $content)))));
 			}
 			return $file;
 		}

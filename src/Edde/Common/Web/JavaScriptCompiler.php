@@ -14,6 +14,9 @@
 	class JavaScriptCompiler extends AbstractCompiler implements IJavaScriptCompiler {
 		use LazyTempDirectoryTrait;
 
+		/**
+		 * @inheritdoc
+		 */
 		public function compile(IResourceList $resourceList): IFile {
 			$this->use();
 			$content = [];
@@ -21,7 +24,7 @@
 				foreach ($resourceList as $resource) {
 					$content[] = $resource->get();
 				}
-				$this->cache->save($cacheId, $file = $this->assetStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.js', implode(";\n", $content))));
+				$this->cache->save($cacheId, $file = $this->assetStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.js', $this->filter(implode(";\n", $content)))));
 			}
 			return $file;
 		}
