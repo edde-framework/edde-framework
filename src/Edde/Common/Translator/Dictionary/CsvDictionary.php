@@ -28,7 +28,6 @@
 		}
 
 		protected function prepare() {
-			$this->cache();
 			if (($this->translationList = $this->cache->load($cacheId = implode(',', array_keys($this->fileList)))) === null) {
 				foreach ($this->fileList as $file) {
 					$file->open('r');

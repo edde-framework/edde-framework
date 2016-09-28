@@ -6,14 +6,16 @@
 	use Edde\Api\Event\IEvent;
 	use Edde\Api\Event\IEventBus;
 	use Edde\Api\Event\IHandler;
-	use Edde\Common\Deffered\AbstractDeffered;
-	use Edde\Common\Deffered\DefferedTrait;
+	use Edde\Common\AbstractObject;
 
 	/**
 	 * Default simple implementation of an EventBus.
 	 */
-	class EventBus extends AbstractDeffered implements IEventBus {
-		use DefferedTrait;
+	class EventBus extends AbstractObject implements IEventBus {
+		/**
+		 * @var bool
+		 */
+		protected $used = false;
 		/**
 		 * @var callable[][]
 		 */
@@ -27,7 +29,7 @@
 		 * @inheritdoc
 		 */
 		public function handler(IHandler $handler): IEventBus {
-			if ($this->isUsed()) {
+			if ($this->used) {
 				$this->listen($handler);
 				return $this;
 			}
@@ -60,7 +62,7 @@
 		 * @inheritdoc
 		 */
 		public function event(IEvent $event): IEventBus {
-			$this->use();
+			$this->prepare();
 			if (isset($this->listenList[$name = get_class($event)]) === false) {
 				return $this;
 			}
@@ -70,10 +72,11 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
 		protected function prepare() {
+			if ($this->used) {
+				return;
+			}
+			$this->used = true;
 			foreach ($this->handlerList as $handler) {
 				$this->listen($handler);
 			}

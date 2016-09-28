@@ -41,11 +41,4 @@
 			$compiler->registerHelperSet($this->helperSet);
 			return $this->cache->save($cacheId, $compiler->template($importList));
 		}
-
-		/**
-		 * @inheritdoc
-		 */
-		protected function prepare() {
-			$this->cache();
-		}
 	}
