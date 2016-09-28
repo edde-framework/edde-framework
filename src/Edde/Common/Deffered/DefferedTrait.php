@@ -65,8 +65,7 @@
 
 		/**
 		 * prepare this class for the first usage
-		 *
-		 * @return mixed
 		 */
-		abstract protected function prepare();
+		protected function prepare() {
+		}
 	}

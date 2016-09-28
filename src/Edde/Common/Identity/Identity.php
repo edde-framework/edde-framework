@@ -77,7 +77,4 @@
 			$this->authenticated = $authenticated;
 			return $this;
 		}
-
-		protected function prepare() {
-		}
 	}

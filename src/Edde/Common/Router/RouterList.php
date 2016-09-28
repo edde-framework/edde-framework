@@ -35,10 +35,4 @@
 			}
 			return null;
 		}
-
-		/**
-		 * @inheritdoc
-		 */
-		protected function prepare() {
-		}
 	}

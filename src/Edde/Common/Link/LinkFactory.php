@@ -40,7 +40,4 @@
 			}
 			throw new LinkException(sprintf('Cannot generate link from the given input%s.', (is_string($generate) ? ' [' . $generate . ']' : '')));
 		}
-
-		protected function prepare() {
-		}
 	}

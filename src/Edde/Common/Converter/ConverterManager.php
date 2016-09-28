@@ -31,7 +31,4 @@
 			}
 			return $this->converterList[$mime]->convert($source, $target);
 		}
-
-		protected function prepare() {
-		}
 	}

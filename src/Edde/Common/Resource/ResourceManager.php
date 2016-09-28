@@ -34,7 +34,4 @@
 		public function handle(string $url, string $mime = null, INode $root = null): INode {
 			return $this->resource($resource = new Resource(Url::create($url)), $mime, $root);
 		}
-
-		protected function prepare() {
-		}
 	}

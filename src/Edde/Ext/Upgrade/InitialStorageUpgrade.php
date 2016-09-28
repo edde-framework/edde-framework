@@ -29,10 +29,4 @@
 				}
 			}
 		}
-
-		/**
-		 * @inheritdoc
-		 */
-		protected function prepare() {
-		}
 	}

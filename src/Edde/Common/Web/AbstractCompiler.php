@@ -7,11 +7,13 @@
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Web\ICompiler;
 	use Edde\Common\Cache\CacheTrait;
+	use Edde\Common\Deffered\DefferedTrait;
 	use Edde\Common\Resource\ResourceList;
 
 	abstract class AbstractCompiler extends ResourceList implements ICompiler, ILazyInject {
 		use LazyAssetStorageTrait;
 		use CacheTrait;
+		use DefferedTrait;
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**

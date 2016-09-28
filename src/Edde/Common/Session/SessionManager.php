@@ -102,10 +102,4 @@
 			session_write_close();
 			return $this;
 		}
-
-		/**
-		 * @inheritdoc
-		 */
-		protected function prepare() {
-		}
 	}

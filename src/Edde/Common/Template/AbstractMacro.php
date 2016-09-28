@@ -161,7 +161,4 @@
 			unset($v);
 			return $attributeList;
 		}
-
-		protected function prepare() {
-		}
 	}

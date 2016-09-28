@@ -120,10 +120,4 @@
 			}
 			return $last;
 		}
-
-		/**
-		 * @inheritdoc
-		 */
-		protected function prepare() {
-		}
 	}

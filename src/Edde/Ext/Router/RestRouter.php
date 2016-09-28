@@ -61,7 +61,4 @@
 			}
 			return $this->serviceList[$generate]->link($generate, ...$parameterList);
 		}
-
-		protected function prepare() {
-		}
 	}

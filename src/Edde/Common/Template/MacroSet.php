@@ -36,10 +36,4 @@
 			$this->macroList[$macro->getName()] = $macro;
 			return $this;
 		}
-
-		/**
-		 * @inheritdoc
-		 */
-		protected function prepare() {
-		}
 	}

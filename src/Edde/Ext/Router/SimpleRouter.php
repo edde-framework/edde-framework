@@ -68,10 +68,4 @@
 			$this->responseManager->setMime($mime = ('http+' . $mime));
 			return new Request($mime, $class, $method, array_merge($parameterList, $crateList));
 		}
-
-		/**
-		 * @inheritdoc
-		 */
-		protected function prepare() {
-		}
 	}
