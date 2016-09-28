@@ -50,7 +50,7 @@
 						->getPath();
 					$resourcePath = dirname($resourcePath);
 					foreach (empty($urlList) ? [] : array_unique($urlList['url']) as $item) {
-						$url = Url::create($item = str_replace([
+						$url = Url::create($file = str_replace([
 							'"',
 							"'",
 						], null, $item));
@@ -61,7 +61,7 @@
 							$current = str_replace($item, '"' . $pathList[$path] . '"', $current);
 							continue;
 						}
-						if (file_exists($file = $item) === false && ($file = FileUtils::realpath($resourcePath . '/' . $path)) === false) {
+						if (file_exists($file) === false && ($file = FileUtils::realpath($resourcePath . '/' . $path)) === false) {
 							throw new WebException(sprintf('Cannot locate css [%s] resource [%s] on the filesystem.', $source, $urlList));
 						}
 						$current = str_replace($item, '"' . ($pathList[$path] = $this->assetStorage->store(new File($file))
