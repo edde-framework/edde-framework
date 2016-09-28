@@ -9,13 +9,13 @@
 	use Edde\Api\Deffered\IDeffered;
 	use Edde\Api\Runtime\ISetupHandler;
 	use Edde\Api\Runtime\RuntimeException;
-	use Edde\Common\AbstractObject;
 	use Edde\Common\Container\Factory\FactoryFactory;
+	use Edde\Common\Event\EventBus;
 
 	/**
 	 * Common class for all setup handlers.
 	 */
-	abstract class AbstractSetupHandler extends AbstractObject implements ISetupHandler {
+	abstract class AbstractSetupHandler extends EventBus implements ISetupHandler {
 		/**
 		 * @var IFactory[]
 		 */

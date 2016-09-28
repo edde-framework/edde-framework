@@ -5,11 +5,12 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
+	use Edde\Api\Event\IEventBus;
 
 	/**
 	 * Standard interface for basic runtime setup.
 	 */
-	interface ISetupHandler {
+	interface ISetupHandler extends IEventBus {
 		/**
 		 * @param IFactory[] $fatoryList
 		 *
