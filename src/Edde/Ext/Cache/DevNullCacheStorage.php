@@ -22,7 +22,4 @@
 			$this->use();
 			return $this;
 		}
-
-		protected function prepare() {
-		}
 	}

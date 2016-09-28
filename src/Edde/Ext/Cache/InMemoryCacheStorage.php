@@ -29,7 +29,4 @@
 			$this->storage = [];
 			return $this;
 		}
-
-		protected function prepare() {
-		}
 	}

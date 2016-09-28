@@ -35,10 +35,4 @@
 			/** @noinspection VariableFunctionsUsageInspection */
 			call_user_func($this->callback);
 		}
-
-		/**
-		 * @inheritdoc
-		 */
-		protected function prepare() {
-		}
 	}

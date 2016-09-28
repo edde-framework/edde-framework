@@ -8,7 +8,6 @@
 	use Edde\Api\Resource\IResourceList;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Web\WebException;
-	use Edde\Common\Deffered\DefferedTrait;
 	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\Strings\StringUtils;
@@ -16,7 +15,6 @@
 
 	class StyleSheetCompiler extends AbstractCompiler implements IStyleSheetCompiler {
 		use LazyTempDirectoryTrait;
-		use DefferedTrait;
 		/**
 		 * ignored url schemes
 		 *

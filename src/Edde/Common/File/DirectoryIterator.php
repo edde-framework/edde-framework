@@ -26,7 +26,4 @@
 				}
 			}
 		}
-
-		protected function prepare() {
-		}
 	}

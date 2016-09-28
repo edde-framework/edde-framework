@@ -7,14 +7,12 @@
 	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Resource\IResourceList;
 	use Edde\Api\Web\IJavaScriptCompiler;
-	use Edde\Common\Deffered\DefferedTrait;
 
 	/**
 	 * JavaScript "minifier" resource compiler.
 	 */
 	class JavaScriptCompiler extends AbstractCompiler implements IJavaScriptCompiler {
 		use LazyTempDirectoryTrait;
-		use DefferedTrait;
 
 		public function compile(IResourceList $resourceList): IFile {
 			$this->use();

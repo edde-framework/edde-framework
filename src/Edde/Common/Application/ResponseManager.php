@@ -42,7 +42,4 @@
 			$this->use();
 			$this->converterManager->convert($this->response->getResponse(), $this->response->getType(), $this->mime);
 		}
-
-		protected function prepare() {
-		}
 	}

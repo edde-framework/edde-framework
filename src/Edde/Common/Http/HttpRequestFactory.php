@@ -64,10 +64,4 @@
 			}
 			return (new HeaderList())->put($headers);
 		}
-
-		/**
-		 * @inheritdoc
-		 */
-		protected function prepare() {
-		}
 	}

@@ -53,10 +53,4 @@
 				return $this->errorControl->exception($e);
 			}
 		}
-
-		/**
-		 * @inheritdoc
-		 */
-		protected function prepare() {
-		}
 	}

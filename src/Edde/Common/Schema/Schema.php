@@ -186,7 +186,4 @@
 			$this->use();
 			return isset($this->metaList[$name]) || array_key_exists($name, $this->metaList);
 		}
-
-		protected function prepare() {
-		}
 	}
