@@ -8,7 +8,7 @@
 	/**
 	 * Container is built, this is called before run method of runtime.
 	 */
-	class Bootstrap extends RuntimeEvent {
+	class BootstrapEvent extends RuntimeEvent {
 		/**
 		 * @var IContainer
 		 */
