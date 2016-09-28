@@ -24,6 +24,7 @@
 			$this->control = $control;
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 */
@@ -41,6 +42,12 @@
 			$this->write($compiler, '$stack->pop();', 5);
 		}
 
+		/**
+		 * when control is "created", this method is called
+		 *
+		 * @param INode $macro
+		 * @param ICompiler $compiler
+		 */
 		protected function onControl(INode $macro, ICompiler $compiler) {
 		}
 	}
