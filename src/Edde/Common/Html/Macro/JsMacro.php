@@ -5,7 +5,7 @@
 
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IFile;
-	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
@@ -16,10 +16,7 @@
 	 * JavaScript support.
 	 */
 	class JsMacro extends AbstractHtmlMacro {
-		/**
-		 * @var IRootDirectory
-		 */
-		protected $rootDirectory;
+		use LazyRootDirectoryTrait;
 		/**
 		 * @var IAssetsDirectory
 		 */
@@ -36,13 +33,6 @@
 		 */
 		public function __construct() {
 			parent::__construct('js');
-		}
-
-		/**
-		 * @param IRootDirectory $rootDirectory
-		 */
-		public function lazyRootDirectory(IRootDirectory $rootDirectory) {
-			$this->rootDirectory = $rootDirectory;
 		}
 
 		/**
@@ -91,6 +81,6 @@
 		 * @throws FileException
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
-			$this->write($compiler, sprintf('$this->javaScriptList->addFile(%s);', var_export($this->attribute($macro, $compiler, 'src', false), true)), 5);
+			$this->write($compiler, sprintf('$this->javaScriptCompiler->addFile(%s);', var_export($this->attribute($macro, $compiler, 'src', false), true)), 5);
 		}
 	}

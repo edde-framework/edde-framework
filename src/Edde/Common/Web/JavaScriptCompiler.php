@@ -4,7 +4,7 @@
 	namespace Edde\Common\Web;
 
 	use Edde\Api\File\IFile;
-	use Edde\Api\File\ITempDirectory;
+	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Resource\IResourceList;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Common\Deffered\DefferedTrait;
@@ -13,18 +13,8 @@
 	 * JavaScript "minifier" resource compiler.
 	 */
 	class JavaScriptCompiler extends AbstractCompiler implements IJavaScriptCompiler {
+		use LazyTempDirectoryTrait;
 		use DefferedTrait;
-		/**
-		 * @var ITempDirectory
-		 */
-		protected $tempDirectory;
-
-		/**
-		 * @param ITempDirectory $tempDirectory
-		 */
-		public function lazyTempDirectory(ITempDirectory $tempDirectory) {
-			$this->tempDirectory = $tempDirectory;
-		}
 
 		public function compile(IResourceList $resourceList): IFile {
 			$this->use();

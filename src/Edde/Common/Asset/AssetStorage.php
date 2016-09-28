@@ -3,12 +3,12 @@
 
 	namespace Edde\Common\Asset;
 
-	use Edde\Api\Asset\IAssetDirectory;
 	use Edde\Api\Asset\IAssetStorage;
-	use Edde\Api\Asset\IStorageDirectory;
+	use Edde\Api\Asset\LazyAssetDirectoryTrait;
+	use Edde\Api\Asset\LazyStorageDirectoryTrait;
 	use Edde\Api\File\DirectoryException;
 	use Edde\Api\File\FileException;
-	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\ResourceException;
 	use Edde\Common\Deffered\AbstractDeffered;
@@ -19,43 +19,9 @@
 	 * Simple and uniform way how to handle file storing.
 	 */
 	class AssetStorage extends AbstractDeffered implements IAssetStorage {
-		/**
-		 * application root directory; it is used for relative path computation
-		 *
-		 * @var IRootDirectory
-		 */
-		protected $rootDirectory;
-		/**
-		 * storage dir; path to store incoming files
-		 *
-		 * @var IAssetDirectory
-		 */
-		protected $assetDirectory;
-		/**
-		 * @var IStorageDirectory
-		 */
-		protected $storageDirectory;
-
-		/**
-		 * @param IRootDirectory $rootDirectory
-		 */
-		public function lazyRootDirectory(IRootDirectory $rootDirectory) {
-			$this->rootDirectory = $rootDirectory;
-		}
-
-		/**
-		 * @param IAssetDirectory $assetDirectory
-		 */
-		public function lazyAssetDirectory(IAssetDirectory $assetDirectory) {
-			$this->assetDirectory = $assetDirectory;
-		}
-
-		/**
-		 * @param IStorageDirectory $storageDirectory
-		 */
-		public function lazyStorageDirectory(IStorageDirectory $storageDirectory) {
-			$this->storageDirectory = $storageDirectory;
-		}
+		use LazyRootDirectoryTrait;
+		use LazyAssetDirectoryTrait;
+		use LazyStorageDirectoryTrait;
 
 		/**
 		 * @inheritdoc

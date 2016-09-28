@@ -5,7 +5,7 @@
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\File\FileException;
-	use Edde\Api\File\ITempDirectory;
+	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Web\LazyJavaScriptCompilerTrait;
 	use Edde\Api\Web\LazyStyleSheetCompilerTrait;
@@ -19,14 +19,7 @@
 		use LazyContainerTrait;
 		use LazyJavaScriptCompilerTrait;
 		use LazyStyleSheetCompilerTrait;
-		/**
-		 * @var ITempDirectory
-		 */
-		protected $tempDirectory;
-
-		public function lazyTempDirectory(ITempDirectory $tempDirectory) {
-			$this->tempDirectory = $tempDirectory;
-		}
+		use LazyTempDirectoryTrait;
 
 		public function setTag(string $tag, bool $pair = true): IHtmlControl {
 			$this->use();

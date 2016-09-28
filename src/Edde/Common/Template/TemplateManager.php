@@ -6,9 +6,9 @@
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\File\FileException;
 	use Edde\Api\Template\ICompiler;
-	use Edde\Api\Template\IHelperSet;
-	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Template\LazyHelperSetTrait;
+	use Edde\Api\Template\LazyMacroSetTrait;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\File\File;
@@ -17,30 +17,10 @@
 	 * Default implementation of a template manager.
 	 */
 	class TemplateManager extends AbstractDeffered implements ITemplateManager {
-		use CacheTrait;
 		use LazyContainerTrait;
-		/**
-		 * @var IMacroSet
-		 */
-		protected $macroSet;
-		/**
-		 * @var IHelperSet
-		 */
-		protected $helperSet;
-
-		/**
-		 * @param IMacroSet $macroSet
-		 */
-		public function lazyMacroSet(IMacroSet $macroSet) {
-			$this->macroSet = $macroSet;
-		}
-
-		/**
-		 * @param IHelperSet $helperSet
-		 */
-		public function lazyHelperSet(IHelperSet $helperSet) {
-			$this->helperSet = $helperSet;
-		}
+		use LazyMacroSetTrait;
+		use LazyHelperSetTrait;
+		use CacheTrait;
 
 		/**
 		 * @inheritdoc

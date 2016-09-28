@@ -6,7 +6,7 @@
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Crypt\LazyCryptEngineTrait;
 	use Edde\Api\File\IFile;
-	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\LazyResourceManagerTrait;
 	use Edde\Api\Template\CompilerException;
@@ -25,10 +25,7 @@
 		use LazyContainerTrait;
 		use LazyResourceManagerTrait;
 		use LazyCryptEngineTrait;
-		/**
-		 * @var IRootDirectory
-		 */
-		protected $rootDirectory;
+		use LazyRootDirectoryTrait;
 		/**
 		 * @var IFile
 		 */
@@ -59,13 +56,6 @@
 		 */
 		public function __construct(IFile $source) {
 			$this->source = $source;
-		}
-
-		/**
-		 * @param IRootDirectory $rootDirectory
-		 */
-		public function lazyRootDirectory(IRootDirectory $rootDirectory) {
-			$this->rootDirectory = $rootDirectory;
 		}
 
 		/**
