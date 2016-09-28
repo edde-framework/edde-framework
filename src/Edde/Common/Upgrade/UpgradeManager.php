@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Upgrade;
 
-	use Edde\Api\Storage\IStorage;
+	use Edde\Api\Storage\LazyStorageTrait;
 	use Edde\Api\Upgrade\IUpgrade;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Upgrade\UpgradeException;
@@ -14,12 +14,12 @@
 	use Edde\Common\Upgrade\Event\UpgradeFailEvent;
 	use Edde\Common\Upgrade\Event\UpgradeStartEvent;
 
+	/**
+	 * Default implementation of a upgrade manager.
+	 */
 	class UpgradeManager extends AbstractDeffered implements IUpgradeManager {
 		use EventTrait;
-		/**
-		 * @var IStorage
-		 */
-		protected $storage;
+		use LazyStorageTrait;
 		/**
 		 * @var IUpgrade[]
 		 */
@@ -29,10 +29,10 @@
 		 */
 		protected $currentVersion;
 
-		public function lazyStorage(IStorage $storage) {
-			$this->storage = $storage;
-		}
-
+		/**
+		 * @inheritdoc
+		 * @throws UpgradeException
+		 */
 		public function registerUpgrade(IUpgrade $upgrade, bool $force = false): IUpgradeManager {
 			$version = $upgrade->getVersion();
 			if ($force === false && isset($this->upgradeList[$version])) {
@@ -42,6 +42,10 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws UpgradeException
+		 */
 		public function setCurrentVersion(string $currentVersion = null): IUpgradeManager {
 			$this->use();
 			if ($currentVersion && isset($this->upgradeList[$currentVersion]) === false) {
@@ -51,15 +55,26 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getUpgradeList(): array {
 			$this->use();
 			return $this->upgradeList;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws \Exception
+		 */
 		public function upgrade(): IUpgrade {
 			return $this->upgradeTo();
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws \Exception
+		 */
 		public function upgradeTo(string $version = null): IUpgrade {
 			$this->use();
 			if ($version === null) {
@@ -106,6 +121,9 @@
 			return $last;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 		}
 	}

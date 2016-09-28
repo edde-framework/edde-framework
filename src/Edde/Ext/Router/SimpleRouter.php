@@ -4,6 +4,7 @@
 	namespace Edde\Ext\Router;
 
 	use Edde\Api\Application\IResponseManager;
+	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHeaderList;
@@ -22,6 +23,7 @@
 	 * Only difference is for GET/POST -> action/handle method mapping.
 	 */
 	class SimpleRouter extends AbstractRouter {
+		use LazyResponseManagerTrait;
 		/**
 		 * @var IRuntime
 		 */
@@ -92,10 +94,6 @@
 
 		public function lazyHttpResponse(IHttpResponse $httpResponse) {
 			$this->httpResponse = $httpResponse;
-		}
-
-		public function lazyResponseManager(IResponseManager $responseManager) {
-			$this->responseManager = $responseManager;
 		}
 
 		public function createRequest() {

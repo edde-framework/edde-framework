@@ -6,8 +6,8 @@
 	use Edde\Api\Client\ClientException;
 	use Edde\Api\Client\IHttpClient;
 	use Edde\Api\Client\IHttpHandler;
-	use Edde\Api\Container\IContainer;
-	use Edde\Api\Converter\IConverterManager;
+	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Common\Client\Event\HandlerEvent;
 	use Edde\Common\Client\Event\PostEvent;
@@ -24,23 +24,9 @@
 	 * Simple http client implementation.
 	 */
 	class HttpClient extends AbstractDeffered implements IHttpClient {
+		use LazyContainerTrait;
+		use LazyConverterManagerTrait;
 		use EventTrait;
-		/**
-		 * @var IConverterManager
-		 */
-		protected $converterManager;
-		/**
-		 * @var IContainer
-		 */
-		protected $container;
-
-		public function lazyConverterManager(IConverterManager $converterManager) {
-			$this->converterManager = $converterManager;
-		}
-
-		public function lazyContainer(IContainer $container) {
-			$this->container = $container;
-		}
 
 		public function get($url): IHttpHandler {
 			return $this->request($this->createRequest($url)

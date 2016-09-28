@@ -4,34 +4,24 @@
 	namespace Edde\Common\Schema;
 
 	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
+	use Edde\Api\Schema\LazySchemaFactoryTrait;
 	use Edde\Api\Schema\SchemaException;
 	use Edde\Common\Deffered\AbstractDeffered;
 
 	class SchemaManager extends AbstractDeffered implements ISchemaManager {
-		/**
-		 * @var ISchemaFactory
-		 */
-		protected $schemaFactory;
+		use LazySchemaFactoryTrait;
 		/**
 		 * @var ISchema[]
 		 */
 		protected $schemaList = [];
 
-		/**
-		 * @param ISchemaFactory $schemaFactory
-		 */
-		public function lazySchemaFactory(ISchemaFactory $schemaFactory) {
-			$this->schemaFactory = $schemaFactory;
-		}
-
-		public function hasSchema($schema) {
+		public function hasSchema(string $schema): bool {
 			$this->use();
 			return isset($this->schemaList[$schema]);
 		}
 
-		public function getSchema($schema) {
+		public function getSchema(string $schema): ISchema {
 			$this->use();
 			if (isset($this->schemaList[$schema]) === false) {
 				throw new SchemaException(sprintf('Requested unknown schema [%s].', $schema));
@@ -39,7 +29,7 @@
 			return $this->schemaList[$schema];
 		}
 
-		public function getSchemaList() {
+		public function getSchemaList(): array {
 			$this->use();
 			return $this->schemaList;
 		}
@@ -50,7 +40,7 @@
 			}
 		}
 
-		public function addSchema(ISchema $schema) {
+		public function addSchema(ISchema $schema): ISchemaManager {
 			$this->schemaList[$schema->getSchemaName()] = $schema;
 			return $this;
 		}

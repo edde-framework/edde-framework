@@ -5,10 +5,15 @@
 
 	use Edde\Api\Usable\IDeffered;
 
+	/**
+	 * General template implementation support.
+	 */
 	interface ITemplateManager extends IDeffered {
 		/**
 		 * @param string $template
 		 * @param array $importList compile time templates
+		 *
+		 * @return mixed
 		 */
 		public function template(string $template, array $importList = []);
 	}

@@ -5,11 +5,12 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\ILazyInject;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlTemplate;
 	use Edde\Api\Resource\IResourceList;
-	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Template\LazyTemplateManagerTrait;
 	use Edde\Api\Template\TemplateException;
 	use Edde\Api\Url\IUrl;
 	use Edde\Api\Web\IJavaScriptCompiler;
@@ -20,14 +21,8 @@
 	 * Abstract helper class fro all html based templates; this should be used only by a template generator.
 	 */
 	abstract class AbstractHtmlTemplate extends AbstractTemplate implements IHtmlTemplate, ILazyInject {
-		/**
-		 * @var IContainer
-		 */
-		protected $container;
-		/**
-		 * @var ITemplateManager
-		 */
-		protected $templateManager;
+		use LazyContainerTrait;
+		use LazyTemplateManagerTrait;
 		/**
 		 * @var IResourceList
 		 */
@@ -54,20 +49,6 @@
 			})($file->getUrl());
 			$class = str_replace('.php', '', $file->getName());
 			return $container->inject(new $class());
-		}
-
-		/**
-		 * @param IContainer $container
-		 */
-		public function lazyContainer(IContainer $container) {
-			$this->container = $container;
-		}
-
-		/**
-		 * @param ITemplateManager $templateManager
-		 */
-		public function lazyTemplateManager(ITemplateManager $templateManager) {
-			$this->templateManager = $templateManager;
 		}
 
 		/**

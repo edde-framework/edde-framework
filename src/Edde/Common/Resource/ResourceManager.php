@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Resource;
 
-	use Edde\Api\Converter\IConverterManager;
+	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceManager;
@@ -13,14 +13,7 @@
 	use Edde\Common\Url\Url;
 
 	class ResourceManager extends AbstractDeffered implements IResourceManager {
-		/**
-		 * @var IConverterManager
-		 */
-		protected $converterManager;
-
-		public function lazyConverterManager(IConverterManager $converterManager) {
-			$this->converterManager = $converterManager;
-		}
+		use LazyConverterManagerTrait;
 
 		public function file(string $file, string $mime = null, INode $root = null): INode {
 			return $this->resource(new File($file), $mime, $root);

@@ -7,7 +7,7 @@
 	use Edde\Api\Identity\IdentityException;
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Api\Identity\IIdentityManager;
-	use Edde\Api\Storage\IStorage;
+	use Edde\Api\Storage\LazyStorageTrait;
 	use Edde\Api\Storage\StorageException;
 	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Query\Select\SelectQuery;
@@ -15,22 +15,14 @@
 
 	class IdentityManager extends AbstractDeffered implements IIdentityManager {
 		use SessionTrait;
+		use LazyStorageTrait;
 
 		const SESSION_IDENTITY = 'identity';
-
-		/**
-		 * @var IStorage
-		 */
-		protected $storage;
 
 		/**
 		 * @var IIdentity
 		 */
 		protected $identity;
-
-		public function lazyStorage(IStorage $storage) {
-			$this->storage = $storage;
-		}
 
 		public function getIdentityCrate(string $identity): ICrate {
 			$this->use();

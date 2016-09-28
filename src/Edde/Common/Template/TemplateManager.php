@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Template;
 
-	use Edde\Api\Container\IContainer;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\File\FileException;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelperSet;
@@ -18,10 +18,7 @@
 	 */
 	class TemplateManager extends AbstractDeffered implements ITemplateManager {
 		use CacheTrait;
-		/**
-		 * @var IContainer
-		 */
-		protected $container;
+		use LazyContainerTrait;
 		/**
 		 * @var IMacroSet
 		 */
@@ -30,13 +27,6 @@
 		 * @var IHelperSet
 		 */
 		protected $helperSet;
-
-		/**
-		 * @param IContainer $container
-		 */
-		public function lazyContainer(IContainer $container) {
-			$this->container = $container;
-		}
 
 		/**
 		 * @param IMacroSet $macroSet

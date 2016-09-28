@@ -5,8 +5,8 @@
 
 	use Edde\Api\Client\ClientException;
 	use Edde\Api\Client\IHttpHandler;
-	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\ILazyInject;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
@@ -20,6 +20,7 @@
 	 * Http client handler; this should not be used in common; only as a result from HttpClient calls
 	 */
 	class HttpHandler extends AbstractObject implements IHttpHandler, ILazyInject {
+		use LazyContainerTrait;
 		/**
 		 * @var IHttpRequest
 		 */
@@ -28,10 +29,6 @@
 		 * @var resource
 		 */
 		protected $curl;
-		/**
-		 * @var IContainer
-		 */
-		protected $container;
 
 		/**
 		 * @param IHttpRequest $httpRequest
@@ -40,13 +37,6 @@
 		public function __construct(IHttpRequest $httpRequest, $curl) {
 			$this->httpRequest = $httpRequest;
 			$this->curl = $curl;
-		}
-
-		/**
-		 * @param IContainer $container
-		 */
-		public function lazyContainer(IContainer $container) {
-			$this->container = $container;
 		}
 
 		/**

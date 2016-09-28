@@ -4,6 +4,7 @@
 	namespace Edde\Ext\Router;
 
 	use Edde\Api\Application\IResponseManager;
+	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttpRequest;
@@ -15,6 +16,7 @@
 	use Edde\Common\Router\AbstractRouter;
 
 	class RestRouter extends AbstractRouter implements ILinkGenerator {
+		use LazyResponseManagerTrait;
 		/**
 		 * @var IRequestUrl
 		 */
@@ -58,10 +60,6 @@
 
 		public function lazyHttpResponse(IHttpResponse $httpResponse) {
 			$this->httpResponse = $httpResponse;
-		}
-
-		public function lazyResponseManager(IResponseManager $responseManager) {
-			$this->responseManager = $responseManager;
 		}
 
 		public function registerServiceList(array $serviceList) {

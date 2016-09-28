@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Html\Macro;
 
-	use Edde\Api\Crypt\ICryptEngine;
+	use Edde\Api\Crypt\LazyCryptEngineTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
@@ -15,10 +15,7 @@
 	 * Switch support.
 	 */
 	class SwitchMacro extends AbstractHtmlMacro {
-		/**
-		 * @var ICryptEngine
-		 */
-		protected $cryptEngine;
+		use LazyCryptEngineTrait;
 
 		/**
 		 * A programmer enters an elevator, wanting to go to the 12th floor.
@@ -27,13 +24,6 @@
 		 */
 		public function __construct() {
 			parent::__construct('switch');
-		}
-
-		/**
-		 * @param ICryptEngine $cryptEngine
-		 */
-		public function lazyCryptEngine(ICryptEngine $cryptEngine) {
-			$this->cryptEngine = $cryptEngine;
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */

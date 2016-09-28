@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Html;
 
-	use Edde\Api\Container\IContainer;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Html\IHtmlControl;
@@ -12,11 +12,11 @@
 	use Edde\Common\Control\AbstractControl;
 	use Edde\Common\File\File;
 
+	/**
+	 * Base class for all html based controls.
+	 */
 	abstract class AbstractHtmlControl extends AbstractControl implements IHtmlControl {
-		/**
-		 * @var IContainer
-		 */
-		protected $container;
+		use LazyContainerTrait;
 		/**
 		 * @var IJavaScriptCompiler
 		 */
@@ -29,10 +29,6 @@
 		 * @var ITempDirectory
 		 */
 		protected $tempDirectory;
-
-		public function lazyContainer(IContainer $container) {
-			$this->container = $container;
-		}
 
 		public function lazyJavaScriptCompiler(IJavaScriptCompiler $javaScriptCompiler) {
 			$this->javaScriptCompiler = $javaScriptCompiler;

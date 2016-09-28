@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Html\Macro;
 
-	use Edde\Api\Crypt\ICryptEngine;
+	use Edde\Api\Crypt\LazyCryptEngineTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelper;
@@ -16,23 +16,13 @@
 	 * Macro for loop support.
 	 */
 	class LoopMacro extends AbstractHtmlMacro implements IHelper {
-		/**
-		 * @var ICryptEngine
-		 */
-		protected $cryptEngine;
+		use LazyCryptEngineTrait;
 
 		/**
 		 * You never finish a program, you just stop working on it.
 		 */
 		public function __construct() {
 			parent::__construct('loop');
-		}
-
-		/**
-		 * @param ICryptEngine $cryptEngine
-		 */
-		public function lazyCryptEngine(ICryptEngine $cryptEngine) {
-			$this->cryptEngine = $cryptEngine;
 		}
 
 		/**

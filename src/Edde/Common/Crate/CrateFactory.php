@@ -3,13 +3,13 @@
 
 	namespace Edde\Common\Crate;
 
-	use Edde\Api\Container\IContainer;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crate\ICrateGenerator;
-	use Edde\Api\Schema\ISchemaManager;
+	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Api\Schema\SchemaException;
 	use Edde\Common\Deffered\AbstractDeffered;
 
@@ -17,27 +17,17 @@
 	 * Factory for... creating crates.
 	 */
 	class CrateFactory extends AbstractDeffered implements ICrateFactory {
-		/**
-		 * @var IContainer
-		 */
-		protected $container;
-		/**
-		 * @var ISchemaManager
-		 */
-		protected $schemaManager;
+		use LazySchemaManagerTrait;
+		use LazyContainerTrait;
 		/**
 		 * @var ICrateGenerator
 		 */
 		protected $crateGenerator;
 
 		/**
-		 * @param IContainer $container
-		 * @param ISchemaManager $schemaManager
 		 * @param ICrateGenerator $crateGenerator
 		 */
-		public function __construct(IContainer $container, ISchemaManager $schemaManager, ICrateGenerator $crateGenerator) {
-			$this->container = $container;
-			$this->schemaManager = $schemaManager;
+		public function __construct(ICrateGenerator $crateGenerator) {
 			$this->crateGenerator = $crateGenerator;
 		}
 

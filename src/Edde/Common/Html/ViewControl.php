@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Html;
 
-	use Edde\Api\Application\IResponseManager;
+	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlView;
 	use Edde\Api\Http\IHttpRequest;
@@ -19,15 +19,12 @@
 	 * Formal root control for displaying page with some shorthands.
 	 */
 	class ViewControl extends DocumentControl implements IHtmlView {
+		use LazyResponseManagerTrait;
 		use TemplateTrait;
 		/**
 		 * @var IHttpRequest
 		 */
 		protected $httpRequest;
-		/**
-		 * @var IResponseManager
-		 */
-		protected $responseManager;
 		/**
 		 * @var ILinkFactory
 		 */
@@ -46,13 +43,6 @@
 		 */
 		public function lazyHttpRequest(IHttpRequest $httpRequest) {
 			$this->httpRequest = $httpRequest;
-		}
-
-		/**
-		 * @param IResponseManager $responseManager
-		 */
-		public function lazyResponseManager(IResponseManager $responseManager) {
-			$this->responseManager = $responseManager;
 		}
 
 		/**

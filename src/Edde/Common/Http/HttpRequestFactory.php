@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Container\IContainer;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttpRequestFactory;
 	use Edde\Common\Deffered\AbstractDeffered;
@@ -12,17 +12,7 @@
 	 * Factory for creating IHttpRequests from http input.
 	 */
 	class HttpRequestFactory extends AbstractDeffered implements IHttpRequestFactory {
-		/**
-		 * @var IContainer
-		 */
-		protected $container;
-
-		/**
-		 * @param IContainer $container
-		 */
-		public function lazyContainer(IContainer $container) {
-			$this->container = $container;
-		}
+		use LazyContainerTrait;
 
 		/**
 		 * @inheritdoc
