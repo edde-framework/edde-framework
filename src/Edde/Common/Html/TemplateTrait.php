@@ -29,7 +29,7 @@
 					$directory . '/../template/layout.xml',
 					$directory . '/layout.xml',
 					$directory . '/template/layout.xml',
-					$action = $this->getActionTemplateFile(),
+					$action = dirname($reflectionClass->getFileName()) . '/template/' . StringUtils::recamel($this->request->getMethod()) . '.xml',
 				];
 				foreach ($fileList as $file) {
 					if (file_exists($file)) {
@@ -49,11 +49,6 @@
 			if (($this instanceof IHtmlControl) === false) {
 				throw new HtmlException(sprintf('Cannot use template trait on [%s]; it can be used only on [%s].', get_class($this), IHtmlControl::class));
 			}
-		}
-
-		protected function getActionTemplateFile() {
-			$reflectionClass = new \ReflectionClass($this);
-			return dirname($reflectionClass->getFileName()) . '/template/' . StringUtils::recamel($this->request->getMethod()) . '.xml';
 		}
 
 		public function snippet(string $file, array $snippetList = null, array $importList = []) {
