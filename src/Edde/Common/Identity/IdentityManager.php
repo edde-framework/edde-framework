@@ -70,8 +70,4 @@
 			}
 			return $this;
 		}
-
-		protected function prepare() {
-			$this->session();
-		}
 	}
