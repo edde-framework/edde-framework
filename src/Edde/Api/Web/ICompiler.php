@@ -22,6 +22,15 @@
 		public function registerFilter(IFilter $filter): ICompiler;
 
 		/**
+		 * set current namespace (optionally) to create different output result set (for example when variables are used)
+		 *
+		 * @param string $namespace
+		 *
+		 * @return ICompiler
+		 */
+		public function setNamespace(string $namespace): ICompiler;
+
+		/**
 		 * general resource list to resource conversion (compilation)
 		 *
 		 * @param IResourceList $resourceList

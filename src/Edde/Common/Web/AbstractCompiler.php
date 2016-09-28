@@ -33,6 +33,15 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
+		public function setNamespace(string $namespace): ICompiler {
+			$this->use();
+			$this->cache->setNamespace($namespace);
+			return $this;
+		}
+
 		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
