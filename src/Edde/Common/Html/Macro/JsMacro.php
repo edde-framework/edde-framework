@@ -6,7 +6,7 @@
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyRootDirectoryTrait;
-	use Edde\Api\IAssetsDirectory;
+	use Edde\Api\LazyAssetsDirectoryTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
@@ -17,11 +17,8 @@
 	 */
 	class JsMacro extends AbstractHtmlMacro {
 		use LazyRootDirectoryTrait;
-		/**
-		 * @var IAssetsDirectory
-		 */
-		protected $assetsDirectory;
-
+		use LazyAssetsDirectoryTrait;
+	
 		/**
 		 * God called a meeting of George Bush, Vladimir Putin, and Bill Gates and said: "I've given you all the tools you needed to make a better world - you've blown it and I'm ending the world in two weeks."
 		 *
@@ -35,12 +32,6 @@
 			parent::__construct('js');
 		}
 
-		/**
-		 * @param IAssetsDirectory $assetsDirectory
-		 */
-		public function lazyAssetsDirectory(IAssetsDirectory $assetsDirectory) {
-			$this->assetsDirectory = $assetsDirectory;
-		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**

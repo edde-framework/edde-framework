@@ -6,7 +6,7 @@
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyRootDirectoryTrait;
-	use Edde\Api\IAssetsDirectory;
+	use Edde\Api\LazyAssetsDirectoryTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
@@ -17,23 +17,13 @@
 	 */
 	class CssMacro extends AbstractHtmlMacro {
 		use LazyRootDirectoryTrait;
-		/**
-		 * @var IAssetsDirectory
-		 */
-		protected $assetsDirectory;
+		use LazyAssetsDirectoryTrait;
 
 		/**
 		 * Any sufficiently advanced bug is indistinguishable from a feature.
 		 */
 		public function __construct() {
 			parent::__construct('css');
-		}
-
-		/**
-		 * @param IAssetsDirectory $assetsDirectory
-		 */
-		public function lazyAssetsDirectory(IAssetsDirectory $assetsDirectory) {
-			$this->assetsDirectory = $assetsDirectory;
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
