@@ -5,6 +5,9 @@
 
 	use Edde\Api\Usable\IDeffered;
 
+	/**
+	 * Cache storage implementation.
+	 */
 	interface ICacheStorage extends IDeffered {
 		/**
 		 * @param string $id
@@ -12,7 +15,7 @@
 		 *
 		 * @return mixed returns input $save
 		 */
-		public function save($id, $save);
+		public function save(string $id, $save);
 
 		/**
 		 * @param string $id

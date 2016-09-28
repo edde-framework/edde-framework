@@ -11,7 +11,7 @@
 	class InMemoryCacheStorage extends AbstractCacheStorage {
 		protected $storage;
 
-		public function save($id, $save) {
+		public function save(string $id, $save) {
 			$this->use();
 			return $this->storage[$id] = $save;
 		}

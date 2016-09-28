@@ -4,17 +4,14 @@
 	namespace Edde\Ext\Converter;
 
 	use Edde\Api\Converter\ConverterException;
-	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Common\Converter\AbstractConverter;
 
 	/**
 	 * Convert "redirect" source to an appropriate answer to http or json request.
 	 */
 	class RedirectConverter extends AbstractConverter {
-		/**
-		 * @var IHttpResponse
-		 */
-		protected $httpResponse;
+		use LazyHttpResponseTrait;
 
 		/**
 		 * You know you're a geek when...
@@ -25,13 +22,6 @@
 			parent::__construct([
 				'redirect',
 			]);
-		}
-
-		/**
-		 * @param IHttpResponse $httpResponse
-		 */
-		public function lazyHttpResponse(IHttpResponse $httpResponse) {
-			$this->httpResponse = $httpResponse;
 		}
 
 		/** @noinspection PhpInconsistentReturnPointsInspection */

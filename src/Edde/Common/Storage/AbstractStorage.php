@@ -4,7 +4,7 @@
 	namespace Edde\Common\Storage;
 
 	use Edde\Api\Crate\ICrate;
-	use Edde\Api\Crate\ICrateFactory;
+	use Edde\Api\Crate\LazyCrateFactoryTrait;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Api\Schema\SchemaException;
@@ -19,17 +19,7 @@
 	 */
 	abstract class AbstractStorage extends AbstractDeffered implements IStorage {
 		use LazySchemaManagerTrait;
-		/**
-		 * @var ICrateFactory
-		 */
-		protected $crateFactory;
-
-		/**
-		 * @param ICrateFactory $crateFactory
-		 */
-		public function lazyCrateFactory(ICrateFactory $crateFactory) {
-			$this->crateFactory = $crateFactory;
-		}
+		use LazyCrateFactoryTrait;
 
 		/**
 		 * @inheritdoc

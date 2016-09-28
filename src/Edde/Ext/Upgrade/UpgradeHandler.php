@@ -4,7 +4,7 @@
 	namespace Edde\Ext\Upgrade;
 
 	use Edde\Api\Container\ILazyInject;
-	use Edde\Api\Crate\ICrateFactory;
+	use Edde\Api\Crate\LazyCrateFactoryTrait;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Api\Storage\LazyStorageTrait;
 	use Edde\Common\AbstractObject;
@@ -21,17 +21,7 @@
 	class UpgradeHandler extends AbstractObject implements ILazyInject {
 		use LazyStorageTrait;
 		use LazySchemaManagerTrait;
-		/**
-		 * @var ICrateFactory
-		 */
-		protected $crateFactory;
-
-		/**
-		 * @param ICrateFactory $crateFactory
-		 */
-		public function lazyCrateFactory(ICrateFactory $crateFactory) {
-			$this->crateFactory = $crateFactory;
-		}
+		use LazyCrateFactoryTrait;
 
 		public function eventUpgradeStart(UpgradeStartEvent $upgradeStartEvent) {
 			$selectQuery = new SelectQuery();

@@ -1,16 +1,18 @@
 <?php
+	declare(strict_types = 1);
+
 	use Edde\Common\Cache\AbstractCacheStorage;
 
 	class TestCacheStorage extends AbstractCacheStorage {
 		private $cache;
 
-		public function save($id, $save) {
+		public function save(string $id, $save) {
 			$this->cache[$id] = $save;
 			return $save;
 		}
 
 		public function load($id) {
-			return isset($this->cache[$id]) ? $this->cache[$id] : null;
+			return $this->cache[$id] ?? null;
 		}
 
 		public function invalidate() {

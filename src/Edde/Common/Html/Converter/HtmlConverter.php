@@ -5,7 +5,7 @@
 
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Html\IHtmlControl;
-	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Converter\AbstractConverter;
@@ -14,10 +14,7 @@
 	 * IHtmlControl conversion to html output.
 	 */
 	class HtmlConverter extends AbstractConverter {
-		/**
-		 * @var IHttpResponse
-		 */
-		protected $httpResponse;
+		use LazyHttpResponseTrait;
 		/**
 		 * @var IJavaScriptCompiler
 		 */
@@ -34,13 +31,6 @@
 			parent::__construct([
 				IHtmlControl::class,
 			]);
-		}
-
-		/**
-		 * @param IHttpResponse $httpResponse
-		 */
-		public function lazyHttpResponse(IHttpResponse $httpResponse) {
-			$this->httpResponse = $httpResponse;
 		}
 
 		/**

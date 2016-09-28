@@ -4,14 +4,14 @@
 	namespace Edde\Ext\Router;
 
 	use Edde\Api\Application\LazyResponseManagerTrait;
-	use Edde\Api\Crate\ICrateFactory;
-	use Edde\Api\Http\IHeaderList;
-	use Edde\Api\Http\IHttpRequest;
-	use Edde\Api\Http\IHttpResponse;
-	use Edde\Api\Http\IPostList;
+	use Edde\Api\Crate\LazyCrateFactoryTrait;
 	use Edde\Api\Http\LazyBodyTrait;
+	use Edde\Api\Http\LazyHeaderListTrait;
+	use Edde\Api\Http\LazyHttpRequestTrait;
+	use Edde\Api\Http\LazyHttpResponseTrait;
+	use Edde\Api\Http\LazyPostListTrait;
 	use Edde\Api\Http\LazyRequestUrlTrait;
-	use Edde\Api\Runtime\IRuntime;
+	use Edde\Api\Runtime\LazyRuntimeTrait;
 	use Edde\Common\Application\Request;
 	use Edde\Common\Router\AbstractRouter;
 	use Edde\Common\Strings\StringUtils;
@@ -25,58 +25,16 @@
 		use LazyResponseManagerTrait;
 		use LazyBodyTrait;
 		use LazyRequestUrlTrait;
-		/**
-		 * @var IRuntime
-		 */
-		protected $runtime;
-		/**
-		 * @var IHeaderList
-		 */
-		protected $headerList;
-		/**
-		 * @var IPostList
-		 */
-		protected $postList;
-		/**
-		 * @var ICrateFactory
-		 */
-		protected $crateFactory;
-		/**
-		 * @var IHttpRequest
-		 */
-		protected $httpRequest;
-		/**
-		 * @var IHttpResponse
-		 */
-		protected $httpResponse;
+		use LazyHeaderListTrait;
+		use LazyPostListTrait;
+		use LazyHttpRequestTrait;
+		use LazyHttpResponseTrait;
+		use LazyRuntimeTrait;
+		use LazyCrateFactoryTrait;
 
 		/**
-		 * @param IRuntime $runtime
+		 * @inheritdoc
 		 */
-		public function lazyRuntime(IRuntime $runtime) {
-			$this->runtime = $runtime;
-		}
-
-		public function lazyHeaderList(IHeaderList $headerList) {
-			$this->headerList = $headerList;
-		}
-
-		public function lazyPostList(IPostList $postList) {
-			$this->postList = $postList;
-		}
-
-		public function lazyCrateFactory(ICrateFactory $crateFactory) {
-			$this->crateFactory = $crateFactory;
-		}
-
-		public function lazyHttpRequest(IHttpRequest $httpRequest) {
-			$this->httpRequest = $httpRequest;
-		}
-
-		public function lazyHttpResponse(IHttpResponse $httpResponse) {
-			$this->httpResponse = $httpResponse;
-		}
-
 		public function createRequest() {
 			$this->use();
 			if ($this->runtime->isConsoleMode()) {
@@ -111,6 +69,9 @@
 			return new Request($mime, $class, $method, array_merge($parameterList, $crateList));
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 		}
 	}

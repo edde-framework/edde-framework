@@ -80,7 +80,7 @@
 
 		/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
 		class DummyCacheStorage extends AbstractCacheStorage {
-			public function save($id, $save) {
+			public function save(string $id, $save) {
 			}
 
 			public function load($id) {

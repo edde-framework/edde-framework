@@ -7,6 +7,7 @@
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlView;
 	use Edde\Api\Http\IHttpRequest;
+	use Edde\Api\Http\LazyHttpRequestTrait;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceList;
@@ -20,6 +21,7 @@
 	 */
 	class ViewControl extends DocumentControl implements IHtmlView {
 		use LazyResponseManagerTrait;
+		use LazyHttpRequestTrait;
 		use TemplateTrait;
 		/**
 		 * @var IHttpRequest
@@ -37,13 +39,6 @@
 		 * @var IResourceList
 		 */
 		protected $javaScriptList;
-
-		/**
-		 * @param IHttpRequest $httpRequest
-		 */
-		public function lazyHttpRequest(IHttpRequest $httpRequest) {
-			$this->httpRequest = $httpRequest;
-		}
 
 		/**
 		 * @param ILinkFactory $linkFactory

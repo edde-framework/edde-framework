@@ -9,7 +9,7 @@
 	 * If caching may be off use this storage.
 	 */
 	class DevNullCacheStorage extends AbstractCacheStorage {
-		public function save($id, $save) {
+		public function save(string $id, $save) {
 			$this->use();
 			return $save;
 		}

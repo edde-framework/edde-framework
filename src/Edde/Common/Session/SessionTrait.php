@@ -4,24 +4,20 @@
 	namespace Edde\Common\Session;
 
 	use Edde\Api\Session\ISession;
-	use Edde\Api\Session\ISessionManager;
+	use Edde\Api\Session\LazySessionManagerTrait;
 
+	/**
+	 * Helper trait for simple work with session section.
+	 */
 	trait SessionTrait {
-		/**
-		 * @var ISessionManager
-		 */
-		protected $sessionManager;
+		use LazySessionManagerTrait;
 		/**
 		 * @var ISession
 		 */
 		protected $session;
 
-		public function lazySessionManager(ISessionManager $sessionManager) {
-			$this->sessionManager = $sessionManager;
-		}
-
 		public function session() {
-			$this->objectProperty('session', function () {
+			$this->lazy('session', function () {
 				return $this->sessionManager->getSession(static::class);
 			});
 		}

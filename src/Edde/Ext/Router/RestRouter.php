@@ -5,9 +5,9 @@
 
 	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Crate\ICrateFactory;
-	use Edde\Api\Http\IHeaderList;
-	use Edde\Api\Http\IHttpRequest;
-	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Http\LazyHeaderListTrait;
+	use Edde\Api\Http\LazyHttpRequestTrait;
+	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Api\Http\LazyRequestUrlTrait;
 	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Api\Rest\IService;
@@ -17,18 +17,9 @@
 	class RestRouter extends AbstractRouter implements ILinkGenerator {
 		use LazyResponseManagerTrait;
 		use LazyRequestUrlTrait;
-		/**
-		 * @var IHeaderList
-		 */
-		protected $headerList;
-		/**
-		 * @var IHttpRequest
-		 */
-		protected $httpRequest;
-		/**
-		 * @var IHttpResponse
-		 */
-		protected $httpResponse;
+		use LazyHeaderListTrait;
+		use LazyHttpRequestTrait;
+		use LazyHttpResponseTrait;
 		/**
 		 * @var ICrateFactory
 		 */
@@ -37,18 +28,6 @@
 		 * @var IService[]
 		 */
 		protected $serviceList = [];
-
-		public function lazyHeaderList(IHeaderList $headerList) {
-			$this->headerList = $headerList;
-		}
-
-		public function lazyHttpRequest(IHttpRequest $httpRequest) {
-			$this->httpRequest = $httpRequest;
-		}
-
-		public function lazyHttpResponse(IHttpResponse $httpResponse) {
-			$this->httpResponse = $httpResponse;
-		}
 
 		public function registerServiceList(array $serviceList) {
 			foreach ($serviceList as $service) {

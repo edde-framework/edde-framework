@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Session;
 
-	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Api\Session\IFingerprint;
 	use Edde\Api\Session\ISession;
 	use Edde\Api\Session\ISessionManager;
@@ -15,6 +15,7 @@
 	 * assigment (and collision preventing).
 	 */
 	class SessionManager extends AbstractDeffered implements ISessionManager {
+		use LazyHttpResponseTrait;
 		/**
 		 * @var IFingerprint
 		 */
@@ -27,10 +28,6 @@
 		 * @var ISession[]
 		 */
 		protected $sessionList = [];
-		/**
-		 * @var IHttpResponse
-		 */
-		protected $httpResponse;
 
 		/**
 		 * You know you've been online too long when:
@@ -42,13 +39,6 @@
 		public function __construct(IFingerprint $fingerprint) {
 			$this->fingerprint = $fingerprint;
 			$this->namespace = 'edde';
-		}
-
-		/**
-		 * @param IHttpResponse $httpResponse
-		 */
-		public function lazyHttpResponse(IHttpResponse $httpResponse) {
-			$this->httpResponse = $httpResponse;
 		}
 
 		/**

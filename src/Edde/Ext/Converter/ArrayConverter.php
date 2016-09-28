@@ -4,17 +4,14 @@
 	namespace Edde\Ext\Converter;
 
 	use Edde\Api\Converter\ConverterException;
-	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Common\Converter\AbstractConverter;
 
 	/**
 	 * General converter frtom an array to one of the supported output types.
 	 */
 	class ArrayConverter extends AbstractConverter {
-		/**
-		 * @var IHttpResponse
-		 */
-		protected $httpResponse;
+		use LazyHttpResponseTrait;
 
 		/**
 		 * Objective: shoot yourself in the foot using a computer language.
@@ -52,13 +49,6 @@
 			parent::__construct([
 				'array',
 			]);
-		}
-
-		/**
-		 * @param IHttpResponse $httpResponse
-		 */
-		public function lazyHttpResponse(IHttpResponse $httpResponse) {
-			$this->httpResponse = $httpResponse;
 		}
 
 		/** @noinspection PhpInconsistentReturnPointsInspection */
