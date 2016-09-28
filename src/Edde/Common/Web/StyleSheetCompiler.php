@@ -69,7 +69,7 @@
 					}
 					$content[] = $current;
 				}
-				$this->cache->save($cacheId, $file = $this->assetStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.css', implode("\n", $content))));
+				$this->cache->save($cacheId, $file = $this->assetStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.css', $this->filter(implode("\n", $content)))));
 			}
 			return $file;
 		}
