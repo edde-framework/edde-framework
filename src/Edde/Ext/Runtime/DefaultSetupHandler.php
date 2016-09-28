@@ -70,6 +70,7 @@
 	use Edde\Common\Crate\CrateDirectory;
 	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Crate\CrateGenerator;
+	use Edde\Common\Crate\CrateLoader;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\EddeDirectory;
@@ -223,6 +224,7 @@
 						return $identityManager->identity();
 					},
 					IEventBus::class => EventBus::class,
+					ICrateLoader::class => CrateLoader::class,
 				], $factoryList))
 				->deffered(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
 					$routerService->registerRouter($container->create(SimpleRouter::class));
