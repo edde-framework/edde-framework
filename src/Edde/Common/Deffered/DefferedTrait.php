@@ -3,6 +3,11 @@
 
 	namespace Edde\Common\Deffered;
 
+	use Edde\Common\Deffered\Event\OnDefferedEvent;
+	use Edde\Common\Deffered\Event\OnPrepareEvent;
+	use Edde\Common\Deffered\Event\OnSetupEvent;
+	use Edde\Common\Event\EventBus;
+
 	/**
 	 * Use this trait where is not possible to use inheritance!
 	 */
@@ -52,10 +57,15 @@
 		public function use () {
 			if ($this->used === false) {
 				$this->used = true;
+				$eventBus = new EventBus();
+				$eventBus->listen($this);
+				$eventBus->event(new OnDefferedEvent($this));
 				foreach ($this->onDefferedList as $callback) {
 					$callback($this);
 				}
+				$eventBus->event(new OnPrepareEvent($this));
 				$this->prepare();
+				$eventBus->event(new OnSetupEvent($this));
 				foreach ($this->onSetupList as $callback) {
 					$callback($this);
 				}

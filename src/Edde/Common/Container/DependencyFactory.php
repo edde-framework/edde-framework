@@ -76,11 +76,4 @@
 			}
 			unset($this->dependencyList[$name]);
 		}
-
-		/**
-		 * @inheritdoc
-		 */
-		protected function prepare() {
-			$this->cache();
-		}
 	}

@@ -27,8 +27,4 @@
 			}
 			return $pathList;
 		}
-
-		protected function prepare() {
-			$this->cache();
-		}
 	}

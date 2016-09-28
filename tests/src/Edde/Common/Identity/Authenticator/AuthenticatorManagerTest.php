@@ -54,7 +54,6 @@
 				IAuthorizator::class => \TrustedAuth::class,
 			]);
 			$this->authenticatorManager = $container->create(IAuthenticatorManager::class);
-			$this->authenticatorManager->session();
 			$this->authenticatorManager->registerAuthenticator(new \TrustedAuthenticator());
 			$this->authenticatorManager->registerAuthenticator(new \InitialAuthenticator());
 			$this->authenticatorManager->registerAuthenticator(new \SecondaryAuthenticator());
