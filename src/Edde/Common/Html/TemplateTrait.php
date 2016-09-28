@@ -20,10 +20,10 @@
 		use LazyTemplateManagerTrait;
 		use LazyRequestTrait;
 
-		public function template(string $layout = null, array $snippetList = null, array $importList = []) {
+		public function template(string $layout = null, array $snippetList = null, array $importList = [], string $class = null) {
 			$this->check();
 			if ($layout === null) {
-				$reflectionClass = new \ReflectionClass($this);
+				$reflectionClass = new \ReflectionClass($class ?: $this);
 				$directory = dirname($reflectionClass->getFileName());
 				$fileList = [
 					$directory . '/../template/layout.xml',
