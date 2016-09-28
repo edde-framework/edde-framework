@@ -3,5 +3,8 @@
 
 	namespace Edde\Api\Router;
 
+	/**
+	 * Implementation of application router service.
+	 */
 	interface IRouterService extends IRouterList {
 	}

@@ -7,6 +7,9 @@
 	use Edde\Api\Router\IRouterList;
 	use Edde\Common\Deffered\AbstractDeffered;
 
+	/**
+	 * Default implementation of a router list.
+	 */
 	class RouterList extends AbstractDeffered implements IRouterList {
 		/**
 		 * @var IRouter[]

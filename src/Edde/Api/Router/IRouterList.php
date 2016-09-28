@@ -3,6 +3,9 @@
 
 	namespace Edde\Api\Router;
 
+	/**
+	 * Set of router, usually used with router serivce.
+	 */
 	interface IRouterList extends IRouter {
 		/**
 		 * register the given router
