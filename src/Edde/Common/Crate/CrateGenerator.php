@@ -202,7 +202,7 @@
 			$source[] = "\t\t}\n";
 			$source[] = "\n";
 			$source[] = sprintf("\t\tpublic function set%sLink(\\%s \$%s) {\n", StringUtils::camelize($linkName = $schemaLink->getName()), $targetSchemaName, $linkName);
-			$source[] = sprintf("\t\t\t\$this->setLink('%s', \$%s);\n", $linkName, $linkName);
+			$source[] = sprintf("\t\t\t\$this->link('%s', \$%s);\n", $linkName, $linkName);
 			$source[] = sprintf("\t\t\treturn \$this;\n");
 			$source[] = "\t\t}\n";
 			return implode('', $source);
