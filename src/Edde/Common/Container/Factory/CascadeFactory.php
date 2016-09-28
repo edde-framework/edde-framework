@@ -47,16 +47,23 @@
 		 * @return string|null
 		 */
 		protected function discover(string $name) {
-			if (isset($this->nameList[$name]) || array_key_exists($name, $this->nameList)) {
-				return $this->nameList[$name];
-			}
-			/** @noinspection ForeachSourceInspection */
-			foreach ($this->container->call($this->source, $name) as $source) {
-				if (class_exists($source)) {
-					return $this->nameList[$name] = $source;
+			try {
+				if (isset($this->nameList[$name]) || array_key_exists($name, $this->nameList)) {
+					return $this->nameList[$name];
 				}
+				/** @noinspection ForeachSourceInspection */
+				foreach ($this->container->call($this->source, $name) as $source) {
+					if (class_exists($source)) {
+						return $this->nameList[$name] = $source;
+					}
+				}
+				return $this->nameList[$name] = null;
+			} catch (\Exception $e) {
+				/**
+				 * $this->nameList[...] is missing to try discover next time
+				 */
+				return null;
 			}
-			return $this->nameList[$name] = null;
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
