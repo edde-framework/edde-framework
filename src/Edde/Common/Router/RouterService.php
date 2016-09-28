@@ -13,10 +13,14 @@
 		 */
 		protected $request;
 
+		/**
+		 * @inheritdoc
+		 * @throws RouterException
+		 */
 		public function createRequest() {
 			$this->use();
 			if ($this->request === null && ($this->request = parent::createRequest()) === null) {
-				throw new RouterException(sprintf('Cannot handle current application request.'));
+				throw new BadRequestException('Cannot handle current application request.');
 			}
 			return $this->request;
 		}
