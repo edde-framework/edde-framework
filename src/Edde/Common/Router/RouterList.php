@@ -4,28 +4,41 @@
 	namespace Edde\Common\Router;
 
 	use Edde\Api\Router\IRouter;
+	use Edde\Api\Router\IRouterList;
 	use Edde\Common\Deffered\AbstractDeffered;
 
-	class RouterList extends AbstractDeffered implements IRouter {
+	/**
+	 * Default implementation of a router list.
+	 */
+	class RouterList extends AbstractDeffered implements IRouterList {
 		/**
 		 * @var IRouter[]
 		 */
 		protected $routerList = [];
 
-		public function registerRouter(IRouter $router) {
+		/**
+		 * @inheritdoc
+		 */
+		public function registerRouter(IRouter $router): IRouterList {
 			$this->routerList[] = $router;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function createRequest() {
 			foreach ($this->routerList as $router) {
-				if (($route = $router->createRequest()) !== null) {
-					return $route;
+				if (($request = $router->createRequest()) !== null) {
+					return $request;
 				}
 			}
 			return null;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 		}
 	}

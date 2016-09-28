@@ -7,17 +7,34 @@
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Router\RouterException;
 
+	/**
+	 * Default implementation of a router service.
+	 */
 	class RouterService extends RouterList implements IRouterService {
 		/**
 		 * @var IRequest
 		 */
 		protected $request;
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
+		/**
+		 * @inheritdoc
+		 * @throws RouterException
+		 */
 		public function createRequest() {
 			$this->use();
-			if ($this->request === null && ($this->request = parent::createRequest()) === null) {
-				throw new RouterException(sprintf('Cannot handle current application request.'));
+			if ($this->request) {
+				return $this->request;
 			}
-			return $this->request;
+			$e = null;
+			foreach ($this->routerList as $router) {
+				try {
+					if (($request = $router->createRequest()) !== null) {
+						return $this->request = $request;
+					}
+				} catch (\Exception $e) {
+				}
+			}
+			throw new BadRequestException('Cannot handle current application request.', 0, $e);
 		}
 	}
