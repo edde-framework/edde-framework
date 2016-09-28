@@ -6,8 +6,8 @@
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Http\LazyHttpResponseTrait;
-	use Edde\Api\Web\IJavaScriptCompiler;
-	use Edde\Api\Web\IStyleSheetCompiler;
+	use Edde\Api\Web\LazyJavaScriptCompilerTrait;
+	use Edde\Api\Web\LazyStyleSheetCompilerTrait;
 	use Edde\Common\Converter\AbstractConverter;
 
 	/**
@@ -15,14 +15,8 @@
 	 */
 	class HtmlConverter extends AbstractConverter {
 		use LazyHttpResponseTrait;
-		/**
-		 * @var IJavaScriptCompiler
-		 */
-		protected $javaScriptCompiler;
-		/**
-		 * @var IStyleSheetCompiler
-		 */
-		protected $styleSheetCompiler;
+		use LazyJavaScriptCompilerTrait;
+		use LazyStyleSheetCompilerTrait;
 
 		/**
 		 * HtmlConverter constructor.
@@ -31,20 +25,6 @@
 			parent::__construct([
 				IHtmlControl::class,
 			]);
-		}
-
-		/**
-		 * @param IJavaScriptCompiler $javaScriptCompiler
-		 */
-		public function lazyJavaScriptCompiler(IJavaScriptCompiler $javaScriptCompiler) {
-			$this->javaScriptCompiler = $javaScriptCompiler;
-		}
-
-		/**
-		 * @param IStyleSheetCompiler $styleSheetCompiler
-		 */
-		public function lazyStyleSheetCompiler(IStyleSheetCompiler $styleSheetCompiler) {
-			$this->styleSheetCompiler = $styleSheetCompiler;
 		}
 
 		/** @noinspection PhpInconsistentReturnPointsInspection */

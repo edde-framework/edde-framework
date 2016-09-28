@@ -6,9 +6,8 @@
 	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlView;
-	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\LazyHttpRequestTrait;
-	use Edde\Api\Link\ILinkFactory;
+	use Edde\Api\Link\LazyLinkFactoryTrait;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceList;
 	use Edde\Common\Application\Response;
@@ -22,15 +21,8 @@
 	class ViewControl extends DocumentControl implements IHtmlView {
 		use LazyResponseManagerTrait;
 		use LazyHttpRequestTrait;
+		use LazyLinkFactoryTrait;
 		use TemplateTrait;
-		/**
-		 * @var IHttpRequest
-		 */
-		protected $httpRequest;
-		/**
-		 * @var ILinkFactory
-		 */
-		protected $linkFactory;
 		/**
 		 * @var IResourceList
 		 */
@@ -39,13 +31,6 @@
 		 * @var IResourceList
 		 */
 		protected $javaScriptList;
-
-		/**
-		 * @param ILinkFactory $linkFactory
-		 */
-		public function lazyLinkFactory(ILinkFactory $linkFactory) {
-			$this->linkFactory = $linkFactory;
-		}
 
 		/**
 		 * @inheritdoc

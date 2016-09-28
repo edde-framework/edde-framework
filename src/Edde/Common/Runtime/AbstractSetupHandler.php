@@ -6,9 +6,9 @@
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
+	use Edde\Api\Deffered\IDeffered;
 	use Edde\Api\Runtime\ISetupHandler;
 	use Edde\Api\Runtime\RuntimeException;
-	use Edde\Api\Usable\IDeffered;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Container\Factory\FactoryFactory;
 

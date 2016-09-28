@@ -3,18 +3,15 @@
 
 	namespace Edde\Common\Application;
 
-	use Edde\Api\Application\IRequest;
 	use Edde\Api\Application\IResponse;
 	use Edde\Api\Application\IResponseManager;
+	use Edde\Api\Application\LazyRequestTrait;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Common\Deffered\AbstractDeffered;
 
 	class ResponseManager extends AbstractDeffered implements IResponseManager {
 		use LazyConverterManagerTrait;
-		/**
-		 * @var IRequest
-		 */
-		protected $request;
+		use LazyRequestTrait;
 		/**
 		 * @var IResponse
 		 */
@@ -23,10 +20,6 @@
 		 * @var string
 		 */
 		protected $mime;
-
-		public function lazyRequest(IRequest $request) {
-			$this->request = $request;
-		}
 
 		public function response(IResponse $response): IResponseManager {
 			$this->response = $response;

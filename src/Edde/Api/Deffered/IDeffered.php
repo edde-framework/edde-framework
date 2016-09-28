@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Api\Usable;
+	namespace Edde\Api\Deffered;
 
 	/**
 	 * Any class can be usable in terms of passive behavior until "touch". This was originally developed from Service interface.

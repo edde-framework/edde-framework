@@ -3,18 +3,11 @@
 
 	namespace Edde\Common\Html\Tag;
 
-	use Edde\Api\Link\ILinkFactory;
+	use Edde\Api\Link\LazyLinkFactoryTrait;
 	use Edde\Common\Html\AbstractHtmlControl;
 
 	class ButtonControl extends AbstractHtmlControl {
-		/**
-		 * @var ILinkFactory
-		 */
-		protected $linkFactory;
-
-		public function lazyLinkFactory(ILinkFactory $linkFactory) {
-			$this->linkFactory = $linkFactory;
-		}
+		use LazyLinkFactoryTrait;
 
 		public function setTitle($title) {
 			$this->use();

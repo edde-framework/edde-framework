@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Upgrade;
 
-	use Edde\Api\Usable\IDeffered;
+	use Edde\Api\Deffered\IDeffered;
 
 	/**
 	 * Simple way how to run arbitrary application upgrades; this can be storage modification, filesystem operations, ...

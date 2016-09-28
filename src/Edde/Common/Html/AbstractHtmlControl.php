@@ -7,8 +7,8 @@
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Html\IHtmlControl;
-	use Edde\Api\Web\IJavaScriptCompiler;
-	use Edde\Api\Web\IStyleSheetCompiler;
+	use Edde\Api\Web\LazyJavaScriptCompilerTrait;
+	use Edde\Api\Web\LazyStyleSheetCompilerTrait;
 	use Edde\Common\Control\AbstractControl;
 	use Edde\Common\File\File;
 
@@ -17,26 +17,12 @@
 	 */
 	abstract class AbstractHtmlControl extends AbstractControl implements IHtmlControl {
 		use LazyContainerTrait;
-		/**
-		 * @var IJavaScriptCompiler
-		 */
-		protected $javaScriptCompiler;
-		/**
-		 * @var IStyleSheetCompiler
-		 */
-		protected $styleSheetCompiler;
+		use LazyJavaScriptCompilerTrait;
+		use LazyStyleSheetCompilerTrait;
 		/**
 		 * @var ITempDirectory
 		 */
 		protected $tempDirectory;
-
-		public function lazyJavaScriptCompiler(IJavaScriptCompiler $javaScriptCompiler) {
-			$this->javaScriptCompiler = $javaScriptCompiler;
-		}
-
-		public function lazyStyleSheetCompiler(IStyleSheetCompiler $styleSheetCompiler) {
-			$this->styleSheetCompiler = $styleSheetCompiler;
-		}
 
 		public function lazyTempDirectory(ITempDirectory $tempDirectory) {
 			$this->tempDirectory = $tempDirectory;

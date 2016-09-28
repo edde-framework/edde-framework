@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Cache;
 
-	use Edde\Api\Usable\IDeffered;
+	use Edde\Api\Deffered\IDeffered;
 
 	/**
 	 * Cache storage implementation.

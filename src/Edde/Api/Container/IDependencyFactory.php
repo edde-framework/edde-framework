@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Container;
 
-	use Edde\Api\Usable\IDeffered;
+	use Edde\Api\Deffered\IDeffered;
 
 	/**
 	 * Interface for factories building dependency tree for a class.

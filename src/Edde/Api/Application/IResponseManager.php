@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Application;
 
-	use Edde\Api\Usable\IDeffered;
+	use Edde\Api\Deffered\IDeffered;
 
 	/**
 	 * Response manager holds current Response (to keep responses immutable).

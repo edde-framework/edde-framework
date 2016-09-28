@@ -4,7 +4,7 @@
 	namespace Edde\Api\Router;
 
 	use Edde\Api\Application\IRequest;
-	use Edde\Api\Usable\IDeffered;
+	use Edde\Api\Deffered\IDeffered;
 
 	interface IRouter extends IDeffered {
 		/**

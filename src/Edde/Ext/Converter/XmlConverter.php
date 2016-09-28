@@ -6,7 +6,7 @@
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResource;
-	use Edde\Api\Xml\IXmlParser;
+	use Edde\Api\Xml\LazyXmlParserTrait;
 	use Edde\Api\Xml\XmlParserException;
 	use Edde\Common\Converter\AbstractConverter;
 	use Edde\Common\Xml\XmlNodeHandler;
@@ -15,10 +15,7 @@
 	 * Xml string sourece to "something" converter.
 	 */
 	class XmlConverter extends AbstractConverter {
-		/**
-		 * @var IXmlParser
-		 */
-		protected $xmlParser;
+		use LazyXmlParserTrait;
 
 		/**
 		 * Only 3 things that are infinite
@@ -32,13 +29,6 @@
 				'applicaiton/xml',
 				'xml',
 			]);
-		}
-
-		/**
-		 * @param IXmlParser $xmlParser
-		 */
-		public function lazyXmlParser(IXmlParser $xmlParser) {
-			$this->xmlParser = $xmlParser;
 		}
 
 		/** @noinspection PhpInconsistentReturnPointsInspection */

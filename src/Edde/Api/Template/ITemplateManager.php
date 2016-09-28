@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Template;
 
-	use Edde\Api\Usable\IDeffered;
+	use Edde\Api\Deffered\IDeffered;
 
 	/**
 	 * General template implementation support.

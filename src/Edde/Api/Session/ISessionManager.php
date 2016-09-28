@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Session;
 
-	use Edde\Api\Usable\IDeffered;
+	use Edde\Api\Deffered\IDeffered;
 
 	/**
 	 * Session manager is responsible for updating session state (starting, modifying, closing, ...).

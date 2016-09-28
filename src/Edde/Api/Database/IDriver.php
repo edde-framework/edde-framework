@@ -3,9 +3,9 @@
 
 	namespace Edde\Api\Database;
 
+	use Edde\Api\Deffered\IDeffered;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
-	use Edde\Api\Usable\IDeffered;
 	use PDOStatement;
 
 	/**

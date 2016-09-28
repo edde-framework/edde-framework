@@ -3,10 +3,10 @@
 
 	namespace Edde\Api\Client;
 
+	use Edde\Api\Deffered\IDeffered;
 	use Edde\Api\Event\IEventBus;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Url\IUrl;
-	use Edde\Api\Usable\IDeffered;
 
 	interface IHttpClient extends IDeffered, IEventBus {
 		/**

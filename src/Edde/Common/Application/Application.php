@@ -5,7 +5,7 @@
 
 	use Edde\Api\Application\ApplicationException;
 	use Edde\Api\Application\IErrorControl;
-	use Edde\Api\Application\IRequest;
+	use Edde\Api\Application\LazyRequestTrait;
 	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Control\IControl;
@@ -21,21 +21,11 @@
 		use LazyContainerTrait;
 		use LazyConverterManagerTrait;
 		use LazyResponseManagerTrait;
-		/**
-		 * @var IRequest
-		 */
-		protected $request;
+		use LazyRequestTrait;
 		/**
 		 * @var IErrorControl
 		 */
 		protected $errorControl;
-
-		/**
-		 * @param IRequest $request
-		 */
-		public function lazyRoute(IRequest $request) {
-			$this->request = $request;
-		}
 
 		/**
 		 * @param IErrorControl $errorControl

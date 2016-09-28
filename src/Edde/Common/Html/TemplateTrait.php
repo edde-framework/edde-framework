@@ -3,13 +3,12 @@
 
 	namespace Edde\Common\Html;
 
-	use Edde\Api\Application\IRequest;
+	use Edde\Api\Application\LazyRequestTrait;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Html\HtmlException;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlTemplate;
 	use Edde\Api\Html\IHtmlView;
-	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Template\LazyTemplateManagerTrait;
 	use Edde\Common\Strings\StringUtils;
 
@@ -19,18 +18,7 @@
 	trait TemplateTrait {
 		use LazyContainerTrait;
 		use LazyTemplateManagerTrait;
-		/**
-		 * @var ITemplateManager
-		 */
-		protected $templateManager;
-		/**
-		 * @var IRequest
-		 */
-		protected $request;
-
-		public function lazyRequest(IRequest $request) {
-			$this->request = $request;
-		}
+		use LazyRequestTrait;
 
 		public function template(string $layout = null, array $snippetList = null, array $importList = []) {
 			$this->check();

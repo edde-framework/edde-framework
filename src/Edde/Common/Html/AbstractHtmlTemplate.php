@@ -9,12 +9,11 @@
 	use Edde\Api\File\IFile;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlTemplate;
-	use Edde\Api\Resource\IResourceList;
 	use Edde\Api\Template\LazyTemplateManagerTrait;
 	use Edde\Api\Template\TemplateException;
 	use Edde\Api\Url\IUrl;
-	use Edde\Api\Web\IJavaScriptCompiler;
-	use Edde\Api\Web\IStyleSheetCompiler;
+	use Edde\Api\Web\LazyJavaScriptCompilerTrait;
+	use Edde\Api\Web\LazyStyleSheetCompilerTrait;
 	use Edde\Common\Template\AbstractTemplate;
 
 	/**
@@ -23,14 +22,8 @@
 	abstract class AbstractHtmlTemplate extends AbstractTemplate implements IHtmlTemplate, ILazyInject {
 		use LazyContainerTrait;
 		use LazyTemplateManagerTrait;
-		/**
-		 * @var IResourceList
-		 */
-		protected $styleSheetList;
-		/**
-		 * @var IResourceList
-		 */
-		protected $javaScriptList;
+		use LazyJavaScriptCompilerTrait;
+		use LazyStyleSheetCompilerTrait;
 		/**
 		 * @var IHtmlTemplate[]
 		 */
@@ -49,20 +42,6 @@
 			})($file->getUrl());
 			$class = str_replace('.php', '', $file->getName());
 			return $container->inject(new $class());
-		}
-
-		/**
-		 * @param IStyleSheetCompiler $styleSheetList
-		 */
-		public function lazyStyleSheetList(IStyleSheetCompiler $styleSheetList) {
-			$this->styleSheetList = $styleSheetList;
-		}
-
-		/**
-		 * @param IJavaScriptCompiler $javaScriptList
-		 */
-		public function lazyJavaScriptList(IJavaScriptCompiler $javaScriptList) {
-			$this->javaScriptList = $javaScriptList;
 		}
 
 		/**
