@@ -3,15 +3,14 @@
 
 	namespace Edde\Ext\Router;
 
-	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Crate\ICrateFactory;
-	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Http\IPostList;
-	use Edde\Api\Http\IRequestUrl;
+	use Edde\Api\Http\LazyBodyTrait;
+	use Edde\Api\Http\LazyRequestUrlTrait;
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Common\Application\Request;
 	use Edde\Common\Router\AbstractRouter;
@@ -24,14 +23,12 @@
 	 */
 	class SimpleRouter extends AbstractRouter {
 		use LazyResponseManagerTrait;
+		use LazyBodyTrait;
+		use LazyRequestUrlTrait;
 		/**
 		 * @var IRuntime
 		 */
 		protected $runtime;
-		/**
-		 * @var IRequestUrl
-		 */
-		protected $requestUrl;
 		/**
 		 * @var IHeaderList
 		 */
@@ -40,10 +37,6 @@
 		 * @var IPostList
 		 */
 		protected $postList;
-		/**
-		 * @var IBody
-		 */
-		protected $body;
 		/**
 		 * @var ICrateFactory
 		 */
@@ -56,10 +49,6 @@
 		 * @var IHttpResponse
 		 */
 		protected $httpResponse;
-		/**
-		 * @var IResponseManager
-		 */
-		protected $responseManager;
 
 		/**
 		 * @param IRuntime $runtime
@@ -68,20 +57,12 @@
 			$this->runtime = $runtime;
 		}
 
-		public function lazyRequestUrl(IRequestUrl $requestUrl) {
-			$this->requestUrl = $requestUrl;
-		}
-
 		public function lazyHeaderList(IHeaderList $headerList) {
 			$this->headerList = $headerList;
 		}
 
 		public function lazyPostList(IPostList $postList) {
 			$this->postList = $postList;
-		}
-
-		public function lazyBody(IBody $body) {
-			$this->body = $body;
 		}
 
 		public function lazyCrateFactory(ICrateFactory $crateFactory) {

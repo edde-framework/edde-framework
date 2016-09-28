@@ -4,8 +4,8 @@
 	namespace Edde\Common\Rest;
 
 	use Edde\Api\Application\LazyResponseManagerTrait;
-	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Http\LazyBodyTrait;
 	use Edde\Api\Rest\IService;
 	use Edde\Common\Application\Response;
 	use Edde\Common\Control\AbstractControl;
@@ -13,6 +13,7 @@
 
 	abstract class AbstractService extends AbstractControl implements IService {
 		use LazyResponseManagerTrait;
+		use LazyBodyTrait;
 
 		const OK_CREATED = 201;
 
@@ -27,17 +28,9 @@
 			'DELETE',
 		];
 		/**
-		 * @var IBody
-		 */
-		protected $body;
-		/**
 		 * @var IHttpResponse
 		 */
 		protected $httpResponse;
-
-		public function lazyBody(IBody $body) {
-			$this->body = $body;
-		}
 
 		public function lazyHttpResponse(IHttpResponse $httpResponse) {
 			$this->httpResponse = $httpResponse;

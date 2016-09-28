@@ -3,6 +3,9 @@
 
 	namespace Edde\Api\Http;
 
+	/**
+	 * Http request/response body implementation.
+	 */
 	interface IBody {
 		/**
 		 * return the original body of a request
