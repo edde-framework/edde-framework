@@ -12,8 +12,11 @@
 	use Foo\Bar\EmptyDictionary;
 	use phpunit\framework\TestCase;
 
-	require_once(__DIR__ . '/assets/assets.php');
+	require_once __DIR__ . '/assets/assets.php';
 
+	/**
+	 * Testsuite for translator.
+	 */
 	class TranslatorTest extends TestCase {
 		/**
 		 * @var IContainer

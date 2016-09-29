@@ -8,6 +8,9 @@
 	use Edde\Api\Translator\TranslatorException;
 	use Edde\Common\Deffered\AbstractDeffered;
 
+	/**
+	 * General class for translations support.
+	 */
 	class Translator extends AbstractDeffered implements ITranslator {
 		/**
 		 * @var IDictionary[]
@@ -18,6 +21,10 @@
 		 */
 		protected $language;
 
+		/**
+		 * @inheritdoc
+		 * @throws TranslatorException
+		 */
 		public function translate(string $id, array $parameterList = [], string $language = null): string {
 			$this->use();
 			foreach ($this->dictionaryList as $dictionary) {
@@ -28,6 +35,10 @@
 			throw new TranslatorException(sprintf('Cannot translate [%s]; the given id is not available in no dictionary.', $id));
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws TranslatorException
+		 */
 		public function translatef(string $id, array $parameterList = null, string $language = null): string {
 			$this->use();
 			foreach ($this->dictionaryList as $dictionary) {
@@ -38,11 +49,17 @@
 			throw new TranslatorException(sprintf('Cannot translate [%s]; the given id is not available in no dictionary.', $id));
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function setLanguage($language): ITranslator {
 			$this->language = $language;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function registerDictionary(IDictionary $dictionary): ITranslator {
 			$this->dictionaryList[] = $dictionary;
 			return $this;
