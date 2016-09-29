@@ -25,6 +25,10 @@
 		protected $parameterList = [];
 
 		/**
+		 * What is the difference between a snowman and a snowwoman?
+		 * -
+		 * Snowballs.
+		 *
 		 * @param string $type
 		 * @param string $class
 		 * @param string $method
