@@ -23,9 +23,9 @@
 		 */
 		protected $language;
 		/**
-		 * @var string
+		 * @var \SplStack
 		 */
-		protected $scope;
+		protected $scopeStack;
 
 		/**
 		 * @inheritdoc
@@ -46,8 +46,16 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setScope(string $scope = null): ITranslator {
-			$this->scope = $scope;
+		public function pushScope(string $scope = null): ITranslator {
+			$this->scopeStack->push($scope);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function popScope(): ITranslator {
+			$this->scopeStack->pop();
 			return $this;
 		}
 
@@ -60,13 +68,13 @@
 			if (($language = $language ?: $this->language) === null) {
 				throw new TranslatorException('Cannot use translator without set language.');
 			}
-			if (($string = $this->cache->load($cacheId = ($id . $language . ($scope = $scope ?: $this->scope)))) !== null) {
+			if (($string = $this->cache->load($cacheId = ($id . $language . ($scope = $scope ?: $this->scopeStack->top())))) !== null) {
 				return $string;
 			}
 			if (isset($this->dictionaryList[$scope]) === false) {
-				throw new TranslatorException(sprintf('Scope [%s] has no dictionaries.', $this->scope));
+				throw new TranslatorException(sprintf('Scope [%s] has no dictionaries.', $scope));
 			}
-			$dictionaryList = $this->dictionaryList[$this->scope];
+			$dictionaryList = $this->dictionaryList[$scope];
 			foreach ($dictionaryList as $dictionary) {
 				if (($string = $dictionary->translate($id, $language)) !== null) {
 					return $this->cache->save($cacheId, $string);
@@ -76,6 +84,8 @@
 		}
 
 		protected function prepare() {
+			$this->scopeStack = new \SplStack();
+			$this->scopeStack->push(null);
 			if (empty($this->dictionaryList)) {
 				throw new TranslatorException('Translator needs at least one dictionary. Or The God will kill one cute devil kitten!');
 			}

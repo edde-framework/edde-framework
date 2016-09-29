@@ -29,13 +29,20 @@
 		public function setLanguage(string $language): ITranslator;
 
 		/**
-		 * set (unset) the current dictionary scope
+		 * ability to "push" a scope on stack (later can be popped)
 		 *
 		 * @param string|null $scope
 		 *
 		 * @return ITranslator
 		 */
-		public function setScope(string $scope = null): ITranslator;
+		public function pushScope(string $scope = null): ITranslator;
+
+		/**
+		 * pops the current scope from stack and return a previous one
+		 *
+		 * @return ITranslator
+		 */
+		public function popScope(): ITranslator;
 
 		/**
 		 * try to translate a string
