@@ -47,6 +47,7 @@
 		 * @inheritdoc
 		 */
 		public function pushScope(string $scope = null): ITranslator {
+			$this->use();
 			$this->scopeStack->push($scope);
 			return $this;
 		}
@@ -55,6 +56,7 @@
 		 * @inheritdoc
 		 */
 		public function popScope(): ITranslator {
+			$this->use();
 			$this->scopeStack->pop();
 			return $this;
 		}

@@ -8,6 +8,7 @@
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Html\Helper\MethodHelper;
+	use Edde\Common\Html\Helper\TranslateHelper;
 	use Edde\Common\Html\Input\PasswordControl;
 	use Edde\Common\Html\Input\TextControl;
 	use Edde\Common\Html\Macro\ButtonMacro;
@@ -26,6 +27,7 @@
 	use Edde\Common\Html\Macro\SchemaMacro;
 	use Edde\Common\Html\Macro\SnippetMacro;
 	use Edde\Common\Html\Macro\SwitchMacro;
+	use Edde\Common\Html\Macro\TranslatorMacro;
 	use Edde\Common\Html\Macro\UseMacro;
 	use Edde\Common\Html\PlaceholderControl;
 	use Edde\Common\Html\Tag\BlockquoteControl;
@@ -82,6 +84,7 @@
 					$container->inject(new PassMacro()),
 					$container->inject(new PassChildMacro()),
 					$container->inject(new SnippetMacro()),
+					$container->inject(new TranslatorMacro()),
 					$container->inject(new HtmlMacro('div', DivControl::class)),
 					$container->inject(new HtmlMacro('span', SpanControl::class)),
 					$container->inject(new HtmlMacro('p', ParagraphControl::class)),
@@ -124,6 +127,7 @@
 			$helperSet = new HelperSet();
 			$helperSet->onDeffered(function (IHelperSet $helperSet) use ($container) {
 				$helperSet->registerHelper($container->inject(new MethodHelper()));
+				$helperSet->registerHelper($container->inject(new TranslateHelper()));
 			});
 			return $helperSet;
 		}
