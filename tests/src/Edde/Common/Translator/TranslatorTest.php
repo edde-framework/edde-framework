@@ -74,6 +74,6 @@
 			$this->container = $container = ContainerFactory::create([
 				ITranslator::class => Translator::class,
 			]);
-			$this->translator = new Translator();
+			$this->translator = $container->create(ITranslator::class);
 		}
 	}

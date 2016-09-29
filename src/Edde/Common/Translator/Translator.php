@@ -6,12 +6,14 @@
 	use Edde\Api\Translator\IDictionary;
 	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Translator\TranslatorException;
+	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Deffered\AbstractDeffered;
 
 	/**
 	 * General class for translations support.
 	 */
 	class Translator extends AbstractDeffered implements ITranslator {
+		use CacheTrait;
 		/**
 		 * @var IDictionary[]
 		 */
@@ -46,9 +48,12 @@
 			if (($language = $language ?: $this->language) === null) {
 				throw new TranslatorException('Cannot use translator without set language.');
 			}
+			if (($string = $this->cache->load($id . $language)) !== null) {
+				return $string;
+			}
 			foreach ($this->dictionaryList as $dictionary) {
 				if (($string = $dictionary->translate($id, $language)) !== null) {
-					return $string;
+					return $this->cache->save($id . $language, $string);
 				}
 			}
 			throw new TranslatorException(sprintf('Cannot translate [%s]; the given id is not available in no dictionary.', $id));
