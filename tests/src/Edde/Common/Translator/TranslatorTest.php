@@ -67,7 +67,7 @@
 			$csvDictionary->addFile(__DIR__ . '/assets/cs.csv');
 			$this->translator->setLanguage('en');
 			self::assertEquals('english foo', $this->translator->translate('foo'));
-			self::assertEquals('czech foo', $this->translator->translate('foo', 'cs'));
+			self::assertEquals('czech foo', $this->translator->translate('foo', null, 'cs'));
 		}
 
 		protected function setUp() {

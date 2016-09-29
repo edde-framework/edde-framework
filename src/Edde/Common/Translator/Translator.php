@@ -55,15 +55,15 @@
 		 * @inheritdoc
 		 * @throws TranslatorException
 		 */
-		public function translate(string $id, string $language = null): string {
+		public function translate(string $id, string $scope = null, string $language = null): string {
 			$this->use();
 			if (($language = $language ?: $this->language) === null) {
 				throw new TranslatorException('Cannot use translator without set language.');
 			}
-			if (($string = $this->cache->load($cacheId = ($id . $language . $this->scope))) !== null) {
+			if (($string = $this->cache->load($cacheId = ($id . $language . ($scope = $scope ?: $this->scope)))) !== null) {
 				return $string;
 			}
-			if (isset($this->dictionaryList[$this->scope]) === false) {
+			if (isset($this->dictionaryList[$scope]) === false) {
 				throw new TranslatorException(sprintf('Scope [%s] has no dictionaries.', $this->scope));
 			}
 			$dictionaryList = $this->dictionaryList[$this->scope];
