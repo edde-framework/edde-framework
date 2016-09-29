@@ -5,6 +5,9 @@
 
 	use Edde\Api\Deffered\IDeffered;
 
+	/**
+	 * Implementation of a translator.
+	 */
 	interface ITranslator extends IDeffered {
 		/**
 		 * register source of words
@@ -22,7 +25,7 @@
 		 *
 		 * @return ITranslator
 		 */
-		public function setLanguage($language): ITranslator;
+		public function setLanguage(string $language): ITranslator;
 
 		/**
 		 * try to translate a string

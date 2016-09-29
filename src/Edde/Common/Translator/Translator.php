@@ -27,8 +27,11 @@
 		 */
 		public function translate(string $id, array $parameterList = [], string $language = null): string {
 			$this->use();
+			if (($language = $language ?: $this->language) === null) {
+				throw new TranslatorException('Cannot use translator without set language.');
+			}
 			foreach ($this->dictionaryList as $dictionary) {
-				if (($string = $dictionary->translate($id, $parameterList, $language ?: $this->language)) !== null) {
+				if (($string = $dictionary->translate($id, $parameterList, $language)) !== null) {
 					return $string;
 				}
 			}
@@ -41,8 +44,11 @@
 		 */
 		public function translatef(string $id, array $parameterList = null, string $language = null): string {
 			$this->use();
+			if (($language = $language ?: $this->language) === null) {
+				throw new TranslatorException('Cannot use translator without set language.');
+			}
 			foreach ($this->dictionaryList as $dictionary) {
-				if (($string = $dictionary->translatef($id, $parameterList, $language ?: $this->language)) !== null) {
+				if (($string = $dictionary->translatef($id, $parameterList, $language)) !== null) {
 					return $string;
 				}
 			}
@@ -52,7 +58,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setLanguage($language): ITranslator {
+		public function setLanguage(string $language): ITranslator {
 			$this->language = $language;
 			return $this;
 		}
@@ -66,9 +72,6 @@
 		}
 
 		protected function prepare() {
-			if ($this->language === null) {
-				throw new TranslatorException('Cannot use translator without set language.');
-			}
 			if (empty($this->dictionaryList)) {
 				throw new TranslatorException('Translator needs at least one dictionary. Or The God will kill one cute devil kitten!');
 			}
