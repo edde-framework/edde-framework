@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Web;
 
+	use Edde\Api\File\FileException;
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Resource\IResourceList;
@@ -10,9 +11,13 @@
 	use Edde\Api\Web\WebException;
 	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
+	use Edde\Common\Strings\StringException;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Url\Url;
 
+	/**
+	 * Compiler for stylesheets.
+	 */
 	class StyleSheetCompiler extends AbstractCompiler implements IStyleSheetCompiler {
 		use LazyTempDirectoryTrait;
 		/**
@@ -24,6 +29,12 @@
 			'data',
 		];
 
+		/**
+		 * @inheritdoc
+		 * @throws WebException
+		 * @throws StringException
+		 * @throws FileException
+		 */
 		public function compile(IResourceList $resourceList): IFile {
 			$this->use();
 			$content = [];
@@ -33,13 +44,13 @@
 					if ($resource->isAvailable() === false) {
 						throw new WebException(sprintf('Cannot compile stylesheets: resource [%s] is not available (does not exists?).', (string)$resource->getUrl()));
 					}
-					$current = $resource->get();
+					$current = $this->filter($resource->get());
 					$urlList = StringUtils::matchAll($current, "~url\\((?<url>.*?)\\)~", true);
 					$resourcePath = $source = $resource->getUrl()
 						->getPath();
 					$resourcePath = dirname($resourcePath);
 					foreach (empty($urlList) ? [] : array_unique($urlList['url']) as $item) {
-						$url = Url::create(str_replace([
+						$url = Url::create($file = str_replace([
 							'"',
 							"'",
 						], null, $item));
@@ -50,7 +61,7 @@
 							$current = str_replace($item, '"' . $pathList[$path] . '"', $current);
 							continue;
 						}
-						if (($file = FileUtils::realpath($resourcePath . '/' . $path)) === false) {
+						if (file_exists($file) === false && ($file = FileUtils::realpath($resourcePath . '/' . $path)) === false) {
 							throw new WebException(sprintf('Cannot locate css [%s] resource [%s] on the filesystem.', $source, $urlList));
 						}
 						$current = str_replace($item, '"' . ($pathList[$path] = $this->assetStorage->store(new File($file))
