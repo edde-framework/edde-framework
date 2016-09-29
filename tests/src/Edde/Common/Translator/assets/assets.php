@@ -6,7 +6,10 @@
 	use Edde\Common\Translator\AbstractDictionary;
 
 	class EmptyDictionary extends AbstractDictionary {
-		public function translate(string $id, array $parameterList = [], string $language) {
+		/**
+		 * @inheritdoc
+		 */
+		public function translate(string $id, string $language) {
 			return null;
 		}
 
@@ -15,7 +18,10 @@
 	}
 
 	class DummyDictionary extends AbstractDictionary {
-		public function translate(string $id, array $parameterList = [], string $language) {
+		/**
+		 * @inheritdoc
+		 */
+		public function translate(string $id, string $language) {
 			return $id . '.' . $language;
 		}
 

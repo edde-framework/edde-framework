@@ -67,29 +67,7 @@
 			$csvDictionary->addFile(__DIR__ . '/assets/cs.csv');
 			$this->translator->setLanguage('en');
 			self::assertEquals('english foo', $this->translator->translate('foo'));
-			self::assertEquals('czech foo', $this->translator->translate('foo', [], 'cs'));
-		}
-
-		public function testDictionaryParameters() {
-			$this->translator->registerDictionary($csvDictionary = $this->container->create(CsvDictionary::class));
-			$csvDictionary->addFile(__DIR__ . '/assets/dic.csv');
-			$this->translator->setLanguage('en');
-			self::assertEquals('english some param foo fooooped foo', $this->translator->translate('foo', $parameters = [
-				'param' => 'some param',
-				'foo' => 'fooooped foo',
-			]));
-			self::assertEquals('czech foo some paramfooooped foo', $this->translator->translate('foo', $parameters, 'cs'));
-		}
-
-		public function testDictionaryParameterf() {
-			$this->translator->registerDictionary($csvDictionary = $this->container->create(CsvDictionary::class));
-			$csvDictionary->addFile(__DIR__ . '/assets/dic.csv');
-			$this->translator->setLanguage('en');
-			self::assertEquals('english "some param" foo 3.142', $this->translator->translatef('foof', $parameters = [
-				'"some param"',
-				3.14156,
-			]));
-			self::assertEquals('czech foo "some param" 3.142', $this->translator->translatef('foof', $parameters, 'cs'));
+			self::assertEquals('czech foo', $this->translator->translate('foo', 'cs'));
 		}
 
 		protected function setUp() {

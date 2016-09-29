@@ -23,36 +23,10 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws TranslatorException
 		 */
-		public function translate(string $id, array $parameterList = [], string $language = null): string {
-			$this->use();
-			if (($language = $language ?: $this->language) === null) {
-				throw new TranslatorException('Cannot use translator without set language.');
-			}
-			foreach ($this->dictionaryList as $dictionary) {
-				if (($string = $dictionary->translate($id, $parameterList, $language)) !== null) {
-					return $string;
-				}
-			}
-			throw new TranslatorException(sprintf('Cannot translate [%s]; the given id is not available in no dictionary.', $id));
-		}
-
-		/**
-		 * @inheritdoc
-		 * @throws TranslatorException
-		 */
-		public function translatef(string $id, array $parameterList = null, string $language = null): string {
-			$this->use();
-			if (($language = $language ?: $this->language) === null) {
-				throw new TranslatorException('Cannot use translator without set language.');
-			}
-			foreach ($this->dictionaryList as $dictionary) {
-				if (($string = $dictionary->translatef($id, $parameterList, $language)) !== null) {
-					return $string;
-				}
-			}
-			throw new TranslatorException(sprintf('Cannot translate [%s]; the given id is not available in no dictionary.', $id));
+		public function registerDictionary(IDictionary $dictionary): ITranslator {
+			$this->dictionaryList[] = $dictionary;
+			return $this;
 		}
 
 		/**
@@ -65,10 +39,19 @@
 
 		/**
 		 * @inheritdoc
+		 * @throws TranslatorException
 		 */
-		public function registerDictionary(IDictionary $dictionary): ITranslator {
-			$this->dictionaryList[] = $dictionary;
-			return $this;
+		public function translate(string $id, string $language = null): string {
+			$this->use();
+			if (($language = $language ?: $this->language) === null) {
+				throw new TranslatorException('Cannot use translator without set language.');
+			}
+			foreach ($this->dictionaryList as $dictionary) {
+				if (($string = $dictionary->translate($id, $language)) !== null) {
+					return $string;
+				}
+			}
+			throw new TranslatorException(sprintf('Cannot translate [%s]; the given id is not available in no dictionary.', $id));
 		}
 
 		protected function prepare() {

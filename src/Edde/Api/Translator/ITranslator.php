@@ -31,21 +31,9 @@
 		 * try to translate a string
 		 *
 		 * @param string $id
-		 * @param array $parameterList
 		 * @param string|null $language
 		 *
 		 * @return string
 		 */
-		public function translate(string $id, array $parameterList = [], string $language = null): string;
-
-		/**
-		 * internally use sprintf with combination of parameterList
-		 *
-		 * @param string $id
-		 * @param array $parameterList
-		 * @param string|null $language
-		 *
-		 * @return string
-		 */
-		public function translatef(string $id, array $parameterList = null, string $language = null): string;
+		public function translate(string $id, string $language = null): string;
 	}
