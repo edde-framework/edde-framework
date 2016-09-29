@@ -7,6 +7,9 @@
 	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Common\AbstractObject;
 
+	/**
+	 * Crate property implementation.
+	 */
 	class Property extends AbstractObject implements IProperty {
 		/**
 		 * property definition of this value
@@ -34,6 +37,8 @@
 		protected $dirty;
 
 		/**
+		 * My wife’s cooking is so bad we usually pray after our food.
+		 *
 		 * @param ISchemaProperty $schemaProperty
 		 * @param mixed|null $value
 		 */
@@ -43,10 +48,16 @@
 			$this->dirty = false;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getSchemaProperty() {
 			return $this->schemaProperty;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function push($value) {
 			$this->dirty = false;
 			$this->current = null;
@@ -54,6 +65,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function get($default = null) {
 			if ($this->current === null && $this->value === null) {
 				$this->set($value = $default ? (is_callable($default) ? call_user_func($default) : $default) : ($this->schemaProperty->hasGenerator() ? $this->schemaProperty->generator() : null));
@@ -66,6 +80,9 @@
 			return $this->schemaProperty->getterFilter($this->schemaProperty->filter($value));
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function set($value) {
 			$value = $this->schemaProperty->setterFilter($this->schemaProperty->filter($value));
 			$this->dirty = false;
@@ -77,14 +94,23 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getValue() {
 			return $this->value;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isDirty(): bool {
 			return $this->dirty;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isEmpty(): bool {
 			if ($this->dirty && $this->current === null) {
 				return true;
@@ -94,6 +120,9 @@
 			return false;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function reset() {
 			$this->dirty = false;
 			$this->current = null;
