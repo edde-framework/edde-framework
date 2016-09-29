@@ -29,7 +29,7 @@
 
 		public function testUseException() {
 			$this->expectException(TranslatorException::class);
-			$this->expectExceptionMessage('Cannot use translator without set language.');
+			$this->expectExceptionMessage('Translator needs at least one dictionary. Or The God will kill one cute devil kitten!');
 			$this->translator->use();
 		}
 
