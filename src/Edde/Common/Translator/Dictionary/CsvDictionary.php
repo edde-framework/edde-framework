@@ -4,12 +4,16 @@
 	namespace Edde\Common\Translator\Dictionary;
 
 	use Edde\Api\Container\ILazyInject;
+	use Edde\Api\File\FileException;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Resource\LazyResourceManagerTrait;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\File\CsvFile;
 	use Edde\Common\Translator\AbstractDictionary;
 
+	/**
+	 * Csv file support.
+	 */
 	class CsvDictionary extends AbstractDictionary implements ILazyInject {
 		use LazyResourceManagerTrait;
 		use CacheTrait;
@@ -22,6 +26,14 @@
 		 */
 		protected $dictionary;
 
+		/**
+		 * register a file to csv dictionary as a source
+		 *
+		 * @param string $file
+		 *
+		 * @return $this
+		 * @throws FileException
+		 */
 		public function addFile(string $file) {
 			$this->fileList[$file] = new CsvFile($file);
 			return $this;

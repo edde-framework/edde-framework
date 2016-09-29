@@ -12,8 +12,11 @@
 	use Foo\Bar\EmptyDictionary;
 	use phpunit\framework\TestCase;
 
-	require_once(__DIR__ . '/assets/assets.php');
+	require_once __DIR__ . '/assets/assets.php';
 
+	/**
+	 * Testsuite for translator.
+	 */
 	class TranslatorTest extends TestCase {
 		/**
 		 * @var IContainer
@@ -26,7 +29,7 @@
 
 		public function testUseException() {
 			$this->expectException(TranslatorException::class);
-			$this->expectExceptionMessage('Cannot use translator without set language.');
+			$this->expectExceptionMessage('Translator needs at least one dictionary. Or The God will kill one cute devil kitten!');
 			$this->translator->use();
 		}
 
@@ -62,37 +65,31 @@
 			$this->translator->registerDictionary($csvDictionary = $this->container->create(CsvDictionary::class));
 			$csvDictionary->addFile(__DIR__ . '/assets/en.csv');
 			$csvDictionary->addFile(__DIR__ . '/assets/cs.csv');
+			$this->translator->registerDictionary($csvDictionary = $this->container->create(CsvDictionary::class), 'scope1');
+			$csvDictionary->addFile(__DIR__ . '/assets/en-scope01.csv');
+			$this->translator->registerDictionary($csvDictionary = $this->container->create(CsvDictionary::class), 'scope2');
+			$csvDictionary->addFile(__DIR__ . '/assets/en-scope02.csv');
 			$this->translator->setLanguage('en');
 			self::assertEquals('english foo', $this->translator->translate('foo'));
-			self::assertEquals('czech foo', $this->translator->translate('foo', [], 'cs'));
-		}
-
-		public function testDictionaryParameters() {
-			$this->translator->registerDictionary($csvDictionary = $this->container->create(CsvDictionary::class));
-			$csvDictionary->addFile(__DIR__ . '/assets/dic.csv');
-			$this->translator->setLanguage('en');
-			self::assertEquals('english some param foo fooooped foo', $this->translator->translate('foo', $parameters = [
-				'param' => 'some param',
-				'foo' => 'fooooped foo',
-			]));
-			self::assertEquals('czech foo some paramfooooped foo', $this->translator->translate('foo', $parameters, 'cs'));
-		}
-
-		public function testDictionaryParameterf() {
-			$this->translator->registerDictionary($csvDictionary = $this->container->create(CsvDictionary::class));
-			$csvDictionary->addFile(__DIR__ . '/assets/dic.csv');
-			$this->translator->setLanguage('en');
-			self::assertEquals('english "some param" foo 3.142', $this->translator->translatef('foof', $parameters = [
-				'"some param"',
-				3.14156,
-			]));
-			self::assertEquals('czech foo "some param" 3.142', $this->translator->translatef('foof', $parameters, 'cs'));
+			self::assertEquals('czech foo', $this->translator->translate('foo', null, 'cs'));
+			$this->translator->pushScope('scope1');
+			self::assertEquals('english foo1', $this->translator->translate('foo'));
+			$this->translator->pushScope('scope2');
+			self::assertEquals('english foo2', $this->translator->translate('foo'));
+			$this->translator->pushScope(null);
+			self::assertEquals('english foo', $this->translator->translate('foo'));
+			self::assertEquals('czech foo', $this->translator->translate('foo', null, 'cs'));
+			$this->translator->popScope();
+			$this->translator->popScope();
+			$this->translator->popScope();
+			self::assertEquals('english foo', $this->translator->translate('foo'));
+			self::assertEquals('czech foo', $this->translator->translate('foo', null, 'cs'));
 		}
 
 		protected function setUp() {
 			$this->container = $container = ContainerFactory::create([
 				ITranslator::class => Translator::class,
 			]);
-			$this->translator = new Translator();
+			$this->translator = $container->create(ITranslator::class);
 		}
 	}
