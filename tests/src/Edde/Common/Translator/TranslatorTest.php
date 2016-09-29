@@ -65,7 +65,23 @@
 			$this->translator->registerDictionary($csvDictionary = $this->container->create(CsvDictionary::class));
 			$csvDictionary->addFile(__DIR__ . '/assets/en.csv');
 			$csvDictionary->addFile(__DIR__ . '/assets/cs.csv');
+			$this->translator->registerDictionary($csvDictionary = $this->container->create(CsvDictionary::class), 'scope1');
+			$csvDictionary->addFile(__DIR__ . '/assets/en-scope01.csv');
+			$this->translator->registerDictionary($csvDictionary = $this->container->create(CsvDictionary::class), 'scope2');
+			$csvDictionary->addFile(__DIR__ . '/assets/en-scope02.csv');
 			$this->translator->setLanguage('en');
+			self::assertEquals('english foo', $this->translator->translate('foo'));
+			self::assertEquals('czech foo', $this->translator->translate('foo', null, 'cs'));
+			$this->translator->pushScope('scope1');
+			self::assertEquals('english foo1', $this->translator->translate('foo'));
+			$this->translator->pushScope('scope2');
+			self::assertEquals('english foo2', $this->translator->translate('foo'));
+			$this->translator->pushScope(null);
+			self::assertEquals('english foo', $this->translator->translate('foo'));
+			self::assertEquals('czech foo', $this->translator->translate('foo', null, 'cs'));
+			$this->translator->popScope();
+			$this->translator->popScope();
+			$this->translator->popScope();
 			self::assertEquals('english foo', $this->translator->translate('foo'));
 			self::assertEquals('czech foo', $this->translator->translate('foo', null, 'cs'));
 		}
