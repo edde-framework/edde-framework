@@ -46,9 +46,7 @@
 			$switch = str_replace('-', '_', $this->cryptEngine->guid());
 			$this->write($compiler, sprintf('$switch_%s = %s;', $switch, $this->switch($this->attribute($macro, $compiler, 'src', false))), 5);
 			$stack->push($switch);
-			foreach ($macro->getNodeList() as $node) {
-				$compiler->macro($node);
-			}
+			parent::macro($macro, $compiler);
 			$stack->pop();
 		}
 

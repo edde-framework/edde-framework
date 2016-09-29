@@ -29,9 +29,7 @@
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
 			if ($macro->isRoot() === false || $macro->getMeta('included', false)) {
-				foreach ($macro->getNodeList() as $node) {
-					$compiler->macro($node);
-				}
+				parent::macro($macro, $compiler);
 				return null;
 			}
 			$this->use();

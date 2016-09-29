@@ -46,9 +46,7 @@
 			$switch = $compiler->getVariable(SwitchMacro::class)
 				->top();
 			$this->write($compiler, sprintf('if($switch_%s === %s) {', $switch, var_export($this->attribute($macro, $compiler, 'name', false), true)), 5);
-			foreach ($macro->getNodeList() as $node) {
-				$compiler->macro($node);
-			}
+			parent::macro($macro, $compiler);
 			$this->write($compiler, '}', 5);
 		}
 	}

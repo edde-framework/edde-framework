@@ -89,9 +89,7 @@
 			$src = $this->attribute($macro, $compiler, 'src', false);
 			$this->write($compiler, sprintf('foreach(%s as $key_%s => $value_%s) {', ($helper = $compiler->helper($macro, $src)) ? $helper : $this->loop($compiler, $src), $key, $value), 5);
 			$stack->push($loop);
-			foreach ($macro->getNodeList() as $node) {
-				$compiler->macro($node);
-			}
+			parent::macro($macro, $compiler);
 			$stack->pop();
 			$this->write($compiler, '}', 5);
 		}

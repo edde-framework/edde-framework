@@ -76,9 +76,7 @@
 			$if = str_replace('-', '_', $this->cryptEngine->guid());
 			$this->write($compiler, sprintf('if($if_%s = %s) {', $if, $this->if($this->attribute($macro, $compiler, 'src', false))), 5);
 			$stack->push($if);
-			foreach ($macro->getNodeList() as $node) {
-				$compiler->macro($node);
-			}
+			parent::macro($macro, $compiler);
 			$stack->pop();
 			$this->write($compiler, '}', 5);
 		}

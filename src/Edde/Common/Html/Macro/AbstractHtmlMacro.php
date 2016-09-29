@@ -19,6 +19,18 @@
 		];
 
 		/**
+		 * @inheritdoc
+		 */
+		public function macro(INode $macro, ICompiler $compiler) {
+			foreach ($macro->getNodeList() as $node) {
+				if ($node->getMeta('snippet', false)) {
+					continue;
+				}
+				$compiler->macro($node);
+			}
+		}
+
+		/**
 		 * write (export) text value from macro node
 		 *
 		 * @param INode $macro
@@ -42,6 +54,8 @@
 			$file = $compiler->getVariable('file');
 			$file->write(($indents ? str_repeat("\t", $indents) : '') . $write . "\n");
 		}
+
+		/** @noinspection PhpMissingParentCallCommonInspection */
 
 		/**
 		 * export attribute list
