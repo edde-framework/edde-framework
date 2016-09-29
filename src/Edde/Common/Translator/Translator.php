@@ -15,19 +15,23 @@
 	class Translator extends AbstractDeffered implements ITranslator {
 		use CacheTrait;
 		/**
-		 * @var IDictionary[]
+		 * @var IDictionary[][]
 		 */
 		protected $dictionaryList = [];
 		/**
 		 * @var string
 		 */
 		protected $language;
+		/**
+		 * @var string
+		 */
+		protected $scope;
 
 		/**
 		 * @inheritdoc
 		 */
-		public function registerDictionary(IDictionary $dictionary): ITranslator {
-			$this->dictionaryList[] = $dictionary;
+		public function registerDictionary(IDictionary $dictionary, string $scope = null): ITranslator {
+			$this->dictionaryList[$scope][] = $dictionary;
 			return $this;
 		}
 
@@ -41,6 +45,14 @@
 
 		/**
 		 * @inheritdoc
+		 */
+		public function setScope(string $scope = null): ITranslator {
+			$this->scope = $scope;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
 		 * @throws TranslatorException
 		 */
 		public function translate(string $id, string $language = null): string {
@@ -48,12 +60,16 @@
 			if (($language = $language ?: $this->language) === null) {
 				throw new TranslatorException('Cannot use translator without set language.');
 			}
-			if (($string = $this->cache->load($id . $language)) !== null) {
+			if (($string = $this->cache->load($cacheId = ($id . $language . $this->scope))) !== null) {
 				return $string;
 			}
-			foreach ($this->dictionaryList as $dictionary) {
+			if (isset($this->dictionaryList[$this->scope]) === false) {
+				throw new TranslatorException(sprintf('Scope [%s] has no dictionaries.', $this->scope));
+			}
+			$dictionaryList = $this->dictionaryList[$this->scope];
+			foreach ($dictionaryList as $dictionary) {
 				if (($string = $dictionary->translate($id, $language)) !== null) {
-					return $this->cache->save($id . $language, $string);
+					return $this->cache->save($cacheId, $string);
 				}
 			}
 			throw new TranslatorException(sprintf('Cannot translate [%s]; the given id is not available in no dictionary.', $id));

@@ -13,10 +13,11 @@
 		 * register source of words
 		 *
 		 * @param IDictionary $dictionary
+		 * @param string $scope
 		 *
 		 * @return ITranslator
 		 */
-		public function registerDictionary(IDictionary $dictionary): ITranslator;
+		public function registerDictionary(IDictionary $dictionary, string $scope = null): ITranslator;
 
 		/**
 		 * language can be set in a runtime
@@ -26,6 +27,15 @@
 		 * @return ITranslator
 		 */
 		public function setLanguage(string $language): ITranslator;
+
+		/**
+		 * set (unset) the current dictionary scope
+		 *
+		 * @param string|null $scope
+		 *
+		 * @return ITranslator
+		 */
+		public function setScope(string $scope = null): ITranslator;
 
 		/**
 		 * try to translate a string
