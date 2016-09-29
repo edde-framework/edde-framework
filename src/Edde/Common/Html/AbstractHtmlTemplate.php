@@ -11,6 +11,7 @@
 	use Edde\Api\Html\IHtmlTemplate;
 	use Edde\Api\Template\LazyTemplateManagerTrait;
 	use Edde\Api\Template\TemplateException;
+	use Edde\Api\Translator\LazyTranslatorTrait;
 	use Edde\Api\Url\IUrl;
 	use Edde\Api\Web\LazyJavaScriptCompilerTrait;
 	use Edde\Api\Web\LazyStyleSheetCompilerTrait;
@@ -24,6 +25,7 @@
 		use LazyTemplateManagerTrait;
 		use LazyJavaScriptCompilerTrait;
 		use LazyStyleSheetCompilerTrait;
+		use LazyTranslatorTrait;
 		/**
 		 * @var IHtmlTemplate[]
 		 */

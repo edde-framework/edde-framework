@@ -53,6 +53,7 @@
 	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
@@ -93,6 +94,7 @@
 	use Edde\Common\Session\DummyFingerprint;
 	use Edde\Common\Session\SessionManager;
 	use Edde\Common\Template\TemplateManager;
+	use Edde\Common\Translator\Translator;
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
@@ -225,6 +227,7 @@
 					},
 					IEventBus::class => EventBus::class,
 					ICrateLoader::class => CrateLoader::class,
+					ITranslator::class => Translator::class,
 				], $factoryList))
 				->deffered(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
 					$routerService->registerRouter($container->create(SimpleRouter::class));

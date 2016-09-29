@@ -1,10 +1,13 @@
-<control foo="@current-method-call()" title="foo">
+<control foo="@current-method-call()" title="foo" t:translator="foo">
 	<include src="./pass-include.xml"/>
 
 	<css src="./foo/bar/boo.css"/>
 	<schema name="foo" schema="Bar\Foo\Fart\Poo"/>
 
 	<div t:schema="foo.property-here"/>
+
+	<div value="this will be translated|translate"/>
+	<div>this will also be translated|translate</div>
 
 	<switch src=":gimme-a-switch()">
 		<case name="foo">

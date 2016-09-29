@@ -18,6 +18,7 @@
 	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Xml\IXmlParser;
@@ -38,6 +39,8 @@
 	use Edde\Common\Link\LinkFactory;
 	use Edde\Common\Resource\ResourceList;
 	use Edde\Common\Resource\ResourceManager;
+	use Edde\Common\Translator\Dictionary\CsvDictionary;
+	use Edde\Common\Translator\Translator;
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Container\ContainerFactory;
@@ -195,6 +198,7 @@
 					$linkFactory->registerLinkGenerator($container->inject(new ControlLinkGenerator()));
 					return $linkFactory;
 				},
+				ITranslator::class => Translator::class,
 			]);
 			/** @var $converterManager IConverterManager */
 			$converterManager = $container->create(IConverterManager::class);
@@ -202,5 +206,9 @@
 			$this->templateManager = $container->create(ITemplateManager::class);
 			$this->styleSheetList = $container->create(IStyleSheetCompiler::class);
 			$this->javaScriptList = $container->create(IJavaScriptCompiler::class);
+			$translator = $container->create(ITranslator::class);
+			$translator->registerDictionary($csvDictionary = $container->create(CsvDictionary::class), 'foo');
+			$csvDictionary->addFile(__DIR__ . '/assets/dictionary.csv');
+			$translator->setLanguage('en');
 		}
 	}
