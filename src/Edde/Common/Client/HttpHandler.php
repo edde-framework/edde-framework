@@ -7,6 +7,8 @@
 	use Edde\Api\Client\IHttpHandler;
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\File\IFile;
+	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
@@ -21,6 +23,7 @@
 	 */
 	class HttpHandler extends AbstractObject implements IHttpHandler, ILazyInject {
 		use LazyContainerTrait;
+		use LazyTempDirectoryTrait;
 		/**
 		 * @var IHttpRequest
 		 */
@@ -29,6 +32,12 @@
 		 * @var resource
 		 */
 		protected $curl;
+		/**
+		 * cookie file; if set, cookies will be supported
+		 *
+		 * @var IFile
+		 */
+		protected $cookie;
 
 		/**
 		 * @param IHttpRequest $httpRequest
@@ -82,6 +91,14 @@
 
 		/**
 		 * @inheritdoc
+		 */
+		public function cookie($file): IHttpHandler {
+			$this->cookie = is_string($file) ? $this->tempDirectory->file($file) : $file;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
 		 * @throws ClientException
 		 */
 		public function execute(): IHttpResponse {
@@ -99,6 +116,9 @@
 			if ($postList->isEmpty() === false) {
 				$options[CURLOPT_POST] = true;
 				$options[CURLOPT_POSTFIELDS] = $postList->array();
+			}
+			if ($this->cookie) {
+				$options[CURLOPT_COOKIEFILE] = $options[CURLOPT_COOKIEJAR] = $this->cookie->getPath();
 			}
 			$headerList = new HeaderList();
 			/** @noinspection PhpUnusedParameterInspection */

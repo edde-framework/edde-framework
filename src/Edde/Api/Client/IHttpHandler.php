@@ -3,6 +3,7 @@
 
 	namespace Edde\Api\Client;
 
+	use Edde\Api\File\IFile;
 	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpResponse;
 
@@ -49,6 +50,15 @@
 		 * @return IHttpHandler
 		 */
 		public function body(IBody $body): IHttpHandler;
+
+		/**
+		 * if stirng is provided, temp dir will be used
+		 *
+		 * @param IFile|string $file
+		 *
+		 * @return mixed
+		 */
+		public function cookie($file): IHttpHandler;
 
 		/**
 		 * execute a client request

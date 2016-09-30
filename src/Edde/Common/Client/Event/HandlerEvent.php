@@ -28,10 +28,16 @@
 			$this->httpHandler = $httpHandler;
 		}
 
+		/**
+		 * @return IHttpRequest
+		 */
 		public function getHttpRequest(): IHttpRequest {
 			return $this->httpRequest;
 		}
 
+		/**
+		 * @return IHttpHandler
+		 */
 		public function getHttpHandler(): IHttpHandler {
 			return $this->httpHandler;
 		}
