@@ -45,10 +45,22 @@
 		 * @inheritdoc
 		 */
 		public function registerSource(IFile $source, string $scope = null): ITranslator {
+			if ($this->isUsed()) {
+				$this->registerDictionary($this->converterManager->convert($source, $source->getMime(), IDictionary::class), $scope);
+				return $this;
+			}
 			$this->sourceList[] = [
 				$source,
 				$scope,
 			];
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function registerDictionary(IDictionary $dictionary, string $scope = null): ITranslator {
+			$this->dictionaryList[$scope][] = $dictionary;
 			return $this;
 		}
 
@@ -112,13 +124,5 @@
 			if (empty($this->dictionaryList)) {
 				throw new TranslatorException('Translator needs at least one dictionary. Or The God will kill one cute devil kitten!');
 			}
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function registerDictionary(IDictionary $dictionary, string $scope = null): ITranslator {
-			$this->dictionaryList[$scope][] = $dictionary;
-			return $this;
 		}
 	}
