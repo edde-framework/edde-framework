@@ -61,6 +61,15 @@
 		public function cookie($file): IHttpHandler;
 
 		/**
+		 * set user agent for this request
+		 *
+		 * @param string $agent
+		 *
+		 * @return IHttpHandler
+		 */
+		public function agent(string $agent): IHttpHandler;
+
+		/**
 		 * execute a client request
 		 *
 		 * @return IHttpResponse

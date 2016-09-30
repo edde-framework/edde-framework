@@ -99,6 +99,14 @@
 
 		/**
 		 * @inheritdoc
+		 */
+		public function agent(string $agent): IHttpHandler {
+			curl_setopt($this->curl, CURLOPT_USERAGENT, $agent);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
 		 * @throws ClientException
 		 */
 		public function execute(): IHttpResponse {
