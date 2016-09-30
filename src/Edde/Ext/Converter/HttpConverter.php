@@ -43,6 +43,11 @@
 					}
 					echo $source;
 					return null;
+				case 'string':
+					if (is_callable($source)) {
+						return $source();
+					}
+					return $source;
 			}
 			$this->exception($target);
 		}
