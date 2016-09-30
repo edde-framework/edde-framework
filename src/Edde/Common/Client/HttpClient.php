@@ -9,6 +9,7 @@
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Http\IHttpRequest;
+	use Edde\Api\Url\IUrl;
 	use Edde\Common\Client\Event\HandlerEvent;
 	use Edde\Common\Client\Event\PostEvent;
 	use Edde\Common\Client\Event\RequestEvent;
@@ -28,11 +29,17 @@
 		use LazyConverterManagerTrait;
 		use EventTrait;
 
+		/**
+		 * @inheritdoc
+		 */
 		public function get($url): IHttpHandler {
 			return $this->request($this->createRequest($url)
 				->setMethod('GET'));
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function request(IHttpRequest $httpRequest): IHttpHandler {
 			$this->use();
 			curl_setopt_array($curl = curl_init($url = (string)$httpRequest->getRequestUrl()), [
@@ -50,6 +57,11 @@
 			return $this->container->inject(new HttpHandler($httpRequest, $curl));
 		}
 
+		/**
+		 * @param IUrl|string $url
+		 *
+		 * @return HttpRequest
+		 */
 		protected function createRequest($url) {
 			$httpRequest = new HttpRequest(new PostList(), new HeaderList(), new CookieList());
 			$httpRequest->setRequestUrl(RequestUrl::create($url));
@@ -57,6 +69,9 @@
 			return $httpRequest;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function post($url): IHttpHandler {
 			$httpRequest = $this->createRequest($url)
 				->setMethod('POST');
@@ -65,6 +80,9 @@
 			return $httpHandler;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function put($url): IHttpHandler {
 			$httpRequest = $this->createRequest($url)
 				->setMethod('PUT');
@@ -73,6 +91,9 @@
 			return $httpHandler;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function delete($url): IHttpHandler {
 			$httpRequest = $this->createRequest($url)
 				->setMethod('DELETE');
@@ -81,6 +102,10 @@
 			return $httpHandler;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws ClientException
+		 */
 		protected function prepare() {
 			if (extension_loaded('curl') === false) {
 				throw new ClientException('Curl extension is not loaded in PHP.');
