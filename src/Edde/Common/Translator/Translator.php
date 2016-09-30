@@ -45,7 +45,7 @@
 		 * @inheritdoc
 		 */
 		public function registerSource(IFile $source, string $scope = null): ITranslator {
-			$this->sourceList[$source->getPath()] = [
+			$this->sourceList[] = [
 				$source,
 				$scope,
 			];

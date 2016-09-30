@@ -16,6 +16,7 @@
 	use Edde\Common\Html\Macro\CaseMacro;
 	use Edde\Common\Html\Macro\ControlMacro;
 	use Edde\Common\Html\Macro\CssMacro;
+	use Edde\Common\Html\Macro\DictionaryMacro;
 	use Edde\Common\Html\Macro\HeaderMacro;
 	use Edde\Common\Html\Macro\HtmlMacro;
 	use Edde\Common\Html\Macro\IfMacro;
@@ -85,6 +86,7 @@
 					$container->inject(new PassChildMacro()),
 					$container->inject(new SnippetMacro()),
 					$container->inject(new TranslatorMacro()),
+					$container->inject(new DictionaryMacro()),
 					$container->inject(new HtmlMacro('div', DivControl::class)),
 					$container->inject(new HtmlMacro('span', SpanControl::class)),
 					$container->inject(new HtmlMacro('p', ParagraphControl::class)),

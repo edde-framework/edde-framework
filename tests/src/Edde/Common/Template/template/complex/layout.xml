@@ -1,4 +1,7 @@
 <control foo="@current-method-call()" title="foo" t:translator="foo">
+	<dictionary src="./dictionary.csv"/>
+	<dictionary src="./dictionary.csv" scope=""/>
+
 	<include src="./pass-include.xml"/>
 
 	<css src="./foo/bar/boo.css"/>

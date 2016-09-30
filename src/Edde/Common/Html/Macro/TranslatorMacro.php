@@ -26,7 +26,8 @@
 		 * @inheritdoc
 		 */
 		public function compileInline(INode $macro, ICompiler $compiler) {
-			$macro->insert(new Node('translator', null, ['scope' => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+			$macro->insert(new Node('translator', null, ['scope' => $scope = $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+			$compiler->setVariable('scope', $scope);
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
