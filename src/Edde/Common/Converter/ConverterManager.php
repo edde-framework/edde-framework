@@ -8,12 +8,19 @@
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Common\Deffered\AbstractDeffered;
 
+	/**
+	 * Default implementation of a convertion manager.
+	 */
 	class ConverterManager extends AbstractDeffered implements IConverterManager {
 		/**
 		 * @var IConverter[]
 		 */
 		protected $converterList = [];
 
+		/**
+		 * @inheritdoc
+		 * @throws ConverterException
+		 */
 		public function registerConverter(IConverter $converter, bool $force = false): IConverterManager {
 			foreach ($converter->getMimeList() as $mime) {
 				if (isset($this->converterList[$mime]) && $force === false) {
@@ -24,6 +31,10 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws ConverterException
+		 */
 		public function convert($source, string $mime, string $target) {
 			$this->use();
 			if (isset($this->converterList[$mime]) === false) {

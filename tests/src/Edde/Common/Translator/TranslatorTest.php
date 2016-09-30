@@ -4,9 +4,13 @@
 	namespace Edde\Common\Translator;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Translator\TranslatorException;
+	use Edde\Common\Converter\ConverterManager;
+	use Edde\Common\File\File;
 	use Edde\Common\Translator\Dictionary\CsvDictionary;
+	use Edde\Common\Translator\Dictionary\CsvDictionaryConverter;
 	use Edde\Ext\Container\ContainerFactory;
 	use Foo\Bar\DummyDictionary;
 	use Foo\Bar\EmptyDictionary;
@@ -86,10 +90,19 @@
 			self::assertEquals('czech foo', $this->translator->translate('foo', null, 'cs'));
 		}
 
+		public function testConverter() {
+			$this->translator->registerSource(new File(__DIR__ . '/assets/dic.csv'));
+			self::assertEquals('english foo', $this->translator->translate('foo', null, 'en'));
+			self::assertEquals('czech foo', $this->translator->translate('foo', null, 'cs'));
+		}
+
 		protected function setUp() {
 			$this->container = $container = ContainerFactory::create([
 				ITranslator::class => Translator::class,
+				IConverterManager::class => ConverterManager::class,
 			]);
+			$converterManager = $container->create(IConverterManager::class);
+			$converterManager->registerConverter($container->create(CsvDictionaryConverter::class));
 			$this->translator = $container->create(ITranslator::class);
 		}
 	}
