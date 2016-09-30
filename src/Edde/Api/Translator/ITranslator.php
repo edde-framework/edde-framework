@@ -4,11 +4,22 @@
 	namespace Edde\Api\Translator;
 
 	use Edde\Api\Deffered\IDeffered;
+	use Edde\Api\File\IFile;
 
 	/**
 	 * Implementation of a translator.
 	 */
 	interface ITranslator extends IDeffered {
+		/**
+		 * register source to translator; this will be convertet via converter to target dictionary (and registered with register
+		 *
+		 * @param IFile $source
+		 * @param string|null $scope
+		 *
+		 * @return ITranslator
+		 */
+		public function registerSource(IFile $source, string $scope = null): ITranslator;
+
 		/**
 		 * register source of words
 		 *

@@ -1,4 +1,3 @@
 id;en;cs
-foo;english {param} foo {foo};czech foo {param}{foo}
+foo;english foo;czech foo
 bar;english bar;czech bar
-foof;english %s foo %.3f;czech foo %s %.3f

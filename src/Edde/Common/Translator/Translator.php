@@ -3,6 +3,8 @@
 
 	namespace Edde\Common\Translator;
 
+	use Edde\Api\Converter\LazyConverterManagerTrait;
+	use Edde\Api\File\IFile;
 	use Edde\Api\Translator\IDictionary;
 	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Translator\TranslatorException;
@@ -13,7 +15,12 @@
 	 * General class for translations support.
 	 */
 	class Translator extends AbstractDeffered implements ITranslator {
+		use LazyConverterManagerTrait;
 		use CacheTrait;
+		/**
+		 * @var array
+		 */
+		protected $sourceList = [];
 		/**
 		 * @var IDictionary[][]
 		 */
@@ -28,10 +35,20 @@
 		protected $scopeStack;
 
 		/**
+		 * When my wife starts to sing I always go out and do some garden work so our neighbors can see there's no domestic violence going on.
+		 */
+		public function __construct() {
+			$this->scopeStack = new \SplStack();
+		}
+
+		/**
 		 * @inheritdoc
 		 */
-		public function registerDictionary(IDictionary $dictionary, string $scope = null): ITranslator {
-			$this->dictionaryList[$scope][] = $dictionary;
+		public function registerSource(IFile $source, string $scope = null): ITranslator {
+			$this->sourceList[$source->getPath()] = [
+				$source,
+				$scope,
+			];
 			return $this;
 		}
 
@@ -47,7 +64,6 @@
 		 * @inheritdoc
 		 */
 		public function pushScope(string $scope = null): ITranslator {
-			$this->use();
 			$this->scopeStack->push($scope);
 			return $this;
 		}
@@ -56,7 +72,6 @@
 		 * @inheritdoc
 		 */
 		public function popScope(): ITranslator {
-			$this->use();
 			$this->scopeStack->pop();
 			return $this;
 		}
@@ -86,10 +101,24 @@
 		}
 
 		protected function prepare() {
-			$this->scopeStack = new \SplStack();
-			$this->scopeStack->push(null);
+			if ($this->scopeStack->isEmpty()) {
+				$this->scopeStack->push(null);
+			}
+			foreach ($this->sourceList as $item) {
+				/** @var $file IFile */
+				list($file, $scope) = $item;
+				$this->registerDictionary($this->converterManager->convert($file, $file->getMime(), IDictionary::class), $scope);
+			}
 			if (empty($this->dictionaryList)) {
 				throw new TranslatorException('Translator needs at least one dictionary. Or The God will kill one cute devil kitten!');
 			}
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function registerDictionary(IDictionary $dictionary, string $scope = null): ITranslator {
+			$this->dictionaryList[$scope][] = $dictionary;
+			return $this;
 		}
 	}
