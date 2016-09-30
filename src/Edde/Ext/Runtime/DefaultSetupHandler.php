@@ -94,6 +94,7 @@
 	use Edde\Common\Session\DummyFingerprint;
 	use Edde\Common\Session\SessionManager;
 	use Edde\Common\Template\TemplateManager;
+	use Edde\Common\Translator\Dictionary\CsvDictionaryConverter;
 	use Edde\Common\Translator\Translator;
 	use Edde\Common\Upgrade\UpgradeManager;
 	use Edde\Common\Web\JavaScriptCompiler;
@@ -241,6 +242,8 @@
 					$converterManager->registerConverter($container->create(HtmlConverter::class));
 					$converterManager->registerConverter($container->create(HttpConverter::class));
 					$converterManager->registerConverter($container->create(RedirectConverter::class));
+
+					$converterManager->registerConverter($container->create(CsvDictionaryConverter::class));
 				})
 				->listen(function (BootstrapEvent $bootstrapEvent) {
 					$container = $bootstrapEvent->getContainer();
