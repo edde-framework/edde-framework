@@ -103,4 +103,9 @@
 				'charset' => 'utf-8',
 			], HttpUtils::contentType('applicaiton/json; charset=utf-8'));
 		}
+
+		public function testCookies1() {
+			self::assertEquals(new Cookie('sessionid', '38afes7a8', '', '/', '', false, true), HttpUtils::cookie('sessionid=38afes7a8; httponly; Path=/'));
+			self::assertEquals(new Cookie('qwerty', '219ffwef9w0f', 'Wed, 30 Aug 2019 00:00:00 GMT', '/', 'somecompany.co.uk', false, false), HttpUtils::cookie('qwerty=219ffwef9w0f; Domain=somecompany.co.uk; Path=/; Expires=Wed, 30 Aug 2019 00:00:00 GMT'));
+		}
 	}

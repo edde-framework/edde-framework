@@ -55,10 +55,11 @@
 		 * if stirng is provided, temp dir will be used
 		 *
 		 * @param IFile|string $file
+		 * @param bool $reset
 		 *
-		 * @return mixed
+		 * @return IHttpHandler|mixed
 		 */
-		public function cookie($file): IHttpHandler;
+		public function cookie($file, bool $reset = false): IHttpHandler;
 
 		/**
 		 * set user agent for this request
