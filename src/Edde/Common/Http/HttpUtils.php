@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Http;
 
+	use Edde\Api\Http\ICookie;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Strings\StringUtils;
 
@@ -99,7 +100,7 @@
 			return $languageList;
 		}
 
-		static public function charset(string $charset = null, $default = 'utf-8') {
+		static public function charset(string $charset = null, $default = 'utf-8'): array {
 			if ($charset === null) {
 				return [$default];
 			}
@@ -127,7 +128,7 @@
 			return $charsetList;
 		}
 
-		static public function contentType(string $contentType) {
+		static public function contentType(string $contentType): \stdClass {
 			$type = explode(';', $contentType);
 			$stdClass = new \stdClass();
 			$stdClass->type = trim($type[0]);
@@ -139,5 +140,35 @@
 				}
 			}
 			return $stdClass;
+		}
+
+		/**
+		 * parse cookie and return array of values
+		 *
+		 * @param string $cookie
+		 *
+		 * @return ICookie
+		 */
+		static public function cookie(string $cookie): ICookie {
+			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
+			$cookie = StringUtils::match($cookie, '~(?<name>[^\s()<>@,;:\"/\\[\\]?={}]+)=(?<value>[^=;\s]+)\s*(?<misc>.*)?~', true);
+			$path = '/';
+			$domain = '';
+			$expires = '';
+			if (isset($cookie['misc'])) {
+				/** @noinspection NestedPositiveIfStatementsInspection */
+				if ($match = StringUtils::match($cookie['misc'], '~path=(?<path>[a-z0-9/._-]+);?~i', true, true)) {
+					$path = $match['path'];
+				}
+				/** @noinspection NestedPositiveIfStatementsInspection */
+				if ($match = StringUtils::match($cookie['misc'], '~domain=(?<domain>[a-z0-9._-]+);?~i', true, true)) {
+					$domain = $match['domain'];
+				}
+				/** @noinspection NestedPositiveIfStatementsInspection */
+				if ($match = StringUtils::match($cookie['misc'], '~expires=(?<expires>[a-z0-9:\s,-]+\s+GMT);?~i', true, true)) {
+					$expires = $match['expires'];
+				}
+			}
+			return new Cookie($cookie['name'], $cookie['value'], $expires, $path, $domain, stripos($cookie['misc'], 'secure') !== false, stripos($cookie['misc'], 'httponly') !== false);
 		}
 	}

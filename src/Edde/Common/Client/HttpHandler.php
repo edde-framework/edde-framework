@@ -14,9 +14,11 @@
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Http\Body;
+	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Http\HttpUtils;
+	use Edde\Common\Strings\StringException;
 
 	/**
 	 * Http client handler; this should not be used in common; only as a result from HttpClient calls
@@ -92,8 +94,11 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function cookie($file): IHttpHandler {
-			$this->cookie = is_string($file) ? $this->tempDirectory->file($file) : $file;
+		public function cookie($file, bool $reset = false): IHttpHandler {
+			$this->cookie = [
+				is_string($file) ? $this->tempDirectory->file($file) : $file,
+				$reset,
+			];
 			return $this;
 		}
 
@@ -108,6 +113,7 @@
 		/**
 		 * @inheritdoc
 		 * @throws ClientException
+		 * @throws StringException
 		 */
 		public function execute(): IHttpResponse {
 			if ($this->curl === null) {
@@ -126,16 +132,25 @@
 				$options[CURLOPT_POSTFIELDS] = $postList->array();
 			}
 			if ($this->cookie) {
-				$options[CURLOPT_COOKIEFILE] = $options[CURLOPT_COOKIEJAR] = $this->cookie->getPath();
+				/** @var $cookie IFile */
+				list($cookie, $reset) = $this->cookie;
+				$reset ? $cookie->delete() : null;
+				$options[CURLOPT_COOKIEFILE] = $options[CURLOPT_COOKIEJAR] = $cookie->getPath();
 			}
 			$headerList = new HeaderList();
+			$cookieList = new CookieList();
 			/** @noinspection PhpUnusedParameterInspection */
 			/** @noinspection PhpDocSignatureInspection */
-			$options[CURLOPT_HEADERFUNCTION] = function ($curl, $header) use ($headerList) {
+			$options[CURLOPT_HEADERFUNCTION] = function ($curl, $header) use ($headerList, $cookieList) {
 				$length = strlen($header);
 				if (($text = trim($header)) !== '' && strpos($header, ':') !== false) {
 					list($header, $content) = explode(':', $header, 2);
-					$headerList->set($header, trim($content));
+					$headerList->set($header, $content = trim($content));
+					switch ($header) {
+						case 'Set-Cookie':
+							$cookieList->addCookie(HttpUtils::cookie($content));
+							break;
+					}
 				}
 				return $length;
 			};
@@ -157,6 +172,7 @@
 			$this->curl = null;
 			$this->container->inject($httpResponse = new HttpResponse($this->container->inject(new Body($content, isset($type) ? $type->type : $contentType))));
 			$httpResponse->setHeaderList($headerList);
+			$httpResponse->setCookieList($cookieList);
 			return $httpResponse;
 		}
 	}
