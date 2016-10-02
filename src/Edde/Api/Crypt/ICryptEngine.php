@@ -53,4 +53,22 @@
 		 * @return bool
 		 */
 		public function verify(string $source, string $hash): bool;
+
+		/**
+		 * ideally constant time implementation of base64 encode
+		 *
+		 * @param string $source
+		 *
+		 * @return string
+		 */
+		public function base64encode(string $source): string;
+
+		/**
+		 * ideally constant time implementation of base64 decode
+		 *
+		 * @param string $source
+		 *
+		 * @return string
+		 */
+		public function base64decode(string $source): string;
 	}
