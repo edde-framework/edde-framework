@@ -21,9 +21,12 @@
 		 * Tech support calls YOU for help.
 		 */
 		public function __construct() {
-			parent::__construct([
+			$this->register([
 				'text/x-php',
 				'application/x-php',
+			], [
+				INode::class,
+				'array',
 			]);
 		}
 
@@ -33,22 +36,22 @@
 		 * @throws ConverterException
 		 * @throws NodeException
 		 */
-		public function convert($source, string $target) {
-			$source = $source instanceof IResource ? $source : $this->unsupported($source, $target);
+		public function convert($convert, string $source, string $target, string $mime) {
+			$this->unsupported($convert, $target, $convert instanceof IResource);
 			switch ($target) {
 				case INode::class:
 					/** @noinspection UnnecessaryParenthesesInspection */
-					return (function (IResource $resource) {
-						NodeUtils::node($root = new Node(), $this->convert($resource, 'array'));
+					return (function (IResource $resource, string $source, string $mime) {
+						NodeUtils::node($root = new Node(), $this->convert($resource, $source, 'array', $mime));
 						return $root;
-					})($source);
+					})($convert, $source, $mime);
 				case 'array':
 					/** @noinspection UsingInclusionReturnValueInspection */
-					if (is_array($include = require (string)$source->getUrl()) === false) {
-						throw new ConverterException(sprintf('Convertion to [%s] failed: php file [%s] has not returned array.', $target, (string)$source->getUrl()));
+					if (is_array($include = require (string)$convert->getUrl()) === false) {
+						throw new ConverterException(sprintf('Convertion to [%s] failed: php file [%s] has not returned array.', $target, (string)$convert->getUrl()));
 					}
 					return $include;
 			}
-			$this->exception($target);
+			$this->exception($source, $target);
 		}
 	}

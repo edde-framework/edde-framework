@@ -102,7 +102,6 @@
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Ext\Application\ExceptionErrorControl;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
-	use Edde\Ext\Converter\ArrayConverter;
 	use Edde\Ext\Converter\HttpConverter;
 	use Edde\Ext\Converter\JsonConverter;
 	use Edde\Ext\Converter\PhpConverter;
@@ -235,7 +234,6 @@
 				})
 				->deffered(IConverterManager::class, function (IContainer $container, IConverterManager $converterManager) {
 					$converterManager->registerConverter($container->create(XmlConverter::class));
-					$converterManager->registerConverter($container->create(ArrayConverter::class));
 					$converterManager->registerConverter($container->create(JsonConverter::class));
 					$converterManager->registerConverter($container->create(PhpConverter::class));
 
