@@ -9,7 +9,9 @@
       <excludeFolder url="file://$MODULE_DIR$/artwork" />
       <excludeFolder url="file://$MODULE_DIR$/release" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/defuse/php-encryption" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -39,11 +41,15 @@
       <library name="PHP" type="php">
         <CLASSES>
           <root url="file://$MODULE_DIR$/vendor/composer" />
+          <root url="file://$MODULE_DIR$/vendor/defuse/php-encryption" />
           <root url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
+          <root url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
         </CLASSES>
         <SOURCES>
           <root url="file://$MODULE_DIR$/vendor/composer" />
+          <root url="file://$MODULE_DIR$/vendor/defuse/php-encryption" />
           <root url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
+          <root url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
         </SOURCES>
       </library>
     </orderEntry>
