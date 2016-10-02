@@ -32,10 +32,10 @@
 		 * @inheritdoc
 		 * @throws ConverterException
 		 */
-		public function convert($source, string $target) {
-			/** @var $source IHtmlControl */
-			if ($source instanceof IHtmlControl === false) {
-				$this->unsupported($source, $target);
+		public function convert($convert, string $source, string $target, string $mime) {
+			/** @var $convert IHtmlControl */
+			if ($convert instanceof IHtmlControl === false) {
+				$this->unsupported($convert, $target);
 			}
 			switch ($target) {
 				/** @noinspection PhpMissingBreakStatementInspection */
@@ -55,7 +55,7 @@
 								->getRelativePath(),
 						];
 					}
-					foreach ($source->invalidate() as $control) {
+					foreach ($convert->invalidate() as $control) {
 						if (($id = $control->getId()) !== '') {
 							$json['selector']['#' . $id] = [
 								'action' => 'replace',
@@ -69,9 +69,9 @@
 				case 'http+text/html':
 					$this->httpResponse->send();
 				case 'text/html':
-					echo $render = $source->render();
+					echo $render = $convert->render();
 					return $render;
 			}
-			$this->exception($target);
+			$this->exception($source, $target);
 		}
 	}

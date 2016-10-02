@@ -24,11 +24,11 @@
 		 * 3.WinRar Trial
 		 */
 		public function __construct() {
-			parent::__construct([
+			$this->register([
 				'text/xml',
 				'applicaiton/xml',
 				'xml',
-			]);
+			], INode::class);
 		}
 
 		/** @noinspection PhpInconsistentReturnPointsInspection */
@@ -37,18 +37,18 @@
 		 * @throws XmlParserException
 		 * @throws ConverterException
 		 */
-		public function convert($source, string $target) {
-			$source = $source instanceof IResource ? $source : $this->unsupported($source, $target);
+		public function convert($convert, string $source, string $target, string $mime) {
+			$this->unsupported($convert, $target, $convert instanceof IResource);
 			try {
 				switch ($target) {
 					case INode::class:
-						$this->xmlParser->parse($source, $handler = new XmlNodeHandler());
+						$this->xmlParser->parse($convert, $handler = new XmlNodeHandler());
 						return $handler->getNode();
 				}
 			} catch (XmlParserException $e) {
-				throw new XmlParserException(sprintf('Cannot handle resource [%s]: %s', (string)$source->getUrl(), $e->getMessage()), 0, $e);
+				throw new XmlParserException(sprintf('Cannot handle resource [%s]: %s', (string)$convert->getUrl(), $e->getMessage()), 0, $e);
 			}
-			$this->exception($target);
+			$this->exception($source, $target);
 		}
 
 		/**

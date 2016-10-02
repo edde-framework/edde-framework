@@ -35,29 +35,11 @@
 		 * @inheritdoc
 		 * @throws ConverterException
 		 */
-		public function convert($source, string $mime, string $target) {
+		public function convert($convert, string $source, string $target) {
 			$this->use();
-			/** @noinspection SuspiciousLoopInspection */
-			foreach (explode(';', $mime) as $mime) {
-				$source = $this->converter($source, $mime, $target);
+			if (isset($this->converterList[$mime = ($source . '|' . $target)]) === false) {
+				throw new ConverterException(sprintf('Cannot convert unknown source mime [%s] to [%s].', $source, $target));
 			}
-			return $source;
-		}
-
-		/**
-		 * execute converter based on a mime type
-		 *
-		 * @param mixed $source
-		 * @param string $mime
-		 * @param string $target
-		 *
-		 * @return mixed
-		 * @throws ConverterException
-		 */
-		protected function converter($source, string $mime, string $target) {
-			if (isset($this->converterList[$mime]) === false) {
-				throw new ConverterException(sprintf('Cannot convert unknown source mime [%s] to [%s].', $mime, $target));
-			}
-			return $this->converterList[$mime]->convert($source, $target);
+			return $this->converterList[$mime]->convert($convert, $source, $target, $mime);
 		}
 	}

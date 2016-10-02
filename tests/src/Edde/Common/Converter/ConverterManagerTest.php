@@ -8,8 +8,11 @@
 	use Edde\Ext\Container\ContainerFactory;
 	use phpunit\framework\TestCase;
 
-	require_once(__DIR__ . '/assets/assets.php');
+	require_once __DIR__ . '/assets/assets.php';
 
+	/**
+	 * Converter manager related tests.
+	 */
 	class ConverterManagerTest extends TestCase {
 		/**
 		 * @var IConverterManager
@@ -24,15 +27,9 @@
 
 		public function testConflictException() {
 			$this->expectException(ConverterException::class);
-			$this->expectExceptionMessage('Converter [CleverConverter] has conflict with converter [DummyConverter] on mime [bar].');
-			$this->converterManager->registerConverter(new \DummyConverter([
-				'foo',
-				'bar',
-			]));
-			$this->converterManager->registerConverter(new \CleverConverter([
-				'bar',
-				'foobar',
-			]));
+			$this->expectExceptionMessage('Converter [DummyConverter] has conflict with converter [DummyConverter] on mime [foo|bar].');
+			$this->converterManager->registerConverter((new \DummyConverter())->register('foo', 'bar'));
+			$this->converterManager->registerConverter((new \DummyConverter())->register('foo', 'bar'));
 		}
 
 		public function testDummyConverter() {
@@ -44,6 +41,6 @@
 				IConverterManager::class => ConverterManager::class,
 			]);
 			$this->converterManager = $container->create(IConverterManager::class);
-			$this->converterManager->registerConverter(new \DummyConverter(['boo']));
+			$this->converterManager->registerConverter((new \DummyConverter())->register('boo', 'something'));
 		}
 	}

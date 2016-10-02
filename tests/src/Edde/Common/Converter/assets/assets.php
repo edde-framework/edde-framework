@@ -4,13 +4,13 @@
 	use Edde\Common\Converter\AbstractConverter;
 
 	class DummyConverter extends AbstractConverter {
-		public function convert($source, string $target) {
-			return $source;
+		public function convert($convert, string $source, string $target, string $mime) {
+			return $convert;
 		}
 	}
 
 	class CleverConverter extends AbstractConverter {
-		public function convert($source, string $target) {
-			return $source;
+		public function convert($convert, string $source, string $target, string $mime) {
+			return $convert;
 		}
 	}

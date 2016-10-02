@@ -17,10 +17,14 @@
 		 * It is so cold outside I saw a politician with his hands in his own pockets.
 		 */
 		public function __construct() {
-			parent::__construct([
+			$this->register([
 				'text/plain',
 				'string',
 				'callback',
+			], [
+				'http+text/plain',
+				'text/plain',
+				'string',
 			]);
 		}
 
@@ -28,27 +32,27 @@
 		 * @inheritdoc
 		 * @throws ConverterException
 		 */
-		public function convert($source, string $target) {
-			if (is_callable($source) === false && is_string($source) === false) {
-				$this->unsupported($source, $target);
+		public function convert($convert, string $source, string $target, string $mime) {
+			if (is_callable($convert) === false && is_string($convert) === false) {
+				$this->unsupported($convert, $target);
 			}
 			switch ($target) {
 				/** @noinspection PhpMissingBreakStatementInspection */
 				case 'http+text/plain':
 					$this->httpResponse->send();
 				case 'text/plain':
-					if (is_callable($source)) {
-						$source();
+					if (is_callable($convert)) {
+						$convert();
 						return null;
 					}
-					echo $source;
+					echo $convert;
 					return null;
 				case 'string':
-					if (is_callable($source)) {
-						return $source();
+					if (is_callable($convert)) {
+						return $convert();
 					}
-					return $source;
+					return $convert;
 			}
-			$this->exception($target);
+			$this->exception($source, $target);
 		}
 	}

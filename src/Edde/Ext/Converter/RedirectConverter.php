@@ -19,8 +19,9 @@
 		 * Nobody ever invites you to their house unless their computer is malfunctioning.
 		 */
 		public function __construct() {
-			parent::__construct([
-				'redirect',
+			$this->register('redirect', [
+				'http+text/html',
+				'http+application/json',
 			]);
 		}
 
@@ -29,18 +30,18 @@
 		 * @inheritdoc
 		 * @throws ConverterException
 		 */
-		public function convert($source, string $target) {
-			$this->unsupported($source, $target, is_string($source));
+		public function convert($convert, string $source, string $target, string $mime) {
+			$this->unsupported($convert, $target, is_string($convert));
 			switch ($target) {
 				case 'http+text/html':
-					$this->httpResponse->header('Location', $source);
+					$this->httpResponse->header('Location', $convert);
 					$this->httpResponse->send();
-					return $source;
+					return $convert;
 				case 'http+application/json':
 					$this->httpResponse->send();
-					echo $source = json_encode(['redirect' => $source]);
-					return $source;
+					echo $convert = json_encode(['redirect' => $convert]);
+					return $convert;
 			}
-			$this->exception($target);
+			$this->exception($source, $target);
 		}
 	}

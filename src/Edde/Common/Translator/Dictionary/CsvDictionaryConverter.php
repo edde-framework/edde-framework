@@ -26,10 +26,10 @@
 		 * God: Correction, I shall create a great flood!
 		 */
 		public function __construct() {
-			parent::__construct([
+			$this->register([
 				'csv',
 				'text/csv',
-			]);
+			], IDictionary::class);
 		}
 
 		/**
@@ -37,15 +37,15 @@
 		 * @throws ConverterException
 		 * @throws FileException
 		 */
-		public function convert($source, string $target) {
-			/** @var $source IFile */
-			$this->unsupported($source, $target, $source instanceof IFile);
+		public function convert($convert, string $source, string $target, string $mime) {
+			/** @var $convert IFile */
+			$this->unsupported($convert, $target, $convert instanceof IFile);
 			switch ($target) {
 				case IDictionary::class:
 					$csvDictionary = $this->container->create(CsvDictionary::class);
-					$csvDictionary->addFile($source->getPath());
+					$csvDictionary->addFile($convert->getPath());
 					return $csvDictionary;
 			}
-			$this->exception($target);
+			$this->exception($source, $target);
 		}
 	}
