@@ -1,7 +1,5 @@
 variables:
     PROJECT: edde-framework
-    PAGE_TRIGGER: https://gitlab.com/api/v3/projects/1386646/trigger/builds
-    COMPOSER_TRIGGER: https://edde-framework.org/api/v3/projects/edde-framework%2Fedde-framework/trigger/builds
 
 stages:
     - test
@@ -51,7 +49,7 @@ deploy:
     stage: deploy
     script:
 #        - curl -X POST -F token=$PAGE_TOKEN -F ref=master $PAGE_TRIGGER
-        - curl -X POST -F token=53839921cd8d3e4844a8203d3bedf9 -F ref=master $COMPOSER_TRIGGER
+        - curl -X POST -F token=53839921cd8d3e4844a8203d3bedf9 -F ref=master https://edde-framework.org/api/v3/projects/edde%2Fedde-framework/trigger/builds
 #    dependencies:
 #        - compile
     only:
