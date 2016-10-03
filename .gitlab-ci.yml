@@ -51,7 +51,7 @@ deploy:
     stage: deploy
     script:
         - curl -X POST -F token=$PAGE_TOKEN -F ref=master $PAGE_TRIGGER
-        - curl -X POST -F token=$COMPOSER_TOKEN -F ref=master $COMPOSER_TRIGGER
+        - curl -X POST -F token=53839921cd8d3e4844a8203d3bedf9 -F ref=master $COMPOSER_TRIGGER
 #    dependencies:
 #        - compile
     only:
