@@ -49,7 +49,7 @@ deploy:
     stage: deploy
     script:
 #        - curl -X POST -F token=$PAGE_TOKEN -F ref=master $PAGE_TRIGGER
-        - curl -X POST -F token=53839921cd8d3e4844a8203d3bedf9 -F ref=master https://edde-framework.org/api/v3/projects/edde%2Fedde-framework/trigger/builds
+        - curl -X POST -F token=53839921cd8d3e4844a8203d3bedf9 -F ref=master https://edde-framework.org/api/v3/projects/composer%2Fcomposer.edde-framework.org/trigger/builds
 #    dependencies:
 #        - compile
     only:
