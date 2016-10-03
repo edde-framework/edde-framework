@@ -1,7 +1,7 @@
 variables:
     PROJECT: edde-framework
     PAGE_TRIGGER: https://gitlab.com/api/v3/projects/1386646/trigger/builds
-    COMPOSER_TRIGGER: https://edde-framework.org/api/v3/projects/4/trigger/builds
+    COMPOSER_TRIGGER: https://edde-framework.org/api/v3/projects/edde-framework%2Fedde-framework/trigger/builds
 
 stages:
     - test
