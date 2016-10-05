@@ -10,6 +10,7 @@
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Url\IUrl;
+	use Edde\Common\Client\Event\GetEvent;
 	use Edde\Common\Client\Event\HandlerEvent;
 	use Edde\Common\Client\Event\PostEvent;
 	use Edde\Common\Client\Event\RequestEvent;
@@ -33,8 +34,23 @@
 		 * @inheritdoc
 		 */
 		public function get($url): IHttpHandler {
-			return $this->request($this->createRequest($url)
-				->setMethod('GET'));
+			$httpRequest = $this->createRequest($url)
+				->setMethod('GET');
+			$this->event(new GetEvent($httpRequest, $httpHandler = $this->request($httpRequest)));
+			$this->event(new HandlerEvent($httpRequest, $httpHandler));
+			return $httpHandler;
+		}
+
+		/**
+		 * @param IUrl|string $url
+		 *
+		 * @return HttpRequest
+		 */
+		protected function createRequest($url) {
+			$httpRequest = new HttpRequest(new PostList(), new HeaderList(), new CookieList());
+			$httpRequest->setRequestUrl(RequestUrl::create($url));
+			$this->event(new RequestEvent($httpRequest));
+			return $httpRequest;
 		}
 
 		/**
@@ -55,18 +71,6 @@
 				CURLOPT_POST => strtoupper($method) === 'POST',
 			]);
 			return $this->container->inject(new HttpHandler($httpRequest, $curl));
-		}
-
-		/**
-		 * @param IUrl|string $url
-		 *
-		 * @return HttpRequest
-		 */
-		protected function createRequest($url) {
-			$httpRequest = new HttpRequest(new PostList(), new HeaderList(), new CookieList());
-			$httpRequest->setRequestUrl(RequestUrl::create($url));
-			$this->event(new RequestEvent($httpRequest));
-			return $httpRequest;
 		}
 
 		/**
