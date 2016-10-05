@@ -22,8 +22,11 @@
 		 * HtmlConverter constructor.
 		 */
 		public function __construct() {
-			parent::__construct([
-				IHtmlControl::class,
+			$this->register(IHtmlControl::class, [
+				'http+application/json',
+				'application/json',
+				'http+text/html',
+				'text/html',
 			]);
 		}
 
