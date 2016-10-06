@@ -17,6 +17,10 @@
 	<div value="this will be translated|translate"/>
 	<div>this will also be translated|translate</div>
 
+	<div t:switch=":gimme-a-switch()" t:include="./switched.xml"/>
+
+	<include src="./this-is-magical-switch.xml"/>
+
 	<switch src=":gimme-a-switch()">
 		<case name="foo">
 			<div class="foo-case"/>

@@ -19,6 +19,10 @@
 	<div data-schema="Bar\Foo\Fart\Poo" data-property="property-here"></div>
 	<div>yepee</div>
 	<div>another yepee</div>
+	<div>
+		<div class="foo-case"></div>
+		<div class="foo-case2"></div>
+	</div>
 	<div class="foo-case"></div>
 	<div class="foo-case2"></div>
 	<div class="inline-switch">
