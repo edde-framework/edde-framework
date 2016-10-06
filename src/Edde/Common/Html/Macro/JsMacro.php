@@ -39,7 +39,7 @@
 		 * @throws MacroException
 		 * @throws FileException
 		 */
-		public function compile(INode $macro, ICompiler $compiler) {
+		public function compile(INode $macro, ICompiler $compiler, INode $root) {
 			$macro->setAttribute('src', $this->file($this->attribute($macro, $compiler, 'src', false), $compiler->getCurrent())
 				->getPath());
 		}

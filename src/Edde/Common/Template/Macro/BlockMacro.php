@@ -26,19 +26,10 @@
 		 * @throws MacroException
 		 * @throws NodeException
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
-			$compiler->block($id = $this->extract($macro, self::COMPILE_PREFIX . $this->getName()), $this->block($macro, $id));
-		}
-
-		/**
-		 * @param INode $macro
-		 * @param string $id
-		 *
-		 * @return INode
-		 * @throws NodeException
-		 */
-		protected function block(INode $macro, string $id): INode {
-			return (new Node('block-root', null, ['id' => $id]))->addNode($macro->setMeta('block', $id), true, true);
+		public function compileInline(INode $macro, ICompiler $compiler, INode $root) {
+			$root->addNode($root = new Node('block', null, ['id' => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+			$root->addNode($macro, true);
+			return $root;
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
@@ -48,8 +39,7 @@
 		 * @throws MacroException
 		 * @throws NodeException
 		 */
-		public function compile(INode $macro, ICompiler $compiler) {
-			$compiler->block($id = $this->attribute($macro, $compiler, 'id'), $this->block($macro, $id));
-			parent::compile($macro, $compiler);
+		public function compile(INode $macro, ICompiler $compiler, INode $root) {
+			$compiler->block($id = $this->attribute($macro, $compiler, 'id'), $macro);
 		}
 	}

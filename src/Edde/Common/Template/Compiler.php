@@ -16,6 +16,7 @@
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Node\Node;
 	use Edde\Common\Reflection\ReflectionUtils;
 
 	/**
@@ -99,10 +100,11 @@
 				$this->setVariable('name', sha1(implode(',', $nameList)));
 				$this->setVariable('name-list', $nameList);
 				foreach ($importList as $import) {
-					$this->file($import)
+					$this->file(new Node(), $import)
 						->setMeta('included', true);
 				}
-				return $this->macro($this->file($this->source));
+				$this->file($root = new Node(), $this->source);
+				return $this->macro($root);
 			} catch (\Exception $exception) {
 				$root = $this->rootDirectory->getDirectory();
 				/**
@@ -133,15 +135,10 @@
 		 * @inheritdoc
 		 * @throws CompilerException
 		 */
-		public function file(IFile $source): INode {
+		public function file(INode $root, IFile $file): INode {
 			$this->use();
-			$this->stack->push($source);
-			$this->compile($root = $this->resourceManager->resource($source));
-			foreach ($this->getBlockList() as $block) {
-				foreach ($block->getNodeList() as $node) {
-					$this->compile($node);
-				}
-			}
+			$this->stack->push($file);
+			$this->compile($this->resourceManager->resource($file), $root);
 			$this->stack->pop();
 			return $root;
 		}
@@ -150,45 +147,29 @@
 		 * @inheritdoc
 		 * @throws CompilerException
 		 */
-		public function compile(INode $macro) {
-			return $this->run($macro, __FUNCTION__, 't');
+		public function compile(INode $macro, INode $root) {
+			return $this->run($macro, $root, __FUNCTION__, 't');
 		}
 
 		/**
 		 * @param INode $macro
+		 * @param INode $root
 		 * @param string $method
 		 * @param string $inline
 		 *
 		 * @return mixed
 		 * @throws CompilerException
 		 */
-		protected function run(INode $macro, string $method, string $inline) {
+		protected function run(INode $macro, INode $root, string $method, string $inline) {
 			if (isset($this->macroList[$name = $macro->getName()]) === false) {
 				throw new CompilerException(sprintf('Unknown macro [%s].', $macro->getPath()));
 			}
 			foreach ($macro->getAttributeList() as $k => $v) {
-				if (isset($this->macroList[$k]) && strpos($k, $inline . ':') === 0) {
-					$this->macroList[$k]->{$method . 'Inline'}($macro, $this);
+				if (isset($this->macroList[$k]) && strpos($k, $inline . ':') === 0 && ($node = $this->macroList[$k]->{$method . 'Inline'}($macro, $this, $root))) {
+					return $this->run($node, $root, $method, $inline);
 				}
 			}
-			return $this->macroList[$name]->{$method}($macro, $this);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getBlockList(): array {
-			return $this->getVariable(static::class . '/block-list', []);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getVariable(string $name, $default = null) {
-			if (isset($this->context[$name]) === false) {
-				$this->context[$name] = $default;
-			}
-			return $this->context[$name];
+			return $this->macroList[$name]->{$method}($macro, $this, $root);
 		}
 
 		/**
@@ -196,7 +177,7 @@
 		 * @throws CompilerException
 		 */
 		public function macro(INode $macro) {
-			return $this->run($macro, __FUNCTION__, 'm');
+			return $this->run($macro, new Node(), __FUNCTION__, 'm');
 		}
 
 		/**
@@ -245,6 +226,23 @@
 			$blockList[$name] = $block;
 			$this->setVariable(static::class . '/block-list', $blockList);
 			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getBlockList(): array {
+			return $this->getVariable(static::class . '/block-list', []);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getVariable(string $name, $default = null) {
+			if (isset($this->context[$name]) === false) {
+				$this->context[$name] = $default;
+			}
+			return $this->context[$name];
 		}
 
 		/**

@@ -29,9 +29,9 @@
 		 * @inheritdoc
 		 * @throws MacroException
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
+		public function compileInline(INode $macro, ICompiler $compiler, INode $root) {
 			/** @var $node INode */
-			foreach ($this->include($source = $this->extract($macro, self::COMPILE_PREFIX . $this->getName()), $compiler->getCurrent(), $compiler) as $node) {
+			foreach ($this->include($source = $this->extract($macro, self::COMPILE_PREFIX . $this->getName()), $compiler->getCurrent(), $compiler, $root) as $node) {
 				$node = clone $node;
 				/**
 				 * mark virtual node root
@@ -50,17 +50,18 @@
 		 * @param string $src
 		 * @param IFile $source
 		 * @param ICompiler $compiler
+		 * @param INode $root
 		 *
 		 * @return array
 		 */
-		protected function include (string $src, IFile $source, ICompiler $compiler) {
+		protected function include (string $src, IFile $source, ICompiler $compiler, INode $root) {
 			if (strpos($src, '/') === 0) {
 				return [
-					$compiler->file($this->rootDirectory->file(substr($src, 1))),
+					$compiler->file($root, $this->rootDirectory->file(substr($src, 1))),
 				];
 			} else if (strpos($src, './') === 0) {
 				return [
-					$compiler->file($source->getDirectory()
+					$compiler->file($root, $source->getDirectory()
 						->file(substr($src, 2))),
 				];
 			}
@@ -73,8 +74,8 @@
 		 * @inheritdoc
 		 * @throws MacroException
 		 */
-		public function compile(INode $macro, ICompiler $compiler) {
-			foreach ($this->include($source = $this->attribute($macro, $compiler, 'src'), $compiler->getCurrent(), $compiler) as $node) {
+		public function compile(INode $macro, ICompiler $compiler, INode $root) {
+			foreach ($this->include($source = $this->attribute($macro, $compiler, 'src'), $compiler->getCurrent(), $compiler, $root) as $node) {
 				$node = clone $node;
 				/**
 				 * mark virtual node root

@@ -22,7 +22,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
+		public function compileInline(INode $macro, ICompiler $compiler, INode $root) {
 			$target = $this->extract($macro, self::COMPILE_PREFIX . $this->getName(), null);
 			foreach ($macro->getNodeList() as $node) {
 				/** @var $nodeList INode[] */

@@ -25,7 +25,7 @@
 		 * @inheritdoc
 		 * @throws MacroException
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
+		public function compileInline(INode $macro, ICompiler $compiler, INode $root) {
 			$schemaList = $compiler->getVariable(static::class);
 			list($schema, $property) = explode('.', $this->extract($macro, self::COMPILE_PREFIX . $this->getName()));
 			if (isset($schemaList[$schema]) === false) {
@@ -40,7 +40,7 @@
 		 * @inheritdoc
 		 * @throws MacroException
 		 */
-		public function compile(INode $macro, ICompiler $compiler) {
+		public function compile(INode $macro, ICompiler $compiler, INode $root) {
 			$schemaList = $compiler->getVariable(static::class, []);
 			$schemaList[$this->attribute($macro, $compiler, 'name', false)] = $this->attribute($macro, $compiler, 'schema', false);
 			$compiler->setVariable(static::class, $schemaList);

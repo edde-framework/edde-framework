@@ -28,7 +28,7 @@
 		 * @inheritdoc
 		 * @throws NodeException
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
+		public function compileInline(INode $macro, ICompiler $compiler, INode $root) {
 			$macro->setMeta('snippet', true);
 			$compiler->block($this->extract($macro, $this->getName()), (new Node('snippet-root'))->addNode($macro));
 		}

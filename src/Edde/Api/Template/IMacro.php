@@ -29,16 +29,20 @@
 		 *
 		 * @param INode $macro
 		 * @param ICompiler $compiler
+		 * @param INode $root
+		 *
+		 * @return
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler);
+		public function compileInline(INode $macro, ICompiler $compiler, INode $root);
 
 		/**
 		 * executed in compile time
 		 *
 		 * @param INode $macro
 		 * @param ICompiler $compiler
+		 * @param INode $root
 		 */
-		public function compile(INode $macro, ICompiler $compiler);
+		public function compile(INode $macro, ICompiler $compiler, INode $root);
 
 		/**
 		 * (optional) inline version of this macro

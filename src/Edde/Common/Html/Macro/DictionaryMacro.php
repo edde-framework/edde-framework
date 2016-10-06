@@ -34,7 +34,7 @@
 		 * @throws FileException
 		 * @throws MacroException
 		 */
-		public function compile(INode $macro, ICompiler $compiler) {
+		public function compile(INode $macro, ICompiler $compiler, INode $root) {
 			$macro->setAttribute('src', $this->file($this->attribute($macro, $compiler, 'src'), $compiler->getCurrent())
 				->getPath());
 			if ($scope = ($macro->hasAttribute('scope') ? $macro->getAttribute('scope') : $compiler->getVariable('scope'))) {

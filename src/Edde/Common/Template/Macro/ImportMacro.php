@@ -28,8 +28,8 @@
 		 * @inheritdoc
 		 * @throws MacroException
 		 */
-		public function compile(INode $macro, ICompiler $compiler) {
-			$compiler->file($this->file($this->attribute($macro, $compiler, 'src'), $compiler->getCurrent(), $macro));
+		public function compile(INode $macro, ICompiler $compiler, INode $root) {
+			$compiler->file($root, $this->file($this->attribute($macro, $compiler, 'src'), $compiler->getCurrent(), $macro));
 		}
 
 		/**

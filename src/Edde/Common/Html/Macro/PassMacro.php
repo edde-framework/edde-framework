@@ -26,7 +26,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
+		public function compileInline(INode $macro, ICompiler $compiler, INode $root) {
 			$macro->prepend(new Node('pass', null, ['target' => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
 		}
 

@@ -31,7 +31,7 @@
 		 * @inheritdoc
 		 * @throws MacroException
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
+		public function compileInline(INode $macro, ICompiler $compiler, INode $root) {
 			$macro->switch(new Node('switch', null, ['src' => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
 		}
 

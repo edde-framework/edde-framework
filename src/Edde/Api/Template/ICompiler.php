@@ -39,8 +39,11 @@
 		 * execute compile macro
 		 *
 		 * @param INode $macro
+		 * @param INode $root
+		 *
+		 * @return
 		 */
-		public function compile(INode $macro);
+		public function compile(INode $macro, INode $root);
 
 		/**
 		 * execute macro in "runtime"
@@ -52,11 +55,12 @@
 		/**
 		 * compile source into node; node is the final result
 		 *
-		 * @param IFile $source
+		 * @param INode $root
+		 * @param IFile $file
 		 *
 		 * @return INode
 		 */
-		public function file(IFile $source): INode;
+		public function file(INode $root, IFile $file): INode;
 
 		/**
 		 * return the original source file

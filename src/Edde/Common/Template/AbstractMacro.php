@@ -97,15 +97,19 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
+		public function compileInline(INode $macro, ICompiler $compiler, INode $root) {
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function compile(INode $macro, ICompiler $compiler) {
+		public function compile(INode $macro, ICompiler $compiler, INode $root) {
+			$node = clone $macro;
+			$node->setParent($root);
+			$node->clearNodeList();
+			$root->addNode($root = $node);
 			foreach ($macro->getNodeList() as $node) {
-				$compiler->compile($node);
+				$compiler->compile($node, $root);
 			}
 		}
 

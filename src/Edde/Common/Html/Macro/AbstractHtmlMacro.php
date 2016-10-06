@@ -73,7 +73,7 @@
 		protected function write(INode $macro, ICompiler $compiler, string $write, int $indents = null) {
 			/** @var $file IFile */
 			$file = $compiler->getVariable('file');
-			$file->write($line = (($indents ? str_repeat("\t", $indents) : '') . $write . "\n"));
+			$file->write(($indents ? str_repeat("\t", $indents) : '') . $write . "\n");
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
