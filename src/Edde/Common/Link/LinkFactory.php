@@ -26,11 +26,18 @@
 			$this->hostUrl = $hostUrl;
 		}
 
-		public function registerLinkGenerator(ILinkGenerator $lingGenerator): ILinkFactory {
-			$this->linkGeneratorList[] = $lingGenerator;
+		/**
+		 * @inheritdoc
+		 */
+		public function registerLinkGenerator(ILinkGenerator $linkGenerator): ILinkFactory {
+			$this->linkGeneratorList[] = $linkGenerator;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws LinkException
+		 */
 		public function link($generate, ...$parameterList) {
 			$this->use();
 			foreach ($this->linkGeneratorList as $linkGenerator) {

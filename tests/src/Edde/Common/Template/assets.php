@@ -17,6 +17,10 @@
 		 * @var SpanControl
 		 */
 		public $includedVariable;
+		/**
+		 * @var DivControl
+		 */
+		public $overkillBlock;
 		protected $trueVariableReference = true;
 		protected $falseVariableReference = false;
 
@@ -53,7 +57,11 @@
 		}
 
 		public function loopFromRoot() {
-			return [];
+			return [
+				'a' => 'abc',
+				'b' => 'def',
+				'c' => 'ghi',
+			];
 		}
 
 		public function loopOverLoopFromRoot() {

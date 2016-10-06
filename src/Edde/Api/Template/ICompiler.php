@@ -25,6 +25,7 @@
 		 * @return ICompiler
 		 */
 		public function registerHelperSet(IHelperSet $helperSet): ICompiler;
+
 		/**
 		 * "runtime macro" - those should generate runtime
 		 *
@@ -121,25 +122,25 @@
 		 * block under the given id
 		 *
 		 * @param string $name
-		 * @param array $nodeList
+		 * @param INode $block
 		 *
 		 * @return ICompiler
 		 */
-		public function block(string $name, array $nodeList): ICompiler;
+		public function block(string $name, INode $block): ICompiler;
 
 		/**
 		 * return list of nodes by the given block name
 		 *
 		 * @param string $name
 		 *
-		 * @return array
+		 * @return INode
 		 */
-		public function getBlock(string $name): array;
+		public function getBlock(string $name): INode;
 
 		/**
 		 * retrieve list of registered blocks
 		 *
-		 * @return array
+		 * @return INode[]
 		 */
 		public function getBlockList(): array;
 	}

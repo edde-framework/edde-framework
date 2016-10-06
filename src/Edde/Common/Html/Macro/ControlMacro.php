@@ -65,7 +65,7 @@
 			$this->write($compiler, 'break;', 5);
 			$caseList = $compiler->getVariable($caseListId = (static::class . '/cast-list'), [null => null]);
 			/** @var $nodeList INode[] */
-			foreach ($compiler->getBlockList() as $id => $nodeList) {
+			foreach ($compiler->getBlockList() as $id => $root) {
 				if (isset($caseList[$id])) {
 					continue;
 				}
@@ -73,7 +73,7 @@
 				/** @noinspection DisconnectedForeachInstructionInspection */
 				$compiler->setVariable($caseListId, $caseList);
 				$this->write($compiler, sprintf('case %s:', var_export($id, true)), 4);
-				foreach ($nodeList as $node) {
+				foreach ($root->getNodeList() as $node) {
 					$this->write($compiler, sprintf('// %s', $node->getPath()), 5);
 					$compiler->macro($node);
 				}

@@ -44,25 +44,27 @@
 			/** @var $stack \SplStack */
 			$stack = $compiler->getVariable(static::class, new \SplStack());
 			$switch = str_replace('-', '_', $this->cryptEngine->guid());
-			$this->write($compiler, sprintf('$switch_%s = %s;', $switch, $this->switch($this->attribute($macro, $compiler, 'src', false))), 5);
+			$this->write($compiler, sprintf('$switch_%s = %s;', $switch, $this->switch($macro, $this->attribute($macro, $compiler, 'src', false))), 5);
 			$stack->push($switch);
 			parent::macro($macro, $compiler);
 			$stack->pop();
 		}
 
 		/**
+		 * @param INode $macro
 		 * @param string $src
 		 *
 		 * @return string
+		 * @throws MacroException
 		 */
-		protected function switch (string $src): string {
+		protected function switch (INode $macro, string $src): string {
 			$func = substr($src, -2) === '()';
 			$src = str_replace('()', '', $src);
 			$type = $src[0];
 			$src = StringUtils::camelize(substr($src, 1), null, true);
 			if ($func) {
-				return sprintf('%s->%s()', self::$reference[$type], $src);
+				return sprintf('%s->%s()', $this->reference($macro, $type), $src);
 			}
-			return sprintf('%s::getProperty(%s, %s)', ReflectionUtils::class, self::$reference[$type], var_export($src, true));
+			return sprintf('%s::getProperty(%s, %s)', ReflectionUtils::class, $this->reference($macro, $type), var_export($src, true));
 		}
 	}

@@ -137,6 +137,11 @@
 			$this->use();
 			$this->stack->push($source);
 			$this->compile($root = $this->resourceManager->resource($source));
+			foreach ($this->getBlockList() as $block) {
+				foreach ($block->getNodeList() as $node) {
+					$this->compile($node);
+				}
+			}
 			$this->stack->pop();
 			return $root;
 		}
@@ -167,6 +172,23 @@
 				}
 			}
 			return $this->macroList[$name]->{$method}($macro, $this);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getBlockList(): array {
+			return $this->getVariable(static::class . '/block-list', []);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getVariable(string $name, $default = null) {
+			if (isset($this->context[$name]) === false) {
+				$this->context[$name] = $default;
+			}
+			return $this->context[$name];
 		}
 
 		/**
@@ -218,35 +240,18 @@
 		 * @inheritdoc
 		 * @throws MacroException
 		 */
-		public function block(string $name, array $nodeList): ICompiler {
+		public function block(string $name, INode $block): ICompiler {
 			$blockList = $this->getBlockList();
-			$blockList[$name] = $nodeList;
+			$blockList[$name] = $block;
 			$this->setVariable(static::class . '/block-list', $blockList);
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
-		 */
-		public function getBlockList(): array {
-			return $this->getVariable(static::class . '/block-list', []);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getVariable(string $name, $default = null) {
-			if (isset($this->context[$name]) === false) {
-				$this->context[$name] = $default;
-			}
-			return $this->context[$name];
-		}
-
-		/**
-		 * @inheritdoc
 		 * @throws MacroException
 		 */
-		public function getBlock(string $name): array {
+		public function getBlock(string $name): INode {
 			$blockList = $this->getVariable(self::class . '/block-list', []);
 			if (isset($blockList[$name]) === false) {
 				throw new MacroException(sprintf('Requested unknown block [%s].', $name));

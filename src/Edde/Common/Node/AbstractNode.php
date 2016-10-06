@@ -99,7 +99,7 @@
 		 * @inheritdoc
 		 * @throws NodeException
 		 */
-		public function addNode(IAbstractNode $abstractNode, bool $move = false): IAbstractNode {
+		public function addNode(IAbstractNode $abstractNode, bool $move = false, bool $soft = false): IAbstractNode {
 			if ($this->accept($abstractNode) === false) {
 				throw new NodeException(sprintf("Current node [%s] doesn't accept given node [%s].", static::class, get_class($abstractNode)));
 			}
@@ -107,7 +107,7 @@
 			$parent = $abstractNode->getParent();
 			if ($move || $parent === null) {
 				if ($parent) {
-					$parent->removeNode($abstractNode);
+					$parent->removeNode($abstractNode, $soft);
 				}
 				$abstractNode->setParent($this);
 			}
@@ -159,13 +159,16 @@
 		 * @inheritdoc
 		 * @throws NodeException
 		 */
-		public function removeNode(IAbstractNode $abstractNode): IAbstractNode {
+		public function removeNode(IAbstractNode $abstractNode, bool $soft = false): IAbstractNode {
 			foreach ($this->nodeList as $index => $node) {
 				if ($node === $abstractNode) {
 					$node->setParent(null);
 					unset($this->nodeList[$index]);
 					return $this;
 				}
+			}
+			if ($soft) {
+				return $this;
 			}
 			throw new NodeException('The given node is not in current node list.');
 		}
@@ -304,9 +307,9 @@
 		 * @inheritdoc
 		 * @throws NodeException
 		 */
-		public function switch (IAbstractNode $abstractNode): IAbstractNode {
+		public function switch (IAbstractNode $abstractNode, bool $soft = false): IAbstractNode {
 			if (($parent = $this->getParent()) !== null) {
-				$parent->replaceNode($this, [$abstractNode]);
+				$parent->replaceNode($this, [$abstractNode], $soft);
 			}
 			$abstractNode->addNode($this);
 			$abstractNode->setParent($parent);
@@ -318,8 +321,11 @@
 		 * @inheritdoc
 		 * @throws NodeException
 		 */
-		public function replaceNode(IAbstractNode $abstractNode, array $nodeList): IAbstractNode {
+		public function replaceNode(IAbstractNode $abstractNode, array $nodeList, bool $soft = false): IAbstractNode {
 			if (($index = array_search($abstractNode, $this->nodeList, true)) === false || $abstractNode->getParent() !== $this) {
+				if ($soft) {
+					return $this;
+				}
 				throw new NodeException(sprintf('Cannot replace the given node in root; root is not parent of the given node.'));
 			}
 			array_splice($this->nodeList, $index, 0, $nodeList);
