@@ -31,7 +31,7 @@
 		 */
 		public function compileInline(INode $macro, ICompiler $compiler) {
 			/** @var $node INode */
-			foreach ($this->include($source = $this->extract($macro, 't:' . $this->getName()), $compiler->getCurrent(), $compiler) as $node) {
+			foreach ($this->include($source = $this->extract($macro, self::COMPILE_PREFIX . $this->getName()), $compiler->getCurrent(), $compiler) as $node) {
 				$node = clone $node;
 				/**
 				 * mark virtual node root
