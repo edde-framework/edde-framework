@@ -43,8 +43,11 @@
 		 * @throws MacroException
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
-			$switch = $compiler->getVariable(SwitchMacro::class)
-				->top();
+			/** @var $stack \SplStack */
+			if (($stack = $compiler->getVariable(SwitchMacro::class)) === null) {
+				throw new MacroException(sprintf('Shit has happend: macro [%s] has no parent switch!', $macro->getPath()));
+			}
+			$switch = $stack->top();
 			$this->write($compiler, sprintf('if($switch_%s === %s) {', $switch, var_export($this->attribute($macro, $compiler, 'name', false), true)), 5);
 			parent::macro($macro, $compiler);
 			$this->write($compiler, '}', 5);
