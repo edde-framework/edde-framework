@@ -64,7 +64,8 @@
 						->file(substr($src, 2))),
 				];
 			}
-			return $compiler->getBlock($src);
+			return $compiler->getBlock($src)
+				->getNodeList();
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */

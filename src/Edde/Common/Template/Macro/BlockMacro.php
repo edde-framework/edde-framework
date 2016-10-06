@@ -4,8 +4,10 @@
 	namespace Edde\Common\Template\Macro;
 
 	use Edde\Api\Node\INode;
+	use Edde\Api\Node\NodeException;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
+	use Edde\Common\Node\Node;
 	use Edde\Common\Template\AbstractMacro;
 
 	/**
@@ -22,17 +24,32 @@
 		/**
 		 * @inheritdoc
 		 * @throws MacroException
+		 * @throws NodeException
 		 */
 		public function compileInline(INode $macro, ICompiler $compiler) {
-			$compiler->block($this->extract($macro, self::COMPILE_PREFIX . $this->getName()), [$macro]);
+			$compiler->block($id = $this->extract($macro, self::COMPILE_PREFIX . $this->getName()), $this->block(clone $macro, $id));
+		}
+
+		/**
+		 * @param INode $macro
+		 * @param string $id
+		 *
+		 * @return INode
+		 * @throws NodeException
+		 */
+		protected function block(INode $macro, string $id): INode {
+			return (new Node('block-root', null, ['id' => $id]))->addNode($macro, true, true);
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
+
 		/**
 		 * @inheritdoc
 		 * @throws MacroException
+		 * @throws NodeException
 		 */
 		public function compile(INode $macro, ICompiler $compiler) {
-			$compiler->block($this->attribute($macro, $compiler, 'id'), $macro->getNodeList());
+			$compiler->block($id = $this->attribute($macro = clone $macro, $compiler, 'id'), $this->block($macro, $id));
+			parent::compile($macro, $compiler);
 		}
 	}

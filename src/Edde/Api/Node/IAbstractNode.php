@@ -12,10 +12,11 @@
 		/**
 		 * @param IAbstractNode $abstractNode
 		 * @param bool $move change $node's parent to $this
+		 * @param bool $soft
 		 *
 		 * @return IAbstractNode
 		 */
-		public function addNode(IAbstractNode $abstractNode, bool $move = false): IAbstractNode;
+		public function addNode(IAbstractNode $abstractNode, bool $move = false, bool $soft = false): IAbstractNode;
 
 		/**
 		 * prepend the given node to the current node list
@@ -70,10 +71,11 @@
 		 * remove the given node from the list of this node; if node is not found (by object comparsion), exception is thrown
 		 *
 		 * @param IAbstractNode $abstractNode
+		 * @param bool $soft
 		 *
 		 * @return IAbstractNode
 		 */
-		public function removeNode(IAbstractNode $abstractNode): IAbstractNode;
+		public function removeNode(IAbstractNode $abstractNode, bool $soft = false): IAbstractNode;
 
 		/**
 		 * @return IAbstractNode[]
@@ -180,18 +182,20 @@
 
 		/**
 		 * @param IAbstractNode $abstractNode
+		 * @param bool $soft
 		 *
 		 * @return IAbstractNode return newly switched node
 		 */
-		public function switch (IAbstractNode $abstractNode): IAbstractNode;
+		public function switch (IAbstractNode $abstractNode, bool $soft = false): IAbstractNode;
 
 		/**
 		 * replace the given child node by the list of nodes
 		 *
 		 * @param IAbstractNode $abstractNode
 		 * @param array $nodeList
+		 * @param bool $soft
 		 *
 		 * @return IAbstractNode
 		 */
-		public function replaceNode(IAbstractNode $abstractNode, array $nodeList): IAbstractNode;
+		public function replaceNode(IAbstractNode $abstractNode, array $nodeList, bool $soft = false): IAbstractNode;
 	}

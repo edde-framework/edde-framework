@@ -4,7 +4,9 @@
 	namespace Edde\Common\Html\Macro;
 
 	use Edde\Api\Node\INode;
+	use Edde\Api\Node\NodeException;
 	use Edde\Api\Template\ICompiler;
+	use Edde\Common\Node\Node;
 
 	/**
 	 * Snippet is piece of template which can be called without any other dependencies.
@@ -24,11 +26,10 @@
 		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
+		 * @throws NodeException
 		 */
 		public function compileInline(INode $macro, ICompiler $compiler) {
 			$macro->setMeta('snippet', true);
-			$compiler->block($this->extract($macro, $this->getName()), [
-				$macro,
-			]);
+			$compiler->block($this->extract($macro, $this->getName()), (new Node('snippet-root'))->addNode($macro));
 		}
 	}

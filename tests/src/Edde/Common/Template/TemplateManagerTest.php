@@ -159,7 +159,8 @@
 		<div class="ghi">c</div>
 		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="ghi"></div>
 	</div>
-</div>', $control->render());
+</div>
+', $control->render());
 
 			$template->snippet($this->container->inject($control = new DivControl()), 'the-name-of-this-snippet');
 			$control->addClass('root');
