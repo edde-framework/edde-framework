@@ -1,4 +1,6 @@
 <control foo="@current-method-call()" title="foo" t:translator="foo">
+	<include src="./this-is-magical-switch.xml"/>
+
 	<div t:block="overkill-block" t:loop=":loop-from-root()" t:pass=":overkill-block">
 		<div value="$#" class="$:"/>
 		<button action="$:"/>
@@ -18,8 +20,6 @@
 	<div>this will also be translated|translate</div>
 
 	<div t:switch=":gimme-a-switch()" t:include="./switched.xml"/>
-
-	<include src="./this-is-magical-switch.xml"/>
 
 	<switch src=":gimme-a-switch()">
 		<case name="foo">

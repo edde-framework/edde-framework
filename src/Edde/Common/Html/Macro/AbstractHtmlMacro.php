@@ -19,6 +19,7 @@
 			'@' => '$control',
 		];
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 */
