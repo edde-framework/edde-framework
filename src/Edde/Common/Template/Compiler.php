@@ -103,8 +103,7 @@
 					$this->file(new Node(), $import)
 						->setMeta('included', true);
 				}
-				$this->file($root = new Node(), $this->source);
-				return $this->macro($root);
+				return $this->macro($this->file($root = new Node(), $this->source));
 			} catch (\Exception $exception) {
 				$root = $this->rootDirectory->getDirectory();
 				/**
