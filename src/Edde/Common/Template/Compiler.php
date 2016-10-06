@@ -190,6 +190,30 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function getHash(): string {
+			return $this->getVariable('name', '');
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getVariable(string $name, $default = null) {
+			if (isset($this->context[$name]) === false) {
+				$this->context[$name] = $default;
+			}
+			return $this->context[$name];
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getImportList(): array {
+			return $this->getVariable('name-list', []);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function getCurrent(): IFile {
 			return $this->stack->top();
 		}
@@ -233,16 +257,6 @@
 		 */
 		public function getBlockList(): array {
 			return $this->getVariable(static::class . '/block-list', []);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getVariable(string $name, $default = null) {
-			if (isset($this->context[$name]) === false) {
-				$this->context[$name] = $default;
-			}
-			return $this->context[$name];
 		}
 
 		/**

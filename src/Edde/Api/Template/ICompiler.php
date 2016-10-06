@@ -70,6 +70,20 @@
 		public function getSource(): IFile;
 
 		/**
+		 * return has of currently used files (same per file set including imports)
+		 *
+		 * @return string
+		 */
+		public function getHash(): string;
+
+		/**
+		 * return array of current import list
+		 *
+		 * @return string[]
+		 */
+		public function getImportList(): array;
+
+		/**
 		 * if there are embedded templates, this method return current template file
 		 *
 		 * @return IFile

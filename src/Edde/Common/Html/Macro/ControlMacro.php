@@ -33,7 +33,7 @@
 				return null;
 			}
 			$this->use();
-			$compiler->setVariable('file', $file = $this->templateDirectory->file(($class = 'Template_' . $compiler->getVariable('name')) . '.php'));
+			$compiler->setVariable('file', $file = $this->templateDirectory->file(($class = 'Template_' . $compiler->getHash()) . '.php'));
 			$file->openForWrite();
 			$file->enableWriteCache();
 			$this->write($macro, $compiler, '<?php');
@@ -41,8 +41,7 @@
 			$this->write($macro, $compiler, '/**', 1);
 			$this->write($macro, $compiler, sprintf(' * @generated at %s', (new \DateTime())->format('Y-m-d H:i:s')), 1);
 			$this->write($macro, $compiler, ' * automagically generated template file from the following source list:', 1);
-			/** @var $nameList array */
-			$nameList = $compiler->getVariable('name-list', []);
+			$nameList = $compiler->getImportList();
 			foreach ($nameList as $name) {
 				$this->write($macro, $compiler, sprintf(' *   - %s', $name), 1);
 			}
