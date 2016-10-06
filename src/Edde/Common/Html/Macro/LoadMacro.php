@@ -31,8 +31,8 @@
 		 * @throws MacroException
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
-			$this->write($compiler, sprintf('$this->embedd($template = self::template($this->templateManager->template(%s), $this->container));', ($helper = $compiler->helper($macro, $src = $this->attribute($macro, $compiler, 'src', false))) ? $helper : $this->load($src, $compiler)), 5);
-			$this->write($compiler, '$template->snippet($stack->top());', 5);
+			$this->write($macro, $compiler, sprintf('$this->embedd($template = self::template($this->templateManager->template(%s), $this->container));', ($helper = $compiler->helper($macro, $src = $this->attribute($macro, $compiler, 'src', false))) ? $helper : $this->load($src, $compiler)), 5);
+			$this->write($macro, $compiler, '$template->snippet($stack->top());', 5);
 		}
 
 		/**

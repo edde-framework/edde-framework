@@ -25,7 +25,7 @@
 		 */
 		protected function onControl(INode $macro, ICompiler $compiler) {
 			if (($action = $this->extract($macro, 'action')) !== null) {
-				$this->write($compiler, sprintf('$control->setAction(%s);', $this->action($macro, $compiler, $action)), 5);
+				$this->write($macro, $compiler, sprintf('$control->setAction(%s);', $this->action($macro, $compiler, $action)), 5);
 			}
 		}
 

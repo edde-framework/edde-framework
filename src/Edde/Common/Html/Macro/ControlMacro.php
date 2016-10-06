@@ -36,21 +36,21 @@
 			$compiler->setVariable('file', $file = $this->templateDirectory->file(($class = 'Template_' . $compiler->getVariable('name')) . '.php'));
 			$file->openForWrite();
 			$file->enableWriteCache();
-			$this->write($compiler, '<?php');
-			$this->write($compiler, "declare(strict_types = 1);\n", 1);
-			$this->write($compiler, '/**', 1);
-			$this->write($compiler, sprintf(' * @generated at %s', (new \DateTime())->format('Y-m-d H:i:s')), 1);
-			$this->write($compiler, ' * automagically generated template file from the following source list:', 1);
+			$this->write($macro, $compiler, '<?php');
+			$this->write($macro, $compiler, "declare(strict_types = 1);\n", 1);
+			$this->write($macro, $compiler, '/**', 1);
+			$this->write($macro, $compiler, sprintf(' * @generated at %s', (new \DateTime())->format('Y-m-d H:i:s')), 1);
+			$this->write($macro, $compiler, ' * automagically generated template file from the following source list:', 1);
 			/** @var $nameList array */
 			$nameList = $compiler->getVariable('name-list', []);
 			foreach ($nameList as $name) {
-				$this->write($compiler, sprintf(' *   - %s', $name), 1);
+				$this->write($macro, $compiler, sprintf(' *   - %s', $name), 1);
 			}
-			$this->write($compiler, ' */', 1);
-			$this->write($compiler, sprintf('class %s extends %s {', $class, AbstractHtmlTemplate::class), 1);
-			$this->write($compiler, sprintf("public function snippet(%s \$root, string \$snippet = null): %s {", IHtmlControl::class, IHtmlControl::class), 2);
-			$this->write($compiler, '$this->embedd($this);', 3);
-			$this->write($compiler, sprintf("\$stack = new SplStack();
+			$this->write($macro, $compiler, ' */', 1);
+			$this->write($macro, $compiler, sprintf('class %s extends %s {', $class, AbstractHtmlTemplate::class), 1);
+			$this->write($macro, $compiler, sprintf("public function snippet(%s \$root, string \$snippet = null): %s {", IHtmlControl::class, IHtmlControl::class), 2);
+			$this->write($macro, $compiler, '$this->embedd($this);', 3);
+			$this->write($macro, $compiler, sprintf("\$stack = new SplStack();
 			\$stack->push(\$control = \$parent = \$root);
 			switch (\$snippet) {
 				case null:", TemplateException::class), 3);
@@ -62,7 +62,7 @@
 				}
 				$compiler->macro($node);
 			}
-			$this->write($compiler, 'break;', 5);
+			$this->write($macro, $compiler, 'break;', 5);
 			$caseList = $compiler->getVariable($caseListId = (static::class . '/cast-list'), [null => null]);
 			/** @var $nodeList INode[] */
 			foreach ($compiler->getBlockList() as $id => $root) {
@@ -72,25 +72,25 @@
 				$caseList[$id] = $id;
 				/** @noinspection DisconnectedForeachInstructionInspection */
 				$compiler->setVariable($caseListId, $caseList);
-				$this->write($compiler, sprintf('case %s:', var_export($id, true)), 4);
+				$this->write($macro, $compiler, sprintf('case %s:', var_export($id, true)), 4);
 				foreach ($root->getNodeList() as $node) {
-					$this->write($compiler, sprintf('// %s', $node->getPath()), 5);
+					$this->write($macro, $compiler, sprintf('// %s', $node->getPath()), 5);
 					$compiler->macro($node);
 				}
 				/** @noinspection DisconnectedForeachInstructionInspection */
-				$this->write($compiler, 'break;', 5);
+				$this->write($macro, $compiler, 'break;', 5);
 			}
-			$this->write($compiler, sprintf("default:
+			$this->write($macro, $compiler, sprintf("default:
 					throw new %s(sprintf('Requested unknown snippet [%%s].', \$snippet));
 			}", TemplateException::class), 4);
-			$this->write($compiler, "return \$root;", 3);
-			$this->write($compiler, '}', 2);
-			$this->write($compiler, '');
-			$this->write($compiler, 'public function getBlockList(): array {', 2);
+			$this->write($macro, $compiler, "return \$root;", 3);
+			$this->write($macro, $compiler, '}', 2);
+			$this->write($macro, $compiler, '');
+			$this->write($macro, $compiler, 'public function getBlockList(): array {', 2);
 			unset($caseList[null]);
-			$this->write($compiler, 'return ' . var_export(array_keys($caseList), true) . ';', 3);
-			$this->write($compiler, '}', 2);
-			$this->write($compiler, '}', 1);
+			$this->write($macro, $compiler, 'return ' . var_export(array_keys($caseList), true) . ';', 3);
+			$this->write($macro, $compiler, '}', 2);
+			$this->write($macro, $compiler, '}', 1);
 			$file->close();
 			return $file;
 		}

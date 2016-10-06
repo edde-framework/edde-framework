@@ -36,8 +36,8 @@
 		 * @throws MacroException
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
-			$this->write($compiler, sprintf('$this->translator->pushScope(%s);', var_export($this->attribute($macro, $compiler, 'scope', false), true)), 5);
+			$this->write($macro, $compiler, sprintf('$this->translator->pushScope(%s);', var_export($this->attribute($macro, $compiler, 'scope', false), true)), 5);
 			parent::macro($macro, $compiler);
-			$this->write($compiler, '$this->translator->popScope();', 5);
+			$this->write($macro, $compiler, '$this->translator->popScope();', 5);
 		}
 	}

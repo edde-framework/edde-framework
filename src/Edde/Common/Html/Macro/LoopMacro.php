@@ -85,13 +85,13 @@
 				$key = str_replace('-', '_', $this->cryptEngine->guid()),
 				$value = str_replace('-', '_', $this->cryptEngine->guid()),
 			];
-			$this->write($compiler, '$control = $stack->top();', 5);
+			$this->write($macro, $compiler, '$control = $stack->top();', 5);
 			$src = $this->attribute($macro, $compiler, 'src', false);
-			$this->write($compiler, sprintf('foreach(%s as $key_%s => $value_%s) {', ($helper = $compiler->helper($macro, $src)) ? $helper : $this->loop($macro, $compiler, $src), $key, $value), 5);
+			$this->write($macro, $compiler, sprintf('foreach(%s as $key_%s => $value_%s) {', ($helper = $compiler->helper($macro, $src)) ? $helper : $this->loop($macro, $compiler, $src), $key, $value), 5);
 			$stack->push($loop);
 			parent::macro($macro, $compiler);
 			$stack->pop();
-			$this->write($compiler, '}', 5);
+			$this->write($macro, $compiler, '}', 5);
 		}
 
 		/**

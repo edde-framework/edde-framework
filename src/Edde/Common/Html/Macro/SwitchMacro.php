@@ -44,7 +44,7 @@
 			/** @var $stack \SplStack */
 			$stack = $compiler->getVariable(static::class, new \SplStack());
 			$switch = str_replace('-', '_', $this->cryptEngine->guid());
-			$this->write($compiler, sprintf('$switch_%s = %s;', $switch, $this->switch($macro, $this->attribute($macro, $compiler, 'src', false))), 5);
+			$this->write($macro, $compiler, sprintf('$switch_%s = %s;', $switch, $this->switch($macro, $this->attribute($macro, $compiler, 'src', false))), 5);
 			$stack->push($switch);
 			parent::macro($macro, $compiler);
 			$stack->pop();

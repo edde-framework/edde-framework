@@ -42,9 +42,9 @@
 			$type = $target[0];
 			$target = StringUtils::camelize(substr($target, 1), null, true);
 			if ($func === false) {
-				$this->write($compiler, sprintf('%s::setProperty(%s, %s, $control);', ReflectionUtils::class, $this->reference($macro, $type), var_export($target, true)), 5);
+				$this->write($macro, $compiler, sprintf('%s::setProperty(%s, %s, $control);', ReflectionUtils::class, $this->reference($macro, $type), var_export($target, true)), 5);
 				return;
 			}
-			$this->write($compiler, sprintf('%s->%s($control);', $this->reference($macro, $type), $target), 5);
+			$this->write($macro, $compiler, sprintf('%s->%s($control);', $this->reference($macro, $type), $target), 5);
 		}
 	}

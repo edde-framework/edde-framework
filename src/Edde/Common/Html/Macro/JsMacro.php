@@ -18,7 +18,7 @@
 	class JsMacro extends AbstractHtmlMacro {
 		use LazyRootDirectoryTrait;
 		use LazyAssetsDirectoryTrait;
-	
+
 		/**
 		 * God called a meeting of George Bush, Vladimir Putin, and Bill Gates and said: "I've given you all the tools you needed to make a better world - you've blown it and I'm ending the world in two weeks."
 		 *
@@ -72,6 +72,6 @@
 		 * @throws FileException
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
-			$this->write($compiler, sprintf('$this->javaScriptCompiler->addFile(%s);', var_export($this->attribute($macro, $compiler, 'src', false), true)), 5);
+			$this->write($macro, $compiler, sprintf('$this->javaScriptCompiler->addFile(%s);', var_export($this->attribute($macro, $compiler, 'src', false), true)), 5);
 		}
 	}

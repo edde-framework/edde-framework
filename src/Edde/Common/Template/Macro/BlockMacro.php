@@ -27,7 +27,7 @@
 		 * @throws NodeException
 		 */
 		public function compileInline(INode $macro, ICompiler $compiler) {
-			$compiler->block($id = $this->extract($macro, self::COMPILE_PREFIX . $this->getName()), $this->block(clone $macro, $id));
+			$compiler->block($id = $this->extract($macro, self::COMPILE_PREFIX . $this->getName()), $this->block($macro, $id));
 		}
 
 		/**
@@ -38,7 +38,7 @@
 		 * @throws NodeException
 		 */
 		protected function block(INode $macro, string $id): INode {
-			return (new Node('block-root', null, ['id' => $id]))->addNode($macro, true, true);
+			return (new Node('block-root', null, ['id' => $id]))->addNode($macro->setMeta('block', $id), true, true);
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
@@ -49,7 +49,7 @@
 		 * @throws NodeException
 		 */
 		public function compile(INode $macro, ICompiler $compiler) {
-			$compiler->block($id = $this->attribute($macro = clone $macro, $compiler, 'id'), $this->block($macro, $id));
+			$compiler->block($id = $this->attribute($macro, $compiler, 'id'), $this->block($macro, $id));
 			parent::compile($macro, $compiler);
 		}
 	}
