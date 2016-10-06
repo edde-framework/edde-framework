@@ -39,7 +39,7 @@
 		public function helper(INode $macro, ICompiler $compiler, $value, ...$parameterList) {
 			/** @var $stack \SplStack */
 			$stack = $compiler->getVariable(static::class);
-			if ($value === null || $stack === null) {
+			if ($value === null || $stack === null || $stack->isEmpty()) {
 				return null;
 			} else if ($value === '$:') {
 				list(, $value) = $stack->top();

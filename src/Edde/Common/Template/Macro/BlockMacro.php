@@ -24,7 +24,7 @@
 		 * @throws MacroException
 		 */
 		public function compileInline(INode $macro, ICompiler $compiler) {
-			$compiler->block($this->extract($macro, 't:' . $this->getName()), [$macro]);
+			$compiler->block($this->extract($macro, self::COMPILE_PREFIX . $this->getName()), [$macro]);
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */

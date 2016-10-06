@@ -13,9 +13,9 @@
 		/**
 		 * register link a generator
 		 *
-		 * @param ILinkGenerator $lingGenerator
+		 * @param ILinkGenerator $linkGenerator
 		 *
 		 * @return ILinkFactory
 		 */
-		public function registerLinkGenerator(ILinkGenerator $lingGenerator): ILinkFactory;
+		public function registerLinkGenerator(ILinkGenerator $linkGenerator): ILinkFactory;
 	}

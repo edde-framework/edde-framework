@@ -1,6 +1,7 @@
 <control foo="@current-method-call()" title="foo" t:translator="foo">
 	<div t:block="overkill-block" t:loop=":loop-from-root()" t:pass=":overkill-block">
 		<div value="$#" class="$:"/>
+		<button action="$:"/>
 	</div>
 
 	<dictionary src="./dictionary.csv"/>

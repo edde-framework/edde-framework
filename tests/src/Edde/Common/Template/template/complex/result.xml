@@ -1,4 +1,16 @@
 <div foo="yahoo!" title="foo" class="root">
+	<div>
+		<div class="abc">a</div>
+		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="abc"></div>
+	</div>
+	<div>
+		<div class="def">b</div>
+		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="def"></div>
+	</div>
+	<div>
+		<div class="ghi">c</div>
+		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="ghi"></div>
+	</div>
 	<div class="foo-bar"></div>
 	<div class="boo-far">
 		<span class="poo">hello!</span>
@@ -109,6 +121,21 @@
 	<h4>foo4</h4>
 	<h5 class="ou-yay!">foo5</h5>
 	<h6>foo6</h6>
+	<div class="abc">
+		<div class="really-deep-div-here">
+			<div class="deepness-of-a-deep" something="ou-yay!">foo</div>
+		</div>
+	</div>
+	<div class="def">
+		<div class="really-deep-div-here">
+			<div class="deepness-of-a-deep" something="ou-yay!">foo</div>
+		</div>
+	</div>
+	<div class="ghi">
+		<div class="really-deep-div-here">
+			<div class="deepness-of-a-deep" something="ou-yay!">foo</div>
+		</div>
+	</div>
 	<div class="upper-loop-key0" empty-attribute=""></div>
 	<div class="wrap">
 		<div class="inner-loop-key-0" some-attribute="upper-loop-key0" root-key="upper-loop-key0">
