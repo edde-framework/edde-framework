@@ -87,7 +87,7 @@
 			];
 			$this->write($compiler, '$control = $stack->top();', 5);
 			$src = $this->attribute($macro, $compiler, 'src', false);
-			$this->write($compiler, sprintf('foreach(%s as $key_%s => $value_%s) {', ($helper = $compiler->helper($macro, $src)) ? $helper : $this->loop($compiler, $src), $key, $value), 5);
+			$this->write($compiler, sprintf('foreach(%s as $key_%s => $value_%s) {', ($helper = $compiler->helper($macro, $src)) ? $helper : $this->loop($macro, $compiler, $src), $key, $value), 5);
 			$stack->push($loop);
 			parent::macro($macro, $compiler);
 			$stack->pop();
@@ -95,15 +95,17 @@
 		}
 
 		/**
+		 * @param INode $macro
 		 * @param ICompiler $compiler
 		 * @param string $src
 		 *
 		 * @return mixed|string
+		 * @throws MacroException
 		 */
-		protected function loop(ICompiler $compiler, string $src) {
+		protected function loop(INode $macro, ICompiler $compiler, string $src) {
 			$type = $src[0];
 			if (isset(self::$reference[$type])) {
-				return sprintf('%s->%s', self::$reference[$type], StringUtils::camelize(substr($src, 1), null, true));
+				return sprintf('%s->%s', $this->reference($macro, $type), StringUtils::camelize(substr($src, 1), null, true));
 			} else if ($src === '$:') {
 				list(, $value) = $compiler->getVariable(static::class)
 					->top();
