@@ -76,7 +76,6 @@
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
-
 		/**
 		 * export attribute list
 		 *
