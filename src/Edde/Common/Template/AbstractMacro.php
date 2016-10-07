@@ -73,61 +73,6 @@
 		}
 
 		/**
-		 * extract an attribute and remove it from attribute list
-		 *
-		 * @param INode $macro
-		 * @param string $name
-		 * @param null $default
-		 *
-		 * @return mixed|null|string
-		 */
-		public function extract(INode $macro, string $name = null, $default = null) {
-			$name = $name ?: $this->getName();
-			$attribute = $macro->getAttribute($name, $default);
-			$macro->removeAttribute($name);
-			return $attribute;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getName(): string {
-			return $this->name;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
-		}
-
-		/**
-		 * switch macro and node and extract attribute from macro node
-		 *
-		 * @param INode $macro
-		 * @param string $attribute
-		 *
-		 * @return INode
-		 */
-		protected function switch (INode $macro, string $attribute): INode {
-			$macro->switch($node = new Node($this->getName(), null, [$attribute => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
-			return $node;
-		}
-
-		/**
-		 * insert node under the given macro
-		 *
-		 * @param INode $macro
-		 * @param string $attribute
-		 *
-		 * @return Node
-		 */
-		protected function insert(INode $macro, string $attribute) {
-			$macro->insert($node = new Node($this->getName(), null, [$attribute => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
-			return $node;
-		}
-
-		/**
 		 * @inheritdoc
 		 */
 		public function inline(INode $macro, ICompiler $compiler) {
@@ -145,16 +90,59 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function macroInline(INode $macro, ICompiler $compiler) {
+		public function macro(INode $macro, ICompiler $compiler) {
+			foreach ($macro->getNodeList() as $node) {
+				$compiler->macro($node);
+			}
+		}
+
+		/**
+		 * switch macro and node and extract attribute from macro node
+		 *
+		 * @param INode $macro
+		 * @param string $attribute
+		 *
+		 * @return INode
+		 */
+		protected function switch (INode $macro, string $attribute): INode {
+			$macro->switch($node = new Node($this->getName(), null, [$attribute => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+			return $node;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function macro(INode $macro, ICompiler $compiler) {
-			foreach ($macro->getNodeList() as $node) {
-				$compiler->macro($node);
-			}
+		public function getName(): string {
+			return $this->name;
+		}
+
+		/**
+		 * extract an attribute and remove it from attribute list
+		 *
+		 * @param INode $macro
+		 * @param string $name
+		 * @param null $default
+		 *
+		 * @return mixed|null|string
+		 */
+		public function extract(INode $macro, string $name = null, $default = null) {
+			$name = $name ?: $this->getName();
+			$attribute = $macro->getAttribute($name, $default);
+			$macro->removeAttribute($name);
+			return $attribute;
+		}
+
+		/**
+		 * insert node under the given macro
+		 *
+		 * @param INode $macro
+		 * @param string $attribute
+		 *
+		 * @return Node
+		 */
+		protected function insert(INode $macro, string $attribute) {
+			$macro->insert($node = new Node($this->getName(), null, [$attribute => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+			return $node;
 		}
 
 		/**

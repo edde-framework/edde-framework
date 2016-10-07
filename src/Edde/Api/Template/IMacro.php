@@ -25,18 +25,6 @@
 		public function getHelperSet(): IHelperSet;
 
 		/**
-		 * (optional) inline version of this macro
-		 *
-		 * @param INode $macro
-		 * @param ICompiler $compiler
-		 *
-		 * @return
-		 * @internal param INode $root
-		 *
-		 */
-		public function compileInline(INode $macro, ICompiler $compiler);
-
-		/**
 		 * pre-compile preparation of node tree; may return the same or a new macro which will be used as a new root
 		 *
 		 * @param INode $macro
@@ -55,16 +43,6 @@
 		 * @return mixed
 		 */
 		public function compile(INode $macro, ICompiler $compiler);
-
-		/**
-		 * (optional) inline version of this macro
-		 *
-		 * @param INode $macro
-		 * @param ICompiler $compiler
-		 *
-		 * @return mixed
-		 */
-		public function macroInline(INode $macro, ICompiler $compiler);
 
 		/**
 		 * executed in runtime phase
