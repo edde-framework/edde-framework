@@ -1,15 +1,15 @@
 <div foo="yahoo!" title="foo" class="root">
 	<div class="foo-case"></div>
 	<div class="foo-case2"></div>
-	<div>
+	<div class="overkilled">
 		<div class="abc">a</div>
 		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="abc"></div>
 	</div>
-	<div>
+	<div class="overkilled">
 		<div class="def">b</div>
 		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="def"></div>
 	</div>
-	<div>
+	<div class="overkilled">
 		<div class="ghi">c</div>
 		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="ghi"></div>
 	</div>

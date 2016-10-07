@@ -1,7 +1,7 @@
 <control foo="@current-method-call()" title="foo" t:translator="foo">
 	<include src="./this-is-magical-switch.xml"/>
 
-	<div t:block="overkill-block" t:loop=":loop-from-root()" t:pass=":overkill-block">
+	<div t:block="overkill-block" t:loop=":loop-from-root()" t:pass=":overkill-block()">
 		<div value="$#" class="$:"/>
 		<button action="$:"/>
 	</div>
@@ -38,8 +38,8 @@
 		<div class="foo-case3" t:case="poo"/>
 	</div>
 	<span class="double-include" t:include="./double-pass-include.xml"/>
-	<span class="pass-child 01" t:pass-child=":pass-child()" t:include="./pass-include.xml"/>
-	<span class="pass-child 02" t:pass-child=":pass-child2()" t:include="./double-pass-include.xml"/>
+	<span class="pass-child 01" t:include="./pass-include.xml" t:pass-child=":pass-child()"/>
+	<span class="pass-child 02" t:include="./double-pass-include.xml" t:pass-child=":pass-child2()"/>
 	<span class="pass-child 03" t:pass-child=":pass-child3()">
 		<div class="child-01"/>
 		<div class="child-02"/>
