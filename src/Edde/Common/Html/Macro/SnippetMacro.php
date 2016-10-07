@@ -6,6 +6,7 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
 	use Edde\Api\Template\ICompiler;
+	use Edde\Api\Template\MacroException;
 
 	/**
 	 * Snippet is piece of template which can be called without any other dependencies.
@@ -28,8 +29,16 @@
 		 * @throws NodeException
 		 */
 		public function inline(INode $macro, ICompiler $compiler) {
+			return $this->switch($macro, 'id');
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws MacroException
+		 */
+		public function compile(INode $macro, ICompiler $compiler) {
 			$macro->setMeta('snippet', true);
-			$compiler->block($this->extract($macro, self::COMPILE_PREFIX . $this->getName()), $node = $this->switch($macro, 'id'));
-			return $node;
+			$compiler->block($this->attribute($macro, $compiler, 'id'), $macro);
+			parent::compile($macro, $compiler);
 		}
 	}

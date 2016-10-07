@@ -44,7 +44,7 @@
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
 			$stack = $compiler->getVariable(static::class, $stack = new \SplStack());
-			$this->write($macro, $compiler, sprintf('$switch_%s = %s;', $switch = str_replace('-', '_', $this->cryptEngine->guid()), $this->generate($macro, $this->attribute($macro, $compiler, 'src', false))), 5);
+			$this->write($compiler, sprintf('$switch_%s = %s;', $switch = str_replace('-', '_', $this->cryptEngine->guid()), $this->generate($macro, $this->attribute($macro, $compiler, 'src', false))), 5);
 			$stack->push($switch);
 			parent::macro($macro, $compiler);
 			$stack->pop();

@@ -50,7 +50,7 @@
 				}
 				$compiler->macro($node);
 				/** @noinspection DisconnectedForeachInstructionInspection */
-				$this->write($macro, $compiler, $write, 5);
+				$this->write($compiler, $write, 5);
 			}
 		}
 	}

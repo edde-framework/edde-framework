@@ -72,6 +72,6 @@
 		 * @throws FileException
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
-			$this->write($macro, $compiler, sprintf('$this->javaScriptCompiler->addFile(%s);', var_export($this->attribute($macro, $compiler, 'src', false), true)), 5);
+			$this->write($compiler, sprintf('$this->javaScriptCompiler->addFile(%s);', var_export($this->attribute($macro, $compiler, 'src', false), true)), 5);
 		}
 	}

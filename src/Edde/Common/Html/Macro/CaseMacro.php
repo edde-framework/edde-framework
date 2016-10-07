@@ -47,8 +47,8 @@
 				throw new MacroException(sprintf('Shit has happend: macro [%s] has no parent switch!', $macro->getPath()));
 			}
 			$switch = $stack->top();
-			$this->write($macro, $compiler, sprintf('if($switch_%s === %s) {', $switch, var_export($this->attribute($macro, $compiler, 'name', false), true)), 5);
+			$this->write($compiler, sprintf('if($switch_%s === %s) {', $switch, var_export($this->attribute($macro, $compiler, 'name', false), true)), 5);
 			parent::macro($macro, $compiler);
-			$this->write($macro, $compiler, '}', 5);
+			$this->write($compiler, '}', 5);
 		}
 	}
