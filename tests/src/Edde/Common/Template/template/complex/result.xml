@@ -74,6 +74,11 @@
 		</div>
 		<div class="poo-class">poo</div>
 	</div>
+	<div class="this-will-use-use">
+		<div class="really-deep-div-here">
+			<div class="deepness-of-a-deep" something="ou-yay!">foo</div>
+		</div>
+	</div>
 	<div class="really-deep-div-here">
 		<div class="deepness-of-a-deep" something="ou-yay!">foo</div>
 	</div>
