@@ -23,7 +23,15 @@
 		 * @inheritdoc
 		 */
 		public function inline(INode $macro, ICompiler $compiler) {
-			$target = $this->extract($macro, self::COMPILE_PREFIX . $this->getName());
+			return $this->insert($macro, 'target');
+		}
+
+		/** @noinspection PhpMissingParentCallCommonInspection */
+		/**
+		 * @inheritdoc
+		 */
+		public function compile(INode $macro, ICompiler $compiler) {
+			$target = $this->extract($macro, 'target');
 			foreach ($macro->getNodeList() as $node) {
 				/** @var $nodeList INode[] */
 				$nodeList = [$node];

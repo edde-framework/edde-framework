@@ -1,4 +1,6 @@
 <div foo="yahoo!" title="foo" class="root">
+	<div class="foo-case"></div>
+	<div class="foo-case2"></div>
 	<div>
 		<div class="abc">a</div>
 		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="abc"></div>

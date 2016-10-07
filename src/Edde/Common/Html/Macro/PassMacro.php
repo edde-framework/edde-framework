@@ -26,7 +26,7 @@
 		 * @inheritdoc
 		 */
 		public function inline(INode $macro, ICompiler $compiler) {
-			return $this->switch($macro, 'target');
+			return $this->insert($macro, 'target');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
@@ -40,10 +40,11 @@
 			$target = str_replace('()', '', $target);
 			$type = $target[0];
 			$target = StringUtils::camelize(substr($target, 1), null, true);
+			$write = sprintf('%s->%s($control);', $this->reference($macro, $type), $target);
 			if ($func === false) {
-				$this->write($macro, $compiler, sprintf('%s::setProperty(%s, %s, $control);', ReflectionUtils::class, $this->reference($macro, $type), var_export($target, true)), 5);
-				return;
+				$write = sprintf('%s::setProperty(%s, %s, $control);', ReflectionUtils::class, $this->reference($macro, $type), var_export($target, true));
 			}
-			$this->write($macro, $compiler, sprintf('%s->%s($control);', $this->reference($macro, $type), $target), 5);
+			$this->write($macro, $compiler, $write, 5);
+			parent::macro($macro, $compiler);
 		}
 	}
