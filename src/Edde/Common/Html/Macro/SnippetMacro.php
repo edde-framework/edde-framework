@@ -29,7 +29,7 @@
 		 * @throws NodeException
 		 */
 		public function inline(INode $macro, ICompiler $compiler) {
-			return $this->switch($macro, 'id');
+			return $this->switchlude($macro, 'id');
 		}
 
 		/**

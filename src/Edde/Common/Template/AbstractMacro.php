@@ -96,15 +96,30 @@
 		}
 
 		/**
-		 * switch macro and node and extract attribute from macro node
+		 * include node when root, otherwise switch node
 		 *
 		 * @param INode $macro
 		 * @param string $attribute
 		 *
-		 * @return INode
+		 * @return INode|Node
 		 */
-		protected function switch (INode $macro, string $attribute): INode {
-			$macro->switch($node = new Node($this->getName(), null, [$attribute => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+		protected function switchlude(INode $macro, string $attribute) {
+			if ($macro->isRoot()) {
+				return $this->insert($macro, $attribute);
+			}
+			return $this->switch($macro, $attribute);
+		}
+
+		/**
+		 * insert node under the given macro
+		 *
+		 * @param INode $macro
+		 * @param string $attribute
+		 *
+		 * @return Node
+		 */
+		protected function insert(INode $macro, string $attribute) {
+			$macro->insert($node = new Node($this->getName(), null, [$attribute => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
 			return $node;
 		}
 
@@ -132,15 +147,15 @@
 		}
 
 		/**
-		 * insert node under the given macro
+		 * switch macro and node and extract attribute from macro node
 		 *
 		 * @param INode $macro
 		 * @param string $attribute
 		 *
-		 * @return Node
+		 * @return INode
 		 */
-		protected function insert(INode $macro, string $attribute) {
-			$macro->insert($node = new Node($this->getName(), null, [$attribute => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+		protected function switch (INode $macro, string $attribute): INode {
+			$macro->switch($node = new Node($this->getName(), null, [$attribute => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
 			return $node;
 		}
 

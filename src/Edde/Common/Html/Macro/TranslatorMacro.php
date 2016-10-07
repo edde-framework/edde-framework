@@ -25,10 +25,7 @@
 		 * @inheritdoc
 		 */
 		public function inline(INode $macro, ICompiler $compiler) {
-			if ($macro->isRoot()) {
-				return $this->insert($macro, 'scope');
-			}
-			return $this->switch($macro, 'scope');
+			return $this->switchlude($macro, 'scope');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */

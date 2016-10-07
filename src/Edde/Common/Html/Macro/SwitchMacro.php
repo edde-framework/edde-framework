@@ -31,10 +31,7 @@
 		 * @throws MacroException
 		 */
 		public function inline(INode $macro, ICompiler $compiler) {
-			if ($macro->isRoot()) {
-				return $this->insert($macro, 'src');
-			}
-			return $this->switch($macro, 'src');
+			return $this->switchlude($macro, 'src');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
