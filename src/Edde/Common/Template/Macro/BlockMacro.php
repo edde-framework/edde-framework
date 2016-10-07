@@ -35,5 +35,6 @@
 		 */
 		public function compile(INode $macro, ICompiler $compiler) {
 			$compiler->block($this->attribute($macro, $compiler, 'id'), clone $macro);
+			parent::compile($macro, $compiler);
 		}
 	}
