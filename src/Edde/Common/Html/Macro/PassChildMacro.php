@@ -22,8 +22,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler, INode $root) {
-			$target = $this->extract($macro, self::COMPILE_PREFIX . $this->getName(), null);
+		public function inline(INode $macro, ICompiler $compiler) {
+			$target = $this->extract($macro, self::COMPILE_PREFIX . $this->getName());
 			foreach ($macro->getNodeList() as $node) {
 				/** @var $nodeList INode[] */
 				$nodeList = [$node];

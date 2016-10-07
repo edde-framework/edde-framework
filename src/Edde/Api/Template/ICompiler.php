@@ -36,14 +36,24 @@
 		public function registerMacro(IMacro $macro): ICompiler;
 
 		/**
+		 * process inline macros first (may modify macro node tree)
+		 *
+		 * @param INode $macro
+		 *
+		 * @return ICompiler
+		 */
+		public function inline(INode $macro): ICompiler;
+
+		/**
 		 * execute compile macro
 		 *
 		 * @param INode $macro
-		 * @param INode $root
 		 *
 		 * @return
+		 * @internal param INode $root
+		 *
 		 */
-		public function compile(INode $macro, INode $root);
+		public function compile(INode $macro);
 
 		/**
 		 * execute macro in "runtime"
@@ -55,12 +65,12 @@
 		/**
 		 * compile source into node; node is the final result
 		 *
-		 * @param INode $root
 		 * @param IFile $file
 		 *
 		 * @return INode
+		 * @internal param INode $root
 		 */
-		public function file(INode $root, IFile $file): INode;
+		public function file(IFile $file): INode;
 
 		/**
 		 * return the original source file

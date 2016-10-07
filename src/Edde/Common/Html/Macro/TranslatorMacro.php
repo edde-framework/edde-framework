@@ -4,10 +4,8 @@
 	namespace Edde\Common\Html\Macro;
 
 	use Edde\Api\Node\INode;
-	use Edde\Api\Node\NodeException;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\Node\Node;
 
 	/**
 	 * Translator support macro.
@@ -25,13 +23,12 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws NodeException
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler, INode $root) {
-			$root->addNode($node = clone $macro);
-			$node->clearNodeList();
-			$node->setNodeList([new Node('translator', null, ['scope' => $scope = $this->extract($macro, self::COMPILE_PREFIX . $this->getName())])]);
-			$compiler->setVariable('scope', $scope);
+		public function inline(INode $macro, ICompiler $compiler) {
+			if ($macro->isRoot()) {
+				return $this->insert($macro, 'scope');
+			}
+			return $this->switch($macro, 'scope');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */

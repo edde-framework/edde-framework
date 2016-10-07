@@ -16,7 +16,6 @@
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Deffered\AbstractDeffered;
-	use Edde\Common\Node\Node;
 	use Edde\Common\Reflection\ReflectionUtils;
 
 	/**
@@ -100,10 +99,10 @@
 				$this->setVariable('name', sha1(implode(',', $nameList)));
 				$this->setVariable('name-list', $nameList);
 				foreach ($importList as $import) {
-					$this->file(new Node(), $import)
+					$this->file($import)
 						->setMeta('included', true);
 				}
-				return $this->macro($this->file($root = new Node(), $this->source));
+				return $this->macro($this->file($this->source));
 			} catch (\Exception $exception) {
 				$root = $this->rootDirectory->getDirectory();
 				/**
@@ -134,41 +133,41 @@
 		 * @inheritdoc
 		 * @throws CompilerException
 		 */
-		public function file(INode $root, IFile $file): INode {
+		public function file(IFile $file): INode {
 			$this->use();
 			$this->stack->push($file);
-			$this->compile($this->resourceManager->resource($file), $root);
+			$this->inline($source = $this->resourceManager->resource($file));
+			$this->compile($source);
 			$this->stack->pop();
-			return $root;
+			return $source;
 		}
 
 		/**
 		 * @inheritdoc
 		 * @throws CompilerException
 		 */
-		public function compile(INode $macro, INode $root) {
-			return $this->run($macro, $root, __FUNCTION__, 't');
-		}
-
-		/**
-		 * @param INode $macro
-		 * @param INode $root
-		 * @param string $method
-		 * @param string $inline
-		 *
-		 * @return mixed
-		 * @throws CompilerException
-		 */
-		protected function run(INode $macro, INode $root, string $method, string $inline) {
+		public function inline(INode $macro): ICompiler {
 			if (isset($this->macroList[$name = $macro->getName()]) === false) {
 				throw new CompilerException(sprintf('Unknown macro [%s].', $macro->getPath()));
 			}
-			foreach ($macro->getAttributeList() as $k => $v) {
-				if (isset($this->macroList[$k]) && strpos($k, $inline . ':') === 0 && ($node = $this->macroList[$k]->{$method . 'Inline'}($macro, $this, $root))) {
-					return $this->run($node, $root, $method, $inline);
-				}
+			foreach ($macro->getAttributeList() as $attribute => $value) {
+				isset($this->macroList[$attribute]) && strpos($attribute, 't:') === 0 && $this->macroList[$attribute]->inline($macro, $this);
 			}
-			return $this->macroList[$name]->{$method}($macro, $this, $root);
+			foreach ($macro->getNodeList() as $node) {
+				$this->inline($node);
+			}
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws CompilerException
+		 */
+		public function compile(INode $macro) {
+			if (isset($this->macroList[$name = $macro->getName()]) === false) {
+				throw new CompilerException(sprintf('Unknown macro [%s].', $macro->getPath()));
+			}
+			return $this->macroList[$name]->compile($macro, $this);
 		}
 
 		/**
@@ -176,7 +175,10 @@
 		 * @throws CompilerException
 		 */
 		public function macro(INode $macro) {
-			return $this->run($macro, new Node(), __FUNCTION__, 'm');
+			if (isset($this->macroList[$name = $macro->getName()]) === false) {
+				throw new CompilerException(sprintf('Unknown macro [%s].', $macro->getPath()));
+			}
+			return $this->macroList[$name]->macro($macro, $this);
 		}
 
 		/**

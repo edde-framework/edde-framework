@@ -6,7 +6,6 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\Node\Node;
 	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Strings\StringUtils;
 
@@ -26,8 +25,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler, INode $root) {
-			$macro->prepend(new Node('pass', null, ['target' => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+		public function inline(INode $macro, ICompiler $compiler) {
+			return $this->switch($macro, 'target');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */

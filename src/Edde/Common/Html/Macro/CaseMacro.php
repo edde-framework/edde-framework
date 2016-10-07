@@ -6,7 +6,6 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\Node\Node;
 
 	/**
 	 * Switch-case macro.
@@ -33,8 +32,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler, INode $root) {
-			$macro->switch(new Node('case', null, ['name' => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+		public function inline(INode $macro, ICompiler $compiler) {
+			return $this->switch($macro, 'name');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */

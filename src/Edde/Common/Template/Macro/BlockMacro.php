@@ -7,7 +7,6 @@
 	use Edde\Api\Node\NodeException;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\Node\Node;
 	use Edde\Common\Template\AbstractMacro;
 
 	/**
@@ -23,23 +22,18 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws MacroException
-		 * @throws NodeException
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler, INode $root) {
-			$root->addNode($root = new Node('block', null, ['id' => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
-			$root->addNode($macro, true);
-			return $root;
+		public function inline(INode $macro, ICompiler $compiler) {
+			return $this->switch($macro, 'id');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
-
 		/**
 		 * @inheritdoc
 		 * @throws MacroException
 		 * @throws NodeException
 		 */
-		public function compile(INode $macro, ICompiler $compiler, INode $root) {
+		public function compile(INode $macro, ICompiler $compiler) {
 			$compiler->block($id = $this->attribute($macro, $compiler, 'id'), $macro);
 		}
 	}

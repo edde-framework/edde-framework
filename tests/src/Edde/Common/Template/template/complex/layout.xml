@@ -19,7 +19,7 @@
 	<div value="this will be translated|translate"/>
 	<div>this will also be translated|translate</div>
 
-	<div t:switch=":gimme-a-switch()" t:include="./switched.xml"/>
+	<div t:include="./switched.xml" t:switch=":gimme-a-switch()"/>
 
 	<switch src=":gimme-a-switch()">
 		<case name="foo">
@@ -66,23 +66,23 @@
 
 	<div class="this-will-be-loaded-on-demand" t:pass=":some-variable">
 		<!--
-			m:load will load the given template on demand; it supports
+			load will load the given template on demand; it supports
 			relative file reference (./ prefix) and "absolute" path reference from
 			application root (/ prefix)
 
 			the template will be executed on root snippet call (a snippet without a name)
 		-->
-		<m:load src="./on-demand.xml"/>
+		<load src="./on-demand.xml"/>
 	</div>
 	<div class="this-will-be-loaded-on-demand" t:snippet="beast-on-demand">
 		<!--
-			m:load will load the given template on demand; it supports
+			load will load the given template on demand; it supports
 			relative file reference (./ prefix) and "absolute" path reference from
 			application root (/ prefix)
 
 			the template will be executed on root snippet call (a snippet without a name)
 		-->
-		<m:load src="./on-demand.xml"/>
+		<load src="./on-demand.xml"/>
 	</div>
 
 	<use src="deep-block"/>

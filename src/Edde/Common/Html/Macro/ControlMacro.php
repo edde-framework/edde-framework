@@ -55,12 +55,7 @@
 				case null:", TemplateException::class), 3);
 			$this->writeTextValue($macro, $compiler);
 			$this->writeAttributeList($macro, $compiler);
-			foreach ($macro->getNodeList() as $node) {
-				if ($node->getMeta('snippet', false)) {
-					continue;
-				}
-				$compiler->macro($node);
-			}
+			parent::macro($macro, $compiler);
 			$this->write($macro, $compiler, 'break;', 5);
 			$caseList = $compiler->getVariable($caseListId = (static::class . '/cast-list'), [null => null]);
 			/** @var $nodeList INode[] */

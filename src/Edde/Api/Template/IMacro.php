@@ -29,20 +29,32 @@
 		 *
 		 * @param INode $macro
 		 * @param ICompiler $compiler
-		 * @param INode $root
 		 *
 		 * @return
+		 * @internal param INode $root
+		 *
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler, INode $root);
+		public function compileInline(INode $macro, ICompiler $compiler);
+
+		/**
+		 * pre-compile preparation of node tree; may return the same or a new macro which will be used as a new root
+		 *
+		 * @param INode $macro
+		 * @param ICompiler $compiler
+		 *
+		 * @return INode|null
+		 */
+		public function inline(INode $macro, ICompiler $compiler);
 
 		/**
 		 * executed in compile time
 		 *
 		 * @param INode $macro
 		 * @param ICompiler $compiler
-		 * @param INode $root
+		 *
+		 * @return mixed
 		 */
-		public function compile(INode $macro, ICompiler $compiler, INode $root);
+		public function compile(INode $macro, ICompiler $compiler);
 
 		/**
 		 * (optional) inline version of this macro

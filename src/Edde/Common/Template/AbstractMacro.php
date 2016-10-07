@@ -11,6 +11,7 @@
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Deffered\DefferedTrait;
+	use Edde\Common\Node\Node;
 
 	/**
 	 * Base macro for all template macros.
@@ -97,19 +98,47 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler, INode $root) {
+		public function compileInline(INode $macro, ICompiler $compiler) {
+		}
+
+		/**
+		 * switch macro and node and extract attribute from macro node
+		 *
+		 * @param INode $macro
+		 * @param string $attribute
+		 *
+		 * @return INode
+		 */
+		protected function switch (INode $macro, string $attribute): INode {
+			$macro->switch($node = new Node($this->getName(), null, [$attribute => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+			return $node;
+		}
+
+		/**
+		 * insert node under the given macro
+		 *
+		 * @param INode $macro
+		 * @param string $attribute
+		 *
+		 * @return Node
+		 */
+		protected function insert(INode $macro, string $attribute) {
+			$macro->insert($node = new Node($this->getName(), null, [$attribute => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+			return $node;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function compile(INode $macro, ICompiler $compiler, INode $root) {
-			$node = clone $macro;
-			$node->setParent($root);
-			$node->clearNodeList();
-			$root->addNode($root = $node);
+		public function inline(INode $macro, ICompiler $compiler) {
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function compile(INode $macro, ICompiler $compiler) {
 			foreach ($macro->getNodeList() as $node) {
-				$compiler->compile($node, $root);
+				$compiler->compile($node);
 			}
 		}
 
