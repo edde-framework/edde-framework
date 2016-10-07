@@ -147,15 +147,15 @@
 			$control->addClass('root');
 			$control->dirty();
 			self::assertEquals('<div class="root">
-	<div>
+	<div class="overkilled">
 		<div class="abc">a</div>
 		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="abc"></div>
 	</div>
-	<div>
+	<div class="overkilled">
 		<div class="def">b</div>
 		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="def"></div>
 	</div>
-	<div>
+	<div class="overkilled">
 		<div class="ghi">c</div>
 		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="ghi"></div>
 	</div>

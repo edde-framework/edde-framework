@@ -29,6 +29,7 @@
 		 */
 		public function inline(INode $macro, ICompiler $compiler) {
 			$macro->setMeta('snippet', true);
-			$compiler->block($this->extract($macro, self::COMPILE_PREFIX . $this->getName()), $macro);
+			$compiler->block($this->extract($macro, self::COMPILE_PREFIX . $this->getName()), $node = $this->switch($macro, 'id'));
+			return $node;
 		}
 	}

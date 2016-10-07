@@ -34,6 +34,6 @@
 		 * @throws NodeException
 		 */
 		public function compile(INode $macro, ICompiler $compiler) {
-			$compiler->block($id = $this->attribute($macro, $compiler, 'id'), $macro);
+			$compiler->block($this->attribute($macro, $compiler, 'id'), clone $macro);
 		}
 	}

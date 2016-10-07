@@ -38,8 +38,8 @@
 		<div class="foo-case3" t:case="poo"/>
 	</div>
 	<span class="double-include" t:include="./double-pass-include.xml"/>
-	<span class="pass-child 01" t:include="./pass-include.xml" t:pass-child=":pass-child()"/>
-	<span class="pass-child 02" t:include="./double-pass-include.xml" t:pass-child=":pass-child2()"/>
+	<!--<span class="pass-child 01" t:include="./pass-include.xml" t:pass-child=":pass-child()"/>-->
+	<!--<span class="pass-child 02" t:include="./double-pass-include.xml" t:pass-child=":pass-child2()"/>-->
 	<span class="pass-child 03" t:pass-child=":pass-child3()">
 		<div class="child-01"/>
 		<div class="child-02"/>

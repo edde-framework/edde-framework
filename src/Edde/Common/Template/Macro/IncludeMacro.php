@@ -30,7 +30,27 @@
 		 * @throws MacroException
 		 */
 		public function inline(INode $macro, ICompiler $compiler) {
-			return $this->insert($macro, 'src');
+			$macro = $this->insert($macro, 'src');
+			$macro->setMeta('root', true);
+			return $macro;
+		}
+
+		/** @noinspection PhpMissingParentCallCommonInspection */
+
+		/**
+		 * @inheritdoc
+		 * @throws MacroException
+		 */
+		public function compile(INode $macro, ICompiler $compiler) {
+			foreach ($this->generate($source = $this->attribute($macro, $compiler, 'src'), $compiler->getCurrent(), $compiler) as $node) {
+				$node = clone $node;
+				/**
+				 * mark virtual node root
+				 */
+				$node->setMeta('root', true);
+				$node->setMeta('source', $source);
+				$macro->addNode($node);
+			}
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
@@ -57,22 +77,5 @@
 			}
 			return $compiler->getBlock($src)
 				->getNodeList();
-		}
-
-		/** @noinspection PhpMissingParentCallCommonInspection */
-		/**
-		 * @inheritdoc
-		 * @throws MacroException
-		 */
-		public function compile(INode $macro, ICompiler $compiler) {
-			foreach ($this->generate($source = $this->attribute($macro, $compiler, 'src'), $compiler->getCurrent(), $compiler) as $node) {
-				$node = clone $node;
-				/**
-				 * mark virtual node root
-				 */
-				$node->setMeta('root', true);
-				$node->setMeta('source', $source);
-				$macro->addNode($node);
-			}
 		}
 	}
