@@ -46,6 +46,6 @@
 		 * @inheritdoc
 		 */
 		protected function onControl(INode $macro, ICompiler $compiler) {
-			$this->write($macro, $compiler, sprintf('$control->setTag(%s);', var_export($this->getName(), true)), 5);
+			$this->write($compiler, sprintf('$control->setTag(%s);', var_export($this->getName(), true)), 5);
 		}
 	}

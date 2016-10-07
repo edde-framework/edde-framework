@@ -44,7 +44,7 @@
 			if ($func === false) {
 				$write = sprintf('%s::setProperty(%s, %s, $control);', ReflectionUtils::class, $this->reference($macro, $type), var_export($target, true));
 			}
-			$this->write($macro, $compiler, $write, 5);
+			$this->write($compiler, $write, 5);
 			parent::macro($macro, $compiler);
 		}
 	}

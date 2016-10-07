@@ -58,19 +58,18 @@
 		 */
 		protected function writeTextValue(INode $macro, ICompiler $compiler) {
 			if (($value = $this->extract($macro, 'value', $macro->isLeaf() ? $macro->getValue() : null)) !== null) {
-				$this->write($macro, $compiler, sprintf('$control->setText(%s);', ($helper = $compiler->helper($macro, $value)) ? $helper : var_export($value, true)), 5);
+				$this->write($compiler, sprintf('$control->setText(%s);', ($helper = $compiler->helper($macro, $value)) ? $helper : var_export($value, true)), 5);
 			}
 		}
 
 		/**
 		 * shortcut for file write
 		 *
-		 * @param INode $macro
 		 * @param ICompiler $compiler
 		 * @param string $write
 		 * @param int|null $indents
 		 */
-		protected function write(INode $macro, ICompiler $compiler, string $write, int $indents = null) {
+		protected function write(ICompiler $compiler, string $write, int $indents = null) {
 			/** @var $file IFile */
 			$file = $compiler->getVariable('file');
 			$file->write(($indents ? str_repeat("\t", $indents) : '') . $write . "\n");
@@ -92,7 +91,7 @@
 				foreach ($attributeList as $k => $v) {
 					$attributes[] = var_export($k, true) . ' => ' . $v;
 				}
-				$this->write($macro, $compiler, sprintf('$control->setAttributeList([%s]);', implode(', ', $attributes)), 5);
+				$this->write($compiler, sprintf('$control->setAttributeList([%s]);', implode(', ', $attributes)), 5);
 			}
 		}
 	}

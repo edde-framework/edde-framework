@@ -89,6 +89,12 @@
 		-->
 		<load src="./on-demand.xml"/>
 	</div>
+	<snippet id="beast-on-demand2">
+		<div class="this-will-be-loaded-on-demand">
+			<load src="./on-demand.xml"/>
+		</div>
+		<use src="deep-block"/>
+	</snippet>
 
 	<use src="deep-block"/>
 	<use src="whoo-whaa"/>
