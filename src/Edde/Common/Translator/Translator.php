@@ -45,6 +45,8 @@
 		 * @inheritdoc
 		 */
 		public function registerSource(IFile $source, string $scope = null): ITranslator {
+			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
+			$scope = $scope ?: ($this->scopeStack->isEmpty() ? null : $this->scopeStack->top());
 			if ($this->isUsed()) {
 				$this->registerDictionary($this->converterManager->convert($source, $source->getMime(), IDictionary::class), $scope);
 				return $this;

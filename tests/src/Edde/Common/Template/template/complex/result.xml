@@ -1,13 +1,15 @@
 <div foo="yahoo!" title="foo" class="root">
-	<div>
+	<div class="foo-case"></div>
+	<div class="foo-case2"></div>
+	<div class="overkilled">
 		<div class="abc">a</div>
 		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="abc"></div>
 	</div>
-	<div>
+	<div class="overkilled">
 		<div class="def">b</div>
 		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="def"></div>
 	</div>
-	<div>
+	<div class="overkilled">
 		<div class="ghi">c</div>
 		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="ghi"></div>
 	</div>
@@ -16,9 +18,12 @@
 		<span class="poo">hello!</span>
 	</div>
 	<div class="foo-foo"></div>
-	<div data-schema="Bar\Foo\Fart\Poo" data-property="property-here"></div>
 	<div>yepee</div>
 	<div>another yepee</div>
+	<div>
+		<div class="foo-case"></div>
+		<div class="foo-case2"></div>
+	</div>
 	<div class="foo-case"></div>
 	<div class="foo-case2"></div>
 	<div class="inline-switch">
@@ -31,20 +36,6 @@
 			<span class="poo">hello!</span>
 		</div>
 		<div class="foo-foo"></div>
-	</span>
-	<span class="pass-child 01">
-		<div class="foo-bar passed"></div>
-		<div class="boo-far passed">
-			<span class="poo">hello!</span>
-		</div>
-		<div class="foo-foo passed"></div>
-	</span>
-	<span class="pass-child 02">
-		<div class="foo-bar passed-02"></div>
-		<div class="boo-far passed-02">
-			<span class="poo">hello!</span>
-		</div>
-		<div class="foo-foo passed-02"></div>
 	</span>
 	<span class="pass-child 03">
 		<div class="child-01 passed-03"></div>

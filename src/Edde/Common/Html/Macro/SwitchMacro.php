@@ -7,7 +7,6 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\Node\Node;
 	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Strings\StringUtils;
 
@@ -31,8 +30,11 @@
 		 * @inheritdoc
 		 * @throws MacroException
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
-			$macro->switch(new Node('switch', null, ['src' => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+		public function inline(INode $macro, ICompiler $compiler) {
+			if ($macro->isRoot()) {
+				return $this->insert($macro, 'src');
+			}
+			return $this->switch($macro, 'src');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
@@ -41,10 +43,8 @@
 		 * @throws MacroException
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
-			/** @var $stack \SplStack */
-			$stack = $compiler->getVariable(static::class, new \SplStack());
-			$switch = str_replace('-', '_', $this->cryptEngine->guid());
-			$this->write($compiler, sprintf('$switch_%s = %s;', $switch, $this->switch($macro, $this->attribute($macro, $compiler, 'src', false))), 5);
+			$stack = $compiler->getVariable(static::class, $stack = new \SplStack());
+			$this->write($macro, $compiler, sprintf('$switch_%s = %s;', $switch = str_replace('-', '_', $this->cryptEngine->guid()), $this->generate($macro, $this->attribute($macro, $compiler, 'src', false))), 5);
 			$stack->push($switch);
 			parent::macro($macro, $compiler);
 			$stack->pop();
@@ -57,7 +57,7 @@
 		 * @return string
 		 * @throws MacroException
 		 */
-		protected function switch (INode $macro, string $src): string {
+		protected function generate(INode $macro, string $src): string {
 			$func = substr($src, -2) === '()';
 			$src = str_replace('()', '', $src);
 			$type = $src[0];

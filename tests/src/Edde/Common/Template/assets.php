@@ -24,6 +24,10 @@
 		protected $trueVariableReference = true;
 		protected $falseVariableReference = false;
 
+		public function overkillBlock(DivControl $divControl) {
+			$divControl->addClass('overkilled');
+		}
+
 		public function trueMethod() {
 			return true;
 		}

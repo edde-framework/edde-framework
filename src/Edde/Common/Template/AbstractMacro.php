@@ -11,6 +11,7 @@
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Deffered\DefferedTrait;
+	use Edde\Common\Node\Node;
 
 	/**
 	 * Base macro for all template macros.
@@ -18,7 +19,6 @@
 	abstract class AbstractMacro extends AbstractObject implements IMacro, ILazyInject {
 		use DefferedTrait;
 		const COMPILE_PREFIX = 't:';
-		const RUNTIME_PREFIX = 'm:';
 		/**
 		 * @var string
 		 */
@@ -72,6 +72,50 @@
 		}
 
 		/**
+		 * @inheritdoc
+		 */
+		public function inline(INode $macro, ICompiler $compiler) {
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function compile(INode $macro, ICompiler $compiler) {
+			foreach ($macro->getNodeList() as $node) {
+				$compiler->compile($node);
+			}
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function macro(INode $macro, ICompiler $compiler) {
+			foreach ($macro->getNodeList() as $node) {
+				$compiler->macro($node);
+			}
+		}
+
+		/**
+		 * switch macro and node and extract attribute from macro node
+		 *
+		 * @param INode $macro
+		 * @param string $attribute
+		 *
+		 * @return INode
+		 */
+		protected function switch (INode $macro, string $attribute): INode {
+			$macro->switch($node = new Node($this->getName(), null, [$attribute => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+			return $node;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getName(): string {
+			return $this->name;
+		}
+
+		/**
 		 * extract an attribute and remove it from attribute list
 		 *
 		 * @param INode $macro
@@ -88,40 +132,16 @@
 		}
 
 		/**
-		 * @inheritdoc
+		 * insert node under the given macro
+		 *
+		 * @param INode $macro
+		 * @param string $attribute
+		 *
+		 * @return Node
 		 */
-		public function getName(): string {
-			return $this->name;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function compile(INode $macro, ICompiler $compiler) {
-			foreach ($macro->getNodeList() as $node) {
-				$compiler->compile($node);
-			}
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function macroInline(INode $macro, ICompiler $compiler) {
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function macro(INode $macro, ICompiler $compiler) {
-			foreach ($macro->getNodeList() as $node) {
-				$compiler->macro($node);
-			}
+		protected function insert(INode $macro, string $attribute) {
+			$macro->insert($node = new Node($this->getName(), null, [$attribute => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+			return $node;
 		}
 
 		/**

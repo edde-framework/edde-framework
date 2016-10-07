@@ -20,11 +20,6 @@
 			parent::__construct('schema');
 		}
 
-		/** @noinspection PhpMissingParentCallCommonInspection */
-		/**
-		 * @inheritdoc
-		 * @throws MacroException
-		 */
 		public function compileInline(INode $macro, ICompiler $compiler) {
 			$schemaList = $compiler->getVariable(static::class);
 			list($schema, $property) = explode('.', $this->extract($macro, self::COMPILE_PREFIX . $this->getName()));

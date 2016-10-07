@@ -6,7 +6,6 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\Node\Node;
 	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Strings\StringUtils;
 
@@ -26,8 +25,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
-			$macro->prepend(new Node('pass', null, ['target' => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+		public function inline(INode $macro, ICompiler $compiler) {
+			return $this->insert($macro, 'target');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
@@ -41,10 +40,11 @@
 			$target = str_replace('()', '', $target);
 			$type = $target[0];
 			$target = StringUtils::camelize(substr($target, 1), null, true);
+			$write = sprintf('%s->%s($control);', $this->reference($macro, $type), $target);
 			if ($func === false) {
-				$this->write($compiler, sprintf('%s::setProperty(%s, %s, $control);', ReflectionUtils::class, $this->reference($macro, $type), var_export($target, true)), 5);
-				return;
+				$write = sprintf('%s::setProperty(%s, %s, $control);', ReflectionUtils::class, $this->reference($macro, $type), var_export($target, true));
 			}
-			$this->write($compiler, sprintf('%s->%s($control);', $this->reference($macro, $type), $target), 5);
+			$this->write($macro, $compiler, $write, 5);
+			parent::macro($macro, $compiler);
 		}
 	}

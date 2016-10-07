@@ -8,7 +8,6 @@
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelper;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\Node\Node;
 	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\HelperSet;
@@ -61,8 +60,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
-			$macro->switch(new Node('if', null, ['src' => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+		public function inline(INode $macro, ICompiler $compiler) {
+			return $this->switch($macro, 'src');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
@@ -74,11 +73,11 @@
 			/** @var $stack \SplStack */
 			$stack = $compiler->getVariable(static::class, new \SplStack());
 			$if = str_replace('-', '_', $this->cryptEngine->guid());
-			$this->write($compiler, sprintf('if($if_%s = %s) {', $if, $this->if($macro, $this->attribute($macro, $compiler, 'src', false))), 5);
+			$this->write($macro, $compiler, sprintf('if($if_%s = %s) {', $if, $this->if($macro, $this->attribute($macro, $compiler, 'src', false))), 5);
 			$stack->push($if);
 			parent::macro($macro, $compiler);
 			$stack->pop();
-			$this->write($compiler, '}', 5);
+			$this->write($macro, $compiler, '}', 5);
 		}
 
 		/**

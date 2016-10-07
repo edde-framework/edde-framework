@@ -6,7 +6,6 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
 	use Edde\Api\Template\ICompiler;
-	use Edde\Common\Node\Node;
 
 	/**
 	 * Snippet is piece of template which can be called without any other dependencies.
@@ -20,7 +19,7 @@
 		 * Proudly she replied, "Asterisk, asterisk, asterisk, asterisk, asterisk!"
 		 */
 		public function __construct() {
-			parent::__construct('t:snippet');
+			parent::__construct('snippet');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
@@ -28,8 +27,9 @@
 		 * @inheritdoc
 		 * @throws NodeException
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
+		public function inline(INode $macro, ICompiler $compiler) {
 			$macro->setMeta('snippet', true);
-			$compiler->block($this->extract($macro, $this->getName()), (new Node('snippet-root'))->addNode($macro));
+			$compiler->block($this->extract($macro, self::COMPILE_PREFIX . $this->getName()), $node = $this->switch($macro, 'id'));
+			return $node;
 		}
 	}

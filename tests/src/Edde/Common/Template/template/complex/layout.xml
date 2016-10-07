@@ -1,5 +1,7 @@
 <control foo="@current-method-call()" title="foo" t:translator="foo">
-	<div t:block="overkill-block" t:loop=":loop-from-root()" t:pass=":overkill-block">
+	<include src="./this-is-magical-switch.xml"/>
+
+	<div t:block="overkill-block" t:loop=":loop-from-root()" t:pass=":overkill-block()">
 		<div value="$#" class="$:"/>
 		<button action="$:"/>
 	</div>
@@ -10,12 +12,14 @@
 	<include src="./pass-include.xml"/>
 
 	<css src="./foo/bar/boo.css"/>
-	<schema name="foo" schema="Bar\Foo\Fart\Poo"/>
+	<!--<schema name="foo" schema="Bar\Foo\Fart\Poo"/>-->
 
-	<div t:schema="foo.property-here"/>
+	<!--<div t:schema="foo.property-here"/>-->
 
 	<div value="this will be translated|translate"/>
 	<div>this will also be translated|translate</div>
+
+	<div t:include="./switched.xml" t:switch=":gimme-a-switch()"/>
 
 	<switch src=":gimme-a-switch()">
 		<case name="foo">
@@ -34,8 +38,8 @@
 		<div class="foo-case3" t:case="poo"/>
 	</div>
 	<span class="double-include" t:include="./double-pass-include.xml"/>
-	<span class="pass-child 01" t:include="./pass-include.xml" t:pass-child=":pass-child()"/>
-	<span class="pass-child 02" t:include="./double-pass-include.xml" t:pass-child=":pass-child2()"/>
+	<!--<span class="pass-child 01" t:include="./pass-include.xml" t:pass-child=":pass-child()"/>-->
+	<!--<span class="pass-child 02" t:include="./double-pass-include.xml" t:pass-child=":pass-child2()"/>-->
 	<span class="pass-child 03" t:pass-child=":pass-child3()">
 		<div class="child-01"/>
 		<div class="child-02"/>
@@ -62,23 +66,23 @@
 
 	<div class="this-will-be-loaded-on-demand" t:pass=":some-variable">
 		<!--
-			m:load will load the given template on demand; it supports
+			load will load the given template on demand; it supports
 			relative file reference (./ prefix) and "absolute" path reference from
 			application root (/ prefix)
 
 			the template will be executed on root snippet call (a snippet without a name)
 		-->
-		<m:load src="./on-demand.xml"/>
+		<load src="./on-demand.xml"/>
 	</div>
 	<div class="this-will-be-loaded-on-demand" t:snippet="beast-on-demand">
 		<!--
-			m:load will load the given template on demand; it supports
+			load will load the given template on demand; it supports
 			relative file reference (./ prefix) and "absolute" path reference from
 			application root (/ prefix)
 
 			the template will be executed on root snippet call (a snippet without a name)
 		-->
-		<m:load src="./on-demand.xml"/>
+		<load src="./on-demand.xml"/>
 	</div>
 
 	<use src="deep-block"/>

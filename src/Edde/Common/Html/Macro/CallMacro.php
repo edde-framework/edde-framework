@@ -29,6 +29,6 @@
 		 * @throws MacroException
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
-			$this->write($compiler, $this->attribute($macro, $compiler, 'method') . ';', 5);
+			$this->write($macro, $compiler, $this->attribute($macro, $compiler, 'method') . ';', 5);
 		}
 	}

@@ -36,9 +36,22 @@
 		public function registerMacro(IMacro $macro): ICompiler;
 
 		/**
+		 * process inline macros first (may modify macro node tree)
+		 *
+		 * @param INode $macro
+		 *
+		 * @return ICompiler
+		 */
+		public function inline(INode $macro): ICompiler;
+
+		/**
 		 * execute compile macro
 		 *
 		 * @param INode $macro
+		 *
+		 * @return
+		 * @internal param INode $root
+		 *
 		 */
 		public function compile(INode $macro);
 
@@ -52,11 +65,12 @@
 		/**
 		 * compile source into node; node is the final result
 		 *
-		 * @param IFile $source
+		 * @param IFile $file
 		 *
 		 * @return INode
+		 * @internal param INode $root
 		 */
-		public function file(IFile $source): INode;
+		public function file(IFile $file): INode;
 
 		/**
 		 * return the original source file
@@ -64,6 +78,20 @@
 		 * @return IFile
 		 */
 		public function getSource(): IFile;
+
+		/**
+		 * return has of currently used files (same per file set including imports)
+		 *
+		 * @return string
+		 */
+		public function getHash(): string;
+
+		/**
+		 * return array of current import list
+		 *
+		 * @return string[]
+		 */
+		public function getImportList(): array;
 
 		/**
 		 * if there are embedded templates, this method return current template file

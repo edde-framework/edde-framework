@@ -71,6 +71,6 @@
 		 * @throws MacroException
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
-			$this->write($compiler, sprintf('$this->translator->registerSource(new %s(%s), %s);', File::class, var_export($this->attribute($macro, $compiler, 'src', false), true), var_export($macro->getAttribute('scope'), true)), 5);
+			$this->write($macro, $compiler, sprintf('$this->translator->registerSource(new %s(%s), %s);', File::class, var_export($this->attribute($macro, $compiler, 'src', false), true), var_export($macro->getAttribute('scope'), true)), 5);
 		}
 	}

@@ -8,7 +8,6 @@
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelper;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\Node\Node;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\HelperSet;
 
@@ -28,8 +27,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
-			$macro->switch(new Node('loop', null, ['src' => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+		public function inline(INode $macro, ICompiler $compiler) {
+			return $this->switch($macro, 'src');
 		}
 
 		/**
@@ -85,13 +84,13 @@
 				$key = str_replace('-', '_', $this->cryptEngine->guid()),
 				$value = str_replace('-', '_', $this->cryptEngine->guid()),
 			];
-			$this->write($compiler, '$control = $stack->top();', 5);
+			$this->write($macro, $compiler, '$control = $stack->top();', 5);
 			$src = $this->attribute($macro, $compiler, 'src', false);
-			$this->write($compiler, sprintf('foreach(%s as $key_%s => $value_%s) {', ($helper = $compiler->helper($macro, $src)) ? $helper : $this->loop($macro, $compiler, $src), $key, $value), 5);
+			$this->write($macro, $compiler, sprintf('foreach(%s as $key_%s => $value_%s) {', ($helper = $compiler->helper($macro, $src)) ? $helper : $this->loop($macro, $compiler, $src), $key, $value), 5);
 			$stack->push($loop);
 			parent::macro($macro, $compiler);
 			$stack->pop();
-			$this->write($compiler, '}', 5);
+			$this->write($macro, $compiler, '}', 5);
 		}
 
 		/**

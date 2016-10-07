@@ -6,7 +6,6 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\Node\Node;
 
 	/**
 	 * Switch-case macro.
@@ -33,8 +32,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
-			$macro->switch(new Node('case', null, ['name' => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+		public function inline(INode $macro, ICompiler $compiler) {
+			return $this->switch($macro, 'name');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
@@ -44,12 +43,12 @@
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
 			/** @var $stack \SplStack */
-			if (($stack = $compiler->getVariable(SwitchMacro::class)) === null) {
+			if (($stack = $compiler->getVariable(SwitchMacro::class)) === null || $stack->isEmpty()) {
 				throw new MacroException(sprintf('Shit has happend: macro [%s] has no parent switch!', $macro->getPath()));
 			}
 			$switch = $stack->top();
-			$this->write($compiler, sprintf('if($switch_%s === %s) {', $switch, var_export($this->attribute($macro, $compiler, 'name', false), true)), 5);
+			$this->write($macro, $compiler, sprintf('if($switch_%s === %s) {', $switch, var_export($this->attribute($macro, $compiler, 'name', false), true)), 5);
 			parent::macro($macro, $compiler);
-			$this->write($compiler, '}', 5);
+			$this->write($macro, $compiler, '}', 5);
 		}
 	}

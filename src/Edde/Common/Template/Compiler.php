@@ -133,17 +133,30 @@
 		 * @inheritdoc
 		 * @throws CompilerException
 		 */
-		public function file(IFile $source): INode {
+		public function file(IFile $file): INode {
 			$this->use();
-			$this->stack->push($source);
-			$this->compile($root = $this->resourceManager->resource($source));
-			foreach ($this->getBlockList() as $block) {
-				foreach ($block->getNodeList() as $node) {
-					$this->compile($node);
-				}
-			}
+			$this->stack->push($file);
+			$this->inline($source = $this->resourceManager->resource($file));
+			$this->compile($source);
 			$this->stack->pop();
-			return $root;
+			return $source;
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws CompilerException
+		 */
+		public function inline(INode $macro): ICompiler {
+			if (isset($this->macroList[$name = $macro->getName()]) === false) {
+				throw new CompilerException(sprintf('Unknown macro [%s].', $macro->getPath()));
+			}
+			foreach ($macro->getAttributeList() as $attribute => $value) {
+				isset($this->macroList[$attribute]) && strpos($attribute, 't:') === 0 && $this->macroList[$attribute]->inline($macro, $this);
+			}
+			foreach ($macro->getNodeList() as $node) {
+				$this->inline($node);
+			}
+			return $this;
 		}
 
 		/**
@@ -151,34 +164,35 @@
 		 * @throws CompilerException
 		 */
 		public function compile(INode $macro) {
-			return $this->run($macro, __FUNCTION__, 't');
-		}
-
-		/**
-		 * @param INode $macro
-		 * @param string $method
-		 * @param string $inline
-		 *
-		 * @return mixed
-		 * @throws CompilerException
-		 */
-		protected function run(INode $macro, string $method, string $inline) {
 			if (isset($this->macroList[$name = $macro->getName()]) === false) {
 				throw new CompilerException(sprintf('Unknown macro [%s].', $macro->getPath()));
 			}
-			foreach ($macro->getAttributeList() as $k => $v) {
-				if (isset($this->macroList[$k]) && strpos($k, $inline . ':') === 0) {
-					$this->macroList[$k]->{$method . 'Inline'}($macro, $this);
-				}
+			return $this->macroList[$name]->compile($macro, $this);
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws CompilerException
+		 */
+		public function macro(INode $macro) {
+			if (isset($this->macroList[$name = $macro->getName()]) === false) {
+				throw new CompilerException(sprintf('Unknown macro [%s].', $macro->getPath()));
 			}
-			return $this->macroList[$name]->{$method}($macro, $this);
+			return $this->macroList[$name]->macro($macro, $this);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function getBlockList(): array {
-			return $this->getVariable(static::class . '/block-list', []);
+		public function getSource(): IFile {
+			return $this->source;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getHash(): string {
+			return $this->getVariable('name', '');
 		}
 
 		/**
@@ -193,17 +207,9 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws CompilerException
 		 */
-		public function macro(INode $macro) {
-			return $this->run($macro, __FUNCTION__, 'm');
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getSource(): IFile {
-			return $this->source;
+		public function getImportList(): array {
+			return $this->getVariable('name-list', []);
 		}
 
 		/**
@@ -245,6 +251,13 @@
 			$blockList[$name] = $block;
 			$this->setVariable(static::class . '/block-list', $blockList);
 			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getBlockList(): array {
+			return $this->getVariable(static::class . '/block-list', []);
 		}
 
 		/**
