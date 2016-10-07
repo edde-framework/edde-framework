@@ -33,7 +33,7 @@
 		 * @inheritdoc
 		 */
 		public function inline(INode $macro, ICompiler $compiler) {
-			return $this->switch($macro, 'name');
+			return $this->switchlude($macro, 'name');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */

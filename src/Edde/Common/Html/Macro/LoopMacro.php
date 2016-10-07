@@ -28,7 +28,7 @@
 		 * @inheritdoc
 		 */
 		public function inline(INode $macro, ICompiler $compiler) {
-			return $this->switch($macro, 'src');
+			return $this->switchlude($macro, 'src');
 		}
 
 		/**

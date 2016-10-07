@@ -1,4 +1,8 @@
 <control foo="@current-method-call()" title="foo" t:translator="foo">
+	<load src="./this-has-block-in-root.xml"/>
+
+	<use src="this-should-not-fail"/>
+
 	<include src="./this-is-magical-switch.xml"/>
 
 	<div t:block="overkill-block" t:loop=":loop-from-root()" t:pass=":overkill-block()">
