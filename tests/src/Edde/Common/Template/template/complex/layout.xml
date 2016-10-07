@@ -96,6 +96,8 @@
 		<use src="deep-block"/>
 	</snippet>
 
+	<div class="this-will-use-use" t:use="deep-block"/>
+
 	<use src="deep-block"/>
 	<use src="whoo-whaa"/>
 	<use src="block-from-imported-template"/>
