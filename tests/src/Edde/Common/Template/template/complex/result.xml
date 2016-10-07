@@ -18,6 +18,12 @@
 		<span class="poo">hello!</span>
 	</div>
 	<div class="foo-foo"></div>
+	<div class="foo">
+		<div data-property="property-here" data-schema="Bar\Foo\Fart\Poo"></div>
+		<div data-property="foo" data-schema="Bar\Foo\Fart\Poo"></div>
+		<div data-property="moo-perty" data-schema="Bar\Foo\Fart\Moo"></div>
+		<div data-property="another-poo" data-schema="Bar\Foo\Fart\Poo"></div>
+	</div>
 	<div>yepee</div>
 	<div>another yepee</div>
 	<div>

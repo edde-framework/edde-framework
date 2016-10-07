@@ -25,6 +25,7 @@
 	use Edde\Common\Html\Macro\LoopMacro;
 	use Edde\Common\Html\Macro\PassChildMacro;
 	use Edde\Common\Html\Macro\PassMacro;
+	use Edde\Common\Html\Macro\PropertyMacro;
 	use Edde\Common\Html\Macro\SchemaMacro;
 	use Edde\Common\Html\Macro\SnippetMacro;
 	use Edde\Common\Html\Macro\SwitchMacro;
@@ -82,6 +83,7 @@
 					$container->inject(new CssMacro()),
 					$container->inject(new JsMacro()),
 					$container->inject(new SchemaMacro()),
+					$container->inject(new PropertyMacro()),
 					$container->inject(new PassMacro()),
 					$container->inject(new PassChildMacro()),
 					$container->inject(new SnippetMacro()),
