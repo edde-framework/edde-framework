@@ -36,6 +36,16 @@
 		public function register(string $event, callable $handler): IEventBus;
 
 		/**
+		 * execute the callback; the callback can emit event which will be listened only during callback execution
+		 *
+		 * @param callable $callback
+		 * @param array ...$handlerList
+		 *
+		 * @return mixed result of the callback
+		 */
+		public function scope(callable $callback, ...$handlerList);
+
+		/**
 		 * emit an event to all it's listeners; it should NOT do any magic
 		 *
 		 * @param IEvent $event

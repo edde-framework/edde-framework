@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Event;
 
+	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEvent;
 	use Edde\Api\Event\IEventBus;
 	use Edde\Api\Event\IHandler;
@@ -17,16 +18,21 @@
 		 */
 		protected $used = false;
 		/**
-		 * @var callable[][]
+		 * @var callable[][][]
 		 */
 		protected $listenList = [];
 		/**
 		 * @var IHandler[]
 		 */
 		protected $handlerList = [];
+		/**
+		 * @var \SplStack
+		 */
+		protected $scopeStack;
 
 		/**
 		 * @inheritdoc
+		 * @throws EventException
 		 */
 		public function handler(IHandler $handler): IEventBus {
 			if ($this->used) {
@@ -39,10 +45,11 @@
 
 		/**
 		 * @inheritdoc
+		 * @throws EventException
 		 */
-		public function listen($listen): IEventBus {
+		public function listen($listen, string $scope = null): IEventBus {
 			if (($listen instanceof IHandler) === false) {
-				$listen = HandlerFactory::handler($listen);
+				$listen = HandlerFactory::handler($listen, $scope);
 			}
 			foreach ($listen as $event => $callable) {
 				$this->register($event, $callable);
@@ -53,20 +60,40 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function register(string $event, callable $handler): IEventBus {
-			$this->listenList[$event][] = $handler;
+		public function register(string $event, callable $handler, string $scope = null): IEventBus {
+			$this->listenList[$scope][$event][] = $handler;
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
+		 * @throws \Edde\Api\Event\EventException
 		 */
-		public function event(IEvent $event): IEventBus {
+		public function scope(callable $callback, ...$handlerList) {
+			$this->scopeStack->push($scopeId = hash('sha256', random_bytes(256)));
+			foreach ($handlerList as $handler) {
+				$this->listen($handler, $scopeId);
+			}
+			try {
+				return $callback();
+			} catch (\Exception $e) {
+				/** @noinspection ExceptionsAnnotatingAndHandlingInspection */
+				throw $e;
+			} finally {
+				unset($this->listenList[$scopeId]);
+				$this->scopeStack->pop();
+			}
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function event(IEvent $event, string $scope = null): IEventBus {
 			$this->prepare();
-			if (isset($this->listenList[$name = get_class($event)]) === false) {
+			if (isset($this->listenList[$scope][$name = get_class($event)]) === false) {
 				return $this;
 			}
-			foreach ($this->listenList[$name] as $callback) {
+			foreach ($this->listenList[$scope][$name] as $callback) {
 				$callback($event);
 			}
 			return $this;
@@ -77,6 +104,7 @@
 				return;
 			}
 			$this->used = true;
+			$this->scopeStack = new \SplStack();
 			foreach ($this->handlerList as $handler) {
 				$this->listen($handler);
 			}

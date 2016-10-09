@@ -83,6 +83,15 @@
 			self::assertTrue($flag, 'Event was not called.');
 		}
 
+		public function testScopeEvents() {
+			$this->eventBus->scope(function () {
+//				....
+			}, function (SomeEvent $someEvent) {
+			}, function (SomeEvent $someEvent) {
+			}, function (AnotherEvent $anotherEvent) {
+			});
+		}
+
 		protected function setUp() {
 			$this->eventBus = new EventBus();
 		}
