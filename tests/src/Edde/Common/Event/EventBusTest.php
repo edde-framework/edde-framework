@@ -84,12 +84,19 @@
 		}
 
 		public function testScopeEvents() {
+			$index = 0;
 			$this->eventBus->scope(function () {
-//				....
-			}, function (SomeEvent $someEvent) {
-			}, function (SomeEvent $someEvent) {
-			}, function (AnotherEvent $anotherEvent) {
+				$this->eventBus->event(new SomeEvent());
+				$this->eventBus->event(new DummyEvent());
+			}, function (SomeEvent $someEvent) use (&$index) {
+				$index++;
+			}, function (DummyEvent $dummyEvent) use (&$index) {
+				$index++;
+			}, function (AnotherEvent $anotherEvent) use (&$index) {
+				$index++;
 			});
+			$this->eventBus->event(new SomeEvent());
+			self::assertEquals(2, $index);
 		}
 
 		protected function setUp() {

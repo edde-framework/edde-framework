@@ -10,6 +10,13 @@
 	 */
 	interface IHandler extends \IteratorAggregate {
 		/**
+		 * return handler's scope
+		 *
+		 * @return string|null
+		 */
+		public function getScope();
+
+		/**
 		 * this should return key as event name and value as handler (event's target) method
 		 *
 		 * @return \Iterator|callable[]

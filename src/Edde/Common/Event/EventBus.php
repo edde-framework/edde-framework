@@ -52,7 +52,7 @@
 				$listen = HandlerFactory::handler($listen, $scope);
 			}
 			foreach ($listen as $event => $callable) {
-				$this->register($event, $callable);
+				$this->register($event, $callable, $listen->getScope());
 			}
 			return $this;
 		}
@@ -70,6 +70,7 @@
 		 * @throws \Edde\Api\Event\EventException
 		 */
 		public function scope(callable $callback, ...$handlerList) {
+			$this->prepare();
 			$this->scopeStack->push($scopeId = hash('sha256', random_bytes(256)));
 			foreach ($handlerList as $handler) {
 				$this->listen($handler, $scopeId);
@@ -85,20 +86,6 @@
 			}
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function event(IEvent $event, string $scope = null): IEventBus {
-			$this->prepare();
-			if (isset($this->listenList[$scope][$name = get_class($event)]) === false) {
-				return $this;
-			}
-			foreach ($this->listenList[$scope][$name] as $callback) {
-				$callback($event);
-			}
-			return $this;
-		}
-
 		protected function prepare() {
 			if ($this->used) {
 				return;
@@ -108,5 +95,21 @@
 			foreach ($this->handlerList as $handler) {
 				$this->listen($handler);
 			}
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function event(IEvent $event, string $scope = null): IEventBus {
+			$this->prepare();
+			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
+			$scope = $scope ?: ($this->scopeStack->isEmpty() ? null : $this->scopeStack->top());
+			if (isset($this->listenList[$scope][$name = get_class($event)]) === false) {
+				return $this;
+			}
+			foreach ($this->listenList[$scope][$name] as $callback) {
+				$callback($event);
+			}
+			return $this;
 		}
 	}
