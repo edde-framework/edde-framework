@@ -1,3 +1,29 @@
+(function ($) {
+	var xhrPool = [];
+	var $document = $(document);
+	$document.ajaxSend(function (e, jqXHR, options) {
+		xhrPool.push(jqXHR);
+	});
+	$document.ajaxComplete(function (e, jqXHR, options) {
+		xhrPool = $.grep(xhrPool, function (x) {
+			return x != jqXHR
+		});
+	});
+	var abort = function () {
+		$.each(xhrPool, function (idx, jqXHR) {
+			jqXHR.abort();
+		});
+	};
+	var onBeforeUnload = window.onbeforeunload;
+	window.onbeforeunload = function () {
+		var result = onBeforeUnload ? onBeforeUnload() : undefined;
+		if (result == undefined) {
+			abort();
+		}
+		return result;
+	}
+})(jQuery);
+
 var Edde = {
 	Event: {
 		listen: function (event, handler) {
@@ -85,12 +111,12 @@ var Edde = {
 				data: parameterList ? JSON.stringify(parameterList) : {},
 				timeout: 10000,
 				contentType: 'application/json',
-				dataType: 'json'
+				dataType: 'json',
+				cache: false
 			}).fail(function (e) {
 				Edde.Event.event('edde.on-ajax-fail', {
 					error: e
 				});
-				console.log(e);
 			}).done(function (data) {
 				Edde.Event.event('edde.on-ajax-done', {
 					data: data
