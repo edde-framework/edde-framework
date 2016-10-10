@@ -10,7 +10,7 @@ var Edde = {
 		 * @returns {jQuery.Event}
 		 */
 		event: function (event, parameterList) {
-			event = $.extend(true, $.event(event), parameterList || {});
+			event = $.extend(true, $.Event(event), parameterList || {});
 			$(document).trigger(event);
 			return event;
 		}
