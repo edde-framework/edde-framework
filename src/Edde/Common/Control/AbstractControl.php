@@ -136,8 +136,10 @@
 
 		/**
 		 * @inheritdoc
+		 * @throws ControlException
 		 */
 		public function handle(string $method, array $parameterList) {
+			$this->listen($this);
 			$this->event(new HandleEvent($this, $method, $parameterList));
 			$this->event(new DoneEvent($this, $result = $this->execute($method, $parameterList)));
 			return $result;
