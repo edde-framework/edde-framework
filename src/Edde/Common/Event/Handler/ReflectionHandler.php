@@ -17,15 +17,31 @@
 
 		protected $methodList = [];
 
-		public function __construct($handler) {
+		/**
+		 * Pessimist: "Things just can't get any worse!"
+		 *
+		 * Optimist: "Nah, of course they can!"
+		 *
+		 * @param string $handler
+		 * @param string|null $scope
+		 */
+		public function __construct($handler, string $scope = null) {
+			parent::__construct($scope);
 			$this->handler = $handler;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getIterator() {
 			$this->use();
 			return new \ArrayIterator($this->methodList);
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws EventException
+		 */
 		protected function prepare() {
 			$reflectionClass = new \ReflectionClass($this->handler);
 			foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {

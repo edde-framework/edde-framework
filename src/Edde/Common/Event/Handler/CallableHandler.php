@@ -10,6 +10,9 @@
 	use Edde\Common\Deffered\DefferedTrait;
 	use Edde\Common\Event\AbstractHandler;
 
+	/**
+	 * Simple lamda handler.
+	 */
 	class CallableHandler extends AbstractHandler {
 		use DefferedTrait;
 		/**
@@ -23,16 +26,25 @@
 
 		/**
 		 * @param callable $callable
+		 * @param string $scope
 		 */
-		public function __construct(callable $callable) {
+		public function __construct(callable $callable, string $scope = null) {
+			parent::__construct($scope);
 			$this->callable = $callable;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getIterator() {
 			$this->use();
 			return new \ArrayIterator([$this->event => $this->callable]);
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws EventException
+		 */
 		protected function prepare() {
 			$callback = new Callback($this->callable);
 			$parameterList = $callback->getParameterList();
