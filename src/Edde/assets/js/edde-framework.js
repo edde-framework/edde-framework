@@ -104,7 +104,7 @@ var Edde = {
 			var crate = null;
 			if (id) {
 				crate = {};
-				$('#' + id).find('[data-schema]').each(function () {
+				$('#' + id + '[data-schema], #' + id + ' *[data-schema]').each(function () {
 					var $this = $(this);
 					var dataClass = $this.data('schema');
 					crate[dataClass] = crate[dataClass] ? crate[dataClass] : {};
