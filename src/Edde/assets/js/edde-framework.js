@@ -1,15 +1,54 @@
+(function ($) {
+	var xhrPool = [];
+	var $document = $(document);
+	$document.ajaxSend(function (e, jqXHR, options) {
+		xhrPool.push(jqXHR);
+	});
+	$document.ajaxComplete(function (e, jqXHR, options) {
+		xhrPool = $.grep(xhrPool, function (x) {
+			return x != jqXHR
+		});
+	});
+	var abort = function () {
+		$.each(xhrPool, function (idx, jqXHR) {
+			jqXHR.abort();
+		});
+	};
+	var onBeforeUnload = window.onbeforeunload;
+	window.onbeforeunload = function () {
+		var result = onBeforeUnload ? onBeforeUnload() : undefined;
+		if (result == undefined) {
+			abort();
+		}
+		return result;
+	}
+})(jQuery);
+
 var Edde = {
 	Event: {
 		listen: function (event, handler) {
 			$(document).on(event, handler);
 		},
-		event: function (event) {
+		/**
+		 *
+		 * @param {string} event
+		 * @param {object} [parameterList]
+		 * @returns {jQuery.Event}
+		 */
+		event: function (event, parameterList) {
+			event = $.extend(true, $.Event(event), parameterList || {});
 			$(document).trigger(event);
+			return event;
 		}
 	},
 	Utils: {
 		redirect: function (url) {
-			Edde.Event.event('edde.redirect');
+			var event = Edde.Event.event('edde.redirect', {
+				url: url,
+			});
+			if (event.isDefaultPrevented()) {
+				return;
+			}
 			window.location.href = url;
 		},
 		class: function (name, func) {
@@ -27,50 +66,62 @@ var Edde = {
 				});
 			}, 0);
 		},
+		update: function (update) {
+			if (update.redirect) {
+				Edde.Utils.redirect(update.redirect);
+				return;
+			}
+			if (update.javaScript) {
+				$.each(update.javaScript, function (i, src) {
+					$.getScript(src);
+				});
+			}
+			if (update.styleSheet) {
+				$.each(update.styleSheet, function (i, src) {
+					if ($('head link[href="' + src + '"]').length) {
+						return;
+					}
+					$('<link/>', {rel: 'stylesheet', href: src}).appendTo('head');
+				});
+			}
+			if (update.selector) {
+				$.each(update.selector, function (selector, value) {
+					switch (value.action) {
+						case 'replace':
+							$(selector).replaceWith(value.source);
+							break;
+						case 'add':
+							$(selector).append(value.source);
+							break;
+					}
+				});
+			}
+		},
 		execute: function (url, parameterList) {
-			Edde.Event.event('edde.on-ajax');
+			var event = Edde.Event.event('edde.on-ajax', {
+				url: url,
+				parameterList: parameterList
+			});
+			if (event.isDefaultPrevented()) {
+				return;
+			}
 			return $.ajax({
 				url: url,
 				method: 'POST',
 				data: parameterList ? JSON.stringify(parameterList) : {},
 				timeout: 10000,
 				contentType: 'application/json',
-				dataType: 'json'
+				dataType: 'json',
+				cache: false
 			}).fail(function (e) {
-				Edde.Event.event('edde.on-ajax-fail');
-				console.log(e);
-				alert('General server error; this should be fixed by a developer.');
+				Edde.Event.event('edde.on-ajax-fail', {
+					error: e
+				});
 			}).done(function (data) {
-				Edde.Event.event('edde.on-ajax-done');
-				if (data.redirect) {
-					Edde.Utils.redirect(data.redirect);
-					return;
-				}
-				if (data.javaScript) {
-					$.each(data.javaScript, function (i, src) {
-						$.getScript(src);
-					});
-				}
-				if (data.styleSheet) {
-					$.each(data.styleSheet, function (i, src) {
-						if ($('head link[href="' + src + '"]').length) {
-							return;
-						}
-						$('<link/>', {rel: 'stylesheet', href: src}).appendTo('head');
-					});
-				}
-				if (data.selector) {
-					$.each(data.selector, function (selector, value) {
-						switch (value.action) {
-							case 'replace':
-								$(selector).replaceWith(value.source);
-								break;
-							case 'add':
-								$(selector).append(value.source);
-								break;
-						}
-					});
-				}
+				Edde.Event.event('edde.on-ajax-done', {
+					data: data
+				});
+				Edde.Utils.update(data);
 			}).always(function () {
 				Edde.Event.event('edde.on-ajax-always');
 			});
