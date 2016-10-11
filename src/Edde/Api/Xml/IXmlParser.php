@@ -10,6 +10,16 @@
 	 */
 	interface IXmlParser {
 		/**
+		 * parse the given string
+		 *
+		 * @param string $string
+		 * @param IXmlHandler $xmlHandler
+		 *
+		 * @return IXmlParser
+		 */
+		public function string(string $string, IXmlHandler $xmlHandler): IXmlParser;
+
+		/**
 		 * shorthand for usage with files
 		 *
 		 * @param string $file

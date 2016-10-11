@@ -38,11 +38,12 @@
 		 * @throws ConverterException
 		 */
 		public function convert($convert, string $source, string $target, string $mime) {
-			$this->unsupported($convert, $target, $convert instanceof IResource);
+			$this->unsupported($convert, $target, $convert instanceof IResource || is_string($convert));
 			try {
 				switch ($target) {
 					case INode::class:
-						$this->xmlParser->parse($convert, $handler = new XmlNodeHandler());
+						$parse = is_string($convert) ? 'string' : 'parse';
+						$this->xmlParser->{$parse}($convert, $handler = new XmlNodeHandler());
 						return $handler->getNode();
 				}
 			} catch (XmlParserException $e) {
