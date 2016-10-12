@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Event;
 
-	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEventBus;
 	use Edde\Common\Event\Handler\CallableHandler;
 	use Edde\Common\Event\Handler\ReflectionHandler;
@@ -42,10 +41,9 @@
 		}
 
 		public function testMultiHandlerError() {
-			$this->expectException(EventException::class);
-			$this->expectExceptionMessage('Event class [Foo\Bar\SomeEvent] was already registered in handler [Foo\Bar\MultiEventHandler].');
 			$this->eventBus->handler(new ReflectionHandler(new MultiEventHandler()));
 			$this->eventBus->event($event = new SomeEvent());
+			self::assertTrue(true, 'this should pass without exception');
 		}
 
 		public function testTraitBusHandler() {
