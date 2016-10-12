@@ -14,8 +14,11 @@
 	use Foo\Bar\SomeUsefullClass;
 	use phpunit\framework\TestCase;
 
-	require_once(__DIR__ . '/assets/assets.php');
+	require_once __DIR__ . '/assets/assets.php';
 
+	/**
+	 * Event bus related tests.
+	 */
 	class EventBusTest extends TestCase {
 		/**
 		 * @var IEventBus
