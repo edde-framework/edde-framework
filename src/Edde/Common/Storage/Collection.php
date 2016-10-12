@@ -62,7 +62,15 @@
 		public function getIterator() {
 			/** @noinspection ForeachSourceInspection */
 			foreach ($this->storage->execute($this->query) as $item) {
-				yield $this->crateFactory->crate($this->crate, $this->schema, (array)$item);
+				$crate = $this->crateFactory->crate($this->crate, $this->schema, (array)$item);
+				$schema = $crate->getSchema();
+				foreach ($schema->getLinkList() as $schemaLink) {
+					$crate->proxy($schemaLink->getName(), [
+						$this->storage,
+						'getLink',
+					]);
+				}
+				yield $crate;
 			}
 		}
 	}
