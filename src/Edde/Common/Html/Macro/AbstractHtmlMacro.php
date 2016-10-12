@@ -6,6 +6,7 @@
 	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
+	use Edde\Api\Template\MacroException;
 	use Edde\Common\Template\AbstractMacro;
 
 	/**
@@ -29,6 +30,24 @@
 				}
 				$compiler->macro($node);
 			}
+		}
+
+		/** @noinspection PhpMissingParentCallCommonInspection */
+
+		/**
+		 * return control reference from a reference symbol
+		 *
+		 * @param INode $macro
+		 * @param string $reference
+		 *
+		 * @return mixed
+		 * @throws MacroException
+		 */
+		protected function reference(INode $macro, string $reference) {
+			if (isset(self::$reference[$reference]) === false) {
+				throw new MacroException(sprintf('Unknown reference symbol [%s]; symbol can be one of ["%s"] did you specified it for macro [%s]?', $reference, implode('", "', array_keys(self::$reference)), $macro->getPath()));
+			}
+			return self::$reference[$reference];
 		}
 
 		/**
@@ -57,7 +76,6 @@
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
-
 		/**
 		 * export attribute list
 		 *

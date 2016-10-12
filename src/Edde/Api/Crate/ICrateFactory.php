@@ -10,6 +10,15 @@
 	 */
 	interface ICrateFactory extends IDeffered {
 		/**
+		 * is possible to create crate with the given name
+		 *
+		 * @param string $crate
+		 *
+		 * @return bool
+		 */
+		public function hasCrate(string $crate): bool;
+
+		/**
 		 * create crate with a given class (should be through container) and with the given schema
 		 *
 		 * @param string $crate

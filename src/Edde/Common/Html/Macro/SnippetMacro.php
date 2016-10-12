@@ -4,7 +4,9 @@
 	namespace Edde\Common\Html\Macro;
 
 	use Edde\Api\Node\INode;
+	use Edde\Api\Node\NodeException;
 	use Edde\Api\Template\ICompiler;
+	use Edde\Api\Template\MacroException;
 
 	/**
 	 * Snippet is piece of template which can be called without any other dependencies.
@@ -18,17 +20,25 @@
 		 * Proudly she replied, "Asterisk, asterisk, asterisk, asterisk, asterisk!"
 		 */
 		public function __construct() {
-			parent::__construct('t:snippet');
+			parent::__construct('snippet');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
+		 * @throws NodeException
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
+		public function inline(INode $macro, ICompiler $compiler) {
+			return $this->switchlude($macro, 'id');
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws MacroException
+		 */
+		public function compile(INode $macro, ICompiler $compiler) {
 			$macro->setMeta('snippet', true);
-			$compiler->block($this->extract($macro, $this->getName()), [
-				$macro,
-			]);
+			$compiler->block($this->attribute($macro, $compiler, 'id'), $macro);
+			parent::compile($macro, $compiler);
 		}
 	}

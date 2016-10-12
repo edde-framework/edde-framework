@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Event;
 
-	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEventBus;
 	use Edde\Common\Event\Handler\CallableHandler;
 	use Edde\Common\Event\Handler\ReflectionHandler;
@@ -15,8 +14,11 @@
 	use Foo\Bar\SomeUsefullClass;
 	use phpunit\framework\TestCase;
 
-	require_once(__DIR__ . '/assets/assets.php');
+	require_once __DIR__ . '/assets/assets.php';
 
+	/**
+	 * Event bus related tests.
+	 */
 	class EventBusTest extends TestCase {
 		/**
 		 * @var IEventBus
@@ -42,10 +44,9 @@
 		}
 
 		public function testMultiHandlerError() {
-			$this->expectException(EventException::class);
-			$this->expectExceptionMessage('Event class [Foo\Bar\SomeEvent] was already registered in handler [Foo\Bar\MultiEventHandler].');
 			$this->eventBus->handler(new ReflectionHandler(new MultiEventHandler()));
 			$this->eventBus->event($event = new SomeEvent());
+			self::assertTrue(true, 'this should pass without exception');
 		}
 
 		public function testTraitBusHandler() {
@@ -81,6 +82,22 @@
 			self::assertFalse($flag);
 			$this->eventBus->event(new DummyEvent());
 			self::assertTrue($flag, 'Event was not called.');
+		}
+
+		public function testScopeEvents() {
+			$index = 0;
+			$this->eventBus->scope(function () {
+				$this->eventBus->event(new SomeEvent());
+				$this->eventBus->event(new DummyEvent());
+			}, function (SomeEvent $someEvent) use (&$index) {
+				$index++;
+			}, function (DummyEvent $dummyEvent) use (&$index) {
+				$index++;
+			}, function (AnotherEvent $anotherEvent) use (&$index) {
+				$index++;
+			});
+			$this->eventBus->event(new SomeEvent());
+			self::assertEquals(2, $index);
 		}
 
 		protected function setUp() {

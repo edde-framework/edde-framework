@@ -22,7 +22,7 @@
 		 * The computer scientist says "My affair is the best thing that's ever happened to me. My wife thinks I'm with my lover. My lover thinks I'm home with my wife, and I can spend all night on the computer!"
 		 */
 		public function __construct() {
-			parent::__construct('m:load');
+			parent::__construct('load');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */

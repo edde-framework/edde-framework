@@ -5,7 +5,6 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
-	use Edde\Api\Template\MacroException;
 
 	/**
 	 * Macro for simplier work with schemas.
@@ -20,29 +19,27 @@
 			parent::__construct('schema');
 		}
 
-		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
-		 * @throws MacroException
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
-			$schemaList = $compiler->getVariable(static::class);
-			list($schema, $property) = explode('.', $this->extract($macro, self::COMPILE_PREFIX . $this->getName()));
-			if (isset($schemaList[$schema]) === false) {
-				throw new MacroException(sprintf('Unknown attribute schema [%s] on [%s].', $schema, $macro->getPath()));
-			}
-			$macro->setAttribute('data-schema', $schemaList[$schema]);
-			$macro->setAttribute('data-property', $property);
+		public function inline(INode $macro, ICompiler $compiler) {
+			return $this->switchlude($macro, 'schema');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
-		 * @throws MacroException
 		 */
 		public function compile(INode $macro, ICompiler $compiler) {
-			$schemaList = $compiler->getVariable(static::class, []);
-			$schemaList[$this->attribute($macro, $compiler, 'name', false)] = $this->attribute($macro, $compiler, 'schema', false);
-			$compiler->setVariable(static::class, $schemaList);
+			$stack = $compiler->getVariable(self::class . '/stack', $stack = new \SplStack());
+			$schemaList = $compiler->getVariable(self::class . '/schema', []);
+			$schema = explode(' ', $macro->getAttribute('schema'));
+			if (isset($schema[1])) {
+				$schemaList[$schema[1]] = $schema[0];
+			}
+			$compiler->setVariable(self::class . '/schema', $schemaList);
+			$stack->push($schema[0]);
+			parent::compile($macro, $compiler);
+			$stack->pop();
 		}
 	}

@@ -1,12 +1,8 @@
 variables:
     PROJECT: edde-framework
-    PAGE_TRIGGER: https://gitlab.com/api/v3/projects/1386646/trigger/builds
-    COMPOSER_TRIGGER: https://gitlab.com/api/v3/projects/1351549/trigger/builds
 
 stages:
     - test
-#    - compile
-#    - package
     - deploy
 
 test:
@@ -18,42 +14,10 @@ test:
         untracked: true
         when: on_failure
 
-#compile:
-#    stage: compile
-#    script:
-#        - php -d phar.readonly=off bin/compile.php
-#    artifacts:
-#        name: $PROJECT-$CI_BUILD_REF_NAME
-#        paths:
-#            - release/$PROJECT.phar
-#    only:
-#        - master
-#        - tags
-#        - /^\d+\.\d+$/
-
-#package:
-#    stage: package
-#    script: /bin/true
-#    dependencies:
-#        - compile
-#    artifacts:
-#        name: $PROJECT-$CI_BUILD_REF_NAME.package
-#        paths:
-#            - release/$PROJECT.phar
-#            - doc/
-#            - src/
-#    only:
-#        - master
-#        - tags
-#        - /^\d+\.\d+$/
-
 deploy:
     stage: deploy
     script:
-        - curl -X POST -F token=$PAGE_TOKEN -F ref=master $PAGE_TRIGGER
-        - curl -X POST -F token=$COMPOSER_TOKEN -F ref=master $COMPOSER_TRIGGER
-#    dependencies:
-#        - compile
+        - curl -X POST -F token=53839921cd8d3e4844a8203d3bedf9 -F ref=master https://edde-framework.org/api/v3/projects/4/trigger/builds
     only:
         - master
         - tags

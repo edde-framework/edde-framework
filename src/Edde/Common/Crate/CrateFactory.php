@@ -100,4 +100,11 @@
 			}
 			return $crate;
 		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function hasCrate(string $crate): bool {
+			return $this->container->has($crate);
+		}
 	}

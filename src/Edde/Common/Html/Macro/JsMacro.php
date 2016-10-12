@@ -18,7 +18,7 @@
 	class JsMacro extends AbstractHtmlMacro {
 		use LazyRootDirectoryTrait;
 		use LazyAssetsDirectoryTrait;
-	
+
 		/**
 		 * God called a meeting of George Bush, Vladimir Putin, and Bill Gates and said: "I've given you all the tools you needed to make a better world - you've blown it and I'm ending the world in two weeks."
 		 *

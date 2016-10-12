@@ -35,6 +35,7 @@
 	use Edde\Common\Html\Tag\SpanControl;
 	use Edde\Common\Html\TemplateDirectory;
 	use Edde\Common\Http\HostUrl;
+	use Edde\Common\Link\AbstractLinkGenerator;
 	use Edde\Common\Link\ControlLinkGenerator;
 	use Edde\Common\Link\LinkFactory;
 	use Edde\Common\Resource\ResourceList;
@@ -141,6 +142,43 @@
 	</div>
 </div>
 ', $control->render());
+
+			$template->snippet($this->container->inject($control = new \SomeCoolControl()), 'overkill-block');
+			$control->addClass('root');
+			$control->dirty();
+			self::assertEquals('<div class="root">
+	<div class="overkilled">
+		<div class="abc">a</div>
+		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="abc"></div>
+	</div>
+	<div class="overkilled">
+		<div class="def">b</div>
+		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="def"></div>
+	</div>
+	<div class="overkilled">
+		<div class="ghi">c</div>
+		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="ghi"></div>
+	</div>
+</div>
+', $control->render());
+
+			$template->snippet($this->container->inject($control = new \SomeCoolControl()), 'beast-on-demand2');
+			$control->addClass('root');
+			$control->dirty();
+			self::assertEquals('<div class="root">
+	<div class="this-will-be-loaded-on-demand">
+		<span class="Hey, I\'m alive!"></span>
+		<div>
+			<div class="hello there!"></div>
+		</div>
+		<div class="poo-class">poo</div>
+	</div>
+	<div class="really-deep-div-here">
+		<div class="deepness-of-a-deep" something="ou-yay!">foo</div>
+	</div>
+</div>
+', $control->render());
+
 			$template->snippet($this->container->inject($control = new DivControl()), 'the-name-of-this-snippet');
 			$control->addClass('root');
 			$control->dirty();
@@ -196,6 +234,14 @@
 				ILinkFactory::class => function (IContainer $container, IHostUrl $hostUrl) {
 					$linkFactory = new LinkFactory($hostUrl);
 					$linkFactory->registerLinkGenerator($container->inject(new ControlLinkGenerator()));
+					$linkFactory->registerLinkGenerator(new class extends AbstractLinkGenerator {
+						/**
+						 * @inheritdoc
+						 */
+						public function link($generate, ...$parameterList) {
+							return $generate;
+						}
+					});
 					return $linkFactory;
 				},
 				ITranslator::class => Translator::class,

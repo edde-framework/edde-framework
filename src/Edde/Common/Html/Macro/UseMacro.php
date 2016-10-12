@@ -18,6 +18,13 @@
 			parent::__construct('use');
 		}
 
+		/**
+		 * @inheritdoc
+		 */
+		public function inline(INode $macro, ICompiler $compiler) {
+			return $this->insert($macro, 'src');
+		}
+
 		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc

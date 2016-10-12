@@ -14,18 +14,40 @@
 	class ReflectionHandler extends AbstractHandler {
 		use DefferedTrait;
 		protected $handler;
-
+		/**
+		 * @var array[]
+		 */
 		protected $methodList = [];
 
-		public function __construct($handler) {
+		/**
+		 * Pessimist: "Things just can't get any worse!"
+		 *
+		 * Optimist: "Nah, of course they can!"
+		 *
+		 * @param string $handler
+		 * @param string|null $scope
+		 */
+		public function __construct($handler, string $scope = null) {
+			parent::__construct($scope);
 			$this->handler = $handler;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getIterator() {
 			$this->use();
-			return new \ArrayIterator($this->methodList);
+			foreach ($this->methodList as $event => $closureList) {
+				foreach ($closureList as $closure) {
+					yield $event => $closure;
+				}
+			}
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws EventException
+		 */
 		protected function prepare() {
 			$reflectionClass = new \ReflectionClass($this->handler);
 			foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
@@ -40,10 +62,7 @@
 				if (in_array(IEvent::class, $class->getInterfaceNames(), true) === false) {
 					continue;
 				}
-				if (isset($this->methodList[$event = $class->getName()])) {
-					throw new EventException(sprintf('Event class [%s] was already registered in handler [%s].', $event, $reflectionClass->getName()));
-				}
-				$this->methodList[$event] = $reflectionMethod->getClosure($this->handler);
+				$this->methodList[$class->getName()][] = $reflectionMethod->getClosure($this->handler);
 			}
 		}
 	}

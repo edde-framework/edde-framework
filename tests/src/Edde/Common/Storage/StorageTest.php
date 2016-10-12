@@ -142,7 +142,7 @@
 					]))
 				->store($rootGod = $this->crateFactory->crate(Crate::class, 'IdentityGroup', null)
 					->put([
-						'guid' => sha1(random_bytes(64)),
+						'guid' => $identityGuid = sha1(random_bytes(64)),
 					])
 					->linkTo([
 						'identity' => $godIdentity,
@@ -174,6 +174,18 @@
 				'guest',
 			], $groupList);
 
+			$selectQuery = new SelectQuery();
+			$selectQuery->select()
+				->all()
+				->from()
+				->source('IdentityGroup')
+				->where()
+				->eq()
+				->property('guid')
+				->parameter($identityGuid);
+			$identityGroup = $this->storage->load(Crate::class, $selectQuery, 'IdentityGroup');
+			$linkIdentity = $identityGroup->getLink('identity');
+			self::assertEquals($linkIdentity->array(), $godIdentity->array());
 			$this->storage->commit();
 		}
 

@@ -25,6 +25,7 @@
 		 * @return ICompiler
 		 */
 		public function registerHelperSet(IHelperSet $helperSet): ICompiler;
+
 		/**
 		 * "runtime macro" - those should generate runtime
 		 *
@@ -35,9 +36,22 @@
 		public function registerMacro(IMacro $macro): ICompiler;
 
 		/**
+		 * process inline macros first (may modify macro node tree)
+		 *
+		 * @param INode $macro
+		 *
+		 * @return ICompiler
+		 */
+		public function inline(INode $macro): ICompiler;
+
+		/**
 		 * execute compile macro
 		 *
 		 * @param INode $macro
+		 *
+		 * @return
+		 * @internal param INode $root
+		 *
 		 */
 		public function compile(INode $macro);
 
@@ -51,11 +65,12 @@
 		/**
 		 * compile source into node; node is the final result
 		 *
-		 * @param IFile $source
+		 * @param IFile $file
 		 *
 		 * @return INode
+		 * @internal param INode $root
 		 */
-		public function file(IFile $source): INode;
+		public function file(IFile $file): INode;
 
 		/**
 		 * return the original source file
@@ -63,6 +78,20 @@
 		 * @return IFile
 		 */
 		public function getSource(): IFile;
+
+		/**
+		 * return has of currently used files (same per file set including imports)
+		 *
+		 * @return string
+		 */
+		public function getHash(): string;
+
+		/**
+		 * return array of current import list
+		 *
+		 * @return string[]
+		 */
+		public function getImportList(): array;
 
 		/**
 		 * if there are embedded templates, this method return current template file
@@ -121,25 +150,25 @@
 		 * block under the given id
 		 *
 		 * @param string $name
-		 * @param array $nodeList
+		 * @param INode $block
 		 *
 		 * @return ICompiler
 		 */
-		public function block(string $name, array $nodeList): ICompiler;
+		public function block(string $name, INode $block): ICompiler;
 
 		/**
 		 * return list of nodes by the given block name
 		 *
 		 * @param string $name
 		 *
-		 * @return array
+		 * @return INode
 		 */
-		public function getBlock(string $name): array;
+		public function getBlock(string $name): INode;
 
 		/**
 		 * retrieve list of registered blocks
 		 *
-		 * @return array
+		 * @return INode[]
 		 */
 		public function getBlockList(): array;
 	}

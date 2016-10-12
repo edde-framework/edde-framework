@@ -31,23 +31,22 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws FileException
 		 * @throws XmlParserException
 		 */
-		public function file(string $file, IXmlHandler $xmlHandler): IXmlParser {
-			return $this->parse(new File($file), $xmlHandler);
+		public function string(string $string, IXmlHandler $xmlHandler): IXmlParser {
+			return $this->iterate(new Iterator(StringUtils::createIterator($string)), $xmlHandler);
 		}
 
 		/**
-		 * @inheritdoc
+		 * @param IIterator $iterator
+		 * @param IXmlHandler $xmlHandler
+		 *
+		 * @return $this
 		 * @throws XmlParserException
 		 */
-		public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParser {
+		protected function iterate(IIterator $iterator, IXmlHandler $xmlHandler) {
 			$value = '';
-			foreach ($iterator = new Iterator(new ChunkIterator([
-				StringUtils::class,
-				'createIterator',
-			], $resource->getIterator())) as $char) {
+			foreach ($iterator as $char) {
 				/** @noinspection DegradedSwitchInspection */
 				switch ($char) {
 					case '<':
@@ -242,5 +241,26 @@
 			}
 			$iterator->setSkipNext();
 			return [];
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws FileException
+		 * @throws XmlParserException
+		 */
+		public function file(string $file, IXmlHandler $xmlHandler): IXmlParser {
+			return $this->parse(new File($file), $xmlHandler);
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws XmlParserException
+		 */
+		public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParser {
+			$this->iterate($iterator = new Iterator(new ChunkIterator([
+				StringUtils::class,
+				'createIterator',
+			], $resource->getIterator())), $xmlHandler);
+			return $this;
 		}
 	}

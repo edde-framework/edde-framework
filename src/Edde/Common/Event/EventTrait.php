@@ -36,6 +36,13 @@
 			return $this->traitEventBus->register($event, $handler);
 		}
 
+		public function scope(callable $callback, ...$handlerList): IEventBus {
+			if ($this->traitEventBus === null) {
+				$this->traitEventBus = new EventBus();
+			}
+			return $this->traitEventBus->scope($callback, ...$handlerList);
+		}
+
 		public function event(IEvent $event): IEventBus {
 			if ($this->traitEventBus === null) {
 				$this->traitEventBus = new EventBus();

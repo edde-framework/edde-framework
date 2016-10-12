@@ -169,6 +169,35 @@
 			], $handler->getTagList());
 		}
 
+		public function testStringParse() {
+			$this->xmlParser->string('<r>
+	<node attr="ibute" another-attribute="foo"/>
+
+	<another-node foo="bar" boo="poo"/>
+</r>
+', $handler = new \TestXmlHandler());
+			self::assertEquals([
+				[
+					'r',
+					[],
+				],
+				[
+					'node',
+					[
+						'attr' => 'ibute',
+						'another-attribute' => 'foo',
+					],
+				],
+				[
+					'another-node',
+					[
+						'foo' => 'bar',
+						'boo' => 'poo',
+					],
+				],
+			], $handler->getTagList());
+		}
+
 		public function testMimeType() {
 			$file = new File(__DIR__ . '/assets/simple.xml');
 			self::assertEquals('text/xml', $file->getMime());

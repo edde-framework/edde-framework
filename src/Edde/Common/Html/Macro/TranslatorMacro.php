@@ -6,7 +6,6 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\Node\Node;
 
 	/**
 	 * Translator support macro.
@@ -25,9 +24,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
-			$macro->insert(new Node('translator', null, ['scope' => $scope = $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
-			$compiler->setVariable('scope', $scope);
+		public function inline(INode $macro, ICompiler $compiler) {
+			return $this->switchlude($macro, 'scope');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */

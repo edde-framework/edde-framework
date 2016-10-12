@@ -144,6 +144,16 @@
 		public function link(string $name, ICrate $crate): ICrate;
 
 		/**
+		 * set crate proxy (when getLink($name), callback will be executed)
+		 *
+		 * @param string $name
+		 * @param callable $crate
+		 *
+		 * @return ICrate
+		 */
+		public function proxy(string $name, callable $crate): ICrate;
+
+		/**
 		 * link array of links; return this crate
 		 *
 		 * @param array $linkTo

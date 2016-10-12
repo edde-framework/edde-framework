@@ -17,8 +17,16 @@
 		 * @var SpanControl
 		 */
 		public $includedVariable;
+		/**
+		 * @var DivControl
+		 */
+		public $overkillBlock;
 		protected $trueVariableReference = true;
 		protected $falseVariableReference = false;
+
+		public function overkillBlock(DivControl $divControl) {
+			$divControl->addClass('overkilled');
+		}
 
 		public function trueMethod() {
 			return true;
@@ -53,7 +61,11 @@
 		}
 
 		public function loopFromRoot() {
-			return [];
+			return [
+				'a' => 'abc',
+				'b' => 'def',
+				'c' => 'ghi',
+			];
 		}
 
 		public function loopOverLoopFromRoot() {

@@ -4,6 +4,7 @@
 	namespace Edde\Common\Template\Macro;
 
 	use Edde\Api\Node\INode;
+	use Edde\Api\Node\NodeException;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Template\AbstractMacro;
@@ -21,18 +22,19 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws MacroException
 		 */
-		public function compileInline(INode $macro, ICompiler $compiler) {
-			$compiler->block($this->extract($macro, 't:' . $this->getName()), [$macro]);
+		public function inline(INode $macro, ICompiler $compiler) {
+			return $this->switchlude($macro, 'id');
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws MacroException
+		 * @throws NodeException
 		 */
 		public function compile(INode $macro, ICompiler $compiler) {
-			$compiler->block($this->attribute($macro, $compiler, 'id'), $macro->getNodeList());
+			parent::compile($macro, $compiler);
+			$compiler->block($this->attribute($macro, $compiler, 'id'), clone $macro);
 		}
 	}
