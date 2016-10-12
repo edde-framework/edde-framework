@@ -14,7 +14,9 @@
 	class ReflectionHandler extends AbstractHandler {
 		use DefferedTrait;
 		protected $handler;
-
+		/**
+		 * @var array[]
+		 */
 		protected $methodList = [];
 
 		/**
@@ -35,7 +37,11 @@
 		 */
 		public function getIterator() {
 			$this->use();
-			return new \ArrayIterator($this->methodList);
+			foreach ($this->methodList as $event => $closureList) {
+				foreach ($closureList as $closure) {
+					yield $event => $closure;
+				}
+			}
 		}
 
 		/**
@@ -56,10 +62,7 @@
 				if (in_array(IEvent::class, $class->getInterfaceNames(), true) === false) {
 					continue;
 				}
-				if (isset($this->methodList[$event = $class->getName()])) {
-					throw new EventException(sprintf('Event class [%s] was already registered in handler [%s].', $event, $reflectionClass->getName()));
-				}
-				$this->methodList[$event] = $reflectionMethod->getClosure($this->handler);
+				$this->methodList[$class->getName()][] = $reflectionMethod->getClosure($this->handler);
 			}
 		}
 	}
