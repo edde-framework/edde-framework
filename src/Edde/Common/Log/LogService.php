@@ -36,7 +36,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function registerLog(array $tagList, ILog $log): ILogService {
+		public function registerLog(ILog $log, array $tagList = null): ILogService {
+			$tagList = $tagList ?: [null];
 			foreach ($tagList as $tag) {
 				$this->logList[$tag] = $log;
 			}
@@ -48,9 +49,11 @@
 		 */
 		public function record(ILogRecord $logRecord): ILog {
 			$log = $logRecord->getLog();
-			$tagList = array_unique($logRecord->getTagList());
-			foreach ($tagList as $tag) {
-				$log = isset($this->contentFilterList[$tag]) ? $this->contentFilterList[$tag]->filter($log) : $log;
+			$tagList = array_unique(($tagList = $logRecord->getTagList()) ? $tagList : [null]);
+			if (empty($this->contentFilterList) !== true) {
+				foreach ($tagList as $tag) {
+					$log = isset($this->contentFilterList[$tag]) ? $this->contentFilterList[$tag]->filter($log) : $log;
+				}
 			}
 			/**
 			 * second run because all filter has been applied

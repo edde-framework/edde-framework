@@ -17,7 +17,7 @@
 		/**
 		 * return array of tags for this log record
 		 *
-		 * @return array
+		 * @return array|null
 		 */
-		public function getTagList(): array;
+		public function getTagList();
 	}

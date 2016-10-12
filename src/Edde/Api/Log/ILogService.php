@@ -23,10 +23,10 @@
 		/**
 		 * register the given log to the given set of tags
 		 *
-		 * @param array $tagList
 		 * @param ILog $log
+		 * @param array $tagList
 		 *
 		 * @return ILogService
 		 */
-		public function registerLog(array $tagList, ILog $log): ILogService;
+		public function registerLog(ILog $log, array $tagList = null): ILogService;
 	}
