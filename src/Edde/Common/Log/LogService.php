@@ -4,18 +4,24 @@
 	namespace Edde\Common\Log;
 
 	use Edde\Api\Filter\IFilter;
+	use Edde\Api\Log\ILog;
 	use Edde\Api\Log\ILogRecord;
 	use Edde\Api\Log\ILogService;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Deffered\DefferedTrait;
 
 	/**
 	 * Default implementation of log service.
 	 */
-	class LogService extends AbstractDeffered implements ILogService {
+	class LogService extends AbstractLog implements ILogService {
+		use DefferedTrait;
 		/**
 		 * @var IFilter[]
 		 */
 		protected $contentFilterList = [];
+		/**
+		 * @var ILog[]
+		 */
+		protected $logList = [];
 
 		/**
 		 * @inheritdoc
@@ -30,51 +36,28 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function info(string $log, array $tagList = []): ILogService {
-			$tagList[] = __FUNCTION__;
-			return $this->log($log, $tagList);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function log(string $log, array $tagList = []): ILogService {
-			return $this->record(new LogRecord($log, $tagList));
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function record(ILogRecord $logRecord): ILogService {
-			$log = $logRecord->getLog();
-			foreach ($logRecord->getTagList() as $tag) {
-				$log = isset($this->contentFilterList[$tag]) ? $this->contentFilterList[$tag]->filter($log) : $log;
+		public function registerLog(array $tagList, ILog $log): ILogService {
+			foreach ($tagList as $tag) {
+				$this->logList[$tag] = $log;
 			}
-			throw new \Exception('not implemented yet: log delivery based on tags');
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function warning(string $log, array $tagList = []): ILogService {
-			$tagList[] = __FUNCTION__;
-			return $this->log($log, $tagList);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function error(string $log, array $tagList = []): ILogService {
-			$tagList[] = __FUNCTION__;
-			return $this->log($log, $tagList);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function critical(string $log, array $tagList = []): ILogService {
-			$tagList[] = __FUNCTION__;
-			return $this->log($log, $tagList);
+		public function record(ILogRecord $logRecord): ILog {
+			$log = $logRecord->getLog();
+			$tagList = array_unique($logRecord->getTagList());
+			foreach ($tagList as $tag) {
+				$log = isset($this->contentFilterList[$tag]) ? $this->contentFilterList[$tag]->filter($log) : $log;
+			}
+			/**
+			 * second run because all filter has been applied
+			 */
+			foreach ($tagList as $tag) {
+				isset($this->logList[$tag]) ? $this->logList[$tag]->record($logRecord) : null;
+			}
+			return $this;
 		}
 	}
