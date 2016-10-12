@@ -41,6 +41,8 @@
 	use Edde\Api\Identity\IIdentityManager;
 	use Edde\Api\IEddeDirectory;
 	use Edde\Api\Link\ILinkFactory;
+	use Edde\Api\Log\ILogDirectory;
+	use Edde\Api\Log\ILogService;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Runtime\ISetupHandler;
@@ -85,6 +87,8 @@
 	use Edde\Common\Identity\AuthenticatorManager;
 	use Edde\Common\Identity\IdentityManager;
 	use Edde\Common\Link\LinkFactory;
+	use Edde\Common\Log\LogDirectory;
+	use Edde\Common\Log\LogService;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\Event\BootstrapEvent;
@@ -228,6 +232,10 @@
 					IEventBus::class => EventBus::class,
 					ICrateLoader::class => CrateLoader::class,
 					ITranslator::class => Translator::class,
+					ILogService::class => LogService::class,
+					ILogDirectory::class => function (IRootDirectory $rootDirectory) {
+						return $rootDirectory->directory('logs', LogDirectory::class);
+					},
 				], $factoryList))
 				->deffered(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
 					$routerService->registerRouter($container->create(SimpleRouter::class));
