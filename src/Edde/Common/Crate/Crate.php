@@ -10,6 +10,7 @@
 	use Edde\Api\Crypt\CryptException;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Callback\CallbackUtils;
 
 	/**
 	 * Simple (...advanced...) crate implementation.
@@ -32,7 +33,7 @@
 		 */
 		protected $collectionList = [];
 		/**
-		 * @var ICrate[]
+		 * @var ICrate[]|callable[]
 		 */
 		protected $linkList = [];
 		/**
@@ -208,9 +209,28 @@
 		 * @inheritdoc
 		 * @throws CrateException
 		 */
+		public function proxy(string $name, callable $crate): ICrate {
+			if ($this->schema->hasLink($name) === false) {
+				throw new CrateException(sprintf('Crate [%s] has no link [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
+			}
+			$callback = CallbackUtils::getReflection($crate);
+			if (($returnType = $callback->getReturnType()) === null || (string)$returnType !== ICrate::class) {
+				throw new CrateException(sprintf('Proxied callable must have [%s] return typehint in crate [%s].', ICrate::class, static::class));
+			}
+			$this->linkList[$name] = $crate;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws CrateException
+		 */
 		public function getLink(string $name) {
 			if ($this->hasLink($name) === false) {
 				throw new CrateException(sprintf('Requested unknown link [%s] on the crate [%s].', $name, $this->schema->getSchemaName()));
+			}
+			if (is_callable($this->linkList[$name])) {
+				$this->linkList[$name] = $this->linkList[$name]($this, $name);
 			}
 			return $this->linkList[$name];
 		}

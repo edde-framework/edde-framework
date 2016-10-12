@@ -11,6 +11,7 @@
 	use Edde\Api\Storage\EmptyResultException;
 	use Edde\Api\Storage\ICollection;
 	use Edde\Api\Storage\IStorage;
+	use Edde\Common\Crate\Crate;
 	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Query\Select\SelectQuery;
 
@@ -93,7 +94,7 @@
 					->getName())
 				->parameter($crate->get($link->getSource()
 					->getName()));
-			$crate->link($link->getName(), $link = $this->load($targetSchemaName, $selectQuery));
+			$crate->link($link->getName(), $link = $this->load($this->crateFactory->hasCrate($targetSchemaName) ? $targetSchemaName : Crate::class, $selectQuery, $targetSchemaName));
 			return $link;
 		}
 
