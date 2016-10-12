@@ -3,6 +3,8 @@
 
 	namespace Edde\Common\Event;
 
+	use Edde\Api\Container\ILazyInject;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEvent;
 	use Edde\Api\Event\IEventBus;
@@ -12,7 +14,8 @@
 	/**
 	 * Default simple implementation of an EventBus.
 	 */
-	class EventBus extends AbstractObject implements IEventBus {
+	class EventBus extends AbstractObject implements IEventBus, ILazyInject {
+		use LazyContainerTrait;
 		/**
 		 * @var bool
 		 */
@@ -105,6 +108,12 @@
 			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
 			$scope = $scope ?: ($this->scopeStack->isEmpty() ? null : $this->scopeStack->top());
 			if (isset($this->listenList[$scope][$name = get_class($event)]) === false) {
+				return $this;
+			}
+			if ($this->container) {
+				foreach ($this->listenList[$scope][$name] as $callback) {
+					$this->container->call($callback, $event);
+				}
 				return $this;
 			}
 			foreach ($this->listenList[$scope][$name] as $callback) {
