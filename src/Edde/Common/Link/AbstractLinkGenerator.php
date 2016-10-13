@@ -4,6 +4,7 @@
 	namespace Edde\Common\Link;
 
 	use Edde\Api\Container\ILazyInject;
+	use Edde\Api\Link\ILink;
 	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Common\AbstractObject;
 
