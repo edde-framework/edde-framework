@@ -28,6 +28,7 @@
 			]);
 		}
 
+		/** @noinspection PhpInconsistentReturnPointsInspection */
 		/**
 		 * @inheritdoc
 		 * @throws ConverterException

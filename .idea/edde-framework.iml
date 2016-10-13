@@ -20,10 +20,14 @@
         <CLASSES>
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/phpmd.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/phpcs.phar/" />
         </CLASSES>
         <SOURCES>
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/phpmd.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/phpcs.phar/" />
         </SOURCES>
       </library>
     </orderEntry>

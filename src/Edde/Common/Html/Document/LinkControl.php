@@ -5,7 +5,11 @@
 
 	use Edde\Common\Html\AbstractHtmlControl;
 
+	/**
+	 * Link html tag control.
+	 */
 	class LinkControl extends AbstractHtmlControl {
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 */
@@ -13,6 +17,10 @@
 			return 'link';
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
+		/**
+		 * @inheritdoc
+		 */
 		public function isPair(): bool {
 			return false;
 		}

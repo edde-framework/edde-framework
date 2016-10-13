@@ -57,6 +57,7 @@
 		}
 
 		public function create(): IDirectory {
+			/** @noinspection PhpUsageOfSilenceOperatorInspection */
 			if (is_dir($this->directory) === false && @mkdir($this->directory, 0777, true) && is_dir($this->directory) === false) {
 				throw new DirectoryException(sprintf('Cannot create directory [%s].', $this->directory));
 			}

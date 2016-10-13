@@ -9,6 +9,7 @@
 	class WhereExpressionFragment extends AbstractFragment {
 		protected $relation = 'and';
 
+		/** @noinspection PhpMethodNamingConventionInspection */
 		/**
 		 * @return WhereFragment
 		 */
@@ -44,6 +45,7 @@
 			return $this->createWhereFragment('is-not-null');
 		}
 
+		/** @noinspection PhpMethodNamingConventionInspection */
 		/**
 		 * @return WhereFragment
 		 */
@@ -58,6 +60,7 @@
 			return $this->createWhereFragment('greater-than-equal');
 		}
 
+		/** @noinspection PhpMethodNamingConventionInspection */
 		/**
 		 * @return WhereFragment
 		 */
@@ -80,6 +83,7 @@
 			return $this;
 		}
 
+		/** @noinspection PhpMethodNamingConventionInspection */
 		/**
 		 * @return WhereExpressionFragment
 		 */

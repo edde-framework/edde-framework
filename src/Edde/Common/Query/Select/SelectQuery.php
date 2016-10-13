@@ -63,7 +63,14 @@
 			return $this->orderFragment;
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
+		/**
+		 * @inheritdoc
+		 */
 		public function getNode() {
+			/**
+			 * missing parent call is intentionall, including $this->use();
+			 */
 			if ($this->selectNode === null) {
 				throw new QueryException(sprintf('Empty select query has no sense; please start with %s::select() method.', self::class));
 			}

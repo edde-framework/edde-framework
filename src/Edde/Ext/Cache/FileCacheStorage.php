@@ -26,11 +26,13 @@
 			$this->use();
 			$file = $this->file($id);
 			if ($save === null) {
+				/** @noinspection PhpUsageOfSilenceOperatorInspection */
 				if (@unlink($file) === false) {
 					throw new CacheStorageException(sprintf('Cannot remove cached file [%s] for cache id [%s] from folder [%s].', $file, $id, $this->cacheDirectory));
 				}
 				return $save;
 			}
+			/** @noinspection PhpUsageOfSilenceOperatorInspection */
 			if (($handle = @fopen($file, 'c+b')) === false) {
 				throw new CacheStorageException(sprintf('Cannot write to the cache file [%s]. Please check cache folder [%s] permissions.', $file, $this->cacheDirectory));
 			}
@@ -46,6 +48,7 @@
 
 		public function load($id) {
 			$this->use();
+			/** @noinspection PhpUsageOfSilenceOperatorInspection */
 			if (($handle = @fopen($this->file($id), 'r+b')) === false) {
 				return null;
 			}

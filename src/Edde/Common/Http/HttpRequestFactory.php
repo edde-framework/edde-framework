@@ -32,7 +32,7 @@
 		 */
 		protected function createHeaderList(): IHeaderList {
 			$headers = [];
-			$copy_server = [
+			$mysticList = [
 				'CONTENT_TYPE' => 'Content-Type',
 				'CONTENT_LENGTH' => 'Content-Length',
 				'CONTENT_MD5' => 'Content-Md5',
@@ -44,20 +44,20 @@
 				}
 				if (strpos($key, 'HTTP_') === 0) {
 					$key = substr($key, 5);
-					if (isset($copy_server[$key]) === false || isset($_SERVER[$key]) === false) {
+					if (isset($mysticList[$key]) === false || isset($_SERVER[$key]) === false) {
 						$key = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', $key))));
 						$headers[$key] = $value;
 					}
-				} else if (isset($copy_server[$key])) {
-					$headers[$copy_server[$key]] = $value;
+				} else if (isset($mysticList[$key])) {
+					$headers[$mysticList[$key]] = $value;
 				}
 			}
 			if (isset($headers['Authorization']) === false) {
 				if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
 					$headers['Authorization'] = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
 				} else if (isset($_SERVER['PHP_AUTH_USER'])) {
-					$basic_pass = $_SERVER['PHP_AUTH_PW'] ?? '';
-					$headers['Authorization'] = 'Basic ' . base64_encode($_SERVER['PHP_AUTH_USER'] . ':' . $basic_pass);
+					$password = $_SERVER['PHP_AUTH_PW'] ?? '';
+					$headers['Authorization'] = 'Basic ' . base64_encode($_SERVER['PHP_AUTH_USER'] . ':' . $password);
 				} else if (isset($_SERVER['PHP_AUTH_DIGEST'])) {
 					$headers['Authorization'] = $_SERVER['PHP_AUTH_DIGEST'];
 				}

@@ -73,7 +73,7 @@
 			/** @var $stack \SplStack */
 			$stack = $compiler->getVariable(static::class, new \SplStack());
 			$if = str_replace('-', '_', $this->cryptEngine->guid());
-			$this->write($compiler, sprintf('if($if_%s = %s) {', $if, $this->if($macro, $this->attribute($macro, $compiler, 'src', false))), 5);
+			$this->write($compiler, sprintf('if($if_%s = %s) {', $if, $this->generate($macro, $this->attribute($macro, $compiler, 'src', false))), 5);
 			$stack->push($if);
 			parent::macro($macro, $compiler);
 			$stack->pop();
@@ -87,7 +87,7 @@
 		 * @return string
 		 * @throws MacroException
 		 */
-		protected function if (INode $macro, string $src): string {
+		protected function generate(INode $macro, string $src): string {
 			$func = substr($src, -2) === '()';
 			$src = str_replace('()', '', $src);
 			$type = $src[0];

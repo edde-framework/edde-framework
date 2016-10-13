@@ -27,6 +27,7 @@
 		static public function humanSize(int $size, int $decimals = 2): string {
 			$sizeList = 'BKMGTP';
 			$factor = floor((strlen((string)$size) - 1) / 3);
+			/** @noinspection PhpUsageOfSilenceOperatorInspection */
 			return sprintf("%.{$decimals}f", $size / pow(1024, $factor)) . @$sizeList[(int)$factor];
 		}
 
@@ -46,6 +47,7 @@
 			if (isset(self::$mimeTypeList[$type = $url->getExtension()])) {
 				return self::$mimeTypeList[$type];
 			}
+			/** @noinspection PhpUsageOfSilenceOperatorInspection */
 			$info = @getimagesize($file); // @ - files smaller than 12 bytes causes read error
 			if (isset($info['mime'])) {
 				return $info['mime'];
@@ -109,6 +111,7 @@
 		static public function delete($path) {
 			if (is_file($path) || is_link($path)) {
 				$func = DIRECTORY_SEPARATOR === '\\' && is_dir($path) ? 'rmdir' : 'unlink';
+				/** @noinspection PhpUsageOfSilenceOperatorInspection */
 				if (@$func($path) === false) {
 					throw new FileException("Unable to delete [$path].");
 				}
@@ -116,6 +119,7 @@
 				foreach (new \FilesystemIterator($path) as $item) {
 					static::delete($item->getRealPath());
 				}
+				/** @noinspection PhpUsageOfSilenceOperatorInspection */
 				if (@rmdir($path) === false) {
 					throw new FileException("Unable to delete directory [$path].");
 				}
@@ -131,6 +135,7 @@
 		 * @throws FileException
 		 */
 		static public function createDir($dir, $mode = 0777) {
+			/** @noinspection PhpUsageOfSilenceOperatorInspection */
 			if (is_dir($dir) === false && @mkdir($dir, $mode, true) === false && is_dir($dir) === false) { // intentionally @; not atomic
 				throw new FileException("Unable to create directory [$dir].");
 			}
@@ -164,6 +169,7 @@
 				}
 			}
 			static::createDir(dirname($dest));
+			/** @noinspection PhpUsageOfSilenceOperatorInspection */
 			if (is_dir($source) === false && @stream_copy_to_stream(fopen($source, 'r'), fopen($dest, 'w')) === false) {
 				throw new FileException("Unable to copy file [$source] to [$dest].");
 			}
@@ -178,7 +184,7 @@
 		 *
 		 * @throws FileException
 		 */
-		static public function rename($name, $rename, $overwrite = true) {
+		static public function rename(string $name, string $rename, bool $overwrite = true) {
 			if ($overwrite === false && file_exists($rename)) {
 				throw new FileException("File or directory [$rename] already exists.");
 			} else if (file_exists($name) === false) {
@@ -186,6 +192,7 @@
 			}
 			static::createDir(dirname($rename));
 			static::delete($rename);
+			/** @noinspection PhpUsageOfSilenceOperatorInspection */
 			if (@rename($name, $rename) === false) {
 				throw new FileException("Unable to rename file or directory [$name] to [$rename].");
 			}

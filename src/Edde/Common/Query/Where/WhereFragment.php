@@ -54,14 +54,17 @@
 			return $this;
 		}
 
+		/** @noinspection PhpMethodNamingConventionInspection */
 		public function eq() {
 			return $this->whereExpressionFragment->eq();
 		}
 
+		/** @noinspection PhpMethodNamingConventionInspection */
 		public function neq() {
 			return $this->whereExpressionFragment->neq();
 		}
 
+		/** @noinspection PhpMethodNamingConventionInspection */
 		public function gt() {
 			return $this->whereExpressionFragment->gt();
 		}
@@ -70,6 +73,7 @@
 			return $this->whereExpressionFragment->gte();
 		}
 
+		/** @noinspection PhpMethodNamingConventionInspection */
 		public function lt() {
 			return $this->whereExpressionFragment->lt();
 		}
@@ -99,6 +103,7 @@
 			return $this->whereExpressionFragment->and();
 		}
 
+		/** @noinspection PhpMethodNamingConventionInspection */
 		/**
 		 * @return WhereExpressionFragment
 		 */

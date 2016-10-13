@@ -110,6 +110,7 @@
 					$type = null;
 					$property->addGetterFilter($this->container->create($filterNode->getValue()));
 				}
+				/** @noinspection DisconnectedForeachInstructionInspection */
 				/**
 				 * magicall thing can be turned off
 				 */

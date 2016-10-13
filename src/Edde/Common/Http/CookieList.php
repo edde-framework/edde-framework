@@ -9,8 +9,18 @@
 	use Edde\Api\Http\ICookieList;
 	use Edde\Common\Collection\AbstractList;
 
+	/**
+	 * Class holding set of cookies.
+	 */
 	class CookieList extends AbstractList implements ICookieList {
-		static public function create(array $cookieList) {
+		/**
+		 * factory class for cookie list
+		 *
+		 * @param array $cookieList
+		 *
+		 * @return ICookieList
+		 */
+		static public function create(array $cookieList): ICookieList {
 			$self = new self();
 			foreach ($cookieList as $name => $value) {
 				$self->addCookie(new Cookie($name, $value, 0, null, null));
@@ -26,6 +36,7 @@
 			return $this;
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws HttpException

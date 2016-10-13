@@ -8,7 +8,7 @@
 	use Edde\Common\Html\AbstractHtmlControl;
 
 	class BlockquoteControl extends AbstractHtmlControl {
-		/** @noinspection PhpMissingDocCommentInspection */
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws HtmlException

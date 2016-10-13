@@ -32,6 +32,7 @@
 			], IDictionary::class);
 		}
 
+		/** @noinspection PhpInconsistentReturnPointsInspection */
 		/**
 		 * @inheritdoc
 		 * @throws ConverterException

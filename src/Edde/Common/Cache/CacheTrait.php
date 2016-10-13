@@ -17,6 +17,7 @@
 		 */
 		protected $cache;
 
+		/** @noinspection PhpUnusedParameterInspection */
 		/**
 		 * ultimately long name to prevent clashes; this sould be called automagically
 		 *

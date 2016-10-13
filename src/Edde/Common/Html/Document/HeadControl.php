@@ -5,6 +5,9 @@
 
 	use Edde\Common\Html\AbstractHtmlControl;
 
+	/**
+	 * Head html tag control.
+	 */
 	class HeadControl extends AbstractHtmlControl {
 		/**
 		 * @var TitleControl
@@ -49,6 +52,7 @@
 			return $this;
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 */
