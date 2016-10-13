@@ -15,6 +15,7 @@
 	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Node\NodeIterator;
+	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Root implementation of all controls.
@@ -173,13 +174,13 @@
 					if (--$argumentCount >= 0) {
 						continue;
 					}
-					if (isset($parameterList[$parameter->getName()]) === false) {
+					if (isset($parameterList[$parameterName = StringUtils::recamel($parameter->getName())]) === false) {
 						if ($parameter->isOptional()) {
 							continue;
 						}
 						throw new ControlException(sprintf('Missing action parameter [%s::%s(, ...$%s, ...)].', static::class, $method, $parameter->getName()));
 					}
-					$argumentList[] = $parameterList[$parameter->getName()];
+					$argumentList[] = $parameterList[$parameterName];
 				}
 			}
 			return $callback(...$argumentList);
