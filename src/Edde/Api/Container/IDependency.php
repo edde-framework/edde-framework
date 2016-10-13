@@ -3,21 +3,33 @@
 
 	namespace Edde\Api\Container;
 
-	use Edde\Api\Node\IAbstractNode;
+	use Edde\Api\Node\INode;
 
 	/**
 	 * Class dependency item.
 	 */
-	interface IDependency extends IAbstractNode {
+	interface IDependency extends INode {
 		/**
-		 * @return string
+		 * @return bool
 		 */
-		public function getName();
+		public function hasClass(): bool;
+
+		/**
+		 * return dependency class or null
+		 *
+		 * @return string|null
+		 */
+		public function getClass();
+
+		/**
+		 * @return bool
+		 */
+		public function isOptional(): bool;
 
 		/**
 		 * return dependency list of this dependency
 		 *
 		 * @return IDependency[]
 		 */
-		public function getDependencyList();
+		public function getDependencyList(): array;
 	}
