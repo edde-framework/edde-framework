@@ -22,7 +22,7 @@
 		 * @param mixed $link
 		 * @param array $parameterList
 		 */
-		public function __construct($link, array $parameterList) {
+		public function __construct($link, array $parameterList = []) {
 			$this->link = $link;
 			$this->parameterList = $parameterList;
 		}
