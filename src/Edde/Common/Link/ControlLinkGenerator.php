@@ -10,6 +10,7 @@
 		use LazyHostUrlTrait;
 
 		public function link($generate, ...$parameterList) {
+			list($generate, $parameterList) = $this->list($generate, $parameterList);
 			if (is_array($generate) === false || count($generate) !== 2) {
 				return null;
 			}
@@ -22,7 +23,7 @@
 			$url->setQuery(array_merge($url->getQuery(), [
 				'control' => $control,
 				'action' => $action,
-			]));
+			], $parameterList));
 			return $url->getAbsoluteUrl();
 		}
 	}
