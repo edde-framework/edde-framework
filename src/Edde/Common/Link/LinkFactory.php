@@ -4,6 +4,7 @@
 	namespace Edde\Common\Link;
 
 	use Edde\Api\Http\IHostUrl;
+	use Edde\Api\Link\ILink;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Api\Link\LinkException;
@@ -40,6 +41,10 @@
 		 */
 		public function link($generate, ...$parameterList) {
 			$this->use();
+			if ($generate instanceof ILink) {
+				$parameterList = array_merge($generate->getParameterList(), $parameterList);
+				$generate = $generate->getLink();
+			}
 			foreach ($this->linkGeneratorList as $linkGenerator) {
 				if (($url = $linkGenerator->link($generate, ...$parameterList)) !== null) {
 					return $url;
