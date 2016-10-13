@@ -47,7 +47,7 @@
 			if ($dependency = $this->cache->load($cacheId = ('dependency-list/' . $name))) {
 				return $dependency;
 			}
-			$this->build($name, $dependency = new Dependency($name, false, false));
+			$this->build($name, $dependency = new Dependency($name, false, false, $name));
 			return $this->cache->save($cacheId, $dependency);
 		}
 
@@ -68,11 +68,10 @@
 			$this->dependencyList[$name] = true;
 			$factory = $this->factoryManager->getFactory($name);
 			foreach ($factory->getParameterList($name) as $parameter) {
-				if ($parameter->hasClass() === false) {
-					continue;
+				$root->addNode($node = new Dependency($parameter->getName(), true, $parameter->isOptional(), $parameter->getClass()));
+				if ($parameter->hasClass()) {
+					$this->build($parameter->getClass(), $node);
 				}
-				$root->addNode($node = new Dependency($parameter->getClass(), true, $parameter->isOptional()));
-				$this->build($parameter->getClass(), $node);
 			}
 			unset($this->dependencyList[$name]);
 		}

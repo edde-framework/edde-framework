@@ -145,15 +145,17 @@
 		 * @throws FactoryException
 		 */
 		protected function factory(IDependency $root, array $parameterList) {
-			$dependencyList = [];
-			foreach ($root->getDependencyList() as $dependency) {
-				if ($this->factoryManager->hasFactory($dependency->getName()) === false) {
+			$dependencies = [];
+			/** @var $dependencyList IDependency[] */
+			$grab = count($dependencyList = $root->getDependencyList()) - count($parameterList);
+			foreach ($dependencyList as $dependency) {
+				if ($grab-- <= 0 || $dependency->isOptional() || $dependency->hasClass() === false || $this->factoryManager->hasFactory($dependency->getClass()) === false) {
 					break;
 				}
-				$dependencyList[] = $this->factory($dependency, []);
+				$dependencies[] = $this->factory($dependency, []);
 			}
-			return $this->factoryManager->getFactory($name = $root->getName())
-				->create($name, array_merge($dependencyList, $parameterList), $this);
+			return $this->factoryManager->getFactory($name = $root->getClass())
+				->create($name, array_merge($dependencies, $parameterList), $this);
 		}
 
 		/**

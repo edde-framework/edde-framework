@@ -1,4 +1,6 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Container\IDependency;
@@ -9,7 +11,7 @@
 	use Edde\Common\ContainerTest\DummyCacheStorage;
 	use phpunit\framework\TestCase;
 
-	require_once(__DIR__ . '/assets.php');
+	require_once __DIR__ . '/assets.php';
 
 	class DependencyFactoryTest extends TestCase {
 		public function testCommon() {
@@ -24,9 +26,9 @@
 			]);
 			self::assertInstanceOf(IDependency::class, $dependency = $dependencyFactory->create('foo'));
 			self::assertEquals('foo', $dependency->getName());
-			$parent = new Dependency('foo', false, false);
-			$parent->addNode(new Dependency(AlphaDependencyClass::class, true, false));
-			$parent->addNode(new Dependency(BetaDependencyClass::class, true, false));
+			$parent = new Dependency('foo', false, false, 'foo');
+			$parent->addNode(new Dependency('foo', true, false, AlphaDependencyClass::class));
+			$parent->addNode(new Dependency('bar', true, false, BetaDependencyClass::class));
 			self::assertEquals($parent->getNodeList(), $dependency->getNodeList());
 		}
 	}

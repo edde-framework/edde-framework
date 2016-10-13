@@ -25,12 +25,26 @@
 		 * @param string $name
 		 * @param bool $mandatory mandatory means needed in constructor
 		 * @param bool $optional optional can be optional, including constructor
+		 * @param string $class
 		 */
-		public function __construct($name, $mandatory, $optional) {
+		public function __construct(string $name, bool $mandatory, bool $optional, string $class = null) {
 			parent::__construct($name, null, [
 				'mandatory' => $mandatory,
 				'optional' => $optional,
+				'class' => $class,
 			]);
+		}
+
+		public function hasClass(): bool {
+			return $this->getClass() !== null;
+		}
+
+		public function getClass() {
+			return $this->getAttribute('class');
+		}
+
+		public function isOptional(): bool {
+			return $this->getAttribute('optional', false) === true;
 		}
 
 		/**
@@ -38,7 +52,7 @@
 		 *
 		 * @return IDependency[]
 		 */
-		public function getDependencyList() {
+		public function getDependencyList(): array {
 			return $this->getNodeList();
 		}
 
