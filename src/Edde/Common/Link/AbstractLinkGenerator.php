@@ -8,4 +8,21 @@
 	use Edde\Common\AbstractObject;
 
 	abstract class AbstractLinkGenerator extends AbstractObject implements ILinkGenerator, ILazyInject {
+		/**
+		 * shorthand for translating generate ILink to values
+		 *
+		 * @param mixed $generate
+		 * @param array $parameterList
+		 *
+		 * @return array
+		 */
+		protected function list($generate, array $parameterList) {
+			return $generate instanceof ILink ? [
+				$generate->getLink(),
+				$generate->getParameterList(),
+			] : [
+				$generate,
+				$parameterList,
+			];
+		}
 	}
