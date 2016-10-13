@@ -17,6 +17,7 @@
 		 */
 		protected $session;
 
+		/** @noinspection PhpUnusedParameterInspection */
 		/**
 		 * ultimately long name to prevent clashes; shoud be called automagically
 		 *

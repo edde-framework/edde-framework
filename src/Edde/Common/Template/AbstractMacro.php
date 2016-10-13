@@ -18,7 +18,6 @@
 	 */
 	abstract class AbstractMacro extends AbstractObject implements IMacro, ILazyInject {
 		use DefferedTrait;
-		const COMPILE_PREFIX = 't:';
 		/**
 		 * @var string
 		 */
@@ -107,7 +106,7 @@
 			if ($macro->isRoot()) {
 				return $this->insert($macro, $attribute);
 			}
-			return $this->switch($macro, $attribute);
+			return $this->switchNode($macro, $attribute);
 		}
 
 		/**
@@ -119,7 +118,7 @@
 		 * @return Node
 		 */
 		protected function insert(INode $macro, string $attribute) {
-			$macro->insert($node = new Node($this->getName(), null, [$attribute => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+			$macro->insert($node = new Node($this->getName(), null, [$attribute => $this->extract($macro, 't:' . $this->getName())]));
 			return $node;
 		}
 
@@ -154,8 +153,8 @@
 		 *
 		 * @return INode
 		 */
-		protected function switch (INode $macro, string $attribute): INode {
-			$macro->switch($node = new Node($this->getName(), null, [$attribute => $this->extract($macro, self::COMPILE_PREFIX . $this->getName())]));
+		protected function switchNode(INode $macro, string $attribute): INode {
+			$macro->switch($node = new Node($this->getName(), null, [$attribute => $this->extract($macro, 't:' . $this->getName())]));
 			return $node;
 		}
 

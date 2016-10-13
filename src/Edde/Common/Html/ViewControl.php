@@ -4,6 +4,7 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Application\LazyResponseManagerTrait;
+	use Edde\Api\Control\ControlException;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlView;
 	use Edde\Api\Http\LazyHttpRequestTrait;
@@ -93,15 +94,6 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function response(): IHtmlView {
-			$this->use();
-			$this->responseManager->response(new Response(IHtmlControl::class, $this));
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function render(int $indent = 0): string {
 			$this->use();
 			if ($this->styleSheetList->isEmpty() === false) {
@@ -114,6 +106,32 @@
 			}
 			$this->dirty();
 			return parent::render($indent);
+		}
+
+		public function __call($name, $arguments) {
+			if (strpos($name, 'action', 0) === false) {
+				if (method_exists($this, $name) === false) {
+					throw new ControlException(sprintf('Calling unknown method [%s::%s()].', static::class, $name));
+				}
+				$this->action();
+				/** @noinspection PhpUndefinedMethodInspection */
+				return parent::__call($name, $arguments);
+			}
+			$this->template();
+			$this->response();
+			return $this;
+		}
+
+		protected function action() {
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function response(): IHtmlView {
+			$this->use();
+			$this->responseManager->response(new Response(IHtmlControl::class, $this));
+			return $this;
 		}
 
 		/**

@@ -7,15 +7,16 @@
 	use Edde\Api\Crate\LazyCrateGeneratorTrait;
 	use Edde\Api\EddeException;
 	use Edde\Api\Html\IHtmlControl;
+	use Edde\Api\Log\LazyLogServiceTrait;
 	use Edde\Api\Upgrade\LazyUpgradeManagerTrait;
-	use Edde\Common\Html\TemplateViewControl;
+	use Edde\Common\Html\ViewControl;
 	use Edde\Framework;
-	use Tracy\Debugger;
 
-	class EddeControl extends TemplateViewControl {
+	class EddeControl extends ViewControl {
 		use LazyCrateGeneratorTrait;
 		use LazyUpgradeManagerTrait;
 		use LazyCacheStorageTrait;
+		use LazyLogServiceTrait;
 		/**
 		 * @var Framework
 		 */
@@ -48,7 +49,9 @@
 				$this->message('success', sprintf('application has been upgraded to version [%s]', $this->upgradeManager->upgrade()
 					->getVersion()));
 			} catch (EddeException $e) {
-				Debugger::log($e);
+				$this->logService->exception($e, [
+					'edde',
+				]);
 				$this->message('alert', $e->getMessage());
 			}
 			$this->response();
@@ -70,7 +73,9 @@
 				$this->crateGenerator->generate(true);
 				$this->message('success', 'crates has been rebuilt');
 			} catch (EddeException $e) {
-				Debugger::log($e);
+				$this->logService->exception($e, [
+					'edde',
+				]);
 				$this->message('alert', $e->getMessage());
 			}
 			$this->response();
@@ -83,7 +88,9 @@
 				$this->cacheStorage->invalidate();
 				$this->message('success', 'cache has been wiped out');
 			} catch (EddeException $e) {
-				Debugger::log($e);
+				$this->logService->exception($e, [
+					'edde',
+				]);
 				$this->message('alert', $e->getMessage());
 			}
 			$this->response();

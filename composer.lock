@@ -9,16 +9,16 @@
     "packages": [
         {
             "name": "defuse/php-encryption",
-            "version": "2.0.1",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/defuse/php-encryption.git",
-                "reference": "c430ea262848fefe891b735575fcbb4ca2ddd3a8"
+                "reference": "2c6fea3d9a4eaaa8cef86b2a89f3660818117b33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/defuse/php-encryption/zipball/c430ea262848fefe891b735575fcbb4ca2ddd3a8",
-                "reference": "c430ea262848fefe891b735575fcbb4ca2ddd3a8",
+                "url": "https://api.github.com/repos/defuse/php-encryption/zipball/2c6fea3d9a4eaaa8cef86b2a89f3660818117b33",
+                "reference": "2c6fea3d9a4eaaa8cef86b2a89f3660818117b33",
                 "shasum": ""
             },
             "require": {
@@ -64,7 +64,7 @@
                 "security",
                 "symmetric key cryptography"
             ],
-            "time": "2016-05-20 22:06:40"
+            "time": "2016-10-10 15:20:26"
         },
         {
             "name": "paragonie/constant_time_encoding",

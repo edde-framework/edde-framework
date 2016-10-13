@@ -36,7 +36,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getLog(): string {
+		public function getLog() {
 			return $this->log;
 		}
 

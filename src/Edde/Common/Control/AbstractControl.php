@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Control;
 
+	use Edde\Api\Callback\ICallback;
 	use Edde\Api\Control\ControlException;
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Node\INode;
@@ -15,6 +16,9 @@
 	use Edde\Common\Node\Node;
 	use Edde\Common\Node\NodeIterator;
 
+	/**
+	 * Root implementation of all controls.
+	 */
 	abstract class AbstractControl extends AbstractDeffered implements IControl {
 		use EventTrait;
 		/**
@@ -38,8 +42,9 @@
 			if ($this->node->isRoot()) {
 				return $this;
 			}
-			return $this->node->getRoot()
-				->getMeta('control');
+			/** @var $rootNode INode */
+			$rootNode = $this->node->getRoot();
+			return $rootNode->getMeta('control');
 		}
 
 		/**
@@ -161,6 +166,7 @@
 				$method,
 			];
 			if (method_exists($this, $method)) {
+				/** @var $callback ICallback */
 				$callback = new Callback($callback);
 				$argumentCount = count($argumentList);
 				foreach ($callback->getParameterList() as $key => $parameter) {

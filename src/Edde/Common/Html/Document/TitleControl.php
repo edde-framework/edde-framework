@@ -5,17 +5,36 @@
 
 	use Edde\Common\Html\AbstractHtmlControl;
 
+	/**
+	 * Html title control.
+	 */
 	class TitleControl extends AbstractHtmlControl {
+		/** @noinspection PhpMissingParentCallCommonInspection */
+		/**
+		 * @inheritdoc
+		 */
 		public function getTag(): string {
 			return 'title';
 		}
 
+		/** @noinspection PhpMissingParentCallCommonInspection */
+		/**
+		 * @inheritdoc
+		 */
 		public function isPair(): bool {
 			return true;
 		}
 
-		public function setTitle($title) {
+		/**
+		 * set a html title
+		 *
+		 * @param string $title
+		 *
+		 * @return $this
+		 */
+		public function setTitle(string $title) {
 			$this->use();
-			return $this->node->setValue($title);
+			$this->node->setValue($title);
+			return $this;
 		}
 	}

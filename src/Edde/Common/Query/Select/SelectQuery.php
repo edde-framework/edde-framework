@@ -66,6 +66,7 @@
 		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
+		 * @throws QueryException
 		 */
 		public function getNode() {
 			/**

@@ -6,5 +6,8 @@
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Common\Deffered\AbstractDeffered;
 
+	/**
+	 * Common stuff for cache storage implementation.
+	 */
 	abstract class AbstractCacheStorage extends AbstractDeffered implements ICacheStorage {
 	}

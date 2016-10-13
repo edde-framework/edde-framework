@@ -7,12 +7,23 @@
 	use Edde\Api\Database\IDriver;
 	use Edde\Common\Deffered\AbstractDeffered;
 
+	/**
+	 * Common stuff for database driver implementation.
+	 */
 	abstract class AbstractDriver extends AbstractDeffered implements IDriver {
 		/**
 		 * @var string[]
 		 */
 		protected $typeList;
 
+		/**
+		 * set type translation list from php scalar to native database type
+		 *
+		 * @param array $typeList
+		 *
+		 * @return $this
+		 * @throws DriverException
+		 */
 		protected function setTypeList(array $typeList) {
 			static $list = [
 				/** special cases */

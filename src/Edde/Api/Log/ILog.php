@@ -10,12 +10,12 @@
 		/**
 		 * shortcut for record();
 		 *
-		 * @param string $log
+		 * @param mixed $log
 		 * @param array $tagList
 		 *
 		 * @return ILog
 		 */
-		public function log(string $log, array $tagList = null): ILog;
+		public function log($log, array $tagList = null): ILog;
 
 		/**
 		 * @param ILogRecord $logRecord
@@ -63,4 +63,14 @@
 		 * @return ILog
 		 */
 		public function critical(string $log, array $tagList = null): ILog;
+
+		/**
+		 * log an exception
+		 *
+		 * @param \Exception $exception
+		 * @param array|null $tagList
+		 *
+		 * @return ILog
+		 */
+		public function exception(\Exception $exception, array $tagList = null): ILog;
 	}

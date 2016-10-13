@@ -6,5 +6,8 @@
 	use Edde\Api\Event\IEvent;
 	use Edde\Common\AbstractObject;
 
+	/**
+	 * Common stuff for event implementation.
+	 */
 	abstract class AbstractEvent extends AbstractObject implements IEvent {
 	}

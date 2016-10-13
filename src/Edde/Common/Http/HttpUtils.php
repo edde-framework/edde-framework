@@ -5,8 +5,12 @@
 
 	use Edde\Api\Http\ICookie;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Strings\StringException;
 	use Edde\Common\Strings\StringUtils;
 
+	/**
+	 * Static set of helper functions around http protocol.
+	 */
 	class HttpUtils extends AbstractObject {
 		/**
 		 * parse accept header and return an ordered array with accept mime types
@@ -14,6 +18,7 @@
 		 * @param string $accept
 		 *
 		 * @return array
+		 * @throws StringException
 		 */
 		static public function accept(string $accept = null): array {
 			if ($accept === null) {
@@ -71,6 +76,7 @@
 		 * @param string $default
 		 *
 		 * @return array
+		 * @throws StringException
 		 */
 		static public function language(string $language = null, string $default = 'en'): array {
 			if ($language === null) {
@@ -148,6 +154,7 @@
 		 * @param string $cookie
 		 *
 		 * @return ICookie
+		 * @throws StringException
 		 */
 		static public function cookie(string $cookie): ICookie {
 			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
@@ -156,15 +163,12 @@
 			$domain = '';
 			$expires = '';
 			if (isset($cookie['misc'])) {
-				/** @noinspection NestedPositiveIfStatementsInspection */
 				if ($match = StringUtils::match($cookie['misc'], '~path=(?<path>[a-z0-9/._-]+);?~i', true, true)) {
 					$path = $match['path'];
 				}
-				/** @noinspection NestedPositiveIfStatementsInspection */
 				if ($match = StringUtils::match($cookie['misc'], '~domain=(?<domain>[a-z0-9._-]+);?~i', true, true)) {
 					$domain = $match['domain'];
 				}
-				/** @noinspection NestedPositiveIfStatementsInspection */
 				if ($match = StringUtils::match($cookie['misc'], '~expires=(?<expires>[a-z0-9:\s,-]+\s+GMT);?~i', true, true)) {
 					$expires = $match['expires'];
 				}

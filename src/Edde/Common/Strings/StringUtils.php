@@ -270,6 +270,7 @@
 		 * @param array|bool|false $trim if array is provided, its used for named parameters defaults
 		 *
 		 * @return array|null
+		 * @throws StringException
 		 */
 		static public function match(string $string, string $pattern, bool $named = false, bool $trim = false) {
 			$match = null;
@@ -300,7 +301,6 @@
 		 * @param $args
 		 *
 		 * @return mixed
-		 * @throws \Exception
 		 * @throws StringException
 		 */
 		static private function pcre($func, $args) {
@@ -312,6 +312,7 @@
 				5 => 'Offset didn\'t correspond to the begin of a valid UTF-8 code point',
 				// PREG_BAD_UTF8_OFFSET_ERROR
 			];
+			/** @noinspection ExceptionsAnnotatingAndHandlingInspection */
 			$res = CallbackUtils::invoke($func, $args, function ($message) use ($args) {
 				// compile-time error, not detectable by preg_last_error
 				throw new StringException($message . ' in pattern: ' . implode(' or ', (array)$args[0]));

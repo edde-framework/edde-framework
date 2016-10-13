@@ -5,6 +5,7 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
+	use Edde\Common\Strings\StringException;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\AbstractHelper;
 
@@ -14,6 +15,7 @@
 	class MethodHelper extends AbstractHelper {
 		/**
 		 * @inheritdoc
+		 * @throws StringException
 		 */
 		public function helper(INode $macro, ICompiler $compiler, $value, ...$parameterList) {
 			if ($value === null) {

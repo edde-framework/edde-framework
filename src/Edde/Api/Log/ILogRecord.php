@@ -10,9 +10,9 @@
 		/**
 		 * compute target log item
 		 *
-		 * @return string
+		 * @return mixed
 		 */
-		public function getLog(): string;
+		public function getLog();
 
 		/**
 		 * return array of tags for this log record

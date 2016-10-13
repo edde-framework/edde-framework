@@ -6,5 +6,8 @@
 	use Edde\Api\Identity\IAuthorizator;
 	use Edde\Common\Deffered\AbstractDeffered;
 
+	/**
+	 * Common stuff for an authorizator implementations.
+	 */
 	abstract class AbstractAuthorizator extends AbstractDeffered implements IAuthorizator {
 	}

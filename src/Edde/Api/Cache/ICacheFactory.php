@@ -10,5 +10,5 @@
 		 *
 		 * @return ICache
 		 */
-		public function factory($namespace = null, ICacheStorage $cacheStorage = null);
+		public function factory(string $namespace = null, ICacheStorage $cacheStorage = null): ICache;
 	}

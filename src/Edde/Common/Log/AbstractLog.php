@@ -21,7 +21,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function log(string $log, array $tagList = null): ILog {
+		public function log($log, array $tagList = null): ILog {
 			return $this->record(new LogRecord($log, $tagList));
 		}
 
@@ -47,5 +47,13 @@
 		public function critical(string $log, array $tagList = null): ILog {
 			$tagList[] = __FUNCTION__;
 			return $this->log($log, $tagList);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function exception(\Exception $exception, array $tagList = null): ILog {
+			$tagList[] = __FUNCTION__;
+			return $this->log($exception, $tagList);
 		}
 	}

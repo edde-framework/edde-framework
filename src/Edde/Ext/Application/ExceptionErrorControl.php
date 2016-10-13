@@ -5,12 +5,12 @@
 
 	use Edde\Api\Application\IErrorControl;
 	use Edde\Api\Router\RouterException;
-	use Edde\Common\Html\TemplateViewControl;
+	use Edde\Common\Html\ViewControl;
 
 	/**
 	 * Only rethrows exception.
 	 */
-	class ExceptionErrorControl extends TemplateViewControl implements IErrorControl {
+	class ExceptionErrorControl extends ViewControl implements IErrorControl {
 		/**
 		 * @inheritdoc
 		 * @throws \Exception

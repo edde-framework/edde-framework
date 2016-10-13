@@ -8,6 +8,7 @@
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelper;
 	use Edde\Api\Template\MacroException;
+	use Edde\Common\Strings\StringException;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\HelperSet;
 
@@ -34,6 +35,7 @@
 		/**
 		 * @inheritdoc
 		 * @throws MacroException
+		 * @throws StringException
 		 */
 		public function helper(INode $macro, ICompiler $compiler, $value, ...$parameterList) {
 			/** @var $stack \SplStack */
