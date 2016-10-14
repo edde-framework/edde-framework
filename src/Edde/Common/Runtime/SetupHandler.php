@@ -58,7 +58,7 @@
 			if ($this->container) {
 				throw new RuntimeException(sprintf('Cannot run [%s()] multiple times; something is wrong!', __METHOD__));
 			}
-			$this->container = new Container($factoryManager = new FactoryManager(), $dependencyFactory = new DependencyFactory($factoryManager, $this->cacheFactory), $this->cacheFactory);
+			$this->container = new Container($factoryManager = new FactoryManager($this->cacheFactory), $dependencyFactory = new DependencyFactory($factoryManager, $this->cacheFactory), $this->cacheFactory);
 			$factoryManager->registerFactoryList([
 				IContainer::class => $this->container,
 				IFactoryManager::class => $factoryManager,

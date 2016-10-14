@@ -3,21 +3,31 @@
 
 	namespace Edde\Common\Container;
 
+	use Edde\Api\Cache\ICacheFactory;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\IFactoryManager;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Container\Factory\FactoryFactory;
+	use Edde\Common\Deffered\AbstractDeffered;
 
 	/**
 	 * Default implementation of a factory manager.
 	 */
-	class FactoryManager extends AbstractObject implements IFactoryManager {
+	class FactoryManager extends AbstractDeffered implements IFactoryManager {
+		use CacheTrait;
 		/**
 		 * @var IFactory[]
 		 */
 		protected $factoryList = [];
 		protected $handleList = [];
+
+		/**
+		 * @param ICacheFactory $cacheFactory
+		 */
+		public function __construct(ICacheFactory $cacheFactory) {
+			$this->cacheFactory = $cacheFactory;
+		}
 
 		/**
 		 * @inheritdoc
@@ -42,8 +52,9 @@
 		 * @inheritdoc
 		 */
 		public function getFactory(string $name): IFactory {
-			if (isset($this->handleList[$name])) {
-				return $this->handleList[$name];
+			$this->use();
+			if ($factory = $this->cache->load($cacheId = __FUNCTION__ . $name)) {
+				return $this->factoryList[$factory];
 			}
 			if ($this->hasFactory($name) === false) {
 				throw new FactoryException(sprintf('Requested unknown factory [%s].', $name));
@@ -53,11 +64,13 @@
 				if ($factory->canHandle($name) === false) {
 					throw new FactoryException(sprintf('Requested factory cannot handle identifier [%s].', $name));
 				}
-				return $this->handleList[$name] = $factory;
+				$this->cache->save($cacheId, $name);
+				return $factory;
 			}
-			foreach ($this->factoryList as $factory) {
+			foreach ($this->factoryList as $factoryName => $factory) {
 				if ($factory->canHandle($name)) {
-					return $this->handleList[$name] = $factory;
+					$this->cache->save($cacheId, $factoryName);
+					return $factory;
 				}
 			}
 			throw new FactoryException(sprintf('Some strange bug here for factory [%s].', $name));
@@ -67,15 +80,19 @@
 		 * @inheritdoc
 		 */
 		public function hasFactory(string $name): bool {
+			$this->use();
+			if ($factory = $this->cache->load($cacheId = __FUNCTION__ . $name)) {
+				return $factory;
+			}
 			if (isset($this->factoryList[$name])) {
-				return true;
+				return $this->cache->save($cacheId, true);
 			}
 			foreach ($this->factoryList as $factory) {
 				if ($factory->canHandle($name)) {
-					return true;
+					return $this->cache->save($cacheId, true);
 				}
 			}
-			return false;
+			return $this->cache->save($cacheId, false);
 		}
 
 		/**

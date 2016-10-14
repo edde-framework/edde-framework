@@ -5,6 +5,7 @@
 
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IFactoryManager;
+	use Edde\Common\Cache\DummyCacheFactory;
 	use Edde\Common\Container\Factory\InstanceFactory;
 	use phpunit\framework\TestCase;
 
@@ -29,6 +30,6 @@
 		}
 
 		protected function setUp() {
-			$this->factoryManager = new FactoryManager();
+			$this->factoryManager = new FactoryManager(new DummyCacheFactory());
 		}
 	}
