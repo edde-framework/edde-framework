@@ -66,12 +66,22 @@
 			self::assertInstanceOf(FooBar::class, $instance = $this->container->create(IFooBar::class));
 		}
 
+		public function testScalar() {
+			self::assertEquals('bar', $this->container->create('foo-bar'));
+			self::assertEquals('bar', $this->container->call(function ($fooBar) {
+				return $fooBar;
+			}));
+		}
+
 		protected function setUp() {
 			$this->container = ContainerFactory::create([
 				SimpleClass::class,
 				SimpleDependency::class,
 				LazyInjectTraitClass::class,
 				BetaDependencyClass::class,
+				'foo-bar' => function () {
+					return 'bar';
+				},
 			]);
 		}
 	}
