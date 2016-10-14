@@ -32,7 +32,7 @@
 		 * @throws FactoryException
 		 */
 		static public function create(array $factoryList = []): IContainer {
-			$factoryManager = new FactoryManager();
+			$factoryManager = new FactoryManager($cacheFactory = $factoryList[ICacheFactory::class] ?? new CacheFactory(__NAMESPACE__, $factoryList[ICacheStorage::class] ?? new InMemoryCacheStorage()));
 			$factoryManager->registerFactoryList($factoryList);
 			if (isset($factoryList[ICacheFactory::class]) && is_object($factoryList[ICacheFactory::class]) === false) {
 				throw new ContainerException(sprintf('[%s] must be instance (special case).', ICacheFactory::class));
@@ -40,7 +40,7 @@
 			if (isset($factoryList[ICacheStorage::class]) && is_object($factoryList[ICacheStorage::class]) === false) {
 				throw new ContainerException(sprintf('[%s] must be instance (special case).', ICacheStorage::class));
 			}
-			$container = new Container($factoryManager, $dependencyFactory = new DependencyFactory($factoryManager, $cacheFactory = $factoryList[ICacheFactory::class] ?? new CacheFactory(__NAMESPACE__, $factoryList[ICacheStorage::class] ?? new InMemoryCacheStorage())), $cacheFactory);
+			$container = new Container($factoryManager, $dependencyFactory = new DependencyFactory($factoryManager, $cacheFactory), $cacheFactory);
 			$factoryManager->registerFactoryList([
 				IContainer::class => $container,
 				IFactoryManager::class => $factoryManager,

@@ -4,19 +4,17 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Container\IDependency;
-	use Edde\Common\Cache\CacheFactory;
+	use Edde\Common\Cache\DummyCacheFactory;
 	use Edde\Common\Container\Factory\CallbackFactory;
 	use Edde\Common\ContainerTest\AlphaDependencyClass;
 	use Edde\Common\ContainerTest\BetaDependencyClass;
-	use Edde\Common\ContainerTest\DummyCacheStorage;
 	use phpunit\framework\TestCase;
 
 	require_once __DIR__ . '/assets.php';
 
 	class DependencyFactoryTest extends TestCase {
 		public function testCommon() {
-			$factoryManager = new FactoryManager();
-			$cacheFactory = new CacheFactory(__DIR__, new DummyCacheStorage());
+			$factoryManager = new FactoryManager($cacheFactory = new DummyCacheFactory());
 			$dependencyFactory = new DependencyFactory($factoryManager, $cacheFactory);
 			$factoryManager->registerFactory('foo', new CallbackFactory('foo', function (AlphaDependencyClass $foo, BetaDependencyClass $bar) {
 			}));
