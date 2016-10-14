@@ -57,6 +57,6 @@
 				$factory[1]($instance = self::create($name, $factory[0], $singleton, $cloneable));
 				return $instance;
 			}
-			throw new FactoryException(sprintf('Cannot handle [%s] factory, unknown $factory type.', $name));
+			throw new FactoryException(sprintf('Cannot handle [%s] factory, cannot determine factory type of $factory [%s].', $name, is_string($factory) ? $factory : gettype($factory)));
 		}
 	}
