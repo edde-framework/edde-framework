@@ -30,7 +30,10 @@
 		 */
 		protected $onSetupList = [];
 		protected $instance;
-		protected $lock = false;
+		/**
+		 * @var bool[]
+		 */
+		protected $lockList = [];
 
 		/**
 		 * Obsolete: Any computer you own.
@@ -80,16 +83,16 @@
 					return $this->instance;
 				}
 			}
-			if ($this->isLocked()) {
+			if ($this->isLocked($name)) {
 				throw new FactoryLockException(sprintf("Factory [%s] is locked; isn't there some circular dependency?", $this->name));
 			}
 			try {
-				$this->lock();
+				$this->lock($name);
 				$container->inject($this->instance = $this->factory($name, $parameterList, $container));
 				$this->setup($this->instance, $container);
 				return $this->instance;
 			} finally {
-				$this->lock(false);
+				$this->lock($name, false);
 			}
 		}
 
@@ -126,12 +129,12 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function isLocked(): bool {
-			return $this->lock;
+		public function isLocked(string $name): bool {
+			return isset($this->lockList[$name]) !== false && $this->lockList[$name] === true;
 		}
 
-		public function lock(bool $lock = true): IFactory {
-			$this->lock = $lock;
+		public function lock(string $name, bool $lock = true): IFactory {
+			$this->lockList[$name] = $lock;
 			return $this;
 		}
 
