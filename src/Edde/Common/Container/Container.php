@@ -153,7 +153,7 @@
 		 */
 		protected function factory(IDependency $root, array $parameterList) {
 			$dependencies = [];
-			$this->dependencyStack->push($root);
+			$this->dependencyStack->push($root->getName());
 			/** @var $dependencyList IDependency[] */
 			$grab = count($dependencyList = $root->getDependencyList()) - count($parameterList);
 			foreach ($dependencyList as $dependency) {
