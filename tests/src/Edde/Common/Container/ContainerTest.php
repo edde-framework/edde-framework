@@ -38,6 +38,11 @@
 			self::assertInstanceOf(SimpleClass::class, $this->container->create(SimpleClass::class, new SimpleUnknownDependency(), 1));
 		}
 
+		public function testCache() {
+			self::assertInstanceOf(SimpleClass::class, $this->container->create(SimpleClass::class, new SimpleUnknownDependency(), 1));
+			self::assertInstanceOf(SimpleClass::class, $this->container->create(SimpleClass::class, new SimpleUnknownDependency(), 1));
+		}
+
 		public function testLazyInject() {
 			$lazyClass = $this->container->create(LazyInjectTraitClass::class);
 			self::assertInstanceOf(BetaDependencyClass::class, $lazyClass->foo());
