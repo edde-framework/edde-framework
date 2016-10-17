@@ -7,6 +7,7 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Container\FactoryLockException;
 
 	/**
 	 * Basic implementation for all dependency factories.
@@ -54,7 +55,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function deffered(callable $callback) {
+		public function deffered(callable $callback): IFactory {
 			$this->onSetupList[] = $callback;
 			return $this;
 		}
@@ -79,19 +80,16 @@
 					return $this->instance;
 				}
 			}
-			if ($this->lock) {
-				throw new FactoryException(sprintf("Factory [%s] is locked; isn't there some circular dependency?", $this->name));
+			if ($this->isLocked()) {
+				throw new FactoryLockException(sprintf("Factory [%s] is locked; isn't there some circular dependency?", $this->name));
 			}
 			try {
-				$this->lock = true;
+				$this->lock();
 				$container->inject($this->instance = $this->factory($name, $parameterList, $container));
 				$this->setup($this->instance, $container);
-				$this->lock = false;
 				return $this->instance;
-			} catch (\Exception $e) {
-				$this->lock = false;
-				/** @noinspection ExceptionsAnnotatingAndHandlingInspection */
-				throw $e;
+			} finally {
+				$this->lock(false);
 			}
 		}
 
@@ -105,7 +103,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setCloneable(bool $cloneable) {
+		public function setCloneable(bool $cloneable): IFactory {
 			$this->cloneable = $cloneable;
 			return $this;
 		}
@@ -120,8 +118,20 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setSingleton(bool $singleton) {
+		public function setSingleton(bool $singleton): IFactory {
 			$this->singleton = $singleton;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function isLocked(): bool {
+			return $this->lock;
+		}
+
+		public function lock(bool $lock = true): IFactory {
+			$this->lock = $lock;
 			return $this;
 		}
 

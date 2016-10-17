@@ -5,6 +5,7 @@
 
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Container\IFactory;
 
 	/**
 	 * Factory for holding already existing instances.
@@ -34,7 +35,7 @@
 		 * @inheritdoc
 		 * @throws FactoryException
 		 */
-		public function deffered(callable $callback) {
+		public function deffered(callable $callback): IFactory {
 			throw new FactoryException(sprintf('Cannot register deffered handler on [%s]; setup handlers are not supported by this factory.', self::class));
 		}
 

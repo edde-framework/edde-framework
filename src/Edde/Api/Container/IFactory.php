@@ -21,9 +21,9 @@
 		 *
 		 * @param bool $singleton
 		 *
-		 * @return $this
+		 * @return IFactory
 		 */
-		public function setSingleton(bool $singleton);
+		public function setSingleton(bool $singleton): IFactory;
 
 		/**
 		 * is result of this factory singleton?
@@ -37,9 +37,9 @@
 		 *
 		 * @param bool $cloneable
 		 *
-		 * @return $this
+		 * @return IFactory
 		 */
-		public function setCloneable(bool $cloneable);
+		public function setCloneable(bool $cloneable): IFactory;
 
 		/**
 		 * is result of this factory clone?
@@ -62,9 +62,25 @@
 		 *
 		 * @param callable $callback
 		 *
-		 * @return $this
+		 * @return IFactory
 		 */
-		public function deffered(callable $callback);
+		public function deffered(callable $callback): IFactory;
+
+		/**
+		 * lock/unlock this factory
+		 *
+		 * @param bool $lock
+		 *
+		 * @return IFactory
+		 */
+		public function lock(bool $lock = true): IFactory;
+
+		/**
+		 * is this factory locked?
+		 *
+		 * @return bool
+		 */
+		public function isLocked(): bool;
 
 		/**
 		 * is this factory able to handle the given identifier?
