@@ -5,7 +5,7 @@
 
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheFactory;
-	use Edde\Api\Callback\IParameter;
+	use Edde\Api\Callback\ICallback;
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
@@ -38,6 +38,10 @@
 		 * @var ICache
 		 */
 		protected $cache;
+		/**
+		 * @var \SplStack
+		 */
+		protected $dependencyStack;
 
 		/**
 		 * @param IFactoryManager $factoryManager
@@ -145,10 +149,11 @@
 		 * @param array $parameterList
 		 *
 		 * @return mixed
-		 * @throws FactoryException
+		 * @throws ContainerException
 		 */
 		protected function factory(IDependency $root, array $parameterList) {
 			$dependencies = [];
+			$this->dependencyStack->push($root);
 			/** @var $dependencyList IDependency[] */
 			$grab = count($dependencyList = $root->getDependencyList()) - count($parameterList);
 			foreach ($dependencyList as $dependency) {
@@ -157,8 +162,14 @@
 				}
 				$dependencies[] = $this->factory($dependency, []);
 			}
-			return $this->factoryManager->getFactory($name = $root->getClass())
-				->create($name, array_merge($dependencies, $parameterList), $this);
+			try {
+				return $this->factoryManager->getFactory($name = $root->getClass())
+					->create($name, array_merge($dependencies, $parameterList), $this);
+			} catch (FactoryException $exception) {
+				throw new ContainerException(sprintf('Cannot create dependency [%s]; dependency stack [%s].', $root->getClass(), implode(', ', iterator_to_array($this->dependencyStack))), 0, $exception);
+			} finally {
+				$this->dependencyStack->pop();
+			}
 		}
 
 		/**
@@ -167,10 +178,10 @@
 		 */
 		public function call(callable $callable, ...$parameterList) {
 			$this->use();
+			/** @var $callback ICallback */
 			$callback = new Callback($callable);
 			$dependencies = [];
 			$grab = count($dependencyList = $callback->getParameterList()) - count($parameterList);
-			/** @var $dependencyList IParameter[] */
 			foreach ($dependencyList as $dependency) {
 				if ($grab-- <= 0 || $dependency->isOptional()) {
 					break;
@@ -184,6 +195,7 @@
 		 * @inheritdoc
 		 */
 		protected function prepare() {
+			$this->dependencyStack = new \SplStack();
 			$this->cache = $this->cacheFactory->factory(self::class);
 		}
 	}

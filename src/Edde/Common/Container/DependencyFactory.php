@@ -4,7 +4,6 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Cache\ICacheFactory;
-	use Edde\Api\Container\DependencyException;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IDependencyFactory;
@@ -39,8 +38,8 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws DependencyException
 		 * @throws FactoryException
+		 * @throws RecursiveDependencyException
 		 */
 		public function create(string $name): IDependency {
 			$this->use();
@@ -55,15 +54,15 @@
 		 * @param string $name
 		 * @param IDependency $root
 		 *
-		 * @throws DependencyException
 		 * @throws FactoryException
+		 * @throws RecursiveDependencyException
 		 */
 		protected function build(string $name, IDependency $root) {
 			if ($this->factoryManager->hasFactory($name) === false) {
 				return;
 			}
 			if (isset($this->dependencyList[$name])) {
-				throw new DependencyException(sprintf('Detected recursive dependency [%s] in stack [%s].', $name, implode(', ', array_keys($this->dependencyList))));
+				throw new RecursiveDependencyException(sprintf('Detected recursive dependency [%s] in stack [%s].', $name, implode(', ', array_keys($this->dependencyList))));
 			}
 			$this->dependencyList[$name] = true;
 			$factory = $this->factoryManager->getFactory($name);
