@@ -9,6 +9,7 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
 	use Edde\Common\Callback\Callback;
+	use Edde\Common\Control\Event\CancelEvent;
 	use Edde\Common\Control\Event\DoneEvent;
 	use Edde\Common\Control\Event\HandleEvent;
 	use Edde\Common\Deffered\AbstractDeffered;
@@ -146,9 +147,13 @@
 		 */
 		public function handle(string $method, array $parameterList) {
 			$this->listen($this);
-			$this->event(new HandleEvent($this, $method, $parameterList));
-			$this->event(new DoneEvent($this, $result = $this->execute($method, $parameterList)));
-			return $result;
+			$this->event($handleEvent = new HandleEvent($this, $method, $parameterList));
+			if ($handleEvent->isCanceled() === false) {
+				$this->event(new DoneEvent($this, $result = $this->execute($method, $parameterList)));
+				return $result;
+			}
+			$this->event(new CancelEvent($this));
+			return null;
 		}
 
 		/**

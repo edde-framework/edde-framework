@@ -17,6 +17,12 @@
 		 * @var array
 		 */
 		protected $parameterList;
+		/**
+		 * is this handler canceled?
+		 *
+		 * @var bool
+		 */
+		protected $cancel;
 
 		/**
 		 * @param IControl $control
@@ -27,6 +33,7 @@
 			parent::__construct($control);
 			$this->method = $method;
 			$this->parameterList = $parameterList;
+			$this->cancel = false;
 		}
 
 		public function getMethod(): string {
@@ -35,5 +42,14 @@
 
 		public function getParameterList(): array {
 			return $this->parameterList;
+		}
+
+		public function cancel(bool $cancel = true) {
+			$this->cancel = $cancel;
+			return $this;
+		}
+
+		public function isCanceled(): bool {
+			return $this->cancel;
 		}
 	}
