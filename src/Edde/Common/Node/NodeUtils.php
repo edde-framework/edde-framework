@@ -76,4 +76,35 @@
 				return $root;
 			})($callback, $root, $source);
 		}
+
+		/**
+		 * convert input of stdClass to node tree
+		 *
+		 * @param \stdClass $stdClass
+		 * @param INode $root
+		 *
+		 * @return INode
+		 * @throws NodeException
+		 */
+		static public function convert(\stdClass $stdClass, INode $root = null): INode {
+			$root = $root ?: new Node();
+			/** @noinspection ForeachSourceInspection */
+			foreach ($stdClass as $k => $v) {
+				if ($v instanceof \stdClass) {
+					$root->setName($k);
+					self::convert($v, $root);
+					continue;
+				}
+				if (is_array($v)) {
+					$root->setName($k);
+					/** @noinspection ForeachSourceInspection */
+					foreach ($v as $kk => $vv) {
+						$root->addNode(self::convert($vv, new Node($kk)));
+					}
+					continue;
+				}
+				$root->setAttribute($k, $v);
+			}
+			return $root;
+		}
 	}

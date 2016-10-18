@@ -7,15 +7,11 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
 	use Edde\Common\Converter\AbstractConverter;
-	use Edde\Common\Node\Node;
 	use Edde\Common\Node\NodeUtils;
 
 	class NodeConverter extends AbstractConverter {
 		public function __construct() {
-			$this->register([
-				'array',
-				\stdClass::class,
-			], INode::class);
+			$this->register(\stdClass::class, INode::class);
 		}
 
 		/** @noinspection PhpInconsistentReturnPointsInspection */
@@ -25,10 +21,10 @@
 		 * @throws NodeException
 		 */
 		public function convert($convert, string $source, string $target, string $mime) {
-			$this->unsupported($convert, $target, is_array($convert) || $convert instanceof \stdClass);
+			$this->unsupported($convert, $target, $convert instanceof \stdClass);
 			switch ($target) {
 				case INode::class:
-					return NodeUtils::node(new Node(), $convert);
+					return NodeUtils::convert($convert);
 			}
 			$this->exception($source, $target);
 		}

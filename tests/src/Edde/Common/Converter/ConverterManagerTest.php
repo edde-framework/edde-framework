@@ -6,6 +6,7 @@
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Node\INode;
+	use Edde\Common\Node\NodeQuery;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Converter\NodeConverter;
 	use phpunit\framework\TestCase;
@@ -39,12 +40,17 @@
 		}
 
 		public function testObjectConverter() {
-			$node = $this->converterManager->convert(json_decode(json_encode([
+			$node = $this->converterManager->convert((object)[
 				'foo' => [
-					['bar' => 'foo'],
+					'bar' => (object)[
+						'moo' => 'foo',
+					],
 				],
-			])), \stdClass::class, INode::class);
+			], \stdClass::class, INode::class);
 			self::assertInstanceOf(INode::class, $node);
+			self::assertInstanceOf(INode::class, $first = NodeQuery::first($node, '/foo/bar'));
+			self::assertEquals('foo', $first->getAttribute('moo'));
+			self::assertTrue($first->isLeaf(), 'Selected node is not a leaf!');
 		}
 
 		protected function setUp() {
