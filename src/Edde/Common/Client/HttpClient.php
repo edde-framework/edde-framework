@@ -8,6 +8,7 @@
 	use Edde\Api\Client\IHttpHandler;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
+	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\Client\Event\GetEvent;
@@ -29,6 +30,15 @@
 		use LazyContainerTrait;
 		use LazyConverterManagerTrait;
 		use EventTrait;
+
+		/**
+		 * @inheritdoc
+		 */
+		public function gete($url, string $target, string $mime = null) {
+			return $this->get($url)
+				->execute()
+				->body($target, $mime);
+		}
 
 		/**
 		 * @inheritdoc
@@ -76,6 +86,18 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function poste($url, IBody $body = null, string $target, string $mime = null) {
+			$handler = $this->post($url);
+			if ($body) {
+				$handler->body($body);
+			}
+			return $handler->execute()
+				->body($target, $mime);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function post($url): IHttpHandler {
 			$httpRequest = $this->createRequest($url)
 				->setMethod('POST');
@@ -87,12 +109,36 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function pute($url, IBody $body = null, string $target, string $mime = null) {
+			$handler = $this->put($url);
+			if ($body) {
+				$handler->body($body);
+			}
+			return $handler->execute()
+				->body($target, $mime);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function put($url): IHttpHandler {
 			$httpRequest = $this->createRequest($url)
 				->setMethod('PUT');
 			$this->event(new PostEvent($httpRequest, $httpHandler = $this->request($httpRequest)));
 			$this->event(new HandlerEvent($httpRequest, $httpHandler));
 			return $httpHandler;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function deletee($url, IBody $body = null, string $target, string $mime = null) {
+			$handler = $this->delete($url);
+			if ($body) {
+				$handler->body($body);
+			}
+			return $handler->execute()
+				->body($target, $mime);
 		}
 
 		/**
