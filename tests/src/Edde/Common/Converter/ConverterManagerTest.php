@@ -5,7 +5,9 @@
 
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Converter\IConverterManager;
+	use Edde\Api\Node\INode;
 	use Edde\Ext\Container\ContainerFactory;
+	use Edde\Ext\Converter\NodeConverter;
 	use phpunit\framework\TestCase;
 
 	require_once __DIR__ . '/assets/assets.php';
@@ -36,11 +38,21 @@
 			self::assertEquals($expect = 'this will be null on output', $this->converterManager->convert($expect, 'boo', 'something'));
 		}
 
+		public function testObjectConverter() {
+			$node = $this->converterManager->convert(json_decode(json_encode([
+				'foo' => [
+					['bar' => 'foo'],
+				],
+			])), \stdClass::class, INode::class);
+			self::assertInstanceOf(INode::class, $node);
+		}
+
 		protected function setUp() {
 			$container = ContainerFactory::create([
 				IConverterManager::class => ConverterManager::class,
 			]);
 			$this->converterManager = $container->create(IConverterManager::class);
 			$this->converterManager->registerConverter((new \DummyConverter())->register('boo', 'something'));
+			$this->converterManager->registerConverter(new NodeConverter());
 		}
 	}

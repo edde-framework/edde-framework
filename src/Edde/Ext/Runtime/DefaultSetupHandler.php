@@ -108,6 +108,7 @@
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Converter\HttpConverter;
 	use Edde\Ext\Converter\JsonConverter;
+	use Edde\Ext\Converter\NodeConverter;
 	use Edde\Ext\Converter\PhpConverter;
 	use Edde\Ext\Converter\RedirectConverter;
 	use Edde\Ext\Converter\XmlConverter;
@@ -244,6 +245,7 @@
 					$converterManager->registerConverter($container->create(XmlConverter::class));
 					$converterManager->registerConverter($container->create(JsonConverter::class));
 					$converterManager->registerConverter($container->create(PhpConverter::class));
+					$converterManager->registerConverter($container->create(NodeConverter::class));
 
 					$converterManager->registerConverter($container->create(HtmlConverter::class));
 					$converterManager->registerConverter($container->create(HttpConverter::class));
