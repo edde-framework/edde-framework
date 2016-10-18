@@ -118,6 +118,7 @@
 		 * @return \stdClass
 		 */
 		protected function parse($query) {
+			$query = str_replace('//', '/*/', $query);
 			$query = '/' . trim($query, '/') . '/';
 			$filter = new \stdClass();
 			$filter->fixed = strpos($query, '**') === false && strpos($query, '?*') === false;

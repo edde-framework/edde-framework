@@ -48,7 +48,7 @@
 				],
 			], \stdClass::class, INode::class);
 			self::assertInstanceOf(INode::class, $node);
-			self::assertInstanceOf(INode::class, $first = NodeQuery::first($node, '/foo/bar'));
+			self::assertInstanceOf(INode::class, $first = NodeQuery::first($node, '//foo/bar'));
 			self::assertEquals('foo', $first->getAttribute('moo'));
 			self::assertTrue($first->isLeaf(), 'Selected node is not a leaf!');
 		}

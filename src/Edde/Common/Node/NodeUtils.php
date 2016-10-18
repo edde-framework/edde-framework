@@ -91,15 +91,14 @@
 			/** @noinspection ForeachSourceInspection */
 			foreach ($stdClass as $k => $v) {
 				if ($v instanceof \stdClass) {
-					$root->setName($k);
-					self::convert($v, $root);
+					$root->addNode($node = new Node($k));
+					self::convert($v, $node);
 					continue;
-				}
-				if (is_array($v)) {
-					$root->setName($k);
+				} else if (is_array($v)) {
+					$root->addNode($node = new Node($k));
 					/** @noinspection ForeachSourceInspection */
 					foreach ($v as $kk => $vv) {
-						$root->addNode(self::convert($vv, new Node($kk)));
+						$node->addNode(self::convert($vv, new Node($kk)));
 					}
 					continue;
 				}
