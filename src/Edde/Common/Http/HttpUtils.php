@@ -175,4 +175,38 @@
 			}
 			return new Cookie($cookie['name'], $cookie['value'], $expires, $path, $domain, stripos($cookie['misc'], 'secure') !== false, stripos($cookie['misc'], 'httponly') !== false);
 		}
+
+		static public function headerList(string $headers, bool $process = true) {
+			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
+			$headers = explode("\r\n", $headers);
+			$headerList = [];
+			if (stripos($headers[0], 'http') !== false) {
+				$headerList['http'] = array_shift($headers);
+			}
+			foreach ($headers as $header) {
+				if (($index = strpos($header, ':')) === false) {
+					continue;
+				}
+				$headerList[substr($header, 0, $index)] = substr($header, $index + 1);
+			}
+			return $process ? self::headers($headerList) : $headerList;
+		}
+
+		static public function headers(array $headerList) {
+			static $map = [
+				'Content-Type' => [static::class => 'contentType'],
+				'http' => [static::class => 'http'],
+			];
+			foreach ($headerList as $name => &$header) {
+				if (isset($map[$name]) === false) {
+					continue;
+				}
+				$header = call_user_func($map[$name], $header);
+			}
+			return $headerList;
+		}
+
+		static public function http(string $http) {
+			return (object)StringUtils::match($http, '~^HTTP/(?<version>\d+(\.\d+)?)\s(?<status>\d+)(\s(?<message>.*))?$~', true);
+		}
 	}
