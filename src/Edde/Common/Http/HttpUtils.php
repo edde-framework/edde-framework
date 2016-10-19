@@ -187,7 +187,7 @@
 				if (($index = strpos($header, ':')) === false) {
 					continue;
 				}
-				$headerList[substr($header, 0, $index)] = substr($header, $index + 1);
+				$headerList[substr($header, 0, $index)] = trim(substr($header, $index + 1));
 			}
 			return $process ? self::headers($headerList) : $headerList;
 		}
