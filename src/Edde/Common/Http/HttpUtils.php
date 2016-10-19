@@ -194,8 +194,8 @@
 
 		static public function headers(array $headerList) {
 			static $map = [
-				'Content-Type' => [static::class => 'contentType'],
-				'http' => [static::class => 'http'],
+				'Content-Type' => [self::class => 'contentType'],
+				'http' => [self::class => 'http'],
 			];
 			foreach ($headerList as $name => &$header) {
 				if (isset($map[$name]) === false) {

@@ -53,16 +53,18 @@
 			if (strpos($class, $this->namespace) === false) {
 				return false;
 			}
-			/** @noinspection PhpUsageOfSilenceOperatorInspection */
-			/** @noinspection UsingInclusionOnceReturnValueInspection */
-			/** @noinspection UsingInclusionReturnValueInspection */
-			@include_once str_replace([
+			$file = str_replace([
 				$this->namespace,
 				'\\',
 			], [
 				$this->root ? null : $this->namespace,
 				'/',
 			], $this->path . '/' . $class . '.php');
+			if (file_exists($file) === false) {
+				return false;
+			}
+			/** @noinspection PhpIncludeInspection */
+			include_once $file;
 			return class_exists($class, false);
 		}
 	}
