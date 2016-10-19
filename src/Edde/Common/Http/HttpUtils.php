@@ -134,16 +134,46 @@
 			return $charsetList;
 		}
 
+		/**
+		 * this method does some really dark magic, so if the output is wrong, try to look here and report a bug
+		 *
+		 * @param string $contentType
+		 *
+		 * @return \stdClass
+		 */
 		static public function contentType(string $contentType): \stdClass {
-			$type = explode(';', $contentType);
+			/**
+			 * this is fuckin' trick how to parse mime using native php's csv parser
+			 *
+			 * Content type header is separated by semicolons, so there is possibility to parse it like
+			 * csv, because it also uses " as delimite character; this can give base output for further
+			 * processing
+			 */
+			{
+				/**
+				 * open in-memory handler (we need few bytes, this is also overkill) and write content type there
+				 */
+				fwrite($handle = fopen('php://memory', 'rw'), $contentType);
+				/**
+				 * seek to the beginning of the memory block ("file")
+				 */
+				fseek($handle, 0, SEEK_SET);
+				/**
+				 * fgetcsv will do the job
+				 */
+				$type = fgetcsv($handle, null, ';', '"');
+				/**
+				 * clean up
+				 */
+				fclose($handle);
+			}
 			$stdClass = new \stdClass();
-			$stdClass->type = trim($type[0]);
-			if (isset($type[1])) {
-				foreach (explode(',', trim($type[1])) as $part) {
-					list($key, $value) = explode('=', $part);
-					/** @noinspection PhpVariableVariableInspection */
-					$stdClass->$key = $value;
-				}
+			$stdClass->mime = strtolower(trim(array_shift($type)));
+			foreach ($type as $part) {
+				$key = trim(substr($part, 0, $index = strpos($part, '=')));
+				$value = trim(trim(substr($part, $index + 1)), '"');
+				/** @noinspection PhpVariableVariableInspection */
+				$stdClass->$key = $value;
 			}
 			return $stdClass;
 		}

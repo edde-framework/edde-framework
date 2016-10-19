@@ -93,15 +93,25 @@
 
 		public function testContentType1() {
 			self::assertEquals((object)[
-				'type' => 'applicaiton/json',
+				'mime' => 'applicaiton/json',
 			], HttpUtils::contentType('applicaiton/json'));
 		}
 
 		public function testContentType2() {
 			self::assertEquals((object)[
-				'type' => 'applicaiton/json',
+				'mime' => 'applicaiton/json',
 				'charset' => 'utf-8',
 			], HttpUtils::contentType('applicaiton/json; charset=utf-8'));
+		}
+
+		public function testContentType3() {
+			self::assertEquals((object)[
+				'mime' => 'multipart/related',
+				'boundary' => '==r4SdGZrQQHDyuSuLOgmDmYbIsG7opnvoWQE2nVPK0e6wN3vxXhEzykf/aBRR==',
+				'type' => 'application/xop+xml',
+				'start' => '<d569a93d-2406-4130-ba60-a61cb17f2818@uuid>',
+				'start-info' => 'application/soap+xml',
+			], HttpUtils::contentType('Multipart/Related; boundary="==r4SdGZrQQHDyuSuLOgmDmYbIsG7opnvoWQE2nVPK0e6wN3vxXhEzykf/aBRR=="; type="application/xop+xml"; start="<d569a93d-2406-4130-ba60-a61cb17f2818@uuid>"; start-info="application/soap+xml"'));
 		}
 
 		public function testCookies1() {
