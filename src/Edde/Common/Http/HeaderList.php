@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Http\HttpException;
 	use Edde\Api\Http\IContentType;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Common\Collection\AbstractList;
@@ -20,9 +19,6 @@
 		public function getContentType(string $default = 'application/octet-stream'): IContentType {
 			if ($this->contentType === null) {
 				$this->contentType = new ContentType($this->get('Content-Type', $default));
-			}
-			if (($mime = $this->contentType->getMime()) !== $default) {
-				throw new HttpException(sprintf('Default mime [%s] type mismatch [%s] in header list (this can make not so nice surprise).', $mime, $default));
 			}
 			return $this->contentType;
 		}
