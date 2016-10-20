@@ -24,7 +24,7 @@
 				->setRemoteHost($_SERVER['REMOTE_HOST'] ?? '')
 				->setBody($this->container->inject(new Body(function () {
 					return file_get_contents('php://input');
-				}, $headerList->getContentType())));
+				}, (string)$headerList->getContentType())));
 		}
 
 		/**
