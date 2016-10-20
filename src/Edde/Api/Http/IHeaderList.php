@@ -12,11 +12,9 @@
 		/**
 		 * return content type from header
 		 *
-		 * @param string $default
-		 *
 		 * @return IContentType
 		 */
-		public function getContentType(string $default = 'application/octet-stream'): IContentType;
+		public function getContentType(): IContentType;
 
 		/**
 		 * return user agent

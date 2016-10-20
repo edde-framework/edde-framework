@@ -21,7 +21,7 @@
 		 *
 		 * @return null|string
 		 */
-		public function getContentType(string $default = ' application/octet-stream'): string;
+		public function getContentType(string $default = ''): string;
 
 		/**
 		 * content id of multipart message (must have Content-ID header)

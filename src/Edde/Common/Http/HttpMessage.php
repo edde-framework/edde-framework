@@ -48,9 +48,10 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getContentType(string $default = 'application/octet-stream'): string {
+		public function getContentType(string $default = ''): string {
 			$this->use();
-			return (string)$this->headerList->getContentType($default);
+			return $this->headerList->getContentType()
+				->getMime($default);
 		}
 
 		/**

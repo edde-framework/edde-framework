@@ -43,7 +43,8 @@
 
 		public function createRequest() {
 			$this->use();
-			$mime = (string)$this->headerList->getContentType($this->headerList->getAccept());
+			$mime = $this->headerList->getContentType()
+				->getMime($this->headerList->getAccept());
 			foreach ($this->serviceList as $service) {
 				if ($service->match($this->requestUrl)) {
 					$this->httpResponse->setContentType($mime);

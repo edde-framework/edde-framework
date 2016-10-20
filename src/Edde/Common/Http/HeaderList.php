@@ -16,9 +16,9 @@
 		 */
 		protected $contentType;
 
-		public function getContentType(string $default = 'application/octet-stream'): IContentType {
+		public function getContentType(): IContentType {
 			if ($this->contentType === null) {
-				$this->contentType = new ContentType($this->get('Content-Type', $default));
+				$this->contentType = new ContentType($this->get('Content-Type', ''));
 			}
 			return $this->contentType;
 		}

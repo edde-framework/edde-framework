@@ -16,7 +16,7 @@
 		 *
 		 * @return string
 		 */
-		public function getMime(string $default = 'application/octet-stream'): string;
+		public function getMime(string $default = ''): string;
 
 		/**
 		 * return charset parameter of this mime type

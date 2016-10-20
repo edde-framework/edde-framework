@@ -9,7 +9,7 @@
 		public function testEmptyMessage() {
 			$message = new HttpMessage('', '');
 			self::assertFalse($message->isUsed(), 'Message has been used!');
-			self::assertEquals('application/octet-stream', $message->getContentType());
+			self::assertEquals('application/octet-stream', $message->getContentType('application/octet-stream'));
 			self::assertTrue($message->isUsed(), 'Message has NOT been used!');
 		}
 

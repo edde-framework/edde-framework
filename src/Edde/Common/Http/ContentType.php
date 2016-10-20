@@ -40,9 +40,9 @@
 			return $this->getMime();
 		}
 
-		public function getMime(string $default = 'application/octet-stream'): string {
+		public function getMime(string $default = ''): string {
 			$this->use();
-			return $this->object->mime;
+			return $this->object ? $this->object->mime : $default;
 		}
 
 		public function getParameterList(): array {
@@ -51,7 +51,9 @@
 		}
 
 		protected function prepare() {
-			$this->object = HttpUtils::contentType($this->contentType);
-			$this->put($this->object->params);
+			if ($this->contentType) {
+				$this->object = HttpUtils::contentType($this->contentType);
+				$this->put($this->object->params);
+			}
 		}
 	}
