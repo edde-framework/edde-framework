@@ -170,7 +170,7 @@
 			$headerList->set('Content-Type', $contentType);
 			curl_close($this->curl);
 			$this->curl = null;
-			$this->container->inject($httpResponse = new HttpResponse($this->container->inject(new Body($content, isset($type) ? $type->type : $contentType))));
+			$this->container->inject($httpResponse = new HttpResponse($this->container->inject(new Body($content, isset($type) ? $type->mime : $contentType))));
 			$httpResponse->setHeaderList($headerList);
 			$httpResponse->setCookieList($cookieList);
 			return $httpResponse;
