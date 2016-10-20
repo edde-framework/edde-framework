@@ -19,7 +19,7 @@
 		}
 
 		public function testComplexMessage() {
-			$message = new HttpMessage(file_get_contents(__DIR__ . '/assets/complex-message.txt'), 'Content-Type: Multipart/Related; boundary="==Ia972IE5ZAauQb99oe4cHtcKVOPm+TnhmgRNG0ettImxcp0myeUedUROkV00=="; type="application/xop+xml"; start="<d569a93d-2406-4130-ba60-a61cb17f2818@uuid>"; start-info="application/soap+xml"');
+			$message = new HttpMessage(file_get_contents(__DIR__ . '/assets/complex-message'), 'Content-Type: Multipart/Related; boundary="==Ia972IE5ZAauQb99oe4cHtcKVOPm+TnhmgRNG0ettImxcp0myeUedUROkV00=="; type="application/xop+xml"; start="<d569a93d-2406-4130-ba60-a61cb17f2818@uuid>"; start-info="application/soap+xml"');
 			self::assertEquals('multipart/related', $message->getContentType());
 			self::assertEquals([
 				'boundary' => '==Ia972IE5ZAauQb99oe4cHtcKVOPm+TnhmgRNG0ettImxcp0myeUedUROkV00==',
@@ -29,5 +29,9 @@
 			], $message->getHeaderList()
 				->getContentType()
 				->getParameterList());
+			self::assertEquals([
+				'd569a93d-2406-4130-ba60-a61cb17f2818@uuid',
+				'01798d1a-28c8-4ee9-ba5f-eb577a2d0ce7@uuid',
+			], $message->getContentList());
 		}
 	}

@@ -3,10 +3,12 @@
 
 	namespace Edde\Api\Http;
 
+	use Edde\Api\Collection\IList;
+
 	/**
 	 * Formal content type implementation; content type can have additional parameters (thus extended from IList).
 	 */
-	interface IContentType {
+	interface IContentType extends IList {
 		/**
 		 * return mime type of this content type
 		 *

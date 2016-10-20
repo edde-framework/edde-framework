@@ -4,10 +4,10 @@
 	namespace Edde\Common\Http;
 
 	use Edde\Api\Http\IContentType;
-	use Edde\Common\Collection\AbstractList;
+	use Edde\Common\Collection\AbstractDefferedList;
 	use Edde\Common\Deffered\DefferedTrait;
 
-	class ContentType extends AbstractList implements IContentType {
+	class ContentType extends AbstractDefferedList implements IContentType {
 		use DefferedTrait;
 		/**
 		 * source content type

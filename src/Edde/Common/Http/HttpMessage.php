@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Http;
 
+	use Edde\Api\Http\HttpMessageException;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttpMessage;
 	use Edde\Common\Deffered\AbstractDeffered;
@@ -20,6 +21,10 @@
 		 * @var IHeaderList
 		 */
 		protected $headerList;
+		/**
+		 * @var IHttpMessage[]
+		 */
+		protected $messageList = [];
 
 		/**
 		 * HttpMessage constructor.
@@ -48,8 +53,61 @@
 			return (string)$this->headerList->getContentType($default);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
+		public function getContentList(): array {
+			return array_keys($this->messageList);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getMessageList(): array {
+			return $this->messageList;
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws HttpMessageException
+		 */
+		public function getMessage(string $contentId): IHttpMessage {
+			if (isset($this->messageList[$contentId]) === false) {
+				throw new HttpMessageException(sprintf('Requested unknown content id [%s] in http message.', $contentId));
+			}
+			return $this->messageList[$contentId];
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getBody(): string {
+			return $this->message;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		protected function prepare() {
 			$this->headerList = new HeaderList();
 			$this->headerList->put(HttpUtils::headerList($this->headers, false));
+			$contentType = $this->headerList->getContentType();
+			if ($contentType->has('boundary')) {
+				foreach (array_slice(explode('--' . $contentType->get('boundary'), $this->message), 1, -1) as $boundary) {
+					list($headers, $message) = explode("\r\n\r\n", $boundary);
+					$message = new self($message, $headers);
+					if ($contentId = $message->getContentId()) {
+						$this->messageList[trim($contentId, '<>')] = $message;
+					}
+				}
+			}
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getContentId() {
+			$this->use();
+			return $this->headerList->get('Content-ID');
 		}
 	}
