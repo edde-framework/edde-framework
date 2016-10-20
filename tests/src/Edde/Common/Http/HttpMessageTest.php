@@ -19,10 +19,10 @@
 		}
 
 		public function testComplexMessage() {
-			$message = new HttpMessage(file_get_contents(__DIR__ . '/assets/complex-message.txt'), 'Content-Type: Multipart/Related; boundary="==r4SdGZrQQHDyuSuLOgmDmYbIsG7opnvoWQE2nVPK0e6wN3vxXhEzykf/aBRR=="; type="application/xop+xml"; start="<d569a93d-2406-4130-ba60-a61cb17f2818@uuid>"; start-info="application/soap+xml"');
+			$message = new HttpMessage(file_get_contents(__DIR__ . '/assets/complex-message.txt'), 'Content-Type: Multipart/Related; boundary="==Ia972IE5ZAauQb99oe4cHtcKVOPm+TnhmgRNG0ettImxcp0myeUedUROkV00=="; type="application/xop+xml"; start="<d569a93d-2406-4130-ba60-a61cb17f2818@uuid>"; start-info="application/soap+xml"');
 			self::assertEquals('multipart/related', $message->getContentType());
 			self::assertEquals([
-				'boundary' => '==r4SdGZrQQHDyuSuLOgmDmYbIsG7opnvoWQE2nVPK0e6wN3vxXhEzykf/aBRR==',
+				'boundary' => '==Ia972IE5ZAauQb99oe4cHtcKVOPm+TnhmgRNG0ettImxcp0myeUedUROkV00==',
 				'type' => 'application/xop+xml',
 				'start' => '<d569a93d-2406-4130-ba60-a61cb17f2818@uuid>',
 				'start-info' => 'application/soap+xml',
