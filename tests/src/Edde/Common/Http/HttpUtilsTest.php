@@ -5,6 +5,9 @@
 
 	use phpunit\framework\TestCase;
 
+	/**
+	 * Http utils related tests.
+	 */
 	class HttpUtilsTest extends TestCase {
 		public function testNullAcceptHeader() {
 			self::assertEquals([
@@ -93,24 +96,29 @@
 
 		public function testContentType1() {
 			self::assertEquals((object)[
-				'mime' => 'applicaiton/json',
-			], HttpUtils::contentType('applicaiton/json'));
+				'mime' => 'application/json',
+				'params' => [],
+			], HttpUtils::contentType('application/json'));
 		}
 
 		public function testContentType2() {
 			self::assertEquals((object)[
-				'mime' => 'applicaiton/json',
-				'charset' => 'utf-8',
-			], HttpUtils::contentType('applicaiton/json; charset=utf-8'));
+				'mime' => 'application/json',
+				'params' => [
+					'charset' => 'utf-8',
+				],
+			], HttpUtils::contentType('application/json; charset=utf-8'));
 		}
 
 		public function testContentType3() {
 			self::assertEquals((object)[
 				'mime' => 'multipart/related',
-				'boundary' => '==r4SdGZrQQHDyuSuLOgmDmYbIsG7opnvoWQE2nVPK0e6wN3vxXhEzykf/aBRR==',
-				'type' => 'application/xop+xml',
-				'start' => '<d569a93d-2406-4130-ba60-a61cb17f2818@uuid>',
-				'start-info' => 'application/soap+xml',
+				'params' => [
+					'boundary' => '==r4SdGZrQQHDyuSuLOgmDmYbIsG7opnvoWQE2nVPK0e6wN3vxXhEzykf/aBRR==',
+					'type' => 'application/xop+xml',
+					'start' => '<d569a93d-2406-4130-ba60-a61cb17f2818@uuid>',
+					'start-info' => 'application/soap+xml',
+				],
 			], HttpUtils::contentType('Multipart/Related; boundary="==r4SdGZrQQHDyuSuLOgmDmYbIsG7opnvoWQE2nVPK0e6wN3vxXhEzykf/aBRR=="; type="application/xop+xml"; start="<d569a93d-2406-4130-ba60-a61cb17f2818@uuid>"; start-info="application/soap+xml"'));
 		}
 

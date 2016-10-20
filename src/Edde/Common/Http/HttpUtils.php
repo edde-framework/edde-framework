@@ -169,11 +169,12 @@
 			}
 			$stdClass = new \stdClass();
 			$stdClass->mime = strtolower(trim(array_shift($type)));
+			$stdClass->params = [];
 			foreach ($type as $part) {
 				$key = trim(substr($part, 0, $index = strpos($part, '=')));
 				$value = trim(trim(substr($part, $index + 1)), '"');
 				/** @noinspection PhpVariableVariableInspection */
-				$stdClass->$key = $value;
+				$stdClass->params[$key] = $value;
 			}
 			return $stdClass;
 		}
