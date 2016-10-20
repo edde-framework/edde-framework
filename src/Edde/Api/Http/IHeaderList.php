@@ -10,13 +10,13 @@
 	 */
 	interface IHeaderList extends IList {
 		/**
-		 * return content type from header or default
+		 * return content type from header
 		 *
 		 * @param string $default
 		 *
-		 * @return string
+		 * @return IContentType
 		 */
-		public function getContentType(string $default = ''): string;
+		public function getContentType(string $default = 'application/octet-stream'): IContentType;
 
 		/**
 		 * return user agent

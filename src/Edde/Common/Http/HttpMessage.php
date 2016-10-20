@@ -27,28 +27,29 @@
 		 * @param string $message
 		 * @param string $headers
 		 */
-		public function __construct($message, $headers) {
+		public function __construct(string $message, string $headers) {
 			$this->message = $message;
 			$this->headers = $headers;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getHeaderList(): IHeaderList {
 			$this->use();
 			return $this->headerList;
 		}
 
 		/**
-		 * return content type from input headers
-		 *
-		 * @return string|null
+		 * @inheritdoc
 		 */
-		public function getContentType(): string {
+		public function getContentType(string $default = ' application/octet-stream'): string {
 			$this->use();
-			return $this->headerList->getContentType('');
+			return (string)$this->headerList->getContentType($default);
 		}
 
 		protected function prepare() {
 			$this->headerList = new HeaderList();
-			$this->headerList->put(HttpUtils::headerList($this->headers));
+			$this->headerList->put(HttpUtils::headerList($this->headers, false));
 		}
 	}

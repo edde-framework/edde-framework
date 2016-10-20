@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Http;
 
+	use Edde\Api\Http\IContentType;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Common\Collection\AbstractList;
 
@@ -10,8 +11,16 @@
 	 * Simple header list implementation over an array.
 	 */
 	class HeaderList extends AbstractList implements IHeaderList {
-		public function getContentType(string $default = ''): string {
-			return $this->get('Content-Type', $default);
+		/**
+		 * @var IContentType
+		 */
+		protected $contentType;
+
+		public function getContentType(string $default = 'application/octet-stream'): IContentType {
+			if ($this->contentType === null) {
+				$this->contentType = new ContentType($this->get('Content-Type', $default));
+			}
+			return $this->contentType;
 		}
 
 		public function getUserAgent(string $default = ''): string {

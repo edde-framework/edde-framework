@@ -40,9 +40,14 @@
 			return $this->getMime();
 		}
 
-		public function getMime(): string {
+		public function getMime(string $default = 'application/octet-stream'): string {
 			$this->use();
 			return $this->object->mime;
+		}
+
+		public function getParameterList(): array {
+			$this->use();
+			return $this->array();
 		}
 
 		protected function prepare() {

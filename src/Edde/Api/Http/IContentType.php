@@ -10,9 +10,11 @@
 		/**
 		 * return mime type of this content type
 		 *
+		 * @param string $default
+		 *
 		 * @return string
 		 */
-		public function getMime(): string;
+		public function getMime(string $default = 'application/octet-stream'): string;
 
 		/**
 		 * return charset parameter of this mime type
@@ -22,6 +24,13 @@
 		 * @return string
 		 */
 		public function getCharset(string $default = 'utf-8'): string;
+
+		/**
+		 * return set of parameters of content type
+		 *
+		 * @return array
+		 */
+		public function getParameterList(): array;
 
 		/**
 		 * return mime type of this content type
