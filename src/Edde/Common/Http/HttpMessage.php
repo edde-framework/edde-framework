@@ -98,7 +98,7 @@
 					list($headers, $message) = explode("\r\n\r\n", $boundary);
 					$message = new self($message, $headers);
 					if ($contentId = $message->getContentId()) {
-						$this->messageList[trim($contentId, '<>')] = $message;
+						$this->messageList[$contentId] = $message;
 					}
 				}
 			}
@@ -109,6 +109,6 @@
 		 */
 		public function getContentId() {
 			$this->use();
-			return $this->headerList->get('Content-ID');
+			return trim($this->headerList->get('Content-ID'), '<>');
 		}
 	}
