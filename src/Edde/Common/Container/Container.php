@@ -138,6 +138,7 @@
 		/**
 		 * @inheritdoc
 		 * @throws FactoryException
+		 * @throws ContainerException
 		 */
 		public function create($name, ...$parameterList) {
 			$this->use();
@@ -175,6 +176,7 @@
 		/**
 		 * @inheritdoc
 		 * @throws FactoryException
+		 * @throws ContainerException
 		 */
 		public function call(callable $callable, ...$parameterList) {
 			$this->use();
