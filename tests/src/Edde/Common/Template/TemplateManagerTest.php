@@ -11,6 +11,7 @@
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Html\ITemplateDirectory;
 	use Edde\Api\Http\IHostUrl;
+	use Edde\Api\Http\IRequestUrl;
 	use Edde\Api\IAssetsDirectory;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Resource\IResourceList;
@@ -35,6 +36,7 @@
 	use Edde\Common\Html\Tag\SpanControl;
 	use Edde\Common\Html\TemplateDirectory;
 	use Edde\Common\Http\HostUrl;
+	use Edde\Common\Http\RequestUrl;
 	use Edde\Common\Link\AbstractLinkGenerator;
 	use Edde\Common\Link\ControlLinkGenerator;
 	use Edde\Common\Link\LinkFactory;
@@ -231,6 +233,9 @@
 				IStyleSheetCompiler::class => ResourceList::class,
 				IJavaScriptCompiler::class => ResourceList::class,
 				IHostUrl::class => HostUrl::create('http://localhost/foo/bar?a=1'),
+				IRequestUrl::class => function (IHostUrl $hostUrl) {
+					return RequestUrl::create($hostUrl->getAbsoluteUrl());
+				},
 				ILinkFactory::class => function (IContainer $container, IHostUrl $hostUrl) {
 					$linkFactory = new LinkFactory($hostUrl);
 					$linkFactory->registerLinkGenerator($container->inject(new ControlLinkGenerator()));
