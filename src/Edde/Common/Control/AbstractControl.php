@@ -94,7 +94,16 @@
 		public function addControl(IControl $control) {
 			$this->use();
 			$this->node->addNode($control->getNode(), true);
+			$control->dirty($this->isDirty());
 			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function isDirty(): bool {
+			$this->use();
+			return $this->node->getMeta('dirty', false);
 		}
 
 		/**
@@ -131,14 +140,6 @@
 				}
 			}
 			return $invalidList;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function isDirty(): bool {
-			$this->use();
-			return $this->node->getMeta('dirty', false);
 		}
 
 		/**
