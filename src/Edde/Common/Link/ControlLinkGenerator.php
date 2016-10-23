@@ -25,9 +25,9 @@
 			if (isset($match['context'], $match['handle'])) {
 				$parameterList['context'] = $control . '.' . $match['context'];
 				$parameterList['handle'] = $control . '.' . $match['handle'];
-			} else if ($match['action']) {
+			} else if (isset($match['action'])) {
 				$parameterList['action'] = $control . '.' . $match['action'];
-			} else if ($match['handle']) {
+			} else if (isset($match['handle'])) {
 				$parameterList['handle'] = $control . '.' . $match['handle'];
 			} else {
 				return null;
