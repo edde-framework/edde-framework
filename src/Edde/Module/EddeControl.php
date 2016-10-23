@@ -42,10 +42,14 @@
 			return $this->framework->getVersionString();
 		}
 
+		public function contextSetup() {
+			$this->use();
+			$this->template(null, ['message']);
+		}
+
 		public function handleOnUpgrade() {
 			$this->use();
 			try {
-				$this->template(null, ['message']);
 				$this->message('success', sprintf('application has been upgraded to version [%s]', $this->upgradeManager->upgrade()
 					->getVersion()));
 			} catch (EddeException $e) {
@@ -67,9 +71,7 @@
 		}
 
 		public function handleOnRebuildCrates() {
-			$this->use();
 			try {
-				$this->template(null, ['message']);
 				$this->crateGenerator->generate(true);
 				$this->message('success', 'crates has been rebuilt');
 			} catch (EddeException $e) {
@@ -82,9 +84,7 @@
 		}
 
 		public function handleOnClearCache() {
-			$this->use();
 			try {
-				$this->template(null, ['message']);
 				$this->cacheStorage->invalidate();
 				$this->message('success', 'cache has been wiped out');
 			} catch (EddeException $e) {

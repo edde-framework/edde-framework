@@ -42,13 +42,14 @@
 				$this->use();
 				$this->event(new StartEvent($this));
 				$result = null;
+				/** @var $controlList IControl[] */
+				$controlList = [];
 				foreach ($this->request->getHandlerList() as $handler) {
 					list($control, $method) = $handler;
-					/** @var $control IControl */
-					if ((($control = $this->container->create($control)) instanceof IControl) === false) {
+					if (isset($controlList[$control]) === false && (($controlList[$control] = $this->container->create($control)) instanceof IControl) === false) {
 						throw new ApplicationException(sprintf('Route class [%s] is not instance of [%s].', $control, IControl::class));
 					}
-					$result = $control->handle($method, $this->request->getParameterList());
+					$result = $controlList[$control]->handle($method, $this->request->getParameterList());
 				}
 				$this->event(new FinishEvent($this, $result));
 				$this->responseManager->execute();

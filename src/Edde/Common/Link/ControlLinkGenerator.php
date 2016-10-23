@@ -3,12 +3,12 @@
 
 	namespace Edde\Common\Link;
 
-	use Edde\Api\Http\LazyRequestUrlTrait;
+	use Edde\Api\Application\LazyRequestTrait;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Url\Url;
 
 	class ControlLinkGenerator extends AbstractLinkGenerator {
-		use LazyRequestUrlTrait;
+		use LazyRequestTrait;
 
 		public function link($generate, ...$parameterList) {
 			list($generate, $parameterList) = $this->list($generate, $parameterList);
@@ -33,7 +33,7 @@
 				return null;
 			}
 			return Url::create()
-				->setQuery(array_merge($this->requestUrl->getQuery(), $parameterList))
+				->setQuery(array_merge($this->request->getParameterList(), $parameterList))
 				->getAbsoluteUrl();
 		}
 	}
