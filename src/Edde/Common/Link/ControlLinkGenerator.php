@@ -19,7 +19,7 @@
 			if (class_exists($control = is_object($control) ? get_class($control) : $control) === false) {
 				return null;
 			}
-			if (($match = StringUtils::match($action, '~^(\$(?<context>[a-zA-Z0-9-]+))?(#(?<handle>[a-zA-Z0-9-]+))?(@(?<action>[a-zA-Z0-9-]+))?$~', true)) === null) {
+			if (($match = StringUtils::match($action, '~^(\$(?<context>[a-zA-Z0-9-]+))?(#(?<handle>[a-zA-Z0-9-]+))?(@(?<action>[a-zA-Z0-9-]+))?$~', true, true)) === null) {
 				$match['action'] = $action;
 			}
 			if (isset($match['context'], $match['handle'])) {
