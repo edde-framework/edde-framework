@@ -11,6 +11,7 @@
 	use Edde\Api\Http\LazyRequestUrlTrait;
 	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Api\Rest\IService;
+	use Edde\Api\Runtime\LazyRuntimeTrait;
 	use Edde\Common\Application\Request;
 	use Edde\Common\Router\AbstractRouter;
 
@@ -20,6 +21,7 @@
 		use LazyHeaderListTrait;
 		use LazyHttpRequestTrait;
 		use LazyHttpResponseTrait;
+		use LazyRuntimeTrait;
 		/**
 		 * @var ICrateFactory
 		 */

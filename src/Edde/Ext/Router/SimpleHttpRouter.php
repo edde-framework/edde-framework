@@ -48,12 +48,12 @@
 				foreach ($classList as $class) {
 					if (class_exists($class)) {
 						$this->requestUrl->setPath('');
-						$parameterList['action'] = $class . '.' . $action;
+						$parameterList['context'] = $parameterList['handle'] = $class . '.' . $action;
 						break 2;
 					}
 				}
 			}
-			if (isset($parameterList['action']) === false) {
+			if (isset($parameterList['context'], $parameterList['handle']) === false) {
 				return null;
 			}
 			$this->requestUrl->setQuery($parameterList);
