@@ -44,18 +44,16 @@
     <orderEntry type="module-library">
       <library name="PHP" type="php">
         <CLASSES>
-          <root url="file://$MODULE_DIR$/../../composer" />
-          <root url="file://$MODULE_DIR$/../../defuse/php-encryption" />
-          <root url="file://$MODULE_DIR$/../../paragonie/constant_time_encoding" />
-          <root url="file://$MODULE_DIR$/../../paragonie/random_compat" />
-          <root url="file://$MODULE_DIR$/../../tracy/tracy" />
+          <root url="file://$MODULE_DIR$/vendor/composer" />
+          <root url="file://$MODULE_DIR$/vendor/defuse/php-encryption" />
+          <root url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
+          <root url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
         </CLASSES>
         <SOURCES>
-          <root url="file://$MODULE_DIR$/../../composer" />
-          <root url="file://$MODULE_DIR$/../../defuse/php-encryption" />
-          <root url="file://$MODULE_DIR$/../../paragonie/constant_time_encoding" />
-          <root url="file://$MODULE_DIR$/../../paragonie/random_compat" />
-          <root url="file://$MODULE_DIR$/../../tracy/tracy" />
+          <root url="file://$MODULE_DIR$/vendor/composer" />
+          <root url="file://$MODULE_DIR$/vendor/defuse/php-encryption" />
+          <root url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
+          <root url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
         </SOURCES>
       </library>
     </orderEntry>
