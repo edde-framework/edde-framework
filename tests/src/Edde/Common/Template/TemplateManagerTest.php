@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Template;
 
+	use Edde\Api\Application\IRequest;
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Converter\IConverterManager;
@@ -23,6 +24,7 @@
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Xml\IXmlParser;
+	use Edde\Common\Application\Request;
 	use Edde\Common\AssetsDirectory;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crypt\CryptEngine;
@@ -235,6 +237,9 @@
 				IHostUrl::class => HostUrl::create('http://localhost/foo/bar?a=1'),
 				IRequestUrl::class => function (IHostUrl $hostUrl) {
 					return RequestUrl::create($hostUrl->getAbsoluteUrl());
+				},
+				IRequest::class => function (IRequestUrl $requestUrl) {
+					return new Request('', $requestUrl->getQuery());
 				},
 				ILinkFactory::class => function (IContainer $container, IHostUrl $hostUrl) {
 					$linkFactory = new LinkFactory($hostUrl);

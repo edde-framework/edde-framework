@@ -20,7 +20,7 @@
 				return null;
 			}
 			if (($match = StringUtils::match($action, '~^(\$(?<context>[a-zA-Z0-9-]+))?(#(?<handle>[a-zA-Z0-9-]+))?(@(?<action>[a-zA-Z0-9-]+))?$~', true)) === null) {
-				return null;
+				$match['action'] = $action;
 			}
 			if (isset($match['context'], $match['handle'])) {
 				$parameterList['context'] = $control . '.' . $match['context'];
