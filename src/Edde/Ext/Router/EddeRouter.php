@@ -10,7 +10,8 @@
 		use LazyRequestUrlTrait;
 
 		public function createRequest() {
-			if ($this->requestUrl->getPath() !== '/edde.setup') {
+			$this->use();
+			if ($this->runtime->isConsoleMode() || $this->requestUrl->getPath() !== '/edde.setup') {
 				return null;
 			}
 			$parameterList = $this->requestUrl->getQuery();

@@ -105,7 +105,10 @@
 			return $this->path;
 		}
 
-		public function setPath($path) {
+		/**
+		 * @inheritdoc
+		 */
+		public function setPath(string $path): IUrl {
 			$this->path = $path;
 			return $this;
 		}
