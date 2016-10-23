@@ -17,11 +17,9 @@
 	use Edde\Common\Strings\StringUtils;
 
 	/**
-	 * Simple router does no magic around uri: incoming request is directly remapped to a class.
-	 *
-	 * Only difference is for GET/POST -> action/handle method mapping.
+	 * Simple http router implementation without any additional magic.
 	 */
-	class SimpleRouter extends AbstractRouter {
+	class HttpRouter extends AbstractRouter {
 		use LazyResponseManagerTrait;
 		use LazyBodyTrait;
 		use LazyRequestUrlTrait;
@@ -40,6 +38,7 @@
 			if ($this->runtime->isConsoleMode()) {
 				return null;
 			}
+
 			$class = $this->requestUrl->getParameter('control', false);
 			$action = $this->requestUrl->getParameter('action', false);
 			if ($action === false) {

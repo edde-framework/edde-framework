@@ -113,7 +113,7 @@
 	use Edde\Ext\Converter\RedirectConverter;
 	use Edde\Ext\Converter\XmlConverter;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
-	use Edde\Ext\Router\SimpleRouter;
+	use Edde\Ext\Router\HttpRouter;
 	use Edde\Ext\Template\DefaultMacroSet;
 	use Edde\Framework;
 
@@ -239,7 +239,7 @@
 					},
 				], $factoryList))
 				->deffered(IRouterService::class, function (IContainer $container, IRouterService $routerService) {
-					$routerService->registerRouter($container->create(SimpleRouter::class));
+					$routerService->registerRouter($container->create(HttpRouter::class));
 				})
 				->deffered(IConverterManager::class, function (IContainer $container, IConverterManager $converterManager) {
 					$converterManager->registerConverter($container->create(XmlConverter::class));

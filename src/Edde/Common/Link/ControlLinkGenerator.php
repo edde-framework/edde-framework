@@ -18,7 +18,14 @@
 			if (class_exists($control = is_object($control) ? get_class($control) : $control) === false) {
 				return null;
 			}
-			$parameterList['action'] = $control . '.' . $action;
+			$method = 'action';
+			switch ($action[0]) {
+				case '#':
+					$action = substr($action, 1);
+					$method = 'handle';
+					break;
+			}
+			$parameterList[$method] = $control . '.' . $action;
 			return Url::create()
 				->setQuery(array_merge($this->requestUrl->getQuery(), $parameterList))
 				->getAbsoluteUrl();
