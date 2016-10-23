@@ -6,6 +6,7 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Log\LazyLogServiceTrait;
 	use Edde\Common\Callback\CallbackUtils;
 
 	/**
@@ -13,6 +14,7 @@
 	 */
 	class CascadeFactory extends ClassFactory implements ILazyInject {
 		use LazyContainerTrait;
+		use LazyLogServiceTrait;
 		/**
 		 * @var callable
 		 */
@@ -59,6 +61,7 @@
 				}
 				return $this->nameList[$name] = null;
 			} catch (\Exception $e) {
+				$this->logService->exception($e, ['edde']);
 				/**
 				 * $this->nameList[...] is missing to try discover next time
 				 */
