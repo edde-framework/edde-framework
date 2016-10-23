@@ -187,7 +187,7 @@
 					}
 					$argumentList[] = $parameterList[$parameterName];
 				}
-				$callback->invoke(...$argumentList);
+				return $callback->invoke(...$argumentList);
 			}
 			return $this->action(StringUtils::recamel($method), $argumentList);
 		}
@@ -201,7 +201,7 @@
 		 * @throws ControlException
 		 */
 		protected function action(string $action, array $parameterList) {
-			throw new ControlException(sprintf('Unknown handle method [%s]; to disable this exception, override [%s()] method or implement [%s::%s()].', $action, __METHOD__, static::class, StringUtils::camelize($action, null, true)));
+			throw new ControlException(sprintf('Unknown handle method [%s]; to disable this exception, override [%s::%s()] method or implement [%s::%s()].', $action, static::class, __FUNCTION__, static::class, StringUtils::camelize($action, null, true)));
 		}
 
 		/**

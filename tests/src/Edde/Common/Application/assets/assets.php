@@ -19,6 +19,10 @@
 			}
 			return $poo;
 		}
+
+		protected function action(string $action, array $parameterList) {
+			return reset($parameterList);
+		}
 	}
 
 	class ForbiddenControl {
