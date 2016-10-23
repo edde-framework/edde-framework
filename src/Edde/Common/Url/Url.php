@@ -191,7 +191,7 @@
 			return $this->query;
 		}
 
-		public function setQuery(array $query) {
+		public function setQuery(array $query): IUrl {
 			$this->query = $query;
 			return $this;
 		}

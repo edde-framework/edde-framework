@@ -7,11 +7,9 @@
 	use Edde\Api\Http\LazyHeaderListTrait;
 	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Api\Http\LazyRequestUrlTrait;
-	use Edde\Common\Application\Request;
-	use Edde\Common\Router\AbstractRouter;
 	use Edde\Module\EddeControl;
 
-	class EddeRouter extends AbstractRouter {
+	class EddeRouter extends HttpRouter {
 		use LazyResponseManagerTrait;
 		use LazyHttpResponseTrait;
 		use LazyHeaderListTrait;
@@ -21,9 +19,9 @@
 			if ($this->requestUrl->getPath() !== '/edde.setup') {
 				return null;
 			}
-			$this->httpResponse->setContentType($mime = $this->headerList->getContentType()
-				->getMime($this->headerList->getAccept()));
-			$this->responseManager->setMime($mime = ('http+' . $mime));
-			return new Request($mime, EddeControl::class, 'actionSetup', []);
+			$parameterList = $this->requestUrl->getQuery();
+			$parameterList['action'] = EddeControl::class . '.setup';
+			$this->requestUrl->setQuery($parameterList);
+			return parent::createRequest();
 		}
 	}

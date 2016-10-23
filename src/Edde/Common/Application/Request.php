@@ -12,13 +12,9 @@
 		 */
 		protected $type;
 		/**
-		 * @var string
+		 * @var array
 		 */
-		protected $class;
-		/**
-		 * @var string
-		 */
-		protected $method;
+		protected $handlerList;
 		/**
 		 * @var array
 		 */
@@ -30,14 +26,10 @@
 		 * Snowballs.
 		 *
 		 * @param string $type
-		 * @param string $class
-		 * @param string $method
 		 * @param array $parameterList
 		 */
-		public function __construct(string $type, string $class, string $method, array $parameterList) {
+		public function __construct(string $type, array $parameterList) {
 			$this->type = $type;
-			$this->class = $class;
-			$this->method = $method;
 			$this->parameterList = $parameterList;
 		}
 
@@ -45,15 +37,19 @@
 			return $this->type;
 		}
 
-		public function getClass(): string {
-			return $this->class;
-		}
-
-		public function getMethod(): string {
-			return $this->method;
-		}
-
 		public function getParameterList(): array {
 			return $this->parameterList;
+		}
+
+		public function registerHandler(string $class, string $method): IRequest {
+			$this->handlerList[] = [
+				$class,
+				$method,
+			];
+			return $this;
+		}
+
+		public function getHandlerList(): array {
+			return $this->handlerList;
 		}
 	}

@@ -68,7 +68,7 @@
 					return DefaultMacroSet::helperSet($container);
 				},
 				IRequest::class => function () {
-					return new Request('foo', 'bar', 'method', []);
+					return (new Request('foo', []))->registerHandler('bar', 'method');
 				},
 			]);
 			$converterManager = $this->container->create(IConverterManager::class);

@@ -214,7 +214,7 @@
 				}
 				return implode('', $content);
 			}
-			$content[] = $indentantion = str_repeat("\t", $this->node->getLevel() + $indent);
+			$content[] = $indentation = str_repeat("\t", $this->node->getLevel() + $indent);
 			$content[] = '<' . $this->getTag();
 			foreach ($this->getAttributeList() as $name => $list) {
 				if (is_array($list)) {
@@ -228,12 +228,12 @@
 			$newline = "\n";
 			if (($value = $this->node->getValue()) !== null) {
 				$newline = null;
-				$indentantion = null;
+				$indentation = null;
 				$content[] = $value;
 			}
 			if ($this->node->isLeaf() && $this->isPair() === true) {
 				$newline = null;
-				$indentantion = null;
+				$indentation = null;
 			}
 			$content[] = $newline;
 			foreach ($this->getControlList() as $control) {
@@ -242,7 +242,7 @@
 				}
 			}
 			if ($this->isPair()) {
-				$content[] = $indentantion . '</' . $this->getTag() . ">\n";
+				$content[] = $indentation . '</' . $this->getTag() . ">\n";
 			}
 			return implode('', $content);
 		}
