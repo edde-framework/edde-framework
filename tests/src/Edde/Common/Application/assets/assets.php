@@ -54,8 +54,10 @@
 
 		public function getHandlerList(): array {
 			return [
-				$this->class,
-				$this->method,
+				[
+					$this->class,
+					$this->method,
+				],
 			];
 		}
 
