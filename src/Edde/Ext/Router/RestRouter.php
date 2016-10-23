@@ -43,6 +43,9 @@
 
 		public function createRequest() {
 			$this->use();
+			if ($this->runtime->isConsoleMode()) {
+				return null;
+			}
 			$mime = $this->headerList->getContentType()
 				->getMime($this->headerList->getAccept());
 			foreach ($this->serviceList as $service) {

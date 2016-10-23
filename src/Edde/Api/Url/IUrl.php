@@ -30,6 +30,15 @@
 		public function getPort();
 
 		/**
+		 * set path path of an url
+		 *
+		 * @param string $path
+		 *
+		 * @return IUrl
+		 */
+		public function setPath(string $path): IUrl;
+
+		/**
 		 * @return string
 		 */
 		public function getPath();
