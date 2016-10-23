@@ -94,7 +94,6 @@
 		public function addControl(IControl $control) {
 			$this->use();
 			$this->node->addNode($control->getNode(), true);
-			$control->dirty($this->isDirty());
 			return $this;
 		}
 
@@ -112,9 +111,6 @@
 		public function dirty(bool $dirty = true): IControl {
 			$this->use();
 			$this->node->setMeta('dirty', $dirty);
-			foreach ($this->getControlList() as $control) {
-				$control->dirty($dirty);
-			}
 			return $this;
 		}
 
