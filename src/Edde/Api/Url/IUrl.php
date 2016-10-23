@@ -61,6 +61,15 @@
 		public function getExtension();
 
 		/**
+		 * set query part of an url
+		 *
+		 * @param array $query
+		 *
+		 * @return IUrl
+		 */
+		public function setQuery(array $query): IUrl;
+
+		/**
 		 * @return array
 		 */
 		public function getQuery();

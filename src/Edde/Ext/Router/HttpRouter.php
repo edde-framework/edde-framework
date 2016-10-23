@@ -3,6 +3,7 @@
 
 	namespace Edde\Ext\Router;
 
+	use Edde\Api\Application\IRequest;
 	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Crate\LazyCrateFactoryTrait;
 	use Edde\Api\Http\LazyBodyTrait;
@@ -38,34 +39,76 @@
 			if ($this->runtime->isConsoleMode()) {
 				return null;
 			}
-
-			$class = $this->requestUrl->getParameter('control', false);
-			$action = $this->requestUrl->getParameter('action', false);
-			if ($action === false) {
-				$pathList = $this->requestUrl->getPathList();
-				$action = StringUtils::camelize(array_pop($pathList));
-				foreach ($pathList as &$path) {
-					$path = StringUtils::camelize($path);
-				}
-				unset($path);
-				if (class_exists($class = implode('\\', $pathList)) === false) {
-					return null;
-				}
-			}
-			$action = StringUtils::camelize($action);
-			$method = 'action' . $action;
-			$crateList = [];
-			if ($this->httpRequest->isMethod('POST')) {
-				$method = 'handle' . $action;
-				if (($source = ($this->postList->isEmpty() ? $this->body->convert('array') : $this->postList->array())) !== null) {
-					$crateList = $this->crateFactory->build($source);
-				}
-			}
 			$parameterList = $this->requestUrl->getQuery();
-			unset($parameterList['control'], $parameterList['action']);
+			if (isset($parameterList['action'])) {
+				return $this->handleActionRequest();
+			} else if (isset($parameterList['context'], $parameterList['handle'])) {
+				return $this->handleContextRequest();
+			} else if (isset($parameterList['handle'])) {
+				return $this->handleHandleRequest();
+			}
+			return null;
+		}
+
+		/**
+		 * same like in older Edde - action is the only executed method
+		 *
+		 * @return IRequest|null
+		 */
+		protected function handleActionRequest() {
+			list($class, $action) = explode('.', $this->requestUrl->getParameter('action'));
+			$method = 'action' . ($action = StringUtils::camelize($action));
+			$parameterList = $this->requestUrl->getQuery();
+			unset($parameterList['action']);
+			return $this->request($parameterList)
+				->registerHandler($class, $method);
+		}
+
+		/**
+		 * prepare request
+		 *
+		 * @param array $parameterList
+		 *
+		 * @return IRequest
+		 */
+		protected function request(array $parameterList) {
 			$this->httpResponse->setContentType($mime = $this->headerList->getContentType()
 				->getMime($this->headerList->getAccept()));
 			$this->responseManager->setMime($mime = ('http+' . $mime));
-			return new Request($mime, $class, $method, array_merge($parameterList, $crateList));
+			if ($this->httpRequest->isMethod('GET') === false && ($source = ($this->postList->isEmpty() ? $this->body->convert('array') : $this->postList->array())) !== null) {
+				$parameterList = array_merge($parameterList, $this->crateFactory->build($source));
+			}
+			return new Request($mime, $parameterList);
+		}
+
+		/**
+		 * when context, context and handle are executed
+		 *
+		 * @return IRequest|null
+		 */
+		protected function handleContextRequest() {
+			list($context, $contexHandle) = explode('.', $this->requestUrl->getParameter('context'));
+			list($handle, $handleHandle) = explode('.', $this->requestUrl->getParameter('handle'));
+			$contextMethod = 'context' . ($contexHandle = StringUtils::camelize($contexHandle));
+			$handleMethod = 'handle' . ($handleHandle = StringUtils::camelize($handleHandle));
+			$parameterList = $this->requestUrl->getQuery();
+			unset($parameterList['context'], $parameterList['handle']);
+			return $this->request($parameterList)
+				->registerHandler($context, $contextMethod)
+				->registerHandler($handle, $handleMethod);
+		}
+
+		/**
+		 * handle is the only executed method
+		 *
+		 * @return IRequest|null
+		 */
+		protected function handleHandleRequest() {
+			list($class, $handle) = explode('.', $this->requestUrl->getParameter('handle'));
+			$method = 'handle' . ($handle = StringUtils::camelize($handle));
+			$parameterList = $this->requestUrl->getQuery();
+			unset($parameterList['handle']);
+			return $this->request($parameterList)
+				->registerHandler($class, $method);
 		}
 	}

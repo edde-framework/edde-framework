@@ -4,6 +4,7 @@
 	namespace Edde\Common\Link;
 
 	use Edde\Api\Http\LazyRequestUrlTrait;
+	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Url\Url;
 
 	class ControlLinkGenerator extends AbstractLinkGenerator {
@@ -18,14 +19,19 @@
 			if (class_exists($control = is_object($control) ? get_class($control) : $control) === false) {
 				return null;
 			}
-			$method = 'action';
-			switch ($action[0]) {
-				case '#':
-					$action = substr($action, 1);
-					$method = 'handle';
-					break;
+			if (($match = StringUtils::match($action, '~^(\$(?<context>[a-zA-Z0-9-]+))?(#(?<handle>[a-zA-Z0-9-]+))?(@(?<action>[a-zA-Z0-9-]+))?$~', true)) === null) {
+				return null;
 			}
-			$parameterList[$method] = $control . '.' . $action;
+			if (isset($match['context'], $match['handle'])) {
+				$parameterList['context'] = $control . '.' . $match['context'];
+				$parameterList['handle'] = $control . '.' . $match['handle'];
+			} else if ($match['action']) {
+				$parameterList['action'] = $control . '.' . $match['action'];
+			} else if ($match['handle']) {
+				$parameterList['handle'] = $control . '.' . $match['handle'];
+			} else {
+				return null;
+			}
 			return Url::create()
 				->setQuery(array_merge($this->requestUrl->getQuery(), $parameterList))
 				->getAbsoluteUrl();
