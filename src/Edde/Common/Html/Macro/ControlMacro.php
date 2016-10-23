@@ -68,6 +68,9 @@
 				$compiler->setVariable($caseListId, $caseList);
 				$this->write($compiler, sprintf('case %s:', var_export($id, true)), 4);
 				foreach ($root->getNodeList() as $node) {
+					if ($node->getMeta('snippet', false)) {
+						continue;
+					}
 					$this->write($compiler, sprintf('// %s', $node->getPath()), 5);
 					$compiler->macro($node);
 				}
