@@ -3,11 +3,12 @@
 
 	namespace Edde\Common\Link;
 
-	use Edde\Api\Http\LazyRequestUrlTrait;
+	use Edde\Api\Application\LazyRequestTrait;
+	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Url\Url;
 
 	class ControlLinkGenerator extends AbstractLinkGenerator {
-		use LazyRequestUrlTrait;
+		use LazyRequestTrait;
 
 		public function link($generate, ...$parameterList) {
 			list($generate, $parameterList) = $this->list($generate, $parameterList);
@@ -18,9 +19,21 @@
 			if (class_exists($control = is_object($control) ? get_class($control) : $control) === false) {
 				return null;
 			}
-			$parameterList['action'] = $control . '.' . $action;
+			if (($match = StringUtils::match($action, '~^(\$(?<context>[a-zA-Z0-9-]+))?(#(?<handle>[a-zA-Z0-9-]+))?(@(?<action>[a-zA-Z0-9-]+))?$~', true)) === null) {
+				$match['action'] = $action;
+			}
+			if (isset($match['context'], $match['handle'])) {
+				$parameterList['context'] = $control . '.' . $match['context'];
+				$parameterList['handle'] = $control . '.' . $match['handle'];
+			} else if ($match['action']) {
+				$parameterList['action'] = $control . '.' . $match['action'];
+			} else if ($match['handle']) {
+				$parameterList['handle'] = $control . '.' . $match['handle'];
+			} else {
+				return null;
+			}
 			return Url::create()
-				->setQuery(array_merge($this->requestUrl->getQuery(), $parameterList))
+				->setQuery(array_merge($this->request->getParameterList(), $parameterList))
 				->getAbsoluteUrl();
 		}
 	}

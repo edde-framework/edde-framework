@@ -21,7 +21,6 @@
 		use LazyRequestTrait;
 
 		public function template(string $layout = null, array $snippetList = null, array $importList = [], string $class = null) {
-			$this->check();
 			if ($layout === null) {
 				$reflectionClass = new \ReflectionClass($class ?: $this);
 				$directory = dirname($reflectionClass->getFileName());
@@ -29,30 +28,28 @@
 					$directory . '/../template/layout.xml',
 					$directory . '/layout.xml',
 					$directory . '/template/layout.xml',
-					$action = dirname($reflectionClass->getFileName()) . '/template/' . StringUtils::recamel($this->request->getMethod()) . '.xml',
 				];
+				foreach ($this->request->getHandlerList() as $handler) {
+					$fileList[] = $directory . '/template/' . StringUtils::recamel($handler[1]) . '.xml';
+				}
 				foreach ($fileList as $file) {
 					if (file_exists($file)) {
-						$layout = $file;
-						break;
+						if (strpos($file, 'layout.xml') !== false) {
+							$layout = $file;
+							continue;
+						}
+						$importList[] = $file;
 					}
-				}
-				if ($layout !== $action && file_exists($action)) {
-					$importList[] = $action;
 				}
 			}
 			$this->snippet($layout, $snippetList, $importList);
 			return $this;
 		}
 
-		protected function check() {
+		public function snippet(string $file, array $snippetList = null, array $importList = []) {
 			if (($this instanceof IHtmlControl) === false) {
 				throw new HtmlException(sprintf('Cannot use template trait on [%s]; it can be used only on [%s].', get_class($this), IHtmlControl::class));
 			}
-		}
-
-		public function snippet(string $file, array $snippetList = null, array $importList = []) {
-			$this->check();
 			/** @var $control IHtmlView */
 			/** @var $template IHtmlTemplate */
 			$control = $this;

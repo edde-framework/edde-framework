@@ -48,12 +48,17 @@
 			return 'foo';
 		}
 
-		public function getClass(): string {
-			return $this->class;
+		public function registerHandler(string $class, string $method): IRequest {
+			return $this;
 		}
 
-		public function getMethod(): string {
-			return $this->method;
+		public function getHandlerList(): array {
+			return [
+				[
+					$this->class,
+					$this->method,
+				],
+			];
 		}
 
 		public function getParameterList(): array {
