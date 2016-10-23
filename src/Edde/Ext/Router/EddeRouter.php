@@ -3,16 +3,10 @@
 
 	namespace Edde\Ext\Router;
 
-	use Edde\Api\Application\LazyResponseManagerTrait;
-	use Edde\Api\Http\LazyHeaderListTrait;
-	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Api\Http\LazyRequestUrlTrait;
 	use Edde\Module\EddeControl;
 
 	class EddeRouter extends HttpRouter {
-		use LazyResponseManagerTrait;
-		use LazyHttpResponseTrait;
-		use LazyHeaderListTrait;
 		use LazyRequestUrlTrait;
 
 		public function createRequest() {
