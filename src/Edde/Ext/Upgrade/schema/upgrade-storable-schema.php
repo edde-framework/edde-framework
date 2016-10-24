@@ -28,6 +28,7 @@
 			],
 		],
 		'meta-list' => [
+			'edde' => true,
 			'storable' => true,
 		],
 	];

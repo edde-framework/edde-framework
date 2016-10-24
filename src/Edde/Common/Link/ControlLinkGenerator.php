@@ -19,15 +19,15 @@
 			if (class_exists($control = is_object($control) ? get_class($control) : $control) === false) {
 				return null;
 			}
-			if (($match = StringUtils::match($action, '~^(\$(?<context>[a-zA-Z0-9-]+))?(#(?<handle>[a-zA-Z0-9-]+))?(@(?<action>[a-zA-Z0-9-]+))?$~', true)) === null) {
-				$match['action'] = $action;
+			if (($match = StringUtils::match($action, '~^(\$(?<context>[a-zA-Z0-9-]+))?(#(?<handle>[a-zA-Z0-9-]+))?(@(?<action>[a-zA-Z0-9-]+))?$~', true, true)) === null) {
+				$match['context'] = $match['handle'] = $action;
 			}
 			if (isset($match['context'], $match['handle'])) {
 				$parameterList['context'] = $control . '.' . $match['context'];
 				$parameterList['handle'] = $control . '.' . $match['handle'];
-			} else if ($match['action']) {
+			} else if (isset($match['action'])) {
 				$parameterList['action'] = $control . '.' . $match['action'];
-			} else if ($match['handle']) {
+			} else if (isset($match['handle'])) {
 				$parameterList['handle'] = $control . '.' . $match['handle'];
 			} else {
 				return null;

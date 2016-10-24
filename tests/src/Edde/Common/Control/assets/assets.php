@@ -8,10 +8,10 @@
 			return $foo . $boo;
 		}
 
-		public function __call($name, $a) {
-			if ($name === 'dummy') {
+		protected function action(string $action, array $parameterList) {
+			if ($action === 'dummy') {
 				return 'dumyyyy';
 			}
-			return parent::__call($name, $a);
+			return parent::action($action, $parameterList);
 		}
 	}

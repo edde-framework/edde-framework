@@ -237,9 +237,7 @@
 			}
 			$content[] = $newline;
 			foreach ($this->getControlList() as $control) {
-				if ($control->isDirty()) {
-					$content[] = $control->render($indent);
-				}
+				$content[] = $control->render($indent);
 			}
 			if ($this->isPair()) {
 				$content[] = $indentation . '</' . $this->getTag() . ">\n";
@@ -272,10 +270,9 @@
 		}
 
 		protected function placeholder(string $id) {
-			$this->addControl($this->createControl(PlaceholderControl::class)
+			return $this->addControl($this->createControl(PlaceholderControl::class)
 				->setId($id)
 				->dirty());
-			return $this;
 		}
 
 		public function createControl(string $control, ...$parameterList): IHtmlControl {
