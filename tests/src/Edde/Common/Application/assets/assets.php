@@ -68,4 +68,8 @@
 		public function getParameterList(): array {
 			return $this->parameters;
 		}
+
+		public function getId(): string {
+			return sha1(random_bytes(64));
+		}
 	}
