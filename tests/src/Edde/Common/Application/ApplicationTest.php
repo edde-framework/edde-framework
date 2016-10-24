@@ -8,9 +8,11 @@
 	use Edde\Api\Application\IRequest;
 	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Control\IControl;
+	use Edde\Api\Log\ILogService;
 	use Edde\Common\Application\Event\FinishEvent;
 	use Edde\Common\Application\Event\StartEvent;
 	use Edde\Common\Container\Factory\ReflectionFactory;
+	use Edde\Common\Log\LogService;
 	use Edde\Ext\Container\ContainerFactory;
 	use phpunit\framework\TestCase;
 
@@ -81,6 +83,7 @@
 				IRequest::class => function () {
 					return new \SomeRequest();
 				},
+				ILogService::class => LogService::class,
 				\SomeControl::class => new ReflectionFactory(\SomeControl::class, \SomeControl::class, true),
 				IErrorControl::class => \SomeErrorControl::class,
 			]);
