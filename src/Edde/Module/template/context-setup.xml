@@ -1,5 +1,5 @@
 <control title="Edde Setup" t:block="content">
-	<button value="Upgrade" action=":$setup#on-upgrade()" title="run upgrades registered to this application"/>
-	<button value="Rebuild crates" action=":$setup#on-rebuild-crates()" title="update automagically generated crates"/>
-	<button value="Clear cache" action=":$setup#on-clear-cache()" title="clear current cache"/>
+	<button value="Upgrade" action=":$message#on-upgrade()" title="run upgrades registered to this application"/>
+	<button value="Rebuild crates" action=":$message#on-rebuild-crates()" title="update automagically generated crates"/>
+	<button value="Clear cache" action=":$message#on-clear-cache()" title="clear current cache"/>
 </control>
