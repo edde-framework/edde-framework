@@ -27,8 +27,7 @@
 			if (($template = $this->cache->load($cacheId = ('template-list/' . $this->request->getId() . $reflectionClass->getName()))) === null) {
 				$parent = $reflectionClass;
 				$fileList = [];
-				$skip = StringUtils::extract(__NAMESPACE__, '\\', 0) . '\\';
-				while ($parent && strpos($parent->getNamespaceName(), $skip) === false) {
+				while ($parent) {
 					$directory = dirname($parent->getFileName());
 					$fileList[] = $directory . '/../template/layout.xml';
 					$fileList[] = $directory . '/layout.xml';
