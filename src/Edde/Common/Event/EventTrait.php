@@ -50,10 +50,10 @@
 			return $this->traitEventBus->scope($callback, ...$handlerList);
 		}
 
-		public function event(IEvent $event): IEventBus {
+		public function event(IEvent $event, string $scope = null): IEventBus {
 			if ($this->traitEventBus === null) {
 				$this->traitEventBus = new EventBus();
 			}
-			return $this->traitEventBus->event($event);
+			return $this->traitEventBus->event($event, $scope);
 		}
 	}
