@@ -14,7 +14,7 @@
 	class AbstractControlTest extends TestCase {
 		public function testCommon() {
 			$control = new \TestControl();
-			$controlList = [];
+			$controlList = [$control];
 			$control->addControl($controlList[] = $another = new \TestControl());
 			$control->addControlList([$controlList[] = new \TestControl()]);
 			self::assertFalse($control->isLeaf());

@@ -72,4 +72,8 @@
 		public function getId(): string {
 			return sha1(random_bytes(64));
 		}
+
+		public function getCurrentHandle(): string {
+			return $this->method;
+		}
 	}
