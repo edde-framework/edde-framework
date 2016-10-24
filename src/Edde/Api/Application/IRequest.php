@@ -35,4 +35,11 @@
 		 * @return array
 		 */
 		public function getParameterList(): array;
+
+		/**
+		 * return id based on current handler list
+		 *
+		 * @return string
+		 */
+		public function getId(): string;
 	}

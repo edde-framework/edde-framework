@@ -34,7 +34,7 @@
 
 		public function contextSetup() {
 			$this->use();
-			$this->template(null);
+			$this->template();
 		}
 
 		public function handleSetup() {
@@ -43,7 +43,7 @@
 
 		public function contextMessage() {
 			$this->use();
-			$this->template(null, ['message']);
+			$this->template(['message']);
 		}
 
 		public function handleOnUpgrade() {

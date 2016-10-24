@@ -19,6 +19,10 @@
 		 * @var array
 		 */
 		protected $parameterList = [];
+		/**
+		 * @var string
+		 */
+		protected $id;
 
 		/**
 		 * What is the difference between a snowman and a snowwoman?
@@ -51,5 +55,12 @@
 
 		public function getHandlerList(): array {
 			return $this->handlerList;
+		}
+
+		public function getId(): string {
+			if ($this->id === null) {
+				$this->id = hash('sha256', json_encode($this->handlerList));
+			}
+			return $this->id;
 		}
 	}
