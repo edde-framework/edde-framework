@@ -80,7 +80,7 @@
 				CURLOPT_CUSTOMREQUEST => $method = $httpRequest->getMethod(),
 				CURLOPT_POST => strtoupper($method) === 'POST',
 			]);
-			return $this->container->inject(new HttpHandler($httpRequest, $curl));
+			return $this->container->inject((new HttpHandler($httpRequest, $curl))->chain($this));
 		}
 
 		/**
