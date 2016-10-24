@@ -129,6 +129,7 @@
 		 * @inheritdoc
 		 */
 		public function invalidate(): array {
+			$this->use();
 			$invalidList = [];
 			foreach ($this as $control) {
 				if ($control->isDirty()) {
@@ -143,6 +144,7 @@
 		 * @throws ControlException
 		 */
 		public function handle(string $method, array $parameterList) {
+			$this->use();
 			$this->listen($this);
 			$this->event($handleEvent = new HandleEvent($this, $method, $parameterList));
 			if ($handleEvent->isCanceled() === false) {
@@ -206,7 +208,7 @@
 		 */
 		public function getIterator() {
 			$this->use();
-			foreach (NodeIterator::recursive($this->node) as $node) {
+			foreach (NodeIterator::recursive($this->node, true) as $node) {
 				yield $node->getMeta('control');
 			}
 		}

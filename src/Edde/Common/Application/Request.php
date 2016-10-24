@@ -5,6 +5,7 @@
 
 	use Edde\Api\Application\IRequest;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Strings\StringUtils;
 
 	class Request extends AbstractObject implements IRequest {
 		/**
@@ -55,6 +56,10 @@
 
 		public function getHandlerList(): array {
 			return $this->handlerList;
+		}
+
+		public function getCurrentHandle(): string {
+			return StringUtils::recamel(reset($this->handlerList)[1]);
 		}
 
 		public function getId(): string {
