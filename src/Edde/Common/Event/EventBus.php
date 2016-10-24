@@ -29,6 +29,10 @@
 		 */
 		protected $handlerList = [];
 		/**
+		 * @var IEventBus
+		 */
+		protected $chain;
+		/**
 		 * @var \SplStack
 		 */
 		protected $scopeStack;
@@ -65,6 +69,14 @@
 		 */
 		public function register(string $event, callable $handler, string $scope = null): IEventBus {
 			$this->listenList[$scope][$event][] = $handler;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function chain(IEventBus $eventBus): IEventBus {
+			$this->chain = $eventBus;
 			return $this;
 		}
 
@@ -118,6 +130,9 @@
 			}
 			foreach ($this->listenList[$scope][$name] as $callback) {
 				$callback($event);
+			}
+			if ($this->chain) {
+				$this->chain->event($event, $scope);
 			}
 			return $this;
 		}

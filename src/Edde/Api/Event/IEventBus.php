@@ -36,6 +36,15 @@
 		public function register(string $event, callable $handler): IEventBus;
 
 		/**
+		 * chain events to the given event bus
+		 *
+		 * @param IEventBus $eventBus
+		 *
+		 * @return IEventBus
+		 */
+		public function chain(IEventBus $eventBus): IEventBus;
+
+		/**
 		 * execute the callback; the callback can emit event which will be listened only during callback execution
 		 *
 		 * @param callable $callback
@@ -49,8 +58,9 @@
 		 * emit an event to all it's listeners; it should NOT do any magic
 		 *
 		 * @param IEvent $event
+		 * @param string $scope
 		 *
 		 * @return IEventBus
 		 */
-		public function event(IEvent $event): IEventBus;
+		public function event(IEvent $event, string $scope = null): IEventBus;
 	}
