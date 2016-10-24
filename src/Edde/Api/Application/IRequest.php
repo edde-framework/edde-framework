@@ -23,6 +23,13 @@
 		public function getHandlerList(): array;
 
 		/**
+		 * return the name of current handle (first of handler list)
+		 *
+		 * @return string
+		 */
+		public function getCurrentHandle(): string;
+
+		/**
 		 * "mime" type (it can be arbitrary string) of a request
 		 *
 		 * @return string
