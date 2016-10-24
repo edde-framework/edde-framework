@@ -3,6 +3,7 @@
 
 	namespace Edde\Api\Client;
 
+	use Edde\Api\Event\IEventBus;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpResponse;
@@ -10,7 +11,7 @@
 	/**
 	 * When request is prepared bu a handler, client should create this handler for later execution.
 	 */
-	interface IHttpHandler {
+	interface IHttpHandler extends IEventBus {
 		/**
 		 * @param string $authorization
 		 *
