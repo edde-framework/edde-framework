@@ -21,7 +21,7 @@
 			self::assertEquals([
 				'Foo',
 				'Bar',
-			], StringUtils::camel('FooBar'));
+			], StringUtils::fromCamelCase('FooBar'));
 			self::assertEquals('foo-bar', StringUtils::recamel('FooBar'));
 			self::assertEquals('FooBar', StringUtils::toCamelCase('foo-bar'));
 			self::assertEquals('fooBar', StringUtils::toCamelHump('foo-bar'));

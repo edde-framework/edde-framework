@@ -157,7 +157,7 @@
 		 * @return string
 		 */
 		static public function recamel(string $string, string $glue = '-', int $index = 0): string {
-			$camel = self::camel($string, $index);
+			$camel = self::fromCamelCase($string, $index);
 			return mb_strtolower(implode($glue, $camel));
 		}
 
@@ -169,7 +169,7 @@
 		 *
 		 * @return array
 		 */
-		static public function camel(string $string, int $index = 0): array {
+		static public function fromCamelCase(string $string, int $index = 0): array {
 			$camel = preg_split('~(?=[A-Z])~', $string, -1, PREG_SPLIT_NO_EMPTY);
 			if ($index > 0) {
 				return array_slice($camel, $index);
