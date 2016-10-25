@@ -120,6 +120,9 @@
 			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
 			$scope = $scope ?: ($this->scopeStack->isEmpty() ? null : $this->scopeStack->top());
 			if (isset($this->listenList[$scope][$name = get_class($event)]) === false) {
+				if ($this->chain) {
+					$this->chain->event($event, $scope);
+				}
 				return $this;
 			}
 			if ($this->container) {
