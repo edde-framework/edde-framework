@@ -166,14 +166,16 @@
 			if ($onRequestEvent->isCanceled()) {
 				throw new ClientException(sprintf('%s: request has been canceled', (string)$this->httpRequest->getRequestUrl()));
 			}
+			$time = microtime(true);
 			if (($content = curl_exec($this->curl)) === false) {
 				$error = curl_error($this->curl);
 				$errorCode = curl_errno($this->curl);
 				curl_close($this->curl);
 				$this->curl = null;
-				$this->event(new RequestFailedEvent($this->httpRequest, $this));
+				$this->event(new RequestFailedEvent($this->httpRequest, $this, microtime(true) - $time));
 				throw new ClientException(sprintf('%s: %s', (string)$this->httpRequest->getRequestUrl(), $error), $errorCode);
 			}
+			$time = microtime(true) - $time;
 			if (is_string($contentType = $headerList->get('Content-Type', curl_getinfo($this->curl, CURLINFO_CONTENT_TYPE)))) {
 				$type = HttpUtils::contentType($contentType);
 			}
@@ -183,7 +185,7 @@
 			$this->container->inject($httpResponse = new HttpResponse($this->container->inject(new Body($content, isset($type) ? $type->mime : $contentType))));
 			$httpResponse->setHeaderList($headerList);
 			$httpResponse->setCookieList($cookieList);
-			$this->event(new RequestDoneEvent($this->httpRequest, $this, $httpResponse));
+			$this->event(new RequestDoneEvent($this->httpRequest, $this, $httpResponse, $time));
 			return $httpResponse;
 		}
 	}

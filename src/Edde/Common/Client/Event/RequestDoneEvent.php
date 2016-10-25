@@ -12,13 +12,22 @@
 		 * @var IHttpResponse
 		 */
 		protected $httpResponse;
+		/**
+		 * @var float
+		 */
+		protected $time;
 
-		public function __construct(IHttpRequest $httpRequest, IHttpHandler $httpHandler, IHttpResponse $httpResponse) {
+		public function __construct(IHttpRequest $httpRequest, IHttpHandler $httpHandler, IHttpResponse $httpResponse, float $time) {
 			parent::__construct($httpRequest, $httpHandler);
 			$this->httpResponse = $httpResponse;
+			$this->time = $time;
 		}
 
 		public function getHttpResponse(): IHttpResponse {
 			return $this->httpResponse;
+		}
+
+		public function getTime(): float {
+			return $this->time;
 		}
 	}
