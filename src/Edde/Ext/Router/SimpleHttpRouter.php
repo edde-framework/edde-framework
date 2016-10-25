@@ -38,7 +38,7 @@
 				return null;
 			}
 			list($control, $action) = $path;
-			$name = StringUtils::camelize($control);
+			$name = StringUtils::toCamelCase($control);
 			$parameterList = $this->requestUrl->getQuery();
 			foreach ($this->namespaceList as $namespace) {
 				$classList = [

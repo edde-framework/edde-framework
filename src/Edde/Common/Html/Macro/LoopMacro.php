@@ -69,7 +69,7 @@
 				if ($type === '#') {
 					return '$key_' . $key;
 				}
-				return '$value_' . $value . (isset($match['call']) ? '->' . StringUtils::camelize($match['call'], null, true) : '');
+				return '$value_' . $value . (isset($match['call']) ? '->' . StringUtils::toCamelHump($match['call']) : '');
 			}
 			return null;
 		}
@@ -106,7 +106,7 @@
 		protected function loop(INode $macro, ICompiler $compiler, string $src) {
 			$type = $src[0];
 			if (isset(self::$reference[$type])) {
-				return sprintf('%s->%s', $this->reference($macro, $type), StringUtils::camelize(substr($src, 1), null, true));
+				return sprintf('%s->%s', $this->reference($macro, $type), StringUtils::toCamelHump(substr($src, 1)));
 			} else if ($src === '$:') {
 				list(, $value) = $compiler->getVariable(static::class)
 					->top();

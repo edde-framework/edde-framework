@@ -54,7 +54,7 @@
 				if ($loop === null) {
 					throw new MacroException(sprintf('There are no loops for macro [%s].', $macro->getPath()));
 				}
-				return '$if_' . $loop . (isset($match['call']) ? '->' . StringUtils::camelize($match['call'], null, true) : '');
+				return '$if_' . $loop . (isset($match['call']) ? '->' . StringUtils::toCamelHump($match['call']) : '');
 			}
 			return null;
 		}
@@ -93,7 +93,7 @@
 			$func = substr($src, -2) === '()';
 			$src = str_replace('()', '', $src);
 			$type = $src[0];
-			$src = StringUtils::camelize(substr($src, 1), null, true);
+			$src = StringUtils::toCamelHump(substr($src, 1));
 			if ($func) {
 				return sprintf('%s->%s()', $this->reference($macro, $type), $src);
 			}

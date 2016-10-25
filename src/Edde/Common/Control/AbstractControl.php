@@ -199,7 +199,7 @@
 		 * @throws ControlException
 		 */
 		protected function action(string $action, array $parameterList) {
-			throw new ControlException(sprintf('Unknown handle method [%s]; to disable this exception, override [%s::%s()] method or implement [%s::%s()].', $action, static::class, __FUNCTION__, static::class, StringUtils::camelize($action, null, true)));
+			throw new ControlException(sprintf('Unknown handle method [%s]; to disable this exception, override [%s::%s()] method or implement [%s::%s()].', $action, static::class, __FUNCTION__, static::class, StringUtils::toCamelHump($action)));
 		}
 
 		/**

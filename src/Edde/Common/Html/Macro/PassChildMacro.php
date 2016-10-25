@@ -41,7 +41,7 @@
 			$func = substr($target, -2) === '()';
 			$target = str_replace('()', '', $target);
 			$type = $target[0];
-			$target = StringUtils::camelize(substr($target, 1), null, true);
+			$target = StringUtils::toCamelHump(substr($target, 1));
 			$write = sprintf('%s->%s($control);', $this->reference($macro, $type), $target);
 			if ($func === false) {
 				$write = sprintf('%s::setProperty(%s, %s, $control);', ReflectionUtils::class, $this->reference($macro, $type), var_export($target, true));

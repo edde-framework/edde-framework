@@ -58,7 +58,7 @@
 			$func = substr($src, -2) === '()';
 			$src = str_replace('()', '', $src);
 			$type = $src[0];
-			$src = StringUtils::camelize(substr($src, 1), null, true);
+			$src = StringUtils::toCamelHump(substr($src, 1));
 			if ($func) {
 				return sprintf('%s->%s()', $this->reference($macro, $type), $src);
 			}

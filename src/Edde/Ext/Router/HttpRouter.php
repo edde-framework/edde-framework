@@ -56,8 +56,8 @@
 		protected function handleContextRequest() {
 			list($context, $contexHandle) = explode('.', $this->requestUrl->getParameter('context'));
 			list($handle, $handleHandle) = explode('.', $this->requestUrl->getParameter('handle'));
-			$contextMethod = 'context' . ($contexHandle = StringUtils::camelize($contexHandle));
-			$handleMethod = 'handle' . ($handleHandle = StringUtils::camelize($handleHandle));
+			$contextMethod = 'context' . ($contexHandle = StringUtils::toCamelCase($contexHandle));
+			$handleMethod = 'handle' . ($handleHandle = StringUtils::toCamelCase($handleHandle));
 			$parameterList = $this->requestUrl->getQuery();
 			unset($parameterList['context'], $parameterList['handle']);
 			return $this->request($parameterList)
@@ -89,7 +89,7 @@
 		 */
 		protected function handleHandleRequest() {
 			list($class, $handle) = explode('.', $this->requestUrl->getParameter('handle'));
-			$method = 'handle' . ($handle = StringUtils::camelize($handle));
+			$method = 'handle' . ($handle = StringUtils::toCamelCase($handle));
 			$parameterList = $this->requestUrl->getQuery();
 			unset($parameterList['handle']);
 			return $this->request($parameterList)
