@@ -46,6 +46,14 @@
 					$this->httpResponse->send();
 				case 'application/json':
 					$json = [];
+					foreach ($convert->invalidate() as $control) {
+						if (($id = $control->getId()) !== '') {
+							$json['selector']['#' . $id] = [
+								'action' => 'replace',
+								'source' => $control->render(),
+							];
+						}
+					}
 					if ($this->javaScriptCompiler->isEmpty() === false) {
 						$json['javaScript'] = [
 							$this->javaScriptCompiler->compile($this->javaScriptCompiler)
@@ -57,14 +65,6 @@
 							$this->styleSheetCompiler->compile($this->styleSheetCompiler)
 								->getRelativePath(),
 						];
-					}
-					foreach ($convert->invalidate() as $control) {
-						if (($id = $control->getId()) !== '') {
-							$json['selector']['#' . $id] = [
-								'action' => 'replace',
-								'source' => $control->render(),
-							];
-						}
 					}
 					echo $json = json_encode($json);
 					return $json;
