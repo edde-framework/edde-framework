@@ -4,11 +4,14 @@
 	namespace Edde\Common\Link;
 
 	use Edde\Api\Application\LazyRequestTrait;
+	use Edde\Api\Http\LazyRequestUrlTrait;
+	use Edde\Api\Link\LinkException;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Url\Url;
 
 	class ControlLinkGenerator extends AbstractLinkGenerator {
 		use LazyRequestTrait;
+		use LazyRequestUrlTrait;
 
 		public function link($generate, ...$parameterList) {
 			list($generate, $parameterList) = $this->list($generate, $parameterList);
@@ -19,21 +22,36 @@
 			if (class_exists($control = is_object($control) ? get_class($control) : $control) === false) {
 				return null;
 			}
-			if (($match = StringUtils::match($action, '~^(\$(?<context>[a-zA-Z0-9-]+))?(#(?<handle>[a-zA-Z0-9-]+))?(@(?<action>[a-zA-Z0-9-]+))?$~', true, true)) === null) {
-				$match['context'] = $match['handle'] = $action;
-			}
-			if (isset($match['context'], $match['handle'])) {
-				$parameterList['context'] = $control . '.' . $match['context'];
-				$parameterList['handle'] = $control . '.' . $match['handle'];
-			} else if (isset($match['action'])) {
-				$parameterList['action'] = $control . '.' . $match['action'];
-			} else if (isset($match['handle'])) {
-				$parameterList['handle'] = $control . '.' . $match['handle'];
+
+			$simpleRegexp = '[a-zA-Z0-9-]+';
+			$contextHandleRegexp = 'context=(?<contextHandle>[a-zA-Z0-9$-]+)';
+			$handleHandleRegexp = 'handle=(?<handleHandle>[a-zA-Z0-9-]+)';
+			if (($match = StringUtils::match($action, '~^' . $contextHandleRegexp . '$~')) !== null) {
+				$parameterList['context'] = $parameterList['handle'] = $this->filter($match['contextHandle'], $control);
+			} else if (($match = StringUtils::match($action, '~^' . $contextHandleRegexp . ',' . $handleHandleRegexp . '$~')) !== null) {
+				$parameterList['context'] = $this->filter($match['contextHandle'], $control);
+				$parameterList['handle'] = $this->filter($match['handleHandle'], $control);
+			} else if (($match = StringUtils::match($action, '~^' . $handleHandleRegexp . '$~')) !== null) {
+				$parameterList['handle'] = $this->filter($match['handleHandle'], $control);
+			} else if (($match = StringUtils::match($action, '~^' . $simpleRegexp . '$~')) !== null) {
+				$parameterList['context'] = $parameterList['handle'] = $control . '.' . $action;
 			} else {
 				return null;
 			}
 			return Url::create()
 				->setQuery(array_merge($this->request->getParameterList(), $parameterList))
 				->getAbsoluteUrl();
+		}
+
+		protected function filter(string $input, string $control): string {
+			switch ($input) {
+				case '$':
+					$query = $this->requestUrl->getQuery();
+					if (isset($query['context']) === false) {
+						throw new LinkException('Context is required for contextual link generation support.');
+					}
+					return $query['context'];
+			}
+			return $control . '.' . $input;
 		}
 	}

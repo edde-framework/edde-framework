@@ -15,7 +15,7 @@
 				return null;
 			}
 			$parameterList = $this->requestUrl->getQuery();
-			$parameterList['action'] = EddeControl::class . '.setup';
+			$parameterList['context'] = $parameterList['handle'] = EddeControl::class . '.setup';
 			$this->requestUrl->setQuery($parameterList);
 			return parent::createRequest();
 		}

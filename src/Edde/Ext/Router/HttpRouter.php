@@ -40,9 +40,7 @@
 				return null;
 			}
 			$parameterList = $this->requestUrl->getQuery();
-			if (isset($parameterList['action'])) {
-				return $this->handleActionRequest();
-			} else if (isset($parameterList['context'], $parameterList['handle'])) {
+			if (isset($parameterList['context'], $parameterList['handle'])) {
 				return $this->handleContextRequest();
 			} else if (isset($parameterList['handle'])) {
 				return $this->handleHandleRequest();
@@ -51,17 +49,20 @@
 		}
 
 		/**
-		 * same like in older Edde - action is the only executed method
+		 * when context, context and handle are executed
 		 *
 		 * @return IRequest|null
 		 */
-		protected function handleActionRequest() {
-			list($class, $action) = explode('.', $this->requestUrl->getParameter('action'));
-			$method = 'action' . ($action = StringUtils::camelize($action));
+		protected function handleContextRequest() {
+			list($context, $contexHandle) = explode('.', $this->requestUrl->getParameter('context'));
+			list($handle, $handleHandle) = explode('.', $this->requestUrl->getParameter('handle'));
+			$contextMethod = 'context' . ($contexHandle = StringUtils::toCamelCase($contexHandle));
+			$handleMethod = 'handle' . ($handleHandle = StringUtils::toCamelCase($handleHandle));
 			$parameterList = $this->requestUrl->getQuery();
-			unset($parameterList['action']);
+			unset($parameterList['context'], $parameterList['handle']);
 			return $this->request($parameterList)
-				->registerHandler($class, $method);
+				->registerHandler($context, $contextMethod)
+				->registerHandler($handle, $handleMethod);
 		}
 
 		/**
@@ -82,30 +83,13 @@
 		}
 
 		/**
-		 * when context, context and handle are executed
-		 *
-		 * @return IRequest|null
-		 */
-		protected function handleContextRequest() {
-			list($context, $contexHandle) = explode('.', $this->requestUrl->getParameter('context'));
-			list($handle, $handleHandle) = explode('.', $this->requestUrl->getParameter('handle'));
-			$contextMethod = 'context' . ($contexHandle = StringUtils::camelize($contexHandle));
-			$handleMethod = 'handle' . ($handleHandle = StringUtils::camelize($handleHandle));
-			$parameterList = $this->requestUrl->getQuery();
-			unset($parameterList['context'], $parameterList['handle']);
-			return $this->request($parameterList)
-				->registerHandler($context, $contextMethod)
-				->registerHandler($handle, $handleMethod);
-		}
-
-		/**
 		 * handle is the only executed method
 		 *
 		 * @return IRequest|null
 		 */
 		protected function handleHandleRequest() {
 			list($class, $handle) = explode('.', $this->requestUrl->getParameter('handle'));
-			$method = 'handle' . ($handle = StringUtils::camelize($handle));
+			$method = 'handle' . ($handle = StringUtils::toCamelCase($handle));
 			$parameterList = $this->requestUrl->getQuery();
 			unset($parameterList['handle']);
 			return $this->request($parameterList)

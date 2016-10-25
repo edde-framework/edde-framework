@@ -21,9 +21,10 @@
 			self::assertEquals([
 				'Foo',
 				'Bar',
-			], StringUtils::camel('FooBar'));
+			], StringUtils::fromCamelCase('FooBar'));
 			self::assertEquals('foo-bar', StringUtils::recamel('FooBar'));
-			self::assertEquals('FooBar', StringUtils::camelize('foo-bar'));
+			self::assertEquals('FooBar', StringUtils::toCamelCase('foo-bar'));
+			self::assertEquals('fooBar', StringUtils::toCamelHump('foo-bar'));
 //			self::assertEquals('escrzyaie', StringUtils::toAscii($unicode));
 //			self::assertEquals('some-title-with-escrzyaie', StringUtils::webalize('Some title with ěščřžýáíé'));
 			self::assertEquals(['o b'], StringUtils::match('foo bar', '~o\s+b~'));

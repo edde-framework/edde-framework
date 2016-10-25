@@ -10,6 +10,7 @@
 	use Edde\Api\Html\IHtmlTemplate;
 	use Edde\Api\Html\IHtmlView;
 	use Edde\Api\Template\LazyTemplateManagerTrait;
+	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Strings\StringUtils;
 
 	/**
@@ -19,19 +20,24 @@
 		use LazyContainerTrait;
 		use LazyTemplateManagerTrait;
 		use LazyRequestTrait;
+		use CacheTrait;
 
-		public function template(string $layout = null, array $snippetList = null, array $importList = [], string $class = null) {
-			if ($layout === null) {
-				$reflectionClass = new \ReflectionClass($class ?: $this);
-				$directory = dirname($reflectionClass->getFileName());
-				$fileList = [
-					$directory . '/../template/layout.xml',
-					$directory . '/layout.xml',
-					$directory . '/template/layout.xml',
-				];
-				foreach ($this->request->getHandlerList() as $handler) {
-					$fileList[] = $directory . '/template/' . StringUtils::recamel($handler[1]) . '.xml';
+		public function template(array $snippetList = null) {
+			$reflectionClass = new \ReflectionClass($this);
+			if (($template = $this->cache->load($cacheId = ('template-list/' . $this->request->getId() . $reflectionClass->getName()))) === null) {
+				$parent = $reflectionClass;
+				$fileList = [];
+				while ($parent) {
+					$directory = dirname($parent->getFileName());
+					$fileList[] = $directory . '/../template/layout.xml';
+					$fileList[] = $directory . '/layout.xml';
+					$fileList[] = $directory . '/template/layout.xml';
+					foreach ($this->request->getHandlerList() as $handler) {
+						$fileList[] = $directory . '/template/' . StringUtils::recamel($handler[1]) . '.xml';
+					}
+					$parent = $parent->getParentClass();
 				}
+				$importList = [];
 				foreach ($fileList as $file) {
 					if (file_exists($file)) {
 						if (strpos($file, 'layout.xml') !== false) {
@@ -41,8 +47,18 @@
 						$importList[] = $file;
 					}
 				}
+				/** @noinspection UnSafeIsSetOverArrayInspection */
+				if (isset($layout) === false) {
+					$layout = array_shift($importList);
+				}
+				/** @noinspection PhpUndefinedVariableInspection */
+				$this->cache->save($cacheId, $template = [
+					$layout,
+					$importList,
+				]);
 			}
-			$this->snippet($layout, $snippetList, $importList);
+			/** @noinspection PhpUndefinedVariableInspection */
+			$this->snippet($template[0], $snippetList, $template[1]);
 			return $this;
 		}
 

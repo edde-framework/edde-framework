@@ -22,10 +22,10 @@
 			try {
 				throw $e;
 			} catch (RouterException $e) {
-				$this->template(__DIR__ . '/template/404.xml');
+				$this->snippet(__DIR__ . '/template/404.xml');
 				$this->response();
 			} catch (\Exception $e) {
-				$this->template(__DIR__ . '/template/500.xml');
+				$this->snippet(__DIR__ . '/template/500.xml');
 				$this->response();
 			}
 		}

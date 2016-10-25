@@ -30,7 +30,7 @@
 					'@' => '$stack->top()',
 					':' => '$control->getRoot()',
 				];
-				return sprintf('%s->%s($stack->top())', $control[$match['type']], StringUtils::camelize($match['method'], null, true));
+				return sprintf('%s->%s($stack->top())', $control[$match['type']], StringUtils::toCamelHump($match['method']));
 			} else if ($match = StringUtils::match($value, '~^(?<class>(\\\\[a-zA-Z0-9_]+)+)::(?<method>[a-zA-Z_]+)\(\)$~', true, true)) {
 				return sprintf('$this->container->create(%s)->%s($stack->top())', var_export($match['class'], true), $match['method']);
 			}

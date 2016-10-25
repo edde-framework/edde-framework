@@ -157,7 +157,7 @@
 		 * @return string
 		 */
 		static public function recamel(string $string, string $glue = '-', int $index = 0): string {
-			$camel = self::camel($string, $index);
+			$camel = self::fromCamelCase($string, $index);
 			return mb_strtolower(implode($glue, $camel));
 		}
 
@@ -169,26 +169,23 @@
 		 *
 		 * @return array
 		 */
-		static public function camel(string $string, int $index = 0): array {
+		static public function fromCamelCase(string $string, int $index = null): array {
 			$camel = preg_split('~(?=[A-Z])~', $string, -1, PREG_SPLIT_NO_EMPTY);
-			if ($index > 0) {
+			if ($index !== null) {
 				return array_slice($camel, $index);
 			}
 			return $camel;
 		}
 
 		/**
-		 * oposite of {@see self::recamel()} method; convert foo-bar to the FooBar form
+		 * convert input string to camelHumpCase
 		 *
-		 * @param string $string
-		 * @param string|null $separator
-		 * @param bool $lowerFirst
+		 * @param array|string $input
 		 *
 		 * @return string
 		 */
-		static public function camelize(string $string, string $separator = null, bool $lowerFirst = false): string {
-			$string = str_replace('~', null, mb_convert_case(str_replace($separator ?: self::$SEPARATOR_LIST, '~', mb_strtolower(implode('~', preg_split('~(?=[A-Z])~', $string, -1, PREG_SPLIT_NO_EMPTY)))), MB_CASE_TITLE, 'UTF-8'));
-			return $lowerFirst ? self::firstLower($string) : $string;
+		static public function toCamelHump($input): string {
+			return self::firstLower(self::toCamelCase($input));
 		}
 
 		/**
@@ -200,6 +197,17 @@
 		 */
 		static public function firstLower(string $string): string {
 			return self::lower(self::substring($string, 0, 1)) . self::substring($string, 1);
+		}
+
+		/**
+		 * return the given input as CamelCase
+		 *
+		 * @param string|array $input
+		 *
+		 * @return string
+		 */
+		static public function toCamelCase($input): string {
+			return str_replace('~', null, mb_convert_case(str_replace(self::$SEPARATOR_LIST, '~', mb_strtolower(implode('~', is_array($input) ? $input : preg_split('~(?=[A-Z])~', $input, -1, PREG_SPLIT_NO_EMPTY)))), MB_CASE_TITLE, 'UTF-8'));
 		}
 
 		/**

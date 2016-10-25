@@ -13,6 +13,10 @@
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Client\Event\OnRequestEvent;
+	use Edde\Common\Client\Event\RequestDoneEvent;
+	use Edde\Common\Client\Event\RequestFailedEvent;
+	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Http\Body;
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
@@ -26,6 +30,7 @@
 	class HttpHandler extends AbstractObject implements IHttpHandler, ILazyInject {
 		use LazyContainerTrait;
 		use LazyTempDirectoryTrait;
+		use EventTrait;
 		/**
 		 * @var IHttpRequest
 		 */
@@ -157,11 +162,16 @@
 			$options[CURLOPT_HTTPHEADER] = $this->httpRequest->getHeaderList()
 				->headers();
 			curl_setopt_array($this->curl, $options);
+			$this->event($onRequestEvent = new OnRequestEvent($this->httpRequest, $this));
+			if ($onRequestEvent->isCanceled()) {
+				throw new ClientException(sprintf('%s: request has been canceled', (string)$this->httpRequest->getRequestUrl()));
+			}
 			if (($content = curl_exec($this->curl)) === false) {
 				$error = curl_error($this->curl);
 				$errorCode = curl_errno($this->curl);
 				curl_close($this->curl);
 				$this->curl = null;
+				$this->event(new RequestFailedEvent($this->httpRequest, $this));
 				throw new ClientException(sprintf('%s: %s', (string)$this->httpRequest->getRequestUrl(), $error), $errorCode);
 			}
 			if (is_string($contentType = $headerList->get('Content-Type', curl_getinfo($this->curl, CURLINFO_CONTENT_TYPE)))) {
@@ -173,6 +183,7 @@
 			$this->container->inject($httpResponse = new HttpResponse($this->container->inject(new Body($content, isset($type) ? $type->mime : $contentType))));
 			$httpResponse->setHeaderList($headerList);
 			$httpResponse->setCookieList($cookieList);
+			$this->event(new RequestDoneEvent($this->httpRequest, $this, $httpResponse));
 			return $httpResponse;
 		}
 	}

@@ -10,28 +10,18 @@
 	use Edde\Api\Log\LazyLogServiceTrait;
 	use Edde\Api\Upgrade\LazyUpgradeManagerTrait;
 	use Edde\Common\Html\ViewControl;
-	use Edde\Framework;
+	use Edde\LazyFrameworkTrait;
 
 	class EddeControl extends ViewControl {
 		use LazyCrateGeneratorTrait;
 		use LazyUpgradeManagerTrait;
 		use LazyCacheStorageTrait;
 		use LazyLogServiceTrait;
-		/**
-		 * @var Framework
-		 */
-		protected $framework;
+		use LazyFrameworkTrait;
 		/**
 		 * @var IHtmlControl
 		 */
 		protected $message;
-
-		/**
-		 * @param Framework $framework
-		 */
-		public function lazyFramework(Framework $framework) {
-			$this->framework = $framework;
-		}
 
 		/**
 		 * template method for getting a framework version
@@ -44,7 +34,16 @@
 
 		public function contextSetup() {
 			$this->use();
-			$this->template(null, ['message']);
+			$this->template();
+		}
+
+		public function handleSetup() {
+			$this->response();
+		}
+
+		public function contextMessage() {
+			$this->use();
+			$this->template(['message']);
 		}
 
 		public function handleOnUpgrade() {

@@ -129,6 +129,7 @@
 		 * @inheritdoc
 		 */
 		public function invalidate(): array {
+			$this->use();
 			$invalidList = [];
 			foreach ($this as $control) {
 				if ($control->isDirty()) {
@@ -143,6 +144,7 @@
 		 * @throws ControlException
 		 */
 		public function handle(string $method, array $parameterList) {
+			$this->use();
 			$this->listen($this);
 			$this->event($handleEvent = new HandleEvent($this, $method, $parameterList));
 			if ($handleEvent->isCanceled() === false) {
@@ -197,7 +199,7 @@
 		 * @throws ControlException
 		 */
 		protected function action(string $action, array $parameterList) {
-			throw new ControlException(sprintf('Unknown handle method [%s]; to disable this exception, override [%s::%s()] method or implement [%s::%s()].', $action, static::class, __FUNCTION__, static::class, StringUtils::camelize($action, null, true)));
+			throw new ControlException(sprintf('Unknown handle method [%s]; to disable this exception, override [%s::%s()] method or implement [%s::%s()].', $action, static::class, __FUNCTION__, static::class, StringUtils::toCamelHump($action)));
 		}
 
 		/**
@@ -206,7 +208,7 @@
 		 */
 		public function getIterator() {
 			$this->use();
-			foreach (NodeIterator::recursive($this->node) as $node) {
+			foreach (NodeIterator::recursive($this->node, true) as $node) {
 				yield $node->getMeta('control');
 			}
 		}

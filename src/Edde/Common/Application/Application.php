@@ -10,6 +10,7 @@
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
+	use Edde\Api\Log\LazyLogServiceTrait;
 	use Edde\Common\Application\Event\ErrorEvent;
 	use Edde\Common\Application\Event\FinishEvent;
 	use Edde\Common\Application\Event\StartEvent;
@@ -22,6 +23,7 @@
 		use LazyConverterManagerTrait;
 		use LazyResponseManagerTrait;
 		use LazyRequestTrait;
+		use LazyLogServiceTrait;
 		/**
 		 * @var IErrorControl
 		 */
@@ -49,12 +51,15 @@
 					if (isset($controlList[$control]) === false && (($controlList[$control] = $this->container->create($control)) instanceof IControl) === false) {
 						throw new ApplicationException(sprintf('Route class [%s] is not instance of [%s].', $control, IControl::class));
 					}
-					$result = $controlList[$control]->handle($method, $this->request->getParameterList());
+					if (($result = $controlList[$control]->handle($method, $this->request->getParameterList())) === false) {
+						break;
+					}
 				}
 				$this->event(new FinishEvent($this, $result));
 				$this->responseManager->execute();
 				return $result;
 			} catch (\Exception $e) {
+				$this->logService->exception($e, ['edde']);
 				$this->event(new ErrorEvent($this, $e));
 				return $this->errorControl->exception($e);
 			}

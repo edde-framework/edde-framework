@@ -39,6 +39,7 @@
 			/**
 			 * template is automagically using layout.xml template
 			 */
+			$control->use();
 			$control->template();
 			$control->dirty();
 			self::assertEquals('<foo>

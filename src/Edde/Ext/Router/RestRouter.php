@@ -54,7 +54,7 @@
 				if ($service->match($this->requestUrl)) {
 					$this->httpResponse->setContentType($mime);
 					$this->responseManager->setMime($mime = ('http+' . $mime));
-					return new Request($mime, get_class($service), $this->httpRequest->getMethod(), $this->requestUrl->getQuery());
+					return (new Request($mime, $this->requestUrl->getQuery()))->registerHandler(get_class($service), $this->httpRequest->getMethod());
 				}
 			}
 			return null;

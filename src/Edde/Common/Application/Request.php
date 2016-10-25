@@ -5,6 +5,7 @@
 
 	use Edde\Api\Application\IRequest;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Strings\StringUtils;
 
 	class Request extends AbstractObject implements IRequest {
 		/**
@@ -19,6 +20,10 @@
 		 * @var array
 		 */
 		protected $parameterList = [];
+		/**
+		 * @var string
+		 */
+		protected $id;
 
 		/**
 		 * What is the difference between a snowman and a snowwoman?
@@ -51,5 +56,16 @@
 
 		public function getHandlerList(): array {
 			return $this->handlerList;
+		}
+
+		public function getCurrentHandle(): string {
+			return StringUtils::recamel(reset($this->handlerList)[1]);
+		}
+
+		public function getId(): string {
+			if ($this->id === null) {
+				$this->id = hash('sha256', json_encode($this->handlerList));
+			}
+			return $this->id;
 		}
 	}
