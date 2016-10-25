@@ -23,15 +23,18 @@
 				return null;
 			}
 
-			$contextRegexp = 'context=(?<contextHandle>[a-zA-Z0-9$-]+)';
-			$handleRegexp = 'handle=(?<handleHandle>[a-zA-Z0-9-]+)';
-			if (($match = StringUtils::match($action, '~^' . $contextRegexp . '$~')) !== null) {
+			$simpleRegexp = '[a-zA-Z0-9-]+';
+			$contextHandleRegexp = 'context=(?<contextHandle>[a-zA-Z0-9$-]+)';
+			$handleHandleRegexp = 'handle=(?<handleHandle>[a-zA-Z0-9-]+)';
+			if (($match = StringUtils::match($action, '~^' . $contextHandleRegexp . '$~')) !== null) {
 				$parameterList['context'] = $parameterList['handle'] = $this->filter($match['contextHandle'], $control);
-			} else if (($match = StringUtils::match($action, '~^' . $contextRegexp . ',' . $handleRegexp . '$~')) !== null) {
+			} else if (($match = StringUtils::match($action, '~^' . $contextHandleRegexp . ',' . $handleHandleRegexp . '$~')) !== null) {
 				$parameterList['context'] = $this->filter($match['contextHandle'], $control);
 				$parameterList['handle'] = $this->filter($match['handleHandle'], $control);
-			} else if (($match = StringUtils::match($action, '~^' . $handleRegexp . '$~')) !== null) {
+			} else if (($match = StringUtils::match($action, '~^' . $handleHandleRegexp . '$~')) !== null) {
 				$parameterList['handle'] = $this->filter($match['handleHandle'], $control);
+			} else if (($match = StringUtils::match($action, '~^' . $simpleRegexp . '$~')) !== null) {
+				$parameterList['context'] = $parameterList['handle'] = $control . '.' . $action;
 			} else {
 				return null;
 			}
