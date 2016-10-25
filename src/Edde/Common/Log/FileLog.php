@@ -59,5 +59,6 @@
 		protected function prepare() {
 			$this->logDirectory->create();
 			$this->file = $this->logDirectory->file(date('Y-m-d-') . $this->name . '.log');
+			$this->file->openForAppend();
 		}
 	}
