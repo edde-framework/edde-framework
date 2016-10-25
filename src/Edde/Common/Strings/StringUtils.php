@@ -169,9 +169,9 @@
 		 *
 		 * @return array
 		 */
-		static public function fromCamelCase(string $string, int $index = 0): array {
+		static public function fromCamelCase(string $string, int $index = null): array {
 			$camel = preg_split('~(?=[A-Z])~', $string, -1, PREG_SPLIT_NO_EMPTY);
-			if ($index > 0) {
+			if ($index !== null) {
 				return array_slice($camel, $index);
 			}
 			return $camel;
