@@ -40,45 +40,12 @@
 				return null;
 			}
 			$parameterList = $this->requestUrl->getQuery();
-			if (isset($parameterList['action'])) {
-				return $this->handleActionRequest();
-			} else if (isset($parameterList['context'], $parameterList['handle'])) {
+			if (isset($parameterList['context'], $parameterList['handle'])) {
 				return $this->handleContextRequest();
 			} else if (isset($parameterList['handle'])) {
 				return $this->handleHandleRequest();
 			}
 			return null;
-		}
-
-		/**
-		 * same like in older Edde - action is the only executed method
-		 *
-		 * @return IRequest|null
-		 */
-		protected function handleActionRequest() {
-			list($class, $action) = explode('.', $this->requestUrl->getParameter('action'));
-			$method = 'action' . ($action = StringUtils::camelize($action));
-			$parameterList = $this->requestUrl->getQuery();
-			unset($parameterList['action']);
-			return $this->request($parameterList)
-				->registerHandler($class, $method);
-		}
-
-		/**
-		 * prepare request
-		 *
-		 * @param array $parameterList
-		 *
-		 * @return IRequest
-		 */
-		protected function request(array $parameterList) {
-			$this->httpResponse->setContentType($mime = $this->headerList->getContentType()
-				->getMime($this->headerList->getAccept()));
-			$this->responseManager->setMime($mime = ('http+' . $mime));
-			if ($this->httpRequest->isMethod('GET') === false && ($source = ($this->postList->isEmpty() ? $this->body->convert('array') : $this->postList->array())) !== null) {
-				$parameterList = array_merge($parameterList, $this->crateFactory->build($source));
-			}
-			return new Request($mime, $parameterList);
 		}
 
 		/**
@@ -96,6 +63,23 @@
 			return $this->request($parameterList)
 				->registerHandler($context, $contextMethod)
 				->registerHandler($handle, $handleMethod);
+		}
+
+		/**
+		 * prepare request
+		 *
+		 * @param array $parameterList
+		 *
+		 * @return IRequest
+		 */
+		protected function request(array $parameterList) {
+			$this->httpResponse->setContentType($mime = $this->headerList->getContentType()
+				->getMime($this->headerList->getAccept()));
+			$this->responseManager->setMime($mime = ('http+' . $mime));
+			if ($this->httpRequest->isMethod('GET') === false && ($source = ($this->postList->isEmpty() ? $this->body->convert('array') : $this->postList->array())) !== null) {
+				$parameterList = array_merge($parameterList, $this->crateFactory->build($source));
+			}
+			return new Request($mime, $parameterList);
 		}
 
 		/**
