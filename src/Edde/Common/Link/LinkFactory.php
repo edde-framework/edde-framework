@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Link;
 
-	use Edde\Api\Http\IHostUrl;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Api\Link\LinkException;
@@ -11,20 +10,9 @@
 
 	class LinkFactory extends AbstractDeffered implements ILinkFactory {
 		/**
-		 * @var IHostUrl
-		 */
-		protected $hostUrl;
-		/**
 		 * @var ILinkGenerator[]
 		 */
 		protected $linkGeneratorList = [];
-
-		/**
-		 * @param IHostUrl $hostUrl
-		 */
-		public function __construct(IHostUrl $hostUrl) {
-			$this->hostUrl = $hostUrl;
-		}
 
 		/**
 		 * @inheritdoc
