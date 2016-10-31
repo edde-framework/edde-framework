@@ -135,7 +135,7 @@
 			 *
 			 * 2 is for 1 button and 1 for explicit js macro
 			 */
-			self::assertCount(2, $this->javaScriptList->getPathList());
+			self::assertCount(1, $this->javaScriptList->getPathList());
 
 			$template->snippet($this->container->inject($control = new \SomeCoolControl()), 'deep-block');
 			$control->addClass('root');
@@ -153,15 +153,15 @@
 			self::assertEquals('<div class="root">
 	<div class="overkilled">
 		<div class="abc">a</div>
-		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="abc"></div>
+		<div class="button" data-action="abc"></div>
 	</div>
 	<div class="overkilled">
 		<div class="def">b</div>
-		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="def"></div>
+		<div class="button" data-action="def"></div>
 	</div>
 	<div class="overkilled">
 		<div class="ghi">c</div>
-		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="ghi"></div>
+		<div class="button" data-action="ghi"></div>
 	</div>
 </div>
 ', $control->render());

@@ -5,15 +5,15 @@
 	<div class="foo-case2"></div>
 	<div class="overkilled">
 		<div class="abc">a</div>
-		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="abc"></div>
+		<div class="button" data-action="abc"></div>
 	</div>
 	<div class="overkilled">
 		<div class="def">b</div>
-		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="def"></div>
+		<div class="button" data-action="def"></div>
 	</div>
 	<div class="overkilled">
 		<div class="ghi">c</div>
-		<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="ghi"></div>
+		<div class="button" data-action="ghi"></div>
 	</div>
 	<div class="foo-bar"></div>
 	<div class="boo-far">
@@ -114,10 +114,10 @@
 	</div>
 	<div class="poo-class">poo</div>
 	<div class="used-div-here"></div>
-	<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="/?a=1&handle=SomeCoolControl.action-on-the-root&context=SomeCoolControl.action-on-the-root"></div>
-	<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="/?a=1&handle=Edde%5CCommon%5CHtml%5CTag%5CButtonControl.action-on-the-current-contol&context=Edde%5CCommon%5CHtml%5CTag%5CButtonControl.action-on-the-current-contol"></div>
-	<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button" data-action="/?a=1&handle=SomeCoolControl.action-on-the-current-contol&context=SomeCoolControl.action-on-the-current-contol"></div>
-	<div data-class="Edde.Common.Html.Tag.ButtonControl" class="button just-useless-button-here"></div>
+	<div class="button" data-action="/?a=1&handle=SomeCoolControl.action-on-the-root&context=SomeCoolControl.action-on-the-root"></div>
+	<div class="button" data-action="/?a=1&handle=Edde%5CCommon%5CHtml%5CTag%5CButtonControl.action-on-the-current-contol&context=Edde%5CCommon%5CHtml%5CTag%5CButtonControl.action-on-the-current-contol"></div>
+	<div class="button" data-action="/?a=1&handle=SomeCoolControl.action-on-the-current-contol&context=SomeCoolControl.action-on-the-current-contol"></div>
+	<div class="button just-useless-button-here"></div>
 	<div class="edde-placeholder" id="foo"></div>
 	<h1>foo1</h1>
 	<h2>foo2</h2>
