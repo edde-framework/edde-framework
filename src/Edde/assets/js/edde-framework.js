@@ -141,3 +141,20 @@ var Edde = {
 		}
 	}
 };
+
+var $document = $(document);
+$document.ready(function () {
+	$document.on('click', '.button', function (event) {
+		if (event.isDefaultPrevented()) {
+			return;
+		}
+		var $this = $(this);
+		if ($this.hasClass('disabled')) {
+			return;
+		}
+		$this.addClass('disabled');
+		Edde.Utils.execute($this.data('action'), Edde.Utils.crate($this.data('bind'))).always(function () {
+			$this.removeClass('disabled');
+		});
+	});
+});

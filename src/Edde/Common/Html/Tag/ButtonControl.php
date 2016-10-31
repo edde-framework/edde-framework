@@ -45,7 +45,6 @@
 
 		protected function prepare() {
 			parent::prepare()
-				->javascript(self::class)
 				->setTag('div', true)
 				->addClass('button');
 		}
