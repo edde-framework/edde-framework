@@ -149,6 +149,7 @@
 		 * @inheritdoc
 		 */
 		public function hasAttribute($attribute) {
+			$this->use();
 			return $this->node->hasAttribute($attribute);
 		}
 
@@ -173,6 +174,7 @@
 		 * @inheritdoc
 		 */
 		public function hasClass(string $class) {
+			$this->use();
 			return in_array($class, $this->getClassList(), true);
 		}
 
@@ -180,6 +182,7 @@
 		 * @inheritdoc
 		 */
 		public function getClassList() {
+			$this->use();
 			return $this->getAttribute('class', []);
 		}
 
