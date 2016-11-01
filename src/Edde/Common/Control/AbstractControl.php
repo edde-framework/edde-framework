@@ -94,6 +94,14 @@
 		public function addControl(IControl $control) {
 			$this->use();
 			$this->node->addNode($control->getNode(), true);
+			$control->attached($this);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function attached(IControl $control): IControl {
 			return $this;
 		}
 

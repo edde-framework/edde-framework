@@ -57,6 +57,15 @@
 		public function addControl(IControl $control);
 
 		/**
+		 * called when this control is attached to the given one
+		 *
+		 * @param IControl $control
+		 *
+		 * @return IControl
+		 */
+		public function attached(IControl $control): IControl;
+
+		/**
 		 * @param IControl[] $controlList
 		 *
 		 * @return $this
