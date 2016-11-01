@@ -107,7 +107,7 @@
 	<use src="block-from-imported-template"/>
 
 	<call method="\SomeService\From\Container::call()"/>
-	<call method="@middle-local-method-call()"/>
+	<call method="#middle-local-method-call()"/>
 	<call method=".middle-root-method-call()"/>
 
 	<div value=".root-method-call()"/>

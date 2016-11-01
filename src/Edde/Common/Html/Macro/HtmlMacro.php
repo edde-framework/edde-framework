@@ -35,7 +35,7 @@
 			$this->writeTextValue($macro, $compiler);
 			$this->onControl($macro, $compiler);
 			$this->writeAttributeList($macro, $compiler);
-			$this->write($compiler, '$parent->addControl($control);');
+			$this->write($compiler, '$parent->addControl($control);', 5);
 			$this->write($compiler, '$stack->push($control);', 5);
 			parent::macro($macro, $compiler);
 			$this->write($compiler, '$stack->pop();', 5);

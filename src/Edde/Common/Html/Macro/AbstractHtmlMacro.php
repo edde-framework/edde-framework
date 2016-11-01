@@ -14,25 +14,11 @@
 	 */
 	abstract class AbstractHtmlMacro extends AbstractMacro {
 		static protected $reference = [
-			':' => '$control->getRoot()',
+			':' => '$parent->getRoot()',
 			'.' => '$root',
 			'@' => '$control',
+			'#' => '$stack->top()',
 		];
-
-		/** @noinspection PhpMissingParentCallCommonInspection */
-		/**
-		 * @inheritdoc
-		 */
-		public function macro(INode $macro, ICompiler $compiler) {
-			foreach ($macro->getNodeList() as $node) {
-				if ($node->getMeta('snippet', false)) {
-					continue;
-				}
-				$compiler->macro($node);
-			}
-		}
-
-		/** @noinspection PhpMissingParentCallCommonInspection */
 
 		/**
 		 * return control reference from a reference symbol
@@ -43,11 +29,23 @@
 		 * @return mixed
 		 * @throws MacroException
 		 */
-		protected function reference(INode $macro, string $reference) {
+		static public function reference(INode $macro, string $reference) {
 			if (isset(self::$reference[$reference]) === false) {
 				throw new MacroException(sprintf('Unknown reference symbol [%s]; symbol can be one of ["%s"] did you specified it for macro [%s]?', $reference, implode('", "', array_keys(self::$reference)), $macro->getPath()));
 			}
 			return self::$reference[$reference];
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function macro(INode $macro, ICompiler $compiler) {
+			foreach ($macro->getNodeList() as $node) {
+				if ($node->getMeta('snippet', false)) {
+					continue;
+				}
+				$compiler->macro($node);
+			}
 		}
 
 		/**
