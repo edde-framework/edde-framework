@@ -66,11 +66,9 @@
 		/**
 		 * this is shortcut method for adding a new control to the body of document
 		 *
-		 * @param IControl $control
-		 *
-		 * @return $this
+		 * @inheritdoc
 		 */
-		public function addControl(IControl $control) {
+		public function addControl(IControl $control): IControl {
 			$this->use();
 			$this->body->addControl($control);
 			return $this;

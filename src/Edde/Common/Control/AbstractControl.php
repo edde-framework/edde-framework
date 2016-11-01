@@ -31,7 +31,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getNode() {
+		public function getNode(): INode {
 			$this->use();
 			return $this->node;
 		}
@@ -39,7 +39,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getRoot() {
+		public function getRoot(): IControl {
 			$this->use();
 			if ($this->node->isRoot()) {
 				return $this;
@@ -91,7 +91,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function addControl(IControl $control) {
+		public function addControl(IControl $control): IControl {
 			$this->use();
 			$this->node->addNode($control->getNode(), true);
 			$control->attached($this);

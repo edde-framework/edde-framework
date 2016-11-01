@@ -17,14 +17,14 @@
 		 *
 		 * @return INode
 		 */
-		public function getNode();
+		public function getNode(): INode;
 
 		/**
 		 * return root control
 		 *
 		 * @return IControl
 		 */
-		public function getRoot();
+		public function getRoot(): IControl;
 
 		/**
 		 * has this control some children?
@@ -52,9 +52,9 @@
 		 *
 		 * @param IControl $control
 		 *
-		 * @return $this
+		 * @return IControl
 		 */
-		public function addControl(IControl $control);
+		public function addControl(IControl $control): IControl;
 
 		/**
 		 * called when this control is attached to the given one
