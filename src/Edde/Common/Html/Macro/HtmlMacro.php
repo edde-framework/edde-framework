@@ -31,10 +31,11 @@
 		public function macro(INode $macro, ICompiler $compiler) {
 			$this->write($compiler, sprintf('/** %s */', $macro->getPath()), 5);
 			$this->write($compiler, '$parent = $stack->top();', 5);
-			$this->write($compiler, sprintf('$parent->addControl($control = $this->container->create(%s));', var_export($this->control, true)), 5);
+			$this->write($compiler, sprintf('$control = $this->container->create(%s);', var_export($this->control, true)), 5);
 			$this->writeTextValue($macro, $compiler);
 			$this->onControl($macro, $compiler);
 			$this->writeAttributeList($macro, $compiler);
+			$this->write($compiler, '$parent->addControl($control);');
 			$this->write($compiler, '$stack->push($control);', 5);
 			parent::macro($macro, $compiler);
 			$this->write($compiler, '$stack->pop();', 5);
