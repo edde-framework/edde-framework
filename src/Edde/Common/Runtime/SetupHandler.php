@@ -47,6 +47,6 @@
 			foreach ($this->factoryList as $factory) {
 				$container->inject($factory);
 			}
-			return $container;
+			return $this->container = $container;
 		}
 	}

@@ -1,28 +1,25 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Runtime;
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Runtime\RuntimeException;
-	use Edde\Common\Cache\CacheFactory;
-	use Edde\Common\RuntimeTest\DummyCacheStorage;
+	use Edde\Ext\Runtime\DefaultSetupHandler;
 	use phpunit\framework\TestCase;
 
 	require_once(__DIR__ . '/assets.php');
 
 	class SetupHandlerTest extends TestCase {
 		public function testCommon() {
-			$setupHandler = new SetupHandler($this->createCacheFactory());
-			self::assertInstanceOf(IContainer::class, $setupHandler->createContainer());
-		}
-
-		protected function createCacheFactory() {
-			return new CacheFactory(__DIR__, new DummyCacheStorage());
+			self::assertInstanceOf(IContainer::class, DefaultSetupHandler::create()
+				->createContainer());
 		}
 
 		public function testMultirun() {
 			$this->expectException(RuntimeException::class);
 			$this->expectExceptionMessage('Cannot run [Edde\Common\Runtime\SetupHandler::createContainer()] multiple times; something is wrong!');
-			$setupHandler = SetupHandler::create($this->createCacheFactory());
+			$setupHandler = DefaultSetupHandler::create();
 			$setupHandler->createContainer();
 			$setupHandler->createContainer();
 		}

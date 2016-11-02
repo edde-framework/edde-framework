@@ -1,29 +1,25 @@
 <?php
+	declare(strict_types = 1);
+
 	namespace Edde\Common\Runtime;
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Runtime\IRuntime;
-	use Edde\Common\Cache\CacheFactory;
-	use Edde\Common\RuntimeTest\DummyCacheStorage;
+	use Edde\Ext\Runtime\DefaultSetupHandler;
 	use phpunit\framework\TestCase;
 
 	require_once(__DIR__ . '/assets.php');
 
 	class RuntimeTest extends TestCase {
 		public function testCommon() {
-			$runtime = new Runtime($setupHandler = new SetupHandler($this->createCacheFactory()));
+			$runtime = new Runtime(new SetupHandler());
 			self::assertFalse($runtime->isUsed());
 			self::assertTrue($runtime->isConsoleMode());
 		}
 
-		protected function createCacheFactory() {
-			return new CacheFactory(__DIR__, new DummyCacheStorage());
-		}
-
 		public function testExecute() {
-			$setupHandler = new SetupHandler($this->createCacheFactory());
 			$flag = false;
-			Runtime::execute($setupHandler, function (IRuntime $runtime, IContainer $container) use (&$flag) {
+			Runtime::execute(DefaultSetupHandler::create(), function (IRuntime $runtime, IContainer $container) use (&$flag) {
 				$flag = true;
 				self::assertTrue($runtime->isConsoleMode());
 			});
