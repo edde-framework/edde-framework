@@ -65,6 +65,14 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function registerFactoryList(array $factoryList): IContainer {
+			$this->factoryManager->registerFactoryList($factoryList);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function has($name) {
 			return $this->factoryManager->hasFactory($name);
 		}

@@ -15,6 +15,8 @@
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Client\IHttpClient;
 	use Edde\Api\Container\IContainer;
+	use Edde\Api\Container\IDependencyFactory;
+	use Edde\Api\Container\IFactoryManager;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Crate\ICrateDirectory;
 	use Edde\Api\Crate\ICrateFactory;
@@ -69,6 +71,9 @@
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheFactory;
 	use Edde\Common\Client\HttpClient;
+	use Edde\Common\Container\Container;
+	use Edde\Common\Container\DependencyFactory;
+	use Edde\Common\Container\FactoryManager;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crate\CrateDirectory;
 	use Edde\Common\Crate\CrateFactory;
@@ -125,10 +130,13 @@
 		 * @inheritdoc
 		 * @throws RuntimeException
 		 */
-		static public function create(ICacheFactory $cacheFactory = null, array $factoryList = []): ISetupHandler {
-			return parent::create($cacheFactory ?: new CacheFactory(__DIR__, new InMemoryCacheStorage()))
+		static public function create(array $factoryList = []): ISetupHandler {
+			return parent::create()
 				->registerFactoryList(array_merge([
 					Framework::class,
+					IContainer::class => Container::class,
+					IFactoryManager::class => FactoryManager::class,
+					IDependencyFactory::class => DependencyFactory::class,
 					IEddeDirectory::class => function () {
 						/**
 						 * this is darkes possible magic; don't use this constant, don't use this interface!
@@ -141,6 +149,9 @@
 						return $eddeDirectory->directory('assets', AssetsDirectory::class);
 					},
 					ICacheStorage::class => InMemoryCacheStorage::class,
+					ICacheFactory::class => function (ICacheStorage $cacheStorage) {
+						return new CacheFactory(__DIR__, $cacheStorage);
+					},
 					/**
 					 * Application and presentation layer
 					 */

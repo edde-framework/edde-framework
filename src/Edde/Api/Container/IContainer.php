@@ -10,7 +10,7 @@
 	 */
 	interface IContainer extends IDeffered {
 		/**
-		 * quickhand to IFactoryManager
+		 * shorthand for factory registration
 		 *
 		 * @param string $name
 		 * @param IFactory $factory
@@ -18,6 +18,15 @@
 		 * @return IContainer
 		 */
 		public function registerFactory(string $name, IFactory $factory): IContainer;
+
+		/**
+		 * shorthand for factory registration
+		 *
+		 * @param array $factoryList
+		 *
+		 * @return IContainer
+		 */
+		public function registerFactoryList(array $factoryList): IContainer;
 
 		/**
 		 * check if the given name is available (known) in a container

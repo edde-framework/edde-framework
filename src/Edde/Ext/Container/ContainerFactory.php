@@ -32,14 +32,14 @@
 		 * @throws FactoryException
 		 */
 		static public function create(array $factoryList = []): IContainer {
-			$factoryManager = new FactoryManager($cacheFactory = $factoryList[ICacheFactory::class] ?? new CacheFactory(__NAMESPACE__, $factoryList[ICacheStorage::class] ?? new InMemoryCacheStorage()));
-			$factoryManager->registerFactoryList($factoryList);
 			if (isset($factoryList[ICacheFactory::class]) && is_object($factoryList[ICacheFactory::class]) === false) {
 				throw new ContainerException(sprintf('[%s] must be instance (special case).', ICacheFactory::class));
 			}
 			if (isset($factoryList[ICacheStorage::class]) && is_object($factoryList[ICacheStorage::class]) === false) {
 				throw new ContainerException(sprintf('[%s] must be instance (special case).', ICacheStorage::class));
 			}
+			$factoryManager = new FactoryManager($cacheFactory = $factoryList[ICacheFactory::class] ?? new CacheFactory(__NAMESPACE__, $factoryList[ICacheStorage::class] ?? new InMemoryCacheStorage()));
+			$factoryManager->registerFactoryList($factoryList);
 			$container = new Container($factoryManager, $dependencyFactory = new DependencyFactory($factoryManager, $cacheFactory), $cacheFactory);
 			$factoryManager->registerFactoryList([
 				IContainer::class => $container,
@@ -49,5 +49,19 @@
 				new ClassFactory(),
 			]);
 			return $container;
+		}
+
+		/**
+		 * create simple independent container with the given factory definition
+		 *
+		 * @param array $factoryList
+		 *
+		 * @return IContainer
+		 * @throws FactoryException
+		 */
+		static public function simple(array $factoryList = []): IContainer {
+			$factoryManager = new FactoryManager($cacheFactory = new CacheFactory(__DIR__, new InMemoryCacheStorage()));
+			$factoryManager->registerFactoryList($factoryList);
+			return new Container($factoryManager, $dependencyFactory = new DependencyFactory($factoryManager, $cacheFactory), $cacheFactory);
 		}
 	}
