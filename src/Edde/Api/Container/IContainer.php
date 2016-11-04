@@ -10,7 +10,7 @@
 	 */
 	interface IContainer extends IDeffered {
 		/**
-		 * shorthand for factory registration
+		 * shorthand for cache registration
 		 *
 		 * @param string $name
 		 * @param IFactory $factory
@@ -20,7 +20,7 @@
 		public function registerFactory(string $name, IFactory $factory): IContainer;
 
 		/**
-		 * shorthand for factory registration
+		 * shorthand for cache registration
 		 *
 		 * @param array $factoryList
 		 *

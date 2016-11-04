@@ -25,7 +25,7 @@
 
 		public function testException() {
 			$this->expectException(FactoryException::class);
-			$this->expectExceptionMessage('Requested unknown factory [poo].');
+			$this->expectExceptionMessage('Requested unknown cache [poo].');
 			$this->factoryManager->getFactory('poo');
 		}
 

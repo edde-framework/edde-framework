@@ -4,7 +4,7 @@
 	namespace Edde\Api\Crate;
 
 	/**
-	 * Lazy crate factory dependency.
+	 * Lazy crate cache dependency.
 	 */
 	trait LazyCrateDirectoryTrait {
 		/**

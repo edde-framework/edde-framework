@@ -4,14 +4,14 @@
 	namespace Edde\Common\Cache;
 
 	use Edde\Api\Cache\ICache;
-	use Edde\Api\Cache\ICacheFactory;
+	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Common\AbstractObject;
 
 	/**
-	 * Common stuff for a cache factory implementation.
+	 * Common stuff for a cache cache implementation.
 	 */
-	abstract class AbstractCacheFactory extends AbstractObject implements ICacheFactory {
+	abstract class AbstractCacheManager extends AbstractObject implements ICacheManager {
 		/**
 		 * @var string
 		 */
@@ -33,7 +33,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(string $namespace = null, ICacheStorage $cacheStorage = null): ICache {
+		public function cache(string $namespace = null, ICacheStorage $cacheStorage = null): ICache {
 			return new Cache($cacheStorage ?: $this->cacheStorage, $this->namespace . $namespace);
 		}
 	}

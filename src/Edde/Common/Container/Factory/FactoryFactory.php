@@ -8,7 +8,7 @@
 	use Edde\Common\AbstractObject;
 
 	/**
-	 * Utility class for "abstract" factory creation (it hides concrete factories on the background).
+	 * Utility class for "abstract" cache creation (it hides concrete factories on the background).
 	 */
 	class FactoryFactory extends AbstractObject {
 		/**
@@ -57,6 +57,6 @@
 				$factory[1]($instance = self::create($name, $factory[0], $singleton, $cloneable));
 				return $instance;
 			}
-			throw new FactoryException(sprintf('Cannot handle [%s] factory, cannot determine factory type of $factory [%s].', $name, is_string($factory) ? $factory : gettype($factory)));
+			throw new FactoryException(sprintf('Cannot handle [%s] cache, cannot determine cache type of $cache [%s].', $name, is_string($factory) ? $factory : gettype($factory)));
 		}
 	}

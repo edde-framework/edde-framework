@@ -6,18 +6,18 @@
 	use Edde\Api\Callback\IParameter;
 
 	/**
-	 * Interface for variaus factory implementations for a dependency container.
+	 * Interface for variaus cache implementations for a dependency container.
 	 */
 	interface IFactory {
 		/**
-		 * get name of this factory; this should usually by name of interface
+		 * get name of this cache; this should usually by name of interface
 		 *
 		 * @return string
 		 */
 		public function getName(): string;
 
 		/**
-		 * switch singleton flag of this factory; should be used only in the configuration time
+		 * switch singleton flag of this cache; should be used only in the configuration time
 		 *
 		 * @param bool $singleton
 		 *
@@ -26,7 +26,7 @@
 		public function setSingleton(bool $singleton): IFactory;
 
 		/**
-		 * is result of this factory singleton?
+		 * is result of this cache singleton?
 		 *
 		 * @return bool
 		 */
@@ -42,14 +42,14 @@
 		public function setCloneable(bool $cloneable): IFactory;
 
 		/**
-		 * is result of this factory clone?
+		 * is result of this cache clone?
 		 *
 		 * @return bool
 		 */
 		public function isCloneable(): bool;
 
 		/**
-		 * return list of required parameters for this factory
+		 * return list of required parameters for this cache
 		 *
 		 * @param string $name
 		 *
@@ -58,7 +58,7 @@
 		public function getParameterList(string $name = null): array;
 
 		/**
-		 * callback of this method should be called when instance of this factory is created
+		 * callback of this method should be called when instance of this cache is created
 		 *
 		 * @param callable $callback
 		 *
@@ -67,7 +67,7 @@
 		public function deffered(callable $callback): IFactory;
 
 		/**
-		 * lock/unlock this factory
+		 * lock/unlock this cache
 		 *
 		 * @param string $name
 		 * @param bool $lock
@@ -77,7 +77,7 @@
 		public function lock(string $name, bool $lock = true): IFactory;
 
 		/**
-		 * is this factory locked?
+		 * is this cache locked?
 		 *
 		 * @param string $name check against requested name
 		 *
@@ -86,7 +86,7 @@
 		public function isLocked(string $name): bool;
 
 		/**
-		 * is this factory able to handle the given identifier?
+		 * is this cache able to handle the given identifier?
 		 *
 		 * @param string $name
 		 *
@@ -95,7 +95,7 @@
 		public function canHandle(string $name): bool;
 
 		/**
-		 * create instance from this factory; container should used for injecting dependencies
+		 * create instance from this cache; container should used for injecting dependencies
 		 *
 		 * @param string $name
 		 * @param array $parameterList

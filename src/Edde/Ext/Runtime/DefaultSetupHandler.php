@@ -11,7 +11,7 @@
 	use Edde\Api\Asset\IAssetStorage;
 	use Edde\Api\Asset\IStorageDirectory;
 	use Edde\Api\Cache\ICacheDirectory;
-	use Edde\Api\Cache\ICacheFactory;
+	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Client\IHttpClient;
 	use Edde\Api\Container\IContainer;
@@ -149,7 +149,7 @@
 						return $eddeDirectory->directory('assets', AssetsDirectory::class);
 					},
 					ICacheStorage::class => InMemoryCacheStorage::class,
-					ICacheFactory::class => function (ICacheStorage $cacheStorage) {
+					ICacheManager::class => function (ICacheStorage $cacheStorage) {
 						return new CacheFactory(__DIR__, $cacheStorage);
 					},
 					/**

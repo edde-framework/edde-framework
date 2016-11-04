@@ -4,14 +4,14 @@
 	namespace Edde\Common\Cache;
 
 	use Edde\Api\Cache\ICache;
-	use Edde\Api\Cache\LazyCacheFactoryTrait;
+	use Edde\Api\Cache\LazyCacheManagerTrait;
 	use Edde\Common\Deffered\Event\OnDefferedEvent;
 
 	/**
 	 * This trait is shorthand for creating cache to a supported class (it must be created through container).
 	 */
 	trait CacheTrait {
-		use LazyCacheFactoryTrait;
+		use LazyCacheManagerTrait;
 		/**
 		 * @var ICache
 		 */
@@ -25,7 +25,7 @@
 		 */
 		public function eventCacheTraitOnPrepareEvent(OnDefferedEvent $onDefferedEvent) {
 			$this->lazy('cache', function () {
-				return $this->cacheFactory->factory(static::class);
+				return $this->cacheManager->cache(static::class);
 			});
 		}
 	}

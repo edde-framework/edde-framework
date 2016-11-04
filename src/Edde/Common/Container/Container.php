@@ -4,7 +4,7 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Cache\ICache;
-	use Edde\Api\Cache\ICacheFactory;
+	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Callback\ICallback;
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
@@ -31,9 +31,9 @@
 		 */
 		protected $dependencyFactory;
 		/**
-		 * @var ICacheFactory
+		 * @var ICacheManager
 		 */
-		protected $cacheFactory;
+		protected $cacheManager;
 		/**
 		 * @var ICache
 		 */
@@ -46,12 +46,12 @@
 		/**
 		 * @param IFactoryManager $factoryManager
 		 * @param IDependencyFactory $dependencyFactory
-		 * @param ICacheFactory $cacheFactory
+		 * @param ICacheManager $cacheManager
 		 */
-		public function __construct(IFactoryManager $factoryManager, IDependencyFactory $dependencyFactory, ICacheFactory $cacheFactory) {
+		public function __construct(IFactoryManager $factoryManager, IDependencyFactory $dependencyFactory, ICacheManager $cacheManager) {
 			$this->factoryManager = $factoryManager;
 			$this->dependencyFactory = $dependencyFactory;
-			$this->cacheFactory = $cacheFactory;
+			$this->cacheManager = $cacheManager;
 		}
 
 		/**
@@ -206,6 +206,6 @@
 		 */
 		protected function prepare() {
 			$this->dependencyStack = new \SplStack();
-			$this->cache = $this->cacheFactory->factory(self::class);
+			$this->cache = $this->cacheManager->cache(self::class);
 		}
 	}

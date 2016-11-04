@@ -20,7 +20,7 @@
 		public function addSchemaNode(INode $node);
 
 		/**
-		 * load the specific file as INode and add it to this factory
+		 * load the specific file as INode and add it to this cache
 		 *
 		 * @param string $file
 		 *

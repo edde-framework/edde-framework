@@ -4,11 +4,11 @@
 	namespace Edde\Api\Http;
 
 	/**
-	 * Wrapper factory for creating http requests and responses.
+	 * Wrapper cache for creating http requests and responses.
 	 */
 	interface IHttpRequestFactory {
 		/**
-		 * return http request; factory should create a new request per call
+		 * return http request; cache should create a new request per call
 		 *
 		 * @return IHttpRequest
 		 */

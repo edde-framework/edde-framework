@@ -3,7 +3,7 @@
 
 	namespace Edde\Ext\Container;
 
-	use Edde\Api\Cache\ICacheFactory;
+	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
@@ -19,11 +19,11 @@
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 
 	/**
-	 * Simple factory for "handy" container creation.
+	 * Simple cache for "handy" container creation.
 	 */
 	class ContainerFactory extends AbstractObject {
 		/**
-		 * simple factory method for default (and simle) container instance
+		 * simple cache method for default (and simle) container instance
 		 *
 		 * @param array $factoryList
 		 *
@@ -32,27 +32,27 @@
 		 * @throws FactoryException
 		 */
 		static public function create(array $factoryList = []): IContainer {
-			if (isset($factoryList[ICacheFactory::class]) && is_object($factoryList[ICacheFactory::class]) === false) {
-				throw new ContainerException(sprintf('[%s] must be instance (special case).', ICacheFactory::class));
+			if (isset($factoryList[ICacheManager::class]) && is_object($factoryList[ICacheManager::class]) === false) {
+				throw new ContainerException(sprintf('[%s] must be instance (special case).', ICacheManager::class));
 			}
 			if (isset($factoryList[ICacheStorage::class]) && is_object($factoryList[ICacheStorage::class]) === false) {
 				throw new ContainerException(sprintf('[%s] must be instance (special case).', ICacheStorage::class));
 			}
-			$factoryManager = new FactoryManager($cacheFactory = $factoryList[ICacheFactory::class] ?? new CacheFactory(__NAMESPACE__, $factoryList[ICacheStorage::class] ?? new InMemoryCacheStorage()));
+			$factoryManager = new FactoryManager($cacheManager = $factoryList[ICacheManager::class] ?? new CacheFactory(__NAMESPACE__, $factoryList[ICacheStorage::class] ?? new InMemoryCacheStorage()));
 			$factoryManager->registerFactoryList($factoryList);
-			$container = new Container($factoryManager, $dependencyFactory = new DependencyFactory($factoryManager, $cacheFactory), $cacheFactory);
+			$container = new Container($factoryManager, $dependencyFactory = new DependencyFactory($factoryManager, $cacheManager), $cacheManager);
 			$factoryManager->registerFactoryList([
 				IContainer::class => $container,
 				IFactoryManager::class => $factoryManager,
 				IDependencyFactory::class => $dependencyFactory,
-				ICacheFactory::class => $cacheFactory,
+				ICacheManager::class => $cacheManager,
 				new ClassFactory(),
 			]);
 			return $container;
 		}
 
 		/**
-		 * create simple independent container with the given factory definition
+		 * create simple independent container with the given cache definition
 		 *
 		 * @param array $factoryList
 		 *
@@ -60,8 +60,8 @@
 		 * @throws FactoryException
 		 */
 		static public function simple(array $factoryList = []): IContainer {
-			$factoryManager = new FactoryManager($cacheFactory = new CacheFactory(__DIR__, new InMemoryCacheStorage()));
+			$factoryManager = new FactoryManager($cacheManager = new CacheFactory(__DIR__, new InMemoryCacheStorage()));
 			$factoryManager->registerFactoryList($factoryList);
-			return new Container($factoryManager, $dependencyFactory = new DependencyFactory($factoryManager, $cacheFactory), $cacheFactory);
+			return new Container($factoryManager, $dependencyFactory = new DependencyFactory($factoryManager, $cacheManager), $cacheManager);
 		}
 	}

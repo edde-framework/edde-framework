@@ -4,7 +4,7 @@
 	namespace Edde\Api\Link;
 
 	/**
-	 * Lazy link factory trait depenendency.
+	 * Lazy link cache trait depenendency.
 	 */
 	trait LazyLinkFactoryTrait {
 		/**

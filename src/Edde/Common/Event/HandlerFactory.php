@@ -10,7 +10,7 @@
 	use Edde\Common\Event\Handler\ReflectionHandler;
 
 	/**
-	 * Handler factory to hide implementation details about input handler.
+	 * Handler cache to hide implementation details about input handler.
 	 */
 	class HandlerFactory extends AbstractObject {
 		/**

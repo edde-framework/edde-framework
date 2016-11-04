@@ -9,7 +9,7 @@
 	use ReflectionClass;
 
 	/**
-	 * Simple constructor-based class factory.
+	 * Simple constructor-based class cache.
 	 */
 	class ReflectionFactory extends AbstractFactory {
 		/**

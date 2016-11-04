@@ -59,7 +59,7 @@
 	 */
 	class DefaultMacroSet extends AbstractObject {
 		/**
-		 * factory method for default set of macros; they are created on demand (when requested macro list)
+		 * cache method for default set of macros; they are created on demand (when requested macro list)
 		 *
 		 * @param IContainer $container
 		 *
@@ -121,7 +121,7 @@
 		}
 
 		/**
-		 * factory method for default set of helpers; they are created on demand (when requested)
+		 * cache method for default set of helpers; they are created on demand (when requested)
 		 *
 		 * @param IContainer $container
 		 *
