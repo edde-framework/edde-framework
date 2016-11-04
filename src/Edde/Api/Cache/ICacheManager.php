@@ -5,7 +5,7 @@
 
 	use Edde\Api\Deffered\IDeffered;
 
-	interface ICacheManager extends IDeffered {
+	interface ICacheManager extends ICache, IDeffered {
 		/**
 		 * create a new cache
 		 *

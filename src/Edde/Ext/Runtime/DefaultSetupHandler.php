@@ -10,6 +10,7 @@
 	use Edde\Api\Asset\IAssetDirectory;
 	use Edde\Api\Asset\IAssetStorage;
 	use Edde\Api\Asset\IStorageDirectory;
+	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Cache\ICacheStorage;
@@ -149,8 +150,11 @@
 						return $eddeDirectory->directory('assets', AssetsDirectory::class);
 					},
 					ICacheStorage::class => InMemoryCacheStorage::class,
-					ICacheManager::class => function (ICacheStorage $cacheStorage) {
-						return new CacheManager(__DIR__, $cacheStorage);
+					ICache::class => function (ICacheManager $cacheManager) {
+						return $cacheManager;
+					},
+					ICacheManager::class => function (ICacheStorage $cacheStorage, Framework $framework) {
+						return (new CacheManager($cacheStorage))->setNamespace(__DIR__ . '/' . $framework->getVersionString());
 					},
 					/**
 					 * Application and presentation layer
