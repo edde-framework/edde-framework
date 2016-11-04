@@ -69,7 +69,7 @@
 	use Edde\Common\Asset\StorageDirectory;
 	use Edde\Common\AssetsDirectory;
 	use Edde\Common\Cache\CacheDirectory;
-	use Edde\Common\Cache\CacheFactory;
+	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Client\HttpClient;
 	use Edde\Common\Container\Container;
 	use Edde\Common\Container\DependencyFactory;
@@ -150,7 +150,7 @@
 					},
 					ICacheStorage::class => InMemoryCacheStorage::class,
 					ICacheManager::class => function (ICacheStorage $cacheStorage) {
-						return new CacheFactory(__DIR__, $cacheStorage);
+						return new CacheManager(__DIR__, $cacheStorage);
 					},
 					/**
 					 * Application and presentation layer

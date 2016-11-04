@@ -7,5 +7,5 @@
 	 * Formal cache cache without any dark magic. You must provide namespace (for example application version
 	 * for simple cache invalidation).
 	 */
-	class CacheFactory extends AbstractCacheManager {
+	class CacheManager extends AbstractCacheManager {
 	}

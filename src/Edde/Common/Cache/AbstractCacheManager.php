@@ -6,12 +6,12 @@
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Cache\ICacheStorage;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Deffered\AbstractDeffered;
 
 	/**
 	 * Common stuff for a cache cache implementation.
 	 */
-	abstract class AbstractCacheManager extends AbstractObject implements ICacheManager {
+	abstract class AbstractCacheManager extends AbstractDeffered implements ICacheManager {
 		/**
 		 * @var string
 		 */

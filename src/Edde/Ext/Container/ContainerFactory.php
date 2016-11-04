@@ -11,7 +11,7 @@
 	use Edde\Api\Container\IDependencyFactory;
 	use Edde\Api\Container\IFactoryManager;
 	use Edde\Common\AbstractObject;
-	use Edde\Common\Cache\CacheFactory;
+	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Container\Container;
 	use Edde\Common\Container\DependencyFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
@@ -38,7 +38,7 @@
 			if (isset($factoryList[ICacheStorage::class]) && is_object($factoryList[ICacheStorage::class]) === false) {
 				throw new ContainerException(sprintf('[%s] must be instance (special case).', ICacheStorage::class));
 			}
-			$factoryManager = new FactoryManager($cacheManager = $factoryList[ICacheManager::class] ?? new CacheFactory(__NAMESPACE__, $factoryList[ICacheStorage::class] ?? new InMemoryCacheStorage()));
+			$factoryManager = new FactoryManager($cacheManager = $factoryList[ICacheManager::class] ?? new CacheManager(__NAMESPACE__, $factoryList[ICacheStorage::class] ?? new InMemoryCacheStorage()));
 			$factoryManager->registerFactoryList($factoryList);
 			$container = new Container($factoryManager, $dependencyFactory = new DependencyFactory($factoryManager, $cacheManager), $cacheManager);
 			$factoryManager->registerFactoryList([
@@ -60,7 +60,7 @@
 		 * @throws FactoryException
 		 */
 		static public function simple(array $factoryList = []): IContainer {
-			$factoryManager = new FactoryManager($cacheManager = new CacheFactory(__DIR__, new InMemoryCacheStorage()));
+			$factoryManager = new FactoryManager($cacheManager = new CacheManager(__DIR__, new InMemoryCacheStorage()));
 			$factoryManager->registerFactoryList($factoryList);
 			return new Container($factoryManager, $dependencyFactory = new DependencyFactory($factoryManager, $cacheManager), $cacheManager);
 		}

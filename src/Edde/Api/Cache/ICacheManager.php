@@ -3,7 +3,9 @@
 
 	namespace Edde\Api\Cache;
 
-	interface ICacheManager {
+	use Edde\Api\Deffered\IDeffered;
+
+	interface ICacheManager extends IDeffered {
 		/**
 		 * create a new cache
 		 *

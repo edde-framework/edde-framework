@@ -10,7 +10,7 @@
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
-	use Edde\Common\Cache\DummyCacheFactory;
+	use Edde\Common\Cache\DummyCacheManager;
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Ext\Container\ContainerFactory;
@@ -58,7 +58,7 @@
 				ICrateDirectory::class => function () {
 					return new CrateDirectory(__DIR__ . '/temp');
 				},
-				ICacheManager::class => new DummyCacheFactory(),
+				ICacheManager::class => new DummyCacheManager(),
 				ICrateLoader::class => CrateLoader::class,
 			]);
 			$this->schemaManager = $container->create(ISchemaManager::class);
