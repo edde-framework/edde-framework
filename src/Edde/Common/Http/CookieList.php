@@ -14,7 +14,7 @@
 	 */
 	class CookieList extends AbstractList implements ICookieList {
 		/**
-		 * factory class for cookie list
+		 * cache class for cookie list
 		 *
 		 * @param array $cookieList
 		 *

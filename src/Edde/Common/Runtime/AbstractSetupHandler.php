@@ -36,7 +36,7 @@
 		 */
 		public function deffered(string $name, callable $onSetup): ISetupHandler {
 			if (isset($this->factoryList[$name]) === false) {
-				throw new RuntimeException(sprintf('Cannot use deffered setup on unknown factory [%s].', $name));
+				throw new RuntimeException(sprintf('Cannot use deffered setup on unknown cache [%s].', $name));
 			}
 			$this->factoryList[$name]->deffered(function (IContainer $container, $instance) use ($onSetup) {
 				if (($instance instanceof IDeffered) === false) {

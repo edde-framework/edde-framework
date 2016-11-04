@@ -6,7 +6,7 @@
 	use Edde\Common\Query\AbstractStaticQueryFactory;
 
 	/**
-	 * Simple SQL query factory; it uses "" as delimiter and [] for quoting.
+	 * Simple SQL query cache; it uses "" as delimiter and [] for quoting.
 	 */
 	class SqlQueryFactory extends AbstractStaticQueryFactory {
 		/**

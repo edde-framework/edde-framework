@@ -36,7 +36,7 @@
 		 * @throws FactoryException
 		 */
 		public function deffered(callable $callback): IFactory {
-			throw new FactoryException(sprintf('Cannot register deffered handler on [%s]; setup handlers are not supported by this factory.', self::class));
+			throw new FactoryException(sprintf('Cannot register deffered handler on [%s]; setup handlers are not supported by this cache.', self::class));
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */

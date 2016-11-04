@@ -3,12 +3,14 @@
 
 	namespace Edde\Api\Cache;
 
-	interface ICacheFactory {
+	interface ICacheManager {
 		/**
+		 * create a new cache
+		 *
 		 * @param string|null $namespace
 		 * @param ICacheStorage $cacheStorage
 		 *
 		 * @return ICache
 		 */
-		public function factory(string $namespace = null, ICacheStorage $cacheStorage = null): ICache;
+		public function cache(string $namespace = null, ICacheStorage $cacheStorage = null): ICache;
 	}

@@ -4,7 +4,7 @@
 	namespace Edde\Common\Database;
 
 	use Edde\Api\Cache\ICache;
-	use Edde\Api\Cache\ICacheFactory;
+	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Database\IDatabaseStorage;
@@ -30,9 +30,9 @@
 		 */
 		protected $driver;
 		/**
-		 * @var ICacheFactory
+		 * @var ICacheManager
 		 */
-		protected $cacheFactory;
+		protected $cacheManager;
 		/**
 		 * @var ICache
 		 */
@@ -48,11 +48,11 @@
 
 		/**
 		 * @param IDriver $driver
-		 * @param ICacheFactory $cacheFactory
+		 * @param ICacheManager $cacheManager
 		 */
-		public function __construct(IDriver $driver, ICacheFactory $cacheFactory) {
+		public function __construct(IDriver $driver, ICacheManager $cacheManager) {
 			$this->driver = $driver;
-			$this->cacheFactory = $cacheFactory;
+			$this->cacheManager = $cacheManager;
 			$this->transaction = 0;
 		}
 
@@ -180,7 +180,7 @@
 		 * @inheritdoc
 		 */
 		protected function prepare() {
-			$this->cache = $this->cacheFactory->factory(static::class);
+			$this->cache = $this->cacheManager->cache(static::class);
 			$this->sourceNodeQuery = new NodeQuery('/**/source');
 		}
 	}

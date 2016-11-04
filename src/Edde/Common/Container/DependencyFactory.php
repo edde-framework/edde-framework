@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Container;
 
-	use Edde\Api\Cache\ICacheFactory;
+	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IDependencyFactory;
@@ -12,7 +12,7 @@
 	use Edde\Common\Deffered\AbstractDeffered;
 
 	/**
-	 * Dependency factory is responsible for static dependency analysis.
+	 * Dependency cache is responsible for static dependency analysis.
 	 */
 	class DependencyFactory extends AbstractDeffered implements IDependencyFactory {
 		use CacheTrait;
@@ -29,11 +29,11 @@
 
 		/**
 		 * @param IFactoryManager $factoryManager
-		 * @param ICacheFactory $cacheFactory
+		 * @param ICacheManager $cacheManager
 		 */
-		public function __construct(IFactoryManager $factoryManager, ICacheFactory $cacheFactory) {
+		public function __construct(IFactoryManager $factoryManager, ICacheManager $cacheManager) {
 			$this->factoryManager = $factoryManager;
-			$this->cacheFactory = $cacheFactory;
+			$this->cacheManager = $cacheManager;
 		}
 
 		/**

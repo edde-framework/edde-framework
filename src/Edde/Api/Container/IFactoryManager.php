@@ -4,11 +4,11 @@
 	namespace Edde\Api\Container;
 
 	/**
-	 * General purpose factory management; used byt an Container and a DependencyFactory.
+	 * General purpose cache management; used byt an Container and a DependencyFactory.
 	 */
 	interface IFactoryManager {
 		/**
-		 * register given factory
+		 * register given cache
 		 *
 		 * @param string $name
 		 * @param IFactory $factory

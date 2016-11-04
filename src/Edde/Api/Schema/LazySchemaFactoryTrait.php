@@ -4,7 +4,7 @@
 	namespace Edde\Api\Schema;
 
 	/**
-	 * LAzy dependency on a schema factory.
+	 * LAzy dependency on a schema cache.
 	 */
 	trait LazySchemaFactoryTrait {
 		/**
