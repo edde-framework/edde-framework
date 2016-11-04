@@ -4,9 +4,53 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "90cf1f69c9d459416f7a61f5c6eb251c",
-    "content-hash": "1340adb0bab103a57c678424133fa6ad",
+    "hash": "7c7cab2aad49b1cc71ee5e7932467353",
+    "content-hash": "02564b735ef5bee31e571edca2a02be2",
     "packages": [
+        {
+            "name": "brick/math",
+            "version": "0.5.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/brick/math.git",
+                "reference": "b44a78b01cb79aa4bf17de46a45db968b6958bda"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/brick/math/zipball/b44a78b01cb79aa4bf17de46a45db968b6958bda",
+                "reference": "b44a78b01cb79aa4bf17de46a45db968b6958bda",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*",
+                "satooshi/php-coveralls": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Brick\\Math\\": "src/",
+                    "Brick\\Math\\Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Arbitrary-precision arithmetic library",
+            "keywords": [
+                "Arbitrary-precision",
+                "BigInteger",
+                "BigRational",
+                "arithmetic",
+                "bigdecimal",
+                "brick",
+                "math"
+            ],
+            "time": "2016-10-17 22:08:04"
+        },
         {
             "name": "defuse/php-encryption",
             "version": "2.0.3",
@@ -65,6 +109,49 @@
                 "symmetric key cryptography"
             ],
             "time": "2016-10-10 15:20:26"
+        },
+        {
+            "name": "jkuchar/bigfiletools",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jkuchar/BigFileTools.git",
+                "reference": "cea157a4239c55263faf09acd6d0c0e75a531316"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jkuchar/BigFileTools/zipball/cea157a4239c55263faf09acd6d0c0e75a531316",
+                "reference": "cea157a4239c55263faf09acd6d0c0e75a531316",
+                "shasum": ""
+            },
+            "require": {
+                "brick/math": "~0.5.2",
+                "php": ">= 5.6.0"
+            },
+            "require-dev": {
+                "nette/tester": "^1.6"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/BigFileTools-nonamespace.php"
+                ],
+                "psr-4": {
+                    "BigFileTools\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "New BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Jan Kuchař",
+                    "homepage": "http://www.jankuchar.cz"
+                }
+            ],
+            "description": "Tools that allows you to manipulate files over 2GB in PHP.",
+            "time": "2016-03-17 16:18:05"
         },
         {
             "name": "paragonie/constant_time_encoding",

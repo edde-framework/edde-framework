@@ -3,6 +3,8 @@
 
 	namespace Edde\Common\File;
 
+	use BigFileTools\BigFileTools;
+	use Brick\Math\BigInteger;
 	use Edde\Api\File\FileException;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\AbstractObject;
@@ -242,5 +244,11 @@
 				'/',
 				'/',
 			], $path), '/');
+		}
+
+		static public function size(string $path): BigInteger {
+			return BigFileTools::createDefault()
+				->getFile($path)
+				->getSize();
 		}
 	}
