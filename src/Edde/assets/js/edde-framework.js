@@ -97,14 +97,7 @@ var Edde = {
 				});
 			}
 		},
-		execute: function (url, parameterList) {
-			var event = Edde.Event.event('edde.on-ajax', {
-				url: url,
-				parameterList: parameterList
-			});
-			if (event.isDefaultPrevented()) {
-				return;
-			}
+		ajax: function (url, parameterList) {
 			return $.ajax({
 				url: url,
 				method: 'POST',
@@ -113,7 +106,17 @@ var Edde = {
 				contentType: 'application/json',
 				dataType: 'json',
 				cache: false
-			}).fail(function (e) {
+			});
+		},
+		execute: function (url, parameterList) {
+			var event = Edde.Event.event('edde.on-ajax', {
+				url: url,
+				parameterList: parameterList
+			});
+			if (event.isDefaultPrevented()) {
+				return;
+			}
+			return Edde.Utils.ajax(url, parameterList).fail(function (e) {
 				Edde.Event.event('edde.on-ajax-fail', {
 					error: e
 				});
