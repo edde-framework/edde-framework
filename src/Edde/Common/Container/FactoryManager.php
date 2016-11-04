@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Container;
 
-	use Edde\Api\Cache\ICacheFactory;
+	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\IFactoryManager;
@@ -12,7 +12,7 @@
 	use Edde\Common\Deffered\AbstractDeffered;
 
 	/**
-	 * Default implementation of a factory manager.
+	 * Default implementation of a cache manager.
 	 */
 	class FactoryManager extends AbstractDeffered implements IFactoryManager {
 		use CacheTrait;
@@ -23,10 +23,10 @@
 		protected $handleList = [];
 
 		/**
-		 * @param ICacheFactory $cacheFactory
+		 * @param ICacheManager $cacheManager
 		 */
-		public function __construct(ICacheFactory $cacheFactory) {
-			$this->cacheFactory = $cacheFactory;
+		public function __construct(ICacheManager $cacheManager) {
+			$this->cacheManager = $cacheManager;
 		}
 
 		/**
@@ -57,12 +57,12 @@
 				return $this->factoryList[$factory];
 			}
 			if ($this->hasFactory($name) === false) {
-				throw new FactoryException(sprintf('Requested unknown factory [%s].', $name));
+				throw new FactoryException(sprintf('Requested unknown cache [%s].', $name));
 			}
 			if (isset($this->factoryList[$name])) {
 				$factory = $this->factoryList[$name];
 				if ($factory->canHandle($name) === false) {
-					throw new FactoryException(sprintf('Requested factory cannot handle identifier [%s].', $name));
+					throw new FactoryException(sprintf('Requested cache cannot handle identifier [%s].', $name));
 				}
 				$this->cache->save($cacheId, $name);
 				return $factory;
@@ -73,7 +73,7 @@
 					return $factory;
 				}
 			}
-			throw new FactoryException(sprintf('Some strange bug here for factory [%s].', $name));
+			throw new FactoryException(sprintf('Some strange bug here for cache [%s].', $name));
 		}
 
 		/**

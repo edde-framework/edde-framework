@@ -139,7 +139,7 @@
 		}
 
 		/**
-		 * execute factory method with all required parameters already provided
+		 * execute cache method with all required parameters already provided
 		 *
 		 * @param string $name
 		 * @param array $parameterList

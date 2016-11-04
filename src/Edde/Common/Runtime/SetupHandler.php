@@ -19,7 +19,7 @@
 		protected $container;
 
 		/**
-		 * factory method for a new setup handler with defaults
+		 * cache method for a new setup handler with defaults
 		 *
 		 * @param array $factoryList
 		 *

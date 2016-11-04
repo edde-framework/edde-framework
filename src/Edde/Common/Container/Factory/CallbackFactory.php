@@ -8,7 +8,7 @@
 	use Edde\Common\Callback\CallbackUtils;
 
 	/**
-	 * Callback factory will use callable as factory method.
+	 * Callback cache will use callable as cache method.
 	 */
 	class CallbackFactory extends AbstractFactory {
 		/**

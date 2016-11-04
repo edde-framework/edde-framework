@@ -30,4 +30,25 @@
 		 * @return $this
 		 */
 		public function invalidate();
+
+		/**
+		 * number of cache hits
+		 *
+		 * @return int
+		 */
+		public function getHitCount(): int;
+
+		/**
+		 * number of cache miss
+		 *
+		 * @return int
+		 */
+		public function getMissCount(): int;
+
+		/**
+		 * number of cache writes
+		 *
+		 * @return int
+		 */
+		public function getWriteCount(): int;
 	}

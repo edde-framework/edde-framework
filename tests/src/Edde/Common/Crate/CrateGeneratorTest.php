@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Crate;
 
-	use Edde\Api\Cache\ICacheFactory;
+	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Crate\ICrateDirectory;
 	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\Crate\ICrateLoader;
@@ -58,7 +58,7 @@
 				ICrateDirectory::class => function () {
 					return new CrateDirectory(__DIR__ . '/temp');
 				},
-				ICacheFactory::class => new DummyCacheFactory(),
+				ICacheManager::class => new DummyCacheFactory(),
 				ICrateLoader::class => CrateLoader::class,
 			]);
 			$this->schemaManager = $container->create(ISchemaManager::class);

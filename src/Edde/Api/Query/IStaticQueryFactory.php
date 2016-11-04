@@ -6,7 +6,7 @@
 	use Edde\Api\Node\INode;
 
 	/**
-	 * General factory for IStaticQuery creation; instance of this factory is usually storage's proprietary
+	 * General cache for IStaticQuery creation; instance of this cache is usually storage's proprietary
 	 * property - every storage can have it's own IStaticQueryFactory.
 	 */
 	interface IStaticQueryFactory {

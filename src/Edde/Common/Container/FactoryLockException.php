@@ -6,7 +6,7 @@
 	use Edde\Api\Container\FactoryException;
 
 	/**
-	 * Exception thrown when factory is locked (usually circular dependency).
+	 * Exception thrown when cache is locked (usually circular dependency).
 	 */
 	class FactoryLockException extends FactoryException {
 	}
