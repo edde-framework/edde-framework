@@ -26,11 +26,19 @@
 			return $this;
 		}
 
+		public function invalidate(): ICache {
+			parent::invalidate();
+			foreach ($this->cacheStorageList as $cacheStorage) {
+				$cacheStorage->invalidate();
+			}
+			return $this;
+		}
+
 		/**
 		 * @inheritdoc
 		 */
 		public function cache(string $namespace = null, ICacheStorage $cacheStorage = null): ICache {
 			$this->use();
-			return new Cache($cacheStorage ?: ($this->cacheStorageList[$namespace] ?? $this->cacheStorage), $this->namespace . $namespace);
+			return (new Cache($cacheStorage ?: ($this->cacheStorageList[$namespace] ?? $this->cacheStorage)))->setNamespace($this->namespace . $namespace);
 		}
 	}
