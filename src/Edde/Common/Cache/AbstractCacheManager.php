@@ -14,9 +14,23 @@
 	abstract class AbstractCacheManager extends AbstractCache implements ICacheManager {
 		use DefferedTrait;
 		/**
+		 * @var ICacheStorage[]
+		 */
+		protected $cacheStorageList;
+
+		/**
+		 * @inheritdoc
+		 */
+		public function registerCacheStorage(string $namespace, ICacheStorage $cacheStorage): ICacheManager {
+			$this->cacheStorageList[$namespace] = $cacheStorage;
+			return $this;
+		}
+
+		/**
 		 * @inheritdoc
 		 */
 		public function cache(string $namespace = null, ICacheStorage $cacheStorage = null): ICache {
-			return new Cache($cacheStorage ?: $this->cacheStorage, $this->namespace . $namespace);
+			$this->use();
+			return new Cache($cacheStorage ?: ($this->cacheStorageList[$namespace] ?? $this->cacheStorage), $this->namespace . $namespace);
 		}
 	}
