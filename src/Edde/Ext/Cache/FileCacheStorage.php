@@ -4,21 +4,17 @@
 	namespace Edde\Ext\Cache;
 
 	use Edde\Api\Cache\CacheStorageException;
-	use Edde\Api\Cache\ICacheDirectory;
+	use Edde\Api\Cache\LazyCacheDirectoryTrait;
 	use Edde\Common\Cache\AbstractCacheStorage;
 
 	class FileCacheStorage extends AbstractCacheStorage {
-		/**
-		 * @var ICacheDirectory
-		 */
-		protected $cacheDirectory;
+		use LazyCacheDirectoryTrait;
 		/**
 		 * @var string
 		 */
 		protected $namespace;
 
-		public function __construct(ICacheDirectory $cacheDirectory, string $namespace = '') {
-			$this->cacheDirectory = $cacheDirectory;
+		public function __construct(string $namespace = null) {
 			$this->namespace = $namespace;
 		}
 
@@ -39,6 +35,7 @@
 			ftruncate($handle, 0);
 			fwrite($handle, serialize($save));
 			fclose($handle);
+			$this->write++;
 			return $save;
 		}
 
@@ -50,10 +47,12 @@
 			$this->use();
 			/** @noinspection PhpUsageOfSilenceOperatorInspection */
 			if (($handle = @fopen($this->file($id), 'r+b')) === false) {
+				$this->miss++;
 				return null;
 			}
 			$source = unserialize(stream_get_contents($handle));
 			fclose($handle);
+			$this->hit++;
 			return $source;
 		}
 
@@ -63,6 +62,7 @@
 		}
 
 		protected function prepare() {
+			parent::prepare();
 			$this->cacheDirectory->create();
 		}
 	}
