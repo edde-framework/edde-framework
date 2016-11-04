@@ -6,30 +6,13 @@
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Cache\ICacheStorage;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Deffered\DefferedTrait;
 
 	/**
 	 * Common stuff for a cache cache implementation.
 	 */
-	abstract class AbstractCacheManager extends AbstractObject implements ICacheManager {
-		/**
-		 * @var string
-		 */
-		protected $namespace;
-		/**
-		 * @var ICacheStorage
-		 */
-		protected $cacheStorage;
-
-		/**
-		 * @param string $namespace
-		 * @param ICacheStorage $cacheStorage
-		 */
-		public function __construct(string $namespace, ICacheStorage $cacheStorage) {
-			$this->namespace = $namespace;
-			$this->cacheStorage = $cacheStorage;
-		}
-
+	abstract class AbstractCacheManager extends AbstractCache implements ICacheManager {
+		use DefferedTrait;
 		/**
 		 * @inheritdoc
 		 */

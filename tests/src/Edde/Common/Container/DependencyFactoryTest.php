@@ -4,7 +4,7 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Container\IDependency;
-	use Edde\Common\Cache\DummyCacheFactory;
+	use Edde\Common\Cache\DummyCacheManager;
 	use Edde\Common\Container\Factory\CallbackFactory;
 	use Edde\Common\ContainerTest\AlphaDependencyClass;
 	use Edde\Common\ContainerTest\BetaDependencyClass;
@@ -14,7 +14,7 @@
 
 	class DependencyFactoryTest extends TestCase {
 		public function testCommon() {
-			$factoryManager = new FactoryManager($cacheFactory = new DummyCacheFactory());
+			$factoryManager = new FactoryManager($cacheFactory = new DummyCacheManager());
 			$dependencyFactory = new DependencyFactory($factoryManager, $cacheFactory);
 			$factoryManager->registerFactory('foo', new CallbackFactory('foo', function (AlphaDependencyClass $foo, BetaDependencyClass $bar) {
 			}));

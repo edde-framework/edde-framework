@@ -4,6 +4,7 @@
 	namespace Edde\Ext\Cache;
 
 	use Edde\Api\Cache\LazyCacheDirectoryTrait;
+	use Edde\Api\File\IDirectory;
 	use Edde\Common\Cache\AbstractCacheStorage;
 
 	/**
@@ -16,9 +17,9 @@
 		 */
 		protected $namespace;
 		/**
-		 * @var string
+		 * @var IDirectory
 		 */
-		protected $file;
+		protected $directory;
 
 		/**
 		 * Two flies are sitting on a pile of dog poop. One suggests to the other: “Do you want to hear a really good joke?”
@@ -32,16 +33,15 @@
 		}
 
 		protected function get() {
-			return @unserialize(($content = file_get_contents($this->file)) ? $content : '');
+			return @unserialize(($content = file_get_contents($this->directory->filename('0.cache'))) ? $content : '');
 		}
 
 		public function save(string $id, $save) {
 			$this->use();
 			$this->write++;
-			touch($this->file);
 			$source = $this->get();
 			$source[$id] = $save;
-			file_put_contents($this->file, serialize($source));
+			file_put_contents($this->directory->filename('0.cache'), serialize($source));
 			return $save;
 		}
 
@@ -58,12 +58,13 @@
 
 		public function invalidate() {
 			$this->use();
-			unlink($this->file);
+			$this->directory->purge();
 		}
 
 		protected function prepare() {
 			parent::prepare();
 			$this->cacheDirectory->create();
-			$this->file = $this->cacheDirectory->filename(sha1($this->namespace));
+			$this->directory = $this->cacheDirectory->directory(sha1($this->namespace))
+				->create();
 		}
 	}
