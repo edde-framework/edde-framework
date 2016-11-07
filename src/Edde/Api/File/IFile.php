@@ -3,6 +3,7 @@
 
 	namespace Edde\Api\File;
 
+	use Brick\Math\BigInteger;
 	use Edde\Api\Resource\IResource;
 
 	interface IFile extends IResource {
@@ -132,4 +133,11 @@
 		 * @return IFile
 		 */
 		public function delete(): IFile;
+
+		/**
+		 * return a file size
+		 *
+		 * @return float
+		 */
+		public function getSize(): float;
 	}

@@ -6,34 +6,39 @@
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Cache\ICacheStorage;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Deffered\DefferedTrait;
 
 	/**
 	 * Common stuff for a cache cache implementation.
 	 */
-	abstract class AbstractCacheManager extends AbstractObject implements ICacheManager {
+	abstract class AbstractCacheManager extends AbstractCache implements ICacheManager {
+		use DefferedTrait;
 		/**
-		 * @var string
+		 * @var ICacheStorage[]
 		 */
-		protected $namespace;
-		/**
-		 * @var ICacheStorage
-		 */
-		protected $cacheStorage;
+		protected $cacheStorageList;
 
 		/**
-		 * @param string $namespace
-		 * @param ICacheStorage $cacheStorage
+		 * @inheritdoc
 		 */
-		public function __construct(string $namespace, ICacheStorage $cacheStorage) {
-			$this->namespace = $namespace;
-			$this->cacheStorage = $cacheStorage;
+		public function registerCacheStorage(string $namespace, ICacheStorage $cacheStorage): ICacheManager {
+			$this->cacheStorageList[$namespace] = $cacheStorage;
+			return $this;
+		}
+
+		public function invalidate(): ICache {
+			parent::invalidate();
+			foreach ($this->cacheStorageList as $cacheStorage) {
+				$cacheStorage->invalidate();
+			}
+			return $this;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function cache(string $namespace = null, ICacheStorage $cacheStorage = null): ICache {
-			return new Cache($cacheStorage ?: $this->cacheStorage, $this->namespace . $namespace);
+			$this->use();
+			return (new Cache($cacheStorage ?: ($this->cacheStorageList[$namespace] ?? $this->cacheStorage)))->setNamespace($this->namespace . $namespace);
 		}
 	}

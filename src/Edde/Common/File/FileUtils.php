@@ -243,4 +243,24 @@
 				'/',
 			], $path), '/');
 		}
+
+		static public function size(string $path): float {
+			$index = 0;
+			$size = 1073741824;
+			fseek($handle = fopen($path, 'r'), 0, SEEK_SET);
+			while ($size > 1) {
+				fseek($handle, $size, SEEK_CUR);
+				if (fgetc($handle) === false) {
+					fseek($handle, -$size, SEEK_CUR);
+					$size = (int)($size / 2);
+					continue;
+				}
+				fseek($handle, -1, SEEK_CUR);
+				$index += $size;
+			}
+			while (fgetc($handle) !== false) {
+				$index++;
+			}
+			return (float)$index;
+		}
 	}
