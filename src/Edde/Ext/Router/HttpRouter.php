@@ -3,7 +3,6 @@
 
 	namespace Edde\Ext\Router;
 
-	use Edde\Api\Application\IRequest;
 	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Crate\LazyCrateFactoryTrait;
 	use Edde\Api\Http\LazyBodyTrait;
@@ -15,7 +14,6 @@
 	use Edde\Api\Runtime\LazyRuntimeTrait;
 	use Edde\Common\Application\Request;
 	use Edde\Common\Router\AbstractRouter;
-	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Simple http router implementation without any additional magic.
@@ -39,60 +37,27 @@
 			if ($this->runtime->isConsoleMode()) {
 				return null;
 			}
-			$parameterList = $this->requestUrl->getQuery();
-			if (isset($parameterList['context'], $parameterList['handle'])) {
-				return $this->handleContextRequest();
-			} else if (isset($parameterList['handle'])) {
-				return $this->handleHandleRequest();
-			}
-			return null;
-		}
-
-		/**
-		 * when context, context and handle are executed
-		 *
-		 * @return IRequest|null
-		 */
-		protected function handleContextRequest() {
-			list($context, $contexHandle) = explode('.', $this->requestUrl->getParameter('context'));
-			list($handle, $handleHandle) = explode('.', $this->requestUrl->getParameter('handle'));
-			$contextMethod = 'context' . ($contexHandle = StringUtils::toCamelCase($contexHandle));
-			$handleMethod = 'handle' . ($handleHandle = StringUtils::toCamelCase($handleHandle));
-			$parameterList = $this->requestUrl->getQuery();
-			unset($parameterList['context'], $parameterList['handle']);
-			return $this->request($parameterList)
-				->registerHandler($context, $contextMethod)
-				->registerHandler($handle, $handleMethod);
-		}
-
-		/**
-		 * prepare request
-		 *
-		 * @param array $parameterList
-		 *
-		 * @return IRequest
-		 */
-		protected function request(array $parameterList) {
 			$this->httpResponse->setContentType($mime = $this->headerList->getContentType()
 				->getMime($this->headerList->getAccept()));
 			$this->responseManager->setMime($mime = ('http+' . $mime));
+			$parameterList = $this->requestUrl->getQuery();
+			if (isset($parameterList['action']) === false && isset($parameterList['handle']) === false) {
+				return null;
+			}
 			if ($this->httpRequest->isMethod('GET') === false && ($source = ($this->postList->isEmpty() ? $this->body->convert('array') : $this->postList->array())) !== null) {
 				$parameterList = array_merge($parameterList, $this->crateFactory->build($source));
 			}
-			return new Request($mime, $parameterList);
-		}
-
-		/**
-		 * handle is the only executed method
-		 *
-		 * @return IRequest|null
-		 */
-		protected function handleHandleRequest() {
-			list($class, $handle) = explode('.', $this->requestUrl->getParameter('handle'));
-			$method = 'handle' . ($handle = StringUtils::toCamelCase($handle));
-			$parameterList = $this->requestUrl->getQuery();
-			unset($parameterList['handle']);
-			return $this->request($parameterList)
-				->registerHandler($class, $method);
+			$request = new Request($mime);
+			if (isset($parameterList['handle'])) {
+				list($control, $handle) = explode('.', $parameterList['handle']);
+				unset($parameterList['handle']);
+				$request->registerHandleHandler($control, 'handle' . $handle, $parameterList);
+			}
+			if (isset($parameterList['action'])) {
+				list($control, $action) = explode('.', $parameterList['action']);
+				unset($parameterList['action']);
+				$request->registerActionHandler($control, 'action' . $action, $parameterList);
+			}
+			return $request;
 		}
 	}

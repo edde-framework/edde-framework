@@ -8,28 +8,6 @@
 	 */
 	interface IRequest {
 		/**
-		 * register handler; the order is important (for example context, handle, ...)
-		 *
-		 * @param string $class
-		 * @param string $method
-		 *
-		 * @return IRequest
-		 */
-		public function registerHandler(string $class, string $method): IRequest;
-
-		/**
-		 * @return array
-		 */
-		public function getHandlerList(): array;
-
-		/**
-		 * return the name of current handle (first of handler list)
-		 *
-		 * @return string
-		 */
-		public function getCurrentHandle(): string;
-
-		/**
 		 * "mime" type (it can be arbitrary string) of a request
 		 *
 		 * @return string
@@ -44,7 +22,64 @@
 		public function getParameterList(): array;
 
 		/**
-		 * return id based on current handler list
+		 * register an action handler (target control and target method to be called)
+		 *
+		 * @param string $control
+		 * @param string $action
+		 * @param array $parameterList
+		 *
+		 * @return IRequest
+		 */
+		public function registerActionHandler(string $control, string $action, array $parameterList = []): IRequest;
+
+		/**
+		 * has this request action
+		 *
+		 * @return bool
+		 */
+		public function hasAction(): bool;
+
+		/**
+		 * return an action name (this should be executed)
+		 *
+		 * @return string[] return [control, method, parameter list]
+		 */
+		public function getAction(): array;
+
+		/**
+		 * register a target control to handle "handle"
+		 *
+		 * @param string $control
+		 * @param string $handle
+		 * @param array $parameterList
+		 *
+		 * @return IRequest
+		 */
+		public function registerHandleHandler(string $control, string $handle, array $parameterList = []): IRequest;
+
+		/**
+		 * should be handler executed?
+		 *
+		 * @return bool
+		 */
+		public function hasHandle(): bool;
+
+		/**
+		 * return handle name to be executed
+		 *
+		 * @return string[] return [control, method, parameter list]
+		 */
+		public function getHandle(): array;
+
+		/**
+		 * return current call name (action/handle); handle should have a precedence
+		 *
+		 * @return string[] return [control, method, parameter list]
+		 */
+		public function getCall(): array;
+
+		/**
+		 * return request id
 		 *
 		 * @return string
 		 */

@@ -150,6 +150,10 @@
 
 		public function update(): IControl {
 			$this->use();
+			foreach ($this->getControlList() as $control) {
+				$control->update();
+			}
+			$this->event(new UpdateEvent($this));
 			return $this;
 		}
 
@@ -165,9 +169,9 @@
 				$this->event(new CancelEvent($this));
 				return null;
 			}
+			$result = $this->execute($method, $parameterList);
 			$this->update();
-			$this->event(new UpdateEvent($this));
-			$this->event(new DoneEvent($this, $result = $this->execute($method, $parameterList)));
+			$this->event(new DoneEvent($this, $result));
 			return $result;
 		}
 
