@@ -4,6 +4,7 @@
 	namespace Edde\Ext\Cache;
 
 	use Edde\Api\Cache\LazyCacheDirectoryTrait;
+	use Edde\Api\File\IDirectory;
 	use Edde\Common\Cache\AbstractCacheStorage;
 
 	/**
@@ -16,9 +17,13 @@
 		 */
 		protected $namespace;
 		/**
-		 * @var string
+		 * @var IDirectory
 		 */
-		protected $file;
+		protected $directory;
+		/**
+		 * @var array
+		 */
+		protected $source = [];
 
 		/**
 		 * Two flies are sitting on a pile of dog poop. One suggests to the other: “Do you want to hear a really good joke?”
@@ -27,30 +32,24 @@
 		 *
 		 * @param string $namespace
 		 */
-		public function __construct(string $namespace = null) {
+		public function __construct(string $namespace = '') {
 			$this->namespace = $namespace;
-		}
-
-		protected function get() {
-			return @unserialize(($content = file_get_contents($this->file)) ? $content : '');
 		}
 
 		public function save(string $id, $save) {
 			$this->use();
 			$this->write++;
-			touch($this->file);
-			$source = $this->get();
-			$source[$id] = $save;
-			file_put_contents($this->file, serialize($source));
+			$this->source[$id] = $save;
+			file_put_contents($this->directory->filename('0.cache'), serialize($this->source));
 			return $save;
 		}
 
 		public function load($id) {
 			$this->use();
-			$source = $this->get();
-			if (isset($source[$id])) {
+			/** @noinspection NotOptimalIfConditionsInspection */
+			if (isset($this->source[$id]) || array_key_exists($id, $this->source)) {
 				$this->hit++;
-				return $source[$id];
+				return $this->source[$id];
 			}
 			$this->miss++;
 			return null;
@@ -58,12 +57,14 @@
 
 		public function invalidate() {
 			$this->use();
-			unlink($this->file);
+			$this->directory->purge();
 		}
 
 		protected function prepare() {
 			parent::prepare();
 			$this->cacheDirectory->create();
-			$this->file = $this->cacheDirectory->filename(sha1($this->namespace));
+			$this->directory = $this->cacheDirectory->directory(sha1($this->namespace))
+				->create();
+			$this->source = @unserialize(($content = file_get_contents($this->directory->filename('0.cache'))) ? $content : '');
 		}
 	}

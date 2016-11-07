@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\File;
 
+	use Brick\Math\BigInteger;
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\File\IFile;
@@ -268,5 +269,12 @@
 		public function setAutoClose(bool $autoClose = true): IFile {
 			$this->autoClose = $autoClose;
 			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getSize(): float {
+			return FileUtils::size($this->getPath());
 		}
 	}

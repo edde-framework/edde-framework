@@ -12,6 +12,7 @@
 	use Edde\Common\Control\Event\CancelEvent;
 	use Edde\Common\Control\Event\DoneEvent;
 	use Edde\Common\Control\Event\HandleEvent;
+	use Edde\Common\Control\Event\UpdateEvent;
 	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Node\Node;
@@ -81,7 +82,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function addControlList(array $controlList) {
+		public function addControlList(array $controlList): IControl {
 			foreach ($controlList as $control) {
 				$this->addControl($control);
 			}
@@ -125,7 +126,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getControlList() {
+		public function getControlList(): array {
 			$controlList = [];
 			foreach ($this->node->getNodeList() as $node) {
 				$controlList[] = $node->getMeta('control');
@@ -147,6 +148,11 @@
 			return $invalidList;
 		}
 
+		public function update(): IControl {
+			$this->use();
+			return $this;
+		}
+
 		/**
 		 * @inheritdoc
 		 * @throws ControlException
@@ -155,12 +161,14 @@
 			$this->use();
 			$this->listen($this);
 			$this->event($handleEvent = new HandleEvent($this, $method, $parameterList));
-			if ($handleEvent->isCanceled() === false) {
-				$this->event(new DoneEvent($this, $result = $this->execute($method, $parameterList)));
-				return $result;
+			if ($handleEvent->isCanceled()) {
+				$this->event(new CancelEvent($this));
+				return null;
 			}
-			$this->event(new CancelEvent($this));
-			return null;
+			$this->update();
+			$this->event(new UpdateEvent($this));
+			$this->event(new DoneEvent($this, $result = $this->execute($method, $parameterList)));
+			return $result;
 		}
 
 		/**

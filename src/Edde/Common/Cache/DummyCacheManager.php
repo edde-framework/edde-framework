@@ -5,8 +5,8 @@
 
 	use Edde\Ext\Cache\DevNullCacheStorage;
 
-	class DummyCacheFactory extends CacheFactory {
+	class DummyCacheManager extends CacheManager {
 		public function __construct() {
-			parent::__construct(__DIR__, new DevNullCacheStorage());
+			parent::__construct(new DevNullCacheStorage());
 		}
 	}
