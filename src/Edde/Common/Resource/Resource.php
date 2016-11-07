@@ -39,7 +39,7 @@
 		 * @param string|null $name
 		 * @param string|null $mime
 		 */
-		public function __construct(IUrl $url, $base = null, $name = null, $mime = null) {
+		public function __construct(IUrl $url, string $base = null, string $name = null, string $mime = null) {
 			$this->url = $url;
 			$this->base = $base;
 			$this->name = $name;

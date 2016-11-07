@@ -4,6 +4,7 @@
 	namespace Edde\Api\Asset;
 
 	use Edde\Api\Deffered\IDeffered;
+	use Edde\Api\File\IFile;
 	use Edde\Api\Resource\IResource;
 
 	/**
@@ -18,4 +19,13 @@
 		 * @return IResource
 		 */
 		public function store(IResource $resource);
+
+		/**
+		 * create an empty file
+		 *
+		 * @param string $name
+		 *
+		 * @return IFile
+		 */
+		public function allocate(string $name): IFile;
 	}

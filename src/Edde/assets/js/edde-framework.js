@@ -51,18 +51,18 @@ var Edde = {
 			}
 			window.location.href = url;
 		},
-		class: function (name, func) {
+		class: function (selector, func) {
 			setTimeout(function () {
-				$('[data-class="' + name + '"]').each(function (i, element) {
+				$(selector).each(function (i, element) {
 					if (element.edde) {
 						return;
 					}
+					element.edde = true;
 					if (typeof func === 'function') {
 						func.call(element, ($(element)));
 						return;
 					}
 					$.extend(true, element, func);
-					element.edde = true;
 				});
 			}, 0);
 		},
