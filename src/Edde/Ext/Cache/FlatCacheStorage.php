@@ -20,6 +20,10 @@
 		 * @var IDirectory
 		 */
 		protected $directory;
+		/**
+		 * @var array
+		 */
+		protected $source = [];
 
 		/**
 		 * Two flies are sitting on a pile of dog poop. One suggests to the other: “Do you want to hear a really good joke?”
@@ -28,29 +32,24 @@
 		 *
 		 * @param string $namespace
 		 */
-		public function __construct(string $namespace = null) {
+		public function __construct(string $namespace = '') {
 			$this->namespace = $namespace;
-		}
-
-		protected function get() {
-			return @unserialize(($content = file_get_contents($this->directory->filename('0.cache'))) ? $content : '');
 		}
 
 		public function save(string $id, $save) {
 			$this->use();
 			$this->write++;
-			$source = $this->get();
-			$source[$id] = $save;
-			file_put_contents($this->directory->filename('0.cache'), serialize($source));
+			$this->source[$id] = $save;
+			file_put_contents($this->directory->filename('0.cache'), serialize($this->source));
 			return $save;
 		}
 
 		public function load($id) {
 			$this->use();
-			$source = $this->get();
-			if (isset($source[$id])) {
+			/** @noinspection NotOptimalIfConditionsInspection */
+			if (isset($this->source[$id]) || array_key_exists($id, $this->source)) {
 				$this->hit++;
-				return $source[$id];
+				return $this->source[$id];
 			}
 			$this->miss++;
 			return null;
@@ -66,5 +65,6 @@
 			$this->cacheDirectory->create();
 			$this->directory = $this->cacheDirectory->directory(sha1($this->namespace))
 				->create();
+			$this->source = @unserialize(($content = file_get_contents($this->directory->filename('0.cache'))) ? $content : '');
 		}
 	}

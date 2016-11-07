@@ -7,6 +7,16 @@
 
 	interface ICacheManager extends ICache, IDeffered {
 		/**
+		 * register cache storage to a namespace, so if cache will be created with same namespace, the given cache storage will be used
+		 *
+		 * @param string $namespace
+		 * @param ICacheStorage $cacheStorage
+		 *
+		 * @return ICacheManager
+		 */
+		public function registerCacheStorage(string $namespace, ICacheStorage $cacheStorage): ICacheManager;
+
+		/**
 		 * create a new cache
 		 *
 		 * @param string|null $namespace

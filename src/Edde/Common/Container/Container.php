@@ -82,63 +82,66 @@
 		 * @throws ContainerException
 		 */
 		public function inject($instance) {
+			if (is_object($instance) === false) {
+				return $instance;
+			}
 			$this->use();
-			if (is_object($instance)) {
-				if (($reflection = $this->cache->load($cacheId = ('reflection/' . get_class($instance)))) === null) {
-					$reflectionClass = new \ReflectionClass($instance);
-					$methodList = [];
-					$injectList = [];
-					foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
-						$name = $reflectionMethod->getName();
-						if ($reflectionMethod->getNumberOfParameters() > 0) {
-							if (strpos($name, 'inject') !== false && strlen($name) > 6) {
-								$methodList[$name] = $name;
-							}
-							if (strpos($name, 'lazy') !== false && strlen($name) > 4) {
-								$parameterList = [];
-								foreach ($reflectionMethod->getParameters() as $parameter) {
-									if ($reflectionClass->hasProperty($parameter->getName()) === false) {
-										throw new ContainerException(vsprintf("Lazy inject missmatch: parameter [$%s] of method [%s::%s()] must have a property [%s::$%s] with the same name as the paramete (for example protected \$%s).", [
-											$parameter->getName(),
-											$reflectionClass->getName(),
-											$reflectionMethod->getName(),
-											$reflectionClass->getName(),
-											$parameter->getName(),
-											$parameter->getName(),
-										]));
-									}
-									$parameterList[$parameter->getName()] = $parameter->getClass()
-										->getName();
+			$cacheId = ('reflection/' . get_class($instance));
+			if ($this->cache === null || ($reflection = $this->cache->load($cacheId)) === null) {
+				$reflectionClass = new \ReflectionClass($instance);
+				$methodList = [];
+				$injectList = [];
+				foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
+					$name = $reflectionMethod->getName();
+					if ($reflectionMethod->getNumberOfParameters() > 0) {
+						if (strpos($name, 'inject') !== false && strlen($name) > 6) {
+							$methodList[$name] = $name;
+						}
+						if (strpos($name, 'lazy') !== false && strlen($name) > 4) {
+							$parameterList = [];
+							foreach ($reflectionMethod->getParameters() as $parameter) {
+								if ($reflectionClass->hasProperty($parameter->getName()) === false) {
+									throw new ContainerException(vsprintf("Lazy inject missmatch: parameter [$%s] of method [%s::%s()] must have a property [%s::$%s] with the same name as the paramete (for example protected \$%s).", [
+										$parameter->getName(),
+										$reflectionClass->getName(),
+										$reflectionMethod->getName(),
+										$reflectionClass->getName(),
+										$parameter->getName(),
+										$parameter->getName(),
+									]));
 								}
-								$injectList[$name] = $parameterList;
+								$parameterList[$parameter->getName()] = $parameter->getClass()
+									->getName();
 							}
+							$injectList[$name] = $parameterList;
 						}
 					}
-					if (in_array(ILazyInject::class, $reflectionClass->getInterfaceNames(), true) === false) {
-						$injectList = [];
-					}
-					$this->cache->save($cacheId, $reflection = [
-						'method-list' => $methodList,
-						'lazy-inject' => $injectList,
-					]);
 				}
+				if (in_array(ILazyInject::class, $reflectionClass->getInterfaceNames(), true) === false) {
+					$injectList = [];
+				}
+				$reflection = [
+					'method-list' => $methodList,
+					'lazy-inject' => $injectList,
+				];
+				$this->cache && $this->cache->save($cacheId, $reflection);
+			}
+			/** @noinspection ForeachSourceInspection */
+			/** @var $instance ILazyInject */
+			foreach ($reflection['lazy-inject'] as $method) {
 				/** @noinspection ForeachSourceInspection */
-				/** @var $instance ILazyInject */
-				foreach ($reflection['lazy-inject'] as $method) {
-					/** @noinspection ForeachSourceInspection */
-					foreach ($method as $property => $class) {
-						$instance->lazy($property, function () use ($class) {
-							return $this->create($class);
-						});
-					}
+				foreach ($method as $property => $class) {
+					$instance->lazy($property, function () use ($class) {
+						return $this->create($class);
+					});
 				}
-				/** @noinspection ForeachSourceInspection */
-				foreach ($reflection['method-list'] as $method) {
-					$this->call([
-						$instance,
-						$method,
-					]);
-				}
+			}
+			/** @noinspection ForeachSourceInspection */
+			foreach ($reflection['method-list'] as $method) {
+				$this->call([
+					$instance,
+					$method,
+				]);
 			}
 			return $instance;
 		}
