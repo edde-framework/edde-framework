@@ -207,7 +207,10 @@
 		 * @throws FileException
 		 */
 		static public function url($file) {
-			return Url::create('file:///' . ltrim(self::realpath($file, false), '/'));
+			if (strpos($file, 'file:///') === false) {
+				$file = 'file:///' . ltrim(self::realpath($file, false), '/');
+			}
+			return Url::create($file);
 		}
 
 		/**
