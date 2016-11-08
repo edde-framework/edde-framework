@@ -27,7 +27,7 @@
 		 */
 		protected $application;
 		/**
-		 * @var \SomeRequest
+		 * @var IRequest
 		 */
 		protected $request;
 		/**
@@ -40,9 +40,7 @@
 		protected $errorControl;
 
 		public function testWorkflow() {
-			$this->request->class = \SomeControl::class;
-			$this->request->method = 'executeThisMethod';
-			$this->request->parameters = ['poo' => 'return this as result'];
+			$this->request->registerActionHandler(\SomeControl::class, 'executeThisMethod', ['poo' => 'return this as result']);
 			$eventList = [];
 			$this->application->listen(function (StartEvent $startEvent) use (&$eventList) {
 				$eventList[] = get_class($startEvent);
@@ -59,18 +57,14 @@
 
 		public function testErrorControl() {
 			$this->control->throw();
-			$this->request->class = \SomeControl::class;
-			$this->request->method = 'executeThisMethod';
-			$this->request->parameters = ['poo' => 'return this as result'];
+			$this->request->registerActionHandler(\SomeControl::class, 'executeThisMethod', ['poo' => 'return this as result']);
 			self::assertInstanceOf(\Exception::class, $this->application->run());
 			self::assertNotEmpty($exception = $this->errorControl->getException());
 			self::assertEquals('some error', $exception->getMessage());
 		}
 
 		public function testForbiddenControl() {
-			$this->request->class = \ForbiddenControl::class;
-			$this->request->method = 'foo';
-			$this->request->parameters = [];
+			$this->request->registerActionHandler(\ForbiddenControl::class, 'foo', []);
 			$this->application->run();
 			self::assertInstanceOf(\Exception::class, $exception = $this->errorControl->getException());
 			self::assertEquals(sprintf('Route class [ForbiddenControl] is not instance of [%s].', IControl::class), $exception->getMessage());
@@ -81,7 +75,7 @@
 				IApplication::class => Application::class,
 				IResponseManager::class => ResponseManager::class,
 				IRequest::class => function () {
-					return new \SomeRequest();
+					return new Request('foo');
 				},
 				ILogService::class => LogService::class,
 				\SomeControl::class => new ReflectionFactory(\SomeControl::class, \SomeControl::class, true),

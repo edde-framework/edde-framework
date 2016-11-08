@@ -68,16 +68,16 @@
 		/**
 		 * @param IControl[] $controlList
 		 *
-		 * @return $this
+		 * @return IControl
 		 */
-		public function addControlList(array $controlList);
+		public function addControlList(array $controlList): IControl;
 
 		/**
 		 * return first level of controls (the same result as self::getNodeList())
 		 *
 		 * @return IControl[]
 		 */
-		public function getControlList();
+		public function getControlList(): array;
 
 		/**
 		 * return all invalid (dirty) controls
@@ -101,6 +101,13 @@
 		 * @return bool
 		 */
 		public function isDirty(): bool;
+
+		/**
+		 * optional method for control update (could change internal state of this or other controls)
+		 *
+		 * @return IControl
+		 */
+		public function update(): IControl;
 
 		/**
 		 * execute the given method in this controls

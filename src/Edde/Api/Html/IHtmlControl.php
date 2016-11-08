@@ -148,7 +148,7 @@
 		/**
 		 * @return IHtmlControl[]
 		 */
-		public function getControlList();
+		public function getControlList(): array;
 
 		/**
 		 * execute output rendering of this control - return string version of this control

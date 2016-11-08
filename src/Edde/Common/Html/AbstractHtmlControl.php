@@ -4,6 +4,7 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Crypt\LazyCryptEngineTrait;
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Html\IHtmlControl;
@@ -20,6 +21,7 @@
 		use LazyJavaScriptCompilerTrait;
 		use LazyStyleSheetCompilerTrait;
 		use LazyTempDirectoryTrait;
+		use LazyCryptEngineTrait;
 
 		public function setTag(string $tag, bool $pair = true): IHtmlControl {
 			$this->use();
@@ -68,7 +70,8 @@
 		 * @throws FileException
 		 */
 		public function javascript(string $class, string $file = null): IHtmlControl {
-			$this->setAttribute('data-class', $name = str_replace('\\', '.', $class));
+			$selector = 'guid-' . ($guid = $this->cryptEngine->guid());
+			$this->addClass($selector);
 			$javascript = null;
 			if (class_exists($class)) {
 				$reflectionClass = new \ReflectionClass($class);
@@ -77,8 +80,8 @@
 			if ($file !== null) {
 				$javascript = new File($file);
 			}
-			$javascript = $this->tempDirectory->save(sha1($name . '-js') . '.js', $source = $javascript->get());
-			$javascript->save(sprintf("Edde.Utils.class('" . $name . "', %s);", $source));
+			$javascript = $this->tempDirectory->save(sha1($guid . '-js') . '.js', $source = $javascript->get());
+			$javascript->save(sprintf("Edde.Utils.class('." . $selector . "', %s);", $source));
 			$this->javaScriptCompiler->addResource($javascript);
 			return $this;
 		}

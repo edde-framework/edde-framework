@@ -8,6 +8,7 @@
 	use Edde\Api\Asset\LazyStorageDirectoryTrait;
 	use Edde\Api\File\DirectoryException;
 	use Edde\Api\File\FileException;
+	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\ResourceException;
@@ -39,6 +40,11 @@
 			}
 			FileUtils::copy($url->getAbsoluteUrl(), $file = $directory->filename($url->getResourceName()));
 			return new File($file, dirname($this->assetDirectory->getDirectory()));
+		}
+
+		public function allocate(string $name): IFile {
+			$this->use();
+			return $this->assetDirectory->file($name);
 		}
 
 		/**

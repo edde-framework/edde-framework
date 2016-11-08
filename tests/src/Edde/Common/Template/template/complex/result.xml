@@ -114,9 +114,9 @@
 	</div>
 	<div class="poo-class">poo</div>
 	<div class="used-div-here"></div>
-	<div class="button" data-action="/?a=1&handle=SomeCoolControl.action-on-the-root&context=SomeCoolControl.action-on-the-root"></div>
-	<div class="button" data-action="/?a=1&handle=Edde%5CCommon%5CHtml%5CTag%5CButtonControl.action-on-the-current-contol&context=Edde%5CCommon%5CHtml%5CTag%5CButtonControl.action-on-the-current-contol"></div>
-	<div class="button" data-action="/?a=1&handle=SomeCoolControl.action-on-the-current-contol&context=SomeCoolControl.action-on-the-current-contol"></div>
+	<div class="button" data-action="/?a=1&action=SomeCoolControl.action-on-the-root"></div>
+	<div class="button" data-action="/?a=1&action=Edde%5CCommon%5CHtml%5CTag%5CButtonControl.action-on-the-current-contol"></div>
+	<div class="button" data-action="/?a=1&action=SomeCoolControl.action-on-the-current-contol"></div>
 	<div class="button just-useless-button-here"></div>
 	<div class="edde-placeholder" id="foo"></div>
 	<h1>foo1</h1>

@@ -3,9 +3,9 @@
 
 	namespace Edde\Common\Application;
 
+	use Edde\Api\Application\ApplicationException;
 	use Edde\Api\Application\IRequest;
 	use Edde\Common\AbstractObject;
-	use Edde\Common\Strings\StringUtils;
 
 	class Request extends AbstractObject implements IRequest {
 		/**
@@ -15,11 +15,11 @@
 		/**
 		 * @var array
 		 */
-		protected $handlerList;
+		protected $action;
 		/**
 		 * @var array
 		 */
-		protected $parameterList = [];
+		protected $handle;
 		/**
 		 * @var string
 		 */
@@ -31,40 +31,64 @@
 		 * Snowballs.
 		 *
 		 * @param string $type
-		 * @param array $parameterList
 		 */
-		public function __construct(string $type, array $parameterList) {
+		public function __construct(string $type) {
 			$this->type = $type;
-			$this->parameterList = $parameterList;
 		}
 
 		public function getType(): string {
 			return $this->type;
 		}
 
-		public function getParameterList(): array {
-			return $this->parameterList;
-		}
-
-		public function registerHandler(string $class, string $method): IRequest {
-			$this->handlerList[] = [
-				$class,
-				$method,
+		public function registerActionHandler(string $control, string $action, array $parameterList = []): IRequest {
+			$this->action = [
+				$control,
+				$action,
+				$parameterList,
 			];
 			return $this;
 		}
 
-		public function getHandlerList(): array {
-			return $this->handlerList;
+		public function hasAction(): bool {
+			return $this->action !== null;
 		}
 
-		public function getCurrentHandle(): string {
-			return StringUtils::recamel(reset($this->handlerList)[1]);
+		public function getAction(): array {
+			return $this->action;
+		}
+
+		public function registerHandleHandler(string $control, string $handle, array $parameterList = []): IRequest {
+			$this->handle = [
+				$control,
+				$handle,
+				$parameterList,
+			];
+			return $this;
+		}
+
+		public function hasHandle(): bool {
+			return $this->handle !== null;
+		}
+
+		public function getHandle(): array {
+			return $this->handle;
+		}
+
+		public function getCall(): array {
+			if ($this->hasHandle()) {
+				return $this->getHandle();
+			} else if ($this->hasAction()) {
+				return $this->getAction();
+			}
+			throw new ApplicationException(sprintf('Request has no action or handle. Ooops!'));
 		}
 
 		public function getId(): string {
 			if ($this->id === null) {
-				$this->id = hash('sha256', json_encode($this->handlerList));
+				$action = $this->action;
+				$handle = $this->handle;
+				unset($action[2], $handle[2]);
+				$this->id = hash('sha256', json_encode($action) . json_encode($handle));
 			}
 			return $this->id;
 		}
