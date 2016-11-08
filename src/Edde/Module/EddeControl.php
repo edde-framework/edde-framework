@@ -3,7 +3,7 @@
 
 	namespace Edde\Module;
 
-	use Edde\Api\Cache\LazyCacheStorageTrait;
+	use Edde\Api\Cache\LazyCacheManagerTrait;
 	use Edde\Api\Crate\LazyCrateGeneratorTrait;
 	use Edde\Api\EddeException;
 	use Edde\Api\Html\IHtmlControl;
@@ -15,7 +15,7 @@
 	class EddeControl extends ViewControl {
 		use LazyCrateGeneratorTrait;
 		use LazyUpgradeManagerTrait;
-		use LazyCacheStorageTrait;
+		use LazyCacheManagerTrait;
 		use LazyLogServiceTrait;
 		use LazyFrameworkTrait;
 		/**
@@ -70,7 +70,7 @@
 		public function handleOnClearCache() {
 			try {
 				$this->template(['message']);
-				$this->cacheStorage->invalidate();
+				$this->cacheManager->invalidate();
 				$this->message('success', 'cache has been wiped out');
 			} catch (EddeException $e) {
 				$this->logService->exception($e, [

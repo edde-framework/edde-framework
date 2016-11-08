@@ -32,6 +32,9 @@
 					$fileList[] = $directory . '/../template/layout.xml';
 					$fileList[] = $directory . '/layout.xml';
 					$fileList[] = $directory . '/template/layout.xml';
+					if ($this->request->hasAction()) {
+						$fileList[] = $directory . '/template/' . StringUtils::recamel($this->request->getAction()[1]) . '.xml';
+					}
 					$fileList[] = $directory . '/template/' . StringUtils::recamel($this->request->getCall()[1]) . '.xml';
 					$parent = $parent->getParentClass();
 				}

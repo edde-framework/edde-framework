@@ -149,14 +149,15 @@ var $document = $(document);
 $document.ready(function () {
 	$document.on('click', '.button', function (event) {
 		var $this = $(this);
-		if (event.isDefaultPrevented() || $this.hasData('action') === false) {
+		var action = $this.data('action');
+		if (event.isDefaultPrevented() || action == false) {
 			return;
 		}
 		if ($this.hasClass('disabled')) {
 			return;
 		}
 		$this.addClass('disabled');
-		Edde.Utils.execute($this.data('action'), Edde.Utils.crate($this.data('bind'))).always(function () {
+		Edde.Utils.execute(action, Edde.Utils.crate($this.data('bind'))).always(function () {
 			$this.removeClass('disabled');
 		});
 	});

@@ -85,7 +85,10 @@
 
 		public function getId(): string {
 			if ($this->id === null) {
-				$this->id = hash('sha256', json_encode($this->action) . json_encode($this->handle));
+				$action = $this->action;
+				$handle = $this->handle;
+				unset($action[2], $handle[2]);
+				$this->id = hash('sha256', json_encode($action) . json_encode($handle));
 			}
 			return $this->id;
 		}
