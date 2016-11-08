@@ -65,6 +65,8 @@
 			$this->cacheDirectory->create();
 			$this->directory = $this->cacheDirectory->directory(sha1($this->namespace))
 				->create();
-			$this->source = @unserialize(($content = file_get_contents($this->directory->filename('0.cache'))) ? $content : '');
+			if (($this->source = @unserialize(($content = file_get_contents($this->directory->filename('0.cache'))) ? $content : '')) === false) {
+				$this->source = [];
+			}
 		}
 	}

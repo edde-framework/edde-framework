@@ -40,10 +40,6 @@
 			return $this->type;
 		}
 
-		public function getParameterList(): array {
-			return $this->parameterList;
-		}
-
 		public function registerActionHandler(string $control, string $action, array $parameterList = []): IRequest {
 			$this->action = [
 				$control,
@@ -89,7 +85,7 @@
 
 		public function getId(): string {
 			if ($this->id === null) {
-				$this->id = hash('sha256', json_encode($this->handlerList));
+				$this->id = hash('sha256', json_encode($this->action) . json_encode($this->handle));
 			}
 			return $this->id;
 		}

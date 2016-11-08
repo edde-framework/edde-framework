@@ -15,13 +15,6 @@
 		public function getType(): string;
 
 		/**
-		 * the given method should be called with this parameter list
-		 *
-		 * @return array
-		 */
-		public function getParameterList(): array;
-
-		/**
 		 * register an action handler (target control and target method to be called)
 		 *
 		 * @param string $control

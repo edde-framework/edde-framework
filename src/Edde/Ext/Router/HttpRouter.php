@@ -14,6 +14,7 @@
 	use Edde\Api\Runtime\LazyRuntimeTrait;
 	use Edde\Common\Application\Request;
 	use Edde\Common\Router\AbstractRouter;
+	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Simple http router implementation without any additional magic.
@@ -51,12 +52,12 @@
 			if (isset($parameterList['handle'])) {
 				list($control, $handle) = explode('.', $parameterList['handle']);
 				unset($parameterList['handle']);
-				$request->registerHandleHandler($control, 'handle' . $handle, $parameterList);
+				$request->registerHandleHandler($control, 'handle' . StringUtils::toCamelCase($handle), $parameterList);
 			}
 			if (isset($parameterList['action'])) {
 				list($control, $action) = explode('.', $parameterList['action']);
 				unset($parameterList['action']);
-				$request->registerActionHandler($control, 'action' . $action, $parameterList);
+				$request->registerActionHandler($control, 'action' . StringUtils::toCamelCase($action), $parameterList);
 			}
 			return $request;
 		}
