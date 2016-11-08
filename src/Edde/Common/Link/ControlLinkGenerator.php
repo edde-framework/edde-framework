@@ -5,8 +5,6 @@
 
 	use Edde\Api\Application\LazyRequestTrait;
 	use Edde\Api\Http\LazyRequestUrlTrait;
-	use Edde\Api\Link\LinkException;
-	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Url\Url;
 
 	class ControlLinkGenerator extends AbstractLinkGenerator {
@@ -22,36 +20,11 @@
 			if (class_exists($control = is_object($control) ? get_class($control) : $control) === false) {
 				return null;
 			}
-
-			$simpleRegexp = '[a-zA-Z0-9-]+';
-			$contextHandleRegexp = 'context=(?<contextHandle>[a-zA-Z0-9$-]+)';
-			$handleHandleRegexp = 'handle=(?<handleHandle>[a-zA-Z0-9-]+)';
-			if (($match = StringUtils::match($action, '~^' . $contextHandleRegexp . '$~')) !== null) {
-				$parameterList['context'] = $parameterList['handle'] = $this->filter($match['contextHandle'], $control);
-			} else if (($match = StringUtils::match($action, '~^' . $contextHandleRegexp . ',' . $handleHandleRegexp . '$~')) !== null) {
-				$parameterList['context'] = $this->filter($match['contextHandle'], $control);
-				$parameterList['handle'] = $this->filter($match['handleHandle'], $control);
-			} else if (($match = StringUtils::match($action, '~^' . $handleHandleRegexp . '$~')) !== null) {
-				$parameterList['handle'] = $this->filter($match['handleHandle'], $control);
-			} else if (($match = StringUtils::match($action, '~^' . $simpleRegexp . '$~')) !== null) {
-				$parameterList['context'] = $parameterList['handle'] = $control . '.' . $action;
-			} else {
+			if (($match = $this->match($control, $action)) === null) {
 				return null;
 			}
 			return Url::create()
-				->setQuery(array_merge($this->request->getParameterList(), $parameterList))
+				->setQuery(array_merge($this->request->getCall()[2], $parameterList, $match))
 				->getAbsoluteUrl();
-		}
-
-		protected function filter(string $input, string $control): string {
-			switch ($input) {
-				case '$':
-					$query = $this->requestUrl->getQuery();
-					if (isset($query['context']) === false) {
-						throw new LinkException('Context is required for contextual link generation support.');
-					}
-					return $query['context'];
-			}
-			return $control . '.' . $input;
 		}
 	}

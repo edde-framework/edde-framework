@@ -2,7 +2,6 @@
 	declare(strict_types = 1);
 
 	use Edde\Api\Application\IErrorControl;
-	use Edde\Api\Application\IRequest;
 	use Edde\Api\Control\ControlException;
 	use Edde\Common\Control\AbstractControl;
 
@@ -40,40 +39,5 @@
 		 */
 		public function getException() {
 			return $this->exception;
-		}
-	}
-
-	class SomeRequest implements IRequest {
-		public $class;
-		public $method;
-		public $parameters;
-
-		public function getType(): string {
-			return 'foo';
-		}
-
-		public function registerHandler(string $class, string $method): IRequest {
-			return $this;
-		}
-
-		public function getHandlerList(): array {
-			return [
-				[
-					$this->class,
-					$this->method,
-				],
-			];
-		}
-
-		public function getParameterList(): array {
-			return $this->parameters;
-		}
-
-		public function getId(): string {
-			return sha1(random_bytes(64));
-		}
-
-		public function getCurrentHandle(): string {
-			return $this->method;
 		}
 	}

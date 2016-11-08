@@ -32,25 +32,46 @@
 			return $this->framework->getVersionString();
 		}
 
-		public function contextSetup() {
+		public function actionSetup() {
 			$this->use();
 			$this->template();
-		}
-
-		public function handleSetup() {
 			$this->response();
-		}
-
-		public function contextMessage() {
-			$this->use();
-			$this->template(['message']);
 		}
 
 		public function handleOnUpgrade() {
 			$this->use();
 			try {
+				$this->template(['message']);
 				$this->message('success', sprintf('application has been upgraded to version [%s]', $this->upgradeManager->upgrade()
 					->getVersion()));
+			} catch (EddeException $e) {
+				$this->logService->exception($e, [
+					'edde',
+				]);
+				$this->message('alert', $e->getMessage());
+			}
+			$this->response();
+		}
+
+		public function handleOnRebuildCrates() {
+			try {
+				$this->template(['message']);
+				$this->crateGenerator->generate(true);
+				$this->message('success', 'crates has been rebuilt');
+			} catch (EddeException $e) {
+				$this->logService->exception($e, [
+					'edde',
+				]);
+				$this->message('alert', $e->getMessage());
+			}
+			$this->response();
+		}
+
+		public function handleOnClearCache() {
+			try {
+				$this->template(['message']);
+				$this->cacheStorage->invalidate();
+				$this->message('success', 'cache has been wiped out');
 			} catch (EddeException $e) {
 				$this->logService->exception($e, [
 					'edde',
@@ -67,31 +88,5 @@
 				->addClass($class)
 				->setText($message)
 				->dirty();
-		}
-
-		public function handleOnRebuildCrates() {
-			try {
-				$this->crateGenerator->generate(true);
-				$this->message('success', 'crates has been rebuilt');
-			} catch (EddeException $e) {
-				$this->logService->exception($e, [
-					'edde',
-				]);
-				$this->message('alert', $e->getMessage());
-			}
-			$this->response();
-		}
-
-		public function handleOnClearCache() {
-			try {
-				$this->cacheStorage->invalidate();
-				$this->message('success', 'cache has been wiped out');
-			} catch (EddeException $e) {
-				$this->logService->exception($e, [
-					'edde',
-				]);
-				$this->message('alert', $e->getMessage());
-			}
-			$this->response();
 		}
 	}

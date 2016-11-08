@@ -43,18 +43,11 @@
 			try {
 				$this->use();
 				$this->event(new StartEvent($this));
-				$result = null;
-				/** @var $controlList IControl[] */
-				$controlList = [];
-				foreach ($this->request->getHandlerList() as $handler) {
-					list($control, $method) = $handler;
-					if (isset($controlList[$control]) === false && (($controlList[$control] = $this->container->create($control)) instanceof IControl) === false) {
-						throw new ApplicationException(sprintf('Route class [%s] is not instance of [%s].', $control, IControl::class));
-					}
-					if (($result = $controlList[$control]->handle($method, $this->request->getParameterList())) === false) {
-						break;
-					}
+				list($class, $method, $parameterList) = $this->request->getCall();
+				if ((($control = $this->container->create($class)) instanceof IControl) === false) {
+					throw new ApplicationException(sprintf('Route class [%s] is not instance of [%s].', $class, IControl::class));
 				}
+				$result = $control->handle($method, $parameterList);
 				$this->event(new FinishEvent($this, $result));
 				$this->responseManager->execute();
 				return $result;

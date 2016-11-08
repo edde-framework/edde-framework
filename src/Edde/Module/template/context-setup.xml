@@ -1,5 +1,0 @@
-<control title="Edde Setup" t:block="content">
-	<button value="Upgrade" action=":context=message,handle=on-upgrade()" title="run upgrades registered to this application"/>
-	<button value="Rebuild crates" action=":context=message,handle=on-rebuild-crates()" title="update automagically generated crates"/>
-	<button value="Clear cache" action=":context=message,handle=on-clear-cache()" title="clear current cache"/>
-</control>
