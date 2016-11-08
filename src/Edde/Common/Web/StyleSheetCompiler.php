@@ -61,8 +61,10 @@
 							$current = str_replace($item, '"' . $pathList[$path] . '"', $current);
 							continue;
 						}
-						if (file_exists($file) === false && ($file = FileUtils::realpath($resourcePath . '/' . $path)) === false) {
-							throw new WebException(sprintf('Cannot locate css [%s] resource [%s] on the filesystem.', $source, $urlList));
+						try {
+							file_exists($file) === false && ($file = FileUtils::realpath($resourcePath . '/' . $path)) === false;
+						} catch (FileException $exception) {
+							throw new WebException(sprintf('Cannot locate css [%s] resource [%s] on the filesystem.', $source, $url), 0, $exception);
 						}
 						$current = str_replace($item, '"' . ($pathList[$path] = $this->assetStorage->store(new File($file))
 								->getRelativePath()) . '"', $current);
