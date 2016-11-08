@@ -11,7 +11,6 @@
 	use Edde\Api\Html\IHtmlView;
 	use Edde\Api\Template\LazyTemplateManagerTrait;
 	use Edde\Common\Cache\CacheTrait;
-	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Template trait can be used by any html control; it gives simple way to load a template (or snippet) with some little magic around.
@@ -33,9 +32,11 @@
 					$fileList[] = $directory . '/layout.xml';
 					$fileList[] = $directory . '/template/layout.xml';
 					if ($this->request->hasAction()) {
-						$fileList[] = $directory . '/template/' . StringUtils::recamel($this->request->getAction()[1]) . '.xml';
+						$fileList[] = $directory . '/template/action-' . $this->request->getActionName() . '.xml';
 					}
-					$fileList[] = $directory . '/template/' . StringUtils::recamel($this->request->getCall()[1]) . '.xml';
+					if ($this->request->hasHandle()) {
+						$fileList[] = $directory . '/template/handle-' . $this->request->getHandleName() . '.xml';
+					}
 					$parent = $parent->getParentClass();
 				}
 				$importList = [];
