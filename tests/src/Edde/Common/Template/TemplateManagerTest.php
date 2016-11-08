@@ -239,7 +239,7 @@
 					return RequestUrl::create($hostUrl->getAbsoluteUrl());
 				},
 				IRequest::class => function (IRequestUrl $requestUrl) {
-					return new Request('', $requestUrl->getQuery());
+					return (new Request(''))->registerActionHandler('foo', 'bar', $requestUrl->getQuery());
 				},
 				ILinkFactory::class => function (IContainer $container, IHostUrl $hostUrl) {
 					$linkFactory = new LinkFactory($hostUrl);
