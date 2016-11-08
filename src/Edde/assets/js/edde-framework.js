@@ -44,7 +44,7 @@ var Edde = {
 	Utils: {
 		redirect: function (url) {
 			var event = Edde.Event.event('edde.redirect', {
-				url: url,
+				url: url
 			});
 			if (event.isDefaultPrevented()) {
 				return;
@@ -148,10 +148,10 @@ var Edde = {
 var $document = $(document);
 $document.ready(function () {
 	$document.on('click', '.button', function (event) {
-		if (event.isDefaultPrevented()) {
+		var $this = $(this);
+		if (event.isDefaultPrevented() || $this.hasData('action') === false) {
 			return;
 		}
-		var $this = $(this);
 		if ($this.hasClass('disabled')) {
 			return;
 		}
