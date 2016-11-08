@@ -6,6 +6,7 @@
 	use Edde\Api\Application\ApplicationException;
 	use Edde\Api\Application\IRequest;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Strings\StringUtils;
 
 	class Request extends AbstractObject implements IRequest {
 		/**
@@ -57,6 +58,10 @@
 			return $this->action;
 		}
 
+		public function getActionName(): string {
+			return StringUtils::recamel($this->action[1], '-', 1);
+		}
+
 		public function registerHandleHandler(string $control, string $handle, array $parameterList = []): IRequest {
 			$this->handle = [
 				$control,
@@ -72,6 +77,10 @@
 
 		public function getHandle(): array {
 			return $this->handle;
+		}
+
+		public function getHandleName(): string {
+			return StringUtils::recamel($this->handle[1], '-', 1);
 		}
 
 		public function getCall(): array {

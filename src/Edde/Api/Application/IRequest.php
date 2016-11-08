@@ -40,6 +40,13 @@
 		public function getAction(): array;
 
 		/**
+		 * return action name (for example foo-bar - without action-foo-bar)
+		 *
+		 * @return string
+		 */
+		public function getActionName(): string;
+
+		/**
 		 * register a target control to handle "handle"
 		 *
 		 * @param string $control
@@ -63,6 +70,13 @@
 		 * @return string[] return [control, method, parameter list]
 		 */
 		public function getHandle(): array;
+
+		/**
+		 * return current handle name (e.g. foo-bar)
+		 *
+		 * @return string
+		 */
+		public function getHandleName(): string;
 
 		/**
 		 * return current call name (action/handle); handle should have a precedence

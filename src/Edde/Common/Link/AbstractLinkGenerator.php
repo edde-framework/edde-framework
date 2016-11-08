@@ -31,7 +31,7 @@
 				$parameterList['handle'] = $control . '.' . substr($action, 1);
 			} else if (strpos($action, '@$') === 0) {
 				$current = $this->request->getAction();
-				$parameterList['action'] = $current[0] . '.' . StringUtils::recamel($current[1], '-', 1);
+				$parameterList['action'] = $current[0] . '.' . $this->request->getActionName();
 				$parameterList['handle'] = $control . '.' . substr($action, 2);
 			}
 			return $parameterList;
