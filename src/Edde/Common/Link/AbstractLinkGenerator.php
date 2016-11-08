@@ -15,15 +15,8 @@
 
 		protected function match(string $control, string $action) {
 			$simpleRegexp = '[a-z0-9-]+';
-			$actionHandleRegexp = 'action=(?<actionHandle>[a-z0-9-]+)';
-			$handleHandleRegexp = 'handle=(?<handleHandle>[a-z0-9-]+)';
 			$parameterList = null;
-			if (($match = StringUtils::match($action, '~^' . $actionHandleRegexp . '$~')) !== null) {
-				$parameterList['action'] = $parameterList['handle'] = $this->filter($match['actionHandle'], $control);
-			} else if (($match = StringUtils::match($action, '~^' . $actionHandleRegexp . ',' . $handleHandleRegexp . '$~')) !== null) {
-				$parameterList['action'] = $control . '.' . $match['actionHandle'];
-				$parameterList['handle'] = $control . '.' . $match['handleHandle'];
-			} else if (($match = StringUtils::match($action, '~^' . $handleHandleRegexp . '$~')) !== null) {
+			if (($match = StringUtils::match($action, '~^handle=(?<handleHandle>[a-z0-9-]+)$~')) !== null) {
 				$parameterList['handle'] = $control . '.' . $match['handleHandle'];
 			} else if (($match = StringUtils::match($action, '~^' . $simpleRegexp . '$~')) !== null) {
 				$parameterList['action'] = $control . '.' . $action;
