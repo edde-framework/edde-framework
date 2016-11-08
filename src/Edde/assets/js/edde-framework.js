@@ -44,7 +44,7 @@ var Edde = {
 	Utils: {
 		redirect: function (url) {
 			var event = Edde.Event.event('edde.redirect', {
-				url: url,
+				url: url
 			});
 			if (event.isDefaultPrevented()) {
 				return;
@@ -148,15 +148,16 @@ var Edde = {
 var $document = $(document);
 $document.ready(function () {
 	$document.on('click', '.button', function (event) {
-		if (event.isDefaultPrevented()) {
+		var $this = $(this);
+		var action = $this.data('action');
+		if (event.isDefaultPrevented() || action == false) {
 			return;
 		}
-		var $this = $(this);
 		if ($this.hasClass('disabled')) {
 			return;
 		}
 		$this.addClass('disabled');
-		Edde.Utils.execute($this.data('action'), Edde.Utils.crate($this.data('bind'))).always(function () {
+		Edde.Utils.execute(action, Edde.Utils.crate($this.data('bind'))).always(function () {
 			$this.removeClass('disabled');
 		});
 	});
