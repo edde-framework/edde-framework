@@ -46,7 +46,7 @@
 			/** @noinspection DegradedSwitchInspection */
 			switch ($attribute) {
 				case 'class':
-					$this->addAttribute($attribute, $value);
+					$this->addClass($value);
 					break;
 				default:
 					$this->node->setAttribute($attribute, $value);
