@@ -156,7 +156,7 @@
 			return $this->node->hasAttribute($attribute);
 		}
 
-		public function toggleClass(string $class, bool $enable = null) {
+		public function toggleClass(string $class, bool $enable = null): IHtmlControl {
 			$this->use();
 			$hasClass = $this->hasClass($class);
 			if ($enable === null) {
