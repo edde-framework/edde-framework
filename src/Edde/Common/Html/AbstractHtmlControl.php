@@ -193,7 +193,11 @@
 		 * @inheritdoc
 		 */
 		public function addClass(string $class) {
-			$this->addAttribute('class', $class);
+			foreach (explode(' ', $class) as $value) {
+				if (($value = trim($value)) !== '') {
+					$this->addAttribute('class', $value);
+				}
+			}
 			return $this;
 		}
 
