@@ -150,7 +150,7 @@ $document.ready(function () {
 	$document.on('click', '.button', function (event) {
 		var $this = $(this);
 		var action = $this.data('action');
-		if (event.isDefaultPrevented() || action == false) {
+		if (event.isDefaultPrevented() || action === undefined) {
 			return;
 		}
 		if ($this.hasClass('disabled')) {
