@@ -16,7 +16,7 @@
 		/**
 		 * @var ICacheStorage[]
 		 */
-		protected $cacheStorageList;
+		protected $cacheStorageList = [];
 
 		/**
 		 * @inheritdoc
