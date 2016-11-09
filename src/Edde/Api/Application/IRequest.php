@@ -83,7 +83,14 @@
 		 *
 		 * @return string[] return [control, method, parameter list]
 		 */
-		public function getCall(): array;
+		public function getCurrent(): array;
+
+		/**
+		 * return name of current action
+		 *
+		 * @return string
+		 */
+		public function getCurrentName(): string;
 
 		/**
 		 * return request id
