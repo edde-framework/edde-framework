@@ -24,7 +24,7 @@
 				return null;
 			}
 			return Url::create()
-				->setQuery(array_merge($this->request->getCall()[2], $parameterList, $match))
+				->setQuery(array_merge($this->request->getCurrent()[2], $parameterList, $match))
 				->getAbsoluteUrl();
 		}
 	}

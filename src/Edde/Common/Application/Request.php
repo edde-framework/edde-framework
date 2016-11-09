@@ -83,13 +83,17 @@
 			return StringUtils::recamel($this->handle[1], '-', 1);
 		}
 
-		public function getCall(): array {
+		public function getCurrent(): array {
 			if ($this->hasHandle()) {
 				return $this->getHandle();
 			} else if ($this->hasAction()) {
 				return $this->getAction();
 			}
 			throw new ApplicationException(sprintf('Request has no action or handle. Ooops!'));
+		}
+
+		public function getCurrentName(): string {
+			return StringUtils::recamel($this->getCurrent()[1], '-', 1);
 		}
 
 		public function getId(): string {
