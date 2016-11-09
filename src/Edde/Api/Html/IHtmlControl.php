@@ -130,6 +130,16 @@
 		public function addClass(string $class);
 
 		/**
+		 * toggle class presence
+		 *
+		 * @param string $class
+		 * @param bool|null $enable
+		 *
+		 * @return IHtmlControl
+		 */
+		public function toggleClass(string $class, bool $enable = null): IHtmlControl;
+
+		/**
 		 * is the given class present in this control?
 		 *
 		 * @param string $class
