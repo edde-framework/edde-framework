@@ -163,7 +163,6 @@
 		 */
 		public function handle(string $method, array $parameterList) {
 			$this->use();
-			$this->listen($this);
 			$this->event($handleEvent = new HandleEvent($this, $method, $parameterList));
 			if ($handleEvent->isCanceled()) {
 				$this->event(new CancelEvent($this));
@@ -237,6 +236,7 @@
 		 * @inheritdoc
 		 */
 		protected function prepare() {
+			$this->listen($this);
 			$this->node = new Node();
 			$this->node->setMeta('control', $this);
 			return $this;
