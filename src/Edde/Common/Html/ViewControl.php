@@ -3,14 +3,11 @@
 
 	namespace Edde\Common\Html;
 
-	use Edde\Api\Application\LazyResponseManagerTrait;
-	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlView;
 	use Edde\Api\Http\LazyHttpRequestTrait;
 	use Edde\Api\Link\LazyLinkFactoryTrait;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceList;
-	use Edde\Common\Application\Response;
 	use Edde\Common\File\File;
 	use Edde\Common\Html\Document\DocumentControl;
 	use Edde\Common\Html\Document\MetaControl;
@@ -19,10 +16,11 @@
 	 * Formal root control for displaying page with some shorthands.
 	 */
 	class ViewControl extends DocumentControl implements IHtmlView {
-		use LazyResponseManagerTrait;
 		use LazyHttpRequestTrait;
 		use LazyLinkFactoryTrait;
 		use TemplateTrait;
+		use ResponseTrait;
+		use RedirectTrait;
 		/**
 		 * @var IResourceList
 		 */
@@ -78,19 +76,6 @@
 		}
 
 		/**
-		 * response redirect response to the client
-		 *
-		 * @param mixed $redirect
-		 *
-		 * @return $this
-		 */
-		public function redirect($redirect) {
-			$this->use();
-			$this->responseManager->response(new Response('redirect', $this->linkFactory->link($redirect)));
-			return $this;
-		}
-
-		/**
 		 * @inheritdoc
 		 */
 		public function render(int $indent = 0): string {
@@ -105,15 +90,6 @@
 			}
 			$this->dirty();
 			return parent::render($indent);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function response(): IHtmlView {
-			$this->use();
-			$this->responseManager->response(new Response(IHtmlControl::class, $this));
-			return $this;
 		}
 
 		/**
