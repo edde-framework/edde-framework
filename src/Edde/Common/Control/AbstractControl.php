@@ -150,10 +150,10 @@
 
 		public function update(): IControl {
 			$this->use();
+			$this->event(new UpdateEvent($this));
 			foreach ($this->getControlList() as $control) {
 				$control->update();
 			}
-			$this->event(new UpdateEvent($this));
 			return $this;
 		}
 
