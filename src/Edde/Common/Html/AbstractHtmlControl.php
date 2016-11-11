@@ -125,6 +125,11 @@
 			return $this;
 		}
 
+		public function getText(): string {
+			$this->use();
+			return $this->node->getValue('');
+		}
+
 		/**
 		 * @inheritdoc
 		 */

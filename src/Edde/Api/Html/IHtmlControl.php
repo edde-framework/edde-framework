@@ -36,6 +36,13 @@
 		public function setText(string $text);
 
 		/**
+		 * return text or empty string
+		 *
+		 * @return string
+		 */
+		public function getText(): string;
+
+		/**
 		 * tells if this control is a paired tag
 		 *
 		 * @return bool
