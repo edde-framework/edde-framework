@@ -19,8 +19,11 @@
 
 		/**
 		 * send response to the current request
-		 *
-		 * @return IHtmlView
 		 */
-		public function response(): IHtmlView;
+		public function response();
+
+		/**
+		 * @param $redirect
+		 */
+		public function redirect($redirect);
 	}
