@@ -18,21 +18,22 @@
 		 */
 		protected $aclList = [];
 
-		public function access(string $group, bool $grant, string $resource = null, \DateTime $until = null): IAclManager {
+		public function access(string $group, bool $grant, string $resource = null, \DateTime $from = null, \DateTime $until = null): IAclManager {
 			$this->aclList[$group][] = [
 				$grant,
 				$resource,
-				$until,
+				$from ?: new \DateTime(),
+				$until ?: new \DateTime(),
 			];
 			return $this;
 		}
 
-		public function grant(string $group, string $resource = null, \DateTime $until = null): IAclManager {
-			return $this->access($group, true, $resource, $until);
+		public function grant(string $group, string $resource = null, \DateTime $from = null, \DateTime $until = null): IAclManager {
+			return $this->access($group, true, $resource, $from, $until);
 		}
 
-		public function deny(string $group, string $resource = null, \DateTime $until = null): IAclManager {
-			return $this->access($group, false, $resource, $until);
+		public function deny(string $group, string $resource = null, \DateTime $from = null, \DateTime $until = null): IAclManager {
+			return $this->access($group, false, $resource, $from, $until);
 		}
 
 		public function acl(array $groupList): IAcl {

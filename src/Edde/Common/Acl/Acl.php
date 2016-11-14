@@ -9,28 +9,36 @@
 
 	class Acl extends AbstractObject implements IAcl {
 		/**
-		 * @var array
+		 * @var array[]
 		 */
 		protected $aclList = [];
 
-		public function register(bool $grant, string $resource = null, \DateTime $until = null): IAcl {
+		/**
+		 * @inheritdoc
+		 */
+		public function register(bool $grant, string $resource = null, \DateTime $from = null, \DateTime $until = null): IAcl {
 			$this->aclList[$resource][] = [
 				$grant,
+				$from,
 				$until,
 			];
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function can(string $resource, \DateTime $dateTime = null): bool {
 			if (isset($this->aclList[$resource]) === false && isset($this->aclList[null]) === false) {
 				throw new AclException(sprintf('Asking for unknown resource [%s].', $resource));
 			}
 			$can = false;
-			$dateTime = $dateTime ?: new \DateTime();
-			foreach ($this->aclList[$resource] ?? $this->aclList[null] as $rule) {
-				/** @var $until \DateTime */
-				list($grant, $until) = $rule;
-				if ($until && $grant = ($diff = $until->diff($dateTime)) && $diff->invert === 0) {
+			/** @noinspection UnnecessaryParenthesesInspection */
+			$stamp = ($dateTime ?: new \DateTime())->getTimestamp();
+			/** @var $from \DateTime */
+			/** @var $until \DateTime */
+			foreach ($this->aclList[$resource] ?? $this->aclList[null] as list($grant, $from, $until)) {
+				if ($stamp < $from->getTimestamp() || $stamp > $until->getTimestamp()) {
 					continue;
 				}
 				$can = $grant;

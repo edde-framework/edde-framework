@@ -32,15 +32,18 @@
 
 		public function testGuestAcl() {
 			$acl = $this->aclManager->acl(['guest']);
-			self::assertFalse($acl->can('something'), 'Guest can something!');
+			self::assertFalse($acl->can('something'), 'Guest can do something!');
 			self::assertTrue($acl->can('file.read'));
 			self::assertFalse($acl->can('file.delete'));
 		}
 
 		public function testGuestTimeAcl() {
 			$acl = $this->aclManager->acl(['guest']);
-			self::assertFalse($acl->can('time', new \DateTime('20.12.2000')), 'Guest can something in wrong time!');
-			self::assertTrue($acl->can('time', new \DateTime('20.12.2025')), 'Guest can not something in good time!');
+			self::assertFalse($acl->can('time', new \DateTime('31.12.1989')), 'Guest can do something in wrong time!');
+			self::assertTrue($acl->can('time', new \DateTime('1.1.1990')), 'Guest can NOT do something in good time!');
+			self::assertTrue($acl->can('time', new \DateTime('2.1.1990')), 'Guest can NOT do something in good time!');
+			self::assertTrue($acl->can('time', new \DateTime('5.1.1990')), 'Guest can NOT do something in good time!');
+			self::assertFalse($acl->can('time', new \DateTime('6.1.1990')), 'Guest can do something in wrong time!');
 		}
 
 		protected function setUp() {
@@ -54,6 +57,6 @@
 			$this->aclManager->grant('guest', 'file.read');
 			$this->aclManager->grant('guest', 'file.delete');
 			$this->aclManager->deny('guest', 'file.delete');
-			$this->aclManager->grant('guest', 'time', new \DateTime('24.12.2024'));
+			$this->aclManager->grant('guest', 'time', new \DateTime('1.1.1990'), new \DateTime('5.1.1990'));
 		}
 	}
