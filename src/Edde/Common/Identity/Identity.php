@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Identity;
 
+	use Edde\Api\Acl\IAcl;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Identity\IdentityException;
 	use Edde\Api\Identity\IIdentity;
@@ -25,6 +26,10 @@
 		 * @var array
 		 */
 		protected $metaList = [];
+		/**
+		 * @var IAcl
+		 */
+		protected $acl;
 
 		public function __construct() {
 			$this->name = 'unknown';
@@ -76,5 +81,21 @@
 		public function setAuthenticated(bool $authenticated): IIdentity {
 			$this->authenticated = $authenticated;
 			return $this;
+		}
+
+		public function setAcl(IAcl $acl): IIdentity {
+			$this->acl = $acl;
+			return $this;
+		}
+
+		public function getAcl(): IAcl {
+			if ($this->acl === null) {
+				throw new IdentityException(sprintf('Identity [%s] has no acl set.', $this->getName()));
+			}
+			return $this->acl;
+		}
+
+		public function can(string $resource, \DateTime $dateTime = null): bool {
+			return $this->acl ? $this->acl->can($resource, $dateTime) : $this->isAuthenticated();
 		}
 	}

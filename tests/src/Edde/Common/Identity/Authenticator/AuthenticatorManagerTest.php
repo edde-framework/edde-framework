@@ -32,6 +32,7 @@
 		public function testFlow() {
 			self::assertEquals('unknown', $this->identity->getName());
 			self::assertFalse($this->identity->isAuthenticated());
+			self::assertFalse($this->identity->can('foobar'));
 			$this->authenticatorManager->select('flow');
 			$this->authenticatorManager->flow(\InitialAuthenticator::class, 'foo', 'bar');
 			self::assertEquals('whepee', $this->identity->getName());
@@ -40,6 +41,7 @@
 			$this->authenticatorManager->flow(\SecondaryAuthenticator::class, 'boo', 'poo');
 			self::assertEquals('whepee', $this->identity->getName());
 			self::assertTrue($this->identity->isAuthenticated());
+			self::assertTrue($this->identity->can('foobar'));
 			self::assertNull($this->authenticatorManager->getCurrentFlow());
 		}
 

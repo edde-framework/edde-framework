@@ -3,6 +3,7 @@
 
 	namespace Edde\Api\Identity;
 
+	use Edde\Api\Acl\IAcl;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Deffered\IDeffered;
 
@@ -90,4 +91,30 @@
 		 * @return bool === true, identity (user) has been logged in and session is valid
 		 */
 		public function isAuthenticated(): bool;
+
+		/**
+		 * until ACL is set, every action will be forbidden if not authenticated, allowed if authenticated
+		 *
+		 * @param IAcl $acl
+		 *
+		 * @return IIdentity
+		 */
+		public function setAcl(IAcl $acl): IIdentity;
+
+		/**
+		 * return current acl set
+		 *
+		 * @return IAcl
+		 */
+		public function getAcl(): IAcl;
+
+		/**
+		 * can this identity access the given resource?
+		 *
+		 * @param string $resource
+		 * @param \DateTime|null $dateTime optionally datetime can be specified; null will NOT disable time checks
+		 *
+		 * @return bool
+		 */
+		public function can(string $resource, \DateTime $dateTime = null): bool;
 	}
