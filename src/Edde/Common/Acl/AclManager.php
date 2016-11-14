@@ -22,8 +22,8 @@
 			$this->aclList[$group][] = [
 				$grant,
 				$resource,
-				$from ?: new \DateTime(),
-				$until ?: new \DateTime(),
+				$from,
+				$until,
 			];
 			return $this;
 		}

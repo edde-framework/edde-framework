@@ -27,6 +27,7 @@
 
 		/**
 		 * @inheritdoc
+		 * @throws AclException
 		 */
 		public function can(string $resource, \DateTime $dateTime = null): bool {
 			if (isset($this->aclList[$resource]) === false && isset($this->aclList[null]) === false) {
@@ -38,7 +39,7 @@
 			/** @var $from \DateTime */
 			/** @var $until \DateTime */
 			foreach ($this->aclList[$resource] ?? $this->aclList[null] as list($grant, $from, $until)) {
-				if ($stamp < $from->getTimestamp() || $stamp > $until->getTimestamp()) {
+				if (($from && $stamp < $from->getTimestamp()) || ($until && $stamp > $until->getTimestamp())) {
 					continue;
 				}
 				$can = $grant;
