@@ -439,11 +439,11 @@
 		 * @return \Generator
 		 */
 		static public function createIterator(string $string): \Generator {
-			$strlen = mb_strlen(self::normalize($string));
-			while ($strlen) {
+			$length = mb_strlen($string = self::normalizeNewLines($string));
+			while ($length) {
 				yield mb_substr($string, 0, 1);
-				$string = mb_substr($string, 1, $strlen);
-				$strlen = mb_strlen($string);
+				$string = mb_substr($string, 1, $length);
+				$length = mb_strlen($string);
 			}
 		}
 
