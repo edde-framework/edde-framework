@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Acl;
 
+	use Edde\Api\Acl\AclException;
 	use Edde\Api\Acl\IAcl;
 	use Edde\Api\Acl\IAclManager;
 	use Edde\Api\Container\LazyContainerTrait;
@@ -10,6 +11,12 @@
 
 	class AclManager extends AbstractDeffered implements IAclManager {
 		use LazyContainerTrait;
+		/**
+		 * array of acl rules
+		 *
+		 * @var array
+		 */
+		protected $aclList = [];
 
 		public function access(string $group, bool $grant, string $resource = null, \DateTime $until = null): IAclManager {
 			return $this;
@@ -24,6 +31,9 @@
 		}
 
 		public function acl(array $groupList): IAcl {
+			if ($diff = array_diff($groupList, array_keys($this->aclList))) {
+				throw new AclException(sprintf('Unknown group [%s]. Did you register access for this group(s)?', implode(', ', $diff)));
+			}
 			return $this->container->inject(new Acl());
 		}
 	}

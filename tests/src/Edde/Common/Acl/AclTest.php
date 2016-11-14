@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Acl;
 
+	use Edde\Api\Acl\AclException;
 	use Edde\Api\Acl\IAclManager;
 	use Edde\Ext\Container\ContainerFactory;
 	use phpunit\framework\TestCase;
@@ -12,6 +13,16 @@
 		 * @var IAclManager
 		 */
 		protected $aclManager;
+
+		public function testException() {
+			$this->expectException(AclException::class);
+			$this->expectExceptionMessage('Unknown group [some, unknown, group]. Did you register access for this group(s)?');
+			$this->aclManager->acl([
+				'some',
+				'unknown',
+				'group',
+			]);
+		}
 
 		public function testRootAcl() {
 			$acl = $this->aclManager->acl(['root']);
