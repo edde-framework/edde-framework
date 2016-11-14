@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Html;
 
+	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Html\IHtmlView;
 	use Edde\Api\Http\LazyHttpRequestTrait;
 	use Edde\Api\Link\LazyLinkFactoryTrait;
@@ -18,6 +19,7 @@
 	class ViewControl extends DocumentControl implements IHtmlView {
 		use LazyHttpRequestTrait;
 		use LazyLinkFactoryTrait;
+		use LazyResponseManagerTrait;
 		use TemplateTrait;
 		use ResponseTrait;
 		use RedirectTrait;
