@@ -14,11 +14,16 @@
 		/**
 		 * array of acl rules
 		 *
-		 * @var array
+		 * @var array[]
 		 */
 		protected $aclList = [];
 
 		public function access(string $group, bool $grant, string $resource = null, \DateTime $until = null): IAclManager {
+			$this->aclList[$group][] = [
+				$grant,
+				$resource,
+				$until,
+			];
 			return $this;
 		}
 
@@ -34,6 +39,15 @@
 			if ($diff = array_diff($groupList, array_keys($this->aclList))) {
 				throw new AclException(sprintf('Unknown group [%s]. Did you register access for this group(s)?', implode(', ', $diff)));
 			}
-			return $this->container->inject(new Acl());
+			$this->container->inject($acl = new Acl());
+			foreach ($groupList as $group) {
+				foreach ($this->aclList[$group] as $rule) {
+					call_user_func_array([
+						$acl,
+						'register',
+					], $rule);
+				}
+			}
+			return $acl;
 		}
 	}
