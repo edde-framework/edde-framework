@@ -133,7 +133,7 @@
 		 * @return string
 		 */
 		protected function generateSetter(ISchemaProperty $schemaProperty) {
-			$parameter = StringUtils::firstLower($camelCase = StringUtils::toCamelCase($propertyName = $schemaProperty->getName()));
+			$parameter = '_' . StringUtils::firstLower($camelCase = StringUtils::toCamelCase($propertyName = $schemaProperty->getName()));
 			$source[] = "\t\t/**\n";
 			$type = $schemaProperty->isArray() ? 'array
 				' : $schemaProperty->getType();
