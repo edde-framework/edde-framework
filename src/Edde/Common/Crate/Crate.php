@@ -165,7 +165,7 @@
 				throw new CrateException(sprintf('Setting unknown values [%s] to the crate [%s].', implode(', ', $diff), $this->schema->getSchemaName()));
 			}
 			foreach ($push as $property => $value) {
-				$property = $this->getProperty($property);
+				$property = $this->getProperty($property = (string)$property);
 				$schemaProperty = $property->getSchemaProperty();
 				if (($isArray = is_array($value)) === false && $schemaProperty->isArray()) {
 					throw new CrateException(sprintf('Cannot push simple value [%s] to array.', $property->getSchemaProperty()));
