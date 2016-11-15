@@ -57,12 +57,12 @@
 				return $this->factoryList[$factory];
 			}
 			if ($this->hasFactory($name) === false) {
-				throw new FactoryException(sprintf('Requested unknown cache [%s].', $name));
+				throw new FactoryException(sprintf('Requested unknown factory [%s].', $name));
 			}
 			if (isset($this->factoryList[$name])) {
 				$factory = $this->factoryList[$name];
 				if ($factory->canHandle($name) === false) {
-					throw new FactoryException(sprintf('Requested cache cannot handle identifier [%s].', $name));
+					throw new FactoryException(sprintf('Requested factory cannot handle identifier [%s].', $name));
 				}
 				$this->cache->save($cacheId, $name);
 				return $factory;
@@ -73,7 +73,7 @@
 					return $factory;
 				}
 			}
-			throw new FactoryException(sprintf('Some strange bug here for cache [%s].', $name));
+			throw new FactoryException(sprintf('Some strange bug here for factory [%s].', $name));
 		}
 
 		/**
