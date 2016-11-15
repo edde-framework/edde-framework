@@ -44,7 +44,7 @@
 		protected function load(ICrate $crate, array $source) {
 			$schema = $crate->getSchema();
 			foreach ($source as $property => $value) {
-				if ($schema->hasCollection($property)) {
+				if ($schema->hasCollection($property = (string)$property)) {
 					$schemaCollection = $schema->getCollection($property);
 					$targetSchema = $schemaCollection->getTarget()
 						->getSchema()
