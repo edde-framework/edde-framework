@@ -120,6 +120,16 @@
 		public function handle(string $method, array $parameterList);
 
 		/**
+		 * this method should be used for internal control creation
+		 *
+		 * @param string $control
+		 * @param array ...$parameterList
+		 *
+		 * @return IControl
+		 */
+		public function createControl(string $control, ...$parameterList): IControl;
+
+		/**
 		 * @return IControl[]
 		 */
 		public function getIterator();
