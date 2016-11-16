@@ -3,6 +3,8 @@
 
 	namespace Edde\Api\Html;
 
+	use Edde\Api\Control\IControl;
+
 	/**
 	 * Formal root implementation for a html page/fragment.
 	 */
@@ -13,9 +15,9 @@
 		 * @param string $control
 		 * @param array ...$parameterList
 		 *
-		 * @return IHtmlControl
+		 * @return IHtmlControl|IControl
 		 */
-		public function createControl(string $control, ...$parameterList): IHtmlControl;
+		public function createControl(string $control, ...$parameterList): IControl;
 
 		/**
 		 * send response to the current request

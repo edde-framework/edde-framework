@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Html;
 
-	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Crypt\LazyCryptEngineTrait;
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\LazyTempDirectoryTrait;
@@ -17,7 +16,6 @@
 	 * Base class for all html based controls.
 	 */
 	abstract class AbstractHtmlControl extends AbstractControl implements IHtmlControl {
-		use LazyContainerTrait;
 		use LazyJavaScriptCompilerTrait;
 		use LazyStyleSheetCompilerTrait;
 		use LazyTempDirectoryTrait;
@@ -297,9 +295,5 @@
 			return $this->addControl($this->createControl(PlaceholderControl::class)
 				->setId($id)
 				->dirty());
-		}
-
-		public function createControl(string $control, ...$parameterList): IHtmlControl {
-			return $this->container->create($control, ...$parameterList);
 		}
 	}

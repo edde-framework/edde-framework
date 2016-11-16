@@ -4,6 +4,7 @@
 	namespace Edde\Common\Control;
 
 	use Edde\Api\Callback\ICallback;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Control\ControlException;
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Node\INode;
@@ -23,6 +24,7 @@
 	 * Root implementation of all controls.
 	 */
 	abstract class AbstractControl extends AbstractDeffered implements IControl {
+		use LazyContainerTrait;
 		use EventTrait;
 		/**
 		 * @var INode
@@ -219,6 +221,10 @@
 		 */
 		protected function action(string $action, array $parameterList) {
 			throw new ControlException(sprintf('Unknown handle method [%s]; to disable this exception, override [%s::%s()] method or implement [%s::%s()].', $action, static::class, __FUNCTION__, static::class, StringUtils::toCamelHump($action)));
+		}
+
+		public function createControl(string $control, ...$parameterList): IControl {
+			return $this->container->create($control, ...$parameterList);
 		}
 
 		/**
