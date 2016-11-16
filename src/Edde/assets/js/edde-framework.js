@@ -147,18 +147,23 @@ var Edde = {
 
 var $document = $(document);
 $document.ready(function () {
-	$document.on('click', '.button', function (event) {
-		var $this = $(this);
-		var action = $this.data('action');
-		if (event.isDefaultPrevented() || action === undefined) {
+	var redirect = false;
+	Edde.Utils.listen('edde.redirect', function () {
+		redirect = true;
+	});
+	$document.on('click', '.button[data-action]', function (event) {
+		if (event.isDefaultPrevented()) {
 			return;
 		}
+		var $this = $(this);
 		if ($this.hasClass('disabled')) {
 			return;
 		}
 		$this.addClass('disabled');
-		Edde.Utils.execute(action, Edde.Utils.crate($this.data('bind'))).always(function () {
-			$this.removeClass('disabled');
+		Edde.Utils.execute($this.data('action'), Edde.Utils.crate($this.data('bind'))).always(function () {
+			if (redirect === false) {
+				$this.removeClass('disabled');
+			}
 		});
 	});
 });
