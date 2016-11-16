@@ -115,7 +115,7 @@
 		 */
 		public function getProperty(string $name): IProperty {
 			if ($this->hasProperty($name) === false) {
-				throw new CrateException(sprintf('Unknown value [%s] in crate [%s].', $name, $this->schema->getSchemaName()));
+				throw new CrateException(sprintf('Unknown value [%s] in crate [%s].', $name, $this->schema ? $this->schema->getSchemaName() : static::class . '; anonymous'));
 			}
 			return $this->propertyList[$name];
 		}
