@@ -128,6 +128,26 @@
 		public function getAttributeList(): array;
 
 		/**
+		 * set a given data to control (data-* attribute)
+		 *
+		 * @param string $name
+		 * @param mixed $data
+		 *
+		 * @return IHtmlControl
+		 */
+		public function data(string $name, $data): IHtmlControl;
+
+		/**
+		 * retrieve the given data from control
+		 *
+		 * @param string $name
+		 * @param null $default
+		 *
+		 * @return IHtmlControl
+		 */
+		public function getData(string $name, $default = null): IHtmlControl;
+
+		/**
 		 * set the given css class
 		 *
 		 * @param string $class
