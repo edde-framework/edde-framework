@@ -148,7 +148,7 @@ var Edde = {
 var $document = $(document);
 $document.ready(function () {
 	var redirect = false;
-	Edde.Utils.listen('edde.redirect', function () {
+	Edde.Event.listen('edde.redirect', function () {
 		redirect = true;
 	});
 	$document.on('click', '.button[data-action]', function (event) {
