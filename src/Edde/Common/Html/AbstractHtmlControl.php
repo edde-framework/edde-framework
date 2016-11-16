@@ -281,7 +281,7 @@
 			return $this;
 		}
 
-		public function getData(string $name, $default = null): IHtmlControl {
+		public function getData(string $name, $default = null) {
 			return $this->getAttribute('data-' . $name, $default);
 		}
 

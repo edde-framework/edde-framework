@@ -143,9 +143,9 @@
 		 * @param string $name
 		 * @param null $default
 		 *
-		 * @return IHtmlControl
+		 * @return string|mixed
 		 */
-		public function getData(string $name, $default = null): IHtmlControl;
+		public function getData(string $name, $default = null);
 
 		/**
 		 * set the given css class
