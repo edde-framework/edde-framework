@@ -276,6 +276,15 @@
 			return $this->node->getAttributeList();
 		}
 
+		public function data(string $name, $data): IHtmlControl {
+			$this->setAttribute('data-' . $name, $data);
+			return $this;
+		}
+
+		public function getData(string $name, $default = null): IHtmlControl {
+			return $this->getAttribute('data-' . $name, $default);
+		}
+
 		/**
 		 * @inheritdoc
 		 */
