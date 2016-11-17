@@ -128,12 +128,20 @@
 			$crate->set('foo', false);
 		}
 
-//		public function testDynamicCrate() {
-//			$crate = new Crate();
-//			$crate->dynamic([
-//				'500' => 'value of property named "500"',
-//			]);
-//		}
+		public function testDynamicCrate() {
+			$crate = new Crate();
+			$crate->dynamic([
+				'500' => 'value of property named "500"',
+				'600' => 200,
+			]);
+			self::assertFalse($crate->isDirty());
+			self::assertEquals($crate->getProperty('500')
+				->getSchemaProperty()
+				->getType(), 'string');
+			self::assertEquals($crate->getProperty('600')
+				->getSchemaProperty()
+				->getType(), 'integer');
+		}
 
 		protected function setUp() {
 			$this->container = ContainerFactory::create([
