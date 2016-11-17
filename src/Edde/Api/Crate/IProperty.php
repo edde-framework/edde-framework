@@ -14,25 +14,25 @@
 		 *
 		 * @return ISchemaProperty
 		 */
-		public function getSchemaProperty();
+		public function getSchemaProperty(): ISchemaProperty;
 
 		/**
 		 * set value to this property; the original value is preserved
 		 *
 		 * @param mixed $value
 		 *
-		 * @return $this
+		 * @return IProperty
 		 */
-		public function set($value);
+		public function set($value): IProperty;
 
 		/**
 		 * push value; the original value is set to this value and current value is nulled; value is NOT dirty after this
 		 *
 		 * @param mixed $value
 		 *
-		 * @return $this
+		 * @return IProperty
 		 */
-		public function push($value);
+		public function push($value): IProperty;
 
 		/**
 		 * retrieve current value or default; default value should be updated to the property
@@ -67,7 +67,7 @@
 		/**
 		 * forgot current value
 		 *
-		 * @return $this
+		 * @return IProperty
 		 */
-		public function reset();
+		public function reset(): IProperty;
 	}
