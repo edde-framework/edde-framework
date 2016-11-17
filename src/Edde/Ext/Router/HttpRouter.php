@@ -46,7 +46,16 @@
 				return null;
 			}
 			if ($this->httpRequest->isMethod('GET') === false && ($source = ($this->postList->isEmpty() ? $this->body->convert('array') : $this->postList->array())) !== null) {
-				$parameterList = array_merge($parameterList, $this->crateFactory->build($source));
+				/**
+				 * support for control property filling
+				 */
+				if (isset($source[''])) {
+					$parameterList[null] = $source[''];
+					unset($source['']);
+				}
+				if (empty($source) === false) {
+					$parameterList = array_merge($parameterList, $this->crateFactory->build($source));
+				}
 			}
 			$request = new Request($mime);
 			if (isset($parameterList['handle'])) {
