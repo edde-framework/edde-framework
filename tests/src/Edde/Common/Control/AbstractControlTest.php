@@ -54,6 +54,18 @@
 			self::assertEquals('dumyyyy', $control->handle('dummy', []));
 		}
 
+		public function testFill() {
+			$control = new \TestControl();
+			$control->fill([
+				'thisIsArray' => $expectedArray = [
+					'foo' => 'bar',
+					'another-foo' => 'anothezr-bar',
+				],
+				'singleValue' => 'boo',
+			]);
+			self::assertEquals($expectedArray, $control->thisIsArray);
+		}
+
 		public function testToggleClass() {
 			$control = new DivControl();
 			$control->toggleClass('foo');

@@ -17,6 +17,7 @@
 	use Edde\Common\Html\Macro\ControlMacro;
 	use Edde\Common\Html\Macro\CssMacro;
 	use Edde\Common\Html\Macro\DictionaryMacro;
+	use Edde\Common\Html\Macro\FillMacro;
 	use Edde\Common\Html\Macro\HeaderMacro;
 	use Edde\Common\Html\Macro\HtmlMacro;
 	use Edde\Common\Html\Macro\IfMacro;
@@ -115,6 +116,7 @@
 					$container->inject(new HeaderMacro('h5')),
 					$container->inject(new HeaderMacro('h6')),
 					$container->inject(new ButtonMacro()),
+					$container->inject(new FillMacro()),
 				]);
 			});
 			return $macroSet;
