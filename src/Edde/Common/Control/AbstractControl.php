@@ -209,6 +209,9 @@
 			$argumentList = array_filter($parameterList, function ($key) {
 				return is_int($key);
 			}, ARRAY_FILTER_USE_KEY);
+			if (isset($parameterList[null])) {
+				$this->fill($parameterList[null]);
+			}
 			if (method_exists($this, $method)) {
 				/** @var $callback ICallback */
 				$callback = new Callback([
