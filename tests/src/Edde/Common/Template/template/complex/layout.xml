@@ -1,4 +1,6 @@
 <control foo="@current-method-call()" title="foo" t:translator="foo">
+	<div t:fill="someTargetProperty"/>
+
 	<load src="./this-has-block-in-root.xml"/>
 
 	<use src="this-should-not-fail"/>

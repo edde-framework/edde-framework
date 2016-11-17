@@ -1,4 +1,5 @@
 <div foo="yahoo!" title="foo" class="root">
+	<div data-fill="someTargetProperty"></div>
 	<div class="hello!"></div>
 	<div class="hello!"></div>
 	<div class="foo-case"></div>
