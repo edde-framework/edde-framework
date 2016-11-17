@@ -157,7 +157,6 @@ var Edde = {
 					}
 					crate[''][name] = this.getValue();
 				});
-				console.log(crate);
 			}
 			return crate;
 		}
