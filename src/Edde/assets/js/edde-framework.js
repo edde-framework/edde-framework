@@ -133,11 +133,27 @@ var Edde = {
 			var crate = null;
 			if (id) {
 				crate = {};
-				$('#' + id + '[data-schema], #' + id + ' *[data-schema]').each(function () {
+				$source = $('#' + id);
+				$source.find('*[data-schema]').each(function () {
 					var $this = $(this);
 					var dataClass = $this.data('schema');
 					crate[dataClass] = crate[dataClass] ? crate[dataClass] : {};
 					crate[dataClass][$this.data('property')] = this.getValue();
+				});
+				$source.find('*[data-fill]').each(function () {
+					var name = $(this).data('fill');
+					crate[null] = crate[null] ? crate[null] : {};
+					if (name.indexOf('[]') === name.length - 2) {
+						name = name.substr(0, name.length - 2);
+						crate[null][name] = crate[null][name] || [];
+						if (this.getKey) {
+							crate[null][name][this.getKey()] = this.getValue();
+							return;
+						}
+						crate[null][name].push(this.getValue());
+						return;
+					}
+					crate[null][name] = this.getValue();
 				});
 			}
 			return crate;
