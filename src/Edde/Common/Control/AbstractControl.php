@@ -167,6 +167,7 @@
 		 * @throws ControlException
 		 */
 		public function fill($fill): IControl {
+			$this->use();
 			$reflectionClass = new \ReflectionClass($this);
 			/** @noinspection ForeachSourceInspection */
 			foreach ($fill as $k => $v) {
