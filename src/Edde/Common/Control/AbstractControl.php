@@ -150,11 +150,32 @@
 			return $invalidList;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function update(): IControl {
 			$this->use();
 			$this->event(new UpdateEvent($this));
 			foreach ($this->getControlList() as $control) {
 				$control->update();
+			}
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws ControlException
+		 */
+		public function fill($fill): IControl {
+			$reflectionClass = new \ReflectionClass($this);
+			/** @noinspection ForeachSourceInspection */
+			foreach ($fill as $k => $v) {
+				if ($reflectionClass->hasProperty($k) === false) {
+					throw new ControlException(sprintf('Unknown property [%s::$%s] to fill.', static::class, $k));
+				}
+				$reflectionProperty = $reflectionClass->getProperty($k);
+				$reflectionProperty->setAccessible(true);
+				$reflectionProperty->setValue($this, $v);
 			}
 			return $this;
 		}

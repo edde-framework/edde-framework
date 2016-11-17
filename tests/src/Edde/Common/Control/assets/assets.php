@@ -4,6 +4,9 @@
 	use Edde\Common\Control\AbstractControl;
 
 	class TestControl extends AbstractControl {
+		public $thisIsArray;
+		public $singleValue;
+
 		public function someMethod($boo, $foo) {
 			return $foo . $boo;
 		}

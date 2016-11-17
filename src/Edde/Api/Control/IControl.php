@@ -110,6 +110,15 @@
 		public function update(): IControl;
 
 		/**
+		 * fill internal properties with given one (stdClass is preffered way)
+		 *
+		 * @param \Traversable|\stdClass|array $fill
+		 *
+		 * @return IControl
+		 */
+		public function fill($fill): IControl;
+
+		/**
 		 * execute the given method in this controls
 		 *
 		 * @param string $method
