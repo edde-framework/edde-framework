@@ -110,6 +110,15 @@
 		public function push(array $push, bool $strict = true): ICrate;
 
 		/**
+		 * crate will be built dynamically from the input
+		 *
+		 * @param \Traversable|array $source
+		 *
+		 * @return ICrate
+		 */
+		public function dynamic($source): ICrate;
+
+		/**
 		 * return value of the given property; if property does not exist, exception is thrown
 		 *
 		 * @param string $name

@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Crate;
 
+	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\IProperty;
 	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Common\AbstractObject;
@@ -42,7 +43,7 @@
 		 * @param ISchemaProperty $schemaProperty
 		 * @param mixed|null $value
 		 */
-		public function __construct(ISchemaProperty $schemaProperty, $value = null) {
+		public function __construct(ISchemaProperty $schemaProperty = null, $value = null) {
 			$this->schemaProperty = $schemaProperty;
 			$this->value = $value;
 			$this->dirty = false;
@@ -50,15 +51,19 @@
 
 		/**
 		 * @inheritdoc
+		 * @throws CrateException
 		 */
-		public function getSchemaProperty() {
+		public function getSchemaProperty(): ISchemaProperty {
+			if ($this->schemaProperty === null) {
+				throw new CrateException(sprintf('Property [%s] has no schema property definition.', static::class));
+			}
 			return $this->schemaProperty;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function push($value) {
+		public function push($value): IProperty {
 			$this->dirty = false;
 			$this->current = null;
 			$this->value = $value;
@@ -83,7 +88,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function set($value) {
+		public function set($value): IProperty {
 			$value = $this->schemaProperty->setterFilter($this->schemaProperty->filter($value));
 			$this->dirty = false;
 			$this->current = null;
@@ -123,7 +128,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function reset() {
+		public function reset(): IProperty {
 			$this->dirty = false;
 			$this->current = null;
 			return $this;

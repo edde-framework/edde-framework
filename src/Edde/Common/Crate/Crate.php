@@ -11,6 +11,8 @@
 	use Edde\Api\Schema\ISchema;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Callback\CallbackUtils;
+	use Edde\Common\Schema\Schema;
+	use Edde\Common\Schema\SchemaProperty;
 
 	/**
 	 * Simple (...advanced...) crate implementation.
@@ -85,23 +87,6 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws CrateException
-		 */
-		public function put(array $put, bool $strict = true): ICrate {
-			if ($strict && ($diff = array_diff(array_keys($put), array_keys($this->propertyList))) !== []) {
-				throw new CrateException(sprintf('Setting unknown values [%s] to the crate [%s].', implode(', ', $diff), $this->schema->getSchemaName()));
-			}
-			foreach ($put as $property => $value) {
-				if (isset($this->propertyList[$property]) === false) {
-					continue;
-				}
-				$this->set($property, $value);
-			}
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
 		 */
 		public function set(string $name, $value): ICrate {
 			$this->getProperty($name)
@@ -115,7 +100,7 @@
 		 */
 		public function getProperty(string $name): IProperty {
 			if ($this->hasProperty($name) === false) {
-				throw new CrateException(sprintf('Unknown value [%s] in crate [%s].', $name, $this->schema->getSchemaName()));
+				throw new CrateException(sprintf('Unknown value [%s] in crate [%s].', $name, $this->schema ? $this->schema->getSchemaName() : static::class . '; anonymous'));
 			}
 			return $this->propertyList[$name];
 		}
@@ -151,9 +136,17 @@
 		 * @inheritdoc
 		 * @throws CrateException
 		 */
-		public function get(string $name, $default = null) {
-			return $this->getProperty($name)
-				->get($default);
+		public function put(array $put, bool $strict = true): ICrate {
+			if ($strict && ($diff = array_diff(array_keys($put), array_keys($this->propertyList))) !== []) {
+				throw new CrateException(sprintf('Setting unknown values [%s] to the crate [%s].', implode(', ', $diff), $this->schema->getSchemaName()));
+			}
+			foreach ($put as $property => $value) {
+				if (isset($this->propertyList[$property]) === false) {
+					continue;
+				}
+				$this->set($property, $value);
+			}
+			return $this;
 		}
 
 		/**
@@ -176,6 +169,24 @@
 				$property->push($value);
 			}
 			return $this;
+		}
+
+		public function dynamic($source): ICrate {
+			$schema = new Schema(static::class);
+			foreach ($source as $k => $v) {
+				$schema->addProperty($schemaProperty = new SchemaProperty($schema, (string)$k, gettype($v), false));
+				$this->addProperty(new Property($schemaProperty, $v));
+			}
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws CrateException
+		 */
+		public function get(string $name, $default = null) {
+			return $this->getProperty($name)
+				->get($default);
 		}
 
 		/**
