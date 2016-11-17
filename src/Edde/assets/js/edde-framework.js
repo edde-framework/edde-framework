@@ -140,21 +140,24 @@ var Edde = {
 					crate[dataClass] = crate[dataClass] ? crate[dataClass] : {};
 					crate[dataClass][$this.data('property')] = this.getValue();
 				});
+				var index = 0;
 				$source.find('*[data-fill]').each(function () {
 					var name = $(this).data('fill');
-					crate[null] = crate[null] ? crate[null] : {};
+					crate[''] = crate[''] || {};
 					if (name.indexOf('[]') === name.length - 2) {
 						name = name.substr(0, name.length - 2);
-						crate[null][name] = crate[null][name] || [];
+						crate[''][name] = crate[''][name] || {};
+						var key = index++;
 						if (this.getKey) {
-							crate[null][name][this.getKey()] = this.getValue();
-							return;
+							key = this.getKey();
+							index--;
 						}
-						crate[null][name].push(this.getValue());
+						crate[''][name][key] = this.getValue();
 						return;
 					}
-					crate[null][name] = this.getValue();
+					crate[''][name] = this.getValue();
 				});
+				console.log(crate);
 			}
 			return crate;
 		}
