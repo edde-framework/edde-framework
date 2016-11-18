@@ -6,13 +6,18 @@
 	use Edde\Common\Html\AbstractHtmlControl;
 
 	class TextControl extends AbstractHtmlControl {
+		public function setValue(string $value) {
+			$this->data('value', $value);
+			return $this;
+		}
+
 		protected function prepare() {
 			parent::prepare()
 				->javascript(self::class)
 				->setTag('input', false)
 				->addAttributeList([
 					'type' => 'text',
-					'value' => $this->node->getValue(),
+					'value' => $this->getData('value', ''),
 				]);
 		}
 	}
