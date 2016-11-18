@@ -7,7 +7,7 @@
 
 	class PasswordControl extends AbstractHtmlControl {
 		public function setValue(string $value) {
-			$this->data('value', $value);
+			$this->setAttribute('value', $value);
 			return $this;
 		}
 
@@ -22,7 +22,6 @@
 				->setTag('input', false)
 				->addAttributeList([
 					'type' => 'password',
-					'value' => $this->getData('value', ''),
 				]);
 		}
 	}
