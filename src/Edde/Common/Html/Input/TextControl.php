@@ -11,6 +11,11 @@
 			return $this;
 		}
 
+		public function setPlaceholder(string $value) {
+			$this->setAttribute('placeholder', $value);
+			return $this;
+		}
+
 		protected function prepare() {
 			parent::prepare()
 				->javascript(self::class)
