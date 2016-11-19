@@ -3,19 +3,10 @@
 
 	namespace Edde\Api\Identity;
 
-	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Deffered\IDeffered;
+	use Edde\Api\Storage\IRepository;
 
-	interface IIdentityManager extends IDeffered {
-		/**
-		 * return identity crate by the given identifier (can be guid, login, ...)
-		 *
-		 * @param string $identity
-		 *
-		 * @return ICrate
-		 */
-		public function getIdentityCrate(string $identity): ICrate;
-
+	interface IIdentityManager extends IRepository, IDeffered {
 		/**
 		 * return current identity build from session
 		 *
