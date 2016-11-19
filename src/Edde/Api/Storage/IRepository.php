@@ -4,12 +4,22 @@
 	namespace Edde\Api\Storage;
 
 	use Edde\Api\Crate\ICrate;
+	use Edde\Api\Schema\ISchema;
 
 	/**
 	 * Repository is simple type of storage, intended to be used as storage endpoint for
 	 * services (for example user service will be extended from this interface).
 	 */
 	interface IRepository {
+		/**
+		 * repository is living over some schema
+		 *
+		 * @param ISchema $schema
+		 *
+		 * @return IRepository
+		 */
+		public function setSchema(ISchema $schema): IRepository;
+
 		/**
 		 * try to store the given crate
 		 *
