@@ -1,13 +1,20 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Api\Storage;
+	namespace Edde\Common\Storage;
 
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Crate\ICrate;
+	use Edde\Api\Storage\IBoundQuery;
+	use Edde\Api\Storage\IRepository;
+	use Edde\Api\Storage\LazyStorageTrait;
+	use Edde\Common\AbstractObject;
 	use Edde\Common\Query\Select\SelectQuery;
-	use Edde\Common\Storage\BoundQuery;
 
-	trait RepositoryTrait {
+	abstract class AbstractRepository extends AbstractObject implements IRepository {
+		use LazyContainerTrait;
+		use LazyStorageTrait;
+
 		public function store(ICrate $crate): IRepository {
 			$this->storage->store($crate);
 			return $this;

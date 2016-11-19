@@ -3,17 +3,18 @@
 
 	namespace Edde\Common\Identity;
 
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Api\Identity\IIdentityManager;
 	use Edde\Api\Storage\LazyStorageTrait;
-	use Edde\Api\Storage\RepositoryTrait;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Deffered\DefferedTrait;
 	use Edde\Common\Session\SessionTrait;
+	use Edde\Common\Storage\AbstractRepository;
 
-	class IdentityManager extends AbstractDeffered implements IIdentityManager {
+	class IdentityManager extends AbstractRepository implements ILazyInject, IIdentityManager {
 		use LazyStorageTrait;
 		use SessionTrait;
-		use RepositoryTrait;
+		use DefferedTrait;
 
 		const SESSION_IDENTITY = 'identity';
 
