@@ -10,6 +10,7 @@
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlTemplate;
 	use Edde\Api\Html\IHtmlView;
+	use Edde\Api\Template\CompilerException;
 	use Edde\Api\Template\LazyTemplateManagerTrait;
 	use Edde\Api\Template\TemplateException;
 	use Edde\Common\Cache\CacheTrait;
@@ -78,8 +79,10 @@
 				foreach ($snippetList ?: [null] as $snippet) {
 					$template->snippet($control, $snippet);
 				}
+			} catch (CompilerException $exception) {
+				throw $exception;
 			} catch (TemplateException $exception) {
-				$message = 'Template has failed; ' . ($snippetList ? sprintf("source files:\n%s", implode(', ', $snippetList)) : 'there are no files in the snippet list. Action/handler template was probablz not found.');
+				$message = 'Template has failed; ' . ($snippetList ? sprintf("source files:\n%s", implode(', ', $snippetList)) : 'there are no files in the snippet list. Action/handler template was probably not found.');
 				throw new ControlException($message, 0, $exception);
 			}
 			return $this;
