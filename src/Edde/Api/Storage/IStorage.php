@@ -11,7 +11,7 @@
 	/**
 	 * This is abstracted way how to store (serialize) almost any object; storage can be arbitrary technology with ability to understand Edde's IQL.
 	 */
-	interface IStorage extends IDeffered {
+	interface IStorage extends IRepository, IDeffered {
 		/**
 		 * start a transaction
 		 *
@@ -52,15 +52,6 @@
 		 * @return mixed
 		 */
 		public function native(IStaticQuery $staticQuery);
-
-		/**
-		 * try to store the given crate
-		 *
-		 * @param ICrate $crate
-		 *
-		 * @return IStorage
-		 */
-		public function store(ICrate $crate): IStorage;
 
 		/**
 		 * return collection based on the input query; if storage doesn't understand the queery, exception should be thrown
