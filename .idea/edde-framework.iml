@@ -18,16 +18,24 @@
     <orderEntry type="module-library">
       <library name="PHARS">
         <CLASSES>
-          <root url="phar://$MODULE_DIR$/bin/phpmd.phar/" />
-          <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/bin/phpcs.phar/" />
+          <root url="phar://$MODULE_DIR$/../edde-framework.composer/bin/phpmd.phar/" />
+          <root url="phar://$MODULE_DIR$/../edde-framework.composer/bin/composer.phar/" />
+          <root url="phar://$MODULE_DIR$/../edde-framework.composer/bin/phpcs.phar/" />
+          <root url="phar://$MODULE_DIR$/../edde-framework.composer/bin/phpunit.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/phpmd.phar/" />
           <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
         </CLASSES>
         <SOURCES>
-          <root url="phar://$MODULE_DIR$/bin/phpmd.phar/" />
-          <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/bin/phpcs.phar/" />
+          <root url="phar://$MODULE_DIR$/../edde-framework.composer/bin/phpmd.phar/" />
+          <root url="phar://$MODULE_DIR$/../edde-framework.composer/bin/composer.phar/" />
+          <root url="phar://$MODULE_DIR$/../edde-framework.composer/bin/phpcs.phar/" />
+          <root url="phar://$MODULE_DIR$/../edde-framework.composer/bin/phpunit.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/phpmd.phar/" />
           <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -44,16 +52,20 @@
     <orderEntry type="module-library">
       <library name="PHP" type="php">
         <CLASSES>
-          <root url="file://$MODULE_DIR$/vendor/composer" />
-          <root url="file://$MODULE_DIR$/vendor/defuse/php-encryption" />
-          <root url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
-          <root url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
+          <root url="file://$MODULE_DIR$/../../composer" />
+          <root url="file://$MODULE_DIR$/../../defuse/php-encryption" />
+          <root url="file://$MODULE_DIR$/../edde-framework.composer" />
+          <root url="file://$MODULE_DIR$/../../paragonie/constant_time_encoding" />
+          <root url="file://$MODULE_DIR$/../../paragonie/random_compat" />
+          <root url="file://$MODULE_DIR$/../../tracy/tracy" />
         </CLASSES>
         <SOURCES>
-          <root url="file://$MODULE_DIR$/vendor/composer" />
-          <root url="file://$MODULE_DIR$/vendor/defuse/php-encryption" />
-          <root url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
-          <root url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
+          <root url="file://$MODULE_DIR$/../../composer" />
+          <root url="file://$MODULE_DIR$/../../defuse/php-encryption" />
+          <root url="file://$MODULE_DIR$/../edde-framework.composer" />
+          <root url="file://$MODULE_DIR$/../../paragonie/constant_time_encoding" />
+          <root url="file://$MODULE_DIR$/../../paragonie/random_compat" />
+          <root url="file://$MODULE_DIR$/../../tracy/tracy" />
         </SOURCES>
       </library>
     </orderEntry>
