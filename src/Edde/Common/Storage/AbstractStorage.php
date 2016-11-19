@@ -26,10 +26,11 @@
 		use LazyContainerTrait;
 
 		public function bound(string $query, ...$parameterList): IBoundQuery {
-			return (new BouQ)->bind($this->container->create($query, ...$parameterList), $this);
+			return (new BoundQuery())->bind($this->container->create($query, ...$parameterList), $this);
 		}
 
 		public function query(): IBoundQuery {
+			return $this->bound(SelectQuery::class);
 		}
 
 		/**
