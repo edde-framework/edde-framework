@@ -8,15 +8,16 @@
 	/**
 	 * Special case of a Query bound to particular storage.
 	 */
-	interface IBoundQuery extends IQuery {
+	interface IBoundQuery {
 		/**
 		 * bind query to the given storage
 		 *
+		 * @param IQuery $query
 		 * @param IStorage $storage
 		 *
 		 * @return IBoundQuery
 		 */
-		public function bind(IStorage $storage): IBoundQuery;
+		public function bind(IQuery $query, IStorage $storage): IBoundQuery;
 
 		/**
 		 * execute method of a storage

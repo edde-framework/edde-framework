@@ -3,12 +3,14 @@
 
 	namespace Edde\Common\Storage;
 
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\LazyCrateFactoryTrait;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Api\Schema\SchemaException;
 	use Edde\Api\Storage\EmptyResultException;
+	use Edde\Api\Storage\IBoundQuery;
 	use Edde\Api\Storage\ICollection;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Common\Crate\Crate;
@@ -21,6 +23,14 @@
 	abstract class AbstractStorage extends AbstractDeffered implements IStorage {
 		use LazySchemaManagerTrait;
 		use LazyCrateFactoryTrait;
+		use LazyContainerTrait;
+
+		public function bound(string $query, ...$parameterList): IBoundQuery {
+			return (new BouQ)->bind($this->container->create($query, ...$parameterList), $this);
+		}
+
+		public function query(): IBoundQuery {
+		}
 
 		/**
 		 * @inheritdoc

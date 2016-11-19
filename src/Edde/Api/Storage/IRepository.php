@@ -20,7 +20,17 @@
 		public function store(ICrate $crate): IRepository;
 
 		/**
-		 * return bound query
+		 * create the given query (through container)
+		 *
+		 * @param string $query
+		 * @param array $parameterList
+		 *
+		 * @return IBoundQuery
+		 */
+		public function bound(string $query, ...$parameterList): IBoundQuery;
+
+		/**
+		 * select query by default (method over bound())
 		 *
 		 * @return IBoundQuery
 		 */
