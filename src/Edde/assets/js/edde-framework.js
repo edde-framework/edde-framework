@@ -137,25 +137,29 @@ var Edde = {
 				$source.find('*[data-schema]').addBack().each(function () {
 					var $this = $(this);
 					var dataClass = $this.data('schema');
-					crate[dataClass] = crate[dataClass] ? crate[dataClass] : {};
-					crate[dataClass][$this.data('property')] = this.getValue();
+					if (dataClass) {
+						crate[dataClass] = crate[dataClass] ? crate[dataClass] : {};
+						crate[dataClass][$this.data('property')] = this.getValue();
+					}
 				});
 				var index = 0;
 				$source.find('*[data-fill]').addBack().each(function () {
 					var name = $(this).data('fill');
-					crate[''] = crate[''] || {};
-					if (name.indexOf('[]') === name.length - 2) {
-						name = name.substr(0, name.length - 2);
-						crate[''][name] = crate[''][name] || {};
-						var key = index++;
-						if (this.getKey) {
-							key = this.getKey();
-							index--;
+					if (name) {
+						crate[''] = crate[''] || {};
+						if (name.indexOf('[]') === name.length - 2) {
+							name = name.substr(0, name.length - 2);
+							crate[''][name] = crate[''][name] || {};
+							var key = index++;
+							if (this.getKey) {
+								key = this.getKey();
+								index--;
+							}
+							crate[''][name][key] = this.getValue();
+							return;
 						}
-						crate[''][name][key] = this.getValue();
-						return;
+						crate[''][name] = this.getValue();
 					}
-					crate[''][name] = this.getValue();
 				});
 			}
 			return crate;
