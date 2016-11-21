@@ -4,6 +4,7 @@
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
+	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Storage\IRepository;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Common\Storage\AbstractStorage;
@@ -27,10 +28,14 @@
 		public function native(IStaticQuery $staticQuery) {
 		}
 
-		public function store(ICrate $crate): IRepository {
+		public function store(ICrate $crate): IStorage {
 			return $this;
 		}
 
 		protected function prepare() {
+		}
+
+		public function setSchema(ISchema $schema): IRepository {
+			return $this;
 		}
 	}
