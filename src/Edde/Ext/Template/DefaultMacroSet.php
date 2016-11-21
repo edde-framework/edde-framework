@@ -11,6 +11,7 @@
 	use Edde\Common\Html\Helper\TranslateHelper;
 	use Edde\Common\Html\Input\PasswordControl;
 	use Edde\Common\Html\Input\TextControl;
+	use Edde\Common\Html\Macro\AttrMacro;
 	use Edde\Common\Html\Macro\ButtonMacro;
 	use Edde\Common\Html\Macro\CallMacro;
 	use Edde\Common\Html\Macro\CaseMacro;
@@ -30,6 +31,7 @@
 	use Edde\Common\Html\Macro\SchemaMacro;
 	use Edde\Common\Html\Macro\SnippetMacro;
 	use Edde\Common\Html\Macro\SwitchMacro;
+	use Edde\Common\Html\Macro\TitleMacro;
 	use Edde\Common\Html\Macro\TranslatorMacro;
 	use Edde\Common\Html\Macro\UseMacro;
 	use Edde\Common\Html\PlaceholderControl;
@@ -117,6 +119,8 @@
 					$container->inject(new HeaderMacro('h6')),
 					$container->inject(new ButtonMacro()),
 					$container->inject(new FillMacro()),
+					$container->inject(new TitleMacro()),
+					$container->inject(new AttrMacro()),
 				]);
 			});
 			return $macroSet;

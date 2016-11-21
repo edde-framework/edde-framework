@@ -3,19 +3,18 @@
 
 	namespace Edde\Common\Identity;
 
-	use Edde\Api\Crate\ICrate;
-	use Edde\Api\Identity\IdentityException;
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Api\Identity\IIdentityManager;
 	use Edde\Api\Storage\LazyStorageTrait;
-	use Edde\Api\Storage\StorageException;
-	use Edde\Common\Deffered\AbstractDeffered;
-	use Edde\Common\Query\Select\SelectQuery;
+	use Edde\Common\Deffered\DefferedTrait;
 	use Edde\Common\Session\SessionTrait;
+	use Edde\Common\Storage\AbstractRepository;
 
-	class IdentityManager extends AbstractDeffered implements IIdentityManager {
-		use SessionTrait;
+	class IdentityManager extends AbstractRepository implements ILazyInject, IIdentityManager {
 		use LazyStorageTrait;
+		use SessionTrait;
+		use DefferedTrait;
 
 		const SESSION_IDENTITY = 'identity';
 
@@ -23,28 +22,6 @@
 		 * @var IIdentity
 		 */
 		protected $identity;
-
-		public function getIdentityCrate(string $identity): ICrate {
-			$this->use();
-			$selectQuery = new SelectQuery();
-			$selectQuery->select()
-				->all()
-				->from()
-				->source(IdentityStorable::class)
-				->where()
-				->eq()
-				->property('guid')
-				->parameter($identity)
-				->or()
-				->eq()
-				->property('login')
-				->parameter($identity);
-			try {
-				return $this->storage->load(IdentityStorable::class, $selectQuery);
-			} catch (StorageException $e) {
-				throw new IdentityException(sprintf('Unknown identity [%s].', $identity), 0, $e);
-			}
-		}
 
 		public function update(): IIdentityManager {
 			$this->use();

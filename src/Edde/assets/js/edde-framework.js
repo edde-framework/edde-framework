@@ -134,14 +134,14 @@ var Edde = {
 			if (id) {
 				crate = {};
 				$source = $('#' + id);
-				$source.find('*[data-schema]').each(function () {
+				$source.find('*[data-schema]').addBack().each(function () {
 					var $this = $(this);
 					var dataClass = $this.data('schema');
 					crate[dataClass] = crate[dataClass] ? crate[dataClass] : {};
 					crate[dataClass][$this.data('property')] = this.getValue();
 				});
 				var index = 0;
-				$source.find('*[data-fill]').each(function () {
+				$source.find('*[data-fill]').addBack().each(function () {
 					var name = $(this).data('fill');
 					crate[''] = crate[''] || {};
 					if (name.indexOf('[]') === name.length - 2) {
