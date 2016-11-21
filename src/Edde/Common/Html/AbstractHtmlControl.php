@@ -11,6 +11,7 @@
 	use Edde\Api\Web\LazyStyleSheetCompilerTrait;
 	use Edde\Common\Control\AbstractControl;
 	use Edde\Common\File\File;
+	use Edde\Common\Strings\StringResource;
 
 	/**
 	 * Base class for all html based controls.
@@ -78,9 +79,7 @@
 			if ($file !== null) {
 				$javascript = new File($file);
 			}
-			$javascript = $this->tempDirectory->save(sha1($class . $file . '-js') . '.js', $source = $javascript->get());
-			$javascript->save(sprintf("Edde.Utils.class('." . $selector . "', %s);", $source));
-			$this->javaScriptCompiler->addResource($javascript);
+			$this->javaScriptCompiler->addResource(new StringResource(sprintf("Edde.Utils.class('." . $selector . "', %s);", $javascript->get())));
 			return $this;
 		}
 
@@ -94,7 +93,7 @@
 			if ($file !== null) {
 				$stylesheet = new File($file);
 			}
-			$this->styleSheetCompiler->addResource($this->tempDirectory->save(sha1(static::class . '-css') . '.css', $stylesheet->get()));
+			$this->styleSheetCompiler->addResource($stylesheet);
 			return $this;
 		}
 

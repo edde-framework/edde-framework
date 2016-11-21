@@ -54,10 +54,6 @@ var Edde = {
 		class: function (selector, func) {
 			setTimeout(function () {
 				$(selector).each(function (i, element) {
-					if (element.edde) {
-						return;
-					}
-					element.edde = true;
 					if (typeof func === 'function') {
 						func.call(element, ($(element)));
 						return;
@@ -102,7 +98,7 @@ var Edde = {
 				url: url,
 				method: 'POST',
 				data: parameterList ? JSON.stringify(parameterList) : {},
-				timeout: 10000,
+				timeout: 3600 * 1000,
 				contentType: 'application/json',
 				dataType: 'json',
 				cache: false
@@ -138,6 +134,11 @@ var Edde = {
 					var $this = $(this);
 					var dataClass = $this.data('schema');
 					if (dataClass) {
+						if (this.getValue === undefined) {
+							console.error('Element without getValue() method!');
+							console.error(this);
+							return;
+						}
 						crate[dataClass] = crate[dataClass] ? crate[dataClass] : {};
 						crate[dataClass][$this.data('property')] = this.getValue();
 					}
@@ -146,6 +147,11 @@ var Edde = {
 				$source.find('*[data-fill]').addBack().each(function () {
 					var name = $(this).data('fill');
 					if (name) {
+						if (this.getValue === undefined) {
+							console.error('Element without getValue() method!');
+							console.error(this);
+							return;
+						}
 						crate[''] = crate[''] || {};
 						if (name.indexOf('[]') === name.length - 2) {
 							name = name.substr(0, name.length - 2);

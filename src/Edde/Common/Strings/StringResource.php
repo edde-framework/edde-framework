@@ -25,6 +25,13 @@
 			$this->string = $string;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
+		public function get() {
+			return $this->string;
+		}
+
 		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
