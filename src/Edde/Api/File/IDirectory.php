@@ -101,6 +101,13 @@
 		public function parent(): IDirectory;
 
 		/**
+		 * a bit more talkative iterator
+		 *
+		 * @return IFile[]
+		 */
+		public function files();
+
+		/**
 		 * @return IFile[]
 		 */
 		public function getIterator();

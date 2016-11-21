@@ -53,7 +53,7 @@
 					}
 				}
 			}
-			if (isset($parameterList['action'], $parameterList['handle']) === false) {
+			if (isset($parameterList['action']) === false && isset($parameterList['handle']) === false) {
 				return null;
 			}
 			$this->requestUrl->setQuery($parameterList);

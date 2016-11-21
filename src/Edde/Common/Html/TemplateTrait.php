@@ -5,11 +5,14 @@
 
 	use Edde\Api\Application\LazyRequestTrait;
 	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Control\ControlException;
 	use Edde\Api\Html\HtmlException;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlTemplate;
 	use Edde\Api\Html\IHtmlView;
+	use Edde\Api\Template\CompilerException;
 	use Edde\Api\Template\LazyTemplateManagerTrait;
+	use Edde\Api\Template\TemplateException;
 	use Edde\Common\Cache\CacheTrait;
 
 	/**
@@ -71,9 +74,16 @@
 			/** @var $control IHtmlView */
 			/** @var $template IHtmlTemplate */
 			$control = $this;
-			$template = AbstractHtmlTemplate::template($this->templateManager->template($file, $importList), $this->container);
-			foreach ($snippetList ?: [null] as $snippet) {
-				$template->snippet($control, $snippet);
+			try {
+				$template = AbstractHtmlTemplate::template($this->templateManager->template($file, $importList), $this->container);
+				foreach ($snippetList ?: [null] as $snippet) {
+					$template->snippet($control, $snippet);
+				}
+			} catch (CompilerException $exception) {
+				throw $exception;
+			} catch (TemplateException $exception) {
+				$message = 'Template has failed; ' . ($snippetList ? sprintf("source files:\n%s", implode(', ', $snippetList)) : 'there are no files in the snippet list. Action/handler template was probably not found.');
+				throw new ControlException($message, 0, $exception);
 			}
 			return $this;
 		}
