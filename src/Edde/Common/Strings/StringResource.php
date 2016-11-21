@@ -21,7 +21,7 @@
 		 * @param string $string
 		 */
 		public function __construct(string $string) {
-			parent::__construct(Url::create('resource://string'));
+			parent::__construct(Url::create('resource://string/' . sha1($string)));
 			$this->string = $string;
 		}
 
