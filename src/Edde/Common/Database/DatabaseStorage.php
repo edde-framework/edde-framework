@@ -12,7 +12,6 @@
 	use Edde\Api\Node\INodeQuery;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
-	use Edde\Api\Storage\IRepository;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Storage\StorageException;
 	use Edde\Common\Node\NodeQuery;
@@ -102,7 +101,7 @@
 		 * @throws DriverException
 		 * @throws StorageException
 		 */
-		public function store(ICrate $crate): IRepository {
+		public function store(ICrate $crate): IStorage {
 			$this->use();
 			$schema = $crate->getSchema();
 			if ($schema->getMeta('storable', false) === false) {

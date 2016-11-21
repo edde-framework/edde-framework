@@ -11,7 +11,7 @@
 	/**
 	 * This is abstracted way how to store (serialize) almost any object; storage can be arbitrary technology with ability to understand Edde's IQL.
 	 */
-	interface IStorage extends IRepository, IDeffered {
+	interface IStorage extends IDeffered {
 		/**
 		 * start a transaction
 		 *
@@ -76,6 +76,15 @@
 		 * @return ICrate[]|ICollection
 		 */
 		public function collectionTo(ICrate $crate, string $relation, string $source, string $target, string $crateTo = null): ICollection;
+
+		/**
+		 * try to store the given crate
+		 *
+		 * @param ICrate $crate
+		 *
+		 * @return IStorage
+		 */
+		public function store(ICrate $crate): IStorage;
 
 		/**
 		 * retrieve crate by the given query; it should formally go through a collection method; if there is no such crate, exception should be thrown

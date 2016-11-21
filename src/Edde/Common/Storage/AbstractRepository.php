@@ -5,6 +5,7 @@
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Crate\ICrate;
+	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Storage\IBoundQuery;
 	use Edde\Api\Storage\IRepository;
 	use Edde\Api\Storage\LazyStorageTrait;
@@ -14,6 +15,15 @@
 	abstract class AbstractRepository extends AbstractObject implements IRepository {
 		use LazyContainerTrait;
 		use LazyStorageTrait;
+		/**
+		 * @var ISchema
+		 */
+		protected $schema;
+
+		public function setSchema(ISchema $schema): IRepository {
+			$this->schema = $schema;
+			return $this;
+		}
 
 		public function store(ICrate $crate): IRepository {
 			$this->storage->store($crate);
