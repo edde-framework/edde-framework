@@ -5,7 +5,6 @@
 
 	use Edde\Api\Crypt\LazyCryptEngineTrait;
 	use Edde\Api\File\FileException;
-	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Web\LazyJavaScriptCompilerTrait;
 	use Edde\Api\Web\LazyStyleSheetCompilerTrait;
@@ -19,7 +18,6 @@
 	abstract class AbstractHtmlControl extends AbstractControl implements IHtmlControl {
 		use LazyJavaScriptCompilerTrait;
 		use LazyStyleSheetCompilerTrait;
-		use LazyTempDirectoryTrait;
 		use LazyCryptEngineTrait;
 
 		public function setTag(string $tag, bool $pair = true): IHtmlControl {
