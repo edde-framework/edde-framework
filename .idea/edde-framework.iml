@@ -18,15 +18,11 @@
     <orderEntry type="module-library">
       <library name="PHARS">
         <CLASSES>
-          <root url="phar://$MODULE_DIR$/bin/phpcs.phar/" />
           <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
-          <root url="phar://$MODULE_DIR$/bin/phpmd.phar/" />
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
         </CLASSES>
         <SOURCES>
-          <root url="phar://$MODULE_DIR$/bin/phpcs.phar/" />
           <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
-          <root url="phar://$MODULE_DIR$/bin/phpmd.phar/" />
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
         </SOURCES>
       </library>
