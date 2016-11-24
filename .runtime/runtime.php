@@ -2,6 +2,7 @@
 	declare(strict_types = 1);
 
 	use Edde\Common\Runtime\Runtime;
+	use Edde\Framework;
 	use Tracy\Debugger;
 
 	$factoryList = require __DIR__ . '/loader.php';
@@ -13,6 +14,6 @@
 		Debugger::log($e);
 	};
 
-	(new Runtime($factoryList))->run(function () {
-		echo "hello new Edde Framework!";
+	(new Runtime($factoryList))->run(function (Framework $framework) {
+		echo sprintf('hello new Edde Framework [%s]!', $framework->getVersionString());
 	});

@@ -21,7 +21,9 @@
 			$factories = [];
 			$singleton = true;
 			foreach ($factoryList as $name => $factory) {
-				if (is_string($name) === false) {
+				if (is_object($factory)) {
+					$name = is_string($name) ? $name : get_class($factory);
+				} else if (is_string($name) === false) {
 					$name = 'anonymous-' . $name;
 					if ($factory instanceof IFactory === false) {
 						$name = $factory;
