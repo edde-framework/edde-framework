@@ -1,7 +1,6 @@
 <?php
 	declare(strict_types = 1);
 
-	use Edde\Api\Application\IApplication;
 	use Edde\Common\CommonSetupHandler;
 	use Edde\Common\Runtime\Runtime;
 	use Tracy\Debugger;
@@ -15,6 +14,5 @@
 		Debugger::log($e);
 	};
 
-	Runtime::execute(CommonSetupHandler::create($factoryList), function (IApplication $application) {
-		$application->run();
+	Runtime::execute(CommonSetupHandler::create($factoryList), function () {
 	});
