@@ -3,13 +3,36 @@
 
 	namespace Edde\Api\Runtime;
 
-	use Edde\Api\Deffered\IDeffered;
+	use Edde\Api\Container\IContainer;
 
-	interface IRuntime extends IDeffered {
+	interface IRuntime {
+		/**
+		 * register factory list used for runtime
+		 *
+		 * @param array $factoryList
+		 *
+		 * @return IRuntime
+		 */
+		public function registerFactoryList(array $factoryList): IRuntime;
+
+		/**
+		 * create default system container for this runtime
+		 *
+		 * @return IContainer
+		 */
+		public function createContainer(): IContainer;
+
+		/**
+		 * execute the given callback with the given runtime (some kind of "main" in C)
+		 *
+		 * @param callable $callback
+		 *
+		 * @return mixed
+		 */
 		public function run(callable $callback);
 
 		/***
 		 * @return bool
 		 */
-		public function isConsoleMode();
+		public function isConsoleMode(): bool;
 	}

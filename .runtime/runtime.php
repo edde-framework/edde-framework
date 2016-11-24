@@ -1,7 +1,6 @@
 <?php
 	declare(strict_types = 1);
 
-	use Edde\Common\CommonSetupHandler;
 	use Edde\Common\Runtime\Runtime;
 	use Tracy\Debugger;
 
@@ -14,5 +13,6 @@
 		Debugger::log($e);
 	};
 
-	Runtime::execute(CommonSetupHandler::create($factoryList), function () {
+	(new Runtime($factoryList))->run(function () {
+		echo "hello new Edde Framework!";
 	});

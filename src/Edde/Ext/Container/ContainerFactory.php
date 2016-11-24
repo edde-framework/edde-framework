@@ -59,9 +59,12 @@
 		 * @return IContainer
 		 * @throws FactoryException
 		 */
-		static public function simple(array $factoryList = []): IContainer {
+		static public function container(array $factoryList = []): IContainer {
 			$factoryManager = new FactoryManager($cacheManager = new CacheManager(new InMemoryCacheStorage()));
 			$factoryManager->registerFactoryList($factoryList);
-			return new Container($factoryManager, $dependencyFactory = new DependencyFactory($factoryManager, $cacheManager), $cacheManager);
+			$container = new Container($factoryManager, $dependencyFactory = new DependencyFactory($factoryManager, $cacheManager), $cacheManager);
+			$container = $container->create(IContainer::class);
+			$container->registerFactoryList($factoryList);
+			return $container;
 		}
 	}
