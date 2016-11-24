@@ -57,6 +57,7 @@
 		 * @param array $factoryList
 		 *
 		 * @return IContainer
+		 * @throws ContainerException
 		 * @throws FactoryException
 		 */
 		static public function container(array $factoryList = []): IContainer {
