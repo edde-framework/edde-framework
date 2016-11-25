@@ -6,10 +6,6 @@
       <sourceFolder url="file://$MODULE_DIR$/tests/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/app/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/.runtime/src" isTestSource="false" />
-      <excludeFolder url="file://$MODULE_DIR$/.runtime/.apache" />
-      <excludeFolder url="file://$MODULE_DIR$/.runtime/.php" />
-      <excludeFolder url="file://$MODULE_DIR$/.runtime/.redis" />
       <excludeFolder url="file://$MODULE_DIR$/artwork" />
       <excludeFolder url="file://$MODULE_DIR$/release" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
@@ -22,14 +18,14 @@
     <orderEntry type="module-library">
       <library name="PHARS">
         <CLASSES>
-          <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
-          <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
           <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
         </CLASSES>
         <SOURCES>
-          <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
-          <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
           <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -40,22 +36,6 @@
         </CLASSES>
         <SOURCES>
           <root url="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/standard" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="PHP" type="php">
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/vendor/composer" />
-          <root url="file://$MODULE_DIR$/vendor/defuse/php-encryption" />
-          <root url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
-          <root url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
-        </CLASSES>
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/vendor/composer" />
-          <root url="file://$MODULE_DIR$/vendor/defuse/php-encryption" />
-          <root url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
-          <root url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
         </SOURCES>
       </library>
     </orderEntry>
