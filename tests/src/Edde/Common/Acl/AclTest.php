@@ -6,7 +6,7 @@
 	use Edde\Api\Acl\AclException;
 	use Edde\Api\Acl\IAclManager;
 	use Edde\Ext\Container\ContainerFactory;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class AclTest extends TestCase {
 		/**
