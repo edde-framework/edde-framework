@@ -5,7 +5,6 @@
 
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheManager;
-	use Edde\Api\Callback\ICallback;
 	use Edde\Api\Callback\IParameter;
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
@@ -13,9 +12,8 @@
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\IFactoryManager;
 	use Edde\Api\Container\ILazyInject;
-	use Edde\Common\Callback\Callback;
+	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Deffered\AbstractDeffered;
-	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Default implementation of a dependency container.
@@ -146,29 +144,7 @@
 		 */
 		public function create($name, ...$parameterList) {
 			$this->use();
-			/** @noinspection UnnecessaryParenthesesInspection */
-			/** @noinspection PhpUndefinedVariableInspection */
-			return ($callback = function (callable $callback, IFactory $factory, array $parameterList = []) {
-				$dependencyList = [];
-				$this->dependencyStack->push($name = $factory->getName());
-				/** @var $parameters IParameter[] */
-				$grab = count($parameters = $factory->getParameterList($name)) - count($parameterList);
-				foreach ($parameters as $parameter) {
-					if ($grab-- <= 0 || $parameter->isOptional() || $parameter->hasClass() === false || $this->factoryManager->hasFactory($parameter->getClass()) === false) {
-						break;
-					}
-					$dependencyList[] = $callback($callback, $this->factoryManager->getFactory($parameter->getClass()));
-				}
-				try {
-					return $this->factoryManager->getFactory($name)
-						->create($name, array_merge($dependencyList, $parameterList), $this);
-				} catch (FactoryException $exception) {
-					$this->dependencyStack->pop();
-					throw new ContainerException(sprintf('Cannot create dependency [%s]; dependency stack [%s].', $name, implode(', ', iterator_to_array($this->dependencyStack))), 0, $exception);
-				} finally {
-					$this->dependencyStack->pop();
-				}
-			})($callback, $this->factoryManager->getFactory($name), $parameterList);
+			return $this->factory($this->factoryManager->getFactory($name), $parameterList);
 		}
 
 		/**
@@ -178,17 +154,27 @@
 		 */
 		public function call(callable $callable, ...$parameterList) {
 			$this->use();
-			/** @var $callback ICallback */
-			$callback = new Callback($callable);
-			$dependencies = [];
-			$grab = count($dependencyList = $callback->getParameterList()) - count($parameterList);
-			foreach ($dependencyList as $dependency) {
-				if ($grab-- <= 0 || $dependency->isOptional()) {
+			return $this->factory(FactoryFactory::create('', $callable), ...$parameterList);
+		}
+
+		public function factory(IFactory $factory, array $parameterList = []) {
+			$dependencyList = [];
+			$this->dependencyStack->push($name = $factory->getName());
+			/** @var $parameters IParameter[] */
+			$grab = count($parameters = $factory->getParameterList($name)) - count($parameterList);
+			foreach ($parameters as $parameter) {
+				if ($grab-- <= 0 || $parameter->isOptional() || $parameter->hasClass() === false || $this->factoryManager->hasFactory($parameter->getClass()) === false) {
 					break;
 				}
-				$dependencies[] = $this->create($dependency->hasClass() ? $dependency->getClass() : StringUtils::recamel($dependency->getName()));
+				$dependencyList[] = $this->factory($this->factoryManager->getFactory($parameter->getClass()));
 			}
-			return $callback->invoke(...array_merge($dependencies, $parameterList));
+			try {
+				return $factory->create($name, array_merge($dependencyList, $parameterList), $this);
+			} catch (FactoryException $exception) {
+				throw new ContainerException(sprintf('Cannot create dependency [%s]; dependency stack [%s].', $name, implode(', ', iterator_to_array($this->dependencyStack))), 0, $exception);
+			} finally {
+				$this->dependencyStack->pop();
+			}
 		}
 
 		/**
