@@ -29,7 +29,7 @@
 				$this->redis->delete($id);
 				return $save;
 			}
-			if ($this->redis->set($id, serialize($save)) !== true) {
+			if ($this->redis->set($id, var_export($save, true)) !== true) {
 				throw new CacheStorageException(sprintf('Cannot save the given id [%s] to Redis server.', $id));
 			}
 			return $save;
@@ -40,7 +40,7 @@
 			if ($this->redis->exists($id) === false) {
 				return null;
 			}
-			return unserialize($this->redis->get($id));
+			return include 'data:text/plain,<?php return ' . $this->redis->get($id) . ';';
 		}
 
 		public function invalidate() {
