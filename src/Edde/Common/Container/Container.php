@@ -163,10 +163,11 @@
 			/** @var $parameters IParameter[] */
 			$grab = count($parameters = $factory->getParameterList($name)) - count($parameterList);
 			foreach ($parameters as $parameter) {
-				if ($grab-- <= 0 || $parameter->isOptional() || $parameter->hasClass() === false || $this->factoryManager->hasFactory($parameter->getClass()) === false) {
+				/** @noinspection NotOptimalIfConditionsInspection */
+				if ($grab-- <= 0 || $parameter->isOptional() || ($class = $parameter->getClass()) === null || $this->factoryManager->hasFactory($class) === false) {
 					break;
 				}
-				$dependencyList[] = $this->factory($this->factoryManager->getFactory($parameter->getClass()));
+				$dependencyList[] = $this->factory($this->factoryManager->getFactory($class));
 			}
 			try {
 				return $factory->create($name, array_merge($dependencyList, $parameterList), $this);
