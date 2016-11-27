@@ -66,62 +66,14 @@
         <CLASSES>
           <root url="file://$MODULE_DIR$/vendor/composer" />
           <root url="file://$MODULE_DIR$/vendor/defuse/php-encryption" />
-          <root url="file://$MODULE_DIR$/vendor/doctrine/instantiator" />
-          <root url="file://$MODULE_DIR$/vendor/myclabs/deep-copy" />
           <root url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
           <root url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
-          <root url="file://$MODULE_DIR$/vendor/phpdocumentor/reflection-common" />
-          <root url="file://$MODULE_DIR$/vendor/phpdocumentor/reflection-docblock" />
-          <root url="file://$MODULE_DIR$/vendor/phpdocumentor/type-resolver" />
-          <root url="file://$MODULE_DIR$/vendor/phpspec/prophecy" />
-          <root url="file://$MODULE_DIR$/vendor/phpunit/php-code-coverage" />
-          <root url="file://$MODULE_DIR$/vendor/phpunit/php-file-iterator" />
-          <root url="file://$MODULE_DIR$/vendor/phpunit/php-text-template" />
-          <root url="file://$MODULE_DIR$/vendor/phpunit/php-timer" />
-          <root url="file://$MODULE_DIR$/vendor/phpunit/php-token-stream" />
-          <root url="file://$MODULE_DIR$/vendor/phpunit/phpunit" />
-          <root url="file://$MODULE_DIR$/vendor/phpunit/phpunit-mock-objects" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/code-unit-reverse-lookup" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/comparator" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/diff" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/environment" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/exporter" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/global-state" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/object-enumerator" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/recursion-context" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/resource-operations" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/version" />
-          <root url="file://$MODULE_DIR$/vendor/webmozart/assert" />
         </CLASSES>
         <SOURCES>
           <root url="file://$MODULE_DIR$/vendor/composer" />
           <root url="file://$MODULE_DIR$/vendor/defuse/php-encryption" />
-          <root url="file://$MODULE_DIR$/vendor/doctrine/instantiator" />
-          <root url="file://$MODULE_DIR$/vendor/myclabs/deep-copy" />
           <root url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
           <root url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
-          <root url="file://$MODULE_DIR$/vendor/phpdocumentor/reflection-common" />
-          <root url="file://$MODULE_DIR$/vendor/phpdocumentor/reflection-docblock" />
-          <root url="file://$MODULE_DIR$/vendor/phpdocumentor/type-resolver" />
-          <root url="file://$MODULE_DIR$/vendor/phpspec/prophecy" />
-          <root url="file://$MODULE_DIR$/vendor/phpunit/php-code-coverage" />
-          <root url="file://$MODULE_DIR$/vendor/phpunit/php-file-iterator" />
-          <root url="file://$MODULE_DIR$/vendor/phpunit/php-text-template" />
-          <root url="file://$MODULE_DIR$/vendor/phpunit/php-timer" />
-          <root url="file://$MODULE_DIR$/vendor/phpunit/php-token-stream" />
-          <root url="file://$MODULE_DIR$/vendor/phpunit/phpunit" />
-          <root url="file://$MODULE_DIR$/vendor/phpunit/phpunit-mock-objects" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/code-unit-reverse-lookup" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/comparator" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/diff" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/environment" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/exporter" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/global-state" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/object-enumerator" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/recursion-context" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/resource-operations" />
-          <root url="file://$MODULE_DIR$/vendor/sebastian/version" />
-          <root url="file://$MODULE_DIR$/vendor/webmozart/assert" />
         </SOURCES>
       </library>
     </orderEntry>
