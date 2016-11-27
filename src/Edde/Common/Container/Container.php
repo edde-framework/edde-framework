@@ -146,36 +146,29 @@
 		 */
 		public function create($name, ...$parameterList) {
 			$this->use();
-			return $this->factory($this->factoryManager->getFactory($name), $parameterList);
-		}
-
-		/**
-		 * @param IFactory $factory
-		 * @param array $parameterList
-		 *
-		 * @return mixed
-		 * @throws ContainerException
-		 */
-		protected function factory(IFactory $factory, array $parameterList = []) {
-			$dependencyList = [];
-			$this->dependencyStack->push($name = $factory->getName());
-			/** @var $parameters IParameter[] */
-			$grab = count($parameters = $factory->getParameterList($name)) - count($parameterList);
-			foreach ($parameters as $parameter) {
-				if ($grab-- <= 0 || $parameter->isOptional() || $parameter->hasClass() === false || $this->factoryManager->hasFactory($parameter->getClass()) === false) {
-					break;
+			/** @noinspection UnnecessaryParenthesesInspection */
+			/** @noinspection PhpUndefinedVariableInspection */
+			return ($callback = function (callable $callback, IFactory $factory, array $parameterList = []) {
+				$dependencyList = [];
+				$this->dependencyStack->push($name = $factory->getName());
+				/** @var $parameters IParameter[] */
+				$grab = count($parameters = $factory->getParameterList($name)) - count($parameterList);
+				foreach ($parameters as $parameter) {
+					if ($grab-- <= 0 || $parameter->isOptional() || $parameter->hasClass() === false || $this->factoryManager->hasFactory($parameter->getClass()) === false) {
+						break;
+					}
+					$dependencyList[] = $callback($callback, $this->factoryManager->getFactory($parameter->getClass()));
 				}
-				$dependencyList[] = $this->factory($this->factoryManager->getFactory($parameter->getClass()));
-			}
-			try {
-				return $this->factoryManager->getFactory($name)
-					->create($name, array_merge($dependencyList, $parameterList), $this);
-			} catch (FactoryException $exception) {
-				$this->dependencyStack->pop();
-				throw new ContainerException(sprintf('Cannot create dependency [%s]; dependency stack [%s].', $name, implode(', ', iterator_to_array($this->dependencyStack))), 0, $exception);
-			} finally {
-				$this->dependencyStack->pop();
-			}
+				try {
+					return $this->factoryManager->getFactory($name)
+						->create($name, array_merge($dependencyList, $parameterList), $this);
+				} catch (FactoryException $exception) {
+					$this->dependencyStack->pop();
+					throw new ContainerException(sprintf('Cannot create dependency [%s]; dependency stack [%s].', $name, implode(', ', iterator_to_array($this->dependencyStack))), 0, $exception);
+				} finally {
+					$this->dependencyStack->pop();
+				}
+			})($callback, $this->factoryManager->getFactory($name), $parameterList);
 		}
 
 		/**
