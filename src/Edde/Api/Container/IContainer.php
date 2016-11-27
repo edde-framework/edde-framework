@@ -58,6 +58,16 @@
 		public function call(callable $callable, ...$parameterList);
 
 		/**
+		 * low-level method for factory execution (other container methods should be using this)
+		 *
+		 * @param IFactory $factory
+		 * @param array $parameterList
+		 *
+		 * @return mixed return created instance of the given factory (result of factory execution)
+		 */
+		public function factory(IFactory $factory, array $parameterList = []);
+
+		/**
 		 * provides all aditional dependencies for the given instance
 		 *
 		 * @param mixed $instance

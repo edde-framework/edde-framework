@@ -157,6 +157,10 @@
 			return $this->factory(FactoryFactory::create('', $callable), ...$parameterList);
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws ContainerException
+		 */
 		public function factory(IFactory $factory, array $parameterList = []) {
 			$this->dependencyStack->push($name = $factory->getName());
 			/** @var $parameters IParameter[] */
