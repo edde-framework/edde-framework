@@ -6,11 +6,10 @@
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Callback\ICallback;
+	use Edde\Api\Callback\IParameter;
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IDependency;
-	use Edde\Api\Container\IDependencyFactory;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\IFactoryManager;
 	use Edde\Api\Container\ILazyInject;
@@ -27,10 +26,6 @@
 		 */
 		protected $factoryManager;
 		/**
-		 * @var IDependencyFactory
-		 */
-		protected $dependencyFactory;
-		/**
 		 * @var ICacheManager
 		 */
 		protected $cacheManager;
@@ -45,12 +40,10 @@
 
 		/**
 		 * @param IFactoryManager $factoryManager
-		 * @param IDependencyFactory $dependencyFactory
 		 * @param ICacheManager $cacheManager
 		 */
-		public function __construct(IFactoryManager $factoryManager, IDependencyFactory $dependencyFactory, ICacheManager $cacheManager) {
+		public function __construct(IFactoryManager $factoryManager, ICacheManager $cacheManager) {
 			$this->factoryManager = $factoryManager;
-			$this->dependencyFactory = $dependencyFactory;
 			$this->cacheManager = $cacheManager;
 		}
 
@@ -153,32 +146,33 @@
 		 */
 		public function create($name, ...$parameterList) {
 			$this->use();
-			return $this->factory($this->dependencyFactory->create($name), $parameterList);
+			return $this->factory($this->factoryManager->getFactory($name), $parameterList);
 		}
 
 		/**
-		 * @param IDependency $root
+		 * @param IFactory $factory
 		 * @param array $parameterList
 		 *
 		 * @return mixed
 		 * @throws ContainerException
 		 */
-		protected function factory(IDependency $root, array $parameterList) {
-			$dependencies = [];
-			$this->dependencyStack->push($root->getName());
-			/** @var $dependencyList IDependency[] */
-			$grab = count($dependencyList = $root->getDependencyList()) - count($parameterList);
-			foreach ($dependencyList as $dependency) {
-				if ($grab-- <= 0 || $dependency->isOptional() || $dependency->hasClass() === false || $this->factoryManager->hasFactory($dependency->getClass()) === false) {
+		protected function factory(IFactory $factory, array $parameterList = []) {
+			$dependencyList = [];
+			$this->dependencyStack->push($name = $factory->getName());
+			/** @var $parameters IParameter[] */
+			$grab = count($parameters = $factory->getParameterList($name)) - count($parameterList);
+			foreach ($parameters as $parameter) {
+				if ($grab-- <= 0 || $parameter->isOptional() || $parameter->hasClass() === false || $this->factoryManager->hasFactory($parameter->getClass()) === false) {
 					break;
 				}
-				$dependencies[] = $this->factory($dependency, []);
+				$dependencyList[] = $this->factory($this->factoryManager->getFactory($parameter->getClass()));
 			}
 			try {
-				return $this->factoryManager->getFactory($name = $root->getClass())
-					->create($name, array_merge($dependencies, $parameterList), $this);
+				return $this->factoryManager->getFactory($name)
+					->create($name, array_merge($dependencyList, $parameterList), $this);
 			} catch (FactoryException $exception) {
-				throw new ContainerException(sprintf('Cannot create dependency [%s]; dependency stack [%s].', $root->getClass(), implode(', ', iterator_to_array($this->dependencyStack))), 0, $exception);
+				$this->dependencyStack->pop();
+				throw new ContainerException(sprintf('Cannot create dependency [%s]; dependency stack [%s].', $name, implode(', ', iterator_to_array($this->dependencyStack))), 0, $exception);
 			} finally {
 				$this->dependencyStack->pop();
 			}

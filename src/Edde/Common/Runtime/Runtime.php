@@ -6,9 +6,9 @@
 	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Cache\ICacheStorage;
+	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IDependencyFactory;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\IFactoryManager;
 	use Edde\Api\Deffered\IDeffered;
@@ -19,7 +19,6 @@
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Container\Container;
-	use Edde\Common\Container\DependencyFactory;
 	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Container\FactoryManager;
 	use Edde\Common\Deffered\AbstractDeffered;
@@ -81,6 +80,7 @@
 		/**
 		 * @inheritdoc
 		 * @throws FactoryException
+		 * @throws ContainerException
 		 */
 		public function createContainer(): IContainer {
 			$this->use();
@@ -88,7 +88,6 @@
 				new Framework(),
 				IContainer::class => Container::class,
 				IFactoryManager::class => FactoryManager::class,
-				IDependencyFactory::class => DependencyFactory::class,
 				ITempDirectory::class => function (IRootDirectory $rootDirectory) {
 					return $rootDirectory->directory('temp', TempDirectory::class);
 				},
@@ -103,6 +102,7 @@
 		/**
 		 * @inheritdoc
 		 * @throws FactoryException
+		 * @throws ContainerException
 		 */
 		public function run(callable $callback) {
 			$this->use();
