@@ -92,7 +92,7 @@
 							$parameterList = [];
 							foreach ($reflectionMethod->getParameters() as $parameter) {
 								if ($reflectionClass->hasProperty($parameter->getName()) === false) {
-									throw new ContainerException(vsprintf("Lazy inject missmatch: parameter [$%s] of method [%s::%s()] must have a property [%s::$%s] with the same name as the paramete (for example protected \$%s).", [
+									throw new ContainerException(vsprintf("Lazy inject mismatch: parameter [$%s] of method [%s::%s()] must have a property [%s::$%s] with the same name as the paramete (for example protected \$%s).", [
 										$parameter->getName(),
 										$reflectionClass->getName(),
 										$reflectionMethod->getName(),
