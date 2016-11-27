@@ -8,7 +8,7 @@
 	use Edde\Common\ContainerTest\MagicFactory;
 	use Edde\Common\ContainerTest\TestMagicFactory;
 	use Edde\Ext\Container\ContainerFactory;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	require_once __DIR__ . '/../assets.php';
 
@@ -19,10 +19,8 @@
 		protected $container;
 
 		public function testCommon() {
-			$factory = new CallbackFactory('name', $magicFactory = new MagicFactory(), false, false);
+			$factory = new CallbackFactory('name', $magicFactory = new MagicFactory(), false);
 			$factory->setSingleton(false);
-			$factory->setCloneable(false);
-			self::assertFalse($factory->isCloneable());
 			self::assertFalse($factory->isSingleton());
 			self::assertFalse($magicFactory->hasFlag());
 			self::assertEquals('name', $factory->getName());
@@ -35,7 +33,7 @@
 			$this->expectExceptionMessage('Factory [name] is locked; isn\'t there some circular dependency?');
 			$factory = new CallbackFactory('name', function (CallbackFactory $f) {
 				$f->create('name', [], $this->container);
-			}, false, false);
+			}, false);
 			$factory->create('name', [$factory], $this->container);
 		}
 

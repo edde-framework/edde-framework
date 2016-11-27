@@ -9,7 +9,7 @@
 	use Edde\Common\ContainerTest\AlphaDependencyClass;
 	use Edde\Common\ContainerTest\BetaDependencyClass;
 	use Edde\Common\ContainerTest\LazyInjectTraitClass;
-	use Edde\Common\ContainerTest\LazyMissmatch;
+	use Edde\Common\ContainerTest\LazyMismatch;
 	use Edde\Common\ContainerTest\OnlySomeString;
 	use Edde\Common\ContainerTest\SimpleClass;
 	use Edde\Common\ContainerTest\SimpleDependency;
@@ -18,7 +18,7 @@
 	use Edde\Ext\Container\ContainerFactory;
 	use Fallback\Foo\Bar\FooBar;
 	use Fallback\Foo\Bar\IFooBar;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	require_once __DIR__ . '/assets.php';
 
@@ -49,10 +49,10 @@
 			self::assertInstanceOf(AlphaDependencyClass::class, $lazyClass->bar());
 		}
 
-		public function testLazyMissmatch() {
+		public function testLazyMismatch() {
 			$this->expectException(ContainerException::class);
-			$this->expectExceptionMessage('Lazy inject missmatch: parameter [$betaDependencyClass] of method [Edde\Common\ContainerTest\LazyMissmatch::lazyDependency()] must have a property [Edde\Common\ContainerTest\LazyMissmatch::$betaDependencyClass] with the same name as the paramete (for example protected $betaDependencyClass).');
-			$this->container->create(LazyMissmatch::class);
+			$this->expectExceptionMessage('Lazy inject mismatch: parameter [$betaDependencyClass] of method [Edde\Common\ContainerTest\LazyMismatch::lazyDependency()] must have a property [Edde\Common\ContainerTest\LazyMismatch::$betaDependencyClass] with the same name as the parameter (for example protected $betaDependencyClass).');
+			$this->container->create(LazyMismatch::class);
 		}
 
 		public function testCascade() {
@@ -68,7 +68,7 @@
 					"Fallback\\$foo\\{$name}Service",
 				];
 			})));
-			self::assertInstanceOf(FooBar::class, $instance = $this->container->create(IFooBar::class));
+			self::assertInstanceOf(FooBar::class, $this->container->create(IFooBar::class));
 		}
 
 		public function testScalar() {

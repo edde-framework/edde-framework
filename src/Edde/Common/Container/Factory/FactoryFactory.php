@@ -47,9 +47,9 @@
 		 */
 		static public function create(string $name, $factory, bool $singleton = true, bool $cloneable = false): IFactory {
 			if (is_callable($factory)) {
-				return new CallbackFactory($name, $factory, $singleton, $cloneable);
+				return new CallbackFactory($name, $factory, $singleton);
 			} else if (is_string($factory) && class_exists($factory)) {
-				return new ReflectionFactory($name, $factory, $singleton, $cloneable);
+				return new ReflectionFactory($name, $factory, $singleton);
 			} else if ($factory instanceof IFactory) {
 				return $factory;
 			} else if (is_object($factory)) {

@@ -123,7 +123,7 @@
 		}
 
 		/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
-		class LazyMissmatch extends AbstractObject implements ILazyInject {
+		class LazyMismatch extends AbstractObject implements ILazyInject {
 			public function lazyDependency(BetaDependencyClass $betaDependencyClass) {
 			}
 		}

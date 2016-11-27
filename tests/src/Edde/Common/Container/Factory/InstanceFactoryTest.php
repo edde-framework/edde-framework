@@ -6,7 +6,7 @@
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Ext\Container\ContainerFactory;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	require_once __DIR__ . '/../assets.php';
 
@@ -25,7 +25,6 @@
 			self::assertEmpty($factory->getParameterList());
 			self::assertSame($this, $factory->create('name', [], $container = $this->container));
 			self::assertSame($this, $factory->create('name', [], $container));
-			self::assertFalse($factory->isCloneable());
 			self::assertTrue($factory->isSingleton());
 		}
 

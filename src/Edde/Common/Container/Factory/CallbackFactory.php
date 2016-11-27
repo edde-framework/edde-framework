@@ -26,10 +26,9 @@
 		 * @param string $name
 		 * @param callable $callback
 		 * @param bool $singleton
-		 * @param bool $cloneable
 		 */
-		public function __construct(string $name, callable $callback, bool $singleton = true, bool $cloneable = false) {
-			parent::__construct($name, $singleton, $cloneable);
+		public function __construct(string $name, callable $callback, bool $singleton = true) {
+			parent::__construct($name, $singleton);
 			$this->callback = $callback;
 		}
 

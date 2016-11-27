@@ -12,9 +12,11 @@
 		/**
 		 * get name of this factory; this should usually by name of interface
 		 *
+		 * @param string $name
+		 *
 		 * @return string
 		 */
-		public function getName(): string;
+		public function getName(string $name = null): string;
 
 		/**
 		 * switch singleton flag of this factory; should be used only in the configuration time
@@ -31,22 +33,6 @@
 		 * @return bool
 		 */
 		public function isSingleton(): bool;
-
-		/**
-		 * switch cloneable flag; should be set only in the configuration time
-		 *
-		 * @param bool $cloneable
-		 *
-		 * @return IFactory
-		 */
-		public function setCloneable(bool $cloneable): IFactory;
-
-		/**
-		 * is result of this factory clone?
-		 *
-		 * @return bool
-		 */
-		public function isCloneable(): bool;
 
 		/**
 		 * return list of required parameters for this factory

@@ -7,7 +7,7 @@
 	use Edde\Api\Container\IFactoryManager;
 	use Edde\Common\Cache\DummyCacheManager;
 	use Edde\Common\Container\Factory\InstanceFactory;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	/**
 	 * Test suite for FactoryManager.

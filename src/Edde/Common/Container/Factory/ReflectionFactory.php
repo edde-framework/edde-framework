@@ -25,10 +25,9 @@
 		 * @param string $name
 		 * @param string $class
 		 * @param bool $singleton
-		 * @param bool $cloneable
 		 */
-		public function __construct(string $name, string $class, bool $singleton = true, bool $cloneable = false) {
-			parent::__construct($name, $singleton, $cloneable);
+		public function __construct(string $name, string $class, bool $singleton = true) {
+			parent::__construct($name, $singleton);
 			$this->class = $class;
 		}
 
@@ -46,10 +45,10 @@
 		 * @inheritdoc
 		 */
 		public function factory(string $name, array $parameterList, IContainer $container) {
-			$reflactionClass = new ReflectionClass($this->class);
+			$reflectionClass = new ReflectionClass($this->class);
 			if (empty($parameterList)) {
-				return $reflactionClass->newInstance();
+				return $reflectionClass->newInstance();
 			}
-			return $reflactionClass->newInstanceArgs($parameterList);
+			return $reflectionClass->newInstanceArgs($parameterList);
 		}
 	}

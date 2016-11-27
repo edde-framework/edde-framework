@@ -15,7 +15,7 @@
 		 * It is later than you think.
 		 */
 		public function __construct() {
-			parent::__construct(static::class, static::class, false, false);
+			parent::__construct(static::class, static::class, false);
 		}
 
 		/** @noinspection PhpMissingParentCallCommonInspection */

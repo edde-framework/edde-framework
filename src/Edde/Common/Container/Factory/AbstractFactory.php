@@ -22,10 +22,6 @@
 		 */
 		protected $singleton;
 		/**
-		 * @var bool
-		 */
-		protected $cloneable;
-		/**
 		 * @var callable[]
 		 */
 		protected $onSetupList = [];
@@ -40,19 +36,17 @@
 		 *
 		 * @param string $name
 		 * @param bool $singleton
-		 * @param bool $cloneable
 		 */
-		public function __construct(string $name, bool $singleton = true, bool $cloneable = false) {
+		public function __construct(string $name, bool $singleton = true) {
 			$this->name = $name;
 			$this->singleton = $singleton;
-			$this->cloneable = $cloneable;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function getName(): string {
-			return $this->name;
+		public function getName(string $name = null): string {
+			return $name ?: $this->name;
 		}
 
 		/**
@@ -76,9 +70,6 @@
 		 */
 		public function create(string $name, array $parameterList, IContainer $container) {
 			if ($this->instance !== null) {
-				if ($this->isCloneable()) {
-					return clone $this->instance;
-				}
 				if ($this->isSingleton()) {
 					return $this->instance;
 				}
@@ -94,21 +85,6 @@
 			} finally {
 				$this->lock($name, false);
 			}
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function isCloneable(): bool {
-			return $this->cloneable;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function setCloneable(bool $cloneable): IFactory {
-			$this->cloneable = $cloneable;
-			return $this;
 		}
 
 		/**

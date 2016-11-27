@@ -7,6 +7,7 @@
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Callback\IParameter;
 	use Edde\Api\Container\ContainerException;
+	use Edde\Api\Container\DependencyException;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
@@ -14,6 +15,7 @@
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Default implementation of a dependency container.
@@ -35,6 +37,7 @@
 		 * @var \SplStack
 		 */
 		protected $dependencyStack;
+		protected $dependencyList = [];
 
 		/**
 		 * @param IFactoryManager $factoryManager
@@ -92,7 +95,7 @@
 							$parameterList = [];
 							foreach ($reflectionMethod->getParameters() as $parameter) {
 								if ($reflectionClass->hasProperty($parameter->getName()) === false) {
-									throw new ContainerException(vsprintf("Lazy inject mismatch: parameter [$%s] of method [%s::%s()] must have a property [%s::$%s] with the same name as the paramete (for example protected \$%s).", [
+									throw new ContainerException(vsprintf("Lazy inject mismatch: parameter [$%s] of method [%s::%s()] must have a property [%s::$%s] with the same name as the parameter (for example protected \$%s).", [
 										$parameter->getName(),
 										$reflectionClass->getName(),
 										$reflectionMethod->getName(),
@@ -144,7 +147,7 @@
 		 */
 		public function create(string $name, ...$parameterList) {
 			$this->use();
-			return $this->factory($this->factoryManager->getFactory($name), $parameterList);
+			return $this->factory($this->factoryManager->getFactory($name), $name, $parameterList);
 		}
 
 		/**
@@ -154,30 +157,35 @@
 		 */
 		public function call(callable $callable, ...$parameterList) {
 			$this->use();
-			return $this->factory(FactoryFactory::create('', $callable), ...$parameterList);
+			return $this->factory(FactoryFactory::create('', $callable), null, $parameterList);
 		}
 
 		/**
 		 * @inheritdoc
 		 * @throws ContainerException
 		 */
-		public function factory(IFactory $factory, array $parameterList = []) {
-			$this->dependencyStack->push($name = $factory->getName());
+		public function factory(IFactory $factory, string $name = null, array $parameterList = []) {
+			$this->dependencyStack->push($name = $factory->getName($name));
+			if (isset($this->dependencyList[$name])) {
+				throw new DependencyException(sprintf('Detected recursive dependency [%s] in stack [%s].', $name, implode(', ', iterator_to_array($this->dependencyStack))));
+			}
+			$this->dependencyList[$name] = true;
 			/** @var $parameters IParameter[] */
 			$grab = count($parameters = $factory->getParameterList($name)) - count($parameterList);
 			$dependencyList = [];
 			foreach ($parameters as $parameter) {
 				/** @noinspection NotOptimalIfConditionsInspection */
-				if ($grab-- <= 0 || $parameter->isOptional() || ($class = $parameter->getClass()) === null || $this->factoryManager->hasFactory($class) === false) {
+				if ($grab-- <= 0 || (($parameter->isOptional() || ($class = $parameter->getClass()) === null || $this->factoryManager->hasFactory($class) === false) && ($this->factoryManager->hasFactory($class = StringUtils::recamel($parameter->getName())) === false))) {
 					break;
 				}
-				$dependencyList[] = $this->factory($this->factoryManager->getFactory($class));
+				$dependencyList[] = $this->factory($this->factoryManager->getFactory($class), $class);
 			}
 			try {
 				return $factory->create($name, array_merge($dependencyList, $parameterList), $this);
 			} catch (FactoryException $exception) {
 				throw new ContainerException(sprintf('Cannot create dependency [%s]; dependency stack [%s].', $name, implode(', ', iterator_to_array($this->dependencyStack))), 0, $exception);
 			} finally {
+				unset($this->dependencyList[$name]);
 				$this->dependencyStack->pop();
 			}
 		}

@@ -61,11 +61,12 @@
 		 * low-level method for factory execution (other container methods should be using this)
 		 *
 		 * @param IFactory $factory
+		 * @param string $name optional dependency name (name given from outside)
 		 * @param array $parameterList
 		 *
 		 * @return mixed return created instance of the given factory (result of factory execution)
 		 */
-		public function factory(IFactory $factory, array $parameterList = []);
+		public function factory(IFactory $factory, string $name = null, array $parameterList = []);
 
 		/**
 		 * provides all aditional dependencies for the given instance
