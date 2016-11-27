@@ -166,7 +166,7 @@
 		 */
 		public function factory(IFactory $factory, string $name = null, array $parameterList = []) {
 			$this->dependencyStack->push($name = $factory->getName($name));
-			if (isset($this->dependencyList[$name])) {
+			if (empty($name) === false && isset($this->dependencyList[$name])) {
 				throw new DependencyException(sprintf('Detected recursive dependency [%s] in stack [%s].', $name, implode(', ', iterator_to_array($this->dependencyStack))));
 			}
 			$this->dependencyList[$name] = true;

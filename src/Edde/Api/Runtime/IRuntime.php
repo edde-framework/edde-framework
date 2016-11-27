@@ -16,6 +16,16 @@
 		public function registerFactoryList(array $factoryList): IRuntime;
 
 		/**
+		 * register deffered callback on the given factory name (must be already registered)
+		 *
+		 * @param string $name
+		 * @param callable $onSetup
+		 *
+		 * @return IRuntime
+		 */
+		public function deffered(string $name, callable $onSetup): IRuntime;
+
+		/**
 		 * create default system container for this runtime
 		 *
 		 * @return IContainer

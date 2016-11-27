@@ -13,12 +13,14 @@
 		 * @var IContainer
 		 */
 		protected $container;
+		protected $result;
 
 		/**
 		 * @param IContainer $container
 		 */
-		public function __construct(IContainer $container) {
+		public function __construct(IContainer $container, $result) {
 			$this->container = $container;
+			$this->result = $result;
 		}
 
 		/**
@@ -26,5 +28,9 @@
 		 */
 		public function getContainer(): IContainer {
 			return $this->container;
+		}
+
+		public function getResult() {
+			return $this->result;
 		}
 	}

@@ -4,7 +4,6 @@
 	namespace Edde\Common\Application;
 
 	use Edde\Api\Application\ApplicationException;
-	use Edde\Api\Application\IErrorControl;
 	use Edde\Api\Application\LazyRequestTrait;
 	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Container\LazyContainerTrait;
@@ -24,20 +23,10 @@
 		use LazyResponseManagerTrait;
 		use LazyRequestTrait;
 		use LazyLogServiceTrait;
-		/**
-		 * @var IErrorControl
-		 */
-		protected $errorControl;
-
-		/**
-		 * @param IErrorControl $errorControl
-		 */
-		public function lazyErrorControl(IErrorControl $errorControl) {
-			$this->errorControl = $errorControl;
-		}
 
 		/**
 		 * @inheritdoc
+		 * @throws \Exception
 		 */
 		public function run() {
 			try {
@@ -51,10 +40,10 @@
 				$this->event(new FinishEvent($this, $result));
 				$this->responseManager->execute();
 				return $result;
-			} catch (\Exception $e) {
-				$this->logService->exception($e, ['edde']);
-				$this->event(new ErrorEvent($this, $e));
-				return $this->errorControl->exception($e);
+			} catch (\Exception $exception) {
+				$this->logService->exception($exception, ['edde']);
+				$this->event(new ErrorEvent($this, $exception));
+				throw $exception;
 			}
 		}
 	}

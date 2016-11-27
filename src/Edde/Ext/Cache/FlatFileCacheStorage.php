@@ -10,7 +10,7 @@
 	/**
 	 * Cache is stored in one file based on a storage namespace.
 	 */
-	class FlatCacheStorage extends AbstractCacheStorage {
+	class FlatFileCacheStorage extends AbstractCacheStorage {
 		use LazyCacheDirectoryTrait;
 		/**
 		 * @var string

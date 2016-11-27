@@ -22,6 +22,13 @@
 			return $this->traitEventBus->handler($handler);
 		}
 
+		public function handlerList(array $handlerList): IEventBus {
+			if ($this->traitEventBus === null) {
+				$this->traitEventBus = new EventBus();
+			}
+			return $this->traitEventBus->handlerList($handlerList);
+		}
+
 		public function listen($listen): IEventBus {
 			if ($this->traitEventBus === null) {
 				$this->traitEventBus = new EventBus();

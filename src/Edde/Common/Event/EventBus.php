@@ -54,6 +54,17 @@
 		 * @inheritdoc
 		 * @throws EventException
 		 */
+		public function handlerList(array $handlerList): IEventBus {
+			foreach ($handlerList as $handler) {
+				$this->handler($handler);
+			}
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws EventException
+		 */
 		public function listen($listen, string $scope = null): IEventBus {
 			if (($listen instanceof IHandler) === false) {
 				$listen = HandlerFactory::handler($listen, $scope);
@@ -82,7 +93,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws \Edde\Api\Event\EventException
+		 * @throws EventException
 		 */
 		public function scope(callable $callback, ...$handlerList) {
 			$this->prepare();

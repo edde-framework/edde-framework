@@ -6,4 +6,7 @@
 	use Edde\Common\Html\ViewControl;
 
 	class IndexView extends ViewControl {
+		public function actionIndex() {
+			echo "foo";
+		}
 	}

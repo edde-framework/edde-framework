@@ -29,12 +29,13 @@
 			$e = null;
 			foreach ($this->routerList as $router) {
 				try {
+					$e = null;
 					if (($request = $router->createRequest()) !== null) {
 						return $this->request = $request;
 					}
 				} catch (\Exception $e) {
 				}
 			}
-			throw new BadRequestException('Cannot handle current application request.', 0, $e);
+			throw new BadRequestException('Cannot handle current application request.' . (empty($this->routerList) ? ' There are no registered routers.' : ''), 0, $e);
 		}
 	}

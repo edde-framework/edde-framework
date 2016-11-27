@@ -1,0 +1,26 @@
+<?php
+	declare(strict_types = 1);
+
+	namespace Edde\Module;
+
+	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\Log\ILogDirectory;
+	use Edde\Api\Log\ILogService;
+	use Edde\Common\Event\Handler\SelfHandler;
+	use Edde\Common\Log\LogService;
+	use Edde\Common\Runtime\Event\SetupEvent;
+
+	/**
+	 * Logging support.
+	 */
+	class LoggerModule extends SelfHandler {
+		public function setupLoggerModule(SetupEvent $setupEvent) {
+			$runtime = $setupEvent->getRuntime();
+			$runtime->registerFactoryList([
+				ILogService::class => LogService::class,
+				ILogDirectory::class => function (IRootDirectory $rootDirectory) {
+					return $rootDirectory->directory('logs');
+				},
+			]);
+		}
+	}
