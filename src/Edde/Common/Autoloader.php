@@ -38,7 +38,7 @@
 		 * @return Autoloader
 		 */
 		static public function register($namespace, $path, $root = true) {
-			spl_autoload_register($autoloader = new self($namespace, $path, $root), true);
+			spl_autoload_register($autoloader = new self($namespace, $path, $root), true, true);
 			return $autoloader;
 		}
 

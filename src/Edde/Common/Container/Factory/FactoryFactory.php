@@ -30,8 +30,7 @@
 						$singleton = false;
 					}
 				}
-				$name = (string)$name;
-				$factories[$name] = self::create($name, $factory, $singleton);
+				$factories[$name = (string)$name] = self::create($name, $factory, $singleton);
 				$singleton = true;
 			}
 			return $factories;
@@ -55,10 +54,7 @@
 				return $factory;
 			} else if (is_object($factory)) {
 				return new InstanceFactory($name, $factory);
-			} else if (is_array($factory)) {
-				$factory[1]($instance = self::create($name, $factory[0], $singleton, $cloneable));
-				return $instance;
 			}
-			throw new FactoryException(sprintf('Cannot handle [%s] cache, cannot determine cache type of $cache [%s].', $name, is_string($factory) ? $factory : gettype($factory)));
+			throw new FactoryException(sprintf('Cannot handle [%s] factory -  cannot determine factory type of $factory [%s].', $name, is_string($factory) ? $factory : gettype($factory)));
 		}
 	}

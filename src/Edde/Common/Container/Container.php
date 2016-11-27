@@ -158,10 +158,10 @@
 		}
 
 		public function factory(IFactory $factory, array $parameterList = []) {
-			$dependencyList = [];
 			$this->dependencyStack->push($name = $factory->getName());
 			/** @var $parameters IParameter[] */
 			$grab = count($parameters = $factory->getParameterList($name)) - count($parameterList);
+			$dependencyList = [];
 			foreach ($parameters as $parameter) {
 				/** @noinspection NotOptimalIfConditionsInspection */
 				if ($grab-- <= 0 || $parameter->isOptional() || ($class = $parameter->getClass()) === null || $this->factoryManager->hasFactory($class) === false) {
