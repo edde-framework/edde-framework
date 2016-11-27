@@ -11,9 +11,9 @@
 	use Edde\Common\Identity\AuthenticatorManager;
 	use Edde\Common\Identity\IdentityManager;
 	use Edde\Ext\Container\ContainerFactory;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
-	require_once(__DIR__ . '/assets/assets.php');
+	require_once __DIR__ . '/assets/assets.php';
 
 	class AuthenticatorManagerTest extends TestCase {
 		/**
