@@ -158,18 +158,13 @@
 		}
 
 		public function factory(IFactory $factory, array $parameterList = []) {
-			static $parameterCache = [];
 			$this->dependencyStack->push($name = $factory->getName());
 			/** @var $parameters IParameter[] */
 			$grab = count($parameters = $factory->getParameterList($name)) - count($parameterList);
 			$dependencyList = [];
 			foreach ($parameters as $parameter) {
 				/** @noinspection NotOptimalIfConditionsInspection */
-				$class = $parameter->getClass();
-				if (isset($parameterCache[$cacheId = ($name . $parameter->getName())]) === false) {
-					$parameterCache[$cacheId] = ($grab-- <= 0 || $parameter->isOptional() || $class === null || $this->factoryManager->hasFactory($class) === false);
-				}
-				if ($parameterCache[$cacheId]) {
+				if ($grab-- <= 0 || $parameter->isOptional() || ($class = $parameter->getClass()) === null || $this->factoryManager->hasFactory($class) === false) {
 					break;
 				}
 				$dependencyList[] = $this->factory($this->factoryManager->getFactory($class));
