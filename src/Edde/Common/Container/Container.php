@@ -64,7 +64,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function has($name) {
+		public function has(string $name) {
 			return $this->factoryManager->hasFactory($name);
 		}
 
@@ -142,7 +142,7 @@
 		 * @throws FactoryException
 		 * @throws ContainerException
 		 */
-		public function create($name, ...$parameterList) {
+		public function create(string $name, ...$parameterList) {
 			$this->use();
 			return $this->factory($this->factoryManager->getFactory($name), $parameterList);
 		}

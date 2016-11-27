@@ -35,7 +35,7 @@
 		 *
 		 * @return bool
 		 */
-		public function has($name);
+		public function has(string $name);
 
 		/**
 		 * create the dependency by it's identifier (name)
@@ -45,7 +45,7 @@
 		 *
 		 * @return mixed
 		 */
-		public function create($name, ...$parameterList);
+		public function create(string $name, ...$parameterList);
 
 		/**
 		 * execute given callback with autowired dependencies
