@@ -21,8 +21,6 @@
 		public function testCommon() {
 			$factory = new CallbackFactory('name', $magicFactory = new MagicFactory(), false, false);
 			$factory->setSingleton(false);
-			$factory->setCloneable(false);
-			self::assertFalse($factory->isCloneable());
 			self::assertFalse($factory->isSingleton());
 			self::assertFalse($magicFactory->hasFlag());
 			self::assertEquals('name', $factory->getName());

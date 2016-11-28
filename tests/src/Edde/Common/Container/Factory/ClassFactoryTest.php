@@ -26,7 +26,6 @@
 				'foo' => new Parameter('foo', null, false),
 				'bar' => new Parameter('bar', null, false),
 			], $factory->getParameterList());
-			self::assertFalse($factory->isCloneable());
 			self::assertFalse($factory->isSingleton());
 			/** @var $alpha TestCommonClass */
 			$alpha = $factory->create('name', [
@@ -45,24 +44,8 @@
 			self::assertEquals('c', $beta->getBar());
 		}
 
-		public function testCloneable() {
-			$factory = new ReflectionFactory('name', TestCommonClass::class, false, true);
-			self::assertTrue($factory->isCloneable());
-			self::assertFalse($factory->isSingleton());
-			self::assertNotEquals($alpha = $factory->create('name', [
-				'a',
-				'b',
-			], $this->container), $beta = $factory->create('name', [
-				'a',
-				'b',
-			], $this->container));
-			self::assertFalse($alpha->isCloned());
-			self::assertTrue($beta->isCloned());
-		}
-
 		public function testSingleton() {
 			$factory = new ReflectionFactory('name', TestCommonClass::class);
-			self::assertFalse($factory->isCloneable());
 			self::assertTrue($factory->isSingleton());
 			self::assertEquals($factory->create('name', [
 				'a',
@@ -75,7 +58,7 @@
 
 		public function testCircularDependency() {
 			$this->expectException(DependencyException::class);
-			$this->expectExceptionMessage('Detected recursive dependency [Edde\Common\ContainerTest\RecursiveClass] in stack [Edde\Common\ContainerTest\RecursiveClass].');
+			$this->expectExceptionMessage('Detected recursive dependency [Edde\Common\ContainerTest\RecursiveClass] in stack [Edde\Common\ContainerTest\RecursiveClass, Edde\Common\ContainerTest\RecursiveClass].');
 			$this->container->create(RecursiveClass::class);
 		}
 

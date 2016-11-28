@@ -51,7 +51,7 @@
 
 		public function testLazyMissmatch() {
 			$this->expectException(ContainerException::class);
-			$this->expectExceptionMessage('Lazy inject missmatch: parameter [$betaDependencyClass] of method [Edde\Common\ContainerTest\LazyMissmatch::lazyDependency()] must have a property [Edde\Common\ContainerTest\LazyMissmatch::$betaDependencyClass] with the same name as the paramete (for example protected $betaDependencyClass).');
+			$this->expectExceptionMessage('Lazy inject mismatch: parameter [$betaDependencyClass] of method [Edde\Common\ContainerTest\LazyMissmatch::lazyDependency()] must have a property [Edde\Common\ContainerTest\LazyMissmatch::$betaDependencyClass] with the same name as the parameter (for example protected $betaDependencyClass).');
 			$this->container->create(LazyMissmatch::class);
 		}
 

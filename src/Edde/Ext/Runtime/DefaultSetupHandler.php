@@ -16,7 +16,6 @@
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Client\IHttpClient;
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IDependencyFactory;
 	use Edde\Api\Container\IFactoryManager;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Crate\ICrateDirectory;
@@ -73,7 +72,6 @@
 	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Client\HttpClient;
 	use Edde\Common\Container\Container;
-	use Edde\Common\Container\DependencyFactory;
 	use Edde\Common\Container\FactoryManager;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crate\CrateDirectory;
@@ -136,7 +134,6 @@
 					Framework::class,
 					IContainer::class => Container::class,
 					IFactoryManager::class => FactoryManager::class,
-					IDependencyFactory::class => DependencyFactory::class,
 					IEddeDirectory::class => function () {
 						/**
 						 * this is darkes possible magic; don't use this constant, don't use this interface!

@@ -25,7 +25,6 @@
 			self::assertEmpty($factory->getParameterList());
 			self::assertSame($this, $factory->create('name', [], $container = $this->container));
 			self::assertSame($this, $factory->create('name', [], $container));
-			self::assertFalse($factory->isCloneable());
 			self::assertTrue($factory->isSingleton());
 		}
 

@@ -35,7 +35,7 @@
 		 *
 		 * @return bool
 		 */
-		public function has($name);
+		public function has(string $name);
 
 		/**
 		 * create the dependency by it's identifier (name)
@@ -45,7 +45,7 @@
 		 *
 		 * @return mixed
 		 */
-		public function create($name, ...$parameterList);
+		public function create(string $name, ...$parameterList);
 
 		/**
 		 * execute given callback with autowired dependencies
@@ -56,6 +56,17 @@
 		 * @return mixed
 		 */
 		public function call(callable $callable, ...$parameterList);
+
+		/**
+		 * low-level method for factory execution (other container methods should be using this)
+		 *
+		 * @param IFactory $factory
+		 * @param string $name optional dependency name (name given from outside)
+		 * @param array $parameterList
+		 *
+		 * @return mixed return created instance of the given factory (result of factory execution)
+		 */
+		public function factory(IFactory $factory, string $name = null, array $parameterList = []);
 
 		/**
 		 * provides all aditional dependencies for the given instance

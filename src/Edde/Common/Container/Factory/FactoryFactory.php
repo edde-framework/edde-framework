@@ -21,15 +21,16 @@
 			$factories = [];
 			$singleton = true;
 			foreach ($factoryList as $name => $factory) {
-				if (is_string($name) === false) {
+				if (is_object($factory)) {
+					$name = is_string($name) ? $name : get_class($factory);
+				} else if (is_string($name) === false) {
 					$name = 'anonymous-' . $name;
 					if ($factory instanceof IFactory === false) {
 						$name = $factory;
 						$singleton = false;
 					}
 				}
-				$name = (string)$name;
-				$factories[$name] = self::create($name, $factory, $singleton);
+				$factories[$name = (string)$name] = self::create($name, $factory, $singleton);
 				$singleton = true;
 			}
 			return $factories;
@@ -46,17 +47,14 @@
 		 */
 		static public function create(string $name, $factory, bool $singleton = true, bool $cloneable = false): IFactory {
 			if (is_callable($factory)) {
-				return new CallbackFactory($name, $factory, $singleton, $cloneable);
+				return new CallbackFactory($name, $factory, $singleton);
 			} else if (is_string($factory) && class_exists($factory)) {
-				return new ReflectionFactory($name, $factory, $singleton, $cloneable);
+				return new ReflectionFactory($name, $factory, $singleton);
 			} else if ($factory instanceof IFactory) {
 				return $factory;
 			} else if (is_object($factory)) {
 				return new InstanceFactory($name, $factory);
-			} else if (is_array($factory)) {
-				$factory[1]($instance = self::create($name, $factory[0], $singleton, $cloneable));
-				return $instance;
 			}
-			throw new FactoryException(sprintf('Cannot handle [%s] cache, cannot determine cache type of $cache [%s].', $name, is_string($factory) ? $factory : gettype($factory)));
+			throw new FactoryException(sprintf('Cannot handle [%s] factory -  cannot determine factory type of $factory [%s].', $name, is_string($factory) ? $factory : gettype($factory)));
 		}
 	}

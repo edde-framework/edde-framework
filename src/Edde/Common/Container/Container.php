@@ -5,16 +5,15 @@
 
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheManager;
-	use Edde\Api\Callback\ICallback;
+	use Edde\Api\Callback\IParameter;
 	use Edde\Api\Container\ContainerException;
+	use Edde\Api\Container\DependencyException;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IDependency;
-	use Edde\Api\Container\IDependencyFactory;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\IFactoryManager;
 	use Edde\Api\Container\ILazyInject;
-	use Edde\Common\Callback\Callback;
+	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Strings\StringUtils;
 
@@ -27,10 +26,6 @@
 		 */
 		protected $factoryManager;
 		/**
-		 * @var IDependencyFactory
-		 */
-		protected $dependencyFactory;
-		/**
 		 * @var ICacheManager
 		 */
 		protected $cacheManager;
@@ -42,15 +37,14 @@
 		 * @var \SplStack
 		 */
 		protected $dependencyStack;
+		protected $dependencyList = [];
 
 		/**
 		 * @param IFactoryManager $factoryManager
-		 * @param IDependencyFactory $dependencyFactory
 		 * @param ICacheManager $cacheManager
 		 */
-		public function __construct(IFactoryManager $factoryManager, IDependencyFactory $dependencyFactory, ICacheManager $cacheManager) {
+		public function __construct(IFactoryManager $factoryManager, ICacheManager $cacheManager) {
 			$this->factoryManager = $factoryManager;
-			$this->dependencyFactory = $dependencyFactory;
 			$this->cacheManager = $cacheManager;
 		}
 
@@ -73,7 +67,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function has($name) {
+		public function has(string $name) {
 			return $this->factoryManager->hasFactory($name);
 		}
 
@@ -101,7 +95,7 @@
 							$parameterList = [];
 							foreach ($reflectionMethod->getParameters() as $parameter) {
 								if ($reflectionClass->hasProperty($parameter->getName()) === false) {
-									throw new ContainerException(vsprintf("Lazy inject missmatch: parameter [$%s] of method [%s::%s()] must have a property [%s::$%s] with the same name as the paramete (for example protected \$%s).", [
+									throw new ContainerException(vsprintf("Lazy inject mismatch: parameter [$%s] of method [%s::%s()] must have a property [%s::$%s] with the same name as the parameter (for example protected \$%s).", [
 										$parameter->getName(),
 										$reflectionClass->getName(),
 										$reflectionMethod->getName(),
@@ -151,37 +145,9 @@
 		 * @throws FactoryException
 		 * @throws ContainerException
 		 */
-		public function create($name, ...$parameterList) {
+		public function create(string $name, ...$parameterList) {
 			$this->use();
-			return $this->factory($this->dependencyFactory->create($name), $parameterList);
-		}
-
-		/**
-		 * @param IDependency $root
-		 * @param array $parameterList
-		 *
-		 * @return mixed
-		 * @throws ContainerException
-		 */
-		protected function factory(IDependency $root, array $parameterList) {
-			$dependencies = [];
-			$this->dependencyStack->push($root->getName());
-			/** @var $dependencyList IDependency[] */
-			$grab = count($dependencyList = $root->getDependencyList()) - count($parameterList);
-			foreach ($dependencyList as $dependency) {
-				if ($grab-- <= 0 || $dependency->isOptional() || $dependency->hasClass() === false || $this->factoryManager->hasFactory($dependency->getClass()) === false) {
-					break;
-				}
-				$dependencies[] = $this->factory($dependency, []);
-			}
-			try {
-				return $this->factoryManager->getFactory($name = $root->getClass())
-					->create($name, array_merge($dependencies, $parameterList), $this);
-			} catch (FactoryException $exception) {
-				throw new ContainerException(sprintf('Cannot create dependency [%s]; dependency stack [%s].', $root->getClass(), implode(', ', iterator_to_array($this->dependencyStack))), 0, $exception);
-			} finally {
-				$this->dependencyStack->pop();
-			}
+			return $this->factory($this->factoryManager->getFactory($name), $name, $parameterList);
 		}
 
 		/**
@@ -191,17 +157,37 @@
 		 */
 		public function call(callable $callable, ...$parameterList) {
 			$this->use();
-			/** @var $callback ICallback */
-			$callback = new Callback($callable);
-			$dependencies = [];
-			$grab = count($dependencyList = $callback->getParameterList()) - count($parameterList);
-			foreach ($dependencyList as $dependency) {
-				if ($grab-- <= 0 || $dependency->isOptional()) {
+			return $this->factory(FactoryFactory::create('', $callable), null, $parameterList);
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws ContainerException
+		 */
+		public function factory(IFactory $factory, string $name = null, array $parameterList = []) {
+			$this->dependencyStack->push($name = $factory->getName($name));
+			if (empty($name) === false && isset($this->dependencyList[$name])) {
+				throw new DependencyException(sprintf('Detected recursive dependency [%s] in stack [%s].', $name, implode(', ', iterator_to_array($this->dependencyStack))));
+			}
+			$this->dependencyList[$name] = true;
+			/** @var $parameters IParameter[] */
+			$grab = count($parameters = $factory->getParameterList($name)) - count($parameterList);
+			$dependencyList = [];
+			foreach ($parameters as $parameter) {
+				/** @noinspection NotOptimalIfConditionsInspection */
+				if ($grab-- <= 0 || (($parameter->isOptional() || ($class = $parameter->getClass()) === null || $this->factoryManager->hasFactory($class) === false) && ($this->factoryManager->hasFactory($class = StringUtils::recamel($parameter->getName())) === false))) {
 					break;
 				}
-				$dependencies[] = $this->create($dependency->hasClass() ? $dependency->getClass() : StringUtils::recamel($dependency->getName()));
+				$dependencyList[] = $this->factory($this->factoryManager->getFactory($class), $class);
 			}
-			return $callback->invoke(...array_merge($dependencies, $parameterList));
+			try {
+				return $factory->create($name, array_merge($dependencyList, $parameterList), $this);
+			} catch (FactoryException $exception) {
+				throw new ContainerException(sprintf('Cannot create dependency [%s]; dependency stack [%s].', $name, implode(', ', iterator_to_array($this->dependencyStack))), 0, $exception);
+			} finally {
+				unset($this->dependencyList[$name]);
+				$this->dependencyStack->pop();
+			}
 		}
 
 		/**

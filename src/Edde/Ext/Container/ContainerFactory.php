@@ -8,12 +8,10 @@
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IDependencyFactory;
 	use Edde\Api\Container\IFactoryManager;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Container\Container;
-	use Edde\Common\Container\DependencyFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\Container\FactoryManager;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
@@ -40,11 +38,10 @@
 			}
 			$factoryManager = new FactoryManager($cacheManager = $factoryList[ICacheManager::class] ?? new CacheManager($factoryList[ICacheStorage::class] ?? new InMemoryCacheStorage()));
 			$factoryManager->registerFactoryList($factoryList);
-			$container = new Container($factoryManager, $dependencyFactory = new DependencyFactory($factoryManager, $cacheManager), $cacheManager);
+			$container = new Container($factoryManager, $cacheManager);
 			$factoryManager->registerFactoryList([
 				IContainer::class => $container,
 				IFactoryManager::class => $factoryManager,
-				IDependencyFactory::class => $dependencyFactory,
 				ICacheManager::class => $cacheManager,
 				new ClassFactory(),
 			]);
@@ -62,6 +59,6 @@
 		static public function simple(array $factoryList = []): IContainer {
 			$factoryManager = new FactoryManager($cacheManager = new CacheManager(new InMemoryCacheStorage()));
 			$factoryManager->registerFactoryList($factoryList);
-			return new Container($factoryManager, $dependencyFactory = new DependencyFactory($factoryManager, $cacheManager), $cacheManager);
+			return new Container($factoryManager, $cacheManager);
 		}
 	}
