@@ -37,7 +37,7 @@
 				}
 				/** @noinspection PhpIncludeInspection */
 				include_once $file;
-				return class_exists($class, false);
+				return true;
 			}, true);
 		}
 	}
