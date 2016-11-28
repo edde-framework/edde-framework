@@ -52,6 +52,7 @@
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Session\IFingerprint;
+	use Edde\Api\Session\ISessionDirectory;
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Template\IHelperSet;
@@ -100,6 +101,7 @@
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Session\DummyFingerprint;
+	use Edde\Common\Session\SessionDirectory;
 	use Edde\Common\Session\SessionManager;
 	use Edde\Common\Template\TemplateManager;
 	use Edde\Common\Translator\Dictionary\CsvDictionaryConverter;
@@ -207,6 +209,10 @@
 					},
 					ITemplateDirectory::class => function (IAssetDirectory $assetDirectory) {
 						return $assetDirectory->directory('template', TemplateDirectory::class);
+					},
+					ISessionDirectory::class => function (ITempDirectory $tempDirectory) {
+						return $tempDirectory->directory('session', SessionDirectory::class)
+							->create();
 					},
 					ICryptEngine::class => CryptEngine::class,
 					IAssetStorage::class => AssetStorage::class,
