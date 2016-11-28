@@ -7,6 +7,7 @@
 	use Edde\Api\Session\IFingerprint;
 	use Edde\Api\Session\ISession;
 	use Edde\Api\Session\ISessionManager;
+	use Edde\Api\Session\LazySessionDirectoryTrait;
 	use Edde\Api\Session\SessionException;
 	use Edde\Common\Deffered\AbstractDeffered;
 
@@ -16,6 +17,7 @@
 	 */
 	class SessionManager extends AbstractDeffered implements ISessionManager {
 		use LazyHttpResponseTrait;
+		use LazySessionDirectoryTrait;
 		/**
 		 * @var IFingerprint
 		 */
@@ -70,6 +72,7 @@
 			if ($this->isSession()) {
 				return $this;
 			}
+			session_save_path($this->sessionDirectory->getDirectory());
 			if (($fingerprint = $this->fingerprint->fingerprint()) !== null) {
 				session_id($fingerprint);
 			}
