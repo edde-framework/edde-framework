@@ -19,9 +19,6 @@
 			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
 			$root = $root ? null : $namespace;
 			spl_autoload_register(function ($class) use ($namespace, $path, $root) {
-				if (strpos($class, $namespace) === false) {
-					return false;
-				}
 				$file = str_replace([
 					$namespace,
 					'\\',
