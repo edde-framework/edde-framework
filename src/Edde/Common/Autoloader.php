@@ -14,11 +14,11 @@
 		 * @param string $path
 		 * @param bool $root loader is in the root of autoloaded sources
 		 */
-		static public function register($namespace, $path, $root = true) {
+		static public function register($namespace, $path, $root = true): callable {
 			$namespace .= '\\';
 			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
 			$root = $root ? null : $namespace;
-			spl_autoload_register(function ($class) use ($namespace, $path, $root) {
+			spl_autoload_register($loader = function ($class) use ($namespace, $path, $root) {
 				$file = str_replace([
 					$namespace,
 					'\\',
@@ -36,5 +36,6 @@
 				include_once $file;
 				return true;
 			}, true);
+			return $loader;
 		}
 	}
