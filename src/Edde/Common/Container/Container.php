@@ -7,7 +7,6 @@
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Callback\IParameter;
 	use Edde\Api\Container\ContainerException;
-	use Edde\Api\Container\DependencyException;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
@@ -167,7 +166,7 @@
 		public function factory(IFactory $factory, string $name = null, array $parameterList = []) {
 			$this->dependencyStack->push($name = $factory->getName($name));
 			if (empty($name) === false && isset($this->dependencyList[$name])) {
-				throw new DependencyException(sprintf('Detected recursive dependency [%s] in stack [%s].', $name, implode(', ', iterator_to_array($this->dependencyStack))));
+//				throw new DependencyException(sprintf('Detected recursive dependency [%s] in stack [%s].', $name, implode(', ', iterator_to_array($this->dependencyStack))));
 			}
 			$this->dependencyList[$name] = true;
 			/** @var $parameters IParameter[] */
