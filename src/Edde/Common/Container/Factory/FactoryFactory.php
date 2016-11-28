@@ -30,7 +30,20 @@
 						$singleton = false;
 					}
 				}
-				$factories[$name = (string)$name] = self::create($name, $factory, $singleton);
+				$name = (string)$name;
+				$factoryInstance = null;
+				if (is_callable($factory)) {
+					$factoryInstance = new CallbackFactory($name, $factory, $singleton);
+				} else if (is_string($factory) && class_exists($factory)) {
+					$factoryInstance = new ReflectionFactory($name, $factory, $singleton);
+				} else if ($factory instanceof IFactory) {
+					$factoryInstance = $factory;
+				} else if (is_object($factory)) {
+					$factoryInstance = new InstanceFactory($name, $factory);
+				} else {
+					throw new FactoryException(sprintf('Cannot handle [%s] factory -  cannot determine factory type of $factory [%s].', $name, is_string($factory) ? $factory : gettype($factory)));
+				}
+				$factories[$name] = $factoryInstance;
 				$singleton = true;
 			}
 			return $factories;
@@ -39,21 +52,14 @@
 		/**
 		 * @param string $name
 		 * @param mixed $factory
-		 * @param bool $singleton
 		 *
 		 * @return IFactory
 		 * @throws FactoryException
 		 */
-		static public function create(string $name, $factory, bool $singleton = true): IFactory {
-			if (is_callable($factory)) {
-				return new CallbackFactory($name, $factory, $singleton);
-			} else if (is_string($factory) && class_exists($factory)) {
-				return new ReflectionFactory($name, $factory, $singleton);
-			} else if ($factory instanceof IFactory) {
-				return $factory;
-			} else if (is_object($factory)) {
-				return new InstanceFactory($name, $factory);
-			}
-			throw new FactoryException(sprintf('Cannot handle [%s] factory -  cannot determine factory type of $factory [%s].', $name, is_string($factory) ? $factory : gettype($factory)));
+		static public function create(string $name, $factory): IFactory {
+			$list = self::createList([
+				$name => $factory,
+			]);
+			return reset($list);
 		}
 	}
