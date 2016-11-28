@@ -33,12 +33,16 @@
 			$this->callable = $callable;
 		}
 
+		/** @noinspection PhpInconsistentReturnPointsInspection */
 		/**
 		 * @inheritdoc
 		 */
 		public function getIterator() {
 			$this->use();
-			return new \ArrayIterator([$this->event => $this->callable]);
+			if (empty($this->event)) {
+				return new \ArrayIterator([]);
+			}
+			yield $this->event => $this->callable;
 		}
 
 		/**
