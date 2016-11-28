@@ -109,20 +109,30 @@
 		 * @throws FileException
 		 */
 		static public function delete($path) {
-			if (is_file($path) || is_link($path)) {
-				$func = DIRECTORY_SEPARATOR === '\\' && is_dir($path) ? 'rmdir' : 'unlink';
-				/** @noinspection PhpUsageOfSilenceOperatorInspection */
-				if (@$func($path) === false) {
-					throw new FileException("Unable to delete [$path].");
+			for ($i = 0; $i < 3; $i++) {
+				try {
+					if (is_file($path) || is_link($path)) {
+						$func = DIRECTORY_SEPARATOR === '\\' && is_dir($path) ? 'rmdir' : 'unlink';
+						/** @noinspection PhpUsageOfSilenceOperatorInspection */
+						if (@$func($path) === false) {
+							throw new FileException("Unable to delete [$path].");
+						}
+					} else if (is_dir($path)) {
+						foreach (new \FilesystemIterator($path) as $item) {
+							static::delete($item->getRealPath());
+						}
+						/** @noinspection PhpUsageOfSilenceOperatorInspection */
+						if (@rmdir($path) === false) {
+							throw new FileException("Unable to delete directory [$path].");
+						}
+					}
+					break;
+				} catch (FileException $exception) {
+					usleep($i * 25);
 				}
-			} else if (is_dir($path)) {
-				foreach (new \FilesystemIterator($path) as $item) {
-					static::delete($item->getRealPath());
-				}
-				/** @noinspection PhpUsageOfSilenceOperatorInspection */
-				if (@rmdir($path) === false) {
-					throw new FileException("Unable to delete directory [$path].");
-				}
+			}
+			if (isset($exception)) {
+				throw $exception;
 			}
 		}
 
