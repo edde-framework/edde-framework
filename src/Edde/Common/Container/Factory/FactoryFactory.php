@@ -40,12 +40,11 @@
 		 * @param string $name
 		 * @param mixed $factory
 		 * @param bool $singleton
-		 * @param bool $cloneable
 		 *
 		 * @return IFactory
 		 * @throws FactoryException
 		 */
-		static public function create(string $name, $factory, bool $singleton = true, bool $cloneable = false): IFactory {
+		static public function create(string $name, $factory, bool $singleton = true): IFactory {
 			if (is_callable($factory)) {
 				return new CallbackFactory($name, $factory, $singleton);
 			} else if (is_string($factory) && class_exists($factory)) {
