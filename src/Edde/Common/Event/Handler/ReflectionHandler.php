@@ -49,20 +49,34 @@
 		 * @throws EventException
 		 */
 		protected function prepare() {
-			$reflectionClass = new \ReflectionClass($this->handler);
-			foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
-				if ($reflectionMethod->getNumberOfParameters() !== 1) {
-					continue;
+			/**
+			 * @var $cache \ReflectionMethod[][][]
+			 */
+			static $cache = [];
+			if (isset($cache[$className = get_class($this->handler)]) === false) {
+				$cache[$className] = [];
+				$reflectionClass = new \ReflectionClass($this->handler);
+				foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
+					if ($reflectionMethod->getNumberOfParameters() !== 1) {
+						continue;
+					}
+					/** @var $reflectionParameter \ReflectionParameter */
+					$reflectionParameter = $reflectionMethod->getParameters()[0];
+					if (($class = $reflectionParameter->getClass()) === null) {
+						continue;
+					}
+					if (in_array(IEvent::class, $class->getInterfaceNames(), true) === false) {
+						continue;
+					}
+					$cache[$className][$class = $class->getName()][] = $reflectionMethod;
+					$this->methodList[$class][] = $reflectionMethod->getClosure($this->handler);
 				}
-				/** @var $reflectionParameter \ReflectionParameter */
-				$reflectionParameter = $reflectionMethod->getParameters()[0];
-				if (($class = $reflectionParameter->getClass()) === null) {
-					continue;
+			} else {
+				foreach ($cache[$className] as $class => $methodList) {
+					foreach ($methodList as $method) {
+						$this->methodList[$class][] = $method->getClosure($this->handler);
+					}
 				}
-				if (in_array(IEvent::class, $class->getInterfaceNames(), true) === false) {
-					continue;
-				}
-				$this->methodList[$class->getName()][] = $reflectionMethod->getClosure($this->handler);
 			}
 		}
 	}
