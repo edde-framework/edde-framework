@@ -53,25 +53,6 @@
 		public function deffered(callable $callback): IFactory;
 
 		/**
-		 * lock/unlock this factory
-		 *
-		 * @param string $name
-		 * @param bool $lock
-		 *
-		 * @return IFactory
-		 */
-		public function lock(string $name, bool $lock = true): IFactory;
-
-		/**
-		 * is this factory locked?
-		 *
-		 * @param string $name check against requested name
-		 *
-		 * @return bool
-		 */
-		public function isLocked(string $name): bool;
-
-		/**
 		 * is this factory able to handle the given identifier?
 		 *
 		 * @param string $name
