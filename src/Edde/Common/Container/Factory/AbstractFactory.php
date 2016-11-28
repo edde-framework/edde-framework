@@ -74,16 +74,16 @@
 					return $this->instance;
 				}
 			}
-			if ($this->isLocked($name)) {
+			if (isset($this->lockList[$name]) !== false && $this->lockList[$name] === true) {
 				throw new FactoryLockException(sprintf("Factory [%s] is locked; isn't there some circular dependency?", $this->name));
 			}
 			try {
-				$this->lock($name);
+				$this->lockList[$name] = true;
 				$container->inject($this->instance = $this->factory($name, $parameterList, $container));
 				$this->setup($this->instance, $container);
 				return $this->instance;
 			} finally {
-				$this->lock($name, false);
+				unset($this->lockList[$name]);
 			}
 		}
 
@@ -103,29 +103,6 @@
 		}
 
 		/**
-		 * @inheritdoc
-		 */
-		public function isLocked(string $name): bool {
-			return isset($this->lockList[$name]) !== false && $this->lockList[$name] === true;
-		}
-
-		public function lock(string $name, bool $lock = true): IFactory {
-			$this->lockList[$name] = $lock;
-			return $this;
-		}
-
-		/**
-		 * execute cache method with all required parameters already provided
-		 *
-		 * @param string $name
-		 * @param array $parameterList
-		 * @param IContainer $container
-		 *
-		 * @return mixed
-		 */
-		abstract public function factory(string $name, array $parameterList, IContainer $container);
-
-		/**
 		 * execute setup callbacks on registered callbacks
 		 *
 		 * @param mixed $instance
@@ -139,4 +116,15 @@
 			}
 			return $instance;
 		}
+
+		/**
+		 * execute cache method with all required parameters already provided
+		 *
+		 * @param string $name
+		 * @param array $parameterList
+		 * @param IContainer $container
+		 *
+		 * @return mixed
+		 */
+		abstract public function factory(string $name, array $parameterList, IContainer $container);
 	}
