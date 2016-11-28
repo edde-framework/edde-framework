@@ -8,63 +8,36 @@
 	 */
 	class Autoloader {
 		/**
-		 * @var string
-		 */
-		protected $namespace;
-		/**
-		 * @var string
-		 */
-		protected $path;
-		protected $root;
-
-		/**
-		 * @param string $namespace
-		 * @param string $path
-		 * @param bool $root
-		 */
-		public function __construct($namespace, $path, $root = true) {
-			$this->namespace = $namespace . '\\';
-			$this->path = $path;
-			$this->root = $root;
-		}
-
-		/**
 		 * simple autoloader based on namespaces and correct class names
 		 *
 		 * @param string $namespace
 		 * @param string $path
 		 * @param bool $root loader is in the root of autoloaded sources
-		 *
-		 * @return Autoloader
 		 */
 		static public function register($namespace, $path, $root = true) {
-			spl_autoload_register($autoloader = new self($namespace, $path, $root), true, true);
-			return $autoloader;
-		}
-
-		/**
-		 * magic executor of class inclusion
-		 *
-		 * @param string $class
-		 *
-		 * @return bool
-		 */
-		public function __invoke(string $class) {
-			if (strpos($class, $this->namespace) === false) {
-				return false;
-			}
-			$file = str_replace([
-				$this->namespace,
-				'\\',
-			], [
-				$this->root ? null : $this->namespace,
-				'/',
-			], $this->path . '/' . $class . '.php');
-			if (file_exists($file) === false) {
-				return false;
-			}
-			/** @noinspection PhpIncludeInspection */
-			include_once $file;
-			return class_exists($class, false);
+			$namespace .= '\\';
+			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
+			$root = $root ? null : $namespace;
+			spl_autoload_register(function ($class) use ($namespace, $path, $root) {
+				if (strpos($class, $namespace) === false) {
+					return false;
+				}
+				$file = str_replace([
+					$namespace,
+					'\\',
+				], [
+					$root,
+					'/',
+				], $path . '/' . $class . '.php');
+				/**
+				 * it's strange, but this is performance boost
+				 */
+				if (file_exists($file) === false) {
+					return false;
+				}
+				/** @noinspection PhpIncludeInspection */
+				include_once $file;
+				return true;
+			}, true);
 		}
 	}
