@@ -8,7 +8,7 @@ stages:
 test:
     stage: test
     script:
-        - php bin/composer.phar phpunit --coverage-text --colors=never
+        - php bin/composer.phar exec phpunit --coverage-text --colors=never
     artifacts:
         name: $PROJECT-$CI_BUILD_REF_NAME-failed
         untracked: true
