@@ -7,14 +7,14 @@
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\IFactoryManager;
+	use Edde\Common\AbstractObject;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Container\Factory\FactoryFactory;
-	use Edde\Common\Deffered\AbstractDeffered;
 
 	/**
 	 * Default implementation of a cache manager.
 	 */
-	class FactoryManager extends AbstractDeffered implements IFactoryManager {
+	class FactoryManager extends AbstractObject implements IFactoryManager {
 		use CacheTrait;
 		/**
 		 * @var IFactory[]
@@ -100,5 +100,10 @@
 		 */
 		public function getFactoryList(): array {
 			return $this->factoryList;
+		}
+
+		protected function onBootstrap() {
+			parent::onBootstrap();
+			$this->cache();
 		}
 	}

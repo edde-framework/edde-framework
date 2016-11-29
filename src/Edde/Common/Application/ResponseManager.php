@@ -7,9 +7,9 @@
 	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Application\LazyRequestTrait;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\AbstractObject;
 
-	class ResponseManager extends AbstractDeffered implements IResponseManager {
+	class ResponseManager extends AbstractObject implements IResponseManager {
 		use LazyConverterManagerTrait;
 		use LazyRequestTrait;
 		/**

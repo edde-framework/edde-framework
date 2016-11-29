@@ -10,11 +10,11 @@
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\SchemaFactoryException;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\AbstractObject;
 	use Edde\Common\Filter\BoolFilter;
 	use Edde\Common\Node\NodeQuery;
 
-	class SchemaFactory extends AbstractDeffered implements ISchemaFactory {
+	class SchemaFactory extends AbstractObject implements ISchemaFactory {
 		use LazyContainerTrait;
 		use LazyResourceManagerTrait;
 		/**
@@ -129,7 +129,8 @@
 			return $schema;
 		}
 
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->propertyListNodeQuery = new NodeQuery('/*/property-list/*');
 			$this->propertyFilterNodeQuery = new NodeQuery('/*/property-list/*/filter/*');
 			$this->propertySetterFilterNodeQuery = new NodeQuery('/*/property-list/*/setter-filter/*');

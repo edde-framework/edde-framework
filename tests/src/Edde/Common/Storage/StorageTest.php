@@ -27,7 +27,7 @@
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Converter\JsonConverter;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class StorageTest extends TestCase {
 		/**

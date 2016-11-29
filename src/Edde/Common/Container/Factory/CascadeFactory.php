@@ -4,7 +4,6 @@
 	namespace Edde\Common\Container\Factory;
 
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Log\LazyLogServiceTrait;
 	use Edde\Common\Callback\CallbackUtils;
@@ -12,7 +11,7 @@
 	/**
 	 * Magical implementation of callback search mechanism based on "class exists".
 	 */
-	class CascadeFactory extends ClassFactory implements ILazyInject {
+	class CascadeFactory extends ClassFactory {
 		use LazyContainerTrait;
 		use LazyLogServiceTrait;
 		/**

@@ -3,9 +3,9 @@
 
 	namespace Edde\Common\Cache;
 
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
-	require_once(__DIR__ . '/assets.php');
+	require_once __DIR__ . '/assets.php';
 
 	class CacheTest extends TestCase {
 		public function testCommon() {

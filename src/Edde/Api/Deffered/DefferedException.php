@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Deffered;
+	namespace Edde\Api\Deffered;
 
 	use Edde\Api\EddeException;
 

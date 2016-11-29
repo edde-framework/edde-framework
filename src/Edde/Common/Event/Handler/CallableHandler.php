@@ -7,14 +7,12 @@
 	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEvent;
 	use Edde\Common\Callback\Callback;
-	use Edde\Common\Deffered\DefferedTrait;
 	use Edde\Common\Event\AbstractHandler;
 
 	/**
 	 * Simple lamda handler.
 	 */
 	class CallableHandler extends AbstractHandler {
-		use DefferedTrait;
 		/**
 		 * @var callable
 		 */
@@ -49,7 +47,8 @@
 		 * @inheritdoc
 		 * @throws EventException
 		 */
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$callback = new Callback($this->callable);
 			$parameterList = $callback->getParameterList();
 			if (count($parameterList) !== 1) {

@@ -8,7 +8,7 @@
 	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Query\Select\SelectQuery;
 	use Edde\Ext\Query\SqlQueryFactory;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class QueryTest extends TestCase {
 		public function testSimpleSelect() {

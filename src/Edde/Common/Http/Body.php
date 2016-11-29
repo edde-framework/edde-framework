@@ -3,12 +3,11 @@
 
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Http\IBody;
 	use Edde\Common\AbstractObject;
 
-	class Body extends AbstractObject implements IBody, ILazyInject {
+	class Body extends AbstractObject implements IBody {
 		use LazyConverterManagerTrait;
 		/**
 		 * @var string|callable

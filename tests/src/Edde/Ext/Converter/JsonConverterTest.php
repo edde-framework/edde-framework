@@ -7,7 +7,7 @@
 	use Edde\Api\Converter\IConverter;
 	use Edde\Api\Node\INode;
 	use Edde\Common\File\File;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	/**
 	 * Json converter test suite.

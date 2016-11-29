@@ -13,14 +13,14 @@
 	use Edde\Api\Storage\IBoundQuery;
 	use Edde\Api\Storage\ICollection;
 	use Edde\Api\Storage\IStorage;
+	use Edde\Common\AbstractObject;
 	use Edde\Common\Crate\Crate;
-	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Query\Select\SelectQuery;
 
 	/**
 	 * Base for all storage implementations.
 	 */
-	abstract class AbstractStorage extends AbstractDeffered implements IStorage {
+	abstract class AbstractStorage extends AbstractObject implements IStorage {
 		use LazySchemaManagerTrait;
 		use LazyCrateFactoryTrait;
 		use LazyContainerTrait;

@@ -138,7 +138,8 @@
 		 * @inheritdoc
 		 * @throws DriverException
 		 */
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			if (extension_loaded('pdo_sqlite') === false) {
 				throw new DriverException('Sqlite PDO is not available, oops!');
 			}

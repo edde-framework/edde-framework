@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Http;
 
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	/**
 	 * Http utils related tests.

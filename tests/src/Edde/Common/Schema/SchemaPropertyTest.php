@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Schema;
 
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class SchemaPropertyTest extends TestCase {
 		public function testDirty() {

@@ -11,11 +11,11 @@
 	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Url\IUrl;
+	use Edde\Common\AbstractObject;
 	use Edde\Common\Client\Event\GetEvent;
 	use Edde\Common\Client\Event\HandlerEvent;
 	use Edde\Common\Client\Event\PostEvent;
 	use Edde\Common\Client\Event\RequestEvent;
-	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
@@ -26,7 +26,7 @@
 	/**
 	 * Simple http client implementation.
 	 */
-	class HttpClient extends AbstractDeffered implements IHttpClient {
+	class HttpClient extends AbstractObject implements IHttpClient {
 		use LazyContainerTrait;
 		use LazyConverterManagerTrait;
 		use EventTrait;
@@ -158,7 +158,8 @@
 		 * @inheritdoc
 		 * @throws ClientException
 		 */
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			if (extension_loaded('curl') === false) {
 				throw new ClientException('Curl extension is not loaded in PHP.');
 			}

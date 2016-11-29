@@ -7,13 +7,11 @@
 	use Edde\Api\Log\ILog;
 	use Edde\Api\Log\ILogRecord;
 	use Edde\Api\Log\ILogService;
-	use Edde\Common\Deffered\DefferedTrait;
 
 	/**
 	 * Default implementation of log service.
 	 */
 	class LogService extends AbstractLog implements ILogService {
-		use DefferedTrait;
 		/**
 		 * @var IFilter[]
 		 */

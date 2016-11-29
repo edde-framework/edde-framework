@@ -19,7 +19,8 @@
 			$this->source = $source;
 		}
 
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->node = new Node('delete-query', $this->source);
 		}
 	}

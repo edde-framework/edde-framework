@@ -5,7 +5,7 @@
 
 	use Edde\Api\Url\UrlException;
 	use Edde\Common\File\FileUtils;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class UrlTest extends TestCase {
 		public function testCommon() {

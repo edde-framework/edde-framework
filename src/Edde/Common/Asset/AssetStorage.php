@@ -12,14 +12,14 @@
 	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\ResourceException;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\AbstractObject;
 	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
 
 	/**
 	 * Simple and uniform way how to handle file storing.
 	 */
-	class AssetStorage extends AbstractDeffered implements IAssetStorage {
+	class AssetStorage extends AbstractObject implements IAssetStorage {
 		use LazyRootDirectoryTrait;
 		use LazyAssetDirectoryTrait;
 		use LazyStorageDirectoryTrait;
@@ -51,7 +51,8 @@
 		 * @inheritdoc
 		 * @throws ResourceException
 		 */
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->assetDirectory->create();
 			$this->storageDirectory->create();
 			if (strpos($this->assetDirectory->getDirectory(), $this->rootDirectory->getDirectory()) === false) {

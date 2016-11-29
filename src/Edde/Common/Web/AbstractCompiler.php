@@ -4,20 +4,17 @@
 	namespace Edde\Common\Web;
 
 	use Edde\Api\Asset\LazyAssetStorageTrait;
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Filter\IFilter;
 	use Edde\Api\Web\ICompiler;
 	use Edde\Common\Cache\CacheTrait;
-	use Edde\Common\Deffered\DefferedTrait;
 	use Edde\Common\Resource\ResourceList;
 
 	/**
 	 * Base class for all compilers (js/css).
 	 */
-	abstract class AbstractCompiler extends ResourceList implements ICompiler, ILazyInject {
+	abstract class AbstractCompiler extends ResourceList implements ICompiler {
 		use LazyAssetStorageTrait;
 		use CacheTrait;
-		use DefferedTrait;
 		/**
 		 * filters applied during compilation (or after)
 		 *
@@ -69,5 +66,10 @@
 				$content = $filter->filter($content);
 			}
 			return $content;
+		}
+
+		protected function onBootstrap() {
+			parent::onBootstrap();
+			$this->cache();
 		}
 	}

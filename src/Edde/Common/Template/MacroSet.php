@@ -5,9 +5,9 @@
 
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\IMacroSet;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\AbstractObject;
 
-	class MacroSet extends AbstractDeffered implements IMacroSet {
+	class MacroSet extends AbstractObject implements IMacroSet {
 		/**
 		 * @var IMacro[]
 		 */

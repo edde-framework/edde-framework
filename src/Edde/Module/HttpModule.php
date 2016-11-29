@@ -13,12 +13,12 @@
 	use Edde\Api\Http\IPostList;
 	use Edde\Api\Http\IRequestUrl;
 	use Edde\Common\Client\HttpClient;
-	use Edde\Common\Event\Handler\SelfHandler;
 	use Edde\Common\Http\HttpRequestFactory;
 	use Edde\Common\Http\HttpResponse;
+	use Edde\Common\Runtime\AbstractModule;
 	use Edde\Common\Runtime\Event\SetupEvent;
 
-	class HttpModule extends SelfHandler {
+	class HttpModule extends AbstractModule {
 		public function setupHttpModule(SetupEvent $setupEvent) {
 			$runtime = $setupEvent->getRuntime();
 			$runtime->registerFactoryList([

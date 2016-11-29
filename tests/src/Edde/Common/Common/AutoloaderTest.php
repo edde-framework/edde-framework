@@ -4,7 +4,7 @@
 	namespace Edde\Common;
 
 	use foo\loadMe;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	/**
 	 * Formal test because autoloader is core dependency; nothing is runnable without it.

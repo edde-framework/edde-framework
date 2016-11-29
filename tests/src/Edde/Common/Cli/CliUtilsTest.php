@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Cli;
 
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class CliUtilsTest extends TestCase {
 		public function testCommon() {

@@ -3,6 +3,9 @@
 
 	namespace Edde\Common;
 
-	abstract class AbstractObject {
+	use Edde\Api\Container\ILazyInject;
+	use Edde\Api\Deffered\IDeffered;
+
+	abstract class AbstractObject implements IDeffered, ILazyInject {
 		use ObjectTrait;
 	}

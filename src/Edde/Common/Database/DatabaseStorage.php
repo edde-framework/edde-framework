@@ -179,7 +179,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->cache = $this->cacheManager->cache(static::class);
 			$this->sourceNodeQuery = new NodeQuery('/**/source');
 		}

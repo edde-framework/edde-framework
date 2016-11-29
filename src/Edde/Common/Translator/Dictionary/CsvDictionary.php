@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Translator\Dictionary;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Resource\LazyResourceManagerTrait;
@@ -14,7 +13,7 @@
 	/**
 	 * Csv file support.
 	 */
-	class CsvDictionary extends AbstractDictionary implements ILazyInject {
+	class CsvDictionary extends AbstractDictionary {
 		use LazyResourceManagerTrait;
 		use CacheTrait;
 		/**
@@ -39,7 +38,13 @@
 			return $this;
 		}
 
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
+			$this->cache();
+		}
+
+		protected function onPrepare() {
+			parent::onPrepare();
 			if (($this->translationList = $this->cache->load($cacheId = implode(',', array_keys($this->fileList)))) === null) {
 				foreach ($this->fileList as $file) {
 					$file->open('r');

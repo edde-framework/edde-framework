@@ -61,8 +61,8 @@
 			$this->cacheDirectory->purge();
 		}
 
-		protected function prepare() {
-			parent::prepare();
+		protected function onPrepare() {
+			parent::onPrepare();
 			$this->cacheDirectory->create();
 		}
 	}

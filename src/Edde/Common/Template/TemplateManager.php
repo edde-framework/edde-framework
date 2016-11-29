@@ -9,14 +9,14 @@
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Template\LazyHelperSetTrait;
 	use Edde\Api\Template\LazyMacroSetTrait;
+	use Edde\Common\AbstractObject;
 	use Edde\Common\Cache\CacheTrait;
-	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\File\File;
 
 	/**
 	 * Default implementation of a template manager.
 	 */
-	class TemplateManager extends AbstractDeffered implements ITemplateManager {
+	class TemplateManager extends AbstractObject implements ITemplateManager {
 		use LazyContainerTrait;
 		use LazyMacroSetTrait;
 		use LazyHelperSetTrait;
@@ -40,5 +40,10 @@
 			$compiler->registerMacroSet($this->macroSet);
 			$compiler->registerHelperSet($this->helperSet);
 			return $this->cache->save($cacheId, $compiler->template($importList));
+		}
+
+		protected function onBootstrap() {
+			parent::onBootstrap();
+			$this->cache();
 		}
 	}

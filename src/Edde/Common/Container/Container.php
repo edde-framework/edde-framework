@@ -13,14 +13,14 @@
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\IFactoryManager;
 	use Edde\Api\Container\ILazyInject;
+	use Edde\Common\AbstractObject;
 	use Edde\Common\Container\Factory\FactoryFactory;
-	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Default implementation of a dependency container.
 	 */
-	class Container extends AbstractDeffered implements IContainer {
+	class Container extends AbstractObject implements IContainer {
 		/**
 		 * @var IFactoryManager
 		 */
@@ -193,7 +193,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->dependencyStack = new \SplStack();
 			$this->cache = $this->cacheManager->cache(self::class);
 		}

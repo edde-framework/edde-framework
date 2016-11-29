@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\File;
 
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class FileUtilsTest extends TestCase {
 		public function testCommon() {

@@ -12,7 +12,7 @@
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Converter\JsonConverter;
 	use Edde\Ext\Converter\PhpConverter;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class SchemaFactoryTest extends TestCase {
 		/**

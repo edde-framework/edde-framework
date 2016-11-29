@@ -39,7 +39,8 @@
 			return $this->whereExpressionFragment;
 		}
 
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->node = new Node('update-query', $this->schema->getSchemaName());
 			$this->node->addNodeList([
 				$updateNode = new Node('update'),

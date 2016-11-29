@@ -4,12 +4,10 @@
 	namespace Edde\Common\Query\Select;
 
 	use Edde\Api\Node\INode;
-	use Edde\Common\Deffered\DefferedTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractFragment;
 
 	class FromFragment extends AbstractFragment {
-		use DefferedTrait;
 		/**
 		 * @var SelectQuery
 		 */
@@ -62,7 +60,8 @@
 			return $this->selectQuery->order();
 		}
 
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->joinFragment = new JoinFragment($this->node);
 		}
 	}

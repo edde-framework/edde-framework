@@ -48,7 +48,8 @@
 			$this->redis->flushDB();
 		}
 
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			if (extension_loaded('redis') === false) {
 				throw new CacheStorageException(sprintf("Redis module is not loaded. Yes, I'm telling truth, believe me!"));
 			}

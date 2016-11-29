@@ -4,7 +4,7 @@
 	namespace Edde\Common\Http;
 
 	use Edde\Api\Http\IContentType;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class ContentTypeTest extends TestCase {
 		public function testComplexContentType() {

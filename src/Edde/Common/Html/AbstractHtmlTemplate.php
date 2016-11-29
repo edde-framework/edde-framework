@@ -4,7 +4,6 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Html\IHtmlControl;
@@ -20,7 +19,7 @@
 	/**
 	 * Abstract helper class fro all html based templates; this should be used only by a template generator.
 	 */
-	abstract class AbstractHtmlTemplate extends AbstractTemplate implements IHtmlTemplate, ILazyInject {
+	abstract class AbstractHtmlTemplate extends AbstractTemplate implements IHtmlTemplate {
 		use LazyContainerTrait;
 		use LazyTemplateManagerTrait;
 		use LazyJavaScriptCompilerTrait;

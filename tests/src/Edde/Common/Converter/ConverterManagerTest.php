@@ -9,7 +9,7 @@
 	use Edde\Common\Node\NodeQuery;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Converter\NodeConverter;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	require_once __DIR__ . '/assets/assets.php';
 

@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\ContainerTest {
 
-		use Edde\Api\Container\ILazyInject;
 		use Edde\Common\AbstractObject;
 		use Edde\Common\Cache\AbstractCacheStorage;
 
@@ -94,7 +93,7 @@
 		}
 
 		/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
-		class LazyInjectTraitClass extends AbstractObject implements ILazyInject {
+		class LazyInjectTraitClass extends AbstractObject {
 			/**
 			 * @var BetaDependencyClass
 			 */
@@ -123,7 +122,7 @@
 		}
 
 		/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
-		class LazyMismatch extends AbstractObject implements ILazyInject {
+		class LazyMismatch extends AbstractObject {
 			public function lazyDependency(BetaDependencyClass $betaDependencyClass) {
 			}
 		}

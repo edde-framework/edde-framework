@@ -8,9 +8,9 @@
 	use Edde\Api\Schema\ISchemaLink;
 	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Api\Schema\SchemaException;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\AbstractObject;
 
-	class Schema extends AbstractDeffered implements ISchema {
+	class Schema extends AbstractObject implements ISchema {
 		/**
 		 * @var string
 		 */

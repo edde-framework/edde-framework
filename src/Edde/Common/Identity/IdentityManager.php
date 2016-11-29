@@ -3,19 +3,15 @@
 
 	namespace Edde\Common\Identity;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Api\Identity\IIdentityManager;
 	use Edde\Api\Storage\LazyStorageTrait;
-	use Edde\Common\Acl\Acl;
-	use Edde\Common\Deffered\DefferedTrait;
 	use Edde\Common\Session\SessionTrait;
 	use Edde\Common\Storage\AbstractRepository;
 
-	class IdentityManager extends AbstractRepository implements ILazyInject, IIdentityManager {
+	class IdentityManager extends AbstractRepository implements IIdentityManager {
 		use LazyStorageTrait;
 		use SessionTrait;
-		use DefferedTrait;
 
 		const SESSION_IDENTITY = 'identity';
 
@@ -42,12 +38,15 @@
 			$this->use();
 			$this->session->set(self::SESSION_IDENTITY, null);
 			$this->identity();
-			$this->identity->setAuthenticated(false);
-			$this->identity->setAcl(new Acl());
 			if ($hard) {
 				$this->identity->setMetaList([]);
 				$this->identity->setName('');
 			}
 			return $this;
+		}
+
+		protected function onBootstrap() {
+			parent::onBootstrap();
+			$this->session();
 		}
 	}

@@ -7,7 +7,7 @@
 	use Edde\Api\Upgrade\IUpgrade;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Upgrade\UpgradeException;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\AbstractObject;
 	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Upgrade\Event\OnUpgradeEvent;
 	use Edde\Common\Upgrade\Event\UpgradeEndEvent;
@@ -17,7 +17,7 @@
 	/**
 	 * Default implementation of a upgrade manager.
 	 */
-	class UpgradeManager extends AbstractDeffered implements IUpgradeManager {
+	class UpgradeManager extends AbstractObject implements IUpgradeManager {
 		use EventTrait;
 		use LazyStorageTrait;
 		/**

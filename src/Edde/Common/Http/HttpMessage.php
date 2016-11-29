@@ -6,9 +6,9 @@
 	use Edde\Api\Http\HttpMessageException;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttpMessage;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\AbstractObject;
 
-	class HttpMessage extends AbstractDeffered implements IHttpMessage {
+	class HttpMessage extends AbstractObject implements IHttpMessage {
 		/**
 		 * @var string
 		 */
@@ -89,7 +89,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->headerList = new HeaderList();
 			$this->headerList->put(HttpUtils::headerList($this->headers, false));
 			$contentType = $this->headerList->getContentType();

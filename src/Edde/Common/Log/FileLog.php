@@ -3,19 +3,16 @@
 
 	namespace Edde\Common\Log;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Log\ILog;
 	use Edde\Api\Log\ILogRecord;
 	use Edde\Api\Log\LazyLogDirectoryTrait;
-	use Edde\Common\Deffered\DefferedTrait;
 
 	/**
 	 * Default file based log.
 	 */
-	class FileLog extends AbstractLog implements ILazyInject {
+	class FileLog extends AbstractLog {
 		use LazyLogDirectoryTrait;
-		use DefferedTrait;
 		/**
 		 * @var string
 		 */
@@ -56,7 +53,8 @@
 			return $this;
 		}
 
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->logDirectory->create();
 			$this->file = $this->logDirectory->file(date('Y-m-d-') . $this->name . '.log');
 			$this->file->openForAppend();

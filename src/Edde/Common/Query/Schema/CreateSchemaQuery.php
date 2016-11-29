@@ -20,7 +20,8 @@
 			$this->schema = $schema;
 		}
 
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->node = new Node('create-schema-query', $this->schema->getSchemaName());
 			foreach ($this->schema->getPropertyList() as $schemaProperty) {
 				$this->node->addNode($propertyNode = new Node($schemaProperty->getName()));

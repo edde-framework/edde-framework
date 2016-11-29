@@ -24,7 +24,7 @@
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Converter\XmlConverter;
 	use Edde\Ext\Template\DefaultMacroSet;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	require_once __DIR__ . '/assets/assets.php';
 

@@ -7,14 +7,14 @@
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\File\IFile;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\AbstractObject;
 	use RecursiveDirectoryIterator;
 	use RecursiveIteratorIterator;
 
 	/**
 	 * Representation of directory on the filesystem.
 	 */
-	class Directory extends AbstractDeffered implements IDirectory {
+	class Directory extends AbstractObject implements IDirectory {
 		/**
 		 * @var string
 		 */
@@ -165,7 +165,8 @@
 		 * @inheritdoc
 		 * @throws FileException
 		 */
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->directory = FileUtils::realpath($this->directory);
 		}
 	}

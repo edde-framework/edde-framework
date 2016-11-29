@@ -6,7 +6,7 @@
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\File\FileUtils;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class FileStorageTest extends TestCase {
 		/**

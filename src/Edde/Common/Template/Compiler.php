@@ -15,13 +15,13 @@
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\AbstractObject;
 	use Edde\Common\Reflection\ReflectionUtils;
 
 	/**
 	 * Default implementation of template compiler.
 	 */
-	class Compiler extends AbstractDeffered implements ICompiler {
+	class Compiler extends AbstractObject implements ICompiler {
 		use LazyContainerTrait;
 		use LazyResourceManagerTrait;
 		use LazyCryptEngineTrait;
@@ -275,7 +275,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->stack = new \SplStack();
 			foreach ($this->macroList as $macro) {
 				if ($macro->hasHelperSet()) {

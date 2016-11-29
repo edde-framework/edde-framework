@@ -11,7 +11,7 @@
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Converter\XmlConverter;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	require_once(__DIR__ . '/assets/assets.php');
 

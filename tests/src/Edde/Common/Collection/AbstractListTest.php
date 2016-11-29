@@ -3,9 +3,9 @@
 
 	namespace Edde\Common\Collection;
 
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
-	require_once(__DIR__ . '/assets/assets.php');
+	require_once __DIR__ . '/assets/assets.php';
 
 	class AbstractListTest extends TestCase {
 		public function testCommon() {

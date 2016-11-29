@@ -4,11 +4,8 @@
 	namespace Edde\Common\Collection;
 
 	use Edde\Api\Collection\IList;
-	use Edde\Common\Deffered\DefferedTrait;
 
 	class AbstractDefferedList extends AbstractList {
-		use DefferedTrait;
-
 		public function isEmpty(): bool {
 			$this->use();
 			return parent::isEmpty();

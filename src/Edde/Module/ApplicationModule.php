@@ -9,11 +9,11 @@
 	use Edde\Api\Router\IRouterService;
 	use Edde\Common\Application\Application;
 	use Edde\Common\Application\ResponseManager;
-	use Edde\Common\Event\Handler\SelfHandler;
 	use Edde\Common\Router\RouterService;
+	use Edde\Common\Runtime\AbstractModule;
 	use Edde\Common\Runtime\Event\SetupEvent;
 
-	class ApplicationModule extends SelfHandler {
+	class ApplicationModule extends AbstractModule {
 		public function setupApplicationModule(SetupEvent $setupEvent) {
 			$runtime = $setupEvent->getRuntime();
 			$runtime->registerFactoryList([

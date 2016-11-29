@@ -78,7 +78,8 @@
 			return $this->selectNode;
 		}
 
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->selectNode = new Node('select-query');
 			$this->selectNode->addNodeList([
 				$selectListNode = new Node('select'),

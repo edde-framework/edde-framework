@@ -10,12 +10,12 @@
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Api\Schema\SchemaException;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\AbstractObject;
 
 	/**
 	 * Factory for... creating crates.
 	 */
-	class CrateFactory extends AbstractDeffered implements ICrateFactory {
+	class CrateFactory extends AbstractObject implements ICrateFactory {
 		use LazySchemaManagerTrait;
 		use LazyContainerTrait;
 

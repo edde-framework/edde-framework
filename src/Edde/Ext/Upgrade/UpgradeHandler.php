@@ -3,7 +3,6 @@
 
 	namespace Edde\Ext\Upgrade;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Crate\LazyCrateFactoryTrait;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Api\Storage\LazyStorageTrait;
@@ -18,7 +17,7 @@
 	/**
 	 * Upgrade Event Handler.
 	 */
-	class UpgradeHandler extends AbstractObject implements ILazyInject {
+	class UpgradeHandler extends AbstractObject {
 		use LazyStorageTrait;
 		use LazySchemaManagerTrait;
 		use LazyCrateFactoryTrait;

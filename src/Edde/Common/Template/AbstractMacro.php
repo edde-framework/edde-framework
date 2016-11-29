@@ -3,21 +3,18 @@
 
 	namespace Edde\Common\Template;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\AbstractObject;
-	use Edde\Common\Deffered\DefferedTrait;
 	use Edde\Common\Node\Node;
 
 	/**
 	 * Base macro for all template macros.
 	 */
-	abstract class AbstractMacro extends AbstractObject implements IMacro, ILazyInject {
-		use DefferedTrait;
+	abstract class AbstractMacro extends AbstractObject implements IMacro {
 		/**
 		 * @var string
 		 */

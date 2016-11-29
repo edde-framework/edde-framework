@@ -7,13 +7,11 @@
 	use Edde\Api\Session\ISession;
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Common\Collection\AbstractDefferedList;
-	use Edde\Common\Deffered\DefferedTrait;
 
 	/**
 	 * Session section for simple session data manipulation.
 	 */
 	class Session extends AbstractDefferedList implements ISession {
-		use DefferedTrait;
 		/**
 		 * @var ISessionManager
 		 */
@@ -46,7 +44,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->list = &$this->sessionManager->session($this->name);
 		}
 	}

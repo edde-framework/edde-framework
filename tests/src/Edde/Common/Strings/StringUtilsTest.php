@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Strings;
 
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class StringUtilsTest extends TestCase {
 		public function testStringUtils() {

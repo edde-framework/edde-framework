@@ -212,6 +212,7 @@
 			}
 			return $attributeList;
 		}
+
 		/**
 		 * @param IIterator $iterator
 		 *

@@ -4,7 +4,7 @@
 	namespace Edde\Common\File;
 
 	use Edde\Api\File\IDirectoryIterator;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class DirectoryIteratorTest extends TestCase {
 		/**
@@ -13,7 +13,7 @@
 		protected $directoryIterator;
 
 		public function testDirectoryIterator() {
-			$this->directoryIterator->onDeffered(function (IDirectoryIterator $directoryIterator) {
+			$this->directoryIterator->registerOnUse(function (IDirectoryIterator $directoryIterator) {
 				$directoryIterator->addDirectory(new Directory(__DIR__ . '/foo'));
 				$directoryIterator->addDirectory(new Directory(__DIR__ . '/bar'));
 			});

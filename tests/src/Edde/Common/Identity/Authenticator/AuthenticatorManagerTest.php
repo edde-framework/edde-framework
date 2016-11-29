@@ -34,15 +34,15 @@
 			self::assertFalse($this->identity->isAuthenticated());
 			self::assertFalse($this->identity->can('foobar'));
 			$this->authenticatorManager->select('flow');
-			$this->authenticatorManager->flow(\InitialAuthenticator::class, 'foo', 'bar');
+			$this->authenticatorManager->step(\InitialAuthenticator::class, 'foo', 'bar');
 			self::assertEquals('whepee', $this->identity->getName());
 			self::assertFalse($this->identity->isAuthenticated());
-			self::assertEquals(\SecondaryAuthenticator::class, $this->authenticatorManager->getCurrentFlow());
-			$this->authenticatorManager->flow(\SecondaryAuthenticator::class, 'boo', 'poo');
+			self::assertEquals(\SecondaryAuthenticator::class, $this->authenticatorManager->getCurrentStep());
+			$this->authenticatorManager->step(\SecondaryAuthenticator::class, 'boo', 'poo');
 			self::assertEquals('whepee', $this->identity->getName());
 			self::assertTrue($this->identity->isAuthenticated());
 			self::assertTrue($this->identity->can('foobar'));
-			self::assertNull($this->authenticatorManager->getCurrentFlow());
+			self::assertTrue($this->authenticatorManager->isDone());
 		}
 
 		protected function setUp() {
@@ -59,7 +59,7 @@
 			$this->authenticatorManager->registerAuthenticator(new \TrustedAuthenticator());
 			$this->authenticatorManager->registerAuthenticator(new \InitialAuthenticator());
 			$this->authenticatorManager->registerAuthenticator(new \SecondaryAuthenticator());
-			$this->authenticatorManager->registerFlow('flow', \InitialAuthenticator::class, \SecondaryAuthenticator::class);
+			$this->authenticatorManager->registerStep('flow', \InitialAuthenticator::class, \SecondaryAuthenticator::class);
 			$this->sessionManager = $container->create(ISessionManager::class);
 			$this->identity = $container->create(IIdentityManager::class)
 				->identity();

@@ -4,7 +4,7 @@
 	namespace Edde\Common\Schema;
 
 	use Edde\Api\Schema\SchemaException;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class SchemaTest extends TestCase {
 		public function testCommon() {

@@ -15,14 +15,14 @@
 	use Edde\Api\Schema\ISchemaLink;
 	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\AbstractObject;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Simple crate php class generator.
 	 */
-	class CrateGenerator extends AbstractDeffered implements ICrateGenerator {
+	class CrateGenerator extends AbstractObject implements ICrateGenerator {
 		use LazySchemaManagerTrait;
 		use LazyCacheManagerTrait;
 		use LazyCrateDirectoryTrait;
@@ -222,7 +222,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->crateDirectory->create();
 			$this->cache = $this->cacheManager->cache(__NAMESPACE__);
 			$this->parent = Crate::class;

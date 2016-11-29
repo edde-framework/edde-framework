@@ -1,7 +1,7 @@
 <?php
 	namespace Edde\Ext\Cache;
 
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class InMemoryStorageTest extends TestCase {
 		public function testCommon() {

@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Crate;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Crate\ICrateLoader;
 	use Edde\Api\Crate\LazyCrateGeneratorTrait;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
@@ -12,7 +11,7 @@
 	/**
 	 * Default crate loader implementation.
 	 */
-	class CrateLoader extends AbstractObject implements ICrateLoader, ILazyInject {
+	class CrateLoader extends AbstractObject implements ICrateLoader {
 		use LazySchemaManagerTrait;
 		use LazyCrateGeneratorTrait;
 

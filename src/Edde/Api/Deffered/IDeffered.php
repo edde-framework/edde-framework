@@ -14,25 +14,7 @@
 		 *
 		 * @return $this
 		 */
-		public function onDeffered(callable $callback);
-
-		/**
-		 * callback executed after {@see self::use()}
-		 *
-		 * @param callable $callback
-		 *
-		 * @return $this
-		 */
-		public function onSetup(callable $callback);
-
-		/**
-		 * general purpose callback executed when usable is loaded (used); if it is already loaded, callback is executed immediately
-		 *
-		 * @param callable $callback
-		 *
-		 * @return $this
-		 */
-		public function onLoaded(callable $callback);
+		public function registerOnUse(callable $callback);
 
 		/**
 		 * prepare for the first usage

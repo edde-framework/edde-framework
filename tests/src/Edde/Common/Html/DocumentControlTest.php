@@ -5,7 +5,7 @@
 
 	use Edde\Common\Html\Document\DocumentControl;
 	use Edde\Ext\Container\ContainerFactory;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class DocumentControlTest extends TestCase {
 		/**

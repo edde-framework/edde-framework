@@ -92,8 +92,8 @@
 			return $file;
 		}
 
-		protected function prepare() {
-			parent::prepare();
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->templateDirectory->create();
 		}
 	}

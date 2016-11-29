@@ -9,7 +9,7 @@
 	use Edde\Api\Upgrade\UpgradeException;
 	use Edde\Common\Upgrade\Event\OnUpgradeEvent;
 	use Edde\Ext\Container\ContainerFactory;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	require_once(__DIR__ . '/assets/assets.php');
 

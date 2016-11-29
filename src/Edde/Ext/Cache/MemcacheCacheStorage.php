@@ -39,7 +39,8 @@
 			$this->memcache->flush();
 		}
 
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->memcache = new \Memcache();
 			foreach ($this->serverList as $item) {
 				$this->memcache->addServer($item[0], $item[1]);

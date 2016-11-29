@@ -3,11 +3,10 @@
 
 	namespace Edde\Api\Template;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 
-	interface ICompiler extends ILazyInject {
+	interface ICompiler {
 		/**
 		 * use the given macroset
 		 *

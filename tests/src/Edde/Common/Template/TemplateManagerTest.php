@@ -51,7 +51,7 @@
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Converter\XmlConverter;
 	use Edde\Ext\Template\DefaultMacroSet;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	require_once __DIR__ . '/assets.php';
 
@@ -217,7 +217,7 @@
 				'\SomeService\From\Container' => $this,
 				IMacroSet::class => function (IContainer $container) {
 					$macroSet = DefaultMacroSet::macroSet($container);
-					$macroSet->onDeffered(function (IMacroSet $macroSet) use ($container) {
+					$macroSet->registerOnUse(function (IMacroSet $macroSet) use ($container) {
 						$macroSet->registerMacro($container->inject(new HtmlMacro('custom-control', \AnotherCoolControl::class)));
 					});
 					return $macroSet;

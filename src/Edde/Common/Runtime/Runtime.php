@@ -8,6 +8,7 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Deffered\IDeffered;
+	use Edde\Api\Runtime\IModule;
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Api\Runtime\RuntimeException;
 	use Edde\Common\AbstractObject;
@@ -52,6 +53,24 @@
 
 		/**
 		 * @inheritdoc
+		 */
+		public function module(IModule $module): IRuntime {
+			$this->listen($module);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function moduleList(array $moduleList): IRuntime {
+			foreach ($moduleList as $module) {
+				$this->module($module);
+			}
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
 		 * @throws RuntimeException
 		 */
 		public function deffered(string $name, callable $onSetup): IRuntime {
@@ -63,7 +82,7 @@
 					throw new RuntimeException(sprintf('Deffered class must implement [%s] interface.', IDeffered::class));
 				}
 				/** @var $instance IDeffered */
-				$instance->onDeffered(function () use ($container, $onSetup, $instance) {
+				$instance->registerOnUse(function () use ($container, $onSetup, $instance) {
 					return $container->call($onSetup, $instance);
 				});
 			});

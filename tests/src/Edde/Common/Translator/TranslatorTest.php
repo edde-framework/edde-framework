@@ -14,7 +14,7 @@
 	use Edde\Ext\Container\ContainerFactory;
 	use Foo\Bar\DummyDictionary;
 	use Foo\Bar\EmptyDictionary;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	require_once __DIR__ . '/assets/assets.php';
 
@@ -40,7 +40,7 @@
 		public function testWithoutDictionaryException() {
 			$this->expectException(TranslatorException::class);
 			$this->expectExceptionMessage('Translator needs at least one dictionary. Or The God will kill one cute devil kitten!');
-			$this->translator->onDeffered(function (ITranslator $translator) {
+			$this->translator->registerOnUse(function (ITranslator $translator) {
 				$translator->setLanguage('en');
 			});
 			$this->translator->use();
@@ -50,7 +50,7 @@
 			$this->expectException(TranslatorException::class);
 			$this->expectExceptionMessage('Cannot translate [foo]; the given id is not available in no dictionary.');
 			$this->translator->registerDictionary(new EmptyDictionary());
-			$this->translator->onDeffered(function (ITranslator $translator) {
+			$this->translator->registerOnUse(function (ITranslator $translator) {
 				$translator->setLanguage('en');
 			});
 			$this->translator->translate('foo');
@@ -59,7 +59,7 @@
 		public function testDummyDictionary() {
 			$this->translator->registerDictionary(new EmptyDictionary());
 			$this->translator->registerDictionary(new DummyDictionary());
-			$this->translator->onDeffered(function (ITranslator $translator) {
+			$this->translator->registerOnUse(function (ITranslator $translator) {
 				$translator->setLanguage('en');
 			});
 			self::assertEquals('foo.en', $this->translator->translate('foo'));

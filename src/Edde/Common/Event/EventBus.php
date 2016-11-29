@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Event;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEvent;
@@ -14,7 +13,7 @@
 	/**
 	 * Default simple implementation of an EventBus.
 	 */
-	class EventBus extends AbstractObject implements IEventBus, ILazyInject {
+	class EventBus extends AbstractObject implements IEventBus {
 		use LazyContainerTrait;
 		/**
 		 * @var bool

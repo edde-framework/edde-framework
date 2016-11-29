@@ -6,12 +6,12 @@
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Converter\IConverter;
 	use Edde\Api\Converter\IConverterManager;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\AbstractObject;
 
 	/**
 	 * Default implementation of a convertion manager.
 	 */
-	class ConverterManager extends AbstractDeffered implements IConverterManager {
+	class ConverterManager extends AbstractObject implements IConverterManager {
 		/**
 		 * @var IConverter[]
 		 */

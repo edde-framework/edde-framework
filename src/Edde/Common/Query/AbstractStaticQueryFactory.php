@@ -9,7 +9,7 @@
 	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Query\IStaticQueryFactory;
 	use Edde\Api\Query\StaticQueryException;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\AbstractObject;
 	use Edde\Common\Node\NodeQuery;
 	use Edde\Common\Strings\StringUtils;
 	use ReflectionClass;
@@ -18,7 +18,7 @@
 	/**
 	 * Helper class for IQL to string building.
 	 */
-	abstract class AbstractStaticQueryFactory extends AbstractDeffered implements IStaticQueryFactory {
+	abstract class AbstractStaticQueryFactory extends AbstractObject implements IStaticQueryFactory {
 		/**
 		 * @var array
 		 */
@@ -71,31 +71,6 @@
 				throw new StaticQueryException(sprintf('Unsuported fragment type [%s].', $node->getName()));
 			}
 			return $this->factoryList[$node->getName()]($node);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		protected function prepare() {
-			$reflectionClass = new ReflectionClass($this);
-			foreach ($reflectionClass->getMethods(ReflectionMethod::IS_PROTECTED) as $reflectionMethod) {
-				if (strpos($reflectionMethod->getName(), 'format') === false) {
-					continue;
-				}
-				$name = StringUtils::recamel(str_replace('format', null, $reflectionMethod->getName()));
-				$this->factoryList[$name] = [
-					$this,
-					$reflectionMethod->getName(),
-				];
-			}
-			$this->selectNodeQuery = new NodeQuery('/select-query/select/*');
-			$this->fromNodeQuery = new NodeQuery('/select-query/from/*');
-			$this->whereNodeQuery = new NodeQuery('/select-query/where/*');
-			$this->orderNodeQuery = new NodeQuery('/select-query/order/*');
-
-			$this->createSchemaNodeQuery = new NodeQuery('/create-schema-query/*');
-			$this->updateQueryNodeQuery = new NodeQuery('/update-query/update/*');
-			$this->updateQueryWhereNodeQuery = new NodeQuery('/update-query/where/*');
 		}
 
 		/**
@@ -510,6 +485,32 @@
 			return new StaticQuery(':' . $hash = $node->getAttribute('name', hash('sha256', spl_object_hash($node))), [
 				$hash => $node->getValue(),
 			]);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		protected function onBootstrap() {
+			parent::onBootstrap();
+			$reflectionClass = new ReflectionClass($this);
+			foreach ($reflectionClass->getMethods(ReflectionMethod::IS_PROTECTED) as $reflectionMethod) {
+				if (strpos($reflectionMethod->getName(), 'format') === false) {
+					continue;
+				}
+				$name = StringUtils::recamel(str_replace('format', null, $reflectionMethod->getName()));
+				$this->factoryList[$name] = [
+					$this,
+					$reflectionMethod->getName(),
+				];
+			}
+			$this->selectNodeQuery = new NodeQuery('/select-query/select/*');
+			$this->fromNodeQuery = new NodeQuery('/select-query/from/*');
+			$this->whereNodeQuery = new NodeQuery('/select-query/where/*');
+			$this->orderNodeQuery = new NodeQuery('/select-query/order/*');
+
+			$this->createSchemaNodeQuery = new NodeQuery('/create-schema-query/*');
+			$this->updateQueryNodeQuery = new NodeQuery('/update-query/update/*');
+			$this->updateQueryWhereNodeQuery = new NodeQuery('/update-query/where/*');
 		}
 
 		/**

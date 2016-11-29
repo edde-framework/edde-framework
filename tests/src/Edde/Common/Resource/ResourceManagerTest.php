@@ -14,7 +14,7 @@
 	use Edde\Ext\Converter\JsonConverter;
 	use Edde\Ext\Converter\PhpConverter;
 	use Edde\Ext\Converter\XmlConverter;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class ResourceManagerTest extends TestCase {
 		/**

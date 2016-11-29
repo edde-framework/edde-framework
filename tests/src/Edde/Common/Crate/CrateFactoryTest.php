@@ -18,7 +18,7 @@
 	use Foo\Bar\ItemSchema;
 	use Foo\Bar\Row;
 	use Foo\Bar\RowSchema;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	require_once __DIR__ . '/assets/assets.php';
 

@@ -3,18 +3,18 @@
 
 	namespace Edde\Common\Application;
 
+	use Edde\Api\Application\ApplicationException;
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Application\IErrorControl;
 	use Edde\Api\Application\IRequest;
 	use Edde\Api\Application\IResponseManager;
-	use Edde\Api\Control\IControl;
 	use Edde\Api\Log\ILogService;
 	use Edde\Common\Application\Event\FinishEvent;
 	use Edde\Common\Application\Event\StartEvent;
 	use Edde\Common\Container\Factory\ReflectionFactory;
 	use Edde\Common\Log\LogService;
 	use Edde\Ext\Container\ContainerFactory;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	require_once __DIR__ . '/assets/assets.php';
 
@@ -55,19 +55,11 @@
 			], $eventList);
 		}
 
-		public function testErrorControl() {
-			$this->control->throw();
-			$this->request->registerActionHandler(\SomeControl::class, 'executeThisMethod', ['poo' => 'return this as result']);
-			self::assertInstanceOf(\Exception::class, $this->application->run());
-			self::assertNotEmpty($exception = $this->errorControl->getException());
-			self::assertEquals('some error', $exception->getMessage());
-		}
-
 		public function testForbiddenControl() {
+			$this->expectException(ApplicationException::class);
+			$this->expectExceptionMessage('Route class [ForbiddenControl] is not instance of [Edde\Api\Control\IControl].');
 			$this->request->registerActionHandler(\ForbiddenControl::class, 'foo', []);
 			$this->application->run();
-			self::assertInstanceOf(\Exception::class, $exception = $this->errorControl->getException());
-			self::assertEquals(sprintf('Route class [ForbiddenControl] is not instance of [%s].', IControl::class), $exception->getMessage());
 		}
 
 		protected function setUp() {

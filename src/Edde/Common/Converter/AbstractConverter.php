@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Converter;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Converter\IConverter;
 	use Edde\Common\AbstractObject;
@@ -11,7 +10,7 @@
 	/**
 	 * Common stuff for converter implementation.
 	 */
-	abstract class AbstractConverter extends AbstractObject implements IConverter, ILazyInject {
+	abstract class AbstractConverter extends AbstractObject implements IConverter {
 		/**
 		 * @var string[]
 		 */

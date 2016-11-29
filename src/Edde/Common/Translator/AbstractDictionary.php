@@ -4,12 +4,12 @@
 	namespace Edde\Common\Translator;
 
 	use Edde\Api\Translator\IDictionary;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\AbstractObject;
 
 	/**
 	 * Common dictionary implementation.
 	 */
-	abstract class AbstractDictionary extends AbstractDeffered implements IDictionary {
+	abstract class AbstractDictionary extends AbstractObject implements IDictionary {
 		/**
 		 * @var string[]
 		 */

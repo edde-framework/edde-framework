@@ -12,7 +12,7 @@
 	use Foo\Bar\MultiEventHandler;
 	use Foo\Bar\SomeEvent;
 	use Foo\Bar\SomeUsefullClass;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	require_once __DIR__ . '/assets/assets.php';
 

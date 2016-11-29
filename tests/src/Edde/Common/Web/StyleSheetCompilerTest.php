@@ -31,7 +31,7 @@
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Upgrade\InitialStorageUpgrade;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class StyleSheetCompilerTest extends TestCase {
 		/**

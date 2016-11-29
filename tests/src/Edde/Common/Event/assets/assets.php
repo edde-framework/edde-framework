@@ -3,7 +3,6 @@
 
 	namespace Foo\Bar;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Event\IEventBus;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Event\AbstractEvent;
@@ -37,6 +36,6 @@
 		}
 	}
 
-	class SomeUsefullClass extends AbstractObject implements IEventBus, ILazyInject {
+	class SomeUsefullClass extends AbstractObject implements IEventBus {
 		use EventTrait;
 	}

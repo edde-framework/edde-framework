@@ -5,14 +5,12 @@
 
 	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEvent;
-	use Edde\Common\Deffered\DefferedTrait;
 	use Edde\Common\Event\AbstractHandler;
 
 	/**
 	 * This should take instance on input and return all methods accepting exactly one IEvent parameter.
 	 */
 	class ReflectionHandler extends AbstractHandler {
-		use DefferedTrait;
 		protected $handler;
 		/**
 		 * @var array[]
@@ -48,7 +46,8 @@
 		 * @inheritdoc
 		 * @throws EventException
 		 */
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			/**
 			 * @var $cache \ReflectionMethod[][][]
 			 */

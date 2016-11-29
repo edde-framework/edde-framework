@@ -4,12 +4,12 @@
 	namespace Edde\Common\Identity;
 
 	use Edde\Api\Identity\IAuthenticator;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\AbstractObject;
 
 	/**
 	 * Abstract implementation for all authenticators.
 	 */
-	abstract class AbstractAuthenticator extends AbstractDeffered implements IAuthenticator {
+	abstract class AbstractAuthenticator extends AbstractObject implements IAuthenticator {
 		/**
 		 * @var string
 		 */

@@ -9,14 +9,14 @@
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\ResourceManagerException;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\AbstractObject;
 	use Edde\Common\File\File;
 	use Edde\Common\Url\Url;
 
 	/**
 	 * Default implementation of a resource manager.
 	 */
-	class ResourceManager extends AbstractDeffered implements IResourceManager {
+	class ResourceManager extends AbstractObject implements IResourceManager {
 		use LazyConverterManagerTrait;
 
 		/**

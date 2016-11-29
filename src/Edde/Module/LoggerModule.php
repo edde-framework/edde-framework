@@ -6,14 +6,14 @@
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
-	use Edde\Common\Event\Handler\SelfHandler;
 	use Edde\Common\Log\LogService;
+	use Edde\Common\Runtime\AbstractModule;
 	use Edde\Common\Runtime\Event\SetupEvent;
 
 	/**
 	 * Logging support.
 	 */
-	class LoggerModule extends SelfHandler {
+	class LoggerModule extends AbstractModule {
 		public function setupLoggerModule(SetupEvent $setupEvent) {
 			$runtime = $setupEvent->getRuntime();
 			$runtime->registerFactoryList([

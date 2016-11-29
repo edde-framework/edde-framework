@@ -77,8 +77,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function prepare() {
-			parent::prepare();
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			parent::addControl($this->head = $this->createControl(HeadControl::class));
 			parent::addControl($this->body = $this->createControl(BodyControl::class));
 		}

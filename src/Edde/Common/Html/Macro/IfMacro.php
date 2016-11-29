@@ -100,8 +100,8 @@
 			return sprintf('%s::getProperty(%s, %s)', ReflectionUtils::class, $this->reference($macro, $type), var_export($src, true));
 		}
 
-		protected function prepare() {
-			parent::prepare();
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->helperSet = new HelperSet();
 			$this->helperSet->registerHelper($this);
 		}

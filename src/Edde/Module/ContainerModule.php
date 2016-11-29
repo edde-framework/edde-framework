@@ -14,13 +14,13 @@
 	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Container\Container;
 	use Edde\Common\Container\FactoryManager;
-	use Edde\Common\Event\Handler\SelfHandler;
 	use Edde\Common\File\TempDirectory;
+	use Edde\Common\Runtime\AbstractModule;
 	use Edde\Common\Runtime\Event\SetupEvent;
 	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Framework;
 
-	class ContainerModule extends SelfHandler {
+	class ContainerModule extends AbstractModule {
 		public function setupContainerModule(SetupEvent $setupEvent) {
 			$runtime = $setupEvent->getRuntime();
 			$runtime->registerFactoryList([

@@ -9,12 +9,12 @@
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
+	use Edde\Common\AbstractObject;
 	use Edde\Common\Callback\Callback;
 	use Edde\Common\Control\Event\CancelEvent;
 	use Edde\Common\Control\Event\DoneEvent;
 	use Edde\Common\Control\Event\HandleEvent;
 	use Edde\Common\Control\Event\UpdateEvent;
-	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Node\NodeIterator;
@@ -23,7 +23,7 @@
 	/**
 	 * Root implementation of all controls.
 	 */
-	abstract class AbstractControl extends AbstractDeffered implements IControl {
+	abstract class AbstractControl extends AbstractObject implements IControl {
 		use LazyContainerTrait;
 		use EventTrait;
 		/**
@@ -266,10 +266,10 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->listen($this);
 			$this->node = new Node();
 			$this->node->setMeta('control', $this);
-			return $this;
 		}
 	}

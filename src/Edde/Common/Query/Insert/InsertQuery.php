@@ -32,7 +32,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->node = new Node('insert-query', $this->schema->getSchemaName());
 			foreach ($this->insert as $name => $value) {
 				$this->node->addNode(new Node($name, $value));

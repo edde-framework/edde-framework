@@ -14,7 +14,7 @@
 	use Edde\Common\Schema\SchemaProperty;
 	use Edde\Ext\Container\ContainerFactory;
 	use Foo\Bar\FooBarBar;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	require_once(__DIR__ . '/assets/assets.php');
 

@@ -5,7 +5,7 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	require_once(__DIR__ . '/assets.php');
 

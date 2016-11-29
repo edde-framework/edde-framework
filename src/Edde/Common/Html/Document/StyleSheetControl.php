@@ -9,8 +9,8 @@
 			return $this;
 		}
 
-		protected function prepare() {
-			parent::prepare();
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->setAttribute('rel', 'stylesheet')
 				->setAttribute('media', 'all');
 		}

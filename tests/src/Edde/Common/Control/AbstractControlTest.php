@@ -7,7 +7,7 @@
 	use Edde\Common\Control\Event\DoneEvent;
 	use Edde\Common\Control\Event\HandleEvent;
 	use Edde\Common\Html\Tag\DivControl;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	require_once(__DIR__ . '/assets/assets.php');
 

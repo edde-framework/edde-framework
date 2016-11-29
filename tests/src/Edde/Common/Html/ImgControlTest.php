@@ -4,7 +4,7 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Common\Html\Tag\ImgControl;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class ImgControlTest extends TestCase {
 		public function testCommon() {

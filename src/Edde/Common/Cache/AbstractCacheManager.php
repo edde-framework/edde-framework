@@ -6,13 +6,11 @@
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Cache\ICacheStorage;
-	use Edde\Common\Deffered\DefferedTrait;
 
 	/**
 	 * Common stuff for a cache cache implementation.
 	 */
 	abstract class AbstractCacheManager extends AbstractCache implements ICacheManager {
-		use DefferedTrait;
 		/**
 		 * @var ICacheStorage[]
 		 */

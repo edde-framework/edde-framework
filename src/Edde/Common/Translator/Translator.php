@@ -8,13 +8,13 @@
 	use Edde\Api\Translator\IDictionary;
 	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Translator\TranslatorException;
+	use Edde\Common\AbstractObject;
 	use Edde\Common\Cache\CacheTrait;
-	use Edde\Common\Deffered\AbstractDeffered;
 
 	/**
 	 * General class for translations support.
 	 */
-	class Translator extends AbstractDeffered implements ITranslator {
+	class Translator extends AbstractObject implements ITranslator {
 		use LazyConverterManagerTrait;
 		use CacheTrait;
 		/**
@@ -114,7 +114,9 @@
 			throw new TranslatorException(sprintf('Cannot translate [%s]; the given id is not available in no dictionary.', $id));
 		}
 
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
+			$this->cache();
 			if ($this->scopeStack->isEmpty()) {
 				$this->scopeStack->push(null);
 			}

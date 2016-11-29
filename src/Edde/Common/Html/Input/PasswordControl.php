@@ -16,9 +16,9 @@
 			return $this;
 		}
 
-		protected function prepare() {
-			parent::prepare()
-				->javascript(self::class)
+		protected function onBootstrap() {
+			parent::onBootstrap();
+			$this->javascript(self::class)
 				->setTag('input', false)
 				->addAttributeList([
 					'type' => 'password',

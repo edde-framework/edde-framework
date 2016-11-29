@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Callback;
 
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class CallbackTest extends TestCase {
 		public function testCommon() {

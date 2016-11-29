@@ -97,8 +97,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function prepare() {
-			parent::prepare();
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->styleSheetList = $this->styleSheetCompiler;
 			$this->javaScriptList = $this->javaScriptCompiler;
 			$this->head->addControl($this->createControl(MetaControl::class)
@@ -106,5 +106,6 @@
 					'name' => 'viewport',
 					'content' => 'width=device-width, initial-scale=1',
 				]));
+			$this->cache();
 		}
 	}

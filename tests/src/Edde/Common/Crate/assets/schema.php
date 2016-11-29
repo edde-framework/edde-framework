@@ -14,7 +14,8 @@
 			parent::__construct(Header::class);
 		}
 
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->addPropertyList([
 				(new SchemaProperty($this, 'guid'))->unique()
 					->identifier()
@@ -44,7 +45,8 @@
 			$this->itemSchema = $itemSchema;
 		}
 
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->addPropertyList([
 				(new SchemaProperty($this, 'guid'))->unique()
 					->identifier()
@@ -64,7 +66,8 @@
 			parent::__construct(Item::class);
 		}
 
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->addPropertyList([
 				(new SchemaProperty($this, 'guid'))->identifier()
 					->unique()
@@ -79,7 +82,8 @@
 			parent::__construct(Header2::class);
 		}
 
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->addPropertyList([
 				(new SchemaProperty($this, 'guid'))->unique()
 					->identifier()
@@ -112,7 +116,8 @@
 			$this->itemSchema = $itemSchema;
 		}
 
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->addPropertyList([
 				(new SchemaProperty($this, 'guid'))->unique()
 					->identifier()
@@ -132,7 +137,8 @@
 			parent::__construct(Item2::class);
 		}
 
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->addPropertyList([
 				(new SchemaProperty($this, 'guid'))->identifier()
 					->unique()

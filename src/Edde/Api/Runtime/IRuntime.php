@@ -16,6 +16,24 @@
 		public function registerFactoryList(array $factoryList): IRuntime;
 
 		/**
+		 * register a new module
+		 *
+		 * @param IModule $module
+		 *
+		 * @return IRuntime
+		 */
+		public function module(IModule $module): IRuntime;
+
+		/**
+		 * register a list of modules
+		 *
+		 * @param array $moduleList
+		 *
+		 * @return IRuntime
+		 */
+		public function moduleList(array $moduleList): IRuntime;
+
+		/**
 		 * register deffered callback on the given factory name (must be already registered)
 		 *
 		 * @param string $name

@@ -4,12 +4,12 @@
 	namespace Edde\Common\Cache;
 
 	use Edde\Api\Cache\ICacheStorage;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\AbstractObject;
 
 	/**
 	 * Common stuff for cache storage implementation.
 	 */
-	abstract class AbstractCacheStorage extends AbstractDeffered implements ICacheStorage {
+	abstract class AbstractCacheStorage extends AbstractObject implements ICacheStorage {
 		/**
 		 * how many cache hits was done on this storage
 		 *

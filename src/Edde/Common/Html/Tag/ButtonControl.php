@@ -43,9 +43,9 @@
 			return $this;
 		}
 
-		protected function prepare() {
-			parent::prepare()
-				->setTag('div', true)
+		protected function onBootstrap() {
+			parent::onBootstrap();
+			$this->setTag('div', true)
 				->addClass('button');
 		}
 	}

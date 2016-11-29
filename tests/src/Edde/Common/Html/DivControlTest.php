@@ -5,7 +5,7 @@
 
 	use Edde\Api\Html\HtmlException;
 	use Edde\Common\Html\Tag\DivControl;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class DivControlTest extends TestCase {
 		public function testCommon() {

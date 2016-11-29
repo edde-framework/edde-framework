@@ -17,7 +17,7 @@
 	use Foo\Bar\Header2Schema;
 	use Foo\Bar\Item2Schema;
 	use Foo\Bar\Row2Schema;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	require_once __DIR__ . '/assets/schema.php';
 

@@ -7,9 +7,9 @@
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Schema\LazySchemaFactoryTrait;
 	use Edde\Api\Schema\SchemaException;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\AbstractObject;
 
-	class SchemaManager extends AbstractDeffered implements ISchemaManager {
+	class SchemaManager extends AbstractObject implements ISchemaManager {
 		use LazySchemaFactoryTrait;
 		/**
 		 * @var ISchema[]
@@ -34,7 +34,8 @@
 			return $this->schemaList;
 		}
 
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			foreach ($this->schemaFactory->create() as $schema) {
 				$this->addSchema($schema);
 			}

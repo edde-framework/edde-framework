@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Filter;
 
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class IntBoolFilterTest extends TestCase {
 		public function testCommon() {

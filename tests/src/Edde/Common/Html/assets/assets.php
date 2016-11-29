@@ -30,8 +30,9 @@
 	class SomeTemplatedControl extends AbstractHtmlControl {
 		use TemplateTrait;
 
-		protected function prepare() {
-			parent::prepare();
+		protected function onBootstrap() {
+			parent::onBootstrap();
+			$this->cache();
 			$this->setTag('foo');
 		}
 	}

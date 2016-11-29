@@ -4,7 +4,7 @@
 	namespace Edde\Common\File;
 
 	use Edde\Api\File\IFile;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
 	class FileTest extends TestCase {
 		/**

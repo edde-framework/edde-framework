@@ -5,10 +5,8 @@
 
 	use Edde\Api\Http\IContentType;
 	use Edde\Common\Collection\AbstractDefferedList;
-	use Edde\Common\Deffered\DefferedTrait;
 
 	class ContentType extends AbstractDefferedList implements IContentType {
-		use DefferedTrait;
 		/**
 		 * source content type
 		 *
@@ -50,7 +48,8 @@
 			return $this->array();
 		}
 
-		protected function prepare() {
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			if ($this->contentType) {
 				$this->object = HttpUtils::contentType($this->contentType);
 				$this->put($this->object->params);

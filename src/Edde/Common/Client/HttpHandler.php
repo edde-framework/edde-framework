@@ -5,7 +5,6 @@
 
 	use Edde\Api\Client\ClientException;
 	use Edde\Api\Client\IHttpHandler;
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyTempDirectoryTrait;
@@ -27,7 +26,7 @@
 	/**
 	 * Http client handler; this should not be used in common; only as a result from HttpClient calls
 	 */
-	class HttpHandler extends AbstractObject implements IHttpHandler, ILazyInject {
+	class HttpHandler extends AbstractObject implements IHttpHandler {
 		use LazyContainerTrait;
 		use LazyTempDirectoryTrait;
 		use EventTrait;

@@ -106,7 +106,7 @@
 		protected function loop(INode $macro, ICompiler $compiler, string $src) {
 			$type = $src[0];
 			if (isset(self::$reference[$type])) {
-				return sprintf('%s->%s', $this->reference($macro, $type), StringUtils::toCamelHump(substr($src, 1)));
+				return sprintf('%s->%s', self::reference($macro, $type), StringUtils::toCamelHump(substr($src, 1)));
 			} else if ($src === '$:') {
 				list(, $value) = $compiler->getVariable(static::class)
 					->top();
@@ -115,8 +115,8 @@
 			return var_export($src, true);
 		}
 
-		protected function prepare() {
-			parent::prepare();
+		protected function onBootstrap() {
+			parent::onBootstrap();
 			$this->helperSet = new HelperSet();
 			$this->helperSet->registerHelper($this);
 		}

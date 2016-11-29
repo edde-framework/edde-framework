@@ -5,12 +5,12 @@
 
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
-	use Edde\Common\Event\Handler\SelfHandler;
+	use Edde\Common\Runtime\AbstractModule;
 	use Edde\Common\Runtime\Event\SetupEvent;
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
 
-	class WebModule extends SelfHandler {
+	class WebModule extends AbstractModule {
 		public function setupWebModule(SetupEvent $setupEvent) {
 			$runtime = $setupEvent->getRuntime();
 			$runtime->registerFactoryList([
