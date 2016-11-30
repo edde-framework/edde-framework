@@ -4,7 +4,6 @@
 	namespace Edde\Common\Crate;
 
 	use Edde\Api\Cache\ICache;
-	use Edde\Api\Cache\LazyCacheManagerTrait;
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\Crate\LazyCrateDirectoryTrait;
@@ -15,6 +14,7 @@
 	use Edde\Api\Schema\ISchemaLink;
 	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
+	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\Strings\StringUtils;
@@ -24,8 +24,8 @@
 	 */
 	class CrateGenerator extends AbstractDeffered implements ICrateGenerator {
 		use LazySchemaManagerTrait;
-		use LazyCacheManagerTrait;
 		use LazyCrateDirectoryTrait;
+		use CacheTrait;
 		/**
 		 * @var ICache
 		 */
@@ -223,8 +223,9 @@
 		 * @inheritdoc
 		 */
 		protected function prepare() {
+			parent::prepare();
 			$this->crateDirectory->create();
-			$this->cache = $this->cacheManager->cache(__NAMESPACE__);
+			$this->cache();
 			$this->parent = Crate::class;
 		}
 	}
