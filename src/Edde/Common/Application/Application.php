@@ -51,10 +51,10 @@
 				$this->event(new FinishEvent($this, $result));
 				$this->responseManager->execute();
 				return $result;
-			} catch (\Exception $e) {
-				$this->logService->exception($e, ['edde']);
-				$this->event(new ErrorEvent($this, $e));
-				return $this->errorControl->exception($e);
+			} catch (\Exception $exception) {
+				$this->logService->exception($exception, ['edde']);
+				$this->event(new ErrorEvent($this, $exception));
+				return $this->errorControl->exception($exception);
 			}
 		}
 	}

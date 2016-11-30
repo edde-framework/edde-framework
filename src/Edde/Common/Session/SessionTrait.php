@@ -16,7 +16,7 @@
 		 */
 		protected $session;
 
-		public function session() {
+		protected function session() {
 			$this->lazy('session', function () {
 				return $this->sessionManager->getSession(static::class);
 			});

@@ -16,7 +16,7 @@
 		 */
 		protected $cache;
 
-		public function cache() {
+		protected function cache() {
 			$this->lazy('cache', function () {
 				return $this->cacheManager->cache(static::class);
 			});
