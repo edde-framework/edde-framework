@@ -105,8 +105,7 @@
 			if (isset($this->dictionaryList[$scope]) === false) {
 				throw new TranslatorException(sprintf('Scope [%s] has no dictionaries.', $scope));
 			}
-			$dictionaryList = $this->dictionaryList[$scope];
-			foreach ($dictionaryList as $dictionary) {
+			foreach ($this->dictionaryList[$scope] as $dictionary) {
 				if (($string = $dictionary->translate($id, $language)) !== null) {
 					return $this->cache->save($cacheId, $string);
 				}
@@ -117,12 +116,15 @@
 		protected function onBootstrap() {
 			parent::onBootstrap();
 			$this->cache();
+		}
+
+		protected function onPrepare() {
+			parent::onPrepare();
 			if ($this->scopeStack->isEmpty()) {
 				$this->scopeStack->push(null);
 			}
-			foreach ($this->sourceList as $item) {
+			foreach ($this->sourceList as list($file, $scope)) {
 				/** @var $file IFile */
-				list($file, $scope) = $item;
 				$this->registerDictionary($this->converterManager->convert($file, $file->getMime(), IDictionary::class), $scope);
 			}
 			if (empty($this->dictionaryList)) {

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ce256a9e4b9aea9ba998d4ce407b95d8",
-    "content-hash": "9956c30d7f7445dc49be9a512c1267b6",
+    "hash": "294762aaa57323540738db0d40e326c0",
+    "content-hash": "2e877a7e5302ed381d4a43da69909b8c",
     "packages": [
         {
             "name": "defuse/php-encryption",
@@ -328,17 +328,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phar-io/manifest.git",
-                "reference": "ee5793d3d61685c7988bde24d7752de85a1d1676"
+                "reference": "9cdb7a02cdc4a8d235197f84f2e3aa1ae2d788a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/manifest/zipball/ee5793d3d61685c7988bde24d7752de85a1d1676",
-                "reference": "ee5793d3d61685c7988bde24d7752de85a1d1676",
+                "url": "https://api.github.com/repos/phar-io/manifest/zipball/9cdb7a02cdc4a8d235197f84f2e3aa1ae2d788a4",
+                "reference": "9cdb7a02cdc4a8d235197f84f2e3aa1ae2d788a4",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-phar": "*",
+                "phar-io/version": "dev-master",
                 "php": "^5.6 || ^7.0"
             },
             "type": "library",
@@ -374,7 +375,59 @@
                 }
             ],
             "description": "Component for reading phar.io manifest information from a PHP Archive (PHAR)",
-            "time": "2016-11-29 10:47:53"
+            "time": "2016-11-30 12:21:45"
+        },
+        {
+            "name": "phar-io/version",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phar-io/version.git",
+                "reference": "363436fa620d80636c7f3c9a484c1452b6602c0c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phar-io/version/zipball/363436fa620d80636c7f3c9a484c1452b6602c0c",
+                "reference": "363436fa620d80636c7f3c9a484c1452b6602c0c",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6 || ^7.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Arne Blankerts",
+                    "email": "arne@blankerts.de",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Sebastian Heuer",
+                    "email": "sebastian@phpeople.de",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Sebastian Bergmann",
+                    "email": "sebastian@phpunit.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Library for handling version information and constraints",
+            "time": "2016-11-30 11:36:41"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -835,12 +888,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "1be5df3e3f593512963bf3cdcf31a8ee9244c8b2"
+                "reference": "771a2ab9e6dfbbc31f2898b1434f67e51304e864"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1be5df3e3f593512963bf3cdcf31a8ee9244c8b2",
-                "reference": "1be5df3e3f593512963bf3cdcf31a8ee9244c8b2",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/771a2ab9e6dfbbc31f2898b1434f67e51304e864",
+                "reference": "771a2ab9e6dfbbc31f2898b1434f67e51304e864",
                 "shasum": ""
             },
             "require": {
@@ -909,7 +962,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-11-28 16:05:57"
+            "time": "2016-11-30 07:28:25"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1841,7 +1894,70 @@
             "time": "2016-11-23 20:04:41"
         }
     ],
-    "packages-dev": [],
+    "packages-dev": [
+        {
+            "name": "tracy/tracy",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nette/tracy.git",
+                "reference": "bb68aaf0df103a3262d0c37d21662f811d6f2f72"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nette/tracy/zipball/bb68aaf0df103a3262d0c37d21662f811d6f2f72",
+                "reference": "bb68aaf0df103a3262d0c37d21662f811d6f2f72",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-session": "*",
+                "php": ">=5.4.4"
+            },
+            "require-dev": {
+                "nette/di": "~2.3",
+                "nette/tester": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.4-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src"
+                ],
+                "files": [
+                    "src/shortcuts.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0",
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "David Grudl",
+                    "homepage": "https://davidgrudl.com"
+                },
+                {
+                    "name": "Nette Community",
+                    "homepage": "https://nette.org/contributors"
+                }
+            ],
+            "description": "Tracy: useful PHP debugger",
+            "homepage": "https://tracy.nette.org",
+            "keywords": [
+                "debug",
+                "debugger",
+                "nette"
+            ],
+            "time": "2016-11-21 18:07:15"
+        }
+    ],
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {

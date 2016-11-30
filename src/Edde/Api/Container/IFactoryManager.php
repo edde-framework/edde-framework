@@ -3,10 +3,12 @@
 
 	namespace Edde\Api\Container;
 
+	use Edde\Api\Serializable\ISerializable;
+
 	/**
 	 * General purpose cache management; used byt an Container and a DependencyFactory.
 	 */
-	interface IFactoryManager {
+	interface IFactoryManager extends ISerializable {
 		/**
 		 * register given cache
 		 *

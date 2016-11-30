@@ -28,5 +28,8 @@
 		"phpunit/phpunit": "6.0.x-dev",
 		"theseer/phpdox": "0.9.0",
 		"roave/security-advisories": "dev-master"
+	},
+	"require-dev": {
+		"tracy/tracy": "^2.4"
 	}
 }

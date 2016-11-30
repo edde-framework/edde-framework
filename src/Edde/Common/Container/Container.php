@@ -13,14 +13,14 @@
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\IFactoryManager;
 	use Edde\Api\Container\ILazyInject;
-	use Edde\Common\AbstractObject;
 	use Edde\Common\Container\Factory\FactoryFactory;
+	use Edde\Common\Serializable\AbstractSerializable;
 	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Default implementation of a dependency container.
 	 */
-	class Container extends AbstractObject implements IContainer {
+	class Container extends AbstractSerializable implements IContainer {
 		/**
 		 * @var IFactoryManager
 		 */

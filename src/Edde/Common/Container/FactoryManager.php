@@ -7,14 +7,14 @@
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\IFactoryManager;
-	use Edde\Common\AbstractObject;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Container\Factory\FactoryFactory;
+	use Edde\Common\Serializable\AbstractSerializable;
 
 	/**
 	 * Default implementation of a cache manager.
 	 */
-	class FactoryManager extends AbstractObject implements IFactoryManager {
+	class FactoryManager extends AbstractSerializable implements IFactoryManager {
 		use CacheTrait;
 		/**
 		 * @var IFactory[]

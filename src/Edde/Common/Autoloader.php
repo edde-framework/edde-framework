@@ -37,7 +37,7 @@
 				/** @noinspection PhpIncludeInspection */
 				include_once $file;
 				return true;
-			}, true);
+			}, true, true);
 			return $loader;
 		}
 	}

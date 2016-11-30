@@ -16,6 +16,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phar-io/manifest" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phar-io/version" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpdocumentor/reflection-common" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpdocumentor/reflection-docblock" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpdocumentor/type-resolver" />
@@ -41,6 +42,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/theseer/fdomdocument" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/theseer/fxsl" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/theseer/phpdox" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tracy/tracy" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/webmozart/assert" />
     </content>
     <orderEntry type="inheritedJdk" />
@@ -82,6 +84,7 @@
           <root url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
           <root url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
           <root url="file://$MODULE_DIR$/vendor/phar-io/manifest" />
+          <root url="file://$MODULE_DIR$/vendor/phar-io/version" />
           <root url="file://$MODULE_DIR$/vendor/phpdocumentor/reflection-common" />
           <root url="file://$MODULE_DIR$/vendor/phpdocumentor/reflection-docblock" />
           <root url="file://$MODULE_DIR$/vendor/phpdocumentor/type-resolver" />
@@ -107,6 +110,7 @@
           <root url="file://$MODULE_DIR$/vendor/theseer/fdomdocument" />
           <root url="file://$MODULE_DIR$/vendor/theseer/fxsl" />
           <root url="file://$MODULE_DIR$/vendor/theseer/phpdox" />
+          <root url="file://$MODULE_DIR$/vendor/tracy/tracy" />
           <root url="file://$MODULE_DIR$/vendor/webmozart/assert" />
         </CLASSES>
         <SOURCES>
@@ -118,6 +122,7 @@
           <root url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
           <root url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
           <root url="file://$MODULE_DIR$/vendor/phar-io/manifest" />
+          <root url="file://$MODULE_DIR$/vendor/phar-io/version" />
           <root url="file://$MODULE_DIR$/vendor/phpdocumentor/reflection-common" />
           <root url="file://$MODULE_DIR$/vendor/phpdocumentor/reflection-docblock" />
           <root url="file://$MODULE_DIR$/vendor/phpdocumentor/type-resolver" />
@@ -143,6 +148,7 @@
           <root url="file://$MODULE_DIR$/vendor/theseer/fdomdocument" />
           <root url="file://$MODULE_DIR$/vendor/theseer/fxsl" />
           <root url="file://$MODULE_DIR$/vendor/theseer/phpdox" />
+          <root url="file://$MODULE_DIR$/vendor/tracy/tracy" />
           <root url="file://$MODULE_DIR$/vendor/webmozart/assert" />
         </SOURCES>
       </library>

@@ -4,6 +4,7 @@
 	namespace Edde\Common\Container\Factory;
 
 	use Edde\Api\Container\IContainer;
+	use Edde\Common\Callback\CallbackUtils;
 
 	/**
 	 * If the class exists, instance is created.
@@ -24,6 +25,14 @@
 		 */
 		public function canHandle(string $name): bool {
 			return class_exists($name);
+		}
+
+		public function getParameterList(string $name = null): array {
+			if (isset($this->parameterList[$name = $name ?: $this->class]) === false) {
+				$this->parameterList[$name] = CallbackUtils::getParameterList($name);
+			}
+			/** @noinspection PhpIncompatibleReturnTypeInspection */
+			return $this->parameterList[$name];
 		}
 
 		/**

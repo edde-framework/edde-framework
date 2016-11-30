@@ -4,11 +4,12 @@
 	namespace Edde\Api\Container;
 
 	use Edde\Api\Deffered\IDeffered;
+	use Edde\Api\Serializable\ISerializable;
 
 	/**
 	 * Implementation of Dependency Inject Container.
 	 */
-	interface IContainer extends IDeffered {
+	interface IContainer extends IDeffered, ISerializable {
 		/**
 		 * shorthand for cache registration
 		 *
