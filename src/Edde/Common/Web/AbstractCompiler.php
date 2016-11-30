@@ -24,6 +24,7 @@
 		 * @var IFilter[]
 		 */
 		protected $filterList = [];
+		protected $namespace;
 
 		/**
 		 * @inheritdoc
@@ -37,8 +38,7 @@
 		 * @inheritdoc
 		 */
 		public function setNamespace(string $namespace): ICompiler {
-			$this->use();
-			$this->cache->setNamespace($namespace);
+			$this->namespace = $namespace;
 			return $this;
 		}
 
@@ -73,5 +73,6 @@
 
 		protected function prepare() {
 			$this->cache();
+			$this->cache->setNamespace($this->namespace);
 		}
 	}
