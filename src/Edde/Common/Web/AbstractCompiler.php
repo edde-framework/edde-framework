@@ -24,7 +24,7 @@
 		 * @var IFilter[]
 		 */
 		protected $filterList = [];
-		protected $namespace;
+		protected $namespace = '';
 
 		/**
 		 * @inheritdoc
