@@ -80,6 +80,25 @@
 		 *
 		 * @return IHttpHandler
 		 */
+		public function patch($url): IHttpHandler;
+
+		/**
+		 * patch & execute & body
+		 *
+		 * @param string|IUrl $url
+		 * @param IBody $body
+		 * @param string $target
+		 * @param string|null $mime
+		 *
+		 * @return mixed
+		 */
+		public function patche($url, IBody $body = null, string $target, string $mime = null);
+
+		/**
+		 * @param string|IUrl $url
+		 *
+		 * @return IHttpHandler
+		 */
 		public function delete($url): IHttpHandler;
 
 		/**

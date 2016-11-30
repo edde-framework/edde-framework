@@ -11,9 +11,12 @@
 	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Url\IUrl;
+	use Edde\Common\Client\Event\DeleteEvent;
 	use Edde\Common\Client\Event\GetEvent;
 	use Edde\Common\Client\Event\HandlerEvent;
+	use Edde\Common\Client\Event\PatchEvent;
 	use Edde\Common\Client\Event\PostEvent;
+	use Edde\Common\Client\Event\PutEvent;
 	use Edde\Common\Client\Event\RequestEvent;
 	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\Event\EventTrait;
@@ -52,15 +55,95 @@
 		}
 
 		/**
-		 * @param IUrl|string $url
-		 *
-		 * @return HttpRequest
+		 * @inheritdoc
 		 */
-		protected function createRequest($url) {
-			$httpRequest = new HttpRequest(new PostList(), new HeaderList(), new CookieList());
-			$httpRequest->setRequestUrl(RequestUrl::create($url));
-			$this->event(new RequestEvent($httpRequest));
-			return $httpRequest;
+		public function post($url): IHttpHandler {
+			$httpRequest = $this->createRequest($url)
+				->setMethod('POST');
+			$this->event(new PostEvent($httpRequest, $httpHandler = $this->request($httpRequest)));
+			$this->event(new HandlerEvent($httpRequest, $httpHandler));
+			return $httpHandler;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function poste($url, IBody $body = null, string $target, string $mime = null) {
+			$handler = $this->post($url);
+			if ($body) {
+				$handler->body($body);
+			}
+			return $handler->execute()
+				->body($target, $mime);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function put($url): IHttpHandler {
+			$httpRequest = $this->createRequest($url)
+				->setMethod('PUT');
+			$this->event(new PutEvent($httpRequest, $httpHandler = $this->request($httpRequest)));
+			$this->event(new HandlerEvent($httpRequest, $httpHandler));
+			return $httpHandler;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function pute($url, IBody $body = null, string $target, string $mime = null) {
+			$handler = $this->put($url);
+			if ($body) {
+				$handler->body($body);
+			}
+			return $handler->execute()
+				->body($target, $mime);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function patch($url): IHttpHandler {
+			$httpRequest = $this->createRequest($url)
+				->setMethod('PATCH');
+			$this->event(new PatchEvent($httpRequest, $httpHandler = $this->request($httpRequest)));
+			$this->event(new HandlerEvent($httpRequest, $httpHandler));
+			return $httpHandler;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function patche($url, IBody $body = null, string $target, string $mime = null) {
+			$handler = $this->patch($url);
+			if ($body) {
+				$handler->body($body);
+			}
+			return $handler->execute()
+				->body($target, $mime);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function deletee($url, IBody $body = null, string $target, string $mime = null) {
+			$handler = $this->delete($url);
+			if ($body) {
+				$handler->body($body);
+			}
+			return $handler->execute()
+				->body($target, $mime);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function delete($url): IHttpHandler {
+			$httpRequest = $this->createRequest($url)
+				->setMethod('DELETE');
+			$this->event(new DeleteEvent($httpRequest, $httpHandler = $this->request($httpRequest)));
+			$this->event(new HandlerEvent($httpRequest, $httpHandler));
+			return $httpHandler;
 		}
 
 		/**
@@ -86,72 +169,15 @@
 		}
 
 		/**
-		 * @inheritdoc
+		 * @param IUrl|string $url
+		 *
+		 * @return HttpRequest
 		 */
-		public function poste($url, IBody $body = null, string $target, string $mime = null) {
-			$handler = $this->post($url);
-			if ($body) {
-				$handler->body($body);
-			}
-			return $handler->execute()
-				->body($target, $mime);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function post($url): IHttpHandler {
-			$httpRequest = $this->createRequest($url)
-				->setMethod('POST');
-			$this->event(new PostEvent($httpRequest, $httpHandler = $this->request($httpRequest)));
-			$this->event(new HandlerEvent($httpRequest, $httpHandler));
-			return $httpHandler;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function pute($url, IBody $body = null, string $target, string $mime = null) {
-			$handler = $this->put($url);
-			if ($body) {
-				$handler->body($body);
-			}
-			return $handler->execute()
-				->body($target, $mime);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function put($url): IHttpHandler {
-			$httpRequest = $this->createRequest($url)
-				->setMethod('PUT');
-			$this->event(new PostEvent($httpRequest, $httpHandler = $this->request($httpRequest)));
-			$this->event(new HandlerEvent($httpRequest, $httpHandler));
-			return $httpHandler;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function deletee($url, IBody $body = null, string $target, string $mime = null) {
-			$handler = $this->delete($url);
-			if ($body) {
-				$handler->body($body);
-			}
-			return $handler->execute()
-				->body($target, $mime);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function delete($url): IHttpHandler {
-			$httpRequest = $this->createRequest($url)
-				->setMethod('DELETE');
-			$this->event(new PostEvent($httpRequest, $httpHandler = $this->request($httpRequest)));
-			$this->event(new HandlerEvent($httpRequest, $httpHandler));
-			return $httpHandler;
+		protected function createRequest($url) {
+			$httpRequest = new HttpRequest(new PostList(), new HeaderList(), new CookieList());
+			$httpRequest->setRequestUrl(RequestUrl::create($url));
+			$this->event(new RequestEvent($httpRequest));
+			return $httpRequest;
 		}
 
 		/**
