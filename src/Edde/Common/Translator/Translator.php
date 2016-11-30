@@ -115,6 +115,8 @@
 		}
 
 		protected function prepare() {
+			parent::prepare();
+			$this->cache();
 			if ($this->scopeStack->isEmpty()) {
 				$this->scopeStack->push(null);
 			}

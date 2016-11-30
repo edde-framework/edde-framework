@@ -99,6 +99,7 @@
 		 */
 		protected function prepare() {
 			parent::prepare();
+			$this->cache();
 			$this->styleSheetList = $this->styleSheetCompiler;
 			$this->javaScriptList = $this->javaScriptCompiler;
 			$this->head->addControl($this->createControl(MetaControl::class)

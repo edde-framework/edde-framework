@@ -41,4 +41,9 @@
 			$compiler->registerHelperSet($this->helperSet);
 			return $this->cache->save($cacheId, $compiler->template($importList));
 		}
+
+		protected function prepare() {
+			parent::prepare();
+			$this->cache();
+		}
 	}

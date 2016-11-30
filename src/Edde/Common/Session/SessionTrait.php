@@ -5,7 +5,6 @@
 
 	use Edde\Api\Session\ISession;
 	use Edde\Api\Session\LazySessionManagerTrait;
-	use Edde\Common\Deffered\Event\OnDefferedEvent;
 
 	/**
 	 * Helper trait for simple work with session section.
@@ -17,13 +16,7 @@
 		 */
 		protected $session;
 
-		/** @noinspection PhpUnusedParameterInspection */
-		/**
-		 * ultimately long name to prevent clashes; shoud be called automagically
-		 *
-		 * @param $onDefferedEvent $onDefferedEvent
-		 */
-		public function eventSessionTraitOnPrepareEvent(OnDefferedEvent $onDefferedEvent) {
+		public function session() {
 			$this->lazy('session', function () {
 				return $this->sessionManager->getSession(static::class);
 			});

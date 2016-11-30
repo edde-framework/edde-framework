@@ -32,6 +32,7 @@
 
 		protected function prepare() {
 			parent::prepare();
+			$this->cache();
 			$this->setTag('foo');
 		}
 	}

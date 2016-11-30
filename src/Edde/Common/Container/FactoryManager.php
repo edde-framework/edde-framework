@@ -101,4 +101,9 @@
 		public function getFactoryList(): array {
 			return $this->factoryList;
 		}
+
+		protected function prepare() {
+			parent::prepare();
+			$this->cache();
+		}
 	}

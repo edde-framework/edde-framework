@@ -70,4 +70,8 @@
 			}
 			return $content;
 		}
+
+		protected function prepare() {
+			$this->cache();
+		}
 	}
