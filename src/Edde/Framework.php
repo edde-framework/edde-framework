@@ -24,7 +24,7 @@
 		 * @return string
 		 */
 		public function getVersion() {
-			return '2.4.231.0';
+			return '2.5.0.0';
 		}
 
 		/**
@@ -33,6 +33,6 @@
 		 * @return string
 		 */
 		public function getCodename() {
-			return 'Purple Void';
+			return 'Dummy Doll';
 		}
 	}
