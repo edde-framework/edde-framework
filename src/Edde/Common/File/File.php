@@ -32,6 +32,7 @@
 		 * @var resource
 		 */
 		protected $handle;
+		protected $mode;
 
 		/**
 		 * @param string|IUrl $file
@@ -98,6 +99,7 @@
 			if (($this->handle = fopen($this->url->getPath(), $mode)) === false) {
 				throw new FileException(sprintf('Cannot open file [%s (%s)].', $this->url->getPath(), $mode));
 			}
+			$this->mode = $mode;
 			return $this;
 		}
 
@@ -141,7 +143,7 @@
 			$this->writeCache = $writeCache;
 			fflush($handle = $this->getHandle());
 			fclose($handle);
-			$this->handle = null;
+			$this->mode = $this->handle = null;
 			return $this;
 		}
 
@@ -276,5 +278,22 @@
 		 */
 		public function getSize(): float {
 			return FileUtils::size($this->getPath());
+		}
+
+		public function lock(bool $exclusive = true): IFile {
+			if ($this->isOpen()) {
+				throw new FileException(sprintf('File [%s] must be closed to use lock.', $this->getPath()));
+			}
+			$exclusive ? $this->openForWrite() : $this->openForRead();
+			if (flock($this->getHandle(), $exclusive ? LOCK_EX : LOCK_SH) === false) {
+				throw new FileException(sprintf('Cannot execute lock on file [%s].', $this->getPath()));
+			}
+			return $this;
+		}
+
+		public function unlock(): IFile {
+			fflush($handle = $this->getHandle());
+			flock($handle, LOCK_UN);
+			return $this;
 		}
 	}

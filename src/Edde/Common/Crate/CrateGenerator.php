@@ -3,11 +3,11 @@
 
 	namespace Edde\Common\Crate;
 
-	use Edde\Api\Cache\ICache;
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\Crate\LazyCrateDirectoryTrait;
 	use Edde\Api\File\FileException;
+	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaCollection;
@@ -25,11 +25,8 @@
 	class CrateGenerator extends AbstractDeffered implements ICrateGenerator {
 		use LazySchemaManagerTrait;
 		use LazyCrateDirectoryTrait;
+		use LazyTempDirectoryTrait;
 		use CacheTrait;
-		/**
-		 * @var ICache
-		 */
-		protected $cache;
 		/**
 		 * @var string
 		 */
@@ -44,6 +41,9 @@
 				return $this;
 			}
 			$this->use();
+			$lock = $this->tempDirectory->file('.crate-generator');
+			$lock->lock();
+			/** @noinspection NotOptimalIfConditionsInspection */
 			if (($crateList = $this->cache->load('crate-list', [])) === [] || $force === true) {
 				$this->crateDirectory->purge();
 				foreach ($this->schemaManager->getSchemaList() as $schema) {
@@ -59,6 +59,7 @@
 	Edde\\Common\\Autoloader::register(null, __DIR__, false);	
 ");
 			$this->include();
+			$lock->unlock();
 			return $this;
 		}
 
@@ -224,7 +225,6 @@
 		 */
 		protected function prepare() {
 			parent::prepare();
-			$this->crateDirectory->create();
 			$this->cache();
 			$this->parent = Crate::class;
 		}
