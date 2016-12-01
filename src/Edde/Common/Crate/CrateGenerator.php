@@ -3,12 +3,11 @@
 
 	namespace Edde\Common\Crate;
 
-	use Edde\Api\Cache\ICache;
-	use Edde\Api\Cache\LazyCacheManagerTrait;
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\Crate\LazyCrateDirectoryTrait;
 	use Edde\Api\File\FileException;
+	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaCollection;
@@ -16,6 +15,7 @@
 	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\Strings\StringUtils;
 
@@ -24,12 +24,9 @@
 	 */
 	class CrateGenerator extends AbstractObject implements ICrateGenerator {
 		use LazySchemaManagerTrait;
-		use LazyCacheManagerTrait;
 		use LazyCrateDirectoryTrait;
-		/**
-		 * @var ICache
-		 */
-		protected $cache;
+		use LazyTempDirectoryTrait;
+		use CacheTrait;
 		/**
 		 * @var string
 		 */
@@ -44,6 +41,9 @@
 				return $this;
 			}
 			$this->use();
+			$lock = $this->tempDirectory->file('.crate-generator');
+			$lock->lock();
+			/** @noinspection NotOptimalIfConditionsInspection */
 			if (($crateList = $this->cache->load('crate-list', [])) === [] || $force === true) {
 				$this->crateDirectory->purge();
 				foreach ($this->schemaManager->getSchemaList() as $schema) {
@@ -59,6 +59,7 @@
 	Edde\\Common\\Autoloader::register(null, __DIR__, false);	
 ");
 			$this->include();
+			$lock->unlock();
 			return $this;
 		}
 
@@ -214,6 +215,7 @@
 		public function include (): ICrateGenerator {
 			/** @noinspection UnnecessaryParenthesesInspection */
 			(function (IResource $resource) {
+				/** @noinspection PhpIncludeInspection */
 				require_once $resource->getUrl();
 			})($this->crateDirectory->file('loader.php'));
 			return $this;
@@ -224,8 +226,7 @@
 		 */
 		protected function onBootstrap() {
 			parent::onBootstrap();
-			$this->crateDirectory->create();
-			$this->cache = $this->cacheManager->cache(__NAMESPACE__);
+			$this->cache();
 			$this->parent = Crate::class;
 		}
 	}
