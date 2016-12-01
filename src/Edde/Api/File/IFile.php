@@ -140,4 +140,20 @@
 		 * @return float
 		 */
 		public function getSize(): float;
+
+		/**
+		 * create a file and do an exclusive lock or lock an existing file; if lock cannot be acquired, exception should be thrown
+		 *
+		 * @param bool $exclusive
+		 *
+		 * @return IFile
+		 */
+		public function lock(bool $exclusive = true): IFile;
+
+		/**
+		 * unlock the file or throw an exception if file is not locked
+		 *
+		 * @return IFile
+		 */
+		public function unlock(): IFile;
 	}

@@ -277,4 +277,21 @@
 		public function getSize(): float {
 			return FileUtils::size($this->getPath());
 		}
+
+		public function lock(bool $exclusive = true): IFile {
+			if ($this->isOpen()) {
+				throw new FileException(sprintf('File [%s] must be closed to use lock.', $this->getPath()));
+			}
+			$exclusive ? $this->openForWrite() : $this->openForRead();
+			if (flock($this->getHandle(), $exclusive ? LOCK_EX : LOCK_SH) === false) {
+				throw new FileException(sprintf('Cannot execute lock on file [%s].', $this->getPath()));
+			}
+			return $this;
+		}
+
+		public function unlock(): IFile {
+			fflush($handle = $this->getHandle());
+			flock($handle, LOCK_UN);
+			return $this;
+		}
 	}
