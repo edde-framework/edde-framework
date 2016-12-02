@@ -3,6 +3,8 @@
 
 	namespace Edde\Api\Container;
 
+	use Edde\Api\Callback\IParameter;
+
 	/**
 	 * Factory is general way how to build a dependency with the final set of parameters/dependencies.
 	 */
@@ -19,7 +21,7 @@
 		/**
 		 * return set of required "hard" dependencies to execute this factory (constructor, lambda, ...)
 		 *
-		 * @return array
+		 * @return IParameter[]|iterable
 		 */
-		public function getDependencyList(): array;
+		public function getMandatoryList(string $name): iterable;
 	}

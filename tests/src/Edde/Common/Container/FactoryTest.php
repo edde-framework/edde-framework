@@ -10,7 +10,8 @@
 	class FactoryTest extends TestCase {
 		public function testClassFactory() {
 			$factory = new ClassFactory();
-			self::assertTrue($factory->canHandle(Container::class));
+			self::assertTrue($factory->canHandle($class = Container::class));
 			self::assertFalse($factory->canHandle(IContainer::class));
+			self::assertNotEmpty($mandatoryList = $factory->getMandatoryList($class));
 		}
 	}
