@@ -224,6 +224,15 @@
 		public function invalidate(): array;
 
 		/**
+		 * replace existing control with the given one by id; exception should be thrown if there is no id
+		 *
+		 * @param IHtmlControl $htmlControl
+		 *
+		 * @return IHtmlControl
+		 */
+		public function replace(IHtmlControl $htmlControl): IHtmlControl;
+
+		/**
 		 * @return IHtmlControl[]
 		 */
 		public function getIterator();
