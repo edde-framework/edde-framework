@@ -168,12 +168,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "bcdfb703d58ddccd0126c979d27ea5b774373379"
+                "reference": "aa6aec90e11a7a4e7d44129c7cb5422ffd15939e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/bcdfb703d58ddccd0126c979d27ea5b774373379",
-                "reference": "bcdfb703d58ddccd0126c979d27ea5b774373379",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/aa6aec90e11a7a4e7d44129c7cb5422ffd15939e",
+                "reference": "aa6aec90e11a7a4e7d44129c7cb5422ffd15939e",
                 "shasum": ""
             },
             "require": {
@@ -211,7 +211,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2016-11-23 21:58:18"
+            "time": "2016-12-01 12:37:30"
         },
         {
             "name": "paragonie/constant_time_encoding",
@@ -383,16 +383,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phar-io/version.git",
-                "reference": "363436fa620d80636c7f3c9a484c1452b6602c0c"
+                "reference": "8129d823903ed6f81f84362c6fef02aab4269fb2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/version/zipball/363436fa620d80636c7f3c9a484c1452b6602c0c",
-                "reference": "363436fa620d80636c7f3c9a484c1452b6602c0c",
+                "url": "https://api.github.com/repos/phar-io/version/zipball/8129d823903ed6f81f84362c6fef02aab4269fb2",
+                "reference": "8129d823903ed6f81f84362c6fef02aab4269fb2",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7"
             },
             "type": "library",
             "extra": {
@@ -427,7 +430,7 @@
                 }
             ],
             "description": "Library for handling version information and constraints",
-            "time": "2016-11-30 11:36:41"
+            "time": "2016-12-02 09:56:56"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -888,12 +891,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "771a2ab9e6dfbbc31f2898b1434f67e51304e864"
+                "reference": "6910ca5fbfce55e3c50c49926a275af2a6bae33a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/771a2ab9e6dfbbc31f2898b1434f67e51304e864",
-                "reference": "771a2ab9e6dfbbc31f2898b1434f67e51304e864",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6910ca5fbfce55e3c50c49926a275af2a6bae33a",
+                "reference": "6910ca5fbfce55e3c50c49926a275af2a6bae33a",
                 "shasum": ""
             },
             "require": {
@@ -903,7 +906,7 @@
                 "ext-mbstring": "*",
                 "ext-xml": "*",
                 "myclabs/deep-copy": "~1.3",
-                "phar-io/manifest": "^1.0@dev",
+                "phar-io/manifest": "^1.0",
                 "php": "^7.0",
                 "phpspec/prophecy": "^1.3.1",
                 "phpunit/php-code-coverage": "^4.0.3",
@@ -913,7 +916,7 @@
                 "phpunit/phpunit-mock-objects": "^3.2",
                 "sebastian/comparator": "~1.2.2",
                 "sebastian/diff": "~1.2",
-                "sebastian/environment": "^1.3 || ^2.0",
+                "sebastian/environment": "^1.3.4 || ^2.0",
                 "sebastian/exporter": "~2.0",
                 "sebastian/global-state": "~1.0",
                 "sebastian/object-enumerator": "~2.0",
@@ -962,7 +965,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-11-30 07:28:25"
+            "time": "2016-12-02 12:03:45"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1901,12 +1904,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tracy.git",
-                "reference": "bb68aaf0df103a3262d0c37d21662f811d6f2f72"
+                "reference": "cf59d9cceb3a9c1ed9253b864dd2498043bbaae5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tracy/zipball/bb68aaf0df103a3262d0c37d21662f811d6f2f72",
-                "reference": "bb68aaf0df103a3262d0c37d21662f811d6f2f72",
+                "url": "https://api.github.com/repos/nette/tracy/zipball/cf59d9cceb3a9c1ed9253b864dd2498043bbaae5",
+                "reference": "cf59d9cceb3a9c1ed9253b864dd2498043bbaae5",
                 "shasum": ""
             },
             "require": {
@@ -1955,7 +1958,7 @@
                 "debugger",
                 "nette"
             ],
-            "time": "2016-11-21 18:07:15"
+            "time": "2016-11-30 23:11:40"
         }
     ],
     "aliases": [],

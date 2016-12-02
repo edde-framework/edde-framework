@@ -3,42 +3,11 @@
 
 	namespace Edde\Common\Container\Factory;
 
-	use Edde\Api\Container\IContainer;
-	use Edde\Common\Callback\CallbackUtils;
-
 	/**
 	 * If the class exists, instance is created.
 	 */
-	class ClassFactory extends ReflectionFactory {
-		/**
-		 * What time is it?
-		 *
-		 * It is later than you think.
-		 */
-		public function __construct() {
-			parent::__construct(static::class, static::class, false);
-		}
-
-		/** @noinspection PhpMissingParentCallCommonInspection */
-		/**
-		 * @inheritdoc
-		 */
-		public function canHandle(string $name): bool {
-			return class_exists($name);
-		}
-
-		public function getParameterList(string $name = null): array {
-			if (isset($this->parameterList[$name = $name ?: $this->class]) === false) {
-				$this->parameterList[$name] = CallbackUtils::getParameterList($name);
-			}
-			/** @noinspection PhpIncompatibleReturnTypeInspection */
-			return $this->parameterList[$name];
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function factory(string $name, array $parameterList, IContainer $container) {
-			return parent::factory($this->class = $name, $parameterList, $container);
+	class ClassFactory extends AbstractFactory {
+		public function canHandle(string $canHandle): bool {
+			return class_exists($canHandle) && interface_exists($canHandle) === false;
 		}
 	}
