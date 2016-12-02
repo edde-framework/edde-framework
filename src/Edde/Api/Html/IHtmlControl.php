@@ -224,6 +224,15 @@
 		public function invalidate(): array;
 
 		/**
+		 * remove all controls with a given id; it's useful to ensure that the given id is not in control tree
+		 *
+		 * @param string $id
+		 *
+		 * @return IHtmlControl
+		 */
+		public function remove(string $id): IHtmlControl;
+
+		/**
 		 * replace existing control with the given one by id; exception should be thrown if there is no id
 		 *
 		 * @param IHtmlControl $htmlControl

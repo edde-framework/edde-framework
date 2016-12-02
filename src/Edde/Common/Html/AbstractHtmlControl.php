@@ -277,11 +277,17 @@
 			return $this->node->getAttributeList();
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function data(string $name, $data): IHtmlControl {
 			$this->setAttribute('data-' . $name, $data);
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getData(string $name, $default = null) {
 			return $this->getAttribute('data-' . $name, $default);
 		}
@@ -294,6 +300,22 @@
 			return $this->node->getMeta('pair', true);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
+		public function remove(string $id): IHtmlControl {
+			foreach (NodeQuery::node($this->getNode(), '/**/[id]') as $node) {
+				if ($node->getAttribute('id') === $id) {
+					$node->getParent()
+						->removeNode($node);
+				}
+			}
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function replace(IHtmlControl $htmlControl): IHtmlControl {
 			if (($id = $htmlControl->getId()) === null) {
 				throw new ControlException(sprintf('Cannot replace control [%s] without id.', get_class($htmlControl)));
