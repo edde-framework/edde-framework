@@ -8,7 +8,7 @@
   <component name="PhpInterpretersPhpInfoCache">
     <phpInfoCache>
       <interpreter name="PHP">
-        <phpinfo binary_type="PHP" php_cgi="C:\Users\Marek Hanzal\projects\edde-framework\edde-framework\.runtime\.php\php-cgi.exe" php_cli="C:\Users\Marek Hanzal\projects\edde-framework\edde-framework\.runtime\.php\php.exe" path_separator=";" version="7.1.0">
+        <phpinfo binary_type="PHP" php_cgi="C:\Users\Marek Hanzal\projects\edde-framework\edde-framework\.runtime\.php\php-cgi.exe" php_cli="C:\Users\Marek Hanzal\projects\edde-framework\edde-framework\.runtime\.php\php.exe" path_separator=";" version="7.0.13">
           <additional_php_ini />
           <configuration_file>C:\Users\Marek Hanzal\projects\edde-framework\edde-framework\.runtime\.php\php.ini</configuration_file>
           <configuration_options>
@@ -29,8 +29,6 @@
             <configuration_option name="auto_prepend_file" value="" />
             <configuration_option name="bcmath.scale" value="0" />
             <configuration_option name="browscap" value="" />
-            <configuration_option name="cli.pager" value="" />
-            <configuration_option name="cli.prompt" value="\b \&gt; " />
             <configuration_option name="curl.cainfo" value="" />
             <configuration_option name="date.default_latitude" value="31.7667" />
             <configuration_option name="date.default_longitude" value="35.2333" />
@@ -59,14 +57,14 @@
             <configuration_option name="exif.decode_unicode_motorola" value="UCS-2BE" />
             <configuration_option name="exif.encode_jis" value="" />
             <configuration_option name="exif.encode_unicode" value="ISO-8859-15" />
+            <configuration_option name="exit_on_timeout" value="0" />
             <configuration_option name="expose_php" value="" />
             <configuration_option name="extension_dir" value="ext" />
             <configuration_option name="file_uploads" value="1" />
             <configuration_option name="filter.default" value="unsafe_raw" />
             <configuration_option name="filter.default_flags" value="" />
             <configuration_option name="from" value="" />
-            <configuration_option name="gd.jpeg_ignore_warning" value="1" />
-            <configuration_option name="hard_timeout" value="2" />
+            <configuration_option name="gd.jpeg_ignore_warning" value="0" />
             <configuration_option name="highlight.comment" value="#FF8000" />
             <configuration_option name="highlight.default" value="#0000BB" />
             <configuration_option name="highlight.html" value="#000000" />
@@ -148,19 +146,19 @@
             <configuration_option name="session.cookie_lifetime" value="0" />
             <configuration_option name="session.cookie_path" value="/" />
             <configuration_option name="session.cookie_secure" value="" />
+            <configuration_option name="session.entropy_file" value="" />
+            <configuration_option name="session.entropy_length" value="0" />
             <configuration_option name="session.gc_divisor" value="1000" />
             <configuration_option name="session.gc_maxlifetime" value="1440" />
             <configuration_option name="session.gc_probability" value="1" />
+            <configuration_option name="session.hash_bits_per_character" value="5" />
+            <configuration_option name="session.hash_function" value="1" />
             <configuration_option name="session.lazy_write" value="1" />
             <configuration_option name="session.name" value="session" />
             <configuration_option name="session.referer_check" value="" />
             <configuration_option name="session.save_handler" value="files" />
             <configuration_option name="session.save_path" value="" />
             <configuration_option name="session.serialize_handler" value="php" />
-            <configuration_option name="session.sid_bits_per_character" value="4" />
-            <configuration_option name="session.sid_length" value="32" />
-            <configuration_option name="session.trans_sid_hosts" value="" />
-            <configuration_option name="session.trans_sid_tags" value="a=href,area=href,frame=src,form=" />
             <configuration_option name="session.upload_progress.cleanup" value="1" />
             <configuration_option name="session.upload_progress.enabled" value="1" />
             <configuration_option name="session.upload_progress.freq" value="1%" />
@@ -184,7 +182,6 @@
             <configuration_option name="unserialize_callback_func" value="" />
             <configuration_option name="upload_max_filesize" value="256M" />
             <configuration_option name="upload_tmp_dir" value="" />
-            <configuration_option name="url_rewriter.hosts" value="" />
             <configuration_option name="url_rewriter.tags" value="a=href,area=href,frame=src,input=src,form=fakeentry" />
             <configuration_option name="user_agent" value="" />
             <configuration_option name="user_dir" value="" />
@@ -264,7 +261,7 @@
             <configuration_option name="zlib.output_handler" value="" />
           </configuration_options>
           <debuggers>
-            <debugger_info debugger="xdebug" debugger_version="2.5.0rc1">
+            <debugger_info debugger="xdebug" debugger_version="2.4.1">
               <debug_extensions />
             </debugger_info>
           </debuggers>
@@ -298,7 +295,6 @@
             <extension name="openssl" />
             <extension name="pcre" />
             <extension name="pdo_sqlite" />
-            <extension name="readline" />
             <extension name="session" />
             <extension name="soap" />
             <extension name="sockets" />
@@ -317,7 +313,7 @@
       </interpreter>
     </phpInfoCache>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
+  <component name="PhpProjectSharedConfiguration" php_language_level="7" />
   <component name="PhpUnit">
     <phpunit_settings>
       <PhpUnitSettings load_method="CUSTOM_LOADER" bootstrap_file_path="$PROJECT_DIR$/src/loader.php" configuration_file_path="$PROJECT_DIR$/phpunit.xml" custom_loader_path="$PROJECT_DIR$/vendor/autoload.php" phpunit_phar_path="$PROJECT_DIR$/bin/phpunit.phar" use_bootstrap_file="true" use_configuration_file="true" />
