@@ -18,7 +18,7 @@
 	 */
 	class ReflectionUtils extends AbstractObject {
 		/**
-		 * @var \ReflectionProperty[]|ReflectionClass[]
+		 * @var \ReflectionProperty[]|ReflectionClass[]|ReflectionMethod[]
 		 */
 		static protected $cache;
 
@@ -78,7 +78,7 @@
 		 *
 		 * @return ReflectionFunction|ReflectionMethod
 		 */
-		public static function getMethodReflection($callback) {
+		static public function getMethodReflection($callback) {
 			if (is_string($callback) && class_exists($callback)) {
 				$reflectionClass = self::getReflectionClass($callback);
 				$callback = $reflectionClass->hasMethod('__construct') ? [
@@ -124,12 +124,26 @@
 		 *
 		 * @return IParameter[]
 		 */
-		public static function getParameterList($callback): array {
+		static public function getParameterList($callback): array {
 			$parameterList = [];
 			$reflection = ReflectionUtils::getMethodReflection($callback);
 			foreach ($reflection->getParameters() as $reflectionParameter) {
 				$parameterList[$reflectionParameter->getName()] = new Parameter($reflectionParameter->getName(), ($class = $reflectionParameter->getClass()) ? $class->getName() : null, $reflectionParameter->isOptional());
 			}
 			return $parameterList;
+		}
+
+		/**
+		 * @param $reflectionClass
+		 * @param int|null $filter
+		 *
+		 * @return ReflectionMethod[]
+		 */
+		static public function getMethodList($reflectionClass, int $filter = null): array {
+			if (isset(self::$cache[$cacheId = 'method-list/' . $filter . '/' . (is_object($reflectionClass) ? get_class($reflectionClass) : $reflectionClass)]) === false) {
+				self::$cache[$cacheId] = self::getReflectionClass($reflectionClass)
+					->getMethods($filter ?: 0);
+			}
+			return self::$cache[$cacheId];
 		}
 	}

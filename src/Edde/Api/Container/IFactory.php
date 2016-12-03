@@ -30,7 +30,18 @@
 		/**
 		 * return set of property name (key) and dependency name (value)
 		 *
+		 * @param string $name
+		 *
 		 * @return array
 		 */
-		public function getLazyInjectList(): array;
+		public function getInjectList(string $name): array;
+
+		/**
+		 * return set of property name (key) and dependency name (value)
+		 *
+		 * @param string $name
+		 *
+		 * @return IParameter[]
+		 */
+		public function getLazyInjectList(string $name): array;
 	}
