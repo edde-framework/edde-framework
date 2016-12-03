@@ -18,6 +18,18 @@
 	 */
 	class ReflectionUtils extends AbstractObject {
 		/**
+		 * @var \ReflectionProperty[]|ReflectionClass[]
+		 */
+		static protected $cache;
+
+		static public function getReflectionClass($class): ReflectionClass {
+			if (isset(self::$cache[$cacheId = 'class/' . (is_object($class) ? get_class($class) : $class)]) === false) {
+				self::$cache[$cacheId] = new ReflectionClass($class);
+			}
+			return self::$cache[$cacheId];
+		}
+
+		/**
 		 * bypass property visibility and set a given value
 		 *
 		 * @param $object
@@ -28,10 +40,12 @@
 		 */
 		static public function setProperty($object, string $property, $value) {
 			try {
-				$reflectionClass = new \ReflectionClass($object);
-				$reflectionProperty = $reflectionClass->getProperty($property);
-				$reflectionProperty->setAccessible(true);
-				$reflectionProperty->setValue($object, $value);
+				if (isset(self::$cache[$cacheId = 'property/' . (is_object($object) ? get_class($object) : $object) . $property]) === false) {
+					$reflectionClass = new ReflectionClass($object);
+					self::$cache[$cacheId] = $reflectionProperty = $reflectionClass->getProperty($property);
+					$reflectionProperty->setAccessible(true);
+				}
+				self::$cache[$cacheId]->setValue($object, $value);
 			} catch (\ReflectionException $exception) {
 				throw new ReflectionException(sprintf('Property [%s::$%s] does not exists.', get_class($object), $property));
 			}
@@ -48,10 +62,12 @@
 		 */
 		static public function getProperty($object, string $property) {
 			try {
-				$reflectionClass = new \ReflectionClass($object);
-				$reflectionProperty = $reflectionClass->getProperty($property);
-				$reflectionProperty->setAccessible(true);
-				return $reflectionProperty->getValue($object);
+				if (isset(self::$cache[$cacheId = 'property/' . (is_object($object) ? get_class($object) : $object) . $property]) === false) {
+					$reflectionClass = new ReflectionClass($object);
+					self::$cache[$cacheId] = $reflectionProperty = $reflectionClass->getProperty($property);
+					$reflectionProperty->setAccessible(true);
+				}
+				return self::$cache[$cacheId]->getValue($object);
 			} catch (\ReflectionException $exception) {
 				throw new ReflectionException(sprintf('Property [%s::$%s] does not exists.', get_class($object), $property));
 			}
@@ -64,7 +80,7 @@
 		 */
 		public static function getMethodReflection($callback) {
 			if (is_string($callback) && class_exists($callback)) {
-				$reflectionClass = new ReflectionClass($callback);
+				$reflectionClass = self::getReflectionClass($callback);
 				$callback = $reflectionClass->hasMethod('__construct') ? [
 					$callback,
 					'__construct',
@@ -109,11 +125,11 @@
 		 * @return IParameter[]
 		 */
 		public static function getParameterList($callback): array {
+			$parameterList = [];
 			$reflection = ReflectionUtils::getMethodReflection($callback);
-			$dependencyList = [];
 			foreach ($reflection->getParameters() as $reflectionParameter) {
-				$dependencyList[$reflectionParameter->getName()] = new Parameter($reflectionParameter->getName(), ($class = $reflectionParameter->getClass()) ? $class->getName() : null, $reflectionParameter->isOptional());
+				$parameterList[$reflectionParameter->getName()] = new Parameter($reflectionParameter->getName(), ($class = $reflectionParameter->getClass()) ? $class->getName() : null, $reflectionParameter->isOptional());
 			}
-			return $dependencyList;
+			return $parameterList;
 		}
 	}

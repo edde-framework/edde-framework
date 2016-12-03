@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "820aa31d46c58ea3589b652233a2f06a",
+    "hash": "f4fab26c94c74dc39cca60125a1930e9",
     "content-hash": "46db3fb8d63732829663c10dc0ea0ccb",
     "packages": [
         {
@@ -144,12 +144,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tracy.git",
-                "reference": "bb68aaf0df103a3262d0c37d21662f811d6f2f72"
+                "reference": "cf59d9cceb3a9c1ed9253b864dd2498043bbaae5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tracy/zipball/bb68aaf0df103a3262d0c37d21662f811d6f2f72",
-                "reference": "bb68aaf0df103a3262d0c37d21662f811d6f2f72",
+                "url": "https://api.github.com/repos/nette/tracy/zipball/cf59d9cceb3a9c1ed9253b864dd2498043bbaae5",
+                "reference": "cf59d9cceb3a9c1ed9253b864dd2498043bbaae5",
                 "shasum": ""
             },
             "require": {
@@ -198,7 +198,7 @@
                 "debugger",
                 "nette"
             ],
-            "time": "2016-11-21 18:07:15"
+            "time": "2016-11-30 23:11:40"
         }
     ],
     "aliases": [],
