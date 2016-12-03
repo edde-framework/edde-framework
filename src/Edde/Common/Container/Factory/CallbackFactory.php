@@ -5,7 +5,7 @@
 
 	use Edde\Api\Callback\IParameter;
 	use Edde\Api\Container\IContainer;
-	use Edde\Common\Callback\CallbackUtils;
+	use Edde\Common\Reflection\ReflectionUtils;
 
 	/**
 	 * Callback cache will use callable as cache method.
@@ -37,7 +37,7 @@
 		 */
 		public function getParameterList(string $name = null): array {
 			if ($this->parameterList === null) {
-				$this->parameterList = CallbackUtils::getParameterList($this->callback);
+				$this->parameterList = ReflectionUtils::getParameterList($this->callback);
 			}
 			return $this->parameterList;
 		}

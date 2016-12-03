@@ -6,7 +6,7 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Log\LazyLogServiceTrait;
-	use Edde\Common\Callback\CallbackUtils;
+	use Edde\Common\Reflection\ReflectionUtils;
 
 	/**
 	 * Magical implementation of callback search mechanism based on "class exists".
@@ -73,7 +73,7 @@
 		 * @inheritdoc
 		 */
 		public function getParameterList(string $name = null): array {
-			return CallbackUtils::getParameterList($this->discover($name));
+			return ReflectionUtils::getParameterList($this->discover($name));
 		}
 
 		/**

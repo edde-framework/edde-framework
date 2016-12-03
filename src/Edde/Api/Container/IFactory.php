@@ -21,7 +21,16 @@
 		/**
 		 * return set of required "hard" dependencies to execute this factory (constructor, lambda, ...)
 		 *
-		 * @return IParameter[]|iterable
+		 * @param string $name
+		 *
+		 * @return array|IParameter[]
 		 */
-		public function getMandatoryList(string $name): iterable;
+		public function getMandatoryList(string $name): array;
+
+		/**
+		 * return set of property name (key) and dependency name (value)
+		 *
+		 * @return array
+		 */
+		public function getLazyInjectList(): array;
 	}

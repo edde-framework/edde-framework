@@ -5,6 +5,7 @@
 
 	use Edde\Api\Callback\ICallback;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Reflection\ReflectionUtils;
 
 	class Callback extends AbstractObject implements ICallback {
 		/**
@@ -39,7 +40,7 @@
 		 */
 		public function getParameterList(): array {
 			if ($this->parameterList === null) {
-				$this->parameterList = CallbackUtils::getParameterList($this->callback);
+				$this->parameterList = ReflectionUtils::getParameterList($this->callback);
 			}
 			return $this->parameterList;
 		}

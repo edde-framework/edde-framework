@@ -10,7 +10,7 @@
 	use Edde\Api\Crypt\CryptException;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Common\AbstractObject;
-	use Edde\Common\Callback\CallbackUtils;
+	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Schema\Schema;
 	use Edde\Common\Schema\SchemaProperty;
 
@@ -224,7 +224,7 @@
 			if ($this->schema->hasLink($name) === false) {
 				throw new CrateException(sprintf('Crate [%s] has no link [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
 			}
-			$callback = CallbackUtils::getReflection($crate);
+			$callback = ReflectionUtils::getMethodReflection($crate);
 			if (($returnType = $callback->getReturnType()) === null || (string)$returnType !== ICrate::class) {
 				throw new CrateException(sprintf('Proxied callable must have [%s] return typehint in crate [%s].', ICrate::class, static::class));
 			}
