@@ -41,7 +41,7 @@
 		 */
 		protected $fragment = '';
 
-		static public function create($url = null) {
+		static public function create($url = null): IUrl {
 			if ($url instanceof IUrl) {
 				return $url;
 			}

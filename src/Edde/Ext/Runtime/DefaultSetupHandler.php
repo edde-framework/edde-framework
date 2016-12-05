@@ -3,6 +3,7 @@
 
 	namespace Edde\Ext\Runtime;
 
+	use Edde\Api\Acl\IAcl;
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Application\IErrorControl;
 	use Edde\Api\Application\IRequest;
@@ -246,6 +247,9 @@
 					IIdentityManager::class => IdentityManager::class,
 					IIdentity::class => function (IIdentityManager $identityManager) {
 						return $identityManager->identity();
+					},
+					IAcl::class => function (IIdentity $identity) {
+						return $identity->getAcl();
 					},
 					IEventBus::class => EventBus::class,
 					ICrateLoader::class => CrateLoader::class,
