@@ -21,8 +21,9 @@
 		 *
 		 * @param string $resource
 		 * @param \DateTime|null $dateTime
+		 * @param bool $default
 		 *
 		 * @return bool
 		 */
-		public function can(string $resource, \DateTime $dateTime = null): bool;
+		public function can(string $resource, \DateTime $dateTime = null, bool $default = null): bool;
 	}

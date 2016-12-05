@@ -29,16 +29,16 @@
 		 * @inheritdoc
 		 * @throws AclException
 		 */
-		public function can(string $resource, \DateTime $dateTime = null): bool {
-			if (isset($this->aclList[$resource]) === false && isset($this->aclList[null]) === false) {
+		public function can(string $resource, \DateTime $dateTime = null, bool $default = null): bool {
+			if ($default !== null && isset($this->aclList[$resource]) === false && isset($this->aclList[null]) === false) {
 				throw new AclException(sprintf('Asking for unknown resource [%s].', $resource));
 			}
-			$can = false;
+			$can = (bool)$default;
 			/** @noinspection UnnecessaryParenthesesInspection */
 			$stamp = ($dateTime ?: new \DateTime())->getTimestamp();
 			/** @var $from \DateTime */
 			/** @var $until \DateTime */
-			foreach ($this->aclList[$resource] ?? $this->aclList[null] as list($grant, $from, $until)) {
+			foreach ($this->aclList[$resource] ?? ($this->aclList[null] ?? []) as list($grant, $from, $until)) {
 				if (($from && $stamp < $from->getTimestamp()) || ($until && $stamp > $until->getTimestamp())) {
 					continue;
 				}
