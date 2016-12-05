@@ -30,7 +30,7 @@
 		 * @throws AclException
 		 */
 		public function can(string $resource, \DateTime $dateTime = null, bool $default = null): bool {
-			if ($default !== null && isset($this->aclList[$resource]) === false && isset($this->aclList[null]) === false) {
+			if ($default === null && isset($this->aclList[$resource]) === false && isset($this->aclList[null]) === false) {
 				throw new AclException(sprintf('Asking for unknown resource [%s].', $resource));
 			}
 			$can = (bool)$default;
