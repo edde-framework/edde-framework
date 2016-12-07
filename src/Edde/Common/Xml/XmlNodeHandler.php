@@ -28,7 +28,7 @@
 		}
 
 		public function onTextEvent(string $text) {
-			$this->current->setValue($text);
+			$this->current ? $this->current->setValue($text) : null;
 		}
 
 		public function onDocTypeEvent(string $docType) {
