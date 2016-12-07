@@ -145,6 +145,16 @@
 			], $handler->getTagList());
 		}
 
+		public function testXmlHeader() {
+			$this->xmlParser->file(__DIR__ . '/assets/xml-with-header.xml', $handler = new \TestXmlHandler());
+			self::assertEquals([
+				[
+					'foo',
+					[],
+				],
+			], $handler->getTagList());
+		}
+
 		public function testNewlineBetweenNodes() {
 			$this->xmlParser->file(__DIR__ . '/assets/newline-between-nodes.xml', $handler = new \TestXmlHandler());
 			self::assertEquals([

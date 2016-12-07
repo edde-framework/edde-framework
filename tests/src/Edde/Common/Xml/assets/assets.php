@@ -36,4 +36,7 @@
 				$attributeList,
 			];
 		}
+
+		public function onCloseHeaderEvent(string $tag) {
+		}
 	}

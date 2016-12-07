@@ -56,6 +56,9 @@
 			$this->current->addNode(new Node($tag, null, $attributeList));
 		}
 
+		public function onCloseHeaderEvent(string $tag) {
+		}
+
 		public function getNode(): INode {
 			if ($this->node === null) {
 				throw new XmlParserException('Nothing has been parsed. One cute kitten will be killed because of you!');
