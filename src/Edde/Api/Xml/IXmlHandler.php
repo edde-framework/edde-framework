@@ -33,4 +33,9 @@
 		 * @param array $attributeList
 		 */
 		public function onShortTagEvent(string $tag, array $attributeList);
+
+		/**
+		 * @param string $header
+		 */
+		public function onHeaderEvent(string $header);
 	}

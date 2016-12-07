@@ -28,6 +28,8 @@
 		const XML_TYPE_COMMENT = 32;
 		const XML_TYPE_OPEN_COMMENT = 64;
 		const XML_TYPE_CLOSE_COMMENT = 128;
+		const XML_TYPE_HEADER = 256;
+		const XML_TYPE_CLOSE_HEADER = 512;
 
 		/**
 		 * @inheritdoc
@@ -108,6 +110,17 @@
 						$type = self::XML_TYPE_DOCTYPE;
 						$name .= $char;
 						break;
+					case '?':
+						if ($type === self::XML_TYPE_HEADER) {
+							$type = self::XML_TYPE_CLOSE_HEADER;
+							break;
+						}
+						if ($last !== '<') {
+							throw new XmlParserException(sprintf('Unexpected token [%s] while reading open tag.', $char));
+						}
+						$type = self::XML_TYPE_HEADER;
+						$name .= $char;
+						break;
 					case '-':
 						switch ($type) {
 							case self::XML_TYPE_DOCTYPE:
@@ -146,6 +159,9 @@
 								break;
 							case self::XML_TYPE_CLOSETAG:
 								$xmlHandler->onCloseTagEvent($name);
+								break;
+							case self::XML_TYPE_CLOSE_HEADER:
+								$xmlHandler->onHeaderEvent($name);
 								break;
 						}
 						return;

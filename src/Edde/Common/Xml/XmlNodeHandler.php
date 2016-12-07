@@ -28,7 +28,7 @@
 		}
 
 		public function onTextEvent(string $text) {
-			$this->current->setValue($text);
+			$this->current ? $this->current->setValue($text) : null;
 		}
 
 		public function onDocTypeEvent(string $docType) {
@@ -54,6 +54,9 @@
 				return;
 			}
 			$this->current->addNode(new Node($tag, null, $attributeList));
+		}
+
+		public function onHeaderEvent(string $header) {
 		}
 
 		public function getNode(): INode {
