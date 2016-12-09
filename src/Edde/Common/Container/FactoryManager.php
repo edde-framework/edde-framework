@@ -3,107 +3,56 @@
 
 	namespace Edde\Common\Container;
 
-	use Edde\Api\Cache\ICacheManager;
+	use Edde\Api\Cache\ICache;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\IFactoryManager;
-	use Edde\Common\Cache\CacheTrait;
-	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Serializable\AbstractSerializable;
 
 	/**
 	 * Default implementation of a cache manager.
 	 */
 	class FactoryManager extends AbstractSerializable implements IFactoryManager {
-		use CacheTrait;
+		/**
+		 * @var ICache
+		 */
+		protected $cache;
 		/**
 		 * @var IFactory[]
 		 */
 		protected $factoryList = [];
-		protected $handleList = [];
 
 		/**
-		 * @param ICacheManager $cacheManager
+		 * @param ICache $cache
 		 */
-		public function __construct(ICacheManager $cacheManager) {
-			$this->cacheManager = $cacheManager;
+		public function __construct(ICache $cache) {
+			$this->cache = $cache;
 		}
 
-		/**
-		 * @inheritdoc
-		 * @throws FactoryException
-		 */
-		public function registerFactoryList(array $factoryList): IFactoryManager {
-			foreach (FactoryFactory::createList($factoryList) as $name => $factory) {
-				$this->registerFactory($name, $factory);
-			}
+		public function registerFactoryList($factoryList): IFactoryManager {
+			$this->factoryList = array_merge($this->factoryList, $factoryList);
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function registerFactory(string $name, IFactory $factory): IFactoryManager {
-			$this->factoryList[$name] = $factory;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getFactory(string $name): IFactory {
+		public function getFactory($dependency): IFactory {
 			$this->use();
-			if ($factory = $this->cache->load($cacheId = __FUNCTION__ . $name)) {
-				return $this->factoryList[$factory];
-			}
-			if ($this->hasFactory($name) === false) {
-				throw new FactoryException(sprintf('Requested unknown factory [%s].', $name));
-			}
-			if (isset($this->factoryList[$name])) {
-				$factory = $this->factoryList[$name];
-				if ($factory->canHandle($name) === false) {
-					throw new FactoryException(sprintf('Requested factory cannot handle identifier [%s].', $name));
-				}
-				$this->cache->save($cacheId, $name);
-				return $factory;
-			}
-			foreach ($this->factoryList as $factoryName => $factory) {
-				if ($factory->canHandle($name)) {
-					$this->cache->save($cacheId, $factoryName);
+			foreach ($this->factoryList as $factory) {
+				if ($factory->canHandle($dependency)) {
 					return $factory;
 				}
 			}
-			throw new FactoryException(sprintf('Some strange bug here for factory [%s].', $name));
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function hasFactory(string $name): bool {
-			$this->use();
-			if ($factory = $this->cache->load($cacheId = __FUNCTION__ . $name)) {
-				return $factory;
-			}
-			if (isset($this->factoryList[$name])) {
-				return $this->cache->save($cacheId, true);
-			}
-			foreach ($this->factoryList as $factory) {
-				if ($factory->canHandle($name)) {
-					return $this->cache->save($cacheId, true);
-				}
-			}
-			return $this->cache->save($cacheId, false);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getFactoryList(): array {
-			return $this->factoryList;
+			throw new FactoryException(sprintf('Cannot find factory for the given dependency [%s].', is_string($dependency) ? $dependency : gettype($dependency)));
 		}
 
 		protected function onBootstrap() {
 			parent::onBootstrap();
-			$this->cache();
+			$factoryList = [];
+			foreach ($this->factoryList as $name => $factory) {
+				if ($factory instanceof IFactory) {
+					$factoryList[] = $factory;
+				}
+				$factory->setCache($this->cache);
+			}
+			$this->factoryList = $factoryList;
 		}
 	}

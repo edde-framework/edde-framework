@@ -5,10 +5,8 @@
 
 	use Closure;
 	use Edde\Api\Callback\ICallback;
-	use Edde\Api\Callback\IParameter;
 	use Edde\Api\Reflection\ReflectionException;
 	use Edde\Common\AbstractObject;
-	use Edde\Common\Callback\Parameter;
 	use ReflectionClass;
 	use ReflectionFunction;
 	use ReflectionMethod;
@@ -122,27 +120,27 @@
 		/**
 		 * @param callable|string $callback
 		 *
-		 * @return IParameter[]
+		 * @return \ReflectionParameter[]
 		 */
 		static public function getParameterList($callback): array {
 			$parameterList = [];
 			$reflection = ReflectionUtils::getMethodReflection($callback);
 			foreach ($reflection->getParameters() as $reflectionParameter) {
-				$parameterList[$reflectionParameter->getName()] = new Parameter($reflectionParameter->getName(), ($class = $reflectionParameter->getClass()) ? $class->getName() : null, $reflectionParameter->isOptional());
+				$parameterList[$reflectionParameter->getName()] = $reflectionParameter;
 			}
 			return $parameterList;
 		}
 
 		/**
-		 * @param $reflectionClass
+		 * @param mixed $class
 		 * @param int|null $filter
 		 *
 		 * @return ReflectionMethod[]
 		 */
-		static public function getMethodList($reflectionClass, int $filter = null): array {
-			if (isset(self::$cache[$cacheId = 'method-list/' . $filter . '/' . (is_object($reflectionClass) ? get_class($reflectionClass) : $reflectionClass)]) === false) {
-				self::$cache[$cacheId] = self::getReflectionClass($reflectionClass)
-					->getMethods($filter ?: 0);
+		static public function getMethodList($class, int $filter = null): array {
+			if (isset(self::$cache[$cacheId = 'method-list/' . $filter . '/' . (is_object($class) ? get_class($class) : $class)]) === false) {
+				$reflectionClass = self::getReflectionClass($class);
+				self::$cache[$cacheId] = $filter ? $reflectionClass->getMethods($filter) : $reflectionClass->getMethods();
 			}
 			return self::$cache[$cacheId];
 		}

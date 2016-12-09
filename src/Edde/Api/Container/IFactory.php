@@ -3,45 +3,32 @@
 
 	namespace Edde\Api\Container;
 
-	use Edde\Api\Callback\IParameter;
+	use Edde\Api\Cache\ICache;
 
 	/**
 	 * Factory is general way how to build a dependency with the final set of parameters/dependencies.
 	 */
 	interface IFactory {
 		/**
-		 * can this factory handle the given input (class/interface/...)?
+		 * @param ICache $cache
 		 *
-		 * @param string $canHandle
+		 * @return IFactory
+		 */
+		public function setCache(ICache $cache): IFactory;
+
+		/**
+		 * is this factory able to handle the given input?
+		 *
+		 * @param mixed $dependency
 		 *
 		 * @return bool
 		 */
-		public function canHandle(string $canHandle): bool;
+		public function canHandle($dependency): bool;
 
 		/**
-		 * return set of required "hard" dependencies to execute this factory (constructor, lambda, ...)
+		 * @param $dependency
 		 *
-		 * @param string $name
-		 *
-		 * @return array|IParameter[]
+		 * @return IDependency
 		 */
-		public function getMandatoryList(string $name): array;
-
-		/**
-		 * return set of property name (key) and dependency name (value)
-		 *
-		 * @param string $name
-		 *
-		 * @return array
-		 */
-		public function getInjectList(string $name): array;
-
-		/**
-		 * return set of property name (key) and dependency name (value)
-		 *
-		 * @param string $name
-		 *
-		 * @return IParameter[]
-		 */
-		public function getLazyInjectList(string $name): array;
+		public function dependency($dependency): IDependency;
 	}
