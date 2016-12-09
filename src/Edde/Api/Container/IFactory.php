@@ -31,4 +31,11 @@
 		 * @return IDependency
 		 */
 		public function dependency($dependency): IDependency;
+
+		/**
+		 * 90% usecase is to return self, but in some rare cases factory can return another factory
+		 *
+		 * @return IFactory
+		 */
+		public function getFactory(): IFactory;
 	}

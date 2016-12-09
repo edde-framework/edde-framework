@@ -10,6 +10,7 @@
 	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Serializable\AbstractSerializable;
 	use Edde\Ext\Container\CallbackFactory;
+	use Edde\Ext\Container\CallbackProxyFactory;
 
 	/**
 	 * Default implementation of a cache manager.
@@ -47,7 +48,7 @@
 			$this->use();
 			foreach ($this->factoryList as $factory) {
 				if ($factory->canHandle($dependency)) {
-					return $factory;
+					return $factory->getFactory();
 				}
 			}
 			throw new FactoryException(sprintf('Cannot find factory for the given dependency [%s].', is_string($dependency) ? $dependency : gettype($dependency)));
@@ -58,7 +59,9 @@
 			$factoryList = [];
 			/** @var mixed $factory */
 			foreach ($this->factoryList as $name => $factory) {
-				if (is_callable($factory)) {
+				if (is_array($factory) && is_string(reset($factory))) {
+					$factory = new CallbackProxyFactory($name, reset($factory), end($factory), $this);
+				} else if (is_callable($factory)) {
 					if (is_string($name) === false) {
 						$name = (string)ReflectionUtils::getMethodReflection($factory)
 							->getReturnType();

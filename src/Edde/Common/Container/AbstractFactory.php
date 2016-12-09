@@ -32,4 +32,8 @@
 		protected function load(string $id, $default = null) {
 			return $this->cache ? $this->cache->load($id, $default) : $default;
 		}
+
+		public function getFactory(): IFactory {
+			return $this;
+		}
 	}

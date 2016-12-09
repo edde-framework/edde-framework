@@ -20,7 +20,11 @@
 				function (ICache $cache): ICache {
 					return $cache;
 				},
-				new ClassFactory(),
+				\ThisIsProductOfCleverManager::class => [
+					\ThisIsCleverManager::class,
+					'createCleverProduct',
+				],
+				$classFactory = new ClassFactory(),
 			]);
 			$factory = $factoryManager->getFactory(\Something::class);
 			self::assertSame($factory->dependency(\Something::class), $dependency = $factory->dependency(\Something::class));
@@ -30,5 +34,8 @@
 
 			$factory = $factoryManager->getFactory(ICache::class);
 			self::assertSame($factory->dependency(ICache::class), $dependency = $factory->dependency(ICache::class));
+
+			self::assertEquals($classFactory, $factory = $factoryManager->getFactory(\ThisIsProductOfCleverManager::class));
+			self::assertSame($factory->dependency(\ThisIsProductOfCleverManager::class), $dependency = $factory->dependency(\ThisIsProductOfCleverManager::class));
 		}
 	}
