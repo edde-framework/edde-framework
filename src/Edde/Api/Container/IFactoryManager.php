@@ -5,7 +5,7 @@
 
 	interface IFactoryManager {
 		/**
-		 * @param iterable $factoryList
+		 * @param array $factoryList
 		 *
 		 * @return IFactoryManager
 		 */

@@ -7,7 +7,9 @@
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\IFactoryManager;
+	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Serializable\AbstractSerializable;
+	use Edde\Ext\Container\CallbackFactory;
 
 	/**
 	 * Default implementation of a cache manager.
@@ -29,11 +31,18 @@
 			$this->cache = $cache;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function registerFactoryList($factoryList): IFactoryManager {
 			$this->factoryList = array_merge($this->factoryList, $factoryList);
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws FactoryException
+		 */
 		public function getFactory($dependency): IFactory {
 			$this->use();
 			foreach ($this->factoryList as $factory) {
@@ -47,10 +56,19 @@
 		protected function onBootstrap() {
 			parent::onBootstrap();
 			$factoryList = [];
+			/** @var mixed $factory */
 			foreach ($this->factoryList as $name => $factory) {
-				if ($factory instanceof IFactory) {
-					$factoryList[] = $factory;
+				if (is_callable($factory)) {
+					if (is_string($name) === false) {
+						$name = (string)ReflectionUtils::getMethodReflection($factory)
+							->getReturnType();
+					}
+					$factory = new CallbackFactory($name, $factory);
+				} else if ($factory instanceof IFactory) {
+				} else {
+					throw new FactoryException(sprintf('Cannot recognize input factory type [%s].', is_string($factory) ? $factoryList : gettype($factory)));
 				}
+				$factoryList[] = $factory;
 				$factory->setCache($this->cache);
 			}
 			$this->factoryList = $factoryList;
