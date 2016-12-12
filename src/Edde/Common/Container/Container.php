@@ -107,16 +107,14 @@
 					$reflectionProperty->setValue($instance, $this->create(($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName()));
 				}
 			}
-			if ($instance instanceof ILazyInject) {
-				foreach ($dependency->getLazyList() as $lazyList) {
-					/** @var $reflectionParameter \ReflectionParameter */
-					/** @var $reflectionProperty \ReflectionProperty */
-					/** @noinspection ForeachSourceInspection */
-					foreach ($lazyList as list($reflectionParameter, $reflectionProperty)) {
-						$instance->lazy($reflectionProperty->getName(), function () use ($reflectionParameter) {
-							return $this->create(($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName());
-						});
-					}
+			foreach ($instance instanceof ILazyInject ? $dependency->getLazyList() : [] as $lazyList) {
+				/** @var $reflectionParameter \ReflectionParameter */
+				/** @var $reflectionProperty \ReflectionProperty */
+				/** @noinspection ForeachSourceInspection */
+				foreach ($lazyList as list($reflectionParameter, $reflectionProperty)) {
+					$instance->lazy($reflectionProperty->getName(), function () use ($reflectionParameter) {
+						return $this->create(($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName());
+					});
 				}
 			}
 			return $instance;
