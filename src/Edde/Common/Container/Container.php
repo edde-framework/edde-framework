@@ -55,12 +55,12 @@
 		 * @inheritdoc
 		 * @throws ContainerException
 		 */
-		public function inject($instance) {
+		public function inject($instance, IFactory $factory = null) {
 			if (is_object($instance) === false) {
 				return $instance;
 			}
 			$this->use();
-			$factory = $this->getFactory($instance);
+			$factory = $factory ?: $this->getFactory($instance);
 			$dependency = $factory->dependency($instance);
 			return $instance;
 		}
@@ -101,6 +101,6 @@
 				}
 				$dependencyList[] = $this->factory($this->getFactory($class = (($class = $parameter->getClass()) ? $class->getName() : $parameter->getName())), $class);
 			}
-			return $factory->execute(array_merge($dependencyList, $parameterList), $name);
+			return $this->inject($factory->execute(array_merge($dependencyList, $parameterList), $name), $factory);
 		}
 	}

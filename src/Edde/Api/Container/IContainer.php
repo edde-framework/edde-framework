@@ -56,8 +56,9 @@
 		 * provides all aditional dependencies for the given instance
 		 *
 		 * @param mixed $instance
+		 * @param IFactory $factory
 		 *
 		 * @return mixed return input instance (input is same as output)
 		 */
-		public function inject($instance);
+		public function inject($instance, IFactory $factory = null);
 	}
