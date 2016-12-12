@@ -69,7 +69,6 @@
 				/** @var $reflectionProperty \ReflectionProperty */
 				/** @noinspection ForeachSourceInspection */
 				foreach ($injectList as list($reflectionParameter, $reflectionProperty)) {
-					$reflectionProperty->setAccessible(true);
 					$reflectionProperty->setValue($instance, $this->create(($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName()));
 				}
 			}
