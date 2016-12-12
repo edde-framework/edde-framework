@@ -4,6 +4,7 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Cache\ICache;
+	use Edde\Api\Container\IFactoryManager;
 	use Edde\Common\Cache\CacheManager;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Container\ClassFactory;
@@ -16,13 +17,18 @@
 			$factoryManager = new FactoryManager(new CacheManager(new InMemoryCacheStorage()));
 			$factoryManager->registerFactoryList([
 				'foo' => function ($a, $b) {
+					return new class() {
+						public function abc() {
+						}
+					};
 				},
 				function (ICache $cache): ICache {
 					return $cache;
 				},
 				$factoryManager->proxy(\ThisIsProductOfCleverManager::class, \ThisIsCleverManager::class, 'createCleverProduct'),
 				$classFactory = new ClassFactory(),
-			]);
+			], function (IFactoryManager $factoryManager) {
+			});
 			$factory = $factoryManager->getFactory(\Something::class);
 			self::assertSame($factory->dependency(\Something::class), $dependency = $factory->dependency(\Something::class));
 

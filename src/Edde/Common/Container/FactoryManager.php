@@ -35,7 +35,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function registerFactoryList($factoryList): IFactoryManager {
+		public function registerFactoryList($factoryList, callable $deffered): IFactoryManager {
 			$this->factoryList = array_merge($this->factoryList, $factoryList);
 			return $this;
 		}
@@ -74,6 +74,7 @@
 				}
 				$factoryList[] = $factory;
 				$factory->setCache($this->cache);
+				$factory->getCode();
 			}
 			$this->factoryList = $factoryList;
 		}

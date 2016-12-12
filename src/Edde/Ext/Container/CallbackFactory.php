@@ -43,4 +43,8 @@
 			}
 			return $source;
 		}
+
+		public function getCode(): string {
+			return ReflectionUtils::getCode($this->callback);
+		}
 	}

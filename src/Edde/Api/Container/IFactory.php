@@ -38,4 +38,11 @@
 		 * @return IFactory
 		 */
 		public function getFactory(): IFactory;
+
+		/**
+		 * this should export factory as a php code fragment to be executed later
+		 *
+		 * @return string
+		 */
+		public function getCode(): string;
 	}

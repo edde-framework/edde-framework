@@ -50,4 +50,8 @@
 			}
 			return $source;
 		}
+
+		public function getCode(): string {
+			return '';
+		}
 	}

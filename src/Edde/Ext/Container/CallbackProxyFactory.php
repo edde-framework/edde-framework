@@ -54,4 +54,9 @@
 		public function getFactory(): IFactory {
 			return $this->factoryManager->getFactory($this->factory);
 		}
+
+		public function getCode(): string {
+			return $this->getFactory()
+				->getCode();
+		}
 	}
