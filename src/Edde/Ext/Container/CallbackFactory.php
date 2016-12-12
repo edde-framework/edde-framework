@@ -31,7 +31,11 @@
 		 * @inheritdoc
 		 */
 		public function canHandle($dependency): bool {
-			return is_string($dependency) && $dependency === $this->name;
+			if ($this->name === null) {
+				$this->name = (string)ReflectionUtils::getMethodReflection($this->callback)
+					->getReturnType();
+			}
+			return $dependency === $this->name;
 		}
 
 		/**
