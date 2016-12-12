@@ -146,38 +146,39 @@
 		}
 
 		static public function getCode(callable $callback): string {
-			$reflectionMethod = self::getMethodReflection($callback);
-			$source = implode('', array_map('trim', array_slice(explode("\n", file_get_contents($reflectionMethod->getFileName())), $start = ($reflectionMethod->getStartLine() - 1), $reflectionMethod->getEndLine() - $start)));
-			$index = 0;
-			$start = null;
-			$end = 0;
-			$track = 0;
-			foreach (token_get_all("<?php $source") as $token) {
-				list($token, $fragment) = is_array($token) ? $token : [
-					$token,
-					$token,
-				];
-				switch ($token) {
-					case T_FUNCTION:
-						if ($start === null) {
-							/** 6 because of fake opening php tag*/
-							$start = $index - 6;
-						}
-						break;
-					case '{':
-						if ($start !== null) {
-							$track++;
-						}
-						break;
-					case '}':
-						if ($start !== null && --$track <= 0) {
-							$end = $index - 6;
-							break 2;
-						}
-						break;
-				}
-				$index += strlen($fragment);
-			}
-			return substr($source, $start, $end - $start + 1);
+//			$reflectionMethod = self::getMethodReflection($callback);
+//			$source = implode('', array_map('trim', array_slice(explode("\n", file_get_contents($reflectionMethod->getFileName())), $start = ($reflectionMethod->getStartLine() - 1), $reflectionMethod->getEndLine() - $start)));
+//			$index = 0;
+//			$start = null;
+//			$end = 0;
+//			$track = 0;
+//			foreach (token_get_all("<?php $source") as $token) {
+//				list($token, $fragment) = is_array($token) ? $token : [
+//					$token,
+//					$token,
+//				];
+//				switch ($token) {
+//					case T_FUNCTION:
+//						if ($start === null) {
+//							/** 6 because of fake opening php tag*/
+//							$start = $index - 6;
+//						}
+//						break;
+//					case '{':
+//						if ($start !== null) {
+//							$track++;
+//						}
+//						break;
+//					case '}':
+//						if ($start !== null && --$track <= 0) {
+//							$end = $index - 6;
+//							break 2;
+//						}
+//						break;
+//				}
+//				$index += strlen($fragment);
+//			}
+//			return substr($source, $start, $end - $start + 1);
+			return '';
 		}
 	}

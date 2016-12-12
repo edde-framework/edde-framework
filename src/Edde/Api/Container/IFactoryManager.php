@@ -6,11 +6,10 @@
 	interface IFactoryManager {
 		/**
 		 * @param array $factoryList
-		 * @param callable $deffered
 		 *
 		 * @return IFactoryManager
 		 */
-		public function registerFactoryList($factoryList, callable $deffered): IFactoryManager;
+		public function registerFactoryList($factoryList): IFactoryManager;
 
 		/**
 		 * @param mixed $dependency

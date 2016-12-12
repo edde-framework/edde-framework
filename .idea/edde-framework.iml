@@ -32,7 +32,6 @@
       <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/diff" />
       <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/environment" />
       <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/exporter" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/global-state" />
       <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/object-enumerator" />
       <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/recursion-context" />
       <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/resource-operations" />
@@ -105,7 +104,6 @@
           <root url="file://$MODULE_DIR$/lib/sebastian/diff" />
           <root url="file://$MODULE_DIR$/lib/sebastian/environment" />
           <root url="file://$MODULE_DIR$/lib/sebastian/exporter" />
-          <root url="file://$MODULE_DIR$/lib/sebastian/global-state" />
           <root url="file://$MODULE_DIR$/lib/sebastian/object-enumerator" />
           <root url="file://$MODULE_DIR$/lib/sebastian/recursion-context" />
           <root url="file://$MODULE_DIR$/lib/sebastian/resource-operations" />
@@ -143,7 +141,6 @@
           <root url="file://$MODULE_DIR$/lib/sebastian/diff" />
           <root url="file://$MODULE_DIR$/lib/sebastian/environment" />
           <root url="file://$MODULE_DIR$/lib/sebastian/exporter" />
-          <root url="file://$MODULE_DIR$/lib/sebastian/global-state" />
           <root url="file://$MODULE_DIR$/lib/sebastian/object-enumerator" />
           <root url="file://$MODULE_DIR$/lib/sebastian/recursion-context" />
           <root url="file://$MODULE_DIR$/lib/sebastian/resource-operations" />
