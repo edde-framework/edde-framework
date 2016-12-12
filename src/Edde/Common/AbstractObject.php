@@ -6,6 +6,6 @@
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Deffered\IDeffered;
 
-	abstract class AbstractObject implements IDeffered, ILazyInject {
+	abstract class AbstractObject implements IDeffered {
 		use ObjectTrait;
 	}
