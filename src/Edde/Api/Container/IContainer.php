@@ -30,7 +30,14 @@
 		 *
 		 * @return IFactory
 		 */
-		public function getFactory($dependency): IFactory;
+		public function getFactory(string $dependency): IFactory;
+
+		/**
+		 * @param mixed $dependency
+		 *
+		 * @return IDependency
+		 */
+		public function dependency(string $dependency): IDependency;
 
 		/**
 		 * create the dependency by it's identifier (name)

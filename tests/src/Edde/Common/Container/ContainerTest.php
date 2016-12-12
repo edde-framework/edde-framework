@@ -35,7 +35,7 @@
 		}
 
 		protected function setUp() {
-			$this->container = new Container();
+			$this->container = new Container(new Cache(new InMemoryCacheStorage()));
 			$this->container->registerFactoryList([
 				new CallbackFactory(function () {
 					return 'bar';

@@ -30,7 +30,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function canHandle($dependency): bool {
+		public function canHandle(string $dependency): bool {
 			if ($this->name === null) {
 				$this->name = (string)ReflectionUtils::getMethodReflection($this->callback)
 					->getReturnType();
@@ -41,13 +41,13 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function dependency($dependency): IDependency {
-			if (($source = $this->load($cacheId = ('dependency/' . $dependency))) === null || $dependency === null) {
-				$this->save($cacheId, $source = new Dependency(ReflectionUtils::getParameterList($this->callback), [], []));
-			}
-			return $source;
+		public function dependency(string $dependency = null): IDependency {
+			return new Dependency(ReflectionUtils::getParameterList($this->callback), [], []);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function execute(array $parameterList, string $name = null) {
 			return call_user_func_array($this->callback, $parameterList);
 		}

@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Container;
 
+	use Edde\Api\Cache\ICache;
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
@@ -17,9 +18,20 @@
 	 */
 	class Container extends AbstractObject implements IContainer {
 		/**
+		 * @var ICache
+		 */
+		protected $cache;
+		/**
 		 * @var IFactory[]
 		 */
 		protected $factoryList = [];
+
+		/**
+		 * @param ICache $cache
+		 */
+		public function __construct(ICache $cache) {
+			$this->cache = $cache;
+		}
 
 		/**
 		 * @inheritdoc
@@ -33,9 +45,7 @@
 		 * @inheritdoc
 		 */
 		public function registerFactoryList(array $factoryList): IContainer {
-			foreach ($factoryList as $factory) {
-				$this->registerFactory($factory);
-			}
+			$this->factoryList = array_merge($this->factoryList, $factoryList);
 			return $this;
 		}
 
@@ -43,14 +53,40 @@
 		 * @inheritdoc
 		 * @throws FactoryException
 		 */
-		public function getFactory($dependency): IFactory {
-			$this->use();
+		public function getFactory(string $dependency): IFactory {
 			foreach ($this->factoryList as $factory) {
 				if ($factory->canHandle($dependency)) {
 					return $factory->getFactory();
 				}
 			}
-			throw new FactoryException(sprintf('Cannot find factory for the given dependency [%s].', is_string($dependency) ? $dependency : gettype($dependency)));
+			throw new FactoryException(sprintf('Cannot find factory for the given dependency [%s].', $dependency));
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws FactoryException
+		 */
+		public function dependency(string $dependency): IDependency {
+			return $this->getFactory($dependency)
+				->dependency($dependency);
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws FactoryException
+		 * @throws ContainerException
+		 */
+		public function create(string $name, ...$parameterList) {
+			return $this->factory($this->getFactory($name), $parameterList, $name);
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws FactoryException
+		 * @throws ContainerException
+		 */
+		public function call(callable $callable, ...$parameterList) {
+			return $this->factory(new CallbackFactory($callable), $parameterList);
 		}
 
 		/**
@@ -61,7 +97,6 @@
 			if (is_object($instance) === false) {
 				return $instance;
 			}
-			$this->use();
 			$factory = $factory ?: $this->getFactory($instance);
 			$dependency = $dependency ?: $factory->dependency($instance);
 			foreach ($dependency->getInjectList() as $injectList) {
@@ -88,30 +123,14 @@
 		}
 
 		/**
-		 * @inheritdoc
-		 * @throws FactoryException
+		 * @param IFactory $factory
+		 * @param array $parameterList
+		 * @param string $name
+		 *
+		 * @return mixed
 		 * @throws ContainerException
 		 */
-		public function create(string $name, ...$parameterList) {
-			$this->use();
-			return $this->factory($this->getFactory($name), $name, $parameterList);
-		}
-
-		/**
-		 * @inheritdoc
-		 * @throws FactoryException
-		 * @throws ContainerException
-		 */
-		public function call(callable $callable, ...$parameterList) {
-			$this->use();
-			return $this->factory(new CallbackFactory($callable), null, $parameterList);
-		}
-
-		/**
-		 * @inheritdoc
-		 * @throws ContainerException
-		 */
-		public function factory(IFactory $factory, string $name = null, array $parameterList = []) {
+		protected function factory(IFactory $factory, array $parameterList = [], string $name = null) {
 			$dependency = $factory->dependency($name);
 			$grab = count($parameterList);
 			$dependencyList = [];
