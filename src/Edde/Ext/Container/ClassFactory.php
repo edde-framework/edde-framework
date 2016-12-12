@@ -27,7 +27,15 @@
 						}
 						$inject = [];
 						foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
-							$inject[$reflectionParameter->getName()] = $reflectionParameter;
+							if ($reflectionClass->hasProperty($name = $reflectionParameter->getName()) === false) {
+								throw new ContainerException(sprintf('Class [%s] must have property [$%s] of the same name as parameter in inject method [%s::%s(..., %s$%s, ...)].', $reflectionClass->getName(), $name, $reflectionClass->getName(), $reflectionMethod->getName(), ($class = $reflectionParameter->getClass()) ? $class->getName() . ' ' : null, $name));
+							}
+							$reflectionProperty = $reflectionClass->getProperty($name);
+							$reflectionProperty->setAccessible(true);
+							$inject[$name] = [
+								$reflectionParameter,
+								$reflectionProperty,
+							];
 						}
 						$injectList[$reflectionMethod->getName()] = $inject;
 					}
@@ -39,9 +47,14 @@
 						$lazy = [];
 						foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
 							if ($reflectionClass->hasProperty($name = $reflectionParameter->getName()) === false) {
-								throw new ContainerException(sprintf('Class [%s] must have property [$%s] of the same name as parameter in inject method [%s::%s(..., %s$%s, ...)].', $reflectionClass->getName(), $name, $reflectionClass->getName(), $reflectionMethod->getName(), ($class = $reflectionParameter->getClass()) ? $class->getName() . ' ' : null, $name));
+								throw new ContainerException(sprintf('Class [%s] must have property [$%s] of the same name as parameter in lazy inject method [%s::%s(..., %s$%s, ...)].', $reflectionClass->getName(), $name, $reflectionClass->getName(), $reflectionMethod->getName(), ($class = $reflectionParameter->getClass()) ? $class->getName() . ' ' : null, $name));
 							}
-							$lazy[$name] = $reflectionParameter;
+							$reflectionProperty = $reflectionClass->getProperty($name);
+							$reflectionProperty->setAccessible(true);
+							$lazy[$name] = [
+								$reflectionParameter,
+								$reflectionProperty,
+							];
 						}
 						$lazyList[$reflectionMethod->getName()] = $lazy;
 					}
@@ -49,5 +62,9 @@
 				$this->save($cacheId, $source = new Dependency(ReflectionUtils::getParameterList($dependency), $injectList, $lazyList));
 			}
 			return $source;
+		}
+
+		public function execute(array $parameterList, string $name = null) {
+			return new $name(...$parameterList);
 		}
 	}

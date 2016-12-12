@@ -57,8 +57,9 @@
 		 *
 		 * @param mixed $instance
 		 * @param IFactory $factory
+		 * @param IDependency $dependency
 		 *
 		 * @return mixed return input instance (input is same as output)
 		 */
-		public function inject($instance, IFactory $factory = null);
+		public function inject($instance, IFactory $factory = null, IDependency $dependency = null);
 	}

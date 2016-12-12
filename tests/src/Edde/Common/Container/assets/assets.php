@@ -1,11 +1,18 @@
 <?php
 	declare(strict_types = 1);
 
-	class Something {
-		protected $lazySomething;
-		protected $anotherAnotherSomething;
+	use Edde\Common\AbstractObject;
+
+	class Something extends AbstractObject {
+		public $someParameter;
+		public $anotherSomething;
+		public $injectedSomething;
+		public $lazySomething;
+		public $anotherAnotherSomething;
 
 		public function __construct($someParameter, AnotherSomething $anotherSomething) {
+			$this->someParameter = $someParameter;
+			$this->anotherSomething = $anotherSomething;
 		}
 
 		public function injectSomething(InjectedSomething $injectedSomething) {
@@ -15,19 +22,19 @@
 		}
 	}
 
-	class AnotherSomething {
+	class AnotherSomething extends AbstractObject {
 	}
 
-	class InjectedSomething {
+	class InjectedSomething extends AbstractObject {
 	}
 
-	class LazySomething {
+	class LazySomething extends AbstractObject {
 	}
 
-	class AnotherAnotherSomething {
+	class AnotherAnotherSomething extends AbstractObject {
 	}
 
-	class ThisIsCleverManager {
+	class ThisIsCleverManager extends AbstractObject {
 		/**
 		 * @var AnotherSomething
 		 */
@@ -51,5 +58,5 @@
 		}
 	}
 
-	class ThisIsProductOfCleverManager {
+	class ThisIsProductOfCleverManager extends AbstractObject {
 	}

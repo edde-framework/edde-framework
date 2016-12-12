@@ -10,7 +10,7 @@
 		/**
 		 * get list of mandatory parameters
 		 *
-		 * @return array
+		 * @return \ReflectionParameter[]
 		 */
 		public function getParameterList(): array;
 
