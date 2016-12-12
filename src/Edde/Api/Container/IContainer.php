@@ -3,22 +3,16 @@
 
 	namespace Edde\Api\Container;
 
-	use Edde\Api\Deffered\IDeffered;
-	use Edde\Api\Serializable\ISerializable;
-
 	/**
-	 * Implementation of Dependency Inject Container.
+	 * Implementation of Dependency Injection Container.
 	 */
-	interface IContainer extends IDeffered, ISerializable {
+	interface IContainer {
 		/**
-		 * shorthand for cache registration
-		 *
-		 * @param string $name
 		 * @param IFactory $factory
 		 *
 		 * @return IContainer
 		 */
-		public function registerFactory(string $name, IFactory $factory): IContainer;
+		public function registerFactory(IFactory $factory): IContainer;
 
 		/**
 		 * shorthand for cache registration
@@ -30,13 +24,13 @@
 		public function registerFactoryList(array $factoryList): IContainer;
 
 		/**
-		 * check if the given name is available (known) in a container
+		 * get factory which is able to create the given dependency
 		 *
-		 * @param string $name
+		 * @param mixed $dependency
 		 *
-		 * @return bool
+		 * @return IFactory
 		 */
-		public function has(string $name);
+		public function getFactory($dependency): IFactory;
 
 		/**
 		 * create the dependency by it's identifier (name)
@@ -57,17 +51,6 @@
 		 * @return mixed
 		 */
 		public function call(callable $callable, ...$parameterList);
-
-		/**
-		 * low-level method for factory execution (other container methods should be using this)
-		 *
-		 * @param IFactory $factory
-		 * @param string $name optional dependency name (name given from outside)
-		 * @param array $parameterList
-		 *
-		 * @return mixed return created instance of the given factory (result of factory execution)
-		 */
-		public function factory(IFactory $factory, string $name = null, array $parameterList = []);
 
 		/**
 		 * provides all aditional dependencies for the given instance

@@ -10,21 +10,21 @@
 
 	class CallbackFactory extends AbstractFactory {
 		/**
-		 * @var string
-		 */
-		protected $name;
-		/**
 		 * @var callable
 		 */
 		protected $callback;
+		/**
+		 * @var string
+		 */
+		protected $name;
 
 		/**
 		 * @param string $name
 		 * @param callable $callback
 		 */
-		public function __construct(string $name, callable $callback) {
-			$this->name = $name;
+		public function __construct(callable $callback, string $name = null) {
 			$this->callback = $callback;
+			$this->name = $name;
 		}
 
 		/**
@@ -38,13 +38,13 @@
 		 * @inheritdoc
 		 */
 		public function dependency($dependency): IDependency {
-			if (($source = $this->load($cacheId = ('dependency/' . $dependency))) === null) {
+			if (($source = $this->load($cacheId = ('dependency/' . $dependency))) === null || $dependency === null) {
 				$this->save($cacheId, $source = new Dependency(ReflectionUtils::getParameterList($this->callback), [], []));
 			}
 			return $source;
 		}
 
-		public function getCode(): string {
-			return ReflectionUtils::getCode($this->callback);
+		public function execute(array $parameterList, string $name = null) {
+			return call_user_func_array($this->callback, $parameterList);
 		}
 	}

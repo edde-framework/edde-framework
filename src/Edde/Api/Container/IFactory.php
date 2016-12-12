@@ -40,9 +40,10 @@
 		public function getFactory(): IFactory;
 
 		/**
-		 * this should export factory as a php code fragment to be executed later
+		 * @param array $parameterList
+		 * @param string $name
 		 *
-		 * @return string
+		 * @return mixed
 		 */
-		public function getCode(): string;
+		public function execute(array $parameterList, string $name = null);
 	}

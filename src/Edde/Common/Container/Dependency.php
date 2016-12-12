@@ -21,4 +21,16 @@
 			$this->injectList = $injectList;
 			$this->lazyList = $lazyList;
 		}
+
+		public function getParameterList(): array {
+			return $this->parameterList;
+		}
+
+		public function getInjectList(): array {
+			return $this->injectList;
+		}
+
+		public function getLazyList(): array {
+			return $this->lazyList;
+		}
 	}
