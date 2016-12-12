@@ -59,8 +59,9 @@
 			$factoryList = [];
 			/** @var mixed $factory */
 			foreach ($this->factoryList as $name => $factory) {
-				if (is_array($factory) && is_string(reset($factory))) {
-					$factory = new CallbackProxyFactory($name, reset($factory), end($factory), $this);
+				if ($factory instanceof \stdClass) {
+					$class = $factory->factory;
+					$factory = new $class(...$factory->parameters);
 				} else if (is_callable($factory)) {
 					if (is_string($name) === false) {
 						$name = (string)ReflectionUtils::getMethodReflection($factory)
@@ -75,5 +76,17 @@
 				$factory->setCache($this->cache);
 			}
 			$this->factoryList = $factoryList;
+		}
+
+		public function proxy(string $name, string $factory, string $method): \stdClass {
+			return (object)[
+				'factory' => CallbackProxyFactory::class,
+				'parameters' => [
+					$name,
+					$factory,
+					$method,
+					$this,
+				],
+			];
 		}
 	}

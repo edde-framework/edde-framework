@@ -20,10 +20,7 @@
 				function (ICache $cache): ICache {
 					return $cache;
 				},
-				\ThisIsProductOfCleverManager::class => [
-					\ThisIsCleverManager::class,
-					'createCleverProduct',
-				],
+				$factoryManager->proxy(\ThisIsProductOfCleverManager::class, \ThisIsCleverManager::class, 'createCleverProduct'),
 				$classFactory = new ClassFactory(),
 			]);
 			$factory = $factoryManager->getFactory(\Something::class);
