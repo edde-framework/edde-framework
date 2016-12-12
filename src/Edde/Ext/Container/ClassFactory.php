@@ -5,6 +5,7 @@
 
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\IDependency;
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Common\Container\AbstractFactory;
 	use Edde\Common\Container\Dependency;
 	use Edde\Common\Reflection\ReflectionUtils;
@@ -39,7 +40,7 @@
 					$injectList[$reflectionMethod->getName()] = $inject;
 				}
 				/** @noinspection NotOptimalIfConditionsInspection */
-				if (strlen($name = $reflectionMethod->getName()) > 6 && strpos($name, 'lazy', 0) === 0) {
+				if ($reflectionClass->implementsInterface(ILazyInject::class) && strlen($name = $reflectionMethod->getName()) > 6 && strpos($name, 'lazy', 0) === 0) {
 					if ($reflectionMethod->isPublic() === false) {
 						throw new ContainerException(sprintf('Lazy method [%s::%s()] must be public.', $reflectionClass->getName(), $reflectionMethod->getName()));
 					}

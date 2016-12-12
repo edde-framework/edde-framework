@@ -9,7 +9,6 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Common\AbstractObject;
 	use Edde\Ext\Container\CallbackFactory;
 
@@ -107,7 +106,7 @@
 					$reflectionProperty->setValue($instance, $this->create(($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName()));
 				}
 			}
-			foreach ($instance instanceof ILazyInject ? $dependency->getLazyList() : [] as $lazyList) {
+			foreach ($dependency->getLazyList() as $lazyList) {
 				/** @var $reflectionParameter \ReflectionParameter */
 				/** @var $reflectionProperty \ReflectionProperty */
 				/** @noinspection ForeachSourceInspection */
@@ -136,7 +135,7 @@
 				if (--$grab >= 0) {
 					continue;
 				}
-				$dependencyList[] = $this->factory($this->getFactory($class = (($class = $parameter->getClass()) ? $class->getName() : $parameter->getName())), $class);
+				$dependencyList[] = $this->factory($this->getFactory($class = (($class = $parameter->getClass()) ? $class->getName() : $parameter->getName())), [], $class);
 			}
 			return $this->inject($factory->execute(array_merge($parameterList, $dependencyList), $name), $factory, $dependency);
 		}
