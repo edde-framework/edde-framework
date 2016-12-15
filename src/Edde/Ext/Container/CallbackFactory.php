@@ -5,6 +5,7 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
+	use Edde\Api\Reflection\ReflectionException;
 	use Edde\Common\Container\AbstractFactory;
 	use Edde\Common\Container\Dependency;
 	use Edde\Common\Reflection\ReflectionUtils;
@@ -30,6 +31,7 @@
 
 		/**
 		 * @inheritdoc
+		 * @throws ReflectionException
 		 */
 		public function canHandle(IContainer $container, string $dependency): bool {
 			if ($this->name === null) {

@@ -3,6 +3,7 @@
 
 	namespace Edde\Ext\Container;
 
+	use Edde\Api\Cache\ICache;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
@@ -37,9 +38,16 @@
 			return $factories;
 		}
 
-		static public function crate(array $factoryList = [], string $cacheId = null): IContainer {
-			return (new Container(new Cache(new InMemoryCacheStorage())))->registerFactoryList($factoryList = self::createFactoryList($factoryList))
-				->create(IContainer::class)
+		static public function crate(array $factoryList = [], ICache $cache = null): IContainer {
+			$cacheId = sha1(implode('', array_keys($factoryList)));
+			if ($cache && ($container = $cache->load($cacheId)) !== null) {
+				return $container;
+			}
+			$container = new Container(new Cache(new InMemoryCacheStorage()));
+			$container->registerFactoryList($factoryList = self::createFactoryList($factoryList));
+			$container = $container->create(IContainer::class)
 				->registerFactoryList($factoryList);
+			$cache ? $cache->save($cacheId, $container) : null;
+			return $container;
 		}
 	}
