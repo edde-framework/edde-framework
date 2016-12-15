@@ -32,6 +32,12 @@
 			self::assertInstanceOf(\InjectedSomething::class, $instance->injectedSomething);
 			self::assertInstanceOf(\LazySomething::class, $instance->lazySomething);
 			self::assertInstanceOf(\AnotherAnotherSomething::class, $instance->anotherAnotherSomething);
+//
+//			Debugger::timer('foo');
+//			for ($i = 0; $i <= 100000; $i++) {
+//				$this->container->create(\Something::class, 'fill-me-up');
+//			}
+//			printf("%.2f\n", Debugger::timer('foo') );
 		}
 
 		protected function setUp() {
