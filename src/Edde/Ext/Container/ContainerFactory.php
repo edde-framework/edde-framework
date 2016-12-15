@@ -24,6 +24,10 @@
 					}
 				} else if ($factory instanceof IFactory) {
 					$current = $factory;
+				} else if (is_callable($factory)) {
+					throw new FactoryException(sprintf('Closures are not supported in factory definition [%s].', $name));
+				} else if (is_object($factory)) {
+					throw new FactoryException(sprintf('Class instances are not supported in factory definition [%s; %s].', $name, get_class($factory)));
 				}
 				if ($current === null) {
 					throw new FactoryException(sprintf('Unsupported factory definition [%s; %s].', is_string($name) ? $name : (is_object($name) ? get_class($name) : gettype($name)), is_string($factory) ? $factory : (is_object($factory) ? get_class($factory) : gettype($factory))));

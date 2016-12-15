@@ -38,19 +38,19 @@
 			/**
 			 * Container::getFactory - cache results in memory and cache results in cache and see benchmark
 			 */
-//
+
 //			Debugger::timer('foo');
-//			for ($i = 0; $i <= 100000; $i++) {
+//			for ($i = 0; $i <= 2500000; $i++) {
 //				$this->container->create(\Something::class, 'fill-me-up');
 //			}
-//			printf("%.2f\n", Debugger::timer('foo') );
+//			printf("%.2f; %.4f\n", $t = Debugger::timer('foo'), ($t / $i) * 1000);
 		}
 
 		protected function setUp() {
 			$this->container = ContainerFactory::crate([
-				'foo' => function () {
-					return 'bar';
-				},
+//				'foo' => function () {
+//					return 'bar';
+//				},
 				IContainer::class => Container::class,
 				ICacheStorage::class => InMemoryCacheStorage::class,
 				ICacheManager::class => CacheManager::class,
