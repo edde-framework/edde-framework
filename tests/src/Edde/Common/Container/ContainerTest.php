@@ -7,15 +7,11 @@
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Container\IContainer;
-	use Edde\Common\Cache\Cache;
-	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheManager;
-	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use PHPUnit\Framework\TestCase;
-	use Tracy\Debugger;
 
 	require_once __DIR__ . '/assets/assets.php';
 
@@ -24,23 +20,6 @@
 		 * @var IContainer
 		 */
 		protected $container;
-
-		public function testCachedContainer() {
-			$cache = new Cache($cacheStorage = new FlatFileCacheStorage());
-//			$cache = null;
-			$cacheStorage->lazyCacheDirectory(new CacheDirectory(__DIR__ . '/cache'));
-			ContainerFactory::crate($f = [
-				IContainer::class => Container::class,
-				ICacheStorage::class => InMemoryCacheStorage::class,
-				ICacheManager::class => CacheManager::class,
-				ICache::class => ICacheManager::class,
-			], $cache);
-			Debugger::timer();
-			for ($i = 0; $i <= 15000; $i++) {
-				ContainerFactory::crate($f, $cache);
-			}
-			printf("%.2fx10\n", (Debugger::timer() / $i) * 10000);
-		}
 
 		public function testContainer() {
 			self::assertEquals('bar', $this->container->create('foo'));
@@ -68,9 +47,7 @@
 		}
 
 		protected function setUp() {
-			$cacheStorage = new FlatFileCacheStorage();
-			$cacheStorage->lazyCacheDirectory(new CacheDirectory(__DIR__ . '/cache'));
-			$this->container = ContainerFactory::crate([
+			$this->container = ContainerFactory::create([
 //				'foo' => function () {
 //					return 'bar';
 //				},
@@ -80,6 +57,6 @@
 				ICache::class => ICacheManager::class,
 				\ISomething::class => \Something::class,
 				new ClassFactory(),
-			], new Cache($cacheStorage));
+			]);
 		}
 	}
