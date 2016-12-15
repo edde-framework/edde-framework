@@ -11,10 +11,17 @@
 	use Edde\Common\Reflection\ReflectionUtils;
 
 	class ClassFactory extends AbstractFactory {
+		/**
+		 * @inheritdoc
+		 */
 		public function canHandle(string $dependency): bool {
 			return class_exists($dependency) && interface_exists($dependency) === false;
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws ContainerException
+		 */
 		public function dependency(string $dependency = null): IDependency {
 			$injectList = [];
 			$lazyList = [];
@@ -62,6 +69,9 @@
 			return new Dependency(ReflectionUtils::getParameterList($dependency), $injectList, $lazyList);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function execute(array $parameterList, string $name = null) {
 			return new $name(...$parameterList);
 		}

@@ -3,7 +3,10 @@
 
 	use Edde\Common\AbstractObject;
 
-	class Something extends AbstractObject {
+	interface ISomething {
+	}
+
+	class Something extends AbstractObject implements ISomething {
 		public $someParameter;
 		public $anotherSomething;
 		public $injectedSomething;
