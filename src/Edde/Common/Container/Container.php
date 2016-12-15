@@ -80,36 +80,13 @@
 		}
 
 		/**
-		 * @param IFactory $factory
-		 * @param array $parameterList
-		 * @param string $name
-		 *
-		 * @return mixed
-		 * @throws ContainerException
-		 */
-		protected function factory(IFactory $factory, array $parameterList = [], string $name = null) {
-			$dependency = $factory->dependency($name);
-			$grab = count($parameterList);
-			$dependencyList = [];
-			foreach ($dependency->getParameterList() as $parameter) {
-				if (--$grab >= 0) {
-					continue;
-				}
-				$dependencyList[] = $this->factory($this->getFactory($class = (($class = $parameter->getClass()) ? $class->getName() : $parameter->getName())), [], $class);
-			}
-			return $this->inject($factory->execute(array_merge($parameterList, $dependencyList), $name), $factory, $dependency);
-		}
-
-		/**
 		 * @inheritdoc
 		 * @throws ContainerException
 		 */
-		public function inject($instance, IFactory $factory = null, IDependency $dependency = null) {
+		public function inject($instance, IDependency $dependency = null) {
 			if (is_object($instance) === false) {
 				return $instance;
 			}
-			$factory = $factory ?: $this->getFactory($instance);
-			$dependency = $dependency ?: $factory->dependency($instance);
 			foreach ($dependency->getInjectList() as $injectList) {
 				/** @var $reflectionParameter \ReflectionParameter */
 				/** @var $reflectionProperty \ReflectionProperty */
@@ -129,5 +106,26 @@
 				}
 			}
 			return $instance;
+		}
+
+		/**
+		 * @param IFactory $factory
+		 * @param array $parameterList
+		 * @param string $name
+		 *
+		 * @return mixed
+		 * @throws ContainerException
+		 */
+		protected function factory(IFactory $factory, array $parameterList = [], string $name = null) {
+			$dependency = $factory->dependency($name);
+			$grab = count($parameterList);
+			$dependencyList = [];
+			foreach ($dependency->getParameterList() as $parameter) {
+				if (--$grab >= 0) {
+					continue;
+				}
+				$dependencyList[] = $this->factory($this->getFactory($class = (($class = $parameter->getClass()) ? $class->getName() : $parameter->getName())), [], $class);
+			}
+			return $this->inject($factory->execute(array_merge($parameterList, $dependencyList), $name), $dependency);
 		}
 	}
