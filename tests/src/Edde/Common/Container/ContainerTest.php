@@ -48,6 +48,9 @@
 
 		protected function setUp() {
 			$this->container = ContainerFactory::crate([
+				'foo' => function () {
+					return 'bar';
+				},
 				IContainer::class => Container::class,
 				ICacheStorage::class => InMemoryCacheStorage::class,
 				ICacheManager::class => CacheManager::class,

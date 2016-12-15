@@ -26,7 +26,7 @@
 					$current = $factory;
 				}
 				if ($current === null) {
-					throw new FactoryException(sprintf('Unsupported factory definition [%s; %s].', is_string($name) ? $name : $name, is_string($factory) ? $factory : $factory));
+					throw new FactoryException(sprintf('Unsupported factory definition [%s; %s].', is_string($name) ? $name : (is_object($name) ? get_class($name) : gettype($name)), is_string($factory) ? $factory : (is_object($factory) ? get_class($factory) : gettype($factory))));
 				}
 				$factories[] = $current;
 			}
