@@ -5,8 +5,10 @@
 
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheManager;
+	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Container\IContainer;
 	use Edde\Common\Cache\CacheManager;
+	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use PHPUnit\Framework\TestCase;
@@ -47,19 +49,11 @@
 		protected function setUp() {
 			$this->container = ContainerFactory::crate([
 				IContainer::class => Container::class,
+				ICacheStorage::class => InMemoryCacheStorage::class,
 				ICacheManager::class => CacheManager::class,
 				ICache::class => ICacheManager::class,
 				\ISomething::class => \Something::class,
 				new ClassFactory(),
 			]);
-//			$this->container->registerFactoryList([
-//				new CallbackFactory(function () {
-//					return 'bar';
-//				}, 'foo'),
-//				new CallbackFactory(function (): ICache {
-//					return new Cache(new InMemoryCacheStorage());
-//				}),
-//				new ClassFactory(),
-//			]);
 		}
 	}

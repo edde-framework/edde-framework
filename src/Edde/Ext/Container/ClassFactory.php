@@ -4,6 +4,7 @@
 	namespace Edde\Ext\Container;
 
 	use Edde\Api\Container\ContainerException;
+	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Common\Container\AbstractFactory;
@@ -14,7 +15,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function canHandle(string $dependency): bool {
+		public function canHandle(IContainer $container, string $dependency): bool {
 			return class_exists($dependency) && interface_exists($dependency) === false;
 		}
 
@@ -22,7 +23,7 @@
 		 * @inheritdoc
 		 * @throws ContainerException
 		 */
-		public function dependency(string $dependency = null): IDependency {
+		public function dependency(IContainer $container, string $dependency = null): IDependency {
 			$injectList = [];
 			$lazyList = [];
 			foreach (ReflectionUtils::getMethodList($dependency) as $reflectionMethod) {
@@ -72,7 +73,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(array $parameterList, string $name = null) {
+		public function execute(IContainer $container, array $parameterList, string $name = null) {
 			return new $name(...$parameterList);
 		}
 	}

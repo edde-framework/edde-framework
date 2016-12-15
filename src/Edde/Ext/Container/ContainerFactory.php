@@ -34,8 +34,8 @@
 		}
 
 		static public function crate(array $factoryList = [], string $cacheId = null): IContainer {
-			$container = new Container(new Cache(new InMemoryCacheStorage()));
-			$container->registerFactoryList($factoryList = self::createFactoryList($factoryList));
-			return $container->create(IContainer::class);
+			return (new Container(new Cache(new InMemoryCacheStorage())))->registerFactoryList($factoryList = self::createFactoryList($factoryList))
+				->create(IContainer::class)
+				->registerFactoryList($factoryList);
 		}
 	}

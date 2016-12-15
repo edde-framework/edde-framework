@@ -44,7 +44,7 @@
 		 * @inheritdoc
 		 */
 		public function registerFactoryList(array $factoryList): IContainer {
-			$this->factoryList = array_merge($this->factoryList, $factoryList);
+			$this->factoryList = $factoryList;
 			return $this;
 		}
 
@@ -54,8 +54,8 @@
 		 */
 		public function getFactory(string $dependency): IFactory {
 			foreach ($this->factoryList as $factory) {
-				if ($factory->canHandle($dependency)) {
-					return $factory->getFactory();
+				if ($factory->canHandle($this, $dependency)) {
+					return $factory->getFactory($this);
 				}
 			}
 			throw new FactoryException(sprintf('Cannot find factory for the given dependency [%s].', $dependency));
@@ -117,7 +117,7 @@
 		 * @throws ContainerException
 		 */
 		protected function factory(IFactory $factory, array $parameterList = [], string $name = null) {
-			$dependency = $factory->dependency($name);
+			$dependency = $factory->dependency($this, $name);
 			$grab = count($parameterList);
 			$dependencyList = [];
 			foreach ($dependency->getParameterList() as $parameter) {
@@ -126,6 +126,6 @@
 				}
 				$dependencyList[] = $this->factory($this->getFactory($class = (($class = $parameter->getClass()) ? $class->getName() : $parameter->getName())), [], $class);
 			}
-			return $this->inject($factory->execute(array_merge($parameterList, $dependencyList), $name), $dependency);
+			return $this->inject($factory->execute($this, array_merge($parameterList, $dependencyList), $name), $dependency);
 		}
 	}

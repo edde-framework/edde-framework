@@ -3,7 +3,9 @@
 
 	namespace Edde\Ext\Container;
 
+	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
+	use Edde\Api\Container\IFactory;
 	use Edde\Common\Container\AbstractFactory;
 
 	/**
@@ -41,13 +43,33 @@
 			$this->target = $target;
 		}
 
-		public function canHandle(string $dependency): bool {
+		/**
+		 * @inheritdoc
+		 */
+		public function canHandle(IContainer $container, string $dependency): bool {
 			return $this->source === $dependency;
 		}
 
-		public function dependency(string $dependency = null): IDependency {
+		/**
+		 * @inheritdoc
+		 */
+		public function getFactory(IContainer $container): IFactory {
+			return $container->getFactory($this->target);
 		}
 
-		public function execute(array $parameterList, string $name = null) {
+		/**
+		 * @inheritdoc
+		 */
+		public function dependency(IContainer $container, string $dependency = null): IDependency {
+			return $container->getFactory($this->target)
+				->dependency($container, $dependency);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function execute(IContainer $container, array $parameterList, string $name = null) {
+			return $container->getFactory($this->target)
+				->execute($container, $parameterList, $name);
 		}
 	}

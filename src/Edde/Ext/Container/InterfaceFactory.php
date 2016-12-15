@@ -3,6 +3,9 @@
 
 	namespace Edde\Ext\Container;
 
+	use Edde\Api\Container\IContainer;
+	use Edde\Api\Container\IDependency;
+
 	/**
 	 * Interface to class binding factory.
 	 */
@@ -32,7 +35,21 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function canHandle(string $dependency): bool {
+		public function canHandle(IContainer $container, string $dependency): bool {
 			return $dependency === $this->interface;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function dependency(IContainer $container, string $dependency = null): IDependency {
+			return parent::dependency($container, $this->class);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function execute(IContainer $container, array $parameterList, string $name = null) {
+			return parent::execute($container, $parameterList, $this->class);
 		}
 	}
