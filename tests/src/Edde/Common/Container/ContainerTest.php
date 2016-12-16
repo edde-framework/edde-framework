@@ -22,11 +22,10 @@
 		protected $container;
 
 		public function testContainer() {
-			self::assertEquals('bar', $this->container->create('foo'));
-			self::assertEquals('bar', $this->container->call(function ($foo) {
-				return $foo;
-			}));
 			self::assertInstanceOf(ICache::class, $this->container->create(ICache::class));
+			self::assertInstanceOf(ICacheManager::class, $cache = $this->container->create(ICache::class));
+			self::assertInstanceOf(ICacheManager::class, $cacheManager = $this->container->create(ICacheManager::class));
+			self::assertSame($cache, $cacheManager);
 			/** @var $instance \Something */
 			$instance = $this->container->create(\Something::class, 'fill-me-up');
 			self::assertEquals('fill-me-up', $instance->someParameter);
@@ -34,23 +33,10 @@
 			self::assertInstanceOf(\InjectedSomething::class, $instance->injectedSomething);
 			self::assertInstanceOf(\LazySomething::class, $instance->lazySomething);
 			self::assertInstanceOf(\AnotherAnotherSomething::class, $instance->anotherAnotherSomething);
-
-			/**
-			 * Container::getFactory - cache results in memory and cache results in cache and see benchmark
-			 */
-
-//			Debugger::timer('foo');
-//			for ($i = 0; $i <= 2500000; $i++) {
-//				$this->container->create(\Something::class, 'fill-me-up');
-//			}
-//			printf("%.2f; %.4f\n", $t = Debugger::timer('foo'), ($t / $i) * 1000);
 		}
 
 		protected function setUp() {
 			$this->container = ContainerFactory::create([
-//				'foo' => function () {
-//					return 'bar';
-//				},
 				IContainer::class => Container::class,
 				ICacheStorage::class => InMemoryCacheStorage::class,
 				ICacheManager::class => CacheManager::class,

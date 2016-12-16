@@ -37,17 +37,10 @@
 			return $factories;
 		}
 
-		static public function create(array $factoryList = [], string $temp = null): IContainer {
-			$cacheId = sha1(implode('', array_keys($factoryList)));
-			if (file_exists($cache = ($temp ?: sys_get_temp_dir()) . '/container-' . $cacheId . '.edde')) {
-				/** @noinspection UnserializeExploitsInspection */
-				return unserialize(file_get_contents($cache));
-			}
+		static public function create(array $factoryList = []): IContainer {
 			$container = new Container(new Cache(new InMemoryCacheStorage()));
 			$container->registerFactoryList($factoryList = self::createFactoryList($factoryList));
-			$container = $container->create(IContainer::class)
+			return $container->create(IContainer::class)
 				->registerFactoryList($factoryList);
-			file_put_contents($cache, serialize($container));
-			return $container;
 		}
 	}
