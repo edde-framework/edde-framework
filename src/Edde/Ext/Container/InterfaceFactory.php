@@ -18,6 +18,10 @@
 		 * @var string
 		 */
 		protected $class;
+		/**
+		 * @var mixed
+		 */
+		protected $instance;
 
 		/**
 		 * Practical thought:
@@ -50,6 +54,6 @@
 		 * @inheritdoc
 		 */
 		public function execute(IContainer $container, array $parameterList, string $name = null) {
-			return parent::execute($container, $parameterList, $this->class);
+			return $this->instance ?: $this->instance = parent::execute($container, $parameterList, $this->class);
 		}
 	}

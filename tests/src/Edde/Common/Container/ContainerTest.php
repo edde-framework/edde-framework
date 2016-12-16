@@ -27,12 +27,21 @@
 			self::assertInstanceOf(ICacheManager::class, $cacheManager = $this->container->create(ICacheManager::class));
 			self::assertSame($cache, $cacheManager);
 			/** @var $instance \Something */
-			$instance = $this->container->create(\Something::class, 'fill-me-up');
+			self::assertNotSame($instance = $this->container->create(\Something::class, 'fill-me-up'), $this->container->create(\Something::class, 'flush-me-out'));
 			self::assertEquals('fill-me-up', $instance->someParameter);
 			self::assertInstanceOf(\AnotherSomething::class, $instance->anotherSomething);
 			self::assertInstanceOf(\InjectedSomething::class, $instance->injectedSomething);
 			self::assertInstanceOf(\LazySomething::class, $instance->lazySomething);
 			self::assertInstanceOf(\AnotherAnotherSomething::class, $instance->anotherAnotherSomething);
+		}
+
+		public function testContainerSerialization() {
+			/** @noinspection UnserializeExploitsInspection */
+			$this->container = unserialize(serialize($this->container));
+			self::assertInstanceOf(ICache::class, $this->container->create(ICache::class));
+			self::assertInstanceOf(ICacheManager::class, $cache = $this->container->create(ICache::class));
+			self::assertInstanceOf(ICacheManager::class, $cacheManager = $this->container->create(ICacheManager::class));
+			self::assertSame($cache, $cacheManager);
 		}
 
 		protected function setUp() {
