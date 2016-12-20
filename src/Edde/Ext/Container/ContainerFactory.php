@@ -3,11 +3,15 @@
 
 	namespace Edde\Ext\Container;
 
+	use Edde\Api\Cache\ICache;
+	use Edde\Api\Cache\ICacheManager;
+	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Cache\Cache;
+	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Container\Container;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 
@@ -27,7 +31,10 @@
 				} else if (is_callable($factory)) {
 					throw new FactoryException(sprintf('Closures are not supported in factory definition [%s].', $name));
 				} else if (is_object($factory)) {
-					throw new FactoryException(sprintf('Class instances are not supported in factory definition [%s; %s].', $name, get_class($factory)));
+					if ($factory instanceof \Serializable === false) {
+						throw new FactoryException(sprintf('Class instances [%s] are not supported in factory definition [%s]. You can use [%s] interface to bypass this error.', get_class($factory), $name, \Serializable::class));
+					}
+					$current = new SerializableFactory($name, $factory);
 				}
 				if ($current === null) {
 					throw new FactoryException(sprintf('Unsupported factory definition [%s; %s].', is_string($name) ? $name : (is_object($name) ? get_class($name) : gettype($name)), is_string($factory) ? $factory : (is_object($factory) ? get_class($factory) : gettype($factory))));
@@ -37,6 +44,13 @@
 			return $factories;
 		}
 
+		/**
+		 * pure way how to simple create a system container using another container
+		 *
+		 * @param array $factoryList
+		 *
+		 * @return IContainer
+		 */
 		static public function create(array $factoryList = []): IContainer {
 			/**
 			 * A young man and his date were parked on a back road some distance from town.
@@ -50,5 +64,21 @@
 			return (new Container(new Cache(new InMemoryCacheStorage())))->registerFactoryList($factoryList = self::createFactoryList($factoryList))
 				->create(IContainer::class)
 				->registerFactoryList($factoryList);
+		}
+
+		/**
+		 * create a default container with set of services from Edde; they can be simply redefined
+		 *
+		 * @param array $factoryList
+		 *
+		 * @return IContainer
+		 */
+		static public function container(array $factoryList = []): IContainer {
+			return self::create(array_merge([
+				IContainer::class => Container::class,
+				ICacheStorage::class => InMemoryCacheStorage::class,
+				ICacheManager::class => CacheManager::class,
+				ICache::class => ICacheManager::class,
+			], $factoryList));
 		}
 	}

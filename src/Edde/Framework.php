@@ -15,7 +15,6 @@
 		 * @return string
 		 */
 		public function getVersionString() {
-
 			return $this->getVersion() . ' - ' . $this->getCodename();
 		}
 

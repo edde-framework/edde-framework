@@ -95,7 +95,7 @@
 		 * @throws ContainerException
 		 */
 		public function createContainer(): IContainer {
-			return ContainerFactory::container($this->factoryList = FactoryFactory::createList(array_merge([IRuntime::class => $this,], $this->runtimeList, $this->factoryList)));
+			return ContainerFactory::create($this->factoryList = FactoryFactory::createList(array_merge([IRuntime::class => $this,], $this->runtimeList, $this->factoryList)));
 		}
 
 		/**
