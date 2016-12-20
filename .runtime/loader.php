@@ -7,11 +7,11 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Router\IRouterService;
-	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\Runtime\Event\ContainerEvent;
 	use Edde\Common\Runtime\Event\SetupEvent;
 	use Edde\Common\Runtime\Runtime;
+	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Router\SimpleHttpRouter;
 	use Edde\Module\ApplicationModule;
 	use Edde\Module\ContainerModule;
