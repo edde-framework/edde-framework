@@ -35,7 +35,7 @@
 		public function onShortTagEvent(string $tag, array $attributeList);
 
 		/**
-		 * @param string $tag
+		 * @param string $header
 		 */
-		public function onCloseHeaderEvent(string $tag);
+		public function onHeaderEvent(string $header);
 	}

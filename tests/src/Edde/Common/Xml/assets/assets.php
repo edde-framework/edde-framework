@@ -37,6 +37,6 @@
 			];
 		}
 
-		public function onCloseHeaderEvent(string $tag) {
+		public function onHeaderEvent(string $header) {
 		}
 	}

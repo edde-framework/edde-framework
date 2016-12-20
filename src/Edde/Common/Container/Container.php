@@ -181,8 +181,6 @@
 			}
 			try {
 				return $factory->create($name, array_merge($dependencyList, $parameterList), $this);
-			} catch (FactoryException $exception) {
-				throw new ContainerException(sprintf('Cannot create dependency [%s]; dependency stack [%s].', $name, implode(', ', iterator_to_array($this->dependencyStack))), 0, $exception);
 			} finally {
 				unset($this->dependencyList[$name]);
 				$this->dependencyStack->pop();

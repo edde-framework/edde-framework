@@ -161,7 +161,7 @@
 								$xmlHandler->onCloseTagEvent($name);
 								break;
 							case self::XML_TYPE_CLOSE_HEADER:
-								$xmlHandler->onCloseHeaderEvent($name);
+								$xmlHandler->onHeaderEvent($name);
 								break;
 						}
 						return;

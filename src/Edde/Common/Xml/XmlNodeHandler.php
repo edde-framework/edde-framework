@@ -56,7 +56,7 @@
 			$this->current->addNode(new Node($tag, null, $attributeList));
 		}
 
-		public function onCloseHeaderEvent(string $tag) {
+		public function onHeaderEvent(string $header) {
 		}
 
 		public function getNode(): INode {
