@@ -20,6 +20,16 @@
 		public function authorization(string $authorization): IHttpHandler;
 
 		/**
+		 * use digest type of authorization
+		 *
+		 * @param string $user
+		 * @param string $password
+		 *
+		 * @return IHttpHandler
+		 */
+		public function digest(string $user, string $password): IHttpHandler;
+
+		/**
 		 * @return IHttpHandler
 		 */
 		public function keepConnectionAlive(): IHttpHandler;
