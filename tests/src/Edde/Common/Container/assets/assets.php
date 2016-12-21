@@ -56,7 +56,7 @@
 			$this->injectedSomething = $injectedSomething;
 		}
 
-		public function createCleverProduct() {
+		public function createCleverProduct(): ThisIsProductOfCleverManager {
 			return new ThisIsProductOfCleverManager();
 		}
 	}

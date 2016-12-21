@@ -43,11 +43,18 @@
 		}
 
 		public function canHandle(IContainer $container, string $dependency): bool {
+			return $this->name === $dependency;
 		}
 
 		public function dependency(IContainer $container, string $dependency = null): IDependency {
+			return $container->getFactory($this->target)
+				->dependency($container, $this->target);
 		}
 
 		public function execute(IContainer $container, array $parameterList, string $name = null) {
+			$method = $this->method;
+			return $container->getFactory($this->target)
+				->execute($container, $parameterList, $this->target)
+				->{$method}();
 		}
 	}

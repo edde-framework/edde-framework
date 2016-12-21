@@ -53,8 +53,12 @@
 		 * @throws FactoryException
 		 */
 		public function getFactory(string $dependency): IFactory {
-			foreach ($this->factoryList as $factory) {
+			if (($id = $this->cache->load($cacheId = ('dependency/' . $dependency))) !== null) {
+				return $this->factoryList[$id]->getFactory($this);
+			}
+			foreach ($this->factoryList as $id => $factory) {
 				if ($factory->canHandle($this, $dependency)) {
+					$this->cache->save($cacheId, $id);
 					return $factory->getFactory($this);
 				}
 			}

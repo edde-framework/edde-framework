@@ -30,6 +30,7 @@
 			self::assertInstanceOf(\InjectedSomething::class, $instance->injectedSomething);
 			self::assertInstanceOf(\LazySomething::class, $instance->lazySomething);
 			self::assertInstanceOf(\AnotherAnotherSomething::class, $instance->anotherAnotherSomething);
+			self::assertInstanceOf(\ThisIsProductOfCleverManager::class, $this->container->create(\ThisIsProductOfCleverManager::class));
 		}
 
 		public function testContainerSerialization() {
@@ -44,6 +45,7 @@
 		protected function setUp() {
 			$this->container = ContainerFactory::container([
 				\ISomething::class => \Something::class,
+				\ThisIsProductOfCleverManager::class => \ThisIsCleverManager::class . '::createCleverProduct',
 				new ClassFactory(),
 			]);
 		}
