@@ -20,15 +20,15 @@
 			$factories = [];
 			foreach ($factoryList as $name => $factory) {
 				$current = null;
-				if (is_string($name) && is_string($factory) && interface_exists($name)) {
+				if (is_string($factory) && strpos($factory, '::') !== false) {
+					list($target, $method) = explode('::', $factory);
+					$current = new ProxyFactory($name, $target, $method);
+				} else if (is_string($name) && is_string($factory) && interface_exists($name)) {
 					if (class_exists($factory)) {
 						$current = new InterfaceFactory($name, $factory);
 					} else if (interface_exists($factory)) {
 						$current = new LinkFactory($name, $factory);
 					}
-				} else if (is_string($factory) && strpos($factory, '::') !== false) {
-					list($target, $method) = explode('::', $factory);
-					$current = new ProxyFactory($name, $target, $method);
 				} else if ($factory instanceof IFactory) {
 					$current = $factory;
 				} else if (is_callable($factory)) {

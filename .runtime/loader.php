@@ -12,6 +12,7 @@
 	use Edde\Common\Application\Application;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\Log\LogService;
+	use Edde\Common\Router\RouterService;
 	use Edde\Ext\Container\ContainerFactory;
 	use Tracy\Debugger;
 
@@ -31,6 +32,7 @@
 		IRootDirectory::class => new RootDirectory(__DIR__),
 		IApplication::class => Application::class,
 		ILogService::class => LogService::class,
+		IRouterService::class => RouterService::class,
 		IRequest::class => IRouterService::class . '::createRequest',
 	], is_array($local = @include __DIR__ . '/loader.local.php') ? $local : []);
 
