@@ -28,17 +28,10 @@
 	};
 
 	/** @noinspection PhpIncludeInspection */
-	$factoryList = array_merge([
+	return ContainerFactory::cache($factoryList = array_merge([
 		IRootDirectory::class => new RootDirectory(__DIR__),
 		IApplication::class => Application::class,
 		ILogService::class => LogService::class,
 		IRouterService::class => RouterService::class,
 		IRequest::class => IRouterService::class . '::createRequest',
-	], is_array($local = @include __DIR__ . '/loader.local.php') ? $local : []);
-
-	if ($container = @file_get_contents($cache = __DIR__ . '/container-' . sha1(implode('', array_keys($factoryList))) . '.cache')) {
-		/** @noinspection UnserializeExploitsInspection */
-		return unserialize($container);
-	}
-	file_put_contents($cache, serialize($container = ContainerFactory::container($factoryList)));
-	return $container;
+	], is_array($local = @include __DIR__ . '/loader.local.php') ? $local : []), __DIR__ . '/temp/container-' . sha1(implode('', array_keys($factoryList))) . '.cache');

@@ -84,4 +84,21 @@
 				ICache::class => ICacheManager::class,
 			], $factoryList));
 		}
+
+		/**
+		 * create container and serialize the result into the file; if file exists, container is build from it
+		 *
+		 * @param array $factoryList
+		 * @param string $cache
+		 *
+		 * @return IContainer
+		 */
+		static public function cache(array $factoryList, string $cache): IContainer {
+			if ($container = @file_get_contents($cache)) {
+				/** @noinspection UnserializeExploitsInspection */
+				return unserialize($container);
+			}
+			file_put_contents($cache, serialize($container = self::container($factoryList)));
+			return $container;
+		}
 	}
