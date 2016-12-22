@@ -20,6 +20,16 @@
 		public function authorization(string $authorization): IHttpHandler;
 
 		/**
+		 * basic auth
+		 *
+		 * @param string $user
+		 * @param string $password
+		 *
+		 * @return IHttpHandler
+		 */
+		public function basic(string $user, string $password): IHttpHandler;
+
+		/**
 		 * use digest type of authorization
 		 *
 		 * @param string $user

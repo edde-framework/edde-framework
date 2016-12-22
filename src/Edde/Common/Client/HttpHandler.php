@@ -65,6 +65,17 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function basic(string $user, string $password): IHttpHandler {
+			curl_setopt_array($this->curl, [
+				CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
+				CURLOPT_USERPWD => vsprintf('%s:%s', func_get_args()),
+			]);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function digest(string $user, string $password): IHttpHandler {
 			curl_setopt_array($this->curl, [
 				CURLOPT_HTTPAUTH => CURLAUTH_DIGEST,
