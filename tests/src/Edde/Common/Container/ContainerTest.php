@@ -25,6 +25,7 @@
 			self::assertSame($cache, $cacheManager);
 			/** @var $instance \Something */
 			self::assertNotSame($instance = $this->container->create(\Something::class, 'fill-me-up'), $this->container->create(\Something::class, 'flush-me-out'));
+			self::assertNotEmpty($instance->somethingList);
 			self::assertEquals('fill-me-up', $instance->someParameter);
 			self::assertInstanceOf(\AnotherSomething::class, $instance->anotherSomething);
 			self::assertInstanceOf(\InjectedSomething::class, $instance->injectedSomething);
@@ -47,6 +48,11 @@
 				\ISomething::class => \Something::class,
 				\ThisIsProductOfCleverManager::class => \ThisIsCleverManager::class . '::createCleverProduct',
 				new ClassFactory(),
+			], [
+				\ISomething::class => [
+					\FirstSomethingSetup::class,
+					\AnotherSomethingSetup::class,
+				],
 			]);
 		}
 	}

@@ -6,6 +6,7 @@
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
+	use Edde\Api\Container\IConfigHandler;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
@@ -24,6 +25,10 @@
 		 * @var IFactory[]
 		 */
 		protected $factoryList = [];
+		/**
+		 * @var IConfigHandler[]
+		 */
+		protected $configHandlerList = [];
 
 		/**
 		 * @param ICache $cache
@@ -45,6 +50,14 @@
 		 */
 		public function registerFactoryList(array $factoryList): IContainer {
 			$this->factoryList = $factoryList;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function registerConfigHandlerList(array $configHandlerList): IContainer {
+			$this->configHandlerList = $configHandlerList;
 			return $this;
 		}
 

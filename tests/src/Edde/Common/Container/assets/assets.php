@@ -1,9 +1,35 @@
 <?php
 	declare(strict_types = 1);
 
+	use Edde\Api\Container\IConfigHandler;
 	use Edde\Common\AbstractObject;
 
 	interface ISomething {
+		public function registerSomeething(string $something);
+	}
+
+	class FirstSomethingSetup implements IConfigHandler {
+		/**
+		 * @param ISomething $instance
+		 *
+		 * @return IConfigHandler
+		 */
+		public function setup($instance): IConfigHandler {
+			$instance->registerSomeething('foo');
+			return $this;
+		}
+	}
+
+	class AnotherSomethingSetup implements IConfigHandler {
+		/**
+		 * @param ISomething $instance
+		 *
+		 * @return IConfigHandler
+		 */
+		public function setup($instance): IConfigHandler {
+			$instance->registerSomeething('bar');
+			return $this;
+		}
 	}
 
 	class Something extends AbstractObject implements ISomething {
@@ -12,6 +38,7 @@
 		public $injectedSomething;
 		public $lazySomething;
 		public $anotherAnotherSomething;
+		public $somethingList = [];
 
 		public function __construct($someParameter, AnotherSomething $anotherSomething) {
 			$this->someParameter = $someParameter;
@@ -22,6 +49,11 @@
 		}
 
 		public function lazySomething(LazySomething $lazySomething, AnotherAnotherSomething $anotherAnotherSomething) {
+		}
+
+		public function registerSomeething(string $something) {
+			$this->somethingList = $something;
+			return $this;
 		}
 	}
 

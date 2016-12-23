@@ -51,10 +51,11 @@
 		 * pure way how to simple create a system container using another container
 		 *
 		 * @param array $factoryList
+		 * @param array $configHandlerList
 		 *
 		 * @return IContainer
 		 */
-		static public function create(array $factoryList = []): IContainer {
+		static public function create(array $factoryList = [], array $configHandlerList = []): IContainer {
 			/**
 			 * A young man and his date were parked on a back road some distance from town.
 			 * They were about to have sex when the girl stopped.
@@ -66,23 +67,25 @@
 			 */
 			return (new Container(new Cache(new InMemoryCacheStorage())))->registerFactoryList($factoryList = self::createFactoryList($factoryList))
 				->create(IContainer::class)
-				->registerFactoryList($factoryList);
+				->registerFactoryList($factoryList)
+				->registerConfigHandlerList($configHandlerList);
 		}
 
 		/**
 		 * create a default container with set of services from Edde; they can be simply redefined
 		 *
 		 * @param array $factoryList
+		 * @param array $configHandlerList
 		 *
 		 * @return IContainer
 		 */
-		static public function container(array $factoryList = []): IContainer {
+		static public function container(array $factoryList = [], array $configHandlerList = []): IContainer {
 			return self::create(array_merge([
 				IContainer::class => Container::class,
 				ICacheStorage::class => InMemoryCacheStorage::class,
 				ICacheManager::class => CacheManager::class,
 				ICache::class => ICacheManager::class,
-			], $factoryList));
+			], $factoryList), array_merge([], $configHandlerList));
 		}
 
 		/**
