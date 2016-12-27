@@ -27,6 +27,7 @@
 				'application/json',
 				'http+text/html',
 				'text/html',
+				'http+application/xml',
 			]);
 		}
 
@@ -70,6 +71,7 @@
 					return $json;
 				/** @noinspection PhpMissingBreakStatementInspection */
 				case 'http+text/html':
+				case 'http+application/xml':
 					$this->httpResponse->send();
 				case 'text/html':
 					echo $render = $convert->render();
