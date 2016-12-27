@@ -107,7 +107,7 @@
 		 * @inheritdoc
 		 */
 		public function content($content, string $mime = null, string $target = null): IHttpHandler {
-			is_array($content) ? $this->httpRequest->setPostList(PostList::create($content)) : $this->httpRequest->setBody($this->container->inject(new Body($content, $mime, $target)));
+			is_array($content) && ($mime === null || $target === null) ? $this->httpRequest->setPostList(PostList::create($content)) : $this->httpRequest->setBody($this->container->inject(new Body($content, $mime, $target)));
 			return $this;
 		}
 
