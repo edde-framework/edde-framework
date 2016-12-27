@@ -5,7 +5,7 @@
 
 	interface ILazyInject {
 		/**
-		 * @param string $property
+		 * @param string   $property
 		 * @param callable $callback
 		 */
 		public function lazy(string $property, callable $callback);

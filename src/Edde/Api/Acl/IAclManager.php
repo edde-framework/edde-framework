@@ -9,10 +9,10 @@
 		/**
 		 * general method for enable/disable access for the given group; order of access/grant/deny is important
 		 *
-		 * @param string $group
-		 * @param bool $grant
-		 * @param string $resource
-		 * @param \DateTime $from
+		 * @param string         $group
+		 * @param bool           $grant
+		 * @param string         $resource
+		 * @param \DateTime      $from
 		 * @param \DateTime|null $until
 		 *
 		 * @return IAclManager
@@ -22,9 +22,9 @@
 		/**
 		 * grant right to the given group; order of access/grant/deny is important
 		 *
-		 * @param string $group
-		 * @param string $resource if null, "root" access is granted
-		 * @param \DateTime $from
+		 * @param string         $group
+		 * @param string         $resource if null, "root" access is granted
+		 * @param \DateTime      $from
 		 * @param \DateTime|null $until
 		 *
 		 * @return IAclManager
@@ -34,9 +34,9 @@
 		/**
 		 * deny right to the given group; order of access/grant/deny is important
 		 *
-		 * @param string $group
-		 * @param string $resource if null, everything is denied (can be changed by ongoing rules)
-		 * @param \DateTime $from
+		 * @param string         $group
+		 * @param string         $resource if null, everything is denied (can be changed by ongoing rules)
+		 * @param \DateTime      $from
 		 * @param \DateTime|null $until
 		 *
 		 * @return IAclManager

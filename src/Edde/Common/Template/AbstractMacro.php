@@ -94,7 +94,7 @@
 		/**
 		 * include node when root, otherwise switch node
 		 *
-		 * @param INode $macro
+		 * @param INode  $macro
 		 * @param string $attribute
 		 *
 		 * @return INode|Node
@@ -109,7 +109,7 @@
 		/**
 		 * insert node under the given macro
 		 *
-		 * @param INode $macro
+		 * @param INode  $macro
 		 * @param string $attribute
 		 *
 		 * @return Node
@@ -129,9 +129,9 @@
 		/**
 		 * extract an attribute and remove it from attribute list
 		 *
-		 * @param INode $macro
+		 * @param INode  $macro
 		 * @param string $name
-		 * @param null $default
+		 * @param null   $default
 		 *
 		 * @return mixed|null|string
 		 */
@@ -145,7 +145,7 @@
 		/**
 		 * switch macro and node and extract attribute from macro node
 		 *
-		 * @param INode $macro
+		 * @param INode  $macro
 		 * @param string $attribute
 		 *
 		 * @return INode
@@ -158,10 +158,10 @@
 		/**
 		 * return attribute from the given macro; throws exception if the attribute is not present
 		 *
-		 * @param INode $macro
-		 * @param ICompiler $compiler
+		 * @param INode       $macro
+		 * @param ICompiler   $compiler
 		 * @param string|null $name
-		 * @param bool $helper
+		 * @param bool        $helper
 		 *
 		 * @return mixed
 		 * @throws MacroException
@@ -177,8 +177,8 @@
 		/**
 		 * return attribute list
 		 *
-		 * @param INode $macro
-		 * @param ICompiler $compiler
+		 * @param INode         $macro
+		 * @param ICompiler     $compiler
 		 * @param callable|null $default
 		 *
 		 * @return array

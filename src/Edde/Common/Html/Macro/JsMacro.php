@@ -48,7 +48,7 @@
 		 * include file from the given source
 		 *
 		 * @param string $src
-		 * @param IFile $source
+		 * @param IFile  $source
 		 *
 		 * @return IFile
 		 * @throws FileException

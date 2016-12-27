@@ -11,7 +11,7 @@
 	interface ITemplateManager extends IDeffered {
 		/**
 		 * @param string $template
-		 * @param array $importList compile time templates
+		 * @param array  $importList compile time templates
 		 *
 		 * @return mixed
 		 */

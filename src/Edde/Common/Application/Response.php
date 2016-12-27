@@ -15,7 +15,7 @@
 
 		/**
 		 * @param string $type
-		 * @param $response
+		 * @param        $response
 		 */
 		public function __construct(string $type = null, $response = null) {
 			$this->type = $type;

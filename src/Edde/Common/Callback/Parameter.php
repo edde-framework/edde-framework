@@ -23,7 +23,7 @@
 		/**
 		 * @param string $name
 		 * @param string $class
-		 * @param bool $optional
+		 * @param bool   $optional
 		 */
 		public function __construct($name, $class, $optional) {
 			$this->name = $name;

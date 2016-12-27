@@ -31,7 +31,7 @@
 		protected $embeddedList = [];
 
 		/**
-		 * @param IFile $file
+		 * @param IFile      $file
 		 * @param IContainer $container
 		 *
 		 * @return IHtmlTemplate

@@ -38,7 +38,7 @@
 		/**
 		 * compute path from macro's source attribute
 		 *
-		 * @param string $src
+		 * @param string    $src
 		 * @param ICompiler $compiler
 		 *
 		 * @return string

@@ -137,7 +137,7 @@
 		}
 
 		/**
-		 * @param INode $node
+		 * @param INode      $node
 		 * @param INodeQuery $nodeQuery
 		 *
 		 * @return IStaticQuery
@@ -150,7 +150,7 @@
 
 		/**
 		 * @param \Iterator|\Traversable|array $iterator
-		 * @param bool $group
+		 * @param bool                         $group
 		 *
 		 * @return StaticQuery
 		 * @throws StaticQueryException
@@ -374,7 +374,7 @@
 
 		/**
 		 * @param INode $node
-		 * @param $operator
+		 * @param       $operator
 		 *
 		 * @return StaticQuery
 		 * @throws StaticQueryException

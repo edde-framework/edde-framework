@@ -96,9 +96,9 @@
 		}
 
 		/**
-		 * @param INode $macro
+		 * @param INode     $macro
 		 * @param ICompiler $compiler
-		 * @param string $src
+		 * @param string    $src
 		 *
 		 * @return mixed|string
 		 * @throws MacroException

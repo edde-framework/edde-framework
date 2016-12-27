@@ -16,7 +16,7 @@
 		/**
 		 * create event handler based on input or throw an exception if input is not supported
 		 *
-		 * @param mixed $handler
+		 * @param mixed       $handler
 		 * @param string|null $scope
 		 *
 		 * @return IHandler

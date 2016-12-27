@@ -57,7 +57,7 @@
 		/**
 		 * method build round body method (internally should create IBody class)
 		 *
-		 * @param mixed $content
+		 * @param mixed  $content
 		 * @param string $mime
 		 * @param string $target
 		 *
@@ -76,7 +76,7 @@
 		 * if stirng is provided, temp dir will be used
 		 *
 		 * @param IFile|string $file
-		 * @param bool $reset
+		 * @param bool         $reset
 		 *
 		 * @return IHttpHandler|mixed
 		 */

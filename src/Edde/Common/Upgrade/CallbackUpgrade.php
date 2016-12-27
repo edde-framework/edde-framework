@@ -21,7 +21,7 @@
 		 * - and a hundred dollars seems to be the only thing my wife will blow these days."
 		 *
 		 * @param callable $callback
-		 * @param string $version
+		 * @param string   $version
 		 */
 		public function __construct(callable $callback, $version) {
 			parent::__construct($version);

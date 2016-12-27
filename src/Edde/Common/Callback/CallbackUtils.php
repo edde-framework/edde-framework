@@ -13,7 +13,7 @@
 		 * safely invoke given callback
 		 *
 		 * @param callable $function
-		 * @param array $args
+		 * @param array    $args
 		 * @param callable $callback
 		 *
 		 * @return mixed

@@ -22,7 +22,7 @@
 
 		/**
 		 * @param ISchema $schema
-		 * @param array $insert
+		 * @param array   $insert
 		 */
 		public function __construct(ISchema $schema, array $insert) {
 			$this->schema = $schema;

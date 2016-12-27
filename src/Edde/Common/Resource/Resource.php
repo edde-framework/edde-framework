@@ -34,7 +34,7 @@
 		protected $mime;
 
 		/**
-		 * @param IUrl $url
+		 * @param IUrl        $url
 		 * @param string|null $base
 		 * @param string|null $name
 		 * @param string|null $mime

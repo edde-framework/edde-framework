@@ -20,7 +20,7 @@
 		protected $sourceIterator;
 
 		/**
-		 * @param callable $chunkIteratorCallback
+		 * @param callable  $chunkIteratorCallback
 		 * @param \Iterator $sourceIterator
 		 */
 		public function __construct(callable $chunkIteratorCallback, \Iterator $sourceIterator) {

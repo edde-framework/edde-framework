@@ -23,7 +23,7 @@
 
 		/**
 		 * @param ISessionManager $sessionManager
-		 * @param string $name
+		 * @param string          $name
 		 */
 		public function __construct(ISessionManager $sessionManager, string $name) {
 			$this->sessionManager = $sessionManager;

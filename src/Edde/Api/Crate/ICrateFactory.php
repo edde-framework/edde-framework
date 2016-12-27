@@ -23,7 +23,7 @@
 		 *
 		 * @param string $crate
 		 * @param string $schema
-		 * @param array $load
+		 * @param array  $load
 		 *
 		 * @return ICrate
 		 */

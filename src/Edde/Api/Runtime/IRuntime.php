@@ -36,7 +36,7 @@
 		/**
 		 * register deffered callback on the given factory name (must be already registered)
 		 *
-		 * @param string $name
+		 * @param string   $name
 		 * @param callable $onSetup
 		 *
 		 * @return IRuntime

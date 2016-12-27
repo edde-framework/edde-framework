@@ -12,7 +12,7 @@
 		 *
 		 * @param string $namespace
 		 * @param string $path
-		 * @param bool $root loader is in the root of autoloaded sources
+		 * @param bool   $root loader is in the root of autoloaded sources
 		 *
 		 * @return callable
 		 */

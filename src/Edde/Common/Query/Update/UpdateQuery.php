@@ -24,7 +24,7 @@
 
 		/**
 		 * @param ISchema $schema
-		 * @param array $update
+		 * @param array   $update
 		 */
 		public function __construct(ISchema $schema, array $update) {
 			$this->schema = $schema;

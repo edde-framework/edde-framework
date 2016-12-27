@@ -25,8 +25,8 @@
 		/**
 		 * return first result of a query or null
 		 *
-		 * @param INode $root
-		 * @param string $query
+		 * @param INode               $root
+		 * @param string              $query
 		 * @param mixed|callable|null $default
 		 *
 		 * @return INode|null|mixed
@@ -41,7 +41,7 @@
 		}
 
 		/**
-		 * @param INode $node
+		 * @param INode  $node
 		 * @param string $query
 		 *
 		 * @return INode[]
@@ -63,8 +63,8 @@
 		/**
 		 * return last result of a query or null
 		 *
-		 * @param INode $node
-		 * @param string $query
+		 * @param INode               $node
+		 * @param string              $query
 		 * @param mixed|callable|null $default
 		 *
 		 * @return INode|null|mixed

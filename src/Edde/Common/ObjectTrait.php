@@ -66,7 +66,7 @@
 		/**
 		 * alias to self::objectProperty()
 		 *
-		 * @param string $property
+		 * @param string   $property
 		 * @param callable $callback
 		 *
 		 * @return $this
@@ -78,7 +78,7 @@
 		/**
 		 * magical method for replacing defined property with a deffered magical method for later value loading
 		 *
-		 * @param string $property
+		 * @param string   $property
 		 * @param callable $callback
 		 *
 		 * @return $this
@@ -111,7 +111,7 @@
 
 		/**
 		 * @param string $name
-		 * @param mixed $value
+		 * @param mixed  $value
 		 *
 		 * @return $this
 		 * @throws EddeException

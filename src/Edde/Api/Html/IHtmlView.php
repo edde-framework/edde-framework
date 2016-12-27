@@ -13,7 +13,7 @@
 		 * helper method for html control creation
 		 *
 		 * @param string $control
-		 * @param array ...$parameterList
+		 * @param array  ...$parameterList
 		 *
 		 * @return IHtmlControl|IControl
 		 */

@@ -83,7 +83,7 @@
 		}
 
 		/**
-		 * @param INode $macro
+		 * @param INode  $macro
 		 * @param string $src
 		 *
 		 * @return string

@@ -17,7 +17,7 @@
 		protected $mimeList;
 
 		/**
-		 * @param array|string $source
+		 * @param array|string      $source
 		 * @param array|string|null $target
 		 *
 		 * @return $this
@@ -46,8 +46,8 @@
 		/**
 		 * helper method to throw an exception if input is not supported
 		 *
-		 * @param mixed $convert
-		 * @param string $target
+		 * @param mixed     $convert
+		 * @param string    $target
 		 * @param bool|null $check
 		 *
 		 * @throws ConverterException

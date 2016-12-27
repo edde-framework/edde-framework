@@ -12,10 +12,10 @@
 		/**
 		 * when null is returned, next helper should be executed
 		 *
-		 * @param INode $macro
+		 * @param INode     $macro
 		 * @param ICompiler $compiler
-		 * @param mixed $value
-		 * @param array ...$parameterList
+		 * @param mixed     $value
+		 * @param array     ...$parameterList
 		 *
 		 * @return mixed|null
 		 */

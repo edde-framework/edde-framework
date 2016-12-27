@@ -30,7 +30,7 @@
 		}
 
 		/**
-		 * @param string $source
+		 * @param string      $source
 		 * @param string|null $alias
 		 *
 		 * @return FromFragment

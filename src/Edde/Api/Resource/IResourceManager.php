@@ -12,7 +12,7 @@
 		 *
 		 * @param string $url
 		 * @param string $mime override/specify mimetype
-		 * @param INode $root
+		 * @param INode  $root
 		 *
 		 * @return INode
 		 */
@@ -21,18 +21,18 @@
 		/**
 		 * same as handle only formally for a file
 		 *
-		 * @param string $file
+		 * @param string      $file
 		 * @param string|null $mime
-		 * @param INode $root
+		 * @param INode       $root
 		 *
 		 * @return INode
 		 */
 		public function file(string $file, string $mime = null, INode $root = null): INode;
 
 		/**
-		 * @param IResource $resource
+		 * @param IResource   $resource
 		 * @param string|null $mime
-		 * @param INode $root
+		 * @param INode       $root
 		 *
 		 * @return INode
 		 */

@@ -41,7 +41,7 @@
 		 * My wife’s cooking is so bad we usually pray after our food.
 		 *
 		 * @param ISchemaProperty $schemaProperty
-		 * @param mixed|null $value
+		 * @param mixed|null      $value
 		 */
 		public function __construct(ISchemaProperty $schemaProperty = null, $value = null) {
 			$this->schemaProperty = $schemaProperty;

@@ -18,10 +18,10 @@
 		/**
 		 * convert input type to a output defined by a target; same target however can have more output types (for example string, node, ...)
 		 *
-		 * @param mixed $convert what to convert
-		 * @param string $source source mime (should match "convert"
-		 * @param string $target target mime (general identifier); converter should throw an exception if a target is unknown/unsuporrted
-		 * @param string $mime concated source|target mime types
+		 * @param mixed  $convert what to convert
+		 * @param string $source  source mime (should match "convert"
+		 * @param string $target  target mime (general identifier); converter should throw an exception if a target is unknown/unsuporrted
+		 * @param string $mime    concated source|target mime types
 		 *
 		 * @return mixed
 		 */

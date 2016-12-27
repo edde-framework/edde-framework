@@ -20,7 +20,7 @@
 		 * authenticate a given identity or throw an exception
 		 *
 		 * @param IIdentity $identity if not specified, global one is used
-		 * @param array ...$credentials
+		 * @param array     ...$credentials
 		 *
 		 * @return IAuthenticator
 		 */

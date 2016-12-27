@@ -23,7 +23,7 @@
 		/**
 		 * return control reference from a reference symbol
 		 *
-		 * @param INode $macro
+		 * @param INode  $macro
 		 * @param string $reference
 		 *
 		 * @return mixed
@@ -51,7 +51,7 @@
 		/**
 		 * write (export) text value from macro node
 		 *
-		 * @param INode $macro
+		 * @param INode     $macro
 		 * @param ICompiler $compiler
 		 */
 		protected function writeTextValue(INode $macro, ICompiler $compiler) {
@@ -64,8 +64,8 @@
 		 * shortcut for file write
 		 *
 		 * @param ICompiler $compiler
-		 * @param string $write
-		 * @param int|null $indents
+		 * @param string    $write
+		 * @param int|null  $indents
 		 */
 		protected function write(ICompiler $compiler, string $write, int $indents = null) {
 			/** @var $file IFile */
@@ -77,7 +77,7 @@
 		/**
 		 * export attribute list
 		 *
-		 * @param INode $macro
+		 * @param INode     $macro
 		 * @param ICompiler $compiler
 		 */
 		protected function writeAttributeList(INode $macro, ICompiler $compiler) {

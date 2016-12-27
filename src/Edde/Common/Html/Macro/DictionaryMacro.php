@@ -48,7 +48,7 @@
 		 * resolve css file include
 		 *
 		 * @param string $src
-		 * @param IFile $source
+		 * @param IFile  $source
 		 *
 		 * @return IFile
 		 * @throws FileException

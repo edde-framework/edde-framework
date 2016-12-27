@@ -45,7 +45,7 @@
 		 * create the dependency by it's identifier (name)
 		 *
 		 * @param string $name
-		 * @param array ...$parameterList
+		 * @param array  ...$parameterList
 		 *
 		 * @return mixed
 		 */
@@ -55,7 +55,7 @@
 		 * execute given callback with autowired dependencies
 		 *
 		 * @param callable $callable
-		 * @param array $parameterList
+		 * @param array    $parameterList
 		 *
 		 * @return mixed
 		 */
@@ -64,7 +64,7 @@
 		/**
 		 * provides all aditional dependencies for the given instance
 		 *
-		 * @param mixed $instance
+		 * @param mixed       $instance
 		 * @param IDependency $dependency
 		 *
 		 * @return mixed return input instance (input is same as output)

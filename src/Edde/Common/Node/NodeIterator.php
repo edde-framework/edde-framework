@@ -38,7 +38,7 @@
 
 		/**
 		 * @param IAbstractNode $abstractNode
-		 * @param bool $root
+		 * @param bool          $root
 		 *
 		 * @return RecursiveIteratorIterator|INode[]
 		 * @throws NodeException

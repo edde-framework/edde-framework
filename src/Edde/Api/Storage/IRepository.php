@@ -33,7 +33,7 @@
 		 * create the given query (through container)
 		 *
 		 * @param string $query
-		 * @param array $parameterList
+		 * @param array  $parameterList
 		 *
 		 * @return IBoundQuery
 		 */

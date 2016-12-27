@@ -36,8 +36,8 @@
 		 * execute compilation from the given source
 		 *
 		 * @param string $src
-		 * @param IFile $source
-		 * @param INode $macro
+		 * @param IFile  $source
+		 * @param INode  $macro
 		 *
 		 * @return IFile
 		 * @throws MacroException

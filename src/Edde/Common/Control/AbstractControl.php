@@ -200,7 +200,7 @@
 
 		/**
 		 * @param string $method
-		 * @param array $parameterList
+		 * @param array  $parameterList
 		 *
 		 * @return mixed
 		 * @throws ControlException
@@ -240,7 +240,7 @@
 		 * when handle method does not exists, this generic method will be executed
 		 *
 		 * @param string $action
-		 * @param array $parameterList
+		 * @param array  $parameterList
 		 *
 		 * @throws ControlException
 		 */

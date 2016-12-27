@@ -12,7 +12,7 @@
 		/**
 		 * bind query to the given storage
 		 *
-		 * @param IQuery $query
+		 * @param IQuery   $query
 		 * @param IStorage $storage
 		 *
 		 * @return IBoundQuery

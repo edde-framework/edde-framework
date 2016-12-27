@@ -30,9 +30,9 @@
 		}
 
 		/**
-		 * @param INode $macro
+		 * @param INode     $macro
 		 * @param ICompiler $compiler
-		 * @param string $action
+		 * @param string    $action
 		 *
 		 * @return mixed|string
 		 * @throws MacroException

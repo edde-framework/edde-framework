@@ -24,7 +24,7 @@
 
 		/**
 		 * @param callable $callable
-		 * @param string $scope
+		 * @param string   $scope
 		 */
 		public function __construct(callable $callable, string $scope = null) {
 			parent::__construct($scope);

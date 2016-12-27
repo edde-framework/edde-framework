@@ -122,7 +122,7 @@
 		 * execute the given method in this controls
 		 *
 		 * @param string $method
-		 * @param array $parameterList
+		 * @param array  $parameterList
 		 *
 		 * @return mixed
 		 */
@@ -132,7 +132,7 @@
 		 * this method should be used for internal control creation
 		 *
 		 * @param string $control
-		 * @param array ...$parameterList
+		 * @param array  ...$parameterList
 		 *
 		 * @return IControl
 		 */

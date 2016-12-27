@@ -12,7 +12,7 @@
 		 *
 		 * @param IContainer $container
 		 *
-		 * @param string $dependency
+		 * @param string     $dependency
 		 *
 		 * @return bool
 		 */
@@ -20,7 +20,7 @@
 
 		/**
 		 * @param IContainer $container
-		 * @param string $dependency
+		 * @param string     $dependency
 		 *
 		 * @return IDependency
 		 */
@@ -37,8 +37,8 @@
 
 		/**
 		 * @param IContainer $container
-		 * @param array $parameterList
-		 * @param string $name
+		 * @param array      $parameterList
+		 * @param string     $name
 		 *
 		 * @return mixed
 		 */

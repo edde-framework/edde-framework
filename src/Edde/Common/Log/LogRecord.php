@@ -26,7 +26,7 @@
 		 * The blonde says, "Thanks!" and hangs up the phone.
 		 *
 		 * @param string $log
-		 * @param array $tagList
+		 * @param array  $tagList
 		 */
 		public function __construct($log, array $tagList = null) {
 			$this->log = $log;

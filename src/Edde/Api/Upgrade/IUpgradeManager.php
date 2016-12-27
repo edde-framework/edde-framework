@@ -14,7 +14,7 @@
 		 * register the given upgrade under it's version; exception should be thrown if version is already present
 		 *
 		 * @param IUpgrade $upgrade
-		 * @param bool $force if true, upgrade is registered regardless of version
+		 * @param bool     $force if true, upgrade is registered regardless of version
 		 *
 		 * @return IUpgradeManager
 		 */

@@ -35,11 +35,11 @@
 		protected $schema;
 
 		/**
-		 * @param string $crate
-		 * @param IStorage $storage
+		 * @param string        $crate
+		 * @param IStorage      $storage
 		 * @param ICrateFactory $crateFactory
-		 * @param IQuery $query
-		 * @param string $schema
+		 * @param IQuery        $query
+		 * @param string        $schema
 		 */
 		public function __construct(string $crate, IStorage $storage, ICrateFactory $crateFactory, IQuery $query, string $schema = null) {
 			$this->crate = $crate;

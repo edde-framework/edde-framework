@@ -14,7 +14,7 @@
 
 		/**
 		 * @param IUpgradeManager $upgradeManager
-		 * @param IUpgrade $upgrade
+		 * @param IUpgrade        $upgrade
 		 */
 		public function __construct(IUpgradeManager $upgradeManager, IUpgrade $upgrade) {
 			parent::__construct($upgradeManager);

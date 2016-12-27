@@ -16,7 +16,7 @@
 		/**
 		 * optionaly define authentication flow (support for chained login methods - credentials + sms, ...)
 		 *
-		 * @param string $initial
+		 * @param string   $initial
 		 * @param string[] ...$authenticatorList
 		 *
 		 * @return IAuthenticatorManager
@@ -36,7 +36,7 @@
 		 * execute an authentication flow; if the flow fails, $flow will be used as initial authenticator
 		 *
 		 * @param string $step
-		 * @param array ...$credentials
+		 * @param array  ...$credentials
 		 *
 		 * @return IAuthenticatorManager
 		 */
@@ -83,7 +83,7 @@
 		 * try to use named authenticator for authenticate the given identity
 		 *
 		 * @param string $name
-		 * @param array ...$credentials
+		 * @param array  ...$credentials
 		 *
 		 * @return IAuthenticatorManager
 		 */

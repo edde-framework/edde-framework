@@ -29,7 +29,7 @@
 
 		/**
 		 * @param bool $attributes include attribute names (e.g. [foo][bar], ....)
-		 * @param bool $meta include meta names (e.g. (foo)(bar)
+		 * @param bool $meta       include meta names (e.g. (foo)(bar)
 		 *
 		 * @return string
 		 */
@@ -51,7 +51,7 @@
 
 		/**
 		 * @param string $name
-		 * @param mixed $value
+		 * @param mixed  $value
 		 *
 		 * @return $this
 		 */
@@ -65,7 +65,7 @@
 		public function hasAttribute($name);
 
 		/**
-		 * @param string $name
+		 * @param string     $name
 		 * @param mixed|null $default
 		 *
 		 * @return mixed
@@ -133,7 +133,7 @@
 
 		/**
 		 * @param string $name
-		 * @param mixed $value
+		 * @param mixed  $value
 		 *
 		 * @return $this
 		 */
@@ -147,7 +147,7 @@
 		public function hasMeta($name);
 
 		/**
-		 * @param string $name
+		 * @param string     $name
 		 * @param mixed|null $default
 		 *
 		 * @return mixed

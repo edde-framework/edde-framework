@@ -39,11 +39,11 @@
 		/**
 		 * @param string $name
 		 * @param string $value
-		 * @param int $expire
+		 * @param int    $expire
 		 * @param string $path
 		 * @param string $domain
-		 * @param bool $secure
-		 * @param bool $httpOnly
+		 * @param bool   $secure
+		 * @param bool   $httpOnly
 		 */
 		public function __construct($name, $value, $expire, $path, $domain, $secure = false, $httpOnly = false) {
 			$this->name = $name;

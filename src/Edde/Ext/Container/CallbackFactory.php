@@ -21,7 +21,7 @@
 		protected $name;
 
 		/**
-		 * @param string $name
+		 * @param string   $name
 		 * @param callable $callback
 		 */
 		public function __construct(callable $callback, string $name = null) {

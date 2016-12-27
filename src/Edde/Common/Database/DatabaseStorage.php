@@ -47,7 +47,7 @@
 		protected $transaction = 0;
 
 		/**
-		 * @param IDriver $driver
+		 * @param IDriver       $driver
 		 * @param ICacheManager $cacheManager
 		 */
 		public function __construct(IDriver $driver, ICacheManager $cacheManager) {

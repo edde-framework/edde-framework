@@ -26,8 +26,8 @@
 
 		/**
 		 * @param IControl $control
-		 * @param string $method
-		 * @param array $parameterList
+		 * @param string   $method
+		 * @param array    $parameterList
 		 */
 		public function __construct(IControl $control, $method, array $parameterList) {
 			parent::__construct($control);

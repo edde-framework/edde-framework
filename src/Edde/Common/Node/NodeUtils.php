@@ -12,7 +12,7 @@
 	 */
 	class NodeUtils extends AbstractObject {
 		/**
-		 * @param INode $root
+		 * @param INode                        $root
 		 * @param \Traversable|\Iterator|array $source
 		 *
 		 * @return INode
@@ -81,7 +81,7 @@
 		 * convert input of stdClass to node tree
 		 *
 		 * @param \stdClass $stdClass
-		 * @param INode $root
+		 * @param INode     $root
 		 *
 		 * @return INode
 		 * @throws NodeException

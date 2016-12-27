@@ -13,7 +13,7 @@
 
 		/**
 		 * @param IControl $control
-		 * @param mixed $result
+		 * @param mixed    $result
 		 */
 		public function __construct(IControl $control, $result) {
 			parent::__construct($control);

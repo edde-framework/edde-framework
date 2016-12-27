@@ -73,7 +73,7 @@
 		/**
 		 * recreate the given directory with respect to preserve permissions of a given folder
 		 *
-		 * @param string $path
+		 * @param string   $path
 		 * @param int|null $permissions
 		 *
 		 * @throws FileException
@@ -140,7 +140,7 @@
 		 * creates a directory
 		 *
 		 * @param string $dir
-		 * @param int $mode
+		 * @param int    $mode
 		 *
 		 * @throws FileException
 		 */
@@ -156,7 +156,7 @@
 		 *
 		 * @param string $source
 		 * @param string $dest
-		 * @param bool $overwrite
+		 * @param bool   $overwrite
 		 *
 		 * @throws FileException
 		 */
@@ -190,7 +190,7 @@
 		 *
 		 * @param string $name
 		 * @param string $rename
-		 * @param bool $overwrite
+		 * @param bool   $overwrite
 		 *
 		 * @throws FileException
 		 */
@@ -227,7 +227,7 @@
 		 * return realpath for the given path
 		 *
 		 * @param string $path
-		 * @param bool $required
+		 * @param bool   $required
 		 *
 		 * @return string
 		 * @throws FileException

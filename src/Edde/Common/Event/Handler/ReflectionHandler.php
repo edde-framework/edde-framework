@@ -22,7 +22,7 @@
 		 *
 		 * Optimist: "Nah, of course they can!"
 		 *
-		 * @param string $handler
+		 * @param string      $handler
 		 * @param string|null $scope
 		 */
 		public function __construct($handler, string $scope = null) {

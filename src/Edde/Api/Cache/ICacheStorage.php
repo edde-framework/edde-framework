@@ -11,7 +11,7 @@
 	interface ICacheStorage extends IDeffered {
 		/**
 		 * @param string $id
-		 * @param mixed $save must be serializable
+		 * @param mixed  $save must be serializable
 		 *
 		 * @return mixed returns input $save
 		 */

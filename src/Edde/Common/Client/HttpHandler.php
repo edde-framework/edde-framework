@@ -47,7 +47,7 @@
 
 		/**
 		 * @param IHttpRequest $httpRequest
-		 * @param resource $curl
+		 * @param resource     $curl
 		 */
 		public function __construct(IHttpRequest $httpRequest, $curl) {
 			$this->httpRequest = $httpRequest;

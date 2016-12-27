@@ -91,7 +91,7 @@
 		/**
 		 * create container and serialize the result into the file; if file exists, container is build from it
 		 *
-		 * @param array $factoryList
+		 * @param array  $factoryList
 		 * @param string $cache
 		 *
 		 * @return IContainer

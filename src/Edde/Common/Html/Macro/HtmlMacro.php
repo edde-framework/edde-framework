@@ -44,7 +44,7 @@
 		/**
 		 * when control is "created", this method is called
 		 *
-		 * @param INode $macro
+		 * @param INode     $macro
 		 * @param ICompiler $compiler
 		 */
 		protected function onControl(INode $macro, ICompiler $compiler) {

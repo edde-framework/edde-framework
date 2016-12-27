@@ -30,7 +30,7 @@
 		 * get & execute & body
 		 *
 		 * @param string|IUrl $url
-		 * @param string $target
+		 * @param string      $target
 		 * @param string|null $mime
 		 *
 		 * @return mixed
@@ -48,8 +48,8 @@
 		 * post & execute & body
 		 *
 		 * @param string|IUrl $url
-		 * @param IBody $body
-		 * @param string $target
+		 * @param IBody       $body
+		 * @param string      $target
 		 * @param string|null $mime
 		 *
 		 * @return mixed
@@ -67,8 +67,8 @@
 		 * put & execute & body
 		 *
 		 * @param string|IUrl $url
-		 * @param IBody $body
-		 * @param string $target
+		 * @param IBody       $body
+		 * @param string      $target
 		 * @param string|null $mime
 		 *
 		 * @return mixed
@@ -86,8 +86,8 @@
 		 * patch & execute & body
 		 *
 		 * @param string|IUrl $url
-		 * @param IBody $body
-		 * @param string $target
+		 * @param IBody       $body
+		 * @param string      $target
 		 * @param string|null $mime
 		 *
 		 * @return mixed
@@ -105,8 +105,8 @@
 		 * delete & execute & body
 		 *
 		 * @param string|IUrl $url
-		 * @param IBody $body
-		 * @param string $target
+		 * @param IBody       $body
+		 * @param string      $target
 		 * @param string|null $mime
 		 *
 		 * @return mixed

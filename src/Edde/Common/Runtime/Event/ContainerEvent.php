@@ -20,7 +20,7 @@
 		protected $container;
 
 		/**
-		 * @param IRuntime $runtime
+		 * @param IRuntime   $runtime
 		 * @param IContainer $container
 		 */
 		public function __construct(IRuntime $runtime, IContainer $container) {

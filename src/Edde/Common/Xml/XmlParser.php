@@ -61,7 +61,7 @@
 		}
 
 		/**
-		 * @param IIterator $iterator
+		 * @param IIterator   $iterator
 		 * @param IXmlHandler $xmlHandler
 		 *
 		 * @return $this
@@ -87,7 +87,7 @@
 		}
 
 		/**
-		 * @param IIterator $iterator
+		 * @param IIterator   $iterator
 		 * @param IXmlHandler $xmlHandler
 		 *
 		 * @throws XmlParserException

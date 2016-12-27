@@ -109,7 +109,7 @@
 		}
 
 		/**
-		 * @param mixed $class
+		 * @param mixed    $class
 		 * @param int|null $filter
 		 *
 		 * @return ReflectionMethod[]

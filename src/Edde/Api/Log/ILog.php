@@ -28,7 +28,7 @@
 		 * adds informative tag
 		 *
 		 * @param string $log
-		 * @param array $tagList
+		 * @param array  $tagList
 		 *
 		 * @return ILog
 		 */
@@ -38,7 +38,7 @@
 		 * adds warning tag
 		 *
 		 * @param string $log
-		 * @param array $tagList
+		 * @param array  $tagList
 		 *
 		 * @return ILog
 		 */
@@ -48,7 +48,7 @@
 		 * adds error tag
 		 *
 		 * @param string $log
-		 * @param array $tagList
+		 * @param array  $tagList
 		 *
 		 * @return ILog
 		 */
@@ -58,7 +58,7 @@
 		 * adds critical tag
 		 *
 		 * @param string $log
-		 * @param array $tagList
+		 * @param array  $tagList
 		 *
 		 * @return ILog
 		 */

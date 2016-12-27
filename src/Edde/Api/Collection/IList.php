@@ -41,7 +41,7 @@
 		public function has(string $name): bool;
 
 		/**
-		 * @param string $name
+		 * @param string               $name
 		 * @param string|callable|null $default
 		 *
 		 * @return mixed

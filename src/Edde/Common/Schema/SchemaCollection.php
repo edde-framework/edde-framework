@@ -22,7 +22,7 @@
 		protected $target;
 
 		/**
-		 * @param string $name
+		 * @param string          $name
 		 * @param ISchemaProperty $source
 		 * @param ISchemaProperty $target
 		 */

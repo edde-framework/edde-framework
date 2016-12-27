@@ -47,7 +47,7 @@
 		 * return particular meta data from identity
 		 *
 		 * @param string $name
-		 * @param mixed $default
+		 * @param mixed  $default
 		 *
 		 * @return mixed
 		 */
@@ -111,7 +111,7 @@
 		/**
 		 * can this identity access the given resource?
 		 *
-		 * @param string $resource
+		 * @param string         $resource
 		 * @param \DateTime|null $dateTime optionally datetime can be specified; null will NOT disable time checks
 		 *
 		 * @return bool

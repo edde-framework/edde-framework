@@ -127,8 +127,8 @@
 
 		/**
 		 * @param IFactory $factory
-		 * @param array $parameterList
-		 * @param string $name
+		 * @param array    $parameterList
+		 * @param string   $name
 		 *
 		 * @return mixed
 		 * @throws ContainerException

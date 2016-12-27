@@ -43,7 +43,7 @@
 		protected $referer;
 
 		/**
-		 * @param IPostList $postList
+		 * @param IPostList   $postList
 		 * @param IHeaderList $headerList
 		 * @param ICookieList $cookieList
 		 */

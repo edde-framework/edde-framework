@@ -53,7 +53,7 @@
 		}
 
 		/**
-		 * @param IResource $resource
+		 * @param IResource  $resource
 		 * @param INode|null $root
 		 *
 		 * @return INode

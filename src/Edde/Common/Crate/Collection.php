@@ -28,8 +28,8 @@
 
 		/**
 		 * @param ICrateFactory $crateFactory
-		 * @param string $schema
-		 * @param string $crate
+		 * @param string        $schema
+		 * @param string        $crate
 		 */
 		public function __construct(ICrateFactory $crateFactory, string $schema, string $crate = null) {
 			$this->crateFactory = $crateFactory;
