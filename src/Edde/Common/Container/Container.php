@@ -50,17 +50,15 @@
 			if (is_object($instance) === false) {
 				return $instance;
 			}
-			/** @var $reflectionParameter \ReflectionParameter */
 			/** @var $reflectionProperty \ReflectionProperty */
-			foreach ($dependency->getInjectList() as list($reflectionParameter, $reflectionProperty)) {
-				$reflectionProperty->setValue($instance, $this->create(($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName()));
+			foreach ($dependency->getInjectList() as list($reflectionProperty, $name)) {
+				$reflectionProperty->setValue($instance, $this->create($name));
 			}
 			/** @var $reflectionParameter \ReflectionParameter */
 			/** @var $reflectionProperty \ReflectionProperty */
-			foreach ($dependency->getLazyList() as list($reflectionParameter, $reflectionProperty)) {
-//					$instance->dependency($this, ($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName());
-				$instance->lazy($reflectionProperty->getName(), function () use ($reflectionParameter) {
-					return $this->create(($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName());
+			foreach ($dependency->getLazyList() as list($reflectionProperty, $name)) {
+				$instance->lazy($reflectionProperty->getName(), function () use ($name) {
+					return $this->create($name);
 				});
 			}
 			return $instance;

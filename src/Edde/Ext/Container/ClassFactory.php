@@ -40,8 +40,8 @@
 						$reflectionProperty = $reflectionClass->getProperty($name);
 						$reflectionProperty->setAccessible(true);
 						$injectList[] = [
-							$reflectionParameter,
 							$reflectionProperty,
+							($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName(),
 						];
 					}
 				}
@@ -50,7 +50,6 @@
 					if ($reflectionMethod->isPublic() === false) {
 						throw new ContainerException(sprintf('Lazy method [%s::%s()] must be public.', $reflectionClass->getName(), $reflectionMethod->getName()));
 					}
-					$lazy = [];
 					foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
 						if ($reflectionClass->hasProperty($name = $reflectionParameter->getName()) === false) {
 							throw new ContainerException(sprintf('Class [%s] must have property [$%s] of the same name as parameter in lazy inject method [%s::%s(..., %s$%s, ...)].', $reflectionClass->getName(), $name, $reflectionClass->getName(), $reflectionMethod->getName(), ($class = $reflectionParameter->getClass()) ? $class->getName() . ' ' : null, $name));
@@ -58,8 +57,8 @@
 						$reflectionProperty = $reflectionClass->getProperty($name);
 						$reflectionProperty->setAccessible(true);
 						$lazyList[] = [
-							$reflectionParameter,
 							$reflectionProperty,
+							($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName(),
 						];
 					}
 				}
