@@ -6,59 +6,23 @@
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
-	use Edde\Api\Container\IConfigHandler;
-	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
-	use Edde\Common\AbstractObject;
-	use Edde\Ext\Container\CallbackFactory;
 
 	/**
 	 * Default implementation of a dependency container.
 	 */
-	class Container extends AbstractObject implements IContainer {
+	class Container extends AbstractContainer {
 		/**
 		 * @var ICache
 		 */
 		protected $cache;
-		/**
-		 * @var IFactory[]
-		 */
-		protected $factoryList = [];
-		/**
-		 * @var IConfigHandler[]
-		 */
-		protected $configHandlerList = [];
 
 		/**
 		 * @param ICache $cache
 		 */
 		public function __construct(ICache $cache) {
 			$this->cache = $cache;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function registerFactory(IFactory $factory): IContainer {
-			$this->factoryList[] = $factory;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function registerFactoryList(array $factoryList): IContainer {
-			$this->factoryList = $factoryList;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function registerConfigHandlerList(array $configHandlerList): IContainer {
-			$this->configHandlerList = $configHandlerList;
-			return $this;
 		}
 
 		/**
@@ -76,24 +40,6 @@
 				}
 			}
 			throw new FactoryException(sprintf('Cannot find factory for the given dependency [%s].', $dependency));
-		}
-
-		/**
-		 * @inheritdoc
-		 * @throws FactoryException
-		 * @throws ContainerException
-		 */
-		public function create(string $name, ...$parameterList) {
-			return $this->factory($this->getFactory($name), $parameterList, $name);
-		}
-
-		/**
-		 * @inheritdoc
-		 * @throws FactoryException
-		 * @throws ContainerException
-		 */
-		public function call(callable $callable, ...$parameterList) {
-			return $this->factory(new CallbackFactory($callable), $parameterList);
 		}
 
 		/**
@@ -133,7 +79,7 @@
 		 * @return mixed
 		 * @throws ContainerException
 		 */
-		protected function factory(IFactory $factory, array $parameterList = [], string $name = null) {
+		public function factory(IFactory $factory, array $parameterList = [], string $name = null) {
 			$dependency = $factory->dependency($this, $name);
 			$grab = count($parameterList);
 			$dependencyList = [];

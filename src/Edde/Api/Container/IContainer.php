@@ -26,7 +26,7 @@
 		/**
 		 * register list of config handlers bound to the given factories (key is factory name, value is config handler)
 		 *
-		 * @param IConfigHandler[] $configHandlerList
+		 * @param string[] $configHandlerList
 		 *
 		 * @return IContainer
 		 */
@@ -70,4 +70,15 @@
 		 * @return mixed return input instance (input is same as output)
 		 */
 		public function inject($instance, IDependency $dependency = null);
+
+		/**
+		 * general method for dependency creation (so call and create should call this one)
+		 *
+		 * @param IFactory    $factory
+		 * @param array       $parameterList
+		 * @param string|null $name
+		 *
+		 * @return mixed
+		 */
+		public function factory(IFactory $factory, array $parameterList = [], string $name = null);
 	}

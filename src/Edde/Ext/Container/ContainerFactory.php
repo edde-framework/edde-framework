@@ -50,10 +50,11 @@
 		/**
 		 * pure way how to simple create a system container using another container
 		 *
-		 * @param array $factoryList
-		 * @param array $configHandlerList
+		 * @param array    $factoryList
+		 * @param string[] $configHandlerList
 		 *
 		 * @return IContainer
+		 * @throws FactoryException
 		 */
 		static public function create(array $factoryList = [], array $configHandlerList = []): IContainer {
 			/**
@@ -74,10 +75,11 @@
 		/**
 		 * create a default container with set of services from Edde; they can be simply redefined
 		 *
-		 * @param array $factoryList
-		 * @param array $configHandlerList
+		 * @param array    $factoryList
+		 * @param string[] $configHandlerList
 		 *
 		 * @return IContainer
+		 * @throws FactoryException
 		 */
 		static public function container(array $factoryList = [], array $configHandlerList = []): IContainer {
 			return self::create(array_merge([
@@ -95,6 +97,7 @@
 		 * @param string $cache
 		 *
 		 * @return IContainer
+		 * @throws FactoryException
 		 */
 		static public function cache(array $factoryList, string $cache): IContainer {
 			if ($container = @file_get_contents($cache)) {
