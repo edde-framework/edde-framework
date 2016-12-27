@@ -24,9 +24,19 @@
 		public function registerFactoryList(array $factoryList): IContainer;
 
 		/**
+		 * register a new config handler for the given dependency
+		 *
+		 * @param string         $name
+		 * @param IConfigHandler $configHandler
+		 *
+		 * @return IContainer
+		 */
+		public function registerConfigHandler(string $name, IConfigHandler $configHandler): IContainer;
+
+		/**
 		 * register list of config handlers bound to the given factories (key is factory name, value is config handler)
 		 *
-		 * @param string[] $configHandlerList
+		 * @param IConfigHandler[] $configHandlerList
 		 *
 		 * @return IContainer
 		 */

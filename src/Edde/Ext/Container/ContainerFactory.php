@@ -6,6 +6,7 @@
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Cache\ICacheStorage;
+	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
@@ -55,6 +56,7 @@
 		 *
 		 * @return IContainer
 		 * @throws FactoryException
+		 * @throws ContainerException
 		 */
 		static public function create(array $factoryList = [], array $configHandlerList = []): IContainer {
 			/**
@@ -66,10 +68,17 @@
 			 * “Why aren’t we going anywhere?” asked the girl.
 			 * “Well, I should have mentioned this before, but I’m actually a taxi driver, and the fare back to town is $25…”
 			 */
-			return (new Container(new Cache(new InMemoryCacheStorage())))->registerFactoryList($factoryList = self::createFactoryList($factoryList))
-				->create(IContainer::class)
-				->registerFactoryList($factoryList)
-				->registerConfigHandlerList($configHandlerList);
+			/** @var $container IContainer */
+			$container = new Container(new Cache(new InMemoryCacheStorage()));
+			$container->registerFactoryList($factoryList = self::createFactoryList($factoryList));
+			$container = $container->create(IContainer::class);
+			$container->registerFactoryList($factoryList);
+			foreach ($configHandlerList as $name => $configHandler) {
+				foreach ($configHandler as $config) {
+					$container->registerConfigHandler($name, $container->create($config));
+				}
+			}
+			return $container;
 		}
 
 		/**
@@ -79,6 +88,7 @@
 		 * @param string[] $configHandlerList
 		 *
 		 * @return IContainer
+		 * @throws ContainerException
 		 * @throws FactoryException
 		 */
 		static public function container(array $factoryList = [], array $configHandlerList = []): IContainer {
@@ -97,6 +107,7 @@
 		 * @param string $cache
 		 *
 		 * @return IContainer
+		 * @throws ContainerException
 		 * @throws FactoryException
 		 */
 		static public function cache(array $factoryList, string $cache): IContainer {

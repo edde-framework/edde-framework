@@ -6,6 +6,7 @@
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
 
@@ -82,6 +83,10 @@
 				}
 				$dependencyList[] = $this->factory($this->getFactory($class = (($class = $parameter->getClass()) ? $class->getName() : $parameter->getName())), [], $class);
 			}
-			return $this->inject($factory->execute($this, array_merge($parameterList, $dependencyList), $name), $dependency);
+			$instance = $this->inject($factory->execute($this, array_merge($parameterList, $dependencyList), $name), $dependency);
+			if (isset($this->configHandlerList[$name]) && $instance instanceof IConfigurable) {
+				$instance->registerConfigHandlerList($this->configHandlerList[$name]);
+			}
+			return $instance;
 		}
 	}

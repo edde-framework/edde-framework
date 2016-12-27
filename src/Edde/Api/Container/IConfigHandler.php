@@ -8,11 +8,9 @@
 	 */
 	interface IConfigHandler {
 		/**
-		 * run setup over the given instance
+		 * run config over the given instance
 		 *
 		 * @param mixed $instance
-		 *
-		 * @return IConfigHandler
 		 */
-		public function setup($instance): IConfigHandler;
+		public function config($instance);
 	}

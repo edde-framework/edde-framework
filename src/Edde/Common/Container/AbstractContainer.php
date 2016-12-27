@@ -5,6 +5,7 @@
 
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
+	use Edde\Api\Container\IConfigHandler;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
 	use Edde\Common\AbstractObject;
@@ -33,6 +34,14 @@
 		 */
 		public function registerFactoryList(array $factoryList): IContainer {
 			$this->factoryList = $factoryList;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function registerConfigHandler(string $name, IConfigHandler $configHandler): IContainer {
+			$this->configHandlerList[$name][] = $configHandler;
 			return $this;
 		}
 

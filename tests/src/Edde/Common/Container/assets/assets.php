@@ -2,7 +2,9 @@
 	declare(strict_types = 1);
 
 	use Edde\Api\Container\IConfigHandler;
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Container\ConfigurableTrait;
 
 	interface ISomething {
 		public function registerSomeething(string $something);
@@ -11,28 +13,24 @@
 	class FirstSomethingSetup implements IConfigHandler {
 		/**
 		 * @param ISomething $instance
-		 *
-		 * @return IConfigHandler
 		 */
-		public function setup($instance): IConfigHandler {
+		public function config($instance) {
 			$instance->registerSomeething('foo');
-			return $this;
 		}
 	}
 
 	class AnotherSomethingSetup implements IConfigHandler {
 		/**
 		 * @param ISomething $instance
-		 *
-		 * @return IConfigHandler
 		 */
-		public function setup($instance): IConfigHandler {
+		public function config($instance) {
 			$instance->registerSomeething('bar');
-			return $this;
 		}
 	}
 
-	class Something extends AbstractObject implements ISomething {
+	class Something extends AbstractObject implements ISomething, IConfigurable {
+		use ConfigurableTrait;
+
 		public $someParameter;
 		public $anotherSomething;
 		public $injectedSomething;
@@ -52,7 +50,7 @@
 		}
 
 		public function registerSomeething(string $something) {
-			$this->somethingList = $something;
+			$this->somethingList[] = $something;
 			return $this;
 		}
 	}
@@ -80,7 +78,7 @@
 		protected $injectedSomething;
 
 		/**
-		 * @param AnotherSomething $anotherSomething
+		 * @param AnotherSomething  $anotherSomething
 		 * @param InjectedSomething $injectedSomething
 		 */
 		public function __construct(AnotherSomething $anotherSomething, InjectedSomething $injectedSomething) {
