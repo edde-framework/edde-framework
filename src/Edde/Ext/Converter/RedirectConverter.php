@@ -22,6 +22,7 @@
 			$this->register('redirect', [
 				'http+text/html',
 				'http+application/json',
+				'http+application/xml',
 			]);
 		}
 
@@ -34,6 +35,7 @@
 			$this->unsupported($convert, $target, is_string($convert));
 			switch ($target) {
 				case 'http+text/html':
+				case 'http+application/xml':
 					$this->httpResponse->header('Location', $convert);
 					$this->httpResponse->send();
 					return $convert;
