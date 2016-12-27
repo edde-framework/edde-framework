@@ -50,23 +50,18 @@
 			if (is_object($instance) === false) {
 				return $instance;
 			}
-			foreach ($dependency->getInjectList() as $injectList) {
-				/** @var $reflectionParameter \ReflectionParameter */
-				/** @var $reflectionProperty \ReflectionProperty */
-				/** @noinspection ForeachSourceInspection */
-				foreach ($injectList as list($reflectionParameter, $reflectionProperty)) {
-					$reflectionProperty->setValue($instance, $this->create(($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName()));
-				}
+			/** @var $reflectionParameter \ReflectionParameter */
+			/** @var $reflectionProperty \ReflectionProperty */
+			foreach ($dependency->getInjectList() as list($reflectionParameter, $reflectionProperty)) {
+				$reflectionProperty->setValue($instance, $this->create(($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName()));
 			}
-			foreach ($dependency->getLazyList() as $lazyList) {
-				/** @var $reflectionParameter \ReflectionParameter */
-				/** @var $reflectionProperty \ReflectionProperty */
-				/** @noinspection ForeachSourceInspection */
-				foreach ($lazyList as list($reflectionParameter, $reflectionProperty)) {
-					$instance->lazy($reflectionProperty->getName(), function () use ($reflectionParameter) {
-						return $this->create(($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName());
-					});
-				}
+			/** @var $reflectionParameter \ReflectionParameter */
+			/** @var $reflectionProperty \ReflectionProperty */
+			foreach ($dependency->getLazyList() as list($reflectionParameter, $reflectionProperty)) {
+//					$instance->dependency($this, ($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName());
+				$instance->lazy($reflectionProperty->getName(), function () use ($reflectionParameter) {
+					return $this->create(($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName());
+				});
 			}
 			return $instance;
 		}
