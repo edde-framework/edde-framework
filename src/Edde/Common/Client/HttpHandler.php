@@ -22,6 +22,7 @@
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Http\HttpUtils;
+	use Edde\Common\Http\PostList;
 	use Edde\Common\Strings\StringException;
 
 	/**
@@ -48,7 +49,7 @@
 
 		/**
 		 * @param IHttpRequest $httpRequest
-		 * @param resource $curl
+		 * @param resource     $curl
 		 */
 		public function __construct(IHttpRequest $httpRequest, $curl) {
 			$this->httpRequest = $httpRequest;
@@ -105,8 +106,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function content($content, string $mime, string $target): IHttpHandler {
-			$this->httpRequest->setBody($this->container->inject(new Body($content, $mime, $target)));
+		public function content($content, string $mime = null, string $target = null): IHttpHandler {
+			is_array($content) ? $this->httpRequest->setPostList(PostList::create($content)) : $this->httpRequest->setBody($this->container->inject(new Body($content, $mime, $target)));
 			return $this;
 		}
 

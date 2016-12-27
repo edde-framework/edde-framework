@@ -57,13 +57,13 @@
 		/**
 		 * method build round body method (internally should create IBody class)
 		 *
-		 * @param mixed $content
+		 * @param mixed  $content
 		 * @param string $mime
 		 * @param string $target
 		 *
 		 * @return IHttpHandler
 		 */
-		public function content($content, string $mime, string $target): IHttpHandler;
+		public function content($content, string $mime = null, string $target = null): IHttpHandler;
 
 		/**
 		 * @param IBody $body
