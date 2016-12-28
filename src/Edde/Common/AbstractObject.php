@@ -25,9 +25,6 @@
 			return $this;
 		}
 
-		protected function prepare() {
-		}
-
 		/**
 		 * @param string $name
 		 *
@@ -45,7 +42,7 @@
 
 		/**
 		 * @param string $name
-		 * @param mixed  $value
+		 * @param mixed $value
 		 *
 		 * @return $this
 		 * @throws EddeException
@@ -82,16 +79,5 @@
 			foreach (unserialize($serialized) as $k => $v) {
 				$this->$k = $v;
 			}
-		}
-
-		static public function warmup(IContainer $container, string $cache) {
-			return unserialize($cache);
-		}
-
-		public function sleep(IContainer $container): string {
-			return serialize([
-				static::class,
-				serialize($this),
-			]);
 		}
 	}

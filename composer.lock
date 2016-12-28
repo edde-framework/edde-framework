@@ -168,12 +168,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "301c34373db1f978aa5d7f4b2965b1b63448e7eb"
+                "reference": "3e8c8d248dcaa837bdb91b82e7883fd9cc055aa5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/301c34373db1f978aa5d7f4b2965b1b63448e7eb",
-                "reference": "301c34373db1f978aa5d7f4b2965b1b63448e7eb",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/3e8c8d248dcaa837bdb91b82e7883fd9cc055aa5",
+                "reference": "3e8c8d248dcaa837bdb91b82e7883fd9cc055aa5",
                 "shasum": ""
             },
             "require": {
@@ -211,7 +211,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2016-12-11 15:47:47"
+            "time": "2016-12-22 19:25:02"
         },
         {
             "name": "paragonie/constant_time_encoding",
@@ -647,12 +647,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "cd1414369602eee0b1b59b400177dc7ec9b26ff5"
+                "reference": "363e14f0171a4fd7eeea36f19104cd9aa2e7de3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/cd1414369602eee0b1b59b400177dc7ec9b26ff5",
-                "reference": "cd1414369602eee0b1b59b400177dc7ec9b26ff5",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/363e14f0171a4fd7eeea36f19104cd9aa2e7de3e",
+                "reference": "363e14f0171a4fd7eeea36f19104cd9aa2e7de3e",
                 "shasum": ""
             },
             "require": {
@@ -701,7 +701,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-12-05 07:01:37"
+            "time": "2016-12-20 15:23:52"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -890,12 +890,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "76f53cdfcdcd50d208fbd2205a37a7c34d80e602"
+                "reference": "17fd00b19d446c4731ee5734f3c236573c4a8550"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/76f53cdfcdcd50d208fbd2205a37a7c34d80e602",
-                "reference": "76f53cdfcdcd50d208fbd2205a37a7c34d80e602",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/17fd00b19d446c4731ee5734f3c236573c4a8550",
+                "reference": "17fd00b19d446c4731ee5734f3c236573c4a8550",
                 "shasum": ""
             },
             "require": {
@@ -964,7 +964,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-12-11 21:15:42"
+            "time": "2016-12-28 07:20:49"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1031,12 +1031,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "5560bd95c22a4ccf9404d8f176fceb4812a7398e"
+                "reference": "c798e4083112679dfe36394ca681153a7a6f83ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/5560bd95c22a4ccf9404d8f176fceb4812a7398e",
-                "reference": "5560bd95c22a4ccf9404d8f176fceb4812a7398e",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c798e4083112679dfe36394ca681153a7a6f83ed",
+                "reference": "c798e4083112679dfe36394ca681153a7a6f83ed",
                 "shasum": ""
             },
             "conflict": {
@@ -1077,7 +1077,7 @@
                 "namshi/jose": "<2.2",
                 "oro/crm": ">=1.7,<1.7.4",
                 "oro/platform": ">=1.7,<1.7.4",
-                "phpmailer/phpmailer": ">=5,<5.2.14",
+                "phpmailer/phpmailer": ">=5,<5.2.18",
                 "pusher/pusher-php-server": "<2.2.1",
                 "sabre/dav": ">=1.6,<1.6.99|>=1.7,<1.7.11|>=1.8,<1.8.9",
                 "shopware/shopware": "<4.3.7|>=5,<5.1.5",
@@ -1086,7 +1086,8 @@
                 "silverstripe/framework": ">=3,<3.3",
                 "silverstripe/userforms": "<3",
                 "simplesamlphp/saml2": ">=1.9,<1.9.1|>=1.10,<1.10.3|>=2.3,<2.3.3",
-                "simplesamlphp/simplesamlphp": "<1.14.10",
+                "simplesamlphp/simplesamlphp": "<1.14.11",
+                "simplesamlphp/simplesamlphp-module-infocard": "<1.0.1",
                 "socalnick/scn-social-auth": "<1.15.2",
                 "swiftmailer/swiftmailer": ">=4,<4.99.99|>=5,<5.2.1",
                 "symfony/dependency-injection": ">=2,<2.0.17",
@@ -1126,13 +1127,13 @@
                 "zendframework/zend-http": ">=2,<2.0.99|>=2.1,<2.1.99|>=2.3,<2.3.8|>=2.4,<2.4.1",
                 "zendframework/zend-json": ">=2.1,<2.1.6|>=2.2,<2.2.6",
                 "zendframework/zend-ldap": ">=2,<2.0.99|>=2.1,<2.1.99|>=2.2,<2.2.8|>=2.3,<2.3.3",
-                "zendframework/zend-mail": ">=2,<2.0.99|>=2.1,<2.1.99|>=2.3,<2.3.8|>=2.4,<2.4.1",
+                "zendframework/zend-mail": ">=2,<2.4.11|>=2.5,<2.7.2",
                 "zendframework/zend-navigation": ">=2,<2.2.7|>=2.3,<2.3.1",
                 "zendframework/zend-session": ">=2,<2.0.99|>=2.1,<2.1.99|>=2.2,<2.2.9|>=2.3,<2.3.4",
                 "zendframework/zend-validator": ">=2.3,<2.3.6",
                 "zendframework/zend-view": ">=2,<2.2.7|>=2.3,<2.3.1",
                 "zendframework/zend-xmlrpc": ">=2.1,<2.1.6|>=2.2,<2.2.6",
-                "zendframework/zendframework": ">=2,<2.4.9|>=2.5,<2.5.1",
+                "zendframework/zendframework": ">=2,<2.4.11|>=2.5,<2.5.1",
                 "zendframework/zendframework1": "<1.12.20",
                 "zendframework/zendopenid": ">=2,<2.0.2",
                 "zendframework/zendxml": ">=1,<1.0.1",
@@ -1153,7 +1154,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2016-12-06 13:29:26"
+            "time": "2016-12-27 15:21:16"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -1435,23 +1436,23 @@
         },
         {
             "name": "sebastian/global-state",
-            "version": "1.1.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/global-state.git",
-                "reference": "5a2b9ba59e8cf82fd1fdd7efb7d7846fd69ac36d"
+                "reference": "ab3e5ce501d9d45288b53f885a54c87e0cdc7164"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/5a2b9ba59e8cf82fd1fdd7efb7d7846fd69ac36d",
-                "reference": "5a2b9ba59e8cf82fd1fdd7efb7d7846fd69ac36d",
+                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/ab3e5ce501d9d45288b53f885a54c87e0cdc7164",
+                "reference": "ab3e5ce501d9d45288b53f885a54c87e0cdc7164",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": "^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.2|~5.0"
+                "phpunit/phpunit": "^5.7 || ^6.0"
             },
             "suggest": {
                 "ext-uopz": "*"
@@ -1459,7 +1460,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0-dev"
+                    "dev-master": "2.0-dev"
                 }
             },
             "autoload": {
@@ -1482,7 +1483,7 @@
             "keywords": [
                 "global state"
             ],
-            "time": "2016-10-03 07:46:22"
+            "time": "2016-12-12 08:07:45"
         },
         {
             "name": "sebastian/object-enumerator",
@@ -1904,12 +1905,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tracy.git",
-                "reference": "c1ec73ea7661b79aa9fade863b75f8cad9f47bb5"
+                "reference": "7a5cb208d2efc3a39205a186fabbf1eb61f5865d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tracy/zipball/c1ec73ea7661b79aa9fade863b75f8cad9f47bb5",
-                "reference": "c1ec73ea7661b79aa9fade863b75f8cad9f47bb5",
+                "url": "https://api.github.com/repos/nette/tracy/zipball/7a5cb208d2efc3a39205a186fabbf1eb61f5865d",
+                "reference": "7a5cb208d2efc3a39205a186fabbf1eb61f5865d",
                 "shasum": ""
             },
             "require": {
@@ -1958,7 +1959,7 @@
                 "debugger",
                 "nette"
             ],
-            "time": "2016-12-10 15:04:11"
+            "time": "2016-12-27 18:13:06"
         }
     ],
     "aliases": [],

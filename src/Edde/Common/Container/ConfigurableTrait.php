@@ -48,6 +48,9 @@
 			return $this->tInit;
 		}
 
+		public function warmup() {
+		}
+
 		/**
 		 * @inheritdoc
 		 */

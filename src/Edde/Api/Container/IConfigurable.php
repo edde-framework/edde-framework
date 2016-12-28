@@ -17,8 +17,9 @@
 		public function registerConfigHandlerList(array $configHandlerList);
 
 		/**
-		 * this method should be called after all dependencies are available; also there should NOT be any heavy computations, only lightweight
-		 * simple stuff
+		 * this method should be called after all dependencies are
+		 * available; also there should NOT be any heavy computations, only
+		 * lightweight simple stuff
 		 */
 		public function init();
 
@@ -26,6 +27,11 @@
 		 * @return bool
 		 */
 		public function isInitialized(): bool;
+
+		/**
+		 * execute object initialization; object must be serializable after this method
+		 */
+		public function warmup();
 
 		/**
 		 * execute object configuration (so after this method object should be fully prepared for use)

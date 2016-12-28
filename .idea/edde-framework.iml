@@ -32,6 +32,7 @@
       <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/diff" />
       <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/environment" />
       <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/exporter" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/global-state" />
       <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/object-enumerator" />
       <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/recursion-context" />
       <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/resource-operations" />
@@ -49,20 +50,16 @@
     <orderEntry type="module-library">
       <library name="PHARS">
         <CLASSES>
-          <root url="phar://$MODULE_DIR$/lib/phar-io/manifest/tests/_fixture/test.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.0.phar/" />
           <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
-          <root url="phar://$MODULE_DIR$/vendor/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.0.phar/" />
-          <root url="phar://$MODULE_DIR$/vendor/phar-io/manifest/tests/_fixture/test.phar/" />
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.0.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/phar-io/manifest/tests/_fixture/test.phar/" />
         </CLASSES>
         <SOURCES>
-          <root url="phar://$MODULE_DIR$/lib/phar-io/manifest/tests/_fixture/test.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.0.phar/" />
           <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
-          <root url="phar://$MODULE_DIR$/vendor/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.0.phar/" />
-          <root url="phar://$MODULE_DIR$/vendor/phar-io/manifest/tests/_fixture/test.phar/" />
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.0.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/phar-io/manifest/tests/_fixture/test.phar/" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -77,7 +74,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="PHP">
+      <library name="PHP" type="php">
         <CLASSES>
           <root url="file://$MODULE_DIR$/lib/composer" />
           <root url="file://$MODULE_DIR$/lib/defuse/php-encryption" />
@@ -104,6 +101,7 @@
           <root url="file://$MODULE_DIR$/lib/sebastian/diff" />
           <root url="file://$MODULE_DIR$/lib/sebastian/environment" />
           <root url="file://$MODULE_DIR$/lib/sebastian/exporter" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/global-state" />
           <root url="file://$MODULE_DIR$/lib/sebastian/object-enumerator" />
           <root url="file://$MODULE_DIR$/lib/sebastian/recursion-context" />
           <root url="file://$MODULE_DIR$/lib/sebastian/resource-operations" />
@@ -141,6 +139,7 @@
           <root url="file://$MODULE_DIR$/lib/sebastian/diff" />
           <root url="file://$MODULE_DIR$/lib/sebastian/environment" />
           <root url="file://$MODULE_DIR$/lib/sebastian/exporter" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/global-state" />
           <root url="file://$MODULE_DIR$/lib/sebastian/object-enumerator" />
           <root url="file://$MODULE_DIR$/lib/sebastian/recursion-context" />
           <root url="file://$MODULE_DIR$/lib/sebastian/resource-operations" />
