@@ -6,13 +6,17 @@
 
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Application\IRequest;
+	use Edde\Api\Cache\ICacheDirectory;
+	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Log\ILogService;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Common\Application\Application;
+	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Router\RouterService;
+	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Router\RouterServiceConfigHandler;
@@ -33,6 +37,8 @@
 	/** @noinspection PhpIncludeInspection */
 	return ContainerFactory::cache($factoryList = array_merge([
 		IRootDirectory::class => new RootDirectory(__DIR__),
+		ICacheDirectory::class => new CacheDirectory(__DIR__ . '/temp/cache'),
+		ICacheStorage::class => FlatFileCacheStorage::class,
 		IApplication::class => Application::class,
 		ILogService::class => LogService::class,
 		IRouterService::class => RouterService::class,

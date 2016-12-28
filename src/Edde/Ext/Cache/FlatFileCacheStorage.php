@@ -4,14 +4,17 @@
 	namespace Edde\Ext\Cache;
 
 	use Edde\Api\Cache\LazyCacheDirectoryTrait;
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\File\IDirectory;
 	use Edde\Common\Cache\AbstractCacheStorage;
+	use Edde\Common\Container\ConfigurableTrait;
 
 	/**
 	 * Cache is stored in one file based on a storage namespace.
 	 */
-	class FlatFileCacheStorage extends AbstractCacheStorage {
+	class FlatFileCacheStorage extends AbstractCacheStorage implements IConfigurable {
 		use LazyCacheDirectoryTrait;
+		use ConfigurableTrait;
 		/**
 		 * @var string
 		 */
@@ -37,6 +40,7 @@
 		}
 
 		public function save(string $id, $save) {
+			$this->config();
 			$this->write++;
 			$this->source[$id] = $save;
 			file_put_contents($this->directory->filename('0.cache'), serialize($this->source));
@@ -44,6 +48,7 @@
 		}
 
 		public function load($id) {
+			$this->config();
 			/** @noinspection NotOptimalIfConditionsInspection */
 			if (isset($this->source[$id]) || array_key_exists($id, $this->source)) {
 				$this->hit++;
@@ -54,6 +59,7 @@
 		}
 
 		public function invalidate() {
+			$this->config();
 			$this->directory->purge();
 		}
 

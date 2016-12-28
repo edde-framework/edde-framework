@@ -3,15 +3,13 @@
 
 	namespace Edde\Common;
 
+	use Closure;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\ILazyInject;
-	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\EddeException;
 	use Serializable;
 
 	class AbstractObject implements ILazyInject, Serializable {
-		use LazyContainerTrait;
-
 		protected $lazyInjectList = [];
 
 		public function lazy(string $property, IContainer $container, string $dependency, array $parameterList = []) {
@@ -20,11 +18,14 @@
 				$dependency,
 				$parameterList,
 			];
-			call_user_func(\Closure::bind(function (string $property) {
+			call_user_func(Closure::bind(function (string $property) {
 				/** @noinspection PhpVariableVariableInspection */
 				unset($this->$property);
 			}, $this, static::class), $property);
 			return $this;
+		}
+
+		protected function prepare() {
 		}
 
 		/**
@@ -72,7 +73,6 @@
 		}
 
 		public function serialize() {
-			$this->container;
 			return serialize(get_object_vars($this));
 		}
 
@@ -82,5 +82,16 @@
 			foreach (unserialize($serialized) as $k => $v) {
 				$this->$k = $v;
 			}
+		}
+
+		static public function warmup(IContainer $container, string $cache) {
+			return unserialize($cache);
+		}
+
+		public function sleep(IContainer $container): string {
+			return serialize([
+				static::class,
+				serialize($this),
+			]);
 		}
 	}

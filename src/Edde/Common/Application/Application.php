@@ -6,6 +6,7 @@
 	use Edde\Api\Application\ApplicationException;
 	use Edde\Api\Application\LazyRequestTrait;
 	use Edde\Api\Application\LazyResponseManagerTrait;
+	use Edde\Api\Container\ICacheable;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
@@ -15,7 +16,7 @@
 	/**
 	 * Default application implementation.
 	 */
-	class Application extends AbstractApplication {
+	class Application extends AbstractApplication implements ICacheable {
 		use LazyContainerTrait;
 		use LazyConverterManagerTrait;
 		use LazyResponseManagerTrait;

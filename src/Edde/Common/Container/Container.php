@@ -6,6 +6,7 @@
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
+	use Edde\Api\Container\ICacheable;
 	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
@@ -73,11 +74,16 @@
 		 * @throws ContainerException
 		 */
 		public function factory(IFactory $factory, array $parameterList = [], string $name = null) {
+			if (($cache = $this->cache->load($cacheId = ('cacheable/' . $name))) !== null) {
+				list($class, $cache) = unserialize($cache);
+				/** @noinspection PhpUndefinedMethodInspection */
+				return $class::warmup($this, $cache);
+			}
 			$dependency = $factory->dependency($this, $name);
 			$grab = count($parameterList);
 			$dependencyList = [];
 			foreach ($dependency->getParameterList() as $parameter) {
-				if (--$grab >= 0) {
+				if (--$grab >= 0 || $parameter->isOptional()) {
 					continue;
 				}
 				$dependencyList[] = $this->factory($this->getFactory($class = (($class = $parameter->getClass()) ? $class->getName() : $parameter->getName())), [], $class);
@@ -86,6 +92,9 @@
 			if ($instance instanceof IConfigurable) {
 				$instance->registerConfigHandlerList(isset($this->configHandlerList[$name]) ? $this->configHandlerList[$name] : []);
 				$instance->init();
+			}
+			if ($instance instanceof ICacheable) {
+				$this->cache->save($cacheId, $instance->sleep($this));
 			}
 			return $instance;
 		}
