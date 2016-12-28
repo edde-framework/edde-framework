@@ -14,6 +14,7 @@
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Router\RouterService;
 	use Edde\Ext\Container\ContainerFactory;
+	use Edde\Framework;
 	use Tracy\Debugger;
 
 	require_once __DIR__ . '/lib/autoload.php';
@@ -34,4 +35,4 @@
 		ILogService::class => LogService::class,
 		IRouterService::class => RouterService::class,
 		IRequest::class => IRouterService::class . '::createRequest',
-	], is_array($local = @include __DIR__ . '/loader.local.php') ? $local : []), __DIR__ . '/temp/container-' . sha1(implode('', array_keys($factoryList))) . '.cache');
+	], is_array($local = @include __DIR__ . '/loader.local.php') ? $local : []), __DIR__ . '/temp/container-' . sha1(implode('', array_keys($factoryList)) . new Framework()) . '.cache');

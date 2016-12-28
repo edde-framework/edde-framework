@@ -24,7 +24,7 @@
 		 * @return string
 		 */
 		public function getVersion() {
-			return '3.0.168.0';
+			return '3.0.203.0';
 		}
 
 		/**
@@ -34,5 +34,9 @@
 		 */
 		public function getCodename() {
 			return 'The Unepic Epicness';
+		}
+
+		public function __toString() {
+			return $this->getVersionString();
 		}
 	}
