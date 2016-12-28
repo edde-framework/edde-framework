@@ -41,7 +41,6 @@
 		 * @inheritdoc
 		 */
 		public function getHeaderList(): IHeaderList {
-			$this->use();
 			return $this->headerList;
 		}
 
@@ -49,7 +48,6 @@
 		 * @inheritdoc
 		 */
 		public function getContentType(string $default = ''): string {
-			$this->use();
 			return $this->headerList->getContentType()
 				->getMime($default);
 		}
@@ -89,8 +87,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function prepare() {
+			parent::prepare();
 			$this->headerList = new HeaderList();
 			$this->headerList->put(HttpUtils::headerList($this->headers, false));
 			$contentType = $this->headerList->getContentType();
@@ -109,7 +107,6 @@
 		 * @inheritdoc
 		 */
 		public function getContentId() {
-			$this->use();
 			return trim($this->headerList->get('Content-ID'), '<>');
 		}
 	}

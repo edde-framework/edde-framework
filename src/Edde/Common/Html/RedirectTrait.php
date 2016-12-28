@@ -10,7 +10,6 @@
 	 */
 	trait RedirectTrait {
 		public function redirect($redirect) {
-			$this->use();
 			$this->responseManager->response(new Response('redirect', $this->linkFactory->link($redirect)));
 		}
 	}

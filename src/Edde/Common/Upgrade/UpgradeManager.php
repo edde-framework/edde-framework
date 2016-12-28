@@ -47,7 +47,6 @@
 		 * @throws UpgradeException
 		 */
 		public function setCurrentVersion(string $currentVersion = null): IUpgradeManager {
-			$this->use();
 			if ($currentVersion && isset($this->upgradeList[$currentVersion]) === false) {
 				throw new UpgradeException(sprintf('Setting unknown current version [%s].', $currentVersion));
 			}
@@ -59,7 +58,6 @@
 		 * @inheritdoc
 		 */
 		public function getUpgradeList(): array {
-			$this->use();
 			return $this->upgradeList;
 		}
 
@@ -76,7 +74,6 @@
 		 * @throws \Exception
 		 */
 		public function upgradeTo(string $version = null): IUpgrade {
-			$this->use();
 			if ($version === null) {
 				end($this->upgradeList);
 				$version = key($this->upgradeList);

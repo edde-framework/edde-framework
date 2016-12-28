@@ -21,7 +21,7 @@
 		use LazyCryptEngineTrait;
 
 		public function setTag(string $tag, bool $pair = true): IHtmlControl {
-			$this->use();
+			$this->config();
 			$this->node->addMetaList([
 				'tag' => $tag,
 				'pair' => $pair,
@@ -30,7 +30,7 @@
 		}
 
 		public function setId(string $id) {
-			$this->use();
+			$this->config();
 			$this->setAttribute('id', $id);
 			return $this;
 		}
@@ -39,7 +39,7 @@
 		 * @inheritdoc
 		 */
 		public function setAttribute($attribute, $value) {
-			$this->use();
+			$this->config();
 			/** @noinspection DegradedSwitchInspection */
 			switch ($attribute) {
 				case 'class':
@@ -55,7 +55,7 @@
 		 * @inheritdoc
 		 */
 		public function addAttribute(string $attribute, $value) {
-			$this->use();
+			$this->config();
 			$attributeList = $this->node->getAttributeList();
 			$attributeList[$attribute][] = $value;
 			$this->node->setAttributeList($attributeList);
@@ -99,7 +99,7 @@
 		 * @inheritdoc
 		 */
 		public function getId(): string {
-			$this->use();
+			$this->config();
 			return $this->getAttribute('id', '');
 		}
 
@@ -107,7 +107,7 @@
 		 * @inheritdoc
 		 */
 		public function getAttribute(string $name, $default = '') {
-			$this->use();
+			$this->config();
 			return $this->node->getAttribute($name, $default);
 		}
 
@@ -115,13 +115,13 @@
 		 * @inheritdoc
 		 */
 		public function setText(string $text) {
-			$this->use();
+			$this->config();
 			$this->node->setValue($text);
 			return $this;
 		}
 
 		public function getText(): string {
-			$this->use();
+			$this->config();
 			return $this->node->getValue('');
 		}
 
@@ -129,7 +129,7 @@
 		 * @inheritdoc
 		 */
 		public function addAttributeList(array $attributeList): IHtmlControl {
-			$this->use();
+			$this->config();
 			$this->node->addAttributeList($attributeList);
 			return $this;
 		}
@@ -138,7 +138,7 @@
 		 * @inheritdoc
 		 */
 		public function setAttributeList(array $attributeList): IHtmlControl {
-			$this->use();
+			$this->config();
 			/**
 			 * intentional loop, because control can simply alter attributes
 			 */
@@ -152,12 +152,12 @@
 		 * @inheritdoc
 		 */
 		public function hasAttribute($attribute) {
-			$this->use();
+			$this->config();
 			return $this->node->hasAttribute($attribute);
 		}
 
 		public function toggleClass(string $class, bool $enable = null): IHtmlControl {
-			$this->use();
+			$this->config();
 			$hasClass = $this->hasClass($class);
 			if ($enable === null) {
 				if ($hasClass === false) {
@@ -177,7 +177,7 @@
 		 * @inheritdoc
 		 */
 		public function hasClass(string $class) {
-			$this->use();
+			$this->config();
 			return in_array($class, $this->getClassList(), true);
 		}
 
@@ -185,7 +185,7 @@
 		 * @inheritdoc
 		 */
 		public function getClassList() {
-			$this->use();
+			$this->config();
 			return $this->getAttribute('class', []);
 		}
 
@@ -202,7 +202,7 @@
 		}
 
 		public function removeClass(string $class) {
-			$this->use();
+			$this->config();
 			$diff = array_diff($this->getClassList(), [$class]);
 			$this->node->removeAttribute('class');
 			if (empty($diff) === false) {
@@ -215,7 +215,7 @@
 		 * @inheritdoc
 		 */
 		public function render(int $indent = 0): string {
-			$this->use();
+			$this->config();
 			$content = [];
 			/** @var $control IHtmlControl */
 			if (($tag = $this->getTag()) === null) {
@@ -259,7 +259,7 @@
 		 * @inheritdoc
 		 */
 		public function getTag(): string {
-			$this->use();
+			$this->config();
 			return $this->node->getMeta('tag');
 		}
 
@@ -267,7 +267,7 @@
 		 * @inheritdoc
 		 */
 		public function getAttributeList(): array {
-			$this->use();
+			$this->config();
 			return $this->node->getAttributeList();
 		}
 
@@ -284,7 +284,7 @@
 		 * @inheritdoc
 		 */
 		public function isPair(): bool {
-			$this->use();
+			$this->config();
 			return $this->node->getMeta('pair', true);
 		}
 

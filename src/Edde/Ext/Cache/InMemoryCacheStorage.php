@@ -12,12 +12,10 @@
 		protected $storage;
 
 		public function save(string $id, $save) {
-			$this->use();
 			return $this->storage[$id] = $save;
 		}
 
 		public function load($id) {
-			$this->use();
 			if (isset($this->storage[$id]) === false) {
 				return null;
 			}
@@ -25,7 +23,6 @@
 		}
 
 		public function invalidate() {
-			$this->use();
 			$this->storage = [];
 			return $this;
 		}

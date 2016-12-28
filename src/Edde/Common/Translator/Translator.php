@@ -10,6 +10,7 @@
 	use Edde\Api\Translator\TranslatorException;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Cache\CacheTrait;
+	use Edde\Common\Container\ConfigurableTrait;
 
 	/**
 	 * General class for translations support.
@@ -17,6 +18,7 @@
 	class Translator extends AbstractObject implements ITranslator {
 		use LazyConverterManagerTrait;
 		use CacheTrait;
+		use ConfigurableTrait;
 		/**
 		 * @var array
 		 */
@@ -47,7 +49,7 @@
 		public function registerSource(IFile $source, string $scope = null): ITranslator {
 			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
 			$scope = $scope ?: ($this->scopeStack->isEmpty() ? null : $this->scopeStack->top());
-			if ($this->isUsed()) {
+			if ($this->isCofnigured()) {
 				$this->registerDictionary($this->converterManager->convert($source, $source->getMime(), IDictionary::class), $scope);
 				return $this;
 			}
@@ -95,7 +97,7 @@
 		 * @throws TranslatorException
 		 */
 		public function translate(string $id, string $scope = null, string $language = null): string {
-			$this->use();
+			$this->config();
 			if (($language = $language ?: $this->language) === null) {
 				throw new TranslatorException('Cannot use translator without set language.');
 			}

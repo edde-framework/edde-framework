@@ -55,7 +55,6 @@
 		 * @throws SessionException
 		 */
 		public function &session(string $name): array {
-			$this->use();
 			$this->start();
 			/** @noinspection PhpVariableNamingConventionInspection */
 			$_SESSION[$this->namespace] = $_SESSION[$this->namespace] ?? [];

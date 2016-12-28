@@ -16,33 +16,42 @@
 		 */
 		protected $schemaList = [];
 
+		/**
+		 * @inheritdoc
+		 */
+		public function addSchema(ISchema $schema): ISchemaManager {
+			$this->schemaList[$schema->getSchemaName()] = $schema;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function hasSchema(string $schema): bool {
-			$this->use();
 			return isset($this->schemaList[$schema]);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getSchema(string $schema): ISchema {
-			$this->use();
 			if (isset($this->schemaList[$schema]) === false) {
 				throw new SchemaException(sprintf('Requested unknown schema [%s].', $schema));
 			}
 			return $this->schemaList[$schema];
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getSchemaList(): array {
-			$this->use();
 			return $this->schemaList;
 		}
 
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function prepare() {
+			parent::prepare();
 			foreach ($this->schemaFactory->create() as $schema) {
 				$this->addSchema($schema);
 			}
-		}
-
-		public function addSchema(ISchema $schema): ISchemaManager {
-			$this->schemaList[$schema->getSchemaName()] = $schema;
-			return $this;
 		}
 	}

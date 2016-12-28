@@ -34,7 +34,6 @@
 		 * @inheritdoc
 		 */
 		public function createRequest() {
-			$this->use();
 			if ($this->runtime->isConsoleMode()) {
 				return null;
 			}

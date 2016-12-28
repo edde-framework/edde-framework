@@ -5,6 +5,7 @@
 
 	use Edde\Api\Asset\LazyAssetStorageTrait;
 	use Edde\Api\Filter\IFilter;
+	use Edde\Api\Session\LazyFingerprintTrait;
 	use Edde\Api\Web\ICompiler;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Resource\ResourceList;
@@ -14,6 +15,7 @@
 	 */
 	abstract class AbstractCompiler extends ResourceList implements ICompiler {
 		use LazyAssetStorageTrait;
+		use LazyFingerprintTrait;
 		use CacheTrait;
 		/**
 		 * filters applied during compilation (or after)
@@ -34,8 +36,7 @@
 		 * @inheritdoc
 		 */
 		public function setNamespace(string $namespace): ICompiler {
-			$this->use();
-			$this->cache->setNamespace($namespace);
+
 			return $this;
 		}
 
@@ -68,8 +69,9 @@
 			return $content;
 		}
 
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function prepare() {
+			parent::prepare();
 			$this->cache();
+			$this->cache->setNamespace($this->fingerprint->fingerprint());
 		}
 	}

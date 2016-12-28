@@ -11,6 +11,7 @@
 	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Url\IUrl;
+	use Edde\Api\Url\UrlException;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Client\Event\DeleteEvent;
 	use Edde\Common\Client\Event\GetEvent;
@@ -19,6 +20,7 @@
 	use Edde\Common\Client\Event\PostEvent;
 	use Edde\Common\Client\Event\PutEvent;
 	use Edde\Common\Client\Event\RequestEvent;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
@@ -33,6 +35,7 @@
 		use LazyContainerTrait;
 		use LazyConverterManagerTrait;
 		use EventTrait;
+		use ConfigurableTrait;
 
 		/**
 		 * @inheritdoc
@@ -150,7 +153,7 @@
 		 * @inheritdoc
 		 */
 		public function request(IHttpRequest $httpRequest): IHttpHandler {
-			$this->use();
+			$this->config();
 			curl_setopt_array($curl = curl_init($url = (string)$httpRequest->getRequestUrl()), [
 				CURLOPT_SSL_VERIFYPEER => false,
 				CURLOPT_FOLLOWLOCATION => true,
@@ -172,6 +175,7 @@
 		 * @param IUrl|string $url
 		 *
 		 * @return HttpRequest
+		 * @throws UrlException
 		 */
 		protected function createRequest($url) {
 			$httpRequest = new HttpRequest(new PostList(), new HeaderList(), new CookieList());

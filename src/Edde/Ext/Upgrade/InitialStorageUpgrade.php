@@ -18,7 +18,7 @@
 		/**
 		 * @param string $version
 		 */
-		public function __construct($version = 'edde-0.5') {
+		public function __construct($version = 'edde') {
 			parent::__construct($version);
 		}
 

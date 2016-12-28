@@ -17,7 +17,6 @@
 		 * @inheritdoc
 		 */
 		public function getMacroList(): array {
-			$this->use();
 			return $this->macroList;
 		}
 

@@ -6,12 +6,12 @@
 	use Edde\Api\Collection\IList;
 	use Edde\Api\Session\ISession;
 	use Edde\Api\Session\ISessionManager;
-	use Edde\Common\Collection\AbstractDefferedList;
+	use Edde\Common\Collection\AbstractList;
 
 	/**
 	 * Session section for simple session data manipulation.
 	 */
-	class Session extends AbstractDefferedList implements ISession {
+	class Session extends AbstractList implements ISession {
 		/**
 		 * @var ISessionManager
 		 */
@@ -34,7 +34,6 @@
 		 * @inheritdoc
 		 */
 		public function set(string $name, $value): IList {
-			$this->use();
 			if ($value === null) {
 				return parent::remove($name);
 			}
@@ -44,8 +43,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function prepare() {
+			parent::prepare();
 			$this->list = &$this->sessionManager->session($this->name);
 		}
 	}

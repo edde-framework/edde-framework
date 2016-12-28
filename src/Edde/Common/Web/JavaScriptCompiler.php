@@ -18,7 +18,6 @@
 		 * @inheritdoc
 		 */
 		public function compile(IResourceList $resourceList): IFile {
-			$this->use();
 			$content = [];
 			if (($file = $this->cache->load($cacheId = $resourceList->getResourceName())) === null) {
 				foreach ($resourceList as $resource) {

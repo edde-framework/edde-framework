@@ -3,87 +3,18 @@
 
 	namespace Edde\Common;
 
-	use Edde\Api\Deffered\DefferedException;
 	use Edde\Api\EddeException;
 
 	/**
 	 * General php object protection trait; this should be used in every class.
 	 */
 	trait ObjectTrait {
-		/**
-		 * has been this object already used (that mean some heavy logic)
-		 *
-		 * @var bool
-		 */
-		protected $objectUsed = false;
-		/**
-		 * set of methods executed after object has been "prepared"
-		 *
-		 * @var callable[]
-		 */
-		protected $objectOnUseList = [];
-		/**
-		 * @var callable[]
-		 */
-		protected $objectPropertyList = [];
-
-		public function registerOnUse(callable $callback) {
-			if ($this->isUsed()) {
-				throw new DefferedException(sprintf('Cannot add %s::registerOnUse() callback to already used class [%s].', static::class, static::class));
-			}
-			$this->objectOnUseList[] = $callback;
-			return $this;
-		}
-
-		public function isUsed(): bool {
-			return $this->objectUsed;
-		}
-
-		public function use () {
-			if ($this->objectUsed === false && $this->objectUsed = true) {
-				$this->onBootstrap();
-				$this->onPrepare();
-				$this->onUse();
-			}
-			return $this;
-		}
-
-		protected function onBootstrap() {
-		}
+		private $objectPropertyList = [];
 
 		/**
-		 * prepare this class for the first usage
-		 */
-		protected function onPrepare() {
-		}
-
-		protected function onUse() {
-			foreach ($this->objectOnUseList as $callback) {
-				$callback($this);
-			}
-		}
-
-		/**
-		 * alias to self::objectProperty()
-		 *
-		 * @param string   $property
-		 * @param callable $callback
-		 *
-		 * @return $this
+		 * @inheritdoc
 		 */
 		public function lazy(string $property, callable $callback) {
-			return $this->objectProperty($property, $callback);
-		}
-
-		/**
-		 * magical method for replacing defined property with a deffered magical method for later value loading
-		 *
-		 * @param string   $property
-		 * @param callable $callback
-		 *
-		 * @return $this
-		 */
-		public function objectProperty(string $property, callable $callback) {
 			$this->objectPropertyList[$property] = $callback;
 			/**
 			 * this magic allows to remove a private property, ou yay!

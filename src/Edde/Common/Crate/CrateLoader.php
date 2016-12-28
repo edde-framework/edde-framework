@@ -8,6 +8,7 @@
 	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Cache\CacheTrait;
+	use Edde\Common\Container\ConfigurableTrait;
 
 	/**
 	 * Default crate loader implementation.
@@ -16,6 +17,7 @@
 		use LazySchemaManagerTrait;
 		use LazyCrateGeneratorTrait;
 		use CacheTrait;
+		use ConfigurableTrait;
 
 		/**
 		 * include the requested class
@@ -25,7 +27,7 @@
 		 * @return bool
 		 */
 		public function __invoke(string $class) {
-			$this->use();
+			$this->config();
 			if (($hasSchema = $this->cache->load($cacheId = ('has-schema/' . $class))) === null) {
 				$this->cache->save($cacheId, $hasSchema = $this->schemaManager->hasSchema($class));
 			}

@@ -19,7 +19,6 @@
 		}
 
 		public function getIterator() {
-			$this->use();
 			foreach ($this->directoryList as $directory) {
 				foreach ($directory as $file) {
 					yield $file;

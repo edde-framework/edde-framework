@@ -16,6 +16,7 @@
 	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Cache\CacheTrait;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\Strings\StringUtils;
 
@@ -27,6 +28,7 @@
 		use LazyCrateDirectoryTrait;
 		use LazyTempDirectoryTrait;
 		use CacheTrait;
+		use ConfigurableTrait;
 		/**
 		 * @var string
 		 */
@@ -37,10 +39,10 @@
 		 * @throws FileException
 		 */
 		public function generate(bool $force = false): ICrateGenerator {
-			if ($this->isUsed()) {
+			if ($this->isCofnigured()) {
 				return $this;
 			}
-			$this->use();
+			$this->config();
 			$lock = $this->tempDirectory->file('.crate-generator');
 			$lock->lock();
 			/** @noinspection NotOptimalIfConditionsInspection */
@@ -67,7 +69,7 @@
 		 * @inheritdoc
 		 */
 		public function compile(ISchema $schema): array {
-			$this->use();
+			$this->config();
 			$sourceList = [];
 			$source[] = "<?php\n";
 			$source[] = "\tdeclare(strict_types = 1);\n\n";

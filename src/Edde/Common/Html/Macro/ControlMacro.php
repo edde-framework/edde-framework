@@ -32,7 +32,6 @@
 				parent::macro($macro, $compiler);
 				return null;
 			}
-			$this->use();
 			$compiler->setVariable('file', $file = $this->templateDirectory->file(($class = 'Template_' . $compiler->getHash()) . '.php'));
 			$file->openForWrite();
 			$file->enableWriteCache();
@@ -90,10 +89,5 @@
 			$this->write($compiler, '}', 1);
 			$file->close();
 			return $file;
-		}
-
-		protected function onBootstrap() {
-			parent::onBootstrap();
-			$this->templateDirectory->create();
 		}
 	}

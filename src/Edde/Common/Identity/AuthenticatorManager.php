@@ -48,7 +48,6 @@
 		}
 
 		public function step(string $step, ...$credentials): IAuthenticatorManager {
-			$this->use();
 			if (($currentList = $this->session->get('flow', false)) === false) {
 				throw new AuthenticatorException(sprintf('Flow was not started; please use [%s::select()] method before.', static::class));
 			}
@@ -67,7 +66,6 @@
 		}
 
 		public function authenticate(string $name, ...$credentials): IAuthenticatorManager {
-			$this->use();
 			if (isset($this->authenticatorList[$name]) === false) {
 				throw new AuthenticatorException(sprintf('Cannot authenticate identity by unknown authenticator [%s]; did you registered it before?', $name));
 			}
@@ -85,14 +83,12 @@
 		}
 
 		public function reset(): IAuthenticatorManager {
-			$this->use();
 			$this->session->set('flow', null);
 			$this->identityManager->reset(true);
 			return $this;
 		}
 
 		public function getCurrentStep(): string {
-			$this->use();
 			if ($this->isDone()) {
 				throw new AuthenticatorException('There are no more steps!');
 			}
@@ -101,17 +97,15 @@
 		}
 
 		public function isDone(): bool {
-			$this->use();
 			return $this->session->get('flow', false) === false;
 		}
 
 		public function getStepList(): array {
-			$this->use();
 			return $this->session->get('flow', []);
 		}
 
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function prepare() {
+			parent::prepare();
 			foreach ($this->flowList as $name => $authList) {
 				foreach ($authList as $authenticator) {
 					if (isset($this->authenticatorList[$authenticator]) === false) {

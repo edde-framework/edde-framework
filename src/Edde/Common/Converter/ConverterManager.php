@@ -7,11 +7,13 @@
 	use Edde\Api\Converter\IConverter;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Container\ConfigurableTrait;
 
 	/**
 	 * Default implementation of a convertion manager.
 	 */
 	class ConverterManager extends AbstractObject implements IConverterManager {
+		use ConfigurableTrait;
 		/**
 		 * @var IConverter[]
 		 */
@@ -36,7 +38,7 @@
 		 * @throws ConverterException
 		 */
 		public function convert($convert, string $source, string $target) {
-			$this->use();
+			$this->config();
 			if (isset($this->converterList[$mime = ($source . '|' . $target)]) === false) {
 				throw new ConverterException(sprintf('Cannot convert unknown source mime [%s] to [%s].', $source, $target));
 			}

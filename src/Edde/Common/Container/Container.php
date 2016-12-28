@@ -84,8 +84,9 @@
 				$dependencyList[] = $this->factory($this->getFactory($class = (($class = $parameter->getClass()) ? $class->getName() : $parameter->getName())), [], $class);
 			}
 			$instance = $this->inject($factory->execute($this, array_merge($parameterList, $dependencyList), $name), $dependency);
-			if (isset($this->configHandlerList[$name]) && $instance instanceof IConfigurable) {
-				$instance->registerConfigHandlerList($this->configHandlerList[$name]);
+			if ($instance instanceof IConfigurable) {
+				$instance->registerConfigHandlerList(isset($this->configHandlerList[$name]) ? $this->configHandlerList[$name] : []);
+				$instance->init();
 			}
 			return $instance;
 		}

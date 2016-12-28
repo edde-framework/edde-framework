@@ -5,12 +5,15 @@
 
 	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEvent;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Event\AbstractHandler;
 
 	/**
 	 * This should take instance on input and return all methods accepting exactly one IEvent parameter.
 	 */
 	class ReflectionHandler extends AbstractHandler {
+		use ConfigurableTrait;
+
 		protected $handler;
 		/**
 		 * @var array[]
@@ -34,7 +37,7 @@
 		 * @inheritdoc
 		 */
 		public function getIterator() {
-			$this->use();
+			$this->config();
 			foreach ($this->methodList as $event => $closureList) {
 				foreach ($closureList as $closure) {
 					yield $event => $closure;

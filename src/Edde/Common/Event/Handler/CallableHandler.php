@@ -7,12 +7,14 @@
 	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEvent;
 	use Edde\Common\Callback\Callback;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Event\AbstractHandler;
 
 	/**
 	 * Simple lamda handler.
 	 */
 	class CallableHandler extends AbstractHandler {
+		use ConfigurableTrait;
 		/**
 		 * @var callable
 		 */
@@ -36,7 +38,7 @@
 		 * @inheritdoc
 		 */
 		public function getIterator() {
-			$this->use();
+			$this->config();
 			if (empty($this->event)) {
 				return new \ArrayIterator([]);
 			}

@@ -4,9 +4,8 @@
 	namespace Edde\Common;
 
 	use Edde\Api\Container\ILazyInject;
-	use Edde\Api\Deffered\IDeffered;
 
-	abstract class AbstractObject implements IDeffered, ILazyInject, \Serializable {
+	abstract class AbstractObject implements ILazyInject, \Serializable {
 		use ObjectTrait;
 
 		public function serialize() {

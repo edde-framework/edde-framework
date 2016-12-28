@@ -46,10 +46,9 @@
 		 * @inheritdoc
 		 */
 		public function record(ILogRecord $logRecord): ILog {
-			$this->use();
-			$log = $logRecord->getLog();
 			$tagList = array_unique(($tagList = $logRecord->getTagList()) ? $tagList : [null]);
 			if (empty($this->contentFilterList) !== true) {
+				$log = $logRecord->getLog();
 				foreach ($tagList as $tag) {
 					$log = isset($this->contentFilterList[$tag]) ? $this->contentFilterList[$tag]->filter($log) : $log;
 				}

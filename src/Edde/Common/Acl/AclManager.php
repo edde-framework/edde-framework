@@ -8,9 +8,11 @@
 	use Edde\Api\Acl\IAclManager;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Container\ConfigurableTrait;
 
 	class AclManager extends AbstractObject implements IAclManager {
 		use LazyContainerTrait;
+		use ConfigurableTrait;
 		/**
 		 * array of acl rules
 		 *
@@ -37,7 +39,7 @@
 		}
 
 		public function acl(array $groupList): IAcl {
-			$this->use();
+			$this->config();
 			if ($diff = array_diff($groupList, array_keys($this->aclList))) {
 				throw new AclException(sprintf('Unknown group [%s]. Did you register access for this group(s)?', implode(', ', $diff)));
 			}

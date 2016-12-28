@@ -61,7 +61,6 @@
 		}
 
 		public function create() {
-			$this->use();
 			/** @var $schemaList ISchema[] */
 			$schemaList = [];
 			foreach ($this->schemaNodeList as $schemaNode) {
@@ -129,8 +128,8 @@
 			return $schema;
 		}
 
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function prepare() {
+			parent::prepare();
 			$this->propertyListNodeQuery = new NodeQuery('/*/property-list/*');
 			$this->propertyFilterNodeQuery = new NodeQuery('/*/property-list/*/filter/*');
 			$this->propertySetterFilterNodeQuery = new NodeQuery('/*/property-list/*/setter-filter/*');

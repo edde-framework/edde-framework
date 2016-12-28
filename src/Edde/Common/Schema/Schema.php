@@ -68,7 +68,6 @@
 		}
 
 		public function getProperty(string $name): ISchemaProperty {
-			$this->use();
 			if ($this->hasProperty($name) === false) {
 				throw new SchemaException(sprintf('Requested unknown property [%s] in schema [%s].', $name, $this->getSchemaName()));
 			}
@@ -76,7 +75,6 @@
 		}
 
 		public function hasProperty(string $name): bool {
-			$this->use();
 			return isset($this->propertyList[$name]);
 		}
 
@@ -88,7 +86,6 @@
 		}
 
 		public function getPropertyList(): array {
-			$this->use();
 			return $this->propertyList;
 		}
 
@@ -168,12 +165,10 @@
 		}
 
 		public function getMeta(string $name, $default = null) {
-			$this->use();
 			return $this->metaList[$name] ?? $default;
 		}
 
 		public function getMetaList(): array {
-			$this->use();
 			return $this->metaList;
 		}
 
@@ -183,7 +178,6 @@
 		}
 
 		public function hasMeta(string $name): bool {
-			$this->use();
 			return isset($this->metaList[$name]) || array_key_exists($name, $this->metaList);
 		}
 	}

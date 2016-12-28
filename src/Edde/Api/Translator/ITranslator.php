@@ -3,13 +3,12 @@
 
 	namespace Edde\Api\Translator;
 
-	use Edde\Api\Deffered\IDeffered;
 	use Edde\Api\File\IFile;
 
 	/**
 	 * Implementation of a translator.
 	 */
-	interface ITranslator extends IDeffered {
+	interface ITranslator {
 		/**
 		 * register source to translator; this will be convertet via converter to target dictionary (and registered with register
 		 *

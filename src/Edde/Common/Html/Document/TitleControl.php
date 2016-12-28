@@ -33,7 +33,6 @@
 		 * @return $this
 		 */
 		public function setTitle(string $title) {
-			$this->use();
 			$this->node->setValue($title);
 			return $this;
 		}

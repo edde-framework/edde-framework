@@ -54,25 +54,25 @@
 		}
 
 		public function addStyleSheet(string $file) {
-			$this->use();
+			$this->config();
 			$this->styleSheetList->addResource(new File($file));
 			return $this;
 		}
 
 		public function addStyleSheetResource(IResource $resource) {
-			$this->use();
+			$this->config();
 			$this->styleSheetList->addResource($resource);
 			return $this;
 		}
 
 		public function addJavaScript(string $file) {
-			$this->use();
+			$this->config();
 			$this->javaScriptList->addResource(new File($file));
 			return $this;
 		}
 
 		public function addJavaScriptResource(IResource $resource) {
-			$this->use();
+			$this->config();
 			$this->javaScriptList->addResource($resource);
 			return $this;
 		}
@@ -81,7 +81,7 @@
 		 * @inheritdoc
 		 */
 		public function render(int $indent = 0): string {
-			$this->use();
+			$this->config();
 			if ($this->styleSheetList->isEmpty() === false) {
 				$this->head->addStyleSheet($this->styleSheetCompiler->compile($this->styleSheetList)
 					->getRelativePath());

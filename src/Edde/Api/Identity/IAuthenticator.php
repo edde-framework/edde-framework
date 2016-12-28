@@ -3,12 +3,10 @@
 
 	namespace Edde\Api\Identity;
 
-	use Edde\Api\Deffered\IDeffered;
-
 	/**
-	 * This implementation is resposnible for an identity authentification.
+	 * This implementation is responsible for an identity authentification.
 	 */
-	interface IAuthenticator extends IDeffered {
+	interface IAuthenticator {
 		/**
 		 * name of auth method
 		 *

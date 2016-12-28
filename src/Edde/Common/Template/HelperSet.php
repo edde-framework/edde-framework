@@ -19,7 +19,6 @@
 		}
 
 		public function getHelperList(): array {
-			$this->use();
 			return $this->helperList;
 		}
 	}

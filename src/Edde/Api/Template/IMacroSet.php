@@ -3,9 +3,7 @@
 
 	namespace Edde\Api\Template;
 
-	use Edde\Api\Deffered\IDeffered;
-
-	interface IMacroSet extends IDeffered {
+	interface IMacroSet {
 		/**
 		 * register a macro into the set
 		 *

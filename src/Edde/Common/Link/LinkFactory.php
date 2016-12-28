@@ -27,7 +27,6 @@
 		 * @throws LinkException
 		 */
 		public function link($generate, ...$parameterList) {
-			$this->use();
 			foreach ($this->linkGeneratorList as $linkGenerator) {
 				if (($url = $linkGenerator->link($generate, ...$parameterList)) !== null) {
 					return $url;

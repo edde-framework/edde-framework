@@ -48,13 +48,12 @@
 		 * @return ILog
 		 */
 		public function record(ILogRecord $logRecord): ILog {
-			$this->use();
 			$this->file->write(sprintf("[%s] %s\n", date('Y-m-d H:i:s'), $logRecord->getLog()));
 			return $this;
 		}
 
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function prepare() {
+			parent::prepare();
 			$this->logDirectory->create();
 			$this->file = $this->logDirectory->file(date('Y-m-d-') . $this->name . '.log');
 			$this->file->openForAppend();

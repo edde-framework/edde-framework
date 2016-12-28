@@ -37,7 +37,6 @@
 		}
 
 		public function save(string $id, $save) {
-			$this->use();
 			$this->write++;
 			$this->source[$id] = $save;
 			file_put_contents($this->directory->filename('0.cache'), serialize($this->source));
@@ -45,7 +44,6 @@
 		}
 
 		public function load($id) {
-			$this->use();
 			/** @noinspection NotOptimalIfConditionsInspection */
 			if (isset($this->source[$id]) || array_key_exists($id, $this->source)) {
 				$this->hit++;
@@ -56,12 +54,11 @@
 		}
 
 		public function invalidate() {
-			$this->use();
 			$this->directory->purge();
 		}
 
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function prepare() {
+			parent::prepare();
 			$this->cacheDirectory->create();
 			$this->directory = $this->cacheDirectory->directory(sha1($this->namespace))
 				->create();

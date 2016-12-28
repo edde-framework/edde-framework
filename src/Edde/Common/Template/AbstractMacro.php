@@ -55,7 +55,6 @@
 		 * @inheritdoc
 		 */
 		public function hasHelperSet(): bool {
-			$this->use();
 			return $this->helperSet !== null;
 		}
 
@@ -63,7 +62,6 @@
 		 * @inheritdoc
 		 */
 		public function getHelperSet(): IHelperSet {
-			$this->use();
 			return $this->helperSet;
 		}
 

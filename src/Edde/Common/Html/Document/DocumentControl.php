@@ -25,7 +25,7 @@
 		 * @return HeadControl
 		 */
 		public function getHead() {
-			$this->use();
+			$this->config();
 			return $this->head;
 		}
 
@@ -35,7 +35,7 @@
 		 * @return BodyControl
 		 */
 		public function getBody() {
-			$this->use();
+			$this->config();
 			return $this->body;
 		}
 
@@ -59,7 +59,7 @@
 		 * @inheritdoc
 		 */
 		public function render(int $indent = 0): string {
-			$this->use();
+			$this->config();
 			return "<!DOCTYPE html>\n" . parent::render($indent);
 		}
 
@@ -69,7 +69,7 @@
 		 * @inheritdoc
 		 */
 		public function addControl(IControl $control): IControl {
-			$this->use();
+			$this->config();
 			$this->body->addControl($control);
 			return $this;
 		}

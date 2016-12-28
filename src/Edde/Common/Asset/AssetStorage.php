@@ -13,6 +13,7 @@
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\ResourceException;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
 
@@ -23,6 +24,7 @@
 		use LazyRootDirectoryTrait;
 		use LazyAssetDirectoryTrait;
 		use LazyStorageDirectoryTrait;
+		use ConfigurableTrait;
 
 		/**
 		 * @inheritdoc
@@ -30,7 +32,7 @@
 		 * @throws FileException
 		 */
 		public function store(IResource $resource) {
-			$this->use();
+			$this->config();
 			$url = $resource->getUrl();
 			$directory = $this->storageDirectory->directory(sha1(dirname($url->getPath())));
 			try {
@@ -43,7 +45,7 @@
 		}
 
 		public function allocate(string $name): IFile {
-			$this->use();
+			$this->config();
 			return $this->assetDirectory->file($name);
 		}
 

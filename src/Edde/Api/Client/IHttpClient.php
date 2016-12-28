@@ -3,13 +3,12 @@
 
 	namespace Edde\Api\Client;
 
-	use Edde\Api\Deffered\IDeffered;
 	use Edde\Api\Event\IEventBus;
 	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Url\IUrl;
 
-	interface IHttpClient extends IDeffered, IEventBus {
+	interface IHttpClient extends IEventBus {
 		/**
 		 * do an arbitrary request; the all others are shortcut to this method
 		 *

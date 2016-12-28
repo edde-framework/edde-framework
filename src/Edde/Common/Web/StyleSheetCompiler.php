@@ -36,7 +36,6 @@
 		 * @throws FileException
 		 */
 		public function compile(IResourceList $resourceList): IFile {
-			$this->use();
 			$content = [];
 			$pathList = [];
 			if (($file = $this->cache->load($cacheId = $resourceList->getResourceName())) === null) {

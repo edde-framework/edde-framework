@@ -57,7 +57,6 @@
 		 * @throws StaticQueryException
 		 */
 		public function create(IQuery $query) {
-			$this->use();
 			return $this->fragment($query->getNode());
 		}
 
@@ -66,7 +65,6 @@
 		 * @throws StaticQueryException
 		 */
 		public function fragment(INode $node) {
-			$this->use();
 			if (isset($this->factoryList[$node->getName()]) === false) {
 				throw new StaticQueryException(sprintf('Unsuported fragment type [%s].', $node->getName()));
 			}
@@ -79,7 +77,6 @@
 		 * @return StaticQuery
 		 */
 		protected function formatDeleteQuery(INode $node) {
-			$this->use();
 			$sql = 'DELETE FROM ' . $this->delimite($node->getValue());
 			return new StaticQuery($sql, []);
 		}
@@ -97,7 +94,6 @@
 		 * @return StaticQuery
 		 */
 		protected function formatInsertQuery(INode $node) {
-			$this->use();
 			$parameterList = [];
 			$nameList = [];
 			$columnList = [];
@@ -118,7 +114,6 @@
 		 * @throws StaticQueryException
 		 */
 		protected function formatUpdateQuery(INode $node) {
-			$this->use();
 			$parameterList = [];
 			$updateQuery[] = 'UPDATE ' . $this->delimite($node->getValue()) . ' SET';
 			$updateList = [];
@@ -183,7 +178,6 @@
 		 * @return StaticQuery
 		 */
 		protected function formatCreateSchemaQuery(INode $node) {
-			$this->use();
 			$sql = 'CREATE TABLE IF NOT EXISTS ' . $this->delimite($node->getValue()) . ' (';
 			$columnList = [];
 			foreach ($this->createSchemaNodeQuery->filter($node) as $propertyNode) {
@@ -202,20 +196,12 @@
 		}
 
 		/**
-		 * @param string $type
-		 *
-		 * @return string
-		 */
-		abstract protected function type(string $type): string;
-
-		/**
 		 * @param INode $node
 		 *
 		 * @return StaticQuery
 		 * @throws StaticQueryException
 		 */
 		protected function formatSelectQuery(INode $node) {
-			$this->use();
 			$selectList = $this->formatSelect($node);
 			$parameterList = [];
 			$selectQuery[] = 'SELECT';
@@ -490,8 +476,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function prepare() {
+			parent::prepare();
 			$reflectionClass = new ReflectionClass($this);
 			foreach ($reflectionClass->getMethods(ReflectionMethod::IS_PROTECTED) as $reflectionMethod) {
 				if (strpos($reflectionMethod->getName(), 'format') === false) {
@@ -519,4 +505,11 @@
 		 * @return string
 		 */
 		abstract protected function quote(string $quote): string;
+
+		/**
+		 * @param string $type
+		 *
+		 * @return string
+		 */
+		abstract protected function type(string $type): string;
 	}

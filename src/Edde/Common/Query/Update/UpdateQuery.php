@@ -35,12 +35,11 @@
 		 * @return WhereExpressionFragment
 		 */
 		public function where(): WhereExpressionFragment {
-			$this->use();
 			return $this->whereExpressionFragment;
 		}
 
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function prepare() {
+			parent::prepare();
 			$this->node = new Node('update-query', $this->schema->getSchemaName());
 			$this->node->addNodeList([
 				$updateNode = new Node('update'),

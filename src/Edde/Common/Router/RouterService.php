@@ -22,7 +22,6 @@
 		 * @throws RouterException
 		 */
 		public function createRequest(): IRequest {
-			$this->use();
 			if ($this->request) {
 				return $this->request;
 			}

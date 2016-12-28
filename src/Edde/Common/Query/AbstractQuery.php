@@ -14,7 +14,6 @@
 		protected $node;
 
 		public function getNode() {
-			$this->use();
 			return $this->node;
 		}
 

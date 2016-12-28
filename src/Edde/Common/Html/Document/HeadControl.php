@@ -20,7 +20,6 @@
 		 * @param string $title
 		 */
 		public function setTitle($title) {
-			$this->use();
 			$this->title->setTitle($title);
 		}
 
@@ -32,7 +31,6 @@
 		 * @return $this
 		 */
 		public function addJavaScript(string $src) {
-			$this->use();
 			$this->addControl($this->createControl(JavaScriptControl::class)
 				->setSrc($src));
 			return $this;
@@ -46,7 +44,6 @@
 		 * @return $this
 		 */
 		public function addStyleSheet(string $href) {
-			$this->use();
 			$this->addControl($this->createControl(StyleSheetControl::class)
 				->setHref($href));
 			return $this;

@@ -3,12 +3,10 @@
 
 	namespace Edde\Api\Template;
 
-	use Edde\Api\Deffered\IDeffered;
-
 	/**
 	 * General template implementation support.
 	 */
-	interface ITemplateManager extends IDeffered {
+	interface ITemplateManager {
 		/**
 		 * @param string $template
 		 * @param array  $importList compile time templates

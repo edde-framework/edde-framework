@@ -7,12 +7,10 @@
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
-	use Edde\Api\Deffered\IDeffered;
 	use Edde\Api\Runtime\IModule;
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Api\Runtime\RuntimeException;
 	use Edde\Common\AbstractObject;
-	use Edde\Common\Container\Factory\FactoryFactory;
 	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Runtime\Event\ContainerEvent;
 	use Edde\Common\Runtime\Event\ExceptionEvent;

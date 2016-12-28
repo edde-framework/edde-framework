@@ -44,7 +44,6 @@
 		}
 
 		public function createRequest() {
-			$this->use();
 			if ($this->runtime->isConsoleMode()) {
 				return null;
 			}
@@ -61,7 +60,6 @@
 		}
 
 		public function link($generate, ...$parameterList) {
-			$this->use();
 			if (is_string($generate) === false || isset($this->serviceList[$generate]) === false) {
 				return null;
 			}

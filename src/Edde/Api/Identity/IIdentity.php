@@ -5,12 +5,11 @@
 
 	use Edde\Api\Acl\IAcl;
 	use Edde\Api\Crate\ICrate;
-	use Edde\Api\Deffered\IDeffered;
 
 	/**
 	 * Identity is (usualy) mutable interface holding current state of an identity (user, cron, ...) in an application.
 	 */
-	interface IIdentity extends IDeffered {
+	interface IIdentity {
 		/**
 		 * identity can have optionaly additional data (for example user's row from database)
 		 *

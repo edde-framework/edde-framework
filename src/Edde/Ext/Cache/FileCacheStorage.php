@@ -19,7 +19,6 @@
 		}
 
 		public function save(string $id, $save) {
-			$this->use();
 			$file = $this->file($id);
 			if ($save === null) {
 				/** @noinspection PhpUsageOfSilenceOperatorInspection */
@@ -44,7 +43,6 @@
 		}
 
 		public function load($id) {
-			$this->use();
 			/** @noinspection PhpUsageOfSilenceOperatorInspection */
 			if (($handle = @fopen($this->file($id), 'r+b')) === false) {
 				$this->miss++;
@@ -57,12 +55,11 @@
 		}
 
 		public function invalidate() {
-			$this->use();
 			$this->cacheDirectory->purge();
 		}
 
-		protected function onPrepare() {
-			parent::onPrepare();
+		protected function prepare() {
+			parent::prepare();
 			$this->cacheDirectory->create();
 		}
 	}

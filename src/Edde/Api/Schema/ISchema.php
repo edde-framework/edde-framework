@@ -3,9 +3,7 @@
 
 	namespace Edde\Api\Schema;
 
-	use Edde\Api\Deffered\IDeffered;
-
-	interface ISchema extends IDeffered {
+	interface ISchema {
 		/**
 		 * return only the name of this schema without namespace
 		 *

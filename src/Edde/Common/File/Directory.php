@@ -31,7 +31,6 @@
 		 * @inheritdoc
 		 */
 		public function getFileList() {
-			$this->use();
 			foreach (new \RecursiveDirectoryIterator($this->directory, \RecursiveDirectoryIterator::SKIP_DOTS) as $path) {
 				yield $path;
 			}
@@ -39,10 +38,26 @@
 
 		/**
 		 * @inheritdoc
+		 */
+		public function normalize(): IDirectory {
+			$this->directory = FileUtils::normalize($this->directory);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function realpath(): IDirectory {
+			$this->normalize();
+			$this->directory = FileUtils::realpath($this->directory);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
 		 * @throws FileException
 		 */
 		public function save(string $file, string $content): IFile {
-			$this->use();
 			file_put_contents($file = $this->filename($file), $content);
 			return new File($file);
 		}
@@ -58,7 +73,6 @@
 		 * @inheritdoc
 		 */
 		public function getDirectory(): string {
-			$this->use();
 			return $this->directory;
 		}
 
@@ -109,7 +123,7 @@
 		 */
 		public function delete(): IDirectory {
 			try {
-				$this->use();
+
 				FileUtils::delete($this->directory);
 			} catch (RealPathException $exception) {
 			}
@@ -151,7 +165,6 @@
 		 * @throws FileException
 		 */
 		public function getIterator() {
-			$this->use();
 			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->directory, RecursiveDirectoryIterator::SKIP_DOTS)) as $splFileInfo) {
 				yield new File((string)$splFileInfo);
 			}
@@ -159,14 +172,5 @@
 
 		public function __toString() {
 			return $this->getDirectory();
-		}
-
-		/**
-		 * @inheritdoc
-		 * @throws FileException
-		 */
-		protected function onBootstrap() {
-			parent::onBootstrap();
-			$this->directory = FileUtils::realpath($this->directory);
 		}
 	}

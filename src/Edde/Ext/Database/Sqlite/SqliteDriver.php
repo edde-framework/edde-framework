@@ -40,7 +40,6 @@
 		 * @inheritdoc
 		 */
 		public function start(bool $exclusive = false) {
-			$this->use();
 			$this->pdo->beginTransaction();
 			return $this;
 		}
@@ -49,7 +48,6 @@
 		 * @inheritdoc
 		 */
 		public function commit() {
-			$this->use();
 			$this->pdo->commit();
 			return $this;
 		}
@@ -58,7 +56,6 @@
 		 * @inheritdoc
 		 */
 		public function rollback() {
-			$this->use();
 			$this->pdo->rollBack();
 			return $this;
 		}
@@ -74,7 +71,6 @@
 		 * @inheritdoc
 		 */
 		public function quote(string $quote): string {
-			$this->use();
 			return $this->pdo->quote($quote);
 		}
 
@@ -83,7 +79,6 @@
 		 * @throws DriverException
 		 */
 		public function type(string $type): string {
-			$this->use();
 			if (isset($this->typeList[$type]) === false) {
 				throw new DriverException(sprintf('Unknown type [%s] for driver [%s].', $type, static::class));
 			}
@@ -97,7 +92,6 @@
 		 * @throws \PDOException
 		 */
 		public function execute(IQuery $query): \PDOStatement {
-			$this->use();
 			return $this->native($this->staticQueryFactory->create($query));
 		}
 
@@ -108,7 +102,6 @@
 		 * @throws \PDOException
 		 */
 		public function native(IStaticQuery $staticQuery) {
-			$this->use();
 			try {
 				$statement = $this->pdo->prepare($staticQuery->getQuery());
 				$statement->setFetchMode(PDO::FETCH_ASSOC);
@@ -138,8 +131,8 @@
 		 * @inheritdoc
 		 * @throws DriverException
 		 */
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function prepare() {
+			parent::prepare();
 			if (extension_loaded('pdo_sqlite') === false) {
 				throw new DriverException('Sqlite PDO is not available, oops!');
 			}

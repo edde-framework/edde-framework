@@ -11,6 +11,7 @@
 	use Edde\Api\Node\NodeException;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Callback\Callback;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Control\Event\CancelEvent;
 	use Edde\Common\Control\Event\DoneEvent;
 	use Edde\Common\Control\Event\HandleEvent;
@@ -26,6 +27,7 @@
 	abstract class AbstractControl extends AbstractObject implements IControl {
 		use LazyContainerTrait;
 		use EventTrait;
+		use ConfigurableTrait;
 		/**
 		 * @var INode
 		 */
@@ -35,7 +37,7 @@
 		 * @inheritdoc
 		 */
 		public function getNode(): INode {
-			$this->use();
+			$this->config();
 			return $this->node;
 		}
 
@@ -43,7 +45,7 @@
 		 * @inheritdoc
 		 */
 		public function getRoot(): IControl {
-			$this->use();
+			$this->config();
 			if ($this->node->isRoot()) {
 				return $this;
 			}
@@ -56,7 +58,7 @@
 		 * @inheritdoc
 		 */
 		public function getParent() {
-			$this->use();
+			$this->config();
 			$parent = $this->node->getParent();
 			return $parent ? $parent->getMeta('control') : null;
 		}
@@ -65,7 +67,7 @@
 		 * @inheritdoc
 		 */
 		public function isLeaf(): bool {
-			$this->use();
+			$this->config();
 			return $this->node->isLeaf();
 		}
 
@@ -73,7 +75,7 @@
 		 * @inheritdoc
 		 */
 		public function disconnect(): IControl {
-			$this->use();
+			$this->config();
 			if ($this->node->isRoot() === false) {
 				$this->node->getParent()
 					->removeNode($this->node);
@@ -95,7 +97,7 @@
 		 * @inheritdoc
 		 */
 		public function addControl(IControl $control): IControl {
-			$this->use();
+			$this->config();
 			$this->node->addNode($control->getNode(), true);
 			$control->attached($this);
 			return $this;
@@ -112,7 +114,7 @@
 		 * @inheritdoc
 		 */
 		public function isDirty(): bool {
-			$this->use();
+			$this->config();
 			return $this->node->getMeta('dirty', false);
 		}
 
@@ -120,7 +122,7 @@
 		 * @inheritdoc
 		 */
 		public function dirty(bool $dirty = true): IControl {
-			$this->use();
+			$this->config();
 			$this->node->setMeta('dirty', $dirty);
 			return $this;
 		}
@@ -140,7 +142,7 @@
 		 * @inheritdoc
 		 */
 		public function invalidate(): array {
-			$this->use();
+			$this->config();
 			$invalidList = [];
 			foreach ($this as $control) {
 				if ($control->isDirty()) {
@@ -154,7 +156,7 @@
 		 * @inheritdoc
 		 */
 		public function update(): IControl {
-			$this->use();
+			$this->config();
 			$this->event(new UpdateEvent($this));
 			foreach ($this->getControlList() as $control) {
 				$control->update();
@@ -167,7 +169,7 @@
 		 * @throws ControlException
 		 */
 		public function fill($fill): IControl {
-			$this->use();
+			$this->config();
 			$reflectionClass = new \ReflectionClass($this);
 			/** @noinspection ForeachSourceInspection */
 			foreach ($fill as $k => $v) {
@@ -186,7 +188,7 @@
 		 * @throws ControlException
 		 */
 		public function handle(string $method, array $parameterList) {
-			$this->use();
+			$this->config();
 			$this->event($handleEvent = new HandleEvent($this, $method, $parameterList));
 			if ($handleEvent->isCanceled()) {
 				$this->event(new CancelEvent($this));
@@ -257,7 +259,7 @@
 		 * @throws NodeException
 		 */
 		public function getIterator() {
-			$this->use();
+			$this->config();
 			foreach (NodeIterator::recursive($this->node, true) as $node) {
 				yield $node->getMeta('control');
 			}

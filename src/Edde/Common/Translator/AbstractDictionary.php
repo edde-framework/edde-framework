@@ -19,7 +19,6 @@
 		 * @inheritdoc
 		 */
 		public function translate(string $id, string $language) {
-			$this->use();
 			if (isset($this->translationList[$language][$id]) === false) {
 				return null;
 			}

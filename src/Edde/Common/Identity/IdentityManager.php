@@ -21,13 +21,11 @@
 		protected $identity;
 
 		public function update(): IIdentityManager {
-			$this->use();
 			$this->session->set(self::SESSION_IDENTITY, $this->identity());
 			return $this;
 		}
 
 		public function identity(): IIdentity {
-			$this->use();
 			if ($this->identity === null) {
 				$this->identity = $this->session->get(self::SESSION_IDENTITY, new Identity());
 			}
@@ -35,7 +33,6 @@
 		}
 
 		public function reset(bool $hard = true): IIdentityManager {
-			$this->use();
 			$this->session->set(self::SESSION_IDENTITY, null);
 			$this->identity();
 			if ($hard) {
@@ -43,10 +40,5 @@
 				$this->identity->setName('');
 			}
 			return $this;
-		}
-
-		protected function onBootstrap() {
-			parent::onBootstrap();
-			$this->session();
 		}
 	}

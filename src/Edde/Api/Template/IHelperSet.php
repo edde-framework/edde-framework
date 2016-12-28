@@ -3,12 +3,10 @@
 
 	namespace Edde\Api\Template;
 
-	use Edde\Api\Deffered\IDeffered;
-
 	/**
 	 * Set of helpers.
 	 */
-	interface IHelperSet extends IDeffered {
+	interface IHelperSet {
 		/**
 		 * @param IHelper $helper
 		 *

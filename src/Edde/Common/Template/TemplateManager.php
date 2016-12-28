@@ -7,8 +7,6 @@
 	use Edde\Api\File\FileException;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\ITemplateManager;
-	use Edde\Api\Template\LazyHelperSetTrait;
-	use Edde\Api\Template\LazyMacroSetTrait;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\File\File;
@@ -18,8 +16,6 @@
 	 */
 	class TemplateManager extends AbstractObject implements ITemplateManager {
 		use LazyContainerTrait;
-		use LazyMacroSetTrait;
-		use LazyHelperSetTrait;
 		use CacheTrait;
 
 		/**
@@ -27,7 +23,6 @@
 		 * @throws FileException
 		 */
 		public function template(string $template, array $importList = []) {
-			$this->use();
 			if ($result = $this->cache->load($cacheId = $template . implode(',', $importList))) {
 				return $result;
 			}
@@ -42,8 +37,8 @@
 			return $this->cache->save($cacheId, $compiler->template($importList));
 		}
 
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function prepare() {
+			parent::prepare();
 			$this->cache();
 		}
 	}

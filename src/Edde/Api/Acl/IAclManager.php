@@ -3,9 +3,7 @@
 
 	namespace Edde\Api\Acl;
 
-	use Edde\Api\Deffered\IDeffered;
-
-	interface IAclManager extends IDeffered {
+	interface IAclManager {
 		/**
 		 * general method for enable/disable access for the given group; order of access/grant/deny is important
 		 *
