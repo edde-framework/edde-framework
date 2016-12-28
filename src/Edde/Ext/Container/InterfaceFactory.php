@@ -31,7 +31,7 @@
 		 * @param string $interface
 		 * @param string $class
 		 */
-		public function __construct($interface, $class) {
+		public function __construct(string $interface, string $class) {
 			$this->interface = $interface;
 			$this->class = $class;
 		}

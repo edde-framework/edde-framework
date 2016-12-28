@@ -67,7 +67,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="PHP Runtime" type="php">
+      <library name="PHP Runtime">
         <CLASSES>
           <root url="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/standard" />
         </CLASSES>
@@ -77,7 +77,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="PHP" type="php">
+      <library name="PHP">
         <CLASSES>
           <root url="file://$MODULE_DIR$/lib/composer" />
           <root url="file://$MODULE_DIR$/lib/defuse/php-encryption" />

@@ -13,7 +13,9 @@
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Router\RouterService;
+	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
+	use Edde\Ext\Router\RouterServiceConfigHandler;
 	use Edde\Framework;
 	use Tracy\Debugger;
 
@@ -35,4 +37,9 @@
 		ILogService::class => LogService::class,
 		IRouterService::class => RouterService::class,
 		IRequest::class => IRouterService::class . '::createRequest',
-	], is_array($local = @include __DIR__ . '/loader.local.php') ? $local : []), __DIR__ . '/temp/container-' . sha1(implode('', array_keys($factoryList)) . new Framework()) . '.cache');
+		new ClassFactory(),
+	], is_array($local = @include __DIR__ . '/loader.local.php') ? $local : []), [
+		IRouterService::class => [
+			RouterServiceConfigHandler::class,
+		],
+	], __DIR__ . '/temp/container-' . sha1(implode('', array_keys($factoryList)) . new Framework()) . '.cache');

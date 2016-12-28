@@ -9,7 +9,7 @@
 	class Dependency extends AbstractObject implements IDependency {
 		protected $parameterList = [];
 		protected $injectList = [];
-		protected $lazyList = [];
+		protected $lazyInjectList = [];
 
 		/**
 		 * @param array $parameterList
@@ -19,7 +19,7 @@
 		public function __construct(array $parameterList, array $injectList, array $lazyList) {
 			$this->parameterList = $parameterList;
 			$this->injectList = $injectList;
-			$this->lazyList = $lazyList;
+			$this->lazyInjectList = $lazyList;
 		}
 
 		public function getParameterList(): array {
@@ -31,6 +31,6 @@
 		}
 
 		public function getLazyList(): array {
-			return $this->lazyList;
+			return $this->lazyInjectList;
 		}
 	}

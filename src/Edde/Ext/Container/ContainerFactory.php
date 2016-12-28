@@ -104,18 +104,19 @@
 		 * create container and serialize the result into the file; if file exists, container is build from it
 		 *
 		 * @param array  $factoryList
+		 * @param array  $configHandlerList
 		 * @param string $cache
 		 *
 		 * @return IContainer
 		 * @throws ContainerException
 		 * @throws FactoryException
 		 */
-		static public function cache(array $factoryList, string $cache): IContainer {
+		static public function cache(array $factoryList, array $configHandlerList, string $cache): IContainer {
 			if ($container = @file_get_contents($cache)) {
 				/** @noinspection UnserializeExploitsInspection */
 				return unserialize($container);
 			}
-			file_put_contents($cache, serialize($container = self::container($factoryList)));
+			file_put_contents($cache, serialize($container = self::container($factoryList, $configHandlerList)));
 			return $container;
 		}
 	}

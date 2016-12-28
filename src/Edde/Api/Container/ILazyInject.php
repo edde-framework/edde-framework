@@ -5,8 +5,14 @@
 
 	interface ILazyInject {
 		/**
-		 * @param string   $property
-		 * @param callable $callback
+		 * register the given container dependency on the given property
+		 *
+		 * @param string     $property
+		 * @param IContainer $container
+		 * @param string     $dependency
+		 * @param array      $parameterList
+		 *
+		 * @return $this
 		 */
-		public function lazy(string $property, callable $callback);
+		public function lazy(string $property, IContainer $container, string $dependency, array $parameterList = []);
 	}

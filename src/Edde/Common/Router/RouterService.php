@@ -6,11 +6,13 @@
 	use Edde\Api\Application\IRequest;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Router\RouterException;
+	use Edde\Common\Container\ConfigurableTrait;
 
 	/**
 	 * Default implementation of a router service.
 	 */
 	class RouterService extends RouterList implements IRouterService {
+		use ConfigurableTrait;
 		/**
 		 * @var IRequest
 		 */
@@ -25,6 +27,7 @@
 			if ($this->request) {
 				return $this->request;
 			}
+			$this->config();
 			$e = null;
 			foreach ($this->routerList as $router) {
 				try {

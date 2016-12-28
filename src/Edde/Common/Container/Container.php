@@ -9,6 +9,7 @@
 	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
+	use Edde\Api\Container\ILazyInject;
 
 	/**
 	 * Default implementation of a dependency container.
@@ -55,12 +56,10 @@
 			foreach ($dependency->getInjectList() as list($reflectionProperty, $name)) {
 				$reflectionProperty->setValue($instance, $this->create($name));
 			}
-			/** @var $reflectionParameter \ReflectionParameter */
 			/** @var $reflectionProperty \ReflectionProperty */
+			/** @var $instance ILazyInject */
 			foreach ($dependency->getLazyList() as list($reflectionProperty, $name)) {
-				$instance->lazy($reflectionProperty->getName(), function () use ($name) {
-					return $this->create($name);
-				});
+				$instance->lazy($reflectionProperty->getName(), $this, $name);
 			}
 			return $instance;
 		}

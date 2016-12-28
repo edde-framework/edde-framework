@@ -1,3 +1,9 @@
-vendor/
-/loader.local.php
-*.cache
+/vendor/
+/cache/
+/doc/
+/.idea/workspace.xml
+*.log
+*.sqlite
+*.local.php
+*.pid
+*.local.ini

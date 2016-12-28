@@ -4,11 +4,12 @@
 	namespace Edde\Api\Router;
 
 	use Edde\Api\Application\IRequest;
+	use Edde\Api\Container\IConfigurable;
 
 	/**
 	 * Implementation of application router service.
 	 */
-	interface IRouterService extends IRouterList {
+	interface IRouterService extends IRouterList, IConfigurable {
 		/**
 		 * @return IRequest
 		 */
