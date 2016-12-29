@@ -3,6 +3,8 @@
 
 	use Edde\Api\Container\IConfigHandler;
 	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Container\ILazyInject;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Container\ConfigurableTrait;
 
@@ -17,14 +19,22 @@
 		public function config($instance) {
 			$instance->registerSomeething('foo');
 		}
+
+		public function getBoo() {
+			return 'boo';
+		}
 	}
 
-	class AnotherSomethingSetup implements IConfigHandler {
+	class AnotherSomethingSetup extends AbstractObject implements IConfigHandler, ILazyInject {
+		use LazyContainerTrait;
+
 		/**
 		 * @param ISomething $instance
 		 */
 		public function config($instance) {
 			$instance->registerSomeething('bar');
+			$instance->registerSomeething($this->container->create(FirstSomethingSetup::class)
+				->getBoo());
 		}
 	}
 
