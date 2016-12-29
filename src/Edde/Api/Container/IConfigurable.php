@@ -34,6 +34,11 @@
 		public function warmup();
 
 		/**
+		 * @return bool
+		 */
+		public function isWarmup(): bool;
+
+		/**
 		 * execute object configuration (so after this method object should be fully prepared for use)
 		 *
 		 * @return $this
@@ -46,4 +51,14 @@
 		 * @return bool
 		 */
 		public function isConfigured(): bool;
+
+		/**
+		 * do any heavy computations; after this object is usualy not serializable
+		 */
+		public function setup();
+
+		/**
+		 * has benn object set up?
+		 */
+		public function isSetup(): bool;
 	}

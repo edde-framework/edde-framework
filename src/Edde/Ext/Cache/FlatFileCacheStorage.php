@@ -63,8 +63,7 @@
 			$this->directory->purge();
 		}
 
-		protected function prepare() {
-			parent::prepare();
+		protected function handleInit() {
 			$this->cacheDirectory->create();
 			$this->directory = $this->cacheDirectory->directory(sha1($this->namespace))
 				->create();

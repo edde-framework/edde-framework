@@ -9,13 +9,17 @@
 	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Log\ILogService;
 	use Edde\Api\Router\IRouterService;
+	use Edde\Api\Runtime\IRuntime;
 	use Edde\Common\Application\Application;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\File\RootDirectory;
+	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Router\RouterService;
+	use Edde\Common\Runtime\Runtime;
 	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
@@ -39,6 +43,8 @@
 		IRootDirectory::class => new RootDirectory(__DIR__),
 		ICacheDirectory::class => new CacheDirectory(__DIR__ . '/temp/cache'),
 		ICacheStorage::class => FlatFileCacheStorage::class,
+		IRuntime::class => Runtime::class,
+		IHttpResponse::class => HttpResponse::class,
 		IApplication::class => Application::class,
 		ILogService::class => LogService::class,
 		IRouterService::class => RouterService::class,

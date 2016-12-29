@@ -15,14 +15,14 @@
 		public function getBody();
 
 		/**
-		 * @return string
+		 * @return string|null
 		 */
-		public function getMime(): string;
+		public function getMime();
 
 		/**
-		 * @return string
+		 * @return string|null
 		 */
-		public function getTarget(): string;
+		public function getTarget();
 
 		/**
 		 * try to convert a request body to specified target using system-wide converter manager

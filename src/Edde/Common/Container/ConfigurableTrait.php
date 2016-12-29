@@ -13,11 +13,16 @@
 		/**
 		 * @var bool
 		 */
+		private $tWarmup = false;
+		/**
+		 * @var bool
+		 */
 		private $tConfig = false;
 		/**
 		 * @var IConfigHandler[]
 		 */
 		private $tConfigHandlerList = [];
+		private $tSetup = false;
 
 		/**
 		 * @inheritdoc
@@ -32,13 +37,14 @@
 		 */
 		public function init() {
 			if ($this->tInit) {
-				return;
+				return $this;
 			}
 			$this->tInit = true;
-			$this->prepare();
+			$this->handleInit();
+			return $this;
 		}
 
-		protected function prepare() {
+		protected function handleInit() {
 		}
 
 		/**
@@ -48,7 +54,25 @@
 			return $this->tInit;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function warmup() {
+			if ($this->tWarmup) {
+				return $this;
+			}
+			$this->handleWarmup();
+			return $this;
+		}
+
+		protected function handleWarmup() {
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function isWarmup(): bool {
+			return $this->tWarmup;
 		}
 
 		/**
@@ -71,5 +95,27 @@
 		 */
 		public function isConfigured(): bool {
 			return $this->tConfig;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setup() {
+			if ($this->tSetup) {
+				return $this;
+			}
+			$this->tSetup = true;
+			$this->handleSetup();
+			return $this;
+		}
+
+		protected function handleSetup() {
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function isSetup(): bool {
+			return $this->tSetup;
 		}
 	}

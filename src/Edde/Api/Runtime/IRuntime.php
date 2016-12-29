@@ -3,62 +3,7 @@
 
 	namespace Edde\Api\Runtime;
 
-	use Edde\Api\Container\IContainer;
-
 	interface IRuntime {
-		/**
-		 * register factory list used for runtime
-		 *
-		 * @param array $factoryList
-		 *
-		 * @return IRuntime
-		 */
-		public function registerFactoryList(array $factoryList): IRuntime;
-
-		/**
-		 * register a new module
-		 *
-		 * @param IModule $module
-		 *
-		 * @return IRuntime
-		 */
-		public function module(IModule $module): IRuntime;
-
-		/**
-		 * register a list of modules
-		 *
-		 * @param array $moduleList
-		 *
-		 * @return IRuntime
-		 */
-		public function moduleList(array $moduleList): IRuntime;
-
-		/**
-		 * register deffered callback on the given factory name (must be already registered)
-		 *
-		 * @param string   $name
-		 * @param callable $onSetup
-		 *
-		 * @return IRuntime
-		 */
-		public function deffered(string $name, callable $onSetup): IRuntime;
-
-		/**
-		 * create default system container for this runtime
-		 *
-		 * @return IContainer
-		 */
-		public function createContainer(): IContainer;
-
-		/**
-		 * execute the given callback with the given runtime (some kind of "main" in C)
-		 *
-		 * @param callable $callback
-		 *
-		 * @return mixed
-		 */
-		public function run(callable $callback);
-
 		/***
 		 * @return bool
 		 */

@@ -66,18 +66,13 @@
 
 		/**
 		 * @param IFactory $factory
-		 * @param array $parameterList
-		 * @param string $name
+		 * @param array    $parameterList
+		 * @param string   $name
 		 *
 		 * @return mixed
 		 * @throws ContainerException
 		 */
 		public function factory(IFactory $factory, array $parameterList = [], string $name = null) {
-//			if (($cache = $this->cache->load($cacheId = ('cacheable/' . $name))) !== null) {
-//				list($class, $cache) = unserialize($cache);
-//				/** @noinspection PhpUndefinedMethodInspection */
-//				return $class::warmup($this, $cache);
-//			}
 			$dependency = $factory->dependency($this, $name);
 			$grab = count($parameterList);
 			$dependencyList = [];
@@ -92,9 +87,6 @@
 				$instance->registerConfigHandlerList(isset($this->configHandlerList[$name]) ? $this->configHandlerList[$name] : []);
 				$instance->init();
 			}
-//			if ($instance instanceof ICacheable) {
-//				$this->cache->save($cacheId, $instance->sleep($this));
-//			}
 			return $instance;
 		}
 	}

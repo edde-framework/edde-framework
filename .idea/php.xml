@@ -314,6 +314,13 @@
     </phpInfoCache>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7" />
+  <component name="PhpStepFilterConfiguration" skip_constructors="true">
+    <option name="skippedFunctions">
+      <list>
+        <option value="Edde\Common\Autoloader::Edde\Common\{closure}" />
+      </list>
+    </option>
+  </component>
   <component name="PhpUnit">
     <phpunit_settings>
       <PhpUnitSettings load_method="CUSTOM_LOADER" bootstrap_file_path="$PROJECT_DIR$/src/loader.php" configuration_file_path="$PROJECT_DIR$/phpunit.xml" custom_loader_path="$PROJECT_DIR$/lib/autoload.php" phpunit_phar_path="$PROJECT_DIR$/bin/phpunit.phar" use_bootstrap_file="true" use_configuration_file="true" />

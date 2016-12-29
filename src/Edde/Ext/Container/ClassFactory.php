@@ -70,6 +70,9 @@
 		 * @inheritdoc
 		 */
 		public function execute(IContainer $container, array $parameterList, string $name = null) {
+			if (empty($parameterList)) {
+				return new $name();
+			}
 			return new $name(...$parameterList);
 		}
 	}

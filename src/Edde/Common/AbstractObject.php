@@ -7,10 +7,12 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\EddeException;
-	use Serializable;
 
-	class AbstractObject implements ILazyInject, Serializable {
+	class AbstractObject implements ILazyInject {
 		protected $lazyInjectList = [];
+
+		protected function prepare() {
+		}
 
 		public function lazy(string $property, IContainer $container, string $dependency, array $parameterList = []) {
 			$this->lazyInjectList[$property] = [
@@ -35,14 +37,14 @@
 			if (isset($this->lazyInjectList[$name])) {
 				/** @var $container IContainer */
 				list($container, $dependency, $parameterList) = $this->lazyInjectList[$name];
-				return $this->$name = $container->create($dependency, $parameterList);
+				return $this->$name = $container->create($dependency, ...$parameterList);
 			}
 			throw new EddeException(sprintf('Reading from the undefined/private/protected property [%s::$%s].', static::class, $name));
 		}
 
 		/**
 		 * @param string $name
-		 * @param mixed $value
+		 * @param mixed  $value
 		 *
 		 * @return $this
 		 * @throws EddeException
@@ -67,17 +69,5 @@
 				return true;
 			}
 			throw new EddeException(sprintf('Cannot check isset on undefined/private/protected property [%s::$%s].', static::class, $name));
-		}
-
-		public function serialize() {
-			return serialize(get_object_vars($this));
-		}
-
-		public function unserialize($serialized) {
-			/** @noinspection UnserializeExploitsInspection */
-			/** @noinspection ForeachSourceInspection */
-			foreach (unserialize($serialized) as $k => $v) {
-				$this->$k = $v;
-			}
 		}
 	}
