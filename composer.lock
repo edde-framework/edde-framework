@@ -890,12 +890,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "17fd00b19d446c4731ee5734f3c236573c4a8550"
+                "reference": "85f4a69ed9522deb4428da4cd0620cd56e6c04a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/17fd00b19d446c4731ee5734f3c236573c4a8550",
-                "reference": "17fd00b19d446c4731ee5734f3c236573c4a8550",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/85f4a69ed9522deb4428da4cd0620cd56e6c04a5",
+                "reference": "85f4a69ed9522deb4428da4cd0620cd56e6c04a5",
                 "shasum": ""
             },
             "require": {
@@ -964,7 +964,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-12-28 07:20:49"
+            "time": "2016-12-29 06:53:44"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1031,12 +1031,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "c798e4083112679dfe36394ca681153a7a6f83ed"
+                "reference": "814b9f0eb4183d86bcc4832ad02476a9890eaca2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c798e4083112679dfe36394ca681153a7a6f83ed",
-                "reference": "c798e4083112679dfe36394ca681153a7a6f83ed",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/814b9f0eb4183d86bcc4832ad02476a9890eaca2",
+                "reference": "814b9f0eb4183d86bcc4832ad02476a9890eaca2",
                 "shasum": ""
             },
             "conflict": {
@@ -1077,7 +1077,7 @@
                 "namshi/jose": "<2.2",
                 "oro/crm": ">=1.7,<1.7.4",
                 "oro/platform": ">=1.7,<1.7.4",
-                "phpmailer/phpmailer": ">=5,<5.2.18",
+                "phpmailer/phpmailer": ">=5,<5.2.20",
                 "pusher/pusher-php-server": "<2.2.1",
                 "sabre/dav": ">=1.6,<1.6.99|>=1.7,<1.7.11|>=1.8,<1.8.9",
                 "shopware/shopware": "<4.3.7|>=5,<5.1.5",
@@ -1154,7 +1154,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2016-12-27 15:21:16"
+            "time": "2016-12-29 10:25:42"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
