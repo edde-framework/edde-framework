@@ -34,17 +34,14 @@
 		}
 
 		public function getBody() {
-			if (is_callable($this->body)) {
-				$this->body = call_user_func($this->body);
-			}
 			return $this->body;
 		}
 
-		public function getMime(): string {
+		public function getMime() {
 			return $this->mime;
 		}
 
-		public function getTarget(): string {
+		public function getTarget() {
 			return $this->target;
 		}
 	}

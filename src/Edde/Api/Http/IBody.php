@@ -17,12 +17,12 @@
 		/**
 		 * @return string
 		 */
-		public function getMime(): string;
+		public function getMime();
 
 		/**
 		 * @return string
 		 */
-		public function getTarget(): string;
+		public function getTarget();
 
 		/**
 		 * try to convert a request body to specified target using system-wide converter manager
