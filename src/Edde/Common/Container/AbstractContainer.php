@@ -17,7 +17,7 @@
 		 */
 		protected $factoryList = [];
 		/**
-		 * @var string[]
+		 * @var IConfigHandler[][]
 		 */
 		protected $configHandlerList = [];
 

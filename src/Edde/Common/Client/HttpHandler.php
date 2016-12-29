@@ -104,8 +104,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function content($content, string $mime, string $target): IHttpHandler {
-			$this->httpRequest->setBody($this->container->inject(new Body($content, $mime, $target)));
+		public function content($content, string $mime = null, string $target = null): IHttpHandler {
+			$this->httpRequest->setBody($this->container->create(Body::class, $content, $mime, $target));
 			return $this;
 		}
 
@@ -113,7 +113,7 @@
 		 * @inheritdoc
 		 */
 		public function body(IBody $body): IHttpHandler {
-			$this->httpRequest->setBody($this->container->inject($body));
+			$this->httpRequest->setBody($body);
 			return $this;
 		}
 
@@ -148,11 +148,12 @@
 			$options = [];
 			if ($body = $this->httpRequest->getBody()) {
 				$options[CURLOPT_POSTFIELDS] = $body->convert();
-				if (($target = $body->getTarget()) !== '') {
+				if (($target = $body->getTarget()) !== null) {
 					$this->header('Content-Type', $target);
 				}
 			}
 			$postList = $this->httpRequest->getPostList();
+			$options[CURLOPT_POST] = false;
 			if ($postList->isEmpty() === false) {
 				$options[CURLOPT_POST] = true;
 				$options[CURLOPT_POSTFIELDS] = $postList->array();
@@ -203,7 +204,7 @@
 			$headerList->set('Content-Type', $contentType);
 			curl_close($this->curl);
 			$this->curl = null;
-			$this->container->inject($httpResponse = new HttpResponse($this->container->inject(new Body($content, isset($type) ? $type->mime : $contentType))));
+			$httpResponse = $this->container->create(HttpResponse::class, $this->container->create(Body::class, $content, isset($type) ? $type->mime : $contentType));
 			$httpResponse->setHeaderList($headerList);
 			$httpResponse->setCookieList($cookieList);
 			$this->event(new RequestDoneEvent($this->httpRequest, $this, $httpResponse, $time));

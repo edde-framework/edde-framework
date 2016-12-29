@@ -8,7 +8,6 @@
 		 * register a converter
 		 *
 		 * @param IConverter $converter
-		 *
 		 * @param bool       $force
 		 *
 		 * @return IConverterManager
@@ -24,5 +23,5 @@
 		 *
 		 * @return mixed return converted source; result depends on mime+target combination
 		 */
-		public function convert($convert, string $source, string $target);
+		public function convert($convert, string $source = null, string $target = null);
 	}

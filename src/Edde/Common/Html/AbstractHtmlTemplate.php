@@ -42,7 +42,7 @@
 				require_once $url->getAbsoluteUrl();
 			})($file->getUrl());
 			$class = str_replace('.php', '', $file->getName());
-			return $container->inject(new $class());
+			return $container->inject(new $class(),);
 		}
 
 		/**

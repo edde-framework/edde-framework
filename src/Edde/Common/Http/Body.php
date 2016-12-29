@@ -22,7 +22,7 @@
 		 */
 		protected $target;
 
-		public function __construct($body = null, string $mime = '', string $target = '') {
+		public function __construct($body = null, string $mime = null, string $target = null) {
 			$this->body = $body;
 			$this->mime = $mime;
 			$this->target = $target;
@@ -39,11 +39,11 @@
 			return $this->body;
 		}
 
-		public function getMime(): string {
+		public function getMime() {
 			return $this->mime;
 		}
 
-		public function getTarget(): string {
+		public function getTarget() {
 			return $this->target;
 		}
 	}

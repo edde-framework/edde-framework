@@ -3,10 +3,9 @@
 
 	namespace Edde\Api\File;
 
-	use Edde\Api\Serialize\ISerializable;
 	use IteratorAggregate;
 
-	interface IDirectory extends ISerializable, IteratorAggregate {
+	interface IDirectory extends IteratorAggregate {
 		/**
 		 * return string path of this directory (can be non-existent)
 		 *

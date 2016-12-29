@@ -166,7 +166,7 @@
 				CURLOPT_CUSTOMREQUEST => $method = $httpRequest->getMethod(),
 				CURLOPT_POST => strtoupper($method) === 'POST',
 			]);
-			$this->container->inject($httpHandler = new HttpHandler($httpRequest, $curl));
+			$httpHandler = $this->container->create(HttpHandler::class, $httpRequest, $curl);
 			$httpHandler->chain($this);
 			return $httpHandler;
 		}
@@ -188,8 +188,7 @@
 		 * @inheritdoc
 		 * @throws ClientException
 		 */
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function handleInit() {
 			if (extension_loaded('curl') === false) {
 				throw new ClientException('Curl extension is not loaded in PHP.');
 			}

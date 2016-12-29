@@ -27,7 +27,7 @@
 				return $result;
 			}
 			/** @var $compiler ICompiler */
-			$this->container->inject($compiler = new Compiler(new File($template)));
+			$compiler = $this->container->create(Compiler::class, new File($template));
 			foreach ($importList as &$import) {
 				$import = new File($import);
 			}

@@ -79,7 +79,7 @@
 		 *
 		 * @return mixed return input instance (input is same as output)
 		 */
-		public function inject($instance, IDependency $dependency = null);
+		public function inject($instance, IDependency $dependency);
 
 		/**
 		 * general method for dependency creation (so call and create should call this one)

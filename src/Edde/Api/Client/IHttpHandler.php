@@ -63,7 +63,7 @@
 		 *
 		 * @return IHttpHandler
 		 */
-		public function content($content, string $mime, string $target): IHttpHandler;
+		public function content($content, string $mime = null, string $target = null): IHttpHandler;
 
 		/**
 		 * @param IBody $body

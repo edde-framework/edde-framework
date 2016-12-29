@@ -6,6 +6,7 @@
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Container\IContainer;
+	use Edde\Common\Serialize\SerializeUtils;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use PHPUnit\Framework\TestCase;
@@ -19,6 +20,7 @@
 		protected $container;
 
 		public function testContainer() {
+			self::assertSame($this->container, $this->container->create(IContainer::class));
 			self::assertInstanceOf(ICache::class, $this->container->create(ICache::class));
 			self::assertInstanceOf(ICacheManager::class, $cache = $this->container->create(ICache::class));
 			self::assertInstanceOf(ICacheManager::class, $cacheManager = $this->container->create(ICacheManager::class));
@@ -42,7 +44,8 @@
 
 		public function testContainerSerialization() {
 			/** @noinspection UnserializeExploitsInspection */
-			$this->container = unserialize(serialize($this->container));
+			$this->container = SerializeUtils::unserialize(SerializeUtils::serialize($this->container));
+			self::assertSame($this->container, $this->container->create(IContainer::class));
 			self::assertInstanceOf(ICache::class, $this->container->create(ICache::class));
 			self::assertInstanceOf(ICacheManager::class, $cache = $this->container->create(ICache::class));
 			self::assertInstanceOf(ICacheManager::class, $cacheManager = $this->container->create(ICacheManager::class));

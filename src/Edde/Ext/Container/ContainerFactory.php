@@ -10,12 +10,12 @@
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
-	use Edde\Api\Serialize\ISerializable;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Cache\Cache;
 	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Container\Container;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
+	use Serializable;
 
 	class ContainerFactory extends AbstractObject {
 		static public function createFactoryList(array $factoryList): array {
@@ -36,8 +36,8 @@
 				} else if (is_callable($factory)) {
 					throw new FactoryException(sprintf('Closures are not supported in factory definition [%s].', $name));
 				} else if (is_object($factory)) {
-					if ($factory instanceof ISerializable === false) {
-						throw new FactoryException(sprintf('Class instances [%s] are not supported in factory definition [%s]. You can use [%s] interface to bypass this error.', get_class($factory), $name, ISerializable::class));
+					if ($factory instanceof Serializable === false) {
+						throw new FactoryException(sprintf('Class instances [%s] are not supported in factory definition [%s]. You can use [%s] interface to bypass this error.', get_class($factory), $name, Serializable::class));
 					}
 					$current = new SerializableFactory($name, $factory);
 				}

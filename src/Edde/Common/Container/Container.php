@@ -48,7 +48,7 @@
 		 * @inheritdoc
 		 * @throws ContainerException
 		 */
-		public function inject($instance, IDependency $dependency = null) {
+		public function inject($instance, IDependency $dependency) {
 			if (is_object($instance) === false) {
 				return $instance;
 			}

@@ -3,16 +3,16 @@
 
 	use Edde\Api\Container\IConfigHandler;
 	use Edde\Api\Container\IConfigurable;
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Container\AbstractConfigHandler;
 	use Edde\Common\Container\ConfigurableTrait;
 
 	interface ISomething {
 		public function registerSomeething(string $something);
 	}
 
-	class FirstSomethingSetup implements IConfigHandler {
+	class FirstSomethingSetup extends AbstractConfigHandler implements IConfigHandler {
 		/**
 		 * @param ISomething $instance
 		 */
@@ -25,7 +25,7 @@
 		}
 	}
 
-	class AnotherSomethingSetup extends AbstractObject implements IConfigHandler, ILazyInject {
+	class AnotherSomethingSetup extends AbstractConfigHandler implements IConfigHandler {
 		use LazyContainerTrait;
 
 		/**
@@ -35,6 +35,10 @@
 			$instance->registerSomeething('bar');
 			$instance->registerSomeething($this->container->create(FirstSomethingSetup::class)
 				->getBoo());
+		}
+
+		public function wakeup(...$parameterList) {
+			list($this->container) = $parameterList;
 		}
 	}
 

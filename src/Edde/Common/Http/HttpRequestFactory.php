@@ -22,9 +22,9 @@
 				->setMethod($_SERVER['REQUEST_METHOD'] ?? '')
 				->setRemoteAddress($_SERVER['REMOTE_ADDR'] ?? '')
 				->setRemoteHost($_SERVER['REMOTE_HOST'] ?? '')
-				->setBody($this->container->inject(new Body(function () {
+				->setBody($this->container->create(Body::class, function () {
 					return file_get_contents('php://input');
-				}, (string)$headerList->getContentType())));
+				}, (string)$headerList->getContentType()),));
 		}
 
 		/**
