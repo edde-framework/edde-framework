@@ -8,10 +8,17 @@
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\EddeException;
 
-	class AbstractObject implements ILazyInject {
+	abstract class AbstractObject implements ILazyInject {
+		protected $injectList = [];
 		protected $lazyInjectList = [];
 
 		protected function prepare() {
+		}
+
+		public function inject(string $property, $dependency) {
+			$this->injectList[$property] = $dependency;
+			$this->{$property} = $dependency;
+			return $this;
 		}
 
 		public function lazy(string $property, IContainer $container, string $dependency, array $parameterList = []) {
@@ -69,5 +76,11 @@
 				return true;
 			}
 			throw new EddeException(sprintf('Cannot check isset on undefined/private/protected property [%s::$%s].', static::class, $name));
+		}
+
+		public function __wakeup() {
+			foreach ($this->injectList as $property => $dependency) {
+				$this->{$property} = $dependency;
+			}
 		}
 	}

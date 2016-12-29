@@ -14,7 +14,7 @@
 	/**
 	 * Representation of directory on the filesystem.
 	 */
-	class Directory extends AbstractObject implements IDirectory {
+	class Directory extends AbstractObject implements IDirectory, \Serializable {
 		/**
 		 * @var string
 		 */
@@ -172,5 +172,13 @@
 
 		public function __toString() {
 			return $this->getDirectory();
+		}
+
+		public function serialize() {
+			return serialize($this->directory);
+		}
+
+		public function unserialize($serialized) {
+			$this->directory = unserialize($serialized);
 		}
 	}

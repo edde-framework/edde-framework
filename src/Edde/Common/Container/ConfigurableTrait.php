@@ -61,6 +61,8 @@
 			if ($this->tWarmup) {
 				return $this;
 			}
+			$this->tWarmup = true;
+			$this->init();
 			$this->handleWarmup();
 			return $this;
 		}
@@ -82,8 +84,8 @@
 			if ($this->tConfig) {
 				return $this;
 			}
-			$this->init();
 			$this->tConfig = true;
+			$this->warmup();
 			foreacH ($this->tConfigHandlerList as $configHandler) {
 				$configHandler->config($this);
 			}
@@ -105,6 +107,7 @@
 				return $this;
 			}
 			$this->tSetup = true;
+			$this->config();
 			$this->handleSetup();
 			return $this;
 		}

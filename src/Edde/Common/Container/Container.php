@@ -45,26 +45,6 @@
 		}
 
 		/**
-		 * @inheritdoc
-		 * @throws ContainerException
-		 */
-		public function inject($instance, IDependency $dependency) {
-			if (is_object($instance) === false) {
-				return $instance;
-			}
-			/** @var $reflectionProperty \ReflectionProperty */
-			foreach ($dependency->getInjectList() as list($reflectionProperty, $name)) {
-				$reflectionProperty->setValue($instance, $this->create($name));
-			}
-			/** @var $reflectionProperty \ReflectionProperty */
-			/** @var $instance ILazyInject */
-			foreach ($dependency->getLazyList() as list($reflectionProperty, $name)) {
-				$instance->lazy($reflectionProperty->getName(), $this, $name);
-			}
-			return $instance;
-		}
-
-		/**
 		 * @param IFactory $factory
 		 * @param array    $parameterList
 		 * @param string   $name
@@ -73,6 +53,10 @@
 		 * @throws ContainerException
 		 */
 		public function factory(IFactory $factory, array $parameterList = [], string $name = null) {
+			$cacheId = get_class($factory) . $name . count($parameterList);
+			if (($instance = $this->cache->load($cacheId)) !== null) {
+				return $instance;
+			}
 			$dependency = $factory->dependency($this, $name);
 			$grab = count($parameterList);
 			$dependencyList = [];
@@ -82,11 +66,42 @@
 				}
 				$dependencyList[] = $this->factory($this->getFactory($class = (($class = $parameter->getClass()) ? $class->getName() : $parameter->getName())), [], $class);
 			}
-			$instance = $this->inject($factory->execute($this, array_merge($parameterList, $dependencyList), $name), $dependency);
-			if ($instance instanceof IConfigurable) {
+			$instance = $factory->execute($this, array_merge($parameterList, $dependencyList), $name);
+			$this->dependency($instance, $dependency, ($config = $instance instanceof IConfigurable) === false);
+			if ($config) {
+				/** @var $instance IConfigurable */
 				$instance->registerConfigHandlerList(isset($this->configHandlerList[$name]) ? $this->configHandlerList[$name] : []);
 				$instance->init();
 				$instance->warmup();
+				$instance->config();
+				$this->cache->save($cacheId, $instance);
+			}
+			return $instance;
+		}
+
+		/**
+		 * @param mixed       $instance
+		 * @param IDependency $dependency
+		 * @param bool        $lazy
+		 *
+		 * @return ILazyInject
+		 */
+		protected function dependency($instance, IDependency $dependency, bool $lazy = true) {
+			if (is_object($instance) === false) {
+				return $instance;
+			}
+			/** @var $instance ILazyInject */
+			/** @var $reflectionProperty \ReflectionProperty */
+			foreach ($dependency->getInjectList() as list($reflectionProperty, $name)) {
+				$instance->inject($reflectionProperty->getName(), $this->create($name));
+			}
+			/** @var $reflectionProperty \ReflectionProperty */
+			foreach ($dependency->getLazyList() as list($reflectionProperty, $name)) {
+				if ($lazy) {
+					$instance->lazy($reflectionProperty->getName(), $this, $name);
+					continue;
+				}
+				$instance->inject($reflectionProperty->getName(), $this->create($name));
 			}
 			return $instance;
 		}

@@ -4,9 +4,12 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Cache\ICache;
+	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheManager;
+	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Container\IContainer;
-	use Edde\Common\Serialize\SerializeUtils;
+	use Edde\Common\Cache\CacheDirectory;
+	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use PHPUnit\Framework\TestCase;
@@ -27,6 +30,7 @@
 			self::assertSame($cache, $cacheManager);
 			/** @var $instance \Something */
 			self::assertNotSame($instance = $this->container->create(\ISomething::class, 'fill-me-up'), $this->container->create(\Something::class, 'flush-me-out'));
+			self::assertSame($this->container->create(\ISomething::class, 'fill-me-up'), $instance);
 			$instance->config();
 			self::assertNotEmpty($instance->somethingList);
 			self::assertEquals([
@@ -44,7 +48,7 @@
 
 		public function testContainerSerialization() {
 			/** @noinspection UnserializeExploitsInspection */
-			$this->container = SerializeUtils::unserialize(SerializeUtils::serialize($this->container));
+			$this->container = unserialize(serialize($this->container));
 			self::assertSame($this->container, $this->container->create(IContainer::class));
 			self::assertInstanceOf(ICache::class, $this->container->create(ICache::class));
 			self::assertInstanceOf(ICacheManager::class, $cache = $this->container->create(ICache::class));
@@ -63,8 +67,12 @@
 		}
 
 		protected function setUp() {
+			$cacheDirectory = new CacheDirectory(__DIR__ . '/cache');
+			$cacheDirectory->purge();
 			$this->container = ContainerFactory::container([
 				\ISomething::class => \Something::class,
+				ICacheDirectory::class => $cacheDirectory,
+				ICacheStorage::class => FlatFileCacheStorage::class,
 				\ThisIsProductOfCleverManager::class => \ThisIsCleverManager::class . '::createCleverProduct',
 				new ClassFactory(),
 			], [
@@ -73,5 +81,10 @@
 					\AnotherSomethingSetup::class,
 				],
 			]);
+		}
+
+		protected function tearDown() {
+			$this->container->create(ICacheDirectory::class)
+				->delete();
 		}
 	}
