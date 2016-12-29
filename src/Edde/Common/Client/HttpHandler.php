@@ -150,7 +150,7 @@
 			$options = [];
 			if ($body = $this->httpRequest->getBody()) {
 				$options[CURLOPT_POSTFIELDS] = $body->convert();
-				if (($target = $body->getTarget()) !== '') {
+				if (($target = $body->getTarget()) !== null) {
 					$this->header('Content-Type', $target);
 				}
 			}

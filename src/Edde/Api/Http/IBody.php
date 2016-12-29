@@ -15,12 +15,12 @@
 		public function getBody();
 
 		/**
-		 * @return string
+		 * @return string|null
 		 */
 		public function getMime();
 
 		/**
-		 * @return string
+		 * @return string|null
 		 */
 		public function getTarget();
 

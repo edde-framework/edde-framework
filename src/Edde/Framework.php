@@ -24,7 +24,7 @@
 		 * @return string
 		 */
 		public function getVersion() {
-			return '2.5.53.0';
+			return '2.5.54.0';
 		}
 
 		/**
