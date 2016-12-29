@@ -12,6 +12,7 @@
 	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Http\IPostList;
 	use Edde\Common\AbstractObject;
 	use Edde\Common\Client\Event\OnRequestEvent;
 	use Edde\Common\Client\Event\RequestDoneEvent;
@@ -22,7 +23,6 @@
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Http\HttpUtils;
-	use Edde\Common\Http\PostList;
 	use Edde\Common\Strings\StringException;
 
 	/**
@@ -107,7 +107,7 @@
 		 * @inheritdoc
 		 */
 		public function content($content, string $mime = null, string $target = null): IHttpHandler {
-			is_array($content) && ($mime === null || $target === null) ? $this->httpRequest->setPostList(PostList::create($content)) : $this->httpRequest->setBody($this->container->inject(new Body($content, $mime, $target)));
+			$content instanceof IPostList ? $this->httpRequest->setPostList($content) : $this->httpRequest->setBody($this->container->inject(new Body($content, $mime, $target)));
 			return $this;
 		}
 

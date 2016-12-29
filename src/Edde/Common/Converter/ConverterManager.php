@@ -35,7 +35,10 @@
 		 * @inheritdoc
 		 * @throws ConverterException
 		 */
-		public function convert($convert, string $source, string $target) {
+		public function convert($convert, string $source = null, string $target = null) {
+			if (empty($source) || empty($target)) {
+				return $convert;
+			}
 			$this->use();
 			if (isset($this->converterList[$mime = ($source . '|' . $target)]) === false) {
 				throw new ConverterException(sprintf('Cannot convert unknown source mime [%s] to [%s].', $source, $target));

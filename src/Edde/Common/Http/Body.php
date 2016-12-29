@@ -23,7 +23,7 @@
 		 */
 		protected $target;
 
-		public function __construct($body = null, string $mime = '', string $target = '') {
+		public function __construct($body = null, string $mime = null, string $target = null) {
 			$this->body = $body;
 			$this->mime = $mime;
 			$this->target = $target;
