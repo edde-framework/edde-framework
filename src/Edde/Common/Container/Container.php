@@ -86,6 +86,7 @@
 			if ($instance instanceof IConfigurable) {
 				$instance->registerConfigHandlerList(isset($this->configHandlerList[$name]) ? $this->configHandlerList[$name] : []);
 				$instance->init();
+				$instance->warmup();
 			}
 			return $instance;
 		}
