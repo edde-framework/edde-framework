@@ -18,6 +18,12 @@
 	use Serializable;
 
 	class ContainerFactory extends AbstractObject {
+		/**
+		 * @param array $factoryList
+		 *
+		 * @return IFactory[]
+		 * @throws FactoryException
+		 */
 		static public function createFactoryList(array $factoryList): array {
 			$factories = [];
 			foreach ($factoryList as $name => $factory) {
@@ -72,6 +78,9 @@
 			/** @var $container IContainer */
 			$container = new Container(new Cache(new InMemoryCacheStorage()));
 			$container->registerFactoryList($factoryList = self::createFactoryList($factoryList));
+			foreach ($factoryList as $factory) {
+				$container->autowire($factory);
+			}
 			$container = $container->create(IContainer::class);
 			$container->registerFactoryList($factoryList);
 			foreach ($configHandlerList as $name => $configHandler) {

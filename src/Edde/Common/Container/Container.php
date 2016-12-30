@@ -10,6 +10,7 @@
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\ILazyInject;
+	use Edde\Ext\Container\ClassFactory;
 
 	/**
 	 * Default implementation of a dependency container.
@@ -76,6 +77,22 @@
 				$instance->config();
 				$this->cache->save($cacheId, $instance);
 			}
+			return $instance;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function autowire($instance) {
+			if (is_object($instance) === false) {
+				return $instance;
+			}
+			$class = get_class($instance);
+			if (($dependency = $this->cache->load($cacheId = ('dependency/' . $class))) === null) {
+				$classFactory = new ClassFactory();
+				$this->cache->save($cacheId, $dependency = $classFactory->dependency($this, $class));
+			}
+			$this->dependency($instance, $dependency);
 			return $instance;
 		}
 

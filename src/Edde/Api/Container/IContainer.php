@@ -81,4 +81,13 @@
 		 * @return mixed
 		 */
 		public function factory(IFactory $factory, array $parameterList = [], string $name = null);
+
+		/**
+		 * try to autowire dependencies to $instance
+		 *
+		 * @param mixed $instance
+		 *
+		 * @return mixed
+		 */
+		public function autowire($instance);
 	}
