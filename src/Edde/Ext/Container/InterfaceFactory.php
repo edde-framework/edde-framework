@@ -56,7 +56,10 @@
 		 * @inheritdoc
 		 */
 		public function fetch(IContainer $container, string $id, ICache $cache) {
-			return $cache->load($id);
+			if ($this->instance) {
+				return $this->instance;
+			}
+			return $this->instance = $cache->load($id);
 		}
 
 		/**

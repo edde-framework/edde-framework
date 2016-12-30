@@ -20,8 +20,10 @@
 		 * this method should be called after all dependencies are
 		 * available; also there should NOT be any heavy computations, only
 		 * lightweight simple stuff
+		 *
+		 * @param bool $force
 		 */
-		public function init();
+		public function init(bool $force = false);
 
 		/**
 		 * @return bool
@@ -30,8 +32,10 @@
 
 		/**
 		 * execute object initialization; object must be serializable after this method
+		 *
+		 * @param bool $force
 		 */
-		public function warmup();
+		public function warmup(bool $force = false);
 
 		/**
 		 * @return bool
@@ -41,9 +45,9 @@
 		/**
 		 * execute object configuration (so after this method object should be fully prepared for use)
 		 *
-		 * @return $this
+		 * @param bool $force
 		 */
-		public function config();
+		public function config(bool $force = false);
 
 		/**
 		 * what to say here, hmm ;)? If method config() has been called, this is true
@@ -54,8 +58,10 @@
 
 		/**
 		 * do any heavy computations; after this object is usualy not serializable
+		 *
+		 * @param bool $force
 		 */
-		public function setup();
+		public function setup(bool $force = false);
 
 		/**
 		 * has benn object set up?

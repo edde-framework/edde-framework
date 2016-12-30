@@ -48,7 +48,7 @@
 
 		public function testContainerSerialization() {
 			/** @noinspection UnserializeExploitsInspection */
-			$this->container = unserialize(serialize($this->container));
+			$this->container = unserialize($source = serialize($this->container));
 			self::assertSame($this->container, $this->container->create(IContainer::class));
 			self::assertInstanceOf(ICache::class, $this->container->create(ICache::class));
 			self::assertInstanceOf(ICacheManager::class, $cache = $this->container->create(ICache::class));
@@ -56,6 +56,7 @@
 			self::assertSame($cache, $cacheManager);
 			/** @var $instance \Something */
 			self::assertNotSame($instance = $this->container->create(\ISomething::class, 'fill-me-up'), $this->container->create(\Something::class, 'flush-me-out'));
+			self::assertSame($instance, $this->container->create(\ISomething::class, 'fill-me-up'));
 			self::assertTrue($instance->isConfigured());
 			self::assertNotEmpty($instance->somethingList);
 			self::assertEquals([
@@ -64,6 +65,9 @@
 				'boo',
 			], $instance->somethingList);
 			self::assertEquals('fill-me-up', $instance->someParameter);
+
+			$this->container = unserialize($source);
+			self::assertSame($instance, $this->container->create(\ISomething::class, 'fill-me-up'));
 		}
 
 		protected function setUp() {
@@ -81,10 +85,5 @@
 					\AnotherSomethingSetup::class,
 				],
 			]);
-		}
-
-		protected function tearDown() {
-			$this->container->create(ICacheDirectory::class)
-				->delete();
 		}
 	}

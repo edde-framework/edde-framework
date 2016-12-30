@@ -1,10 +1,12 @@
 <?php
 	declare(strict_types = 1);
 
+	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Container\IConfigHandler;
 	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Common\AbstractObject;
+	use Edde\Common\Cache\CacheableTrait;
 	use Edde\Common\Container\AbstractConfigHandler;
 	use Edde\Common\Container\ConfigurableTrait;
 
@@ -38,8 +40,9 @@
 		}
 	}
 
-	class Something extends AbstractObject implements ISomething, IConfigurable {
+	class Something extends AbstractObject implements ISomething, IConfigurable, ICacheable {
 		use ConfigurableTrait;
+		use CacheableTrait;
 
 		public $someParameter;
 		public $anotherSomething;

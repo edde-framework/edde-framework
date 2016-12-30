@@ -38,8 +38,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function init() {
-			if ($this->tInit) {
+		public function init(bool $force = false) {
+			if ($this->tInit && $force === false) {
 				return $this;
 			}
 			$this->tInit = true;
@@ -60,12 +60,12 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function warmup() {
-			if ($this->tWarmup) {
+		public function warmup(bool $force = false) {
+			if ($this->tWarmup && $force === false) {
 				return $this;
 			}
 			$this->tWarmup = true;
-			$this->init();
+			$this->init($force);
 			$this->handleWarmup();
 			return $this;
 		}
@@ -83,12 +83,12 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function config() {
-			if ($this->tConfig) {
+		public function config(bool $force = false) {
+			if ($this->tConfig && $force === false) {
 				return $this;
 			}
 			$this->tConfig = true;
-			$this->warmup();
+			$this->warmup($force);
 			$this->handleConfig();
 			foreacH ($this->tConfigHandlerList as $configHandler) {
 				$configHandler->config($this);
@@ -109,12 +109,12 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setup() {
-			if ($this->tSetup) {
+		public function setup(bool $force = false) {
+			if ($this->tSetup && $force === false) {
 				return $this;
 			}
 			$this->tSetup = true;
-			$this->config();
+			$this->config($force);
 			$this->handleSetup();
 			return $this;
 		}

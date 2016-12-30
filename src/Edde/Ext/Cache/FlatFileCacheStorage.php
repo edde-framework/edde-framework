@@ -71,4 +71,9 @@
 				$this->source = [];
 			}
 		}
+
+		public function __wakeup() {
+			parent::__wakeup();
+			$this->tInit = false;
+		}
 	}
