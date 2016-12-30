@@ -36,7 +36,7 @@
 		/**
 		 * @return bool
 		 */
-		public function isWarmup(): bool;
+		public function isWarmedup(): bool;
 
 		/**
 		 * execute object configuration (so after this method object should be fully prepared for use)

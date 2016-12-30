@@ -7,22 +7,25 @@
 
 	trait ConfigurableTrait {
 		/**
-		 * @var bool
-		 */
-		private $tInit = false;
-		/**
-		 * @var bool
-		 */
-		private $tWarmup = false;
-		/**
-		 * @var bool
-		 */
-		private $tConfig = false;
-		/**
 		 * @var IConfigHandler[]
 		 */
-		private $tConfigHandlerList = [];
-		private $tSetup = false;
+		protected $tConfigHandlerList = [];
+		/**
+		 * @var bool
+		 */
+		protected $tInit = false;
+		/**
+		 * @var bool
+		 */
+		protected $tWarmup = false;
+		/**
+		 * @var bool
+		 */
+		protected $tConfig = false;
+		/**
+		 * @var bool
+		 */
+		protected $tSetup = false;
 
 		/**
 		 * @inheritdoc
@@ -73,7 +76,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function isWarmup(): bool {
+		public function isWarmedup(): bool {
 			return $this->tWarmup;
 		}
 

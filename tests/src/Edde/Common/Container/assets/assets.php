@@ -36,10 +36,6 @@
 			$instance->registerSomeething($this->container->create(FirstSomethingSetup::class)
 				->getBoo());
 		}
-
-		public function wakeup(...$parameterList) {
-			list($this->container) = $parameterList;
-		}
 	}
 
 	class Something extends AbstractObject implements ISomething, IConfigurable {
@@ -69,7 +65,8 @@
 		}
 	}
 
-	class AnotherSomething extends AbstractObject {
+	class AnotherSomething extends AbstractObject implements IConfigurable {
+		use ConfigurableTrait;
 	}
 
 	class InjectedSomething extends AbstractObject {
