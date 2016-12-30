@@ -65,9 +65,6 @@
 				'boo',
 			], $instance->somethingList);
 			self::assertEquals('fill-me-up', $instance->someParameter);
-
-			$this->container = unserialize($source);
-			self::assertSame($instance, $this->container->create(\ISomething::class, 'fill-me-up'));
 		}
 
 		protected function setUp() {
