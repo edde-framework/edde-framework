@@ -36,6 +36,17 @@
 		public function getFactory(IContainer $container): IFactory;
 
 		/**
+		 * try to prefetch dependency before heavy computations are done
+		 *
+		 * @param IContainer $container
+		 * @param string     $name
+		 * @param array      $parameterList
+		 *
+		 * @return mixed|null if null is returned, container will execute... execute() on this factory
+		 */
+		public function fetch(IContainer $container, string $name, array $parameterList);
+
+		/**
 		 * @param IContainer $container
 		 * @param array      $parameterList
 		 * @param string     $name

@@ -14,4 +14,7 @@
 		public function getFactory(IContainer $container): IFactory {
 			return $this;
 		}
+
+		public function fetch(IContainer $container, string $name, array $parameterList) {
+		}
 	}

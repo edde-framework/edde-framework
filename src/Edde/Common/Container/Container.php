@@ -33,7 +33,7 @@
 		 * @throws FactoryException
 		 */
 		public function getFactory(string $dependency): IFactory {
-			if (($id = $this->cache->load($cacheId = ('dependency/' . $dependency))) !== null) {
+			if (($id = $this->cache->load($cacheId = ('factory/' . $dependency))) !== null) {
 				return $this->factoryList[$id]->getFactory($this);
 			}
 			foreach ($this->factoryList as $id => $factory) {
@@ -54,8 +54,7 @@
 		 * @throws ContainerException
 		 */
 		public function factory(IFactory $factory, array $parameterList = [], string $name = null) {
-			$cacheId = get_class($factory) . $name . count($parameterList);
-			if (($instance = $this->cache->load($cacheId)) !== null) {
+			if (($instance = $factory->fetch($this, $name, $parameterList)) !== null) {
 				return $instance;
 			}
 			$dependency = $factory->dependency($this, $name);
@@ -75,7 +74,6 @@
 				$instance->init();
 				$instance->warmup();
 				$instance->config();
-				$this->cache->save($cacheId, $instance);
 			}
 			return $instance;
 		}
