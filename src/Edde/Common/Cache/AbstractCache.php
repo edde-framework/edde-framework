@@ -4,6 +4,7 @@
 	namespace Edde\Common\Cache;
 
 	use Edde\Api\Cache\ICache;
+	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Common\AbstractObject;
 
@@ -71,6 +72,9 @@
 		 * @inheritdoc
 		 */
 		public function save(string $id, $source) {
+			if (is_object($source) && $source instanceof ICacheable === false) {
+				return $source;
+			}
 			$this->cacheStorage->save($this->cacheId($id), $source);
 			return $source;
 		}

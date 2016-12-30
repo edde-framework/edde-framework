@@ -54,10 +54,12 @@
 		 * @throws ContainerException
 		 */
 		public function factory(IFactory $factory, array $parameterList = [], string $name = null) {
-			if (($instance = $factory->fetch($this, $name, $parameterList)) !== null) {
+			if (($instance = $factory->fetch($this, $fetchId = (get_class($factory) . count($parameterList) . $name), $this->cache)) !== null) {
 				return $instance;
 			}
-			$dependency = $factory->dependency($this, $name);
+			if (($dependency = $this->cache->load($cacheId = ('dependency/' . $name))) === null) {
+				$this->cache->save($cacheId, $dependency = $factory->dependency($this, $name));
+			}
 			$grab = count($parameterList);
 			$dependencyList = [];
 			foreach ($dependency->getParameterList() as $parameter) {
@@ -66,13 +68,13 @@
 				}
 				$dependencyList[] = $this->factory($this->getFactory($class = (($class = $parameter->getClass()) ? $class->getName() : $parameter->getName())), [], $class);
 			}
-			$instance = $factory->execute($this, array_merge($parameterList, $dependencyList), $name);
-			$this->dependency($instance, $dependency);
+			$this->dependency($instance = $factory->execute($this, array_merge($parameterList, $dependencyList), $name), $dependency);
 			if ($instance instanceof IConfigurable) {
 				/** @var $instance IConfigurable */
 				$instance->registerConfigHandlerList(isset($this->configHandlerList[$name]) ? $this->configHandlerList[$name] : []);
 				$instance->init();
 			}
+			$factory->push($this, $fetchId, $instance, $this->cache);
 			return $instance;
 		}
 
@@ -83,8 +85,7 @@
 			if (is_object($instance) === false) {
 				return $instance;
 			}
-			$class = get_class($instance);
-			if (($dependency = $this->cache->load($cacheId = ('dependency/' . $class))) === null) {
+			if (($dependency = $this->cache->load($cacheId = ('dependency/' . ($class = get_class($instance))))) === null) {
 				$classFactory = new ClassFactory();
 				$this->cache->save($cacheId, $dependency = $classFactory->dependency($this, $class));
 			}

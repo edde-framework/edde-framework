@@ -77,12 +77,9 @@
 			 */
 			/** @var $container IContainer */
 			$container = new Container(new Cache(new InMemoryCacheStorage()));
-			$container->registerFactoryList($factoryList = self::createFactoryList($factoryList));
-			foreach ($factoryList as $factory) {
-				$container->autowire($factory);
-			}
+			$container->registerFactoryList(self::createFactoryList($factoryList));
 			$container = $container->create(IContainer::class);
-			$container->registerFactoryList($factoryList);
+			$container->registerFactoryList(self::createFactoryList($factoryList));
 			foreach ($configHandlerList as $name => $configHandler) {
 				foreach ($configHandler as $config) {
 					$container->registerConfigHandler($name, $container->create($config));

@@ -3,6 +3,8 @@
 
 	namespace Edde\Api\Container;
 
+	use Edde\Api\Cache\ICache;
+
 	/**
 	 * Factory is general way how to build a dependency with the final set of parameters/dependencies.
 	 */
@@ -39,12 +41,15 @@
 		 * try to prefetch dependency before heavy computations are done
 		 *
 		 * @param IContainer $container
-		 * @param string     $name
-		 * @param array      $parameterList
+		 * @param string     $id
+		 * @param ICache     $cache
 		 *
 		 * @return mixed|null if null is returned, container will execute... execute() on this factory
+		 * @internal param string $name
+		 * @internal param array $parameterList
+		 *
 		 */
-		public function fetch(IContainer $container, string $name, array $parameterList);
+		public function fetch(IContainer $container, string $id, ICache $cache);
 
 		/**
 		 * @param IContainer $container
@@ -54,4 +59,18 @@
 		 * @return mixed
 		 */
 		public function execute(IContainer $container, array $parameterList, string $name = null);
+
+		/**
+		 * factory can optionally push dependency to some kind of cache (this instance should be returned on fetch())
+		 *
+		 * @param IContainer $container
+		 * @param string     $id
+		 * @param mixed      $instance
+		 * @param ICache     $cache
+		 *
+		 * @return mixed
+		 * @internal param string $name
+		 * @internal param array $parameterList
+		 */
+		public function push(IContainer $container, string $id, $instance, ICache $cache);
 	}
