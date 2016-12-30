@@ -67,13 +67,11 @@
 				$dependencyList[] = $this->factory($this->getFactory($class = (($class = $parameter->getClass()) ? $class->getName() : $parameter->getName())), [], $class);
 			}
 			$instance = $factory->execute($this, array_merge($parameterList, $dependencyList), $name);
-			$this->dependency($instance, $dependency, ($config = $instance instanceof IConfigurable) === false);
-			if ($config) {
+			$this->dependency($instance, $dependency);
+			if ($instance instanceof IConfigurable) {
 				/** @var $instance IConfigurable */
 				$instance->registerConfigHandlerList(isset($this->configHandlerList[$name]) ? $this->configHandlerList[$name] : []);
 				$instance->init();
-				$instance->warmup();
-				$instance->config();
 			}
 			return $instance;
 		}
@@ -81,7 +79,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function autowire($instance) {
+		public function autowire($instance, bool $force = false) {
 			if (is_object($instance) === false) {
 				return $instance;
 			}
@@ -90,7 +88,7 @@
 				$classFactory = new ClassFactory();
 				$this->cache->save($cacheId, $dependency = $classFactory->dependency($this, $class));
 			}
-			$this->dependency($instance, $dependency);
+			$this->dependency($instance, $dependency, $force !== true);
 			return $instance;
 		}
 

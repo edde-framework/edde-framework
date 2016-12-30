@@ -86,8 +86,9 @@
 		 * try to autowire dependencies to $instance
 		 *
 		 * @param mixed $instance
+		 * @param bool  $force if true, dependencies will be autowired regardless of lazy injects
 		 *
 		 * @return mixed
 		 */
-		public function autowire($instance);
+		public function autowire($instance, bool $force = false);
 	}
