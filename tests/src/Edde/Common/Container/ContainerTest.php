@@ -56,7 +56,7 @@
 			self::assertSame($cache, $cacheManager);
 			/** @var $instance \Something */
 			self::assertNotSame($instance = $this->container->create(\ISomething::class, 'fill-me-up'), $this->container->create(\Something::class, 'flush-me-out'));
-			$instance->config();
+			self::assertTrue($instance->isConfigured());
 			self::assertNotEmpty($instance->somethingList);
 			self::assertEquals([
 				'foo',

@@ -89,10 +89,14 @@
 			}
 			$this->tConfig = true;
 			$this->warmup();
+			$this->handleConfig();
 			foreacH ($this->tConfigHandlerList as $configHandler) {
 				$configHandler->config($this);
 			}
 			return $this;
+		}
+
+		protected function handleConfig() {
 		}
 
 		/**
