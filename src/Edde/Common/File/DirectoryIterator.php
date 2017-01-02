@@ -5,9 +5,9 @@
 
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\File\IDirectoryIterator;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class DirectoryIterator extends AbstractObject implements IDirectoryIterator {
+	class DirectoryIterator extends Object implements IDirectoryIterator {
 		/**
 		 * @var IDirectory[]
 		 */

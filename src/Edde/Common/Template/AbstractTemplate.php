@@ -4,7 +4,7 @@
 	namespace Edde\Common\Template;
 
 	use Edde\Api\Template\ITemplate;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	abstract class AbstractTemplate extends AbstractObject implements ITemplate {
+	abstract class AbstractTemplate extends Object implements ITemplate {
 	}

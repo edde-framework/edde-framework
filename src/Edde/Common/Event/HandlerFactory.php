@@ -5,14 +5,14 @@
 
 	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IHandler;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Event\Handler\CallableHandler;
 	use Edde\Common\Event\Handler\ReflectionHandler;
 
 	/**
 	 * Handler cache to hide implementation details about input handler.
 	 */
-	class HandlerFactory extends AbstractObject {
+	class HandlerFactory extends Object {
 		/**
 		 * create event handler based on input or throw an exception if input is not supported
 		 *

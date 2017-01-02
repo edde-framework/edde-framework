@@ -6,9 +6,9 @@
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Storage\IBoundQuery;
 	use Edde\Api\Storage\IStorage;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class BoundQuery extends AbstractObject implements IBoundQuery {
+	class BoundQuery extends Object implements IBoundQuery {
 		/**
 		 * @var IQuery
 		 */

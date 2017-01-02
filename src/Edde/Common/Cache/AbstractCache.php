@@ -6,9 +6,9 @@
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Cache\ICacheStorage;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	abstract class AbstractCache extends AbstractObject implements ICache {
+	abstract class AbstractCache extends Object implements ICache {
 		/**
 		 * @var ICacheStorage
 		 */

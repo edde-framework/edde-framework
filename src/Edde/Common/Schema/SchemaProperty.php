@@ -7,9 +7,9 @@
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Api\Schema\SchemaException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class SchemaProperty extends AbstractObject implements ISchemaProperty {
+	class SchemaProperty extends Object implements ISchemaProperty {
 		/**
 		 * @var ISchema
 		 */

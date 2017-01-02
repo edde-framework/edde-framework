@@ -8,13 +8,13 @@
 	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Node\Node;
 
 	/**
 	 * Base macro for all template macros.
 	 */
-	abstract class AbstractMacro extends AbstractObject implements IMacro {
+	abstract class AbstractMacro extends Object implements IMacro {
 		/**
 		 * @var string
 		 */

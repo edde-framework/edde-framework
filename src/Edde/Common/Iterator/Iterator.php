@@ -4,9 +4,9 @@
 	namespace Edde\Common\Iterator;
 
 	use Edde\Api\Iterator\IIterator;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class Iterator extends AbstractObject implements IIterator {
+	class Iterator extends Object implements IIterator {
 		/**
 		 * @var \Iterator
 		 */

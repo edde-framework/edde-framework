@@ -4,10 +4,10 @@
 	namespace Edde\Common\Callback;
 
 	use Edde\Api\Callback\ICallback;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Reflection\ReflectionUtils;
 
-	class Callback extends AbstractObject implements ICallback {
+	class Callback extends Object implements ICallback {
 		/**
 		 * @var callable
 		 */

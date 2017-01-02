@@ -4,7 +4,7 @@
 	namespace Edde\Common\Router;
 
 	use Edde\Api\Router\IRouter;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	abstract class AbstractRouter extends AbstractObject implements IRouter {
+	abstract class AbstractRouter extends Object implements IRouter {
 	}

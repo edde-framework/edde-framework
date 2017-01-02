@@ -12,7 +12,7 @@
 	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\ResourceException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
@@ -20,7 +20,7 @@
 	/**
 	 * Simple and uniform way how to handle file storing.
 	 */
-	class AssetStorage extends AbstractObject implements IAssetStorage {
+	class AssetStorage extends Object implements IAssetStorage {
 		use LazyRootDirectoryTrait;
 		use LazyAssetDirectoryTrait;
 		use LazyStorageDirectoryTrait;

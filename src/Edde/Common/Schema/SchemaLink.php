@@ -5,9 +5,9 @@
 
 	use Edde\Api\Schema\ISchemaLink;
 	use Edde\Api\Schema\ISchemaProperty;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class SchemaLink extends AbstractObject implements ISchemaLink {
+	class SchemaLink extends Object implements ISchemaLink {
 		/**
 		 * @var string
 		 */

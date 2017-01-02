@@ -9,10 +9,10 @@
 	use Edde\Api\Storage\IBoundQuery;
 	use Edde\Api\Storage\IRepository;
 	use Edde\Api\Storage\LazyStorageTrait;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Query\Select\SelectQuery;
 
-	abstract class AbstractRepository extends AbstractObject implements IRepository {
+	abstract class AbstractRepository extends Object implements IRepository {
 		use LazyContainerTrait;
 		use LazyStorageTrait;
 		/**

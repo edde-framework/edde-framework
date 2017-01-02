@@ -5,10 +5,10 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\INodeQuery;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Iterator;
 
-	class NodeQuery extends AbstractObject implements INodeQuery {
+	class NodeQuery extends Object implements INodeQuery {
 		/**
 		 * @var string
 		 */

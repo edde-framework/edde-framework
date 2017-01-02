@@ -5,7 +5,7 @@
 	use Edde\Api\Container\IConfigHandler;
 	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Container\LazyContainerTrait;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Cache\CacheableTrait;
 	use Edde\Common\Container\AbstractConfigHandler;
 	use Edde\Common\Container\ConfigurableTrait;
@@ -40,7 +40,7 @@
 		}
 	}
 
-	class Something extends AbstractObject implements ISomething, IConfigurable, ICacheable {
+	class Something extends Object implements ISomething, IConfigurable, ICacheable {
 		use ConfigurableTrait;
 		use CacheableTrait;
 
@@ -68,20 +68,20 @@
 		}
 	}
 
-	class AnotherSomething extends AbstractObject implements IConfigurable {
+	class AnotherSomething extends Object implements IConfigurable {
 		use ConfigurableTrait;
 	}
 
-	class InjectedSomething extends AbstractObject {
+	class InjectedSomething extends Object {
 	}
 
-	class LazySomething extends AbstractObject {
+	class LazySomething extends Object {
 	}
 
-	class AnotherAnotherSomething extends AbstractObject {
+	class AnotherAnotherSomething extends Object {
 	}
 
-	class ThisIsCleverManager extends AbstractObject {
+	class ThisIsCleverManager extends Object {
 		/**
 		 * @var AnotherSomething
 		 */
@@ -105,5 +105,5 @@
 		}
 	}
 
-	class ThisIsProductOfCleverManager extends AbstractObject {
+	class ThisIsProductOfCleverManager extends Object {
 	}

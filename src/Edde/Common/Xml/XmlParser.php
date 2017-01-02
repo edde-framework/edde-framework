@@ -9,7 +9,7 @@
 	use Edde\Api\Xml\IXmlHandler;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Api\Xml\XmlParserException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\File\File;
 	use Edde\Common\Iterator\ChunkIterator;
 	use Edde\Common\Iterator\Iterator;
@@ -18,7 +18,7 @@
 	/**
 	 * Simple and fast event based xml parser.
 	 */
-	class XmlParser extends AbstractObject implements IXmlParser {
+	class XmlParser extends Object implements IXmlParser {
 		const XML_TYPE_WARP = null;
 		const XML_TYPE_OPENTAG = 1;
 		const XML_TYPE_CLOSETAG = 2;

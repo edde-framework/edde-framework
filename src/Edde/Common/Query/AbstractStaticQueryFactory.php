@@ -9,7 +9,7 @@
 	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Query\IStaticQueryFactory;
 	use Edde\Api\Query\StaticQueryException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Node\NodeQuery;
 	use Edde\Common\Strings\StringUtils;
 	use ReflectionClass;
@@ -18,7 +18,7 @@
 	/**
 	 * Helper class for IQL to string building.
 	 */
-	abstract class AbstractStaticQueryFactory extends AbstractObject implements IStaticQueryFactory {
+	abstract class AbstractStaticQueryFactory extends Object implements IStaticQueryFactory {
 		/**
 		 * @var array
 		 */

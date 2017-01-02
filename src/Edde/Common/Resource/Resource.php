@@ -7,13 +7,13 @@
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\ResourceException;
 	use Edde\Api\Url\IUrl;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\File\FileUtils;
 
 	/**
 	 * Abstract definition of some "resource".
 	 */
-	class Resource extends AbstractObject implements IResource {
+	class Resource extends Object implements IResource {
 		/**
 		 * @var IUrl
 		 */

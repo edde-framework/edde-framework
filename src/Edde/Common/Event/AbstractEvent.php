@@ -4,10 +4,10 @@
 	namespace Edde\Common\Event;
 
 	use Edde\Api\Event\IEvent;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Common stuff for event implementation.
 	 */
-	abstract class AbstractEvent extends AbstractObject implements IEvent {
+	abstract class AbstractEvent extends Object implements IEvent {
 	}

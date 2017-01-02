@@ -9,7 +9,7 @@
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Callback\Callback;
 	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Control\Event\CancelEvent;
@@ -24,7 +24,7 @@
 	/**
 	 * Root implementation of all controls.
 	 */
-	abstract class AbstractControl extends AbstractObject implements IControl {
+	abstract class AbstractControl extends Object implements IControl {
 		use LazyContainerTrait;
 		use EventTrait;
 		use ConfigurableTrait;

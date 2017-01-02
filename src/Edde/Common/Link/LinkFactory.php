@@ -6,9 +6,9 @@
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Api\Link\LinkException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class LinkFactory extends AbstractObject implements ILinkFactory {
+	class LinkFactory extends Object implements ILinkFactory {
 		/**
 		 * @var ILinkGenerator[]
 		 */

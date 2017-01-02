@@ -4,7 +4,7 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Container\IConfigHandler;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	abstract class AbstractConfigHandler extends AbstractObject implements IConfigHandler {
+	abstract class AbstractConfigHandler extends Object implements IConfigHandler {
 	}

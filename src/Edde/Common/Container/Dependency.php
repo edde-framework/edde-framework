@@ -5,10 +5,10 @@
 
 	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Container\IDependency;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Cache\CacheableTrait;
 
-	class Dependency extends AbstractObject implements IDependency, ICacheable {
+	class Dependency extends Object implements IDependency, ICacheable {
 		use CacheableTrait;
 
 		protected $parameterList = [];

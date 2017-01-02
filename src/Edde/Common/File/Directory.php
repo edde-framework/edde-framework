@@ -7,14 +7,14 @@
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\File\IFile;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use RecursiveDirectoryIterator;
 	use RecursiveIteratorIterator;
 
 	/**
 	 * Representation of directory on the filesystem.
 	 */
-	class Directory extends AbstractObject implements IDirectory, \Serializable {
+	class Directory extends Object implements IDirectory, \Serializable {
 		/**
 		 * @var string
 		 */

@@ -4,12 +4,12 @@
 	namespace Edde\Common\Identity;
 
 	use Edde\Api\Identity\IAuthenticator;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Abstract implementation for all authenticators.
 	 */
-	abstract class AbstractAuthenticator extends AbstractObject implements IAuthenticator {
+	abstract class AbstractAuthenticator extends Object implements IAuthenticator {
 		/**
 		 * @var string
 		 */

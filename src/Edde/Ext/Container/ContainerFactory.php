@@ -10,14 +10,14 @@
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Cache\Cache;
 	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Container\Container;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Serializable;
 
-	class ContainerFactory extends AbstractObject {
+	class ContainerFactory extends Object {
 		/**
 		 * @param array $factoryList
 		 *

@@ -3,13 +3,13 @@
 
 	namespace Edde\Common\Strings;
 
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Callback\CallbackUtils;
 
 	/**
 	 * StringsUtils are set of independent methods for UTF-8 string manipulation.
 	 */
-	class StringUtils extends AbstractObject {
+	class StringUtils extends Object {
 		private static $SEPARATOR_LIST = [
 			'|',
 			':',

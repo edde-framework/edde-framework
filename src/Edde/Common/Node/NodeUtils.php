@@ -5,12 +5,12 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Set of tools for work with nodes.
 	 */
-	class NodeUtils extends AbstractObject {
+	class NodeUtils extends Object {
 		/**
 		 * @param INode                        $root
 		 * @param \Traversable|\Iterator|array $source

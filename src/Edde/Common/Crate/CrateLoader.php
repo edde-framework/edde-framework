@@ -6,14 +6,14 @@
 	use Edde\Api\Crate\ICrateLoader;
 	use Edde\Api\Crate\LazyCrateGeneratorTrait;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Container\ConfigurableTrait;
 
 	/**
 	 * Default crate loader implementation.
 	 */
-	class CrateLoader extends AbstractObject implements ICrateLoader {
+	class CrateLoader extends Object implements ICrateLoader {
 		use LazySchemaManagerTrait;
 		use LazyCrateGeneratorTrait;
 		use CacheTrait;

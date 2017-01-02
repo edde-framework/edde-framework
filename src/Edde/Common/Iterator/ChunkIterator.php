@@ -3,9 +3,9 @@
 
 	namespace Edde\Common\Iterator;
 
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class ChunkIterator extends AbstractObject implements \Iterator {
+	class ChunkIterator extends Object implements \Iterator {
 		/**
 		 * @var callable
 		 */

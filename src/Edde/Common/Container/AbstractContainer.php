@@ -8,10 +8,10 @@
 	use Edde\Api\Container\IConfigHandler;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Ext\Container\CallbackFactory;
 
-	abstract class AbstractContainer extends AbstractObject implements IContainer {
+	abstract class AbstractContainer extends Object implements IContainer {
 		/**
 		 * @var IFactory[]
 		 */

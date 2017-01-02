@@ -10,11 +10,11 @@
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\SchemaFactoryException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Filter\BoolFilter;
 	use Edde\Common\Node\NodeQuery;
 
-	class SchemaFactory extends AbstractObject implements ISchemaFactory {
+	class SchemaFactory extends Object implements ISchemaFactory {
 		use LazyContainerTrait;
 		use LazyResourceManagerTrait;
 		/**

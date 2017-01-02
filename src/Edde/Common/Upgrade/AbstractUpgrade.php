@@ -4,9 +4,9 @@
 	namespace Edde\Common\Upgrade;
 
 	use Edde\Api\Upgrade\IUpgrade;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	abstract class AbstractUpgrade extends AbstractObject implements IUpgrade {
+	abstract class AbstractUpgrade extends Object implements IUpgrade {
 		/**
 		 * @var string
 		 */

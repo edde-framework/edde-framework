@@ -3,8 +3,8 @@
 
 	namespace Edde\Test;
 
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class FooObject extends AbstractObject {
+	class FooObject extends Object {
 		public $foo = 'a';
 	}

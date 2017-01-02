@@ -4,9 +4,9 @@
 	namespace Edde\Common\Runtime;
 
 	use Edde\Api\Runtime\IRuntime;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class Runtime extends AbstractObject implements IRuntime {
+	class Runtime extends Object implements IRuntime {
 		/**
 		 * @inheritdoc
 		 */

@@ -11,7 +11,7 @@
 	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Client\Event\OnRequestEvent;
 	use Edde\Common\Client\Event\RequestDoneEvent;
 	use Edde\Common\Client\Event\RequestFailedEvent;
@@ -26,7 +26,7 @@
 	/**
 	 * Http client handler; this should not be used in common; only as a result from HttpClient calls
 	 */
-	class HttpHandler extends AbstractObject implements IHttpHandler {
+	class HttpHandler extends Object implements IHttpHandler {
 		use LazyContainerTrait;
 		use LazyTempDirectoryTrait;
 		use EventTrait;

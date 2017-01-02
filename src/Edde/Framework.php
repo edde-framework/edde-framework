@@ -3,12 +3,12 @@
 
 	namespace Edde;
 
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Information about framework hidden in this class.
 	 */
-	class Framework extends AbstractObject {
+	class Framework extends Object {
 		/**
 		 * return full version string
 		 *

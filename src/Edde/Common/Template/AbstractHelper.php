@@ -4,7 +4,7 @@
 	namespace Edde\Common\Template;
 
 	use Edde\Api\Template\IHelper;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	abstract class AbstractHelper extends AbstractObject implements IHelper {
+	abstract class AbstractHelper extends Object implements IHelper {
 	}

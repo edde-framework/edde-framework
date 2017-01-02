@@ -5,12 +5,12 @@
 
 	use Edde\Api\Router\IRouter;
 	use Edde\Api\Router\IRouterList;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Default implementation of a router list.
 	 */
-	class RouterList extends AbstractObject implements IRouterList {
+	class RouterList extends Object implements IRouterList {
 		/**
 		 * @var IRouter[]
 		 */

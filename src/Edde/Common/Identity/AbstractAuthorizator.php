@@ -4,10 +4,10 @@
 	namespace Edde\Common\Identity;
 
 	use Edde\Api\Identity\IAuthorizator;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Common stuff for an authorizator implementations.
 	 */
-	abstract class AbstractAuthorizator extends AbstractObject implements IAuthorizator {
+	abstract class AbstractAuthorizator extends Object implements IAuthorizator {
 	}

@@ -4,9 +4,9 @@
 	namespace Edde\Common\Callback;
 
 	use Edde\Api\Callback\IParameter;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class Parameter extends AbstractObject implements IParameter {
+	class Parameter extends Object implements IParameter {
 		/**
 		 * @var string
 		 */

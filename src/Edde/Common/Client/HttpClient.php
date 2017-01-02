@@ -12,7 +12,7 @@
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Url\IUrl;
 	use Edde\Api\Url\UrlException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Client\Event\DeleteEvent;
 	use Edde\Common\Client\Event\GetEvent;
 	use Edde\Common\Client\Event\HandlerEvent;
@@ -31,7 +31,7 @@
 	/**
 	 * Simple http client implementation.
 	 */
-	class HttpClient extends AbstractObject implements IHttpClient {
+	class HttpClient extends Object implements IHttpClient {
 		use LazyContainerTrait;
 		use LazyConverterManagerTrait;
 		use EventTrait;

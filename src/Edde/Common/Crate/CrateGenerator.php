@@ -14,7 +14,7 @@
 	use Edde\Api\Schema\ISchemaLink;
 	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\File\FileUtils;
@@ -23,7 +23,7 @@
 	/**
 	 * Simple crate php class generator.
 	 */
-	class CrateGenerator extends AbstractObject implements ICrateGenerator {
+	class CrateGenerator extends Object implements ICrateGenerator {
 		use LazySchemaManagerTrait;
 		use LazyCrateDirectoryTrait;
 		use LazyTempDirectoryTrait;

@@ -9,9 +9,9 @@
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class Collection extends AbstractObject implements ICollection {
+	class Collection extends Object implements ICollection {
 		/**
 		 * @var ICrateFactory
 		 */

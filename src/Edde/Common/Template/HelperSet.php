@@ -5,9 +5,9 @@
 
 	use Edde\Api\Template\IHelper;
 	use Edde\Api\Template\IHelperSet;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class HelperSet extends AbstractObject implements IHelperSet {
+	class HelperSet extends Object implements IHelperSet {
 		/**
 		 * @var IHelper[]
 		 */

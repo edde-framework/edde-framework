@@ -8,12 +8,12 @@
 	use Edde\Api\Event\IEvent;
 	use Edde\Api\Event\IEventBus;
 	use Edde\Api\Event\IHandler;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Default simple implementation of an EventBus.
 	 */
-	class EventBus extends AbstractObject implements IEventBus {
+	class EventBus extends Object implements IEventBus {
 		use LazyContainerTrait;
 		/**
 		 * @var bool

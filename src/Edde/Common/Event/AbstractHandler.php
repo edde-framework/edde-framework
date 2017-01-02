@@ -4,12 +4,12 @@
 	namespace Edde\Common\Event;
 
 	use Edde\Api\Event\IHandler;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Common stuff for event handlers.
 	 */
-	abstract class AbstractHandler extends AbstractObject implements IHandler {
+	abstract class AbstractHandler extends Object implements IHandler {
 		/**
 		 * @var string
 		 */

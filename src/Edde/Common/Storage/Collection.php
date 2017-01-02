@@ -7,12 +7,12 @@
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Storage\ICollection;
 	use Edde\Api\Storage\IStorage;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Default implementation of collection.
 	 */
-	class Collection extends AbstractObject implements ICollection {
+	class Collection extends Object implements ICollection {
 		/**
 		 * @var string
 		 */

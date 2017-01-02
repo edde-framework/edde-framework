@@ -9,10 +9,10 @@
 	use Edde\Api\Identity\LazyAuthorizatorTrait;
 	use Edde\Api\Identity\LazyIdentityManagerTrait;
 	use Edde\Api\Identity\LazyIdentityTrait;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Session\SessionTrait;
 
-	class AuthenticatorManager extends AbstractObject implements IAuthenticatorManager {
+	class AuthenticatorManager extends Object implements IAuthenticatorManager {
 		use LazyIdentityTrait;
 		use LazyIdentityManagerTrait;
 		use LazyAuthorizatorTrait;

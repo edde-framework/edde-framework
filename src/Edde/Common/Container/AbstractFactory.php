@@ -6,12 +6,12 @@
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Basic implementation for all dependency factories.
 	 */
-	abstract class AbstractFactory extends AbstractObject implements IFactory {
+	abstract class AbstractFactory extends Object implements IFactory {
 		/**
 		 * @inheritdoc
 		 */

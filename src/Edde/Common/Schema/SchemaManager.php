@@ -7,9 +7,9 @@
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Schema\LazySchemaFactoryTrait;
 	use Edde\Api\Schema\SchemaException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class SchemaManager extends AbstractObject implements ISchemaManager {
+	class SchemaManager extends Object implements ISchemaManager {
 		use LazySchemaFactoryTrait;
 		/**
 		 * @var ISchema[]

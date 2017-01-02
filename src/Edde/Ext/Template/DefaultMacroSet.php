@@ -6,14 +6,14 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacroSet;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Template\HelperSet;
 	use Edde\Common\Template\MacroSet;
 
 	/**
 	 * Factory class for default macro and helper set creation.
 	 */
-	class DefaultMacroSet extends AbstractObject {
+	class DefaultMacroSet extends Object {
 		/**
 		 * cache method for default set of macros; they are created on demand (when requested macro list)
 		 *

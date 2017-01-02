@@ -5,12 +5,12 @@
 
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Converter\IConverter;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Common stuff for converter implementation.
 	 */
-	abstract class AbstractConverter extends AbstractObject implements IConverter {
+	abstract class AbstractConverter extends Object implements IConverter {
 		/**
 		 * @var string[]
 		 */

@@ -6,12 +6,12 @@
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\IProperty;
 	use Edde\Api\Schema\ISchemaProperty;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Crate property implementation.
 	 */
-	class Property extends AbstractObject implements IProperty {
+	class Property extends Object implements IProperty {
 		/**
 		 * property definition of this value
 		 *

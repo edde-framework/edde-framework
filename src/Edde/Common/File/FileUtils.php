@@ -5,10 +5,10 @@
 
 	use Edde\Api\File\FileException;
 	use Edde\Api\Url\IUrl;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Url\Url;
 
-	class FileUtils extends AbstractObject {
+	class FileUtils extends Object {
 		static protected $mimeTypeList = [
 			'xml' => 'text/xml',
 			'json' => 'application/json',

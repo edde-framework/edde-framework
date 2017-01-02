@@ -3,12 +3,12 @@
 
 	namespace Edde\Common\Callback;
 
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Useful set of methods around callable reflections.
 	 */
-	class CallbackUtils extends AbstractObject {
+	class CallbackUtils extends Object {
 		/**
 		 * safely invoke given callback
 		 *

@@ -4,13 +4,13 @@
 	namespace Edde\Common\Crypt;
 
 	use Edde\Api\Crypt\ICryptEngine;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use ParagonIE\ConstantTime\Encoding;
 
 	/**
 	 * Default (safe) cryptographic engine implementation.
 	 */
-	class CryptEngine extends AbstractObject implements ICryptEngine {
+	class CryptEngine extends Object implements ICryptEngine {
 		/**
 		 * @inheritdoc
 		 */

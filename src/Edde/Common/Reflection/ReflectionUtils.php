@@ -5,7 +5,7 @@
 
 	use Closure;
 	use Edde\Api\Reflection\ReflectionException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use ReflectionClass;
 	use ReflectionFunction;
 	use ReflectionMethod;
@@ -13,7 +13,7 @@
 	/**
 	 * Set of tools for simplier reflection manipulation.
 	 */
-	class ReflectionUtils extends AbstractObject {
+	class ReflectionUtils extends Object {
 		/**
 		 * @var \ReflectionProperty[]|ReflectionClass[]|ReflectionMethod[]
 		 */

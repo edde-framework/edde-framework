@@ -6,9 +6,9 @@
 	use Edde\Api\Http\HttpMessageException;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttpMessage;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class HttpMessage extends AbstractObject implements IHttpMessage {
+	class HttpMessage extends Object implements IHttpMessage {
 		/**
 		 * @var string
 		 */

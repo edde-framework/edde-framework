@@ -10,7 +10,7 @@
 
 	require_once __DIR__ . '/assets/assets.php';
 
-	class AbstractObjectTest extends TestCase {
+	class ObjectTest extends TestCase {
 		/**
 		 * @var FooObject
 		 */
@@ -23,6 +23,7 @@
 		public function testWriteException() {
 			$this->expectException(EddeException::class);
 			$this->expectExceptionMessage('Writing to the undefined/private/protected property [Edde\Test\FooObject::$thisWillThrowAnException].');
+			/** @noinspection PhpUndefinedFieldInspection */
 			$this->object->thisWillThrowAnException = 'really!';
 		}
 
@@ -30,6 +31,7 @@
 			$this->expectException(EddeException::class);
 			$this->expectExceptionMessage('Reading from the undefined/private/protected property [Edde\Test\FooObject::$yesThisWillThrowAnException].');
 			/** @noinspection PhpUnusedLocalVariableInspection */
+			/** @noinspection PhpUndefinedFieldInspection */
 			$willYouThrowAnException = $this->object->yesThisWillThrowAnException;
 		}
 

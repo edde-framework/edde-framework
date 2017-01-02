@@ -7,10 +7,10 @@
 	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Application\LazyRequestTrait;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Container\ConfigurableTrait;
 
-	class ResponseManager extends AbstractObject implements IResponseManager {
+	class ResponseManager extends Object implements IResponseManager {
 		use LazyConverterManagerTrait;
 		use LazyRequestTrait;
 		use ConfigurableTrait;

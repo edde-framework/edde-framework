@@ -6,13 +6,13 @@
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Converter\IConverter;
 	use Edde\Api\Converter\IConverterManager;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Container\ConfigurableTrait;
 
 	/**
 	 * Default implementation of a convertion manager.
 	 */
-	class ConverterManager extends AbstractObject implements IConverterManager {
+	class ConverterManager extends Object implements IConverterManager {
 		use ConfigurableTrait;
 		/**
 		 * @var IConverter[]

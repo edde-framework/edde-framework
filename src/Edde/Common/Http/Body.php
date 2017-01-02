@@ -5,9 +5,9 @@
 
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Http\IBody;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class Body extends AbstractObject implements IBody {
+	class Body extends Object implements IBody {
 		use LazyConverterManagerTrait;
 		/**
 		 * @var string|callable

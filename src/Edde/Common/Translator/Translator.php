@@ -8,14 +8,14 @@
 	use Edde\Api\Translator\IDictionary;
 	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Translator\TranslatorException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Container\ConfigurableTrait;
 
 	/**
 	 * General class for translations support.
 	 */
-	class Translator extends AbstractObject implements ITranslator {
+	class Translator extends Object implements ITranslator {
 		use LazyConverterManagerTrait;
 		use CacheTrait;
 		use ConfigurableTrait;

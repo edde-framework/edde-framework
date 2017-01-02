@@ -15,13 +15,13 @@
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Reflection\ReflectionUtils;
 
 	/**
 	 * Default implementation of template compiler.
 	 */
-	class Compiler extends AbstractObject implements ICompiler {
+	class Compiler extends Object implements ICompiler {
 		use LazyContainerTrait;
 		use LazyResourceManagerTrait;
 		use LazyCryptEngineTrait;

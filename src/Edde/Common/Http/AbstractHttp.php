@@ -8,9 +8,9 @@
 	use Edde\Api\Http\ICookieList;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttp;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	abstract class AbstractHttp extends AbstractObject implements IHttp {
+	abstract class AbstractHttp extends Object implements IHttp {
 		/**
 		 * @var IHeaderList
 		 */

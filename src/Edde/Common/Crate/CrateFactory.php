@@ -10,13 +10,13 @@
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Api\Schema\SchemaException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Container\ConfigurableTrait;
 
 	/**
 	 * Factory for... creating crates.
 	 */
-	class CrateFactory extends AbstractObject implements ICrateFactory {
+	class CrateFactory extends Object implements ICrateFactory {
 		use LazySchemaManagerTrait;
 		use LazyContainerTrait;
 		use ConfigurableTrait;

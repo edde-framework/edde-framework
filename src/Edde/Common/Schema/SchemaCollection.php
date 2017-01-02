@@ -5,9 +5,9 @@
 
 	use Edde\Api\Schema\ISchemaCollection;
 	use Edde\Api\Schema\ISchemaProperty;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class SchemaCollection extends AbstractObject implements ISchemaCollection {
+	class SchemaCollection extends Object implements ISchemaCollection {
 		/**
 		 * @var string
 		 */

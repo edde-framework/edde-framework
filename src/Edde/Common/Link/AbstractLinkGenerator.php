@@ -6,10 +6,10 @@
 	use Edde\Api\Application\LazyRequestTrait;
 	use Edde\Api\Link\ILink;
 	use Edde\Api\Link\ILinkGenerator;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Strings\StringUtils;
 
-	abstract class AbstractLinkGenerator extends AbstractObject implements ILinkGenerator {
+	abstract class AbstractLinkGenerator extends Object implements ILinkGenerator {
 		use LazyRequestTrait;
 
 		protected function match(string $control, string $action) {

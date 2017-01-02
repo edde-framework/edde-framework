@@ -7,9 +7,9 @@
 	use Edde\Api\Acl\IAcl;
 	use Edde\Api\Acl\IAclManager;
 	use Edde\Api\Container\LazyContainerTrait;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class AclManager extends AbstractObject implements IAclManager {
+	class AclManager extends Object implements IAclManager {
 		use LazyContainerTrait;
 
 		/**

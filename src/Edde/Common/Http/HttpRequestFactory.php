@@ -6,12 +6,12 @@
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttpRequestFactory;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Factory for creating IHttpRequests from http input.
 	 */
-	class HttpRequestFactory extends AbstractObject implements IHttpRequestFactory {
+	class HttpRequestFactory extends Object implements IHttpRequestFactory {
 		use LazyContainerTrait;
 
 		/**

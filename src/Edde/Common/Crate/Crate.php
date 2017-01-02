@@ -9,7 +9,7 @@
 	use Edde\Api\Crate\IProperty;
 	use Edde\Api\Crypt\CryptException;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Schema\Schema;
 	use Edde\Common\Schema\SchemaProperty;
@@ -17,7 +17,7 @@
 	/**
 	 * Simple (...advanced...) crate implementation.
 	 */
-	class Crate extends AbstractObject implements ICrate {
+	class Crate extends Object implements ICrate {
 		/**
 		 * @var ISchema
 		 */

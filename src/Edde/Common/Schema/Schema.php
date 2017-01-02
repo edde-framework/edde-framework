@@ -8,9 +8,9 @@
 	use Edde\Api\Schema\ISchemaLink;
 	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Api\Schema\SchemaException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class Schema extends AbstractObject implements ISchema {
+	class Schema extends Object implements ISchema {
 		/**
 		 * @var string
 		 */
