@@ -10,7 +10,7 @@
 
 	abstract class AbstractObject implements ILazyInject {
 		protected $aInjectList = [];
-		protected $aLazyaInjectList = [];
+		protected $aLazyInjectList = [];
 
 		protected function prepare() {
 		}
@@ -22,7 +22,7 @@
 		}
 
 		public function lazy(string $property, IContainer $container, string $dependency, array $parameterList = []) {
-			$this->aLazyaInjectList[$property] = [
+			$this->aLazyInjectList[$property] = [
 				$container,
 				$dependency,
 				$parameterList,
@@ -41,9 +41,9 @@
 		 * @throws EddeException
 		 */
 		public function __get(string $name) {
-			if (isset($this->aLazyaInjectList[$name])) {
+			if (isset($this->aLazyInjectList[$name])) {
 				/** @var $container IContainer */
-				list($container, $dependency, $parameterList) = $this->aLazyaInjectList[$name];
+				list($container, $dependency, $parameterList) = $this->aLazyInjectList[$name];
 				return $this->$name = $container->create($dependency, ...$parameterList);
 			}
 			throw new EddeException(sprintf('Reading from the undefined/private/protected property [%s::$%s].', static::class, $name));
@@ -57,37 +57,11 @@
 		 * @throws EddeException
 		 */
 		public function __set(string $name, $value) {
-			if (isset($this->aLazyaInjectList[$name])) {
+			if (isset($this->aLazyInjectList[$name])) {
 				/** @noinspection PhpVariableVariableInspection */
 				$this->$name = $value;
 				return $this;
 			}
 			throw new EddeException(sprintf('Writing to the undefined/private/protected property [%s::$%s].', static::class, $name));
-		}
-
-		/**
-		 * @param string $name
-		 *
-		 * @return bool
-		 * @throws EddeException
-		 */
-		public function __isset(string $name) {
-			if (isset($this->aLazyaInjectList[$name])) {
-				return true;
-			}
-			throw new EddeException(sprintf('Cannot check isset on undefined/private/protected property [%s::$%s].', static::class, $name));
-		}
-
-		public function __wakeup() {
-			foreach ($this->aInjectList as $property => $dependency) {
-				if ($dependency !== null) {
-					$this->{$property} = $dependency;
-				}
-			}
-			foreach ($this->aLazyaInjectList as $property => $dependency) {
-				if ($this->{$property} === null) {
-					unset($this->{$property});
-				}
-			}
 		}
 	}
