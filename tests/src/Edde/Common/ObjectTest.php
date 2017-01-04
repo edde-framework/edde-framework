@@ -70,6 +70,7 @@
 		}
 
 		public function testComposite() {
+			HashIndex::drop();
 			self::assertSame($this->composite->getBar()
 				->getFoo(), $this->composite->getFoo());
 			self::assertEmpty(HashIndex::getIndex());
