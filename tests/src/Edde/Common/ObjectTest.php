@@ -40,6 +40,10 @@
 			self::assertTrue(isset($this->object->foo));
 		}
 
+		public function testObjectHash() {
+			self::assertSame($this->object->hash(), $this->object->hash());
+		}
+
 		protected function setUp() {
 			$this->object = new FooObject();
 		}

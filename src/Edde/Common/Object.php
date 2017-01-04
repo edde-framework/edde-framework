@@ -20,8 +20,21 @@
 	 * The father says, "From the smell of his fingers, I'd say our son-in-law."
 	 */
 	class Object implements ILazyInject {
+		protected $aId;
 		protected $aInjectList = [];
 		protected $aLazyInjectList = [];
+
+		/**
+		 * return object hash (unique id)
+		 *
+		 * @return string
+		 */
+		public function hash(): string {
+			if ($this->aId === null) {
+				$this->aId = hash('sha512', spl_object_hash($this));
+			}
+			return $this->aId;
+		}
 
 		protected function prepare() {
 		}
