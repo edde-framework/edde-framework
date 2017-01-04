@@ -38,7 +38,6 @@
 		 * @inheritdoc
 		 */
 		public function cache(string $namespace = null, ICacheStorage $cacheStorage = null): ICache {
-			$this->config();
 			return (new Cache($cacheStorage ?: ($this->cacheStorageList[$namespace] ?? $this->cacheStorage)))->setNamespace($this->namespace . $namespace);
 		}
 	}

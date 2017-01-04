@@ -112,20 +112,23 @@
 		 *
 		 * @param array  $factoryList
 		 * @param array  $configHandlerList
-		 * @param string $cache
+		 * @param string $cacheId
 		 *
 		 * @return IContainer
 		 * @throws ContainerException
 		 * @throws FactoryException
 		 */
-		static public function cache(array $factoryList, array $configHandlerList, string $cache): IContainer {
-			if ($container = @file_get_contents($cache)) {
+		static public function cache(array $factoryList, array $configHandlerList, string $cacheId): IContainer {
+			if ($container = @file_get_contents($cacheId)) {
 				/** @noinspection UnserializeExploitsInspection */
 				return unserialize($container);
 			}
 			register_shutdown_function(function (IContainer $container, $cache) {
 				file_put_contents($cache, serialize($container));
-			}, $container = self::container($factoryList, $configHandlerList), $cache);
+			}, $container = self::container($factoryList, $configHandlerList), $cacheId);
+			/** @var $cache ICache */
+			$cache = $container->create(ICache::class);
+			$cache->setNamespace($cacheId);
 			return $container;
 		}
 	}

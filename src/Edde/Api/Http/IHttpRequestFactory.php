@@ -12,5 +12,5 @@
 		 *
 		 * @return IHttpRequest
 		 */
-		public function create();
+		public function create(): IHttpRequest;
 	}

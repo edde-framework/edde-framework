@@ -5,6 +5,7 @@
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Http\IHeaderList;
+	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpRequestFactory;
 	use Edde\Common\Object;
 
@@ -17,7 +18,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function create() {
+		public function create(): IHttpRequest {
+
 //			return (new HttpRequest(PostList::create($_POST), $headerList = $this->createHeaderList(), CookieList::create($_COOKIE)))->setRequestUrl(RequestUrl::create((isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']))
 //				->setMethod($_SERVER['REQUEST_METHOD'] ?? '')
 //				->setRemoteAddress($_SERVER['REMOTE_ADDR'] ?? '')
