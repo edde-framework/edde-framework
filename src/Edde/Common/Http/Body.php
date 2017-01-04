@@ -34,6 +34,9 @@
 		}
 
 		public function getBody() {
+			if (is_callable($this->body)) {
+				$this->body = call_user_func($this->body);
+			}
 			return $this->body;
 		}
 
