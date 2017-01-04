@@ -10,7 +10,6 @@
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Http\IHttpRequest;
-	use Edde\Api\Http\IHttpRequestFactory;
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Http\IPostFactory;
 	use Edde\Api\Http\IPostList;
@@ -21,8 +20,8 @@
 	use Edde\Common\Application\Application;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\File\RootDirectory;
-	use Edde\Common\Http\HttpRequestFactory;
 	use Edde\Common\Http\HttpResponse;
+	use Edde\Common\Http\PostFactory;
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\Runtime;
@@ -55,6 +54,7 @@
 		ILogService::class => LogService::class,
 		IRouterService::class => RouterService::class,
 		IRequest::class => IRouterService::class . '::createRequest',
+		IPostFactory::class => PostFactory::class,
 		IPostList::class => IPostFactory::class . '::create',
 //		IHttpRequestFactory::class => HttpRequestFactory::class,
 //		IHttpRequest::class => IHttpRequestFactory::class . '::create',
