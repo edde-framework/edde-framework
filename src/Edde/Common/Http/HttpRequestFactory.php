@@ -18,13 +18,13 @@
 		 * @inheritdoc
 		 */
 		public function create() {
-			return (new HttpRequest(PostList::create($_POST), $headerList = $this->createHeaderList(), CookieList::create($_COOKIE)))->setRequestUrl(RequestUrl::create((isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']))
-				->setMethod($_SERVER['REQUEST_METHOD'] ?? '')
-				->setRemoteAddress($_SERVER['REMOTE_ADDR'] ?? '')
-				->setRemoteHost($_SERVER['REMOTE_HOST'] ?? '')
-				->setBody($this->container->create(Body::class, function () {
-					return file_get_contents('php://input');
-				}, (string)$headerList->getContentType()),));
+//			return (new HttpRequest(PostList::create($_POST), $headerList = $this->createHeaderList(), CookieList::create($_COOKIE)))->setRequestUrl(RequestUrl::create((isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']))
+//				->setMethod($_SERVER['REQUEST_METHOD'] ?? '')
+//				->setRemoteAddress($_SERVER['REMOTE_ADDR'] ?? '')
+//				->setRemoteHost($_SERVER['REMOTE_HOST'] ?? '')
+//				->setBody($this->container->create(Body::class, function () {
+//					return file_get_contents('php://input');
+//				}, (string)$headerList->getContentType()),));
 		}
 
 		/**
