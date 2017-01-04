@@ -25,7 +25,7 @@
 		protected $aLazyInjectList = [];
 
 		/**
-		 * return object hash (unique id)
+		 * return object hash (unique id); object has is NOT based on internal state; ist's only
 		 *
 		 * @return string
 		 */
@@ -87,5 +87,18 @@
 				return $this;
 			}
 			throw new EddeException(sprintf('Writing to the undefined/private/protected property [%s::$%s].', static::class, $name));
+		}
+
+		public function __wakeup() {
+			foreach ($this->aInjectList as $property => $dependency) {
+				if ($dependency !== null) {
+					$this->{$property} = $dependency;
+				}
+			}
+			foreach ($this->aLazyInjectList as $property => $dependency) {
+				if ($this->{$property} === null) {
+					unset($this->{$property});
+				}
+			}
 		}
 	}
