@@ -28,11 +28,8 @@
 			}
 			$e = null;
 			foreach ($this->routerList as $router) {
-				try {
-					if (($request = $router->createRequest()) !== null) {
-						return $this->request = $request;
-					}
-				} catch (\Exception $e) {
+				if (($request = $router->createRequest()) !== null) {
+					return $this->request = $request;
 				}
 			}
 			throw new BadRequestException('Cannot handle current application request.', 0, $e);
