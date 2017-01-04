@@ -10,10 +10,10 @@
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
-	use Edde\Common\Object;
 	use Edde\Common\Cache\Cache;
 	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Container\Container;
+	use Edde\Common\Object;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Serializable;
 
@@ -123,7 +123,9 @@
 				/** @noinspection UnserializeExploitsInspection */
 				return unserialize($container);
 			}
-			file_put_contents($cache, serialize($container = self::container($factoryList, $configHandlerList)));
+			register_shutdown_function(function (IContainer $container, $cache) {
+				file_put_contents($cache, serialize($container));
+			}, $container = self::container($factoryList, $configHandlerList), $cache);
 			return $container;
 		}
 	}

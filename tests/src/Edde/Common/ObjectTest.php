@@ -5,7 +5,6 @@
 
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\EddeException;
-	use Edde\Common\Serialize\HashIndex;
 	use Edde\Test\BarObject;
 	use Edde\Test\CompositeObject;
 	use Edde\Test\FooObject;
@@ -53,39 +52,6 @@
 
 		public function testObjectHash() {
 			self::assertSame($this->fooObject->hash(), $this->fooObject->hash());
-		}
-
-		public function testSerializeHash() {
-			$object = unserialize(serialize($this->fooObject));
-			self::assertSame($object->hash(), $this->fooObject->hash());
-		}
-
-		public function testHashIndex() {
-			$hash = HashIndex::serialize();
-			serialize($this->fooObject);
-			self::assertNotSame($hash, $hashIndex = HashIndex::serialize());
-			self::assertSame($this->fooObject, HashIndex::load($this->fooObject->hash()));
-			HashIndex::unserialize($hashIndex);
-			self::assertEquals($this->fooObject, HashIndex::load($this->fooObject->hash()));
-		}
-
-		public function testComposite() {
-			HashIndex::drop();
-			self::assertSame($this->composite->getBar()
-				->getFoo(), $this->composite->getFoo());
-			self::assertEmpty(HashIndex::getIndex());
-			$foo = serialize($this->composite->getFoo());
-			$composite = serialize($this->composite);
-			self::assertNotEmpty(HashIndex::getIndex());
-			self::assertCount(3, HashIndex::getIndex());
-			HashIndex::drop();
-			self::assertEmpty(HashIndex::getIndex());
-			$foo = unserialize($foo);
-			$composite = unserialize($composite);
-			self::assertNotEmpty(HashIndex::getIndex());
-			self::assertCount(3, HashIndex::getIndex());
-			self::assertEquals($compositeFoo = $this->composite->getFoo(), HashIndex::load($compositeFoo->hash()));
-			self::assertSame($foo, $composite->getFoo());
 		}
 
 		protected function setUp() {

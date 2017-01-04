@@ -3,14 +3,13 @@
 
 	namespace Edde\Test;
 
-	use Edde\Api\Serialize\IHashable;
-	use Edde\Common\Serialize\AbstractSerializable;
+	use Edde\Common\Object;
 
-	class FooObject extends AbstractSerializable implements IHashable {
+	class FooObject extends Object {
 		public $foo = 'bar';
 	}
 
-	class BarObject extends AbstractSerializable implements IHashable {
+	class BarObject extends Object {
 		public $bar = 'foo';
 		/**
 		 * @var FooObject
@@ -29,7 +28,7 @@
 		}
 	}
 
-	class CompositeObject extends AbstractSerializable implements IHashable {
+	class CompositeObject extends Object {
 		/**
 		 * @var FooObject
 		 */
