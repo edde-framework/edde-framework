@@ -5,6 +5,7 @@
 
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\EddeException;
+	use Edde\Common\Serialize\HashIndex;
 	use Edde\Test\FooObject;
 	use PHPUnit\Framework\TestCase;
 
@@ -47,6 +48,15 @@
 		public function testSerializeHash() {
 			$object = unserialize(serialize($this->object));
 			self::assertSame($object->hash(), $this->object->hash());
+		}
+
+		public function testHashIndex() {
+			$hash = HashIndex::serialize();
+			serialize($this->object);
+			self::assertNotSame($hash, $hashIndex = HashIndex::serialize());
+			self::assertSame($this->object, HashIndex::load($this->object->hash()));
+			HashIndex::unserialize($hashIndex);
+			self::assertEquals($this->object, HashIndex::load($this->object->hash()));
 		}
 
 		protected function setUp() {
