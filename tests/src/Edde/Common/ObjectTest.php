@@ -84,7 +84,7 @@
 			$composite = unserialize($composite);
 			self::assertNotEmpty(HashIndex::getIndex());
 			self::assertCount(3, HashIndex::getIndex());
-			self::assertEquals($cfoo = $this->composite->getFoo(), HashIndex::load($cfoo->hash()));
+			self::assertEquals($compositeFoo = $this->composite->getFoo(), HashIndex::load($compositeFoo->hash()));
 			self::assertSame($foo, $composite->getFoo());
 		}
 
