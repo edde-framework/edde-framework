@@ -44,6 +44,11 @@
 			self::assertSame($this->object->hash(), $this->object->hash());
 		}
 
+		public function testSerializeHash() {
+			$object = unserialize(serialize($this->object));
+			self::assertSame($object->hash(), $this->object->hash());
+		}
+
 		protected function setUp() {
 			$this->object = new FooObject();
 		}

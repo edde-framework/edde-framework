@@ -88,4 +88,9 @@
 			}
 			throw new EddeException(sprintf('Writing to the undefined/private/protected property [%s::$%s].', static::class, $name));
 		}
+
+		public function __sleep() {
+			$this->hash();
+			return array_keys(get_object_vars($this));
+		}
 	}
