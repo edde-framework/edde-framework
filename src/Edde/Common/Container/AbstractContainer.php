@@ -78,7 +78,7 @@
 		 * @throws ContainerException
 		 */
 		public function create(string $name, array $parameterList = [], string $source = null) {
-			return $this->factory($this->getFactory($name), $parameterList, $name, $source);
+			return $this->factory($this->getFactory($name, $source), $parameterList, $name, $source);
 		}
 
 		/**

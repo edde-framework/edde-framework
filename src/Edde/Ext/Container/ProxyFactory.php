@@ -47,7 +47,7 @@
 		}
 
 		public function dependency(IContainer $container, string $dependency = null): IDependency {
-			return $container->getFactory($this->target)
+			return $container->getFactory($this->target, $source)
 				->dependency($container, $this->target);
 		}
 

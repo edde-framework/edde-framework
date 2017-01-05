@@ -54,11 +54,13 @@
 		/**
 		 * get factory which is able to create the given dependency
 		 *
-		 * @param mixed $dependency
+		 * @param mixed  $dependency
+		 *
+		 * @param string $source
 		 *
 		 * @return IFactory
 		 */
-		public function getFactory(string $dependency): IFactory;
+		public function getFactory(string $dependency, string $source = null): IFactory;
 
 		/**
 		 * create the dependency by it's identifier (name)
