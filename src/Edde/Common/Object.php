@@ -4,6 +4,7 @@
 	namespace Edde\Common;
 
 	use Closure;
+	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\EddeException;
@@ -100,5 +101,20 @@
 					unset($this->{$property});
 				}
 			}
+		}
+
+		public function __sleep() {
+			foreach ($this as $k => $v) {
+				if (is_object($v) && $v instanceof ICacheable === false) {
+					unset($v);
+				} else if (is_array($v)) {
+					foreach ($v as $kk => $vv) {
+						if (is_object($vv) && $vv instanceof ICacheable === false) {
+							unset($v[$kk]);
+						}
+					}
+				}
+			}
+			return array_keys(get_object_vars($this));
 		}
 	}

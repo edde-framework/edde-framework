@@ -52,7 +52,7 @@
 		public function factory(IFactory $factory, array $parameterList = [], string $name = null, string $source = null) {
 			try {
 				$this->stack->push($name ?: '[anonymous]');
-				if (($instance = $factory->fetch($this, $fetchId = (get_class($factory) . count($parameterList) . $name), $this->cache)) !== null) {
+				if (($instance = $factory->fetch($this, $fetchId = (get_class($factory) . count($parameterList) . $name . $source), $this->cache)) !== null) {
 					return $instance;
 				}
 				if (($dependency = $this->cache->load($cacheId = (__METHOD__ . '/' . $name))) === null) {
