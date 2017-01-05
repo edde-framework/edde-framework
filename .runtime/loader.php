@@ -10,6 +10,8 @@
 	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\Http\ICookieFactory;
+	use Edde\Api\Http\ICookieList;
 	use Edde\Api\Http\IHeaderFactory;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttpRequest;
@@ -22,10 +24,12 @@
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Runtime\IRuntime;
+	use Edde\App\Router\RouterServiceConfigHandler;
 	use Edde\Common\Application\Application;
 	use Edde\Common\Application\ResponseManager;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\File\RootDirectory;
+	use Edde\Common\Http\CookieFactory;
 	use Edde\Common\Http\HeaderFactory;
 	use Edde\Common\Http\HttpRequest;
 	use Edde\Common\Http\HttpResponse;
@@ -38,7 +42,6 @@
 	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
-	use Edde\Ext\Router\RouterServiceConfigHandler;
 	use Edde\Framework;
 	use Tracy\Debugger;
 
@@ -66,6 +69,8 @@
 		IRequest::class => IRouterService::class . '::createRequest',
 		IPostFactory::class => PostFactory::class,
 		IPostList::class => IPostFactory::class . '::create',
+		ICookieFactory::class => CookieFactory::class,
+		ICookieList::class => ICookieFactory::class . '::create',
 		IRequestUrlFactory::class => RequestUrlFactory::class,
 		IRequestUrl::class => IRequestUrlFactory::class . '::create',
 		IHeaderFactory::class => HeaderFactory::class,

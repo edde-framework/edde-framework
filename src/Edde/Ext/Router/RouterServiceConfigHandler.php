@@ -17,6 +17,5 @@
 			$instance->registerRouter($this->container->create(EddeRouter::class, [], __METHOD__));
 			$instance->registerRouter($this->container->create(RestRouter::class, [], __METHOD__));
 			$instance->registerRouter($this->container->create(HttpRouter::class, [], __METHOD__));
-			$instance->registerRouter($this->container->create(SimpleHttpRouter::class, [], __METHOD__));
 		}
 	}

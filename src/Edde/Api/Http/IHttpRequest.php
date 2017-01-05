@@ -13,14 +13,14 @@
 		/**
 		 * @return string
 		 */
-		public function getMethod();
+		public function getMethod(): string;
 
 		/**
 		 * @param string $method
 		 *
 		 * @return bool
 		 */
-		public function isMethod(string $method);
+		public function isMethod(string $method): bool;
 
 		/**
 		 * @return null|string
@@ -40,10 +40,10 @@
 		/**
 		 * @return bool
 		 */
-		public function isSecured();
+		public function isSecured(): bool;
 
 		/**
 		 * @return bool
 		 */
-		public function isAjax();
+		public function isAjax(): bool;
 	}

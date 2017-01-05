@@ -35,11 +35,11 @@
 		 */
 		protected $referrer;
 
-		public function getMethod() {
-			return $this->method;
+		public function getMethod(): string {
+			return $_SERVER['REQUEST_METHOD'] ?? '';
 		}
 
-		public function isMethod(string $method) {
+		public function isMethod(string $method): bool {
 			return strcasecmp($this->getMethod(), $method) === 0;
 		}
 
@@ -61,11 +61,11 @@
 			return $this->referrer;
 		}
 
-		public function isSecured() {
+		public function isSecured(): bool {
 			return $this->requestUrl->getScheme() === 'https';
 		}
 
-		public function isAjax() {
+		public function isAjax(): bool {
 			return $this->headerList->get('X-Requested-With') === 'XMLHttpRequest';
 		}
 	}
