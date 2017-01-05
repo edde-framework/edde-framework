@@ -54,14 +54,14 @@
 		 * @inheritdoc
 		 */
 		public function getFactory(IContainer $container): IFactory {
-			return $container->getFactory($this->target, $source);
+			return $container->getFactory($this->target, $this->source);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function dependency(IContainer $container, string $dependency = null): IDependency {
-			return $container->getFactory($this->target, $source)
+			return $container->getFactory($this->target, $this->source)
 				->dependency($container, $dependency);
 		}
 
@@ -69,7 +69,7 @@
 		 * @inheritdoc
 		 */
 		public function execute(IContainer $container, array $parameterList, string $name = null) {
-			return $container->getFactory($this->target, $source)
+			return $container->getFactory($this->target, $this->source)
 				->execute($container, $parameterList, $name);
 		}
 	}
