@@ -17,6 +17,7 @@
 	use Edde\Api\Http\IRequestUrl;
 	use Edde\Api\Http\IRequestUrlFactory;
 	use Edde\Api\Log\ILogService;
+	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Common\Application\Application;
@@ -27,6 +28,7 @@
 	use Edde\Common\Http\PostFactory;
 	use Edde\Common\Http\RequestUrlFactory;
 	use Edde\Common\Log\LogService;
+	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\Runtime;
 	use Edde\Ext\Cache\FlatFileCacheStorage;
@@ -64,6 +66,7 @@
 		IRequestUrl::class => IRequestUrlFactory::class . '::create',
 		IHeaderFactory::class => HeaderFactory::class,
 		IHeaderList::class => IHeaderFactory::class . '::create',
+		IResourceManager::class => ResourceManager::class,
 //		IHttpRequest::class => IHttpRequestFactory::class . '::create',
 		new ClassFactory(),
 	], is_array($local = @include __DIR__ . '/loader.local.php') ? $local : []), [
