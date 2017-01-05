@@ -10,8 +10,8 @@
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Api\Schema\SchemaException;
-	use Edde\Common\Object;
 	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Object;
 
 	/**
 	 * Factory for... creating crates.
@@ -80,7 +80,10 @@
 		 */
 		public function collection(string $schema, string $crate = null): ICollection {
 			$this->config();
-			return $this->container->create(Collection::class, $schema, $crate);
+			return $this->container->create(Collection::class, [
+				$schema,
+				$crate,
+			], __METHOD__);
 		}
 
 		/**
@@ -91,7 +94,7 @@
 		public function crate(string $crate, string $schema = null, array $load = null): ICrate {
 			$this->config();
 			/** @var $crate ICrate */
-			$crate = $this->container->create($crate);
+			$crate = $this->container->create($crate, [], __METHOD__);
 			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
 			$crate->setSchema($schema = $this->schemaManager->getSchema($schema ?: get_class($crate)));
 			foreach ($schema->getPropertyList() as $schemaProperty) {

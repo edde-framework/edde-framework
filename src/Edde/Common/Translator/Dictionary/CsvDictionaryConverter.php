@@ -43,7 +43,7 @@
 			$this->unsupported($convert, $target, $convert instanceof IFile);
 			switch ($target) {
 				case IDictionary::class:
-					$csvDictionary = $this->container->create(CsvDictionary::class);
+					$csvDictionary = $this->container->create(CsvDictionary::class, [], __METHOD__);
 					$csvDictionary->addFile($convert->getPath());
 					return $csvDictionary;
 			}

@@ -11,7 +11,6 @@
 	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
-	use Edde\Common\Object;
 	use Edde\Common\Client\Event\OnRequestEvent;
 	use Edde\Common\Client\Event\RequestDoneEvent;
 	use Edde\Common\Client\Event\RequestFailedEvent;
@@ -21,6 +20,7 @@
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Http\HttpUtils;
+	use Edde\Common\Object;
 	use Edde\Common\Strings\StringException;
 
 	/**
@@ -105,7 +105,7 @@
 		 * @inheritdoc
 		 */
 		public function content($content, string $mime = null, string $target = null): IHttpHandler {
-			$this->httpRequest->setBody($this->container->create(Body::class, $content, $mime, $target));
+			$this->httpRequest->setBody($this->container->create(Body::class, [$content], __METHOD__));
 			return $this;
 		}
 
@@ -204,7 +204,12 @@
 			$headerList->set('Content-Type', $contentType);
 			curl_close($this->curl);
 			$this->curl = null;
-			$httpResponse = $this->container->create(HttpResponse::class, $this->container->create(Body::class, $content, isset($type) ? $type->mime : $contentType));
+			$httpResponse = $this->container->create(HttpResponse::class, [
+				$this->container->create(Body::class, [
+					$content,
+					isset($type) ? $type->mime : $contentType,
+				], __METHOD__),
+			], __METHOD__);
 			$httpResponse->setHeaderList($headerList);
 			$httpResponse->setCookieList($cookieList);
 			$this->event(new RequestDoneEvent($this->httpRequest, $this, $httpResponse, $time));

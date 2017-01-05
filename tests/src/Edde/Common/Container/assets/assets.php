@@ -5,10 +5,10 @@
 	use Edde\Api\Container\IConfigHandler;
 	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Container\LazyContainerTrait;
-	use Edde\Common\Object;
 	use Edde\Common\Cache\CacheableTrait;
 	use Edde\Common\Container\AbstractConfigHandler;
 	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Object;
 
 	interface ISomething {
 		public function registerSomeething(string $something);

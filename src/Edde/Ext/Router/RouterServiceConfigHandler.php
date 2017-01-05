@@ -14,8 +14,8 @@
 		 * @param IRouterService $instance
 		 */
 		public function config($instance) {
-			$instance->registerRouter($this->container->create(EddeRouter::class));
-			$instance->registerRouter($this->container->create(RestRouter::class));
-			$instance->registerRouter($this->container->create(HttpRouter::class));
+			$instance->registerRouter($this->container->create(EddeRouter::class, [], __METHOD__));
+			$instance->registerRouter($this->container->create(RestRouter::class, [], __METHOD__));
+			$instance->registerRouter($this->container->create(HttpRouter::class, [], __METHOD__));
 		}
 	}

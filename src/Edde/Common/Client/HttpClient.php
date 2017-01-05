@@ -12,7 +12,6 @@
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Url\IUrl;
 	use Edde\Api\Url\UrlException;
-	use Edde\Common\Object;
 	use Edde\Common\Client\Event\DeleteEvent;
 	use Edde\Common\Client\Event\GetEvent;
 	use Edde\Common\Client\Event\HandlerEvent;
@@ -27,6 +26,7 @@
 	use Edde\Common\Http\HttpRequest;
 	use Edde\Common\Http\PostList;
 	use Edde\Common\Http\RequestUrl;
+	use Edde\Common\Object;
 
 	/**
 	 * Simple http client implementation.
@@ -166,7 +166,10 @@
 				CURLOPT_CUSTOMREQUEST => $method = $httpRequest->getMethod(),
 				CURLOPT_POST => strtoupper($method) === 'POST',
 			]);
-			$httpHandler = $this->container->create(HttpHandler::class, $httpRequest, $curl);
+			$httpHandler = $this->container->create(HttpHandler::class, [
+				$httpRequest,
+				$curl,
+			], __METHOD__);
 			$httpHandler->chain($this);
 			return $httpHandler;
 		}

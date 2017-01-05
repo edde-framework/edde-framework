@@ -8,4 +8,4 @@
 	$container = require __DIR__ . '/loader.php';
 	$container->call(function (IApplication $application) {
 		$application->run();
-	});
+	}, [], basename(__FILE__));

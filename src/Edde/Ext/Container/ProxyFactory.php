@@ -53,7 +53,7 @@
 
 		public function execute(IContainer $container, array $parameterList, string $name = null) {
 			$method = $this->method;
-			return $container->create($this->target, ...$parameterList)
+			return $container->create($this->target, $parameterList, $this->name)
 				->{$method}();
 		}
 	}

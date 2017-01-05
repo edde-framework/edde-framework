@@ -29,8 +29,8 @@
 			self::assertInstanceOf(ICacheManager::class, $cacheManager = $this->container->create(ICacheManager::class));
 			self::assertSame($cache, $cacheManager);
 			/** @var $instance \Something */
-			self::assertNotSame($instance = $this->container->create(\ISomething::class, 'fill-me-up'), $this->container->create(\Something::class, 'flush-me-out'));
-			self::assertSame($this->container->create(\ISomething::class, 'fill-me-up'), $instance);
+			self::assertNotSame($instance = $this->container->create(\ISomething::class, ['fill-me-up']), $this->container->create(\Something::class, ['flush-me-out']));
+			self::assertSame($this->container->create(\ISomething::class, ['fill-me-up']), $instance);
 			$instance->config();
 			self::assertNotEmpty($instance->somethingList);
 			self::assertEquals([
@@ -55,8 +55,8 @@
 			self::assertInstanceOf(ICacheManager::class, $cacheManager = $this->container->create(ICacheManager::class));
 			self::assertSame($cache, $cacheManager);
 			/** @var $instance \Something */
-			self::assertNotSame($instance = $this->container->create(\ISomething::class, 'fill-me-up'), $this->container->create(\Something::class, 'flush-me-out'));
-			self::assertSame($instance, $this->container->create(\ISomething::class, 'fill-me-up'));
+			self::assertNotSame($instance = $this->container->create(\ISomething::class, ['fill-me-up']), $this->container->create(\Something::class, ['flush-me-out']));
+			self::assertSame($instance, $this->container->create(\ISomething::class, ['fill-me-up']));
 			self::assertTrue($instance->isConfigured());
 			self::assertNotEmpty($instance->somethingList);
 			self::assertEquals([

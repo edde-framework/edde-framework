@@ -9,7 +9,6 @@
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
-	use Edde\Common\Object;
 	use Edde\Common\Callback\Callback;
 	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Control\Event\CancelEvent;
@@ -19,6 +18,7 @@
 	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Node\NodeIterator;
+	use Edde\Common\Object;
 	use Edde\Common\Strings\StringUtils;
 
 	/**
@@ -251,7 +251,7 @@
 		}
 
 		public function createControl(string $control, ...$parameterList): IControl {
-			return $this->container->create($control, ...$parameterList);
+			return $this->container->create($control, $parameterList, static::class);
 		}
 
 		/**
@@ -268,8 +268,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function handleInit() {
+//			parent::handleInit();
 			$this->listen($this);
 			$this->node = new Node();
 			$this->node->setMeta('control', $this);

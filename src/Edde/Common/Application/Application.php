@@ -31,7 +31,7 @@
 			try {
 				$this->config();
 				list($class, $method, $parameterList) = $this->request->getCurrent();
-				if ((($control = $this->container->create($class)) instanceof IControl) === false) {
+				if ((($control = $this->container->create($class, [], __METHOD__)) instanceof IControl) === false) {
 					throw new ApplicationException(sprintf('Route class [%s] is not instance of [%s].', $class, IControl::class));
 				}
 				$result = $control->handle($method, $parameterList);

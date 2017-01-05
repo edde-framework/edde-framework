@@ -77,8 +77,8 @@
 		 * @throws FactoryException
 		 * @throws ContainerException
 		 */
-		public function create(string $name, ...$parameterList) {
-			return $this->factory($this->getFactory($name), $parameterList, $name);
+		public function create(string $name, array $parameterList = [], string $source = null) {
+			return $this->factory($this->getFactory($name), $parameterList, $name, $source);
 		}
 
 		/**
@@ -86,7 +86,7 @@
 		 * @throws FactoryException
 		 * @throws ContainerException
 		 */
-		public function call(callable $callable, ...$parameterList) {
-			return $this->factory(new CallbackFactory($callable), $parameterList);
+		public function call(callable $callable, array $parameterList = [], string $source = null) {
+			return $this->factory(new CallbackFactory($callable), $parameterList, $source);
 		}
 	}

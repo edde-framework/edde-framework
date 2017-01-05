@@ -7,9 +7,9 @@
 	use Edde\Api\File\FileException;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\ITemplateManager;
-	use Edde\Common\Object;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\File\File;
+	use Edde\Common\Object;
 
 	/**
 	 * Default implementation of a template manager.
@@ -27,7 +27,7 @@
 				return $result;
 			}
 			/** @var $compiler ICompiler */
-			$compiler = $this->container->create(Compiler::class, new File($template));
+			$compiler = $this->container->create(Compiler::class, [new File($template)], __METHOD__);
 			foreach ($importList as &$import) {
 				$import = new File($import);
 			}

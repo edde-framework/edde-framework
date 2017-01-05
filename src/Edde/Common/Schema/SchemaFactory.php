@@ -10,9 +10,9 @@
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\SchemaFactoryException;
-	use Edde\Common\Object;
 	use Edde\Common\Filter\BoolFilter;
 	use Edde\Common\Node\NodeQuery;
+	use Edde\Common\Object;
 
 	class SchemaFactory extends Object implements ISchemaFactory {
 		use LazyContainerTrait;
@@ -94,20 +94,20 @@
 			foreach ($this->propertyListNodeQuery->filter($schemaNode) as $propertyNode) {
 				$schema->addProperty($property = new SchemaProperty($schema, $propertyNode->getName(), str_replace('[]', '', $type = $propertyNode->getAttribute('type', 'string')), filter_var($propertyNode->getAttribute('required', true), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('unique'), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('identifier'), FILTER_VALIDATE_BOOLEAN), strpos($type, '[]') !== false));
 				if (($generator = $propertyNode->getAttribute('generator')) !== null) {
-					$property->setGenerator($this->container->create($generator));
+					$property->setGenerator($this->container->create($generator, [], __METHOD__));
 				}
 				$type = $property->getType();
 				foreach ($this->propertyFilterNodeQuery->filter($propertyNode) as $filterNode) {
 					$type = null;
-					$property->addFilter($this->container->create($filterNode->getValue()));
+					$property->addFilter($this->container->create($filterNode->getValue(), [], __METHOD__));
 				}
 				foreach ($this->propertySetterFilterNodeQuery->filter($propertyNode) as $filterNode) {
 					$type = null;
-					$property->addSetterFilter($this->container->create($filterNode->getValue()));
+					$property->addSetterFilter($this->container->create($filterNode->getValue(), [], __METHOD__));
 				}
 				foreach ($this->propertyGetterFilterNodeQuery->filter($propertyNode) as $filterNode) {
 					$type = null;
-					$property->addGetterFilter($this->container->create($filterNode->getValue()));
+					$property->addGetterFilter($this->container->create($filterNode->getValue(), [], __METHOD__));
 				}
 				/** @noinspection DisconnectedForeachInstructionInspection */
 				/**

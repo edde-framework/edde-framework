@@ -31,7 +31,7 @@
 		}
 
 		public function bound(string $query, ...$parameterList): IBoundQuery {
-			return (new BoundQuery())->bind($this->container->create($query, ...$parameterList), $this->storage);
+			return (new BoundQuery())->bind($this->container->create($query, $parameterList, __METHOD__), $this->storage);
 		}
 
 		public function query(): IBoundQuery {

@@ -85,7 +85,7 @@
 			$container->registerFactoryList($factoryList);
 			foreach ($configHandlerList as $name => $configHandler) {
 				foreach ($configHandler as $config) {
-					$container->registerConfigHandler($name, $container->create($config));
+					$container->registerConfigHandler($name, $container->create($config, [], __METHOD__));
 				}
 			}
 			return $container;

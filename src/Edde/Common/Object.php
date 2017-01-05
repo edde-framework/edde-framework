@@ -68,7 +68,7 @@
 			if (isset($this->aLazyInjectList[$name])) {
 				/** @var $container IContainer */
 				list($container, $dependency, $parameterList) = $this->aLazyInjectList[$name];
-				return $this->$name = $container->create($dependency, ...$parameterList);
+				return $this->$name = $container->create($dependency, $parameterList, static::class);
 			}
 			throw new EddeException(sprintf('Reading from the undefined/private/protected property [%s::$%s].', static::class, $name));
 		}

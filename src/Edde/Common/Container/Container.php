@@ -43,18 +43,13 @@
 					return $factory->getFactory($this);
 				}
 			}
-			throw new FactoryException(sprintf('Cannot find factory for the given dependency [%s]; dependency chain [%s].', $dependency, implode('→', array_reverse(iterator_to_array($this->stack)))));
+			throw new FactoryException(sprintf('Cannot find factory for the given dependency [%s].', $dependency));
 		}
 
 		/**
-		 * @param IFactory $factory
-		 * @param array    $parameterList
-		 * @param string   $name
-		 *
-		 * @return mixed
-		 * @throws ContainerException
+		 * @inheritdoc
 		 */
-		public function factory(IFactory $factory, array $parameterList = [], string $name = null) {
+		public function factory(IFactory $factory, array $parameterList = [], string $name = null, string $source = null) {
 			try {
 				$this->stack->push($name ?: '[anonymous]');
 				if (($instance = $factory->fetch($this, $fetchId = (get_class($factory) . count($parameterList) . $name), $this->cache)) !== null) {
@@ -69,7 +64,7 @@
 					if (--$grab >= 0 || $reflectionParameter->isOptional()) {
 						continue;
 					}
-					$dependencyList[] = $this->factory($this->getFactory($class = (($class = $reflectionParameter->getClass()) ? $class : $reflectionParameter->getName())), [], $class);
+					$dependencyList[] = $this->factory($this->getFactory($class = (($class = $reflectionParameter->getClass()) ? $class : $reflectionParameter->getName())), [], $class, $name);
 				}
 				$this->dependency($instance = $factory->execute($this, array_merge($parameterList, $dependencyList), $name), $dependency);
 				if ($instance instanceof IConfigurable) {
@@ -79,6 +74,12 @@
 				}
 				$factory->push($this, $fetchId, $instance, $this->cache);
 				return $instance;
+			} catch (FactoryException $exception) {
+				throw new ContainerException(sprintf('Cannot create the given dependency [%s] for [%s]; dependency chain [%s].', $name, $source ?: 'unknown source', implode('→', array_reverse(iterator_to_array($this->stack)))), 0, $exception);
+			} catch (ContainerException $exception) {
+				throw $exception;
+			} catch (\Exception $exception) {
+				throw new ContainerException(sprintf('Cannot create the given dependency [%s] for [%s]; dependency chain [%s].', $name, $source ?: 'unknown source', implode('→', array_reverse(iterator_to_array($this->stack)))), 0, $exception);
 			} finally {
 				$this->stack->pop();
 			}
@@ -110,9 +111,10 @@
 			if (is_object($instance) === false) {
 				return $instance;
 			}
+			$class = get_class($instance);
 			/** @var $instance ILazyInject */
 			foreach ($dependency->getInjectList() as $reflectionParameter) {
-				$instance->inject($reflectionParameter->getName(), $this->create($reflectionParameter->getClass()));
+				$instance->inject($reflectionParameter->getName(), $this->create($reflectionParameter->getClass(), [], $class));
 			}
 			foreach ($dependency->getLazyList() as $reflectionParameter) {
 				if ($lazy) {
