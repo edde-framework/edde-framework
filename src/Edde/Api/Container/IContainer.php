@@ -3,10 +3,19 @@
 
 	namespace Edde\Api\Container;
 
+	use Edde\Api\Cache\ICache;
+
 	/**
 	 * Implementation of Dependency Injection Container.
 	 */
 	interface IContainer {
+		/**
+		 * if container is using cache, it must be configurable; do not use this as cache solution!
+		 *
+		 * @return ICache
+		 */
+		public function getCache(): ICache;
+
 		/**
 		 * @param IFactory $factory
 		 *

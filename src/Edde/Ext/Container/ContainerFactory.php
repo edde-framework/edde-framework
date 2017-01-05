@@ -60,12 +60,11 @@
 		 *
 		 * @param array    $factoryList
 		 * @param string[] $configHandlerList
+		 * @param string   $cacheId
 		 *
 		 * @return IContainer
-		 * @throws FactoryException
-		 * @throws ContainerException
 		 */
-		static public function create(array $factoryList = [], array $configHandlerList = []): IContainer {
+		static public function create(array $factoryList = [], array $configHandlerList = [], string $cacheId = null): IContainer {
 			/**
 			 * A young man and his date were parked on a back road some distance from town.
 			 * They were about to have sex when the girl stopped.
@@ -79,6 +78,10 @@
 			$container = new Container(new Cache(new InMemoryCacheStorage()));
 			$container->registerFactoryList($factoryList = self::createFactoryList($factoryList));
 			$container = $container->create(IContainer::class);
+			if ($cacheId !== null) {
+				$container->getCache()
+					->setNamespace($cacheId);
+			}
 			$container->registerFactoryList($factoryList);
 			foreach ($configHandlerList as $name => $configHandler) {
 				foreach ($configHandler as $config) {
@@ -93,18 +96,17 @@
 		 *
 		 * @param array    $factoryList
 		 * @param string[] $configHandlerList
+		 * @param string   $cacheId
 		 *
 		 * @return IContainer
-		 * @throws ContainerException
-		 * @throws FactoryException
 		 */
-		static public function container(array $factoryList = [], array $configHandlerList = []): IContainer {
+		static public function container(array $factoryList = [], array $configHandlerList = [], string $cacheId = null): IContainer {
 			return self::create(array_merge([
 				IContainer::class => Container::class,
 				ICacheStorage::class => InMemoryCacheStorage::class,
 				ICacheManager::class => CacheManager::class,
 				ICache::class => ICacheManager::class,
-			], $factoryList), array_merge([], $configHandlerList));
+			], $factoryList), array_merge([], $configHandlerList), $cacheId);
 		}
 
 		/**
@@ -125,10 +127,7 @@
 			}
 			register_shutdown_function(function (IContainer $container, $cache) {
 				file_put_contents($cache, serialize($container));
-			}, $container = self::container($factoryList, $configHandlerList), $cacheId);
-			/** @var $cache ICache */
-			$cache = $container->create(ICache::class);
-			$cache->setNamespace($cacheId);
+			}, $container = self::container($factoryList, $configHandlerList, $cacheId), $cacheId);
 			return $container;
 		}
 	}
