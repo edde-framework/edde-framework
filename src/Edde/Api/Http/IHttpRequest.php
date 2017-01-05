@@ -11,23 +11,6 @@
 	 */
 	interface IHttpRequest extends IHttp {
 		/**
-		 * @return IRequestUrl
-		 */
-		public function getRequestUrl(): IRequestUrl;
-
-		/**
-		 * @param IPostList $postList
-		 *
-		 * @return $this
-		 */
-		public function setPostList(IPostList $postList);
-
-		/**
-		 * @return IPostList
-		 */
-		public function getPostList(): IPostList;
-
-		/**
 		 * @return string
 		 */
 		public function getMethod();
@@ -37,7 +20,7 @@
 		 *
 		 * @return bool
 		 */
-		public function isMethod($method);
+		public function isMethod(string $method);
 
 		/**
 		 * @return null|string
@@ -52,7 +35,7 @@
 		/**
 		 * @return IUrl|null
 		 */
-		public function getReferer();
+		public function getReferrer();
 
 		/**
 		 * @return bool
