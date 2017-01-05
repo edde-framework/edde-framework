@@ -3,6 +3,8 @@
 
 	namespace Edde\Api\Container;
 
+	use Edde\Api\Reflection\IReflectionParameter;
+
 	/**
 	 * Describes dependency from point of view of object (or closure); so dependency is "me".
 	 */
@@ -10,21 +12,21 @@
 		/**
 		 * get list of mandatory parameters
 		 *
-		 * @return \ReflectionParameter[]
+		 * @return IReflectionParameter[]
 		 */
 		public function getParameterList(): array;
 
 		/**
 		 * get list of injectable parameters
 		 *
-		 * @return array
+		 * @return IReflectionParameter[]
 		 */
 		public function getInjectList(): array;
 
 		/**
 		 * get list of lazy parameters
 		 *
-		 * @return array
+		 * @return IReflectionParameter[]
 		 */
 		public function getLazyList(): array;
 	}

@@ -10,6 +10,7 @@ timeout 2 /nobreak > nul
 pushd
 chdir "%~dp0.apache"
 echo ...and we're happily online!
+title Edde Sandbox
 "%~dp0.apache\bin\httpd.exe"
 popd
 pause

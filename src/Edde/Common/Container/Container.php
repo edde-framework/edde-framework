@@ -20,12 +20,17 @@
 		 * @var ICache
 		 */
 		protected $cache;
+		/**
+		 * @var \SplStack
+		 */
+		protected $stack;
 
 		/**
 		 * @param ICache $cache
 		 */
 		public function __construct(ICache $cache) {
 			$this->cache = $cache;
+			$this->stack = new \SplStack();
 		}
 
 		/**
@@ -42,7 +47,7 @@
 					return $factory->getFactory($this);
 				}
 			}
-			throw new FactoryException(sprintf('Cannot find factory for the given dependency [%s].', $dependency));
+			throw new FactoryException(sprintf('Cannot find factory for the given dependency [%s]; dependency chain [%s].', $dependency, implode('→', array_reverse(iterator_to_array($this->stack)))));
 		}
 
 		/**
@@ -54,28 +59,33 @@
 		 * @throws ContainerException
 		 */
 		public function factory(IFactory $factory, array $parameterList = [], string $name = null) {
-			if (($instance = $factory->fetch($this, $fetchId = (get_class($factory) . count($parameterList) . $name), $this->cache)) !== null) {
-				return $instance;
-			}
-			if (($dependency = $this->cache->load($cacheId = (__METHOD__ . '/' . $name))) === null) {
-				$this->cache->save($cacheId, $dependency = $factory->dependency($this, $name));
-			}
-			$grab = count($parameterList);
-			$dependencyList = [];
-			foreach ($dependency->getParameterList() as $parameter) {
-				if (--$grab >= 0 || $parameter->isOptional()) {
-					continue;
+			try {
+				$this->stack->push($name ?: '[anonymous]');
+				if (($instance = $factory->fetch($this, $fetchId = (get_class($factory) . count($parameterList) . $name), $this->cache)) !== null) {
+					return $instance;
 				}
-				$dependencyList[] = $this->factory($this->getFactory($class = (($class = $parameter->getClass()) ? $class->getName() : $parameter->getName())), [], $class);
+				if (($dependency = $this->cache->load($cacheId = (__METHOD__ . '/' . $name))) === null) {
+					$this->cache->save($cacheId, $dependency = $factory->dependency($this, $name));
+				}
+				$grab = count($parameterList);
+				$dependencyList = [];
+				foreach ($dependency->getParameterList() as $reflectionParameter) {
+					if (--$grab >= 0 || $reflectionParameter->isOptional()) {
+						continue;
+					}
+					$dependencyList[] = $this->factory($this->getFactory($class = (($class = $reflectionParameter->getClass()) ? $class : $reflectionParameter->getName())), [], $class);
+				}
+				$this->dependency($instance = $factory->execute($this, array_merge($parameterList, $dependencyList), $name), $dependency);
+				if ($instance instanceof IConfigurable) {
+					/** @var $instance IConfigurable */
+					$instance->registerConfigHandlerList(isset($this->configHandlerList[$name]) ? $this->configHandlerList[$name] : []);
+					$instance->init();
+				}
+				$factory->push($this, $fetchId, $instance, $this->cache);
+				return $instance;
+			} finally {
+				$this->stack->pop();
 			}
-			$this->dependency($instance = $factory->execute($this, array_merge($parameterList, $dependencyList), $name), $dependency);
-			if ($instance instanceof IConfigurable) {
-				/** @var $instance IConfigurable */
-				$instance->registerConfigHandlerList(isset($this->configHandlerList[$name]) ? $this->configHandlerList[$name] : []);
-				$instance->init();
-			}
-			$factory->push($this, $fetchId, $instance, $this->cache);
-			return $instance;
 		}
 
 		/**
@@ -105,17 +115,15 @@
 				return $instance;
 			}
 			/** @var $instance ILazyInject */
-			/** @var $reflectionProperty \ReflectionProperty */
-			foreach ($dependency->getInjectList() as list($reflectionProperty, $name)) {
-				$instance->inject($reflectionProperty->getName(), $this->create($name));
+			foreach ($dependency->getInjectList() as $reflectionParameter) {
+				$instance->inject($reflectionParameter->getName(), $this->create($reflectionParameter->getClass()));
 			}
-			/** @var $reflectionProperty \ReflectionProperty */
-			foreach ($dependency->getLazyList() as list($reflectionProperty, $name)) {
+			foreach ($dependency->getLazyList() as $reflectionParameter) {
 				if ($lazy) {
-					$instance->lazy($reflectionProperty->getName(), $this, $name);
+					$instance->lazy($reflectionParameter->getName(), $this, $reflectionParameter->getClass());
 					continue;
 				}
-				$instance->inject($reflectionProperty->getName(), $this->create($name));
+				$instance->inject($reflectionParameter->getName(), $reflectionParameter->getClass());
 			}
 			return $instance;
 		}

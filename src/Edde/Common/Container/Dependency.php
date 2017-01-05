@@ -5,8 +5,9 @@
 
 	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Container\IDependency;
-	use Edde\Common\Object;
+	use Edde\Api\Reflection\IReflectionParameter;
 	use Edde\Common\Cache\CacheableTrait;
+	use Edde\Common\Object;
 
 	class Dependency extends Object implements IDependency, ICacheable {
 		use CacheableTrait;
@@ -23,9 +24,9 @@
 		 * She hears the little boy continue, "For those of you just boarding, we ask you to stow all of your hand luggage under your seat. Remember, there is no smoking on the train. We hope you will have a pleasant and relaxing journey with us today."
 		 * As the mother began to smile, the child added, "For those of you who are pissed off about the TWO HOUR delay, please see the b*tch in the kitchen."
 		 *
-		 * @param array $parameterList
-		 * @param array $injectList
-		 * @param array $lazyList
+		 * @param IReflectionParameter[] $parameterList
+		 * @param IReflectionParameter[] $injectList
+		 * @param IReflectionParameter[] $lazyList
 		 */
 		public function __construct(array $parameterList, array $injectList, array $lazyList) {
 			$this->parameterList = $parameterList;

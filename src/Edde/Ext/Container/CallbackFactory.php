@@ -8,6 +8,7 @@
 	use Edde\Api\Reflection\ReflectionException;
 	use Edde\Common\Container\AbstractFactory;
 	use Edde\Common\Container\Dependency;
+	use Edde\Common\Reflection\ReflectionParameter;
 	use Edde\Common\Reflection\ReflectionUtils;
 
 	class CallbackFactory extends AbstractFactory {
@@ -45,7 +46,11 @@
 		 * @inheritdoc
 		 */
 		public function dependency(IContainer $container, string $dependency = null): IDependency {
-			return new Dependency(ReflectionUtils::getParameterList($this->callback), [], []);
+			$parameterList = [];
+			foreach (ReflectionUtils::getParameterList($this->callback) as $reflectionParameter) {
+				$parameterList[] = new ReflectionParameter($reflectionParameter->getName(), $reflectionParameter->isOptional(), ($class = $reflectionParameter->getClass()) ? $class->getName() : null);
+			}
+			return new Dependency($parameterList, [], []);
 		}
 
 		/**

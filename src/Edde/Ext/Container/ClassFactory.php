@@ -9,6 +9,7 @@
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Common\Container\AbstractFactory;
 	use Edde\Common\Container\Dependency;
+	use Edde\Common\Reflection\ReflectionParameter;
 	use Edde\Common\Reflection\ReflectionUtils;
 
 	class ClassFactory extends AbstractFactory {
@@ -39,10 +40,7 @@
 						}
 						$reflectionProperty = $reflectionClass->getProperty($name);
 						$reflectionProperty->setAccessible(true);
-						$injectList[] = [
-							$reflectionProperty,
-							($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName(),
-						];
+						$injectList[] = new ReflectionParameter($reflectionProperty->getName(), false, ($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName());
 					}
 				}
 				/** @noinspection NotOptimalIfConditionsInspection */
@@ -56,14 +54,15 @@
 						}
 						$reflectionProperty = $reflectionClass->getProperty($name);
 						$reflectionProperty->setAccessible(true);
-						$lazyList[] = [
-							$reflectionProperty,
-							($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName(),
-						];
+						$lazyList[] = new ReflectionParameter($reflectionProperty->getName(), false, ($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName());
 					}
 				}
 			}
-			return new Dependency(ReflectionUtils::getParameterList($dependency), $injectList, $lazyList);
+			$parameterList = [];
+			foreach (ReflectionUtils::getParameterList($dependency) as $reflectionParameter) {
+				$parameterList[] = new ReflectionParameter($reflectionParameter->getName(), $reflectionParameter->isOptional(), ($class = $reflectionParameter->getClass()) ? $class->getName() : null);
+			}
+			return new Dependency($parameterList, $injectList, $lazyList);
 		}
 
 		/**
