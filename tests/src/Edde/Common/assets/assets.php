@@ -3,13 +3,14 @@
 
 	namespace Edde\Test;
 
+	use Edde\Api\Cache\ICacheable;
 	use Edde\Common\Object;
 
-	class FooObject extends Object {
+	class FooObject extends Object implements ICacheable {
 		public $foo = 'bar';
 	}
 
-	class BarObject extends Object {
+	class BarObject extends Object implements ICacheable {
 		public $bar = 'foo';
 		/**
 		 * @var FooObject
@@ -28,7 +29,7 @@
 		}
 	}
 
-	class CompositeObject extends Object {
+	class CompositeObject extends Object implements ICacheable {
 		/**
 		 * @var FooObject
 		 */

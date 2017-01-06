@@ -14,7 +14,7 @@
 		public function registerSomeething(string $something);
 	}
 
-	class FirstSomethingSetup extends AbstractConfigHandler implements IConfigHandler {
+	class FirstSomethingSetup extends AbstractConfigHandler implements IConfigHandler, ICacheable {
 		/**
 		 * @param ISomething $instance
 		 */
@@ -27,7 +27,7 @@
 		}
 	}
 
-	class AnotherSomethingSetup extends AbstractConfigHandler implements IConfigHandler {
+	class AnotherSomethingSetup extends AbstractConfigHandler implements IConfigHandler, ICacheable {
 		use LazyContainerTrait;
 
 		/**
@@ -68,20 +68,20 @@
 		}
 	}
 
-	class AnotherSomething extends Object implements IConfigurable {
+	class AnotherSomething extends Object implements IConfigurable, ICacheable {
 		use ConfigurableTrait;
 	}
 
-	class InjectedSomething extends Object {
+	class InjectedSomething extends Object implements ICacheable {
 	}
 
-	class LazySomething extends Object {
+	class LazySomething extends Object implements ICacheable {
 	}
 
-	class AnotherAnotherSomething extends Object {
+	class AnotherAnotherSomething extends Object implements ICacheable {
 	}
 
-	class ThisIsCleverManager extends Object {
+	class ThisIsCleverManager extends Object implements ICacheable {
 		/**
 		 * @var AnotherSomething
 		 */
