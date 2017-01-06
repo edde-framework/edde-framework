@@ -90,6 +90,15 @@
 			throw new EddeException(sprintf('Writing to the undefined/private/protected property [%s::$%s].', static::class, $name));
 		}
 
+		public function __sleep() {
+			foreach ($this as $k => $v) {
+				if (is_object($v) && $v instanceof ICacheable === false) {
+					unset($this->{$k});
+				}
+			}
+			return array_keys(get_object_vars($this));
+		}
+
 		public function __wakeup() {
 			foreach ($this->aInjectList as $property => $dependency) {
 				if ($dependency !== null) {
@@ -101,20 +110,5 @@
 					unset($this->{$property});
 				}
 			}
-		}
-
-		public function __sleep() {
-			foreach ($this as $k => $v) {
-				if (is_object($v) && $v instanceof ICacheable === false) {
-					unset($this->{$k});
-				} else if (is_array($v)) {
-					foreach ($v as $kk => $vv) {
-						if (is_object($vv) && $vv instanceof ICacheable === false) {
-							unset($v[$kk]);
-						}
-					}
-				}
-			}
-			return array_keys(get_object_vars($this));
 		}
 	}
