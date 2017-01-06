@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Html\Converter;
 
+	use Edde\Api\Control\ControlException;
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Http\LazyHttpResponseTrait;
@@ -47,12 +48,14 @@
 				case 'application/json':
 					$json = [];
 					foreach ($convert->invalidate() as $control) {
-						if (($id = $control->getId()) !== '') {
-							$json['selector']['#' . $id] = [
-								'action' => 'replace',
-								'source' => $control->render(),
-							];
+						if (($id = $control->getId()) === '') {
+							throw new ControlException(sprintf('Control [%s; %s] has no assigned id, thus it cannot be rendered.', get_class($control), $control->getNode()
+								->getPath()));
 						}
+						$json['selector']['#' . $id] = [
+							'action' => 'replace',
+							'source' => $control->render(),
+						];
 					}
 					if ($this->javaScriptCompiler->isEmpty() === false) {
 						$json['javaScript'] = [

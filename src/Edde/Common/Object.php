@@ -106,7 +106,7 @@
 		public function __sleep() {
 			foreach ($this as $k => $v) {
 				if (is_object($v) && $v instanceof ICacheable === false) {
-					unset($v);
+					unset($this->{$k});
 				} else if (is_array($v)) {
 					foreach ($v as $kk => $vv) {
 						if (is_object($vv) && $vv instanceof ICacheable === false) {
