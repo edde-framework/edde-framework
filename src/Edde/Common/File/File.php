@@ -4,6 +4,7 @@
 	namespace Edde\Common\File;
 
 	use Brick\Math\BigInteger;
+	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\File\IFile;
@@ -13,7 +14,7 @@
 	/**
 	 * File class; this is just file. Simple goold old classic file. Really.
 	 */
-	class File extends Resource implements IFile {
+	class File extends Resource implements IFile, ICacheable {
 		/**
 		 * @var int
 		 */
@@ -142,6 +143,8 @@
 			fflush($handle = $this->getHandle());
 			fclose($handle);
 			$this->handle = null;
+			/** reset write cache by current value */
+			$this->enableWriteCache($writeCache);
 			return $this;
 		}
 
@@ -293,5 +296,12 @@
 			fflush($handle = $this->getHandle());
 			flock($handle, LOCK_UN);
 			return $this;
+		}
+
+		public function __sleep() {
+			if ($this->isOpen()) {
+				$this->close();
+			}
+			return parent::__sleep();
 		}
 	}

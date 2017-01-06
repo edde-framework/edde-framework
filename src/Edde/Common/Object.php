@@ -91,9 +91,20 @@
 		}
 
 		public function __sleep() {
-			foreach ($this as $k => $v) {
-				if (is_object($v) && $v instanceof ICacheable === false) {
-					unset($this->{$k});
+			static $allowed = [
+				\stdClass::class,
+			];
+			$reflectionClass = new \ReflectionClass($this);
+			foreach ($reflectionClass->getProperties() as $reflectionProperty) {
+				$name = $reflectionProperty->getName();
+				$doc = is_string($doc = $reflectionProperty->getDocComment()) ? $doc : '';
+				if (strpos($doc, '@no-cache') !== false) {
+					unset($this->{$name});
+				} else if (is_object($this->{$name}) && $this->{$name} instanceof ICacheable === false && in_array($class = get_class($this->{$name}), $allowed) === false) {
+					if (strpos($doc, '@cache-optional') === false) {
+						throw new EddeException(sprintf('Trying to serialize object [%s] which is not cacheable.', $class));
+					}
+					unset($this->{$name});
 				}
 			}
 			return array_keys(get_object_vars($this));

@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\File;
 
+	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\File\DirectoryException;
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IDirectory;
@@ -14,7 +15,7 @@
 	/**
 	 * Representation of directory on the filesystem.
 	 */
-	class Directory extends Object implements IDirectory, \Serializable {
+	class Directory extends Object implements IDirectory, ICacheable {
 		/**
 		 * @var string
 		 */
@@ -172,13 +173,5 @@
 
 		public function __toString() {
 			return $this->getDirectory();
-		}
-
-		public function serialize() {
-			return serialize($this->directory);
-		}
-
-		public function unserialize($serialized) {
-			$this->directory = unserialize($serialized);
 		}
 	}

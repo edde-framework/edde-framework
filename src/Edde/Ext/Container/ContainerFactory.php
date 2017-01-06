@@ -4,6 +4,7 @@
 	namespace Edde\Ext\Container;
 
 	use Edde\Api\Cache\ICache;
+	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Container\ContainerException;
@@ -42,8 +43,8 @@
 				} else if (is_callable($factory)) {
 					throw new FactoryException(sprintf('Closures are not supported in factory definition [%s].', $name));
 				} else if (is_object($factory)) {
-					if ($factory instanceof Serializable === false) {
-						throw new FactoryException(sprintf('Class instances [%s] are not supported in factory definition [%s]. You can use [%s] interface to bypass this error.', get_class($factory), $name, Serializable::class));
+					if ($factory instanceof ICacheable === false) {
+						throw new FactoryException(sprintf('Class instances [%s] are not supported in factory definition [%s]. You can use [%s] interface to bypass this error.', get_class($factory), $name, ICacheable::class));
 					}
 					$current = new SerializableFactory($name, $factory);
 				}

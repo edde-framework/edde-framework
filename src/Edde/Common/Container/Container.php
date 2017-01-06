@@ -4,6 +4,7 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Cache\ICache;
+	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IConfigurable;
@@ -15,7 +16,7 @@
 	/**
 	 * Default implementation of a dependency container.
 	 */
-	class Container extends AbstractContainer {
+	class Container extends AbstractContainer implements ICacheable {
 		/**
 		 * @var \SplStack
 		 */
@@ -118,5 +119,15 @@
 				$instance->inject($reflectionParameter->getName(), $reflectionParameter->getClass());
 			}
 			return $instance;
+		}
+
+		public function __sleep() {
+			$this->stack = null;
+			return parent::__sleep();
+		}
+
+		public function __wakeup() {
+			$this->stack = new \SplStack();
+			return parent::__wakeup();
 		}
 	}

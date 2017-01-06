@@ -4,6 +4,7 @@
 	namespace Edde\Common\Cache;
 
 	use Edde\Api\Cache\ICache;
+	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Common\Container\ConfigurableTrait;

@@ -3,6 +3,7 @@
 
 	namespace Edde\Ext\Cache;
 
+	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Cache\LazyCacheDirectoryTrait;
 	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\File\IDirectory;
@@ -12,7 +13,7 @@
 	/**
 	 * Cache is stored in one file based on a storage namespace.
 	 */
-	class FlatFileCacheStorage extends AbstractCacheStorage implements IConfigurable {
+	class FlatFileCacheStorage extends AbstractCacheStorage implements IConfigurable, ICacheable {
 		use LazyCacheDirectoryTrait;
 		use ConfigurableTrait;
 		/**
