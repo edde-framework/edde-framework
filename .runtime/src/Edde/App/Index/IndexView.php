@@ -7,7 +7,7 @@
 
 	class IndexView extends ViewControl {
 		public function actionFoo() {
-			echo 'foo';
+			$this->template();
 		}
 
 		public function actionBar() {

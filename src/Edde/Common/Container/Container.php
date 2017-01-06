@@ -44,7 +44,7 @@
 					return $factory->getFactory($this);
 				}
 			}
-			throw new ContainerException(sprintf('Cannot create the given dependency [%s] for [%s]; dependency chain [%s].', $dependency, $source ?: 'unknown source', implode('→', array_reverse(iterator_to_array($this->stack)))));
+			throw new ContainerException(sprintf('Unknown factory for the given dependency [%s] for [%s]; dependency chain [%s].', $dependency, $source ?: 'unknown source', implode('→', array_reverse(iterator_to_array($this->stack)))));
 		}
 
 		/**

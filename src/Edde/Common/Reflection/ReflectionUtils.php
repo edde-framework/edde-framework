@@ -85,10 +85,10 @@
 				}
 				return new ReflectionFunction(function () {
 				});
-			} else if (is_string($callback) || $callback instanceof Closure) {
+			} else if ((is_string($callback) && strpos($callback, '::') === false) || $callback instanceof Closure) {
 				return new ReflectionFunction($callback);
-			} else if (is_array($callback)) {
-				list($class, $method) = $callback;
+			} else if (is_array($callback) || (is_string($callback) && strpos($callback, '::') !== false)) {
+				list($class, $method) = is_array($callback) ? $callback : explode('::', $callback);
 				return new ReflectionMethod($class, $method);
 			}
 			throw new ReflectionException('Cannot get reflection method from the given input.');

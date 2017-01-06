@@ -24,6 +24,9 @@
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Runtime\IRuntime;
+	use Edde\Api\Template\IHelperSet;
+	use Edde\Api\Template\IMacroSet;
+	use Edde\Api\Template\ITemplateManager;
 	use Edde\App\Router\RouterServiceConfigHandler;
 	use Edde\Common\Application\Application;
 	use Edde\Common\Application\ResponseManager;
@@ -39,9 +42,11 @@
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\Runtime;
+	use Edde\Common\Template\TemplateManager;
 	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
+	use Edde\Ext\Template\DefaultMacroSet;
 	use Edde\Framework;
 	use Tracy\Debugger;
 
@@ -78,6 +83,9 @@
 		IHttpRequest::class => HttpRequest::class,
 		IResponseManager::class => ResponseManager::class,
 		IResourceManager::class => ResourceManager::class,
+		ITemplateManager::class => TemplateManager::class,
+		IMacroSet::class => DefaultMacroSet::class . '::macroSet',
+		IHelperSet::class => DefaultMacroSet::class . '::helperSet',
 		new ClassFactory(),
 	], is_array($local = @include __DIR__ . '/loader.local.php') ? $local : []), [
 		IRouterService::class => [

@@ -16,7 +16,6 @@
 	use Edde\Common\Container\Container;
 	use Edde\Common\Object;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
-	use Serializable;
 
 	class ContainerFactory extends Object {
 		/**
@@ -31,7 +30,11 @@
 				$current = null;
 				if (is_string($factory) && strpos($factory, '::') !== false) {
 					list($target, $method) = explode('::', $factory);
+					$reflectionMethod = new \ReflectionMethod($target, $method);
 					$current = new ProxyFactory($name, $target, $method);
+					if ($reflectionMethod->isStatic()) {
+						$current = new CallbackFactory($factory, $name);
+					}
 				} else if (is_string($name) && is_string($factory) && interface_exists($name)) {
 					if (class_exists($factory)) {
 						$current = new InterfaceFactory($name, $factory);
