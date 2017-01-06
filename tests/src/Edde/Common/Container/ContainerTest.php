@@ -21,6 +21,8 @@
 		 * @var IContainer
 		 */
 		protected $container;
+		protected $factoryList;
+		protected $configList;
 
 		public function testContainer() {
 			self::assertSame($this->container, $this->container->create(IContainer::class));
@@ -48,7 +50,9 @@
 
 		public function testContainerSerialization() {
 			/** @noinspection UnserializeExploitsInspection */
-			$this->container = unserialize($source = serialize($this->container));
+			$this->container = ContainerFactory::cache($this->factoryList, $this->configList, $cacheId = __DIR__ . '/cache/foo');
+			file_put_contents($cacheId, serialize($this->container));
+			$this->container = ContainerFactory::cache($this->factoryList, $this->configList, $cacheId);
 			self::assertSame($this->container, $this->container->create(IContainer::class));
 			self::assertInstanceOf(ICache::class, $this->container->create(ICache::class));
 			self::assertInstanceOf(ICacheManager::class, $cache = $this->container->create(ICache::class));
@@ -70,13 +74,13 @@
 		protected function setUp() {
 			$cacheDirectory = new CacheDirectory(__DIR__ . '/cache');
 			$cacheDirectory->purge();
-			$this->container = ContainerFactory::container([
+			$this->container = ContainerFactory::container($this->factoryList = [
 				\ISomething::class => \Something::class,
 				ICacheDirectory::class => $cacheDirectory,
 				ICacheStorage::class => FlatFileCacheStorage::class,
 				\ThisIsProductOfCleverManager::class => \ThisIsCleverManager::class . '::createCleverProduct',
 				new ClassFactory(),
-			], [
+			], $this->configList = [
 				\ISomething::class => [
 					\FirstSomethingSetup::class,
 					\AnotherSomethingSetup::class,

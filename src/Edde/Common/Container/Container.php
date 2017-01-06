@@ -121,11 +121,6 @@
 			return $instance;
 		}
 
-		public function __sleep() {
-			$this->stack = null;
-			return parent::__sleep();
-		}
-
 		public function __wakeup() {
 			$this->stack = new \SplStack();
 			return parent::__wakeup();

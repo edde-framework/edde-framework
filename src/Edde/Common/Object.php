@@ -93,12 +93,14 @@
 		public function __sleep() {
 			static $allowed = [
 				\stdClass::class,
+				\SplStack::class,
 			];
 			$reflectionClass = new \ReflectionClass($this);
 			foreach ($reflectionClass->getProperties() as $reflectionProperty) {
 				$name = $reflectionProperty->getName();
-				$doc = is_string($doc = $reflectionProperty->getDocComment()) ? $doc : '';
-				if (strpos($doc, '@no-cache') !== false) {
+				if (isset($this->{$name}) === false) {
+					continue;
+				} else if (strpos($doc = is_string($doc = $reflectionProperty->getDocComment()) ? $doc : '', '@no-cache') !== false) {
 					unset($this->{$name});
 				} else if (is_object($this->{$name}) && $this->{$name} instanceof ICacheable === false && in_array($class = get_class($this->{$name}), $allowed) === false) {
 					if (strpos($doc, '@cache-optional') === false) {
