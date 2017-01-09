@@ -6,8 +6,7 @@
 	require_once __DIR__ . '/loader.php';
 
 	$server = new StreamServer();
-	foreach ($server->server('tcp://0.0.0.0:8080') as $foo) {
-	}
+	$server->server('tcp://0.0.0.0:8080');
 	$server->close();
 
 

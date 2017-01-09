@@ -20,6 +20,10 @@
 		 * @var bool
 		 */
 		protected $online;
+		/**
+		 * @var resource[]
+		 */
+		protected $connectionList;
 
 		public function server(string $socket): IStreamServer {
 			if (($this->stream = stream_socket_server($this->socket = $socket)) === false) {
@@ -39,7 +43,14 @@
 		}
 
 		public function close() {
+			$this->offline();
 			usleep(50);
+			foreach ($this->connectionList as $client) {
+				fflush($client);
+				stream_socket_shutdown($client, STREAM_SHUT_RDWR);
+				fclose($client);
+			}
+			$this->connectionList = null;
 			fflush($this->stream);
 			stream_socket_shutdown($this->stream, STREAM_SHUT_RDWR);
 			fclose($this->stream);
@@ -47,6 +58,36 @@
 		}
 
 		public function tick() {
+			$read = $this->connectionList;
+			$read[] = $this->stream;
+			$write = $except = [$this->stream];
+			if (($select = stream_select($read, $write, $except, 256000)) === false) {
+				throw new StreamServerException('Stream select has failed.');
+			} else if ($select === 0) {
+				/**
+				 * nothing happened
+				 */
+				return false;
+			}
+			if (($index = array_search($this->stream, $read, true)) !== false) {
+				unset($read[$index]);
+				if (($handle = stream_socket_accept($this->stream)) !== false) {
+					// a new client
+					$this->connectionList[] = $handle;
+				}
+			}
+			foreach ($read as $stream) {
+				/**
+				 * stream closed
+				 */
+				if (feof($stream)) {
+					stream_socket_shutdown($this->connectionList[$index = array_search($stream, $this->connectionList, true)], STREAM_SHUT_RDWR);
+					fflush($this->connectionList[$index]);
+					fclose($this->connectionList[$index]);
+					unset($this->connectionList[$index]);
+					continue;
+				}
+			}
 			return false;
 		}
 
