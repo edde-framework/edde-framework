@@ -30,7 +30,7 @@
 			if (($stream = stream_socket_server($this->socket = $socket)) === false) {
 				throw new StreamServerException('Cannot open server socket [%s].', $socket);
 			}
-			stream_set_blocking($stream, 0);
+			stream_set_blocking($stream, false);
 			$this->connectionList[] = $this->connection = new Connection($this, $stream, stream_socket_get_name($stream, false));
 			return $this->online();
 		}
@@ -59,7 +59,7 @@
 		}
 
 		public function tick() {
-			$writeList = $exceptList = $readList = array_map(function (IConnection $connection) {
+			$connectionList = $writeList = $exceptList = $readList = array_map(function (IConnection $connection) {
 				return $connection->getStream();
 			}, $this->connectionList);
 			if (($select = stream_select($readList, $writeList, $exceptList, 3)) === false) {
@@ -73,17 +73,17 @@
 			if (($index = array_search($this->connection->getStream(), $readList, true)) !== false) {
 				unset($readList[$index]);
 				if (($handle = stream_socket_accept($this->connection->getStream())) !== false) {
-					stream_set_blocking($handle, 0);
+					stream_set_blocking($handle, false);
 					$this->connectionList[] = new Connection($this, $handle, stream_socket_get_name($handle, true));
 				}
 			}
 			foreach ($readList as $stream) {
-				$connection = $this->connectionList[$index = array_search($stream, $this->connectionList, true)];
+				$connection = $this->connectionList[$index = array_search($stream, $connectionList, true)];
 				/**
 				 * stream closed
 				 */
 				if (feof($stream)) {
-					$$connection->close();
+					$connection->close();
 					unset($this->connectionList[$index]);
 					continue;
 				}

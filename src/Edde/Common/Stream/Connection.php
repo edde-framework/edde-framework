@@ -65,6 +65,7 @@
 		}
 
 		public function read(): IConnection {
+			$data = stream_get_contents($this->stream);
 			// on read event?
 			return $this;
 		}
