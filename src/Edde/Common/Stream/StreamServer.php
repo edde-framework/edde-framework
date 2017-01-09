@@ -77,9 +77,7 @@
 				 * stream closed
 				 */
 				if (feof($stream)) {
-					stream_socket_shutdown($this->connectionList[$index = array_search($stream, $this->connectionList, true)], STREAM_SHUT_RDWR);
-					fflush($this->connectionList[$index]);
-					fclose($this->connectionList[$index]);
+					$this->connectionList[$index = array_search($stream, $this->connectionList, true)]->close();
 					unset($this->connectionList[$index]);
 					continue;
 				}
