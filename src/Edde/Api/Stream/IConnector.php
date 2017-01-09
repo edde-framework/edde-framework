@@ -5,6 +5,11 @@
 
 	interface IConnector {
 		/**
+		 * @return IConnection
+		 */
+		public function getConnection(): IConnection;
+
+		/**
 		 * @return IConnector
 		 */
 		public function close(): IConnector;

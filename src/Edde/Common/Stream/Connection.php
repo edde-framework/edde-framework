@@ -69,16 +69,35 @@
 			return $this->stream !== null && feof($this->stream) === false;
 		}
 
-		public function read(): IConnection {
+		public function read(callable $handler = null): string {
 			/**
 			 * stream must read the data or connection will stay forever
 			 */
-			$data = stream_get_contents($this->stream);
-			// on read event?
-			return $this;
+			$data = '';
+			$read = $except = null;
+			$connectionList = [$this->stream];
+			while (stream_select($read, $connectionList, $except, 256000) && feof($stream = reset($connectionList)) === false) {
+				$source = fread($stream, 4096 * 2);
+				if ($handler) {
+					$handler($source);
+					continue;
+				}
+				$data .= $source;
+			}
+			return $data;
 		}
 
 		public function write(string $buffer): IConnection {
+			$limit = 2048;
+			$length = strlen($buffer);
+			$count = 0;
+			$read = $except = null;
+			$connectionList = [$this->stream];
+			while ($count < $length) {
+				if (stream_select($read, $connectionList, $except, 256000) > 0) {
+					$count += fwrite(reset($connectionList), substr($buffer, $count, $limit), $limit);
+				}
+			}
 			return $this;
 		}
 

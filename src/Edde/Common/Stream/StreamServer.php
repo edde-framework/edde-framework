@@ -7,13 +7,8 @@
 	use Edde\Api\Stream\IConnector;
 	use Edde\Api\Stream\IStreamServer;
 	use Edde\Api\Stream\StreamServerException;
-	use Edde\Common\Object;
 
-	class StreamServer extends Object implements IStreamServer {
-		/**
-		 * @var IConnection
-		 */
-		protected $connection;
+	class StreamServer extends AbstractConnector implements IStreamServer {
 		/**
 		 * @var IConnection[]
 		 */

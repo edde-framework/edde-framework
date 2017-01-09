@@ -33,9 +33,11 @@
 		/**
 		 * read the data from the stream
 		 *
-		 * @return IConnection
+		 * @param callable $handler if provided, every call will get a piece of data
+		 *
+		 * @return string
 		 */
-		public function read(): IConnection;
+		public function read(callable $handler = null): string;
 
 		/**
 		 * close the connection

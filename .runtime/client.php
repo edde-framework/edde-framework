@@ -7,5 +7,5 @@
 
 	$client = new StreamClient();
 	$client->connect('tcp://127.0.0.1:389');
-	$client->write('something');
+	$client->write(str_repeat('0', 1024 * 1024 * 32));
 	$client->close();
