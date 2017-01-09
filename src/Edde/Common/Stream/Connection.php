@@ -60,11 +60,18 @@
 			return $this->stream;
 		}
 
+		public function hello(): IConnection {
+			return $this;
+		}
+
 		public function isAlive(): bool {
 			return $this->stream !== null && feof($this->stream) === false;
 		}
 
 		public function read(): IConnection {
+			/**
+			 * stream must read the data or connection will stay forever
+			 */
 			$data = stream_get_contents($this->stream);
 			// on read event?
 			return $this;

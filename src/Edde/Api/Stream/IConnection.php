@@ -5,11 +5,23 @@
 
 	interface IConnection {
 		/**
+		 * @return string
+		 */
+		public function getId(): string;
+
+		/**
 		 * return connection stream; it should not be used for direct manipulation
 		 *
 		 * @return resource
 		 */
 		public function getStream();
+
+		/**
+		 * when connection is accepted, hello is executed
+		 *
+		 * @return IConnection
+		 */
+		public function hello(): IConnection;
 
 		/**
 		 * is connection still alive?

@@ -74,7 +74,8 @@
 				unset($readList[$index]);
 				if (($handle = stream_socket_accept($this->connection->getStream())) !== false) {
 					stream_set_blocking($handle, false);
-					$this->connectionList[] = new Connection($this, $handle, stream_socket_get_name($handle, true));
+					$this->connectionList[] = $connection = new Connection($this, $handle, stream_socket_get_name($handle, true));
+					$connection->hello();
 				}
 			}
 			foreach ($readList as $stream) {
