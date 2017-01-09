@@ -5,6 +5,7 @@
 
 	use Edde\Api\Stream\ConnectionException;
 	use Edde\Api\Stream\IConnection;
+	use Edde\Api\Stream\IConnector;
 	use Edde\Api\Stream\IStreamServer;
 	use Edde\Common\Object;
 
@@ -12,7 +13,7 @@
 		/**
 		 * @var IStreamServer
 		 */
-		protected $server;
+		protected $connector;
 		/**
 		 * @var resource
 		 */
@@ -39,12 +40,12 @@
 		 * Stunned, the woman said, "That was brilliant! How did you do that?"
 		 * The old man replied, "I was behind you in line at McDonald's."
 		 *
-		 * @param IStreamServer $server
-		 * @param resource      $stream
-		 * @param string        $id
+		 * @param IConnector $connector
+		 * @param resource   $stream
+		 * @param string     $id
 		 */
-		public function __construct(IStreamServer $server, $stream, string $id) {
-			$this->server = $server;
+		public function __construct(IConnector $connector, $stream, string $id) {
+			$this->connector = $connector;
 			$this->stream = $stream;
 			$this->id = $id;
 		}

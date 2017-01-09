@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Stream;
 
-	interface IStreamServer {
+	interface IStreamServer extends IConnector {
 		/**
 		 * @param string $socket
 		 *

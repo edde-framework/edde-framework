@@ -4,6 +4,7 @@
 	namespace Edde\Common\Stream;
 
 	use Edde\Api\Stream\IConnection;
+	use Edde\Api\Stream\IConnector;
 	use Edde\Api\Stream\IStreamServer;
 	use Edde\Api\Stream\StreamServerException;
 	use Edde\Common\Object;
@@ -49,13 +50,14 @@
 			return $this;
 		}
 
-		public function close() {
+		public function close(): IConnector {
 			$this->offline();
 			usleep(50);
 			foreach ($this->connectionList as $connection) {
 				$connection->close();
 			}
 			$this->connectionList = $this->connection = null;
+			return $this;
 		}
 
 		public function tick() {
