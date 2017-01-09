@@ -69,7 +69,7 @@
 				unset($read[$index]);
 				if (($handle = stream_socket_accept($this->connection->getStream())) !== false) {
 					// a new client
-					$this->connectionList[] = new Connection($handle, stream_socket_get_name($this->stream, true));
+					$this->connectionList[] = new Connection($handle, stream_socket_get_name($handle, true));
 				}
 			}
 			foreach ($read as $stream) {
