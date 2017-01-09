@@ -30,7 +30,8 @@
 			if (($stream = stream_socket_server($this->socket = $socket)) === false) {
 				throw new StreamServerException('Cannot open server socket [%s].', $socket);
 			}
-			$this->connectionList[] = $this->connection = new Connection($stream, stream_socket_get_name($stream, false));
+			stream_set_blocking($stream, 0);
+			$this->connectionList[] = $this->connection = new Connection($this, $stream, stream_socket_get_name($stream, false));
 			return $this->online();
 		}
 
@@ -58,10 +59,10 @@
 		}
 
 		public function tick() {
-			$write = $except = $read = array_map(function (IConnection $connection) {
+			$writeList = $exceptList = $readList = array_map(function (IConnection $connection) {
 				return $connection->getStream();
 			}, $this->connectionList);
-			if (($select = stream_select($read, $write, $except, 5)) === false) {
+			if (($select = stream_select($readList, $writeList, $exceptList, 3)) === false) {
 				throw new StreamServerException('Stream select has failed.');
 			} else if ($select === 0) {
 				/**
@@ -69,14 +70,14 @@
 				 */
 				return $this->isOnline();
 			}
-			if (($index = array_search($this->connection->getStream(), $read, true)) !== false) {
-				unset($read[$index]);
+			if (($index = array_search($this->connection->getStream(), $readList, true)) !== false) {
+				unset($readList[$index]);
 				if (($handle = stream_socket_accept($this->connection->getStream())) !== false) {
-					// a new client
-					$this->connectionList[] = new Connection($handle, stream_socket_get_name($handle, true));
+					stream_set_blocking($handle, 0);
+					$this->connectionList[] = new Connection($this, $handle, stream_socket_get_name($handle, true));
 				}
 			}
-			foreach ($read as $stream) {
+			foreach ($readList as $stream) {
 				$connection = $this->connectionList[$index = array_search($stream, $this->connectionList, true)];
 				/**
 				 * stream closed
@@ -86,6 +87,7 @@
 					unset($this->connectionList[$index]);
 					continue;
 				}
+				$connection->read();
 			}
 			return $this->isOnline();
 		}

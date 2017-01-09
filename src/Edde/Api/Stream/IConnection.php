@@ -19,18 +19,18 @@
 		public function isAlive(): bool;
 
 		/**
-		 * close the connection
-		 *
-		 * @return IConnection
-		 */
-		public function close(): IConnection;
-
-		/**
 		 * read the data from the stream
 		 *
 		 * @return IConnection
 		 */
 		public function read(): IConnection;
+
+		/**
+		 * close the connection
+		 *
+		 * @return IConnection
+		 */
+		public function close(): IConnection;
 
 		/**
 		 * write the data to the stream

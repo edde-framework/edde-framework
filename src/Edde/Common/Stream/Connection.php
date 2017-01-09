@@ -5,13 +5,21 @@
 
 	use Edde\Api\Stream\ConnectionException;
 	use Edde\Api\Stream\IConnection;
+	use Edde\Api\Stream\IStreamServer;
 	use Edde\Common\Object;
 
 	class Connection extends Object implements IConnection {
 		/**
+		 * @var IStreamServer
+		 */
+		protected $server;
+		/**
 		 * @var resource
 		 */
 		protected $stream;
+		/**
+		 * @var string
+		 */
 		protected $id;
 
 		/**
@@ -31,9 +39,12 @@
 		 * Stunned, the woman said, "That was brilliant! How did you do that?"
 		 * The old man replied, "I was behind you in line at McDonald's."
 		 *
-		 * @param resource $stream
+		 * @param IStreamServer $server
+		 * @param resource      $stream
+		 * @param string        $id
 		 */
-		public function __construct($stream, string $id) {
+		public function __construct(IStreamServer $server, $stream, string $id) {
+			$this->server = $server;
 			$this->stream = $stream;
 			$this->id = $id;
 		}
@@ -51,6 +62,15 @@
 
 		public function isAlive(): bool {
 			return $this->stream !== null && feof($this->stream) === false;
+		}
+
+		public function read(): IConnection {
+			// on read event?
+			return $this;
+		}
+
+		public function write(string $buffer): IConnection {
+			return $this;
 		}
 
 		public function close(): IConnection {
