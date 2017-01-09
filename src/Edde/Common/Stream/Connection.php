@@ -77,7 +77,7 @@
 			$read = $except = null;
 			$connectionList = [$this->stream];
 			while (stream_select($read, $connectionList, $except, 256000) && feof($stream = reset($connectionList)) === false) {
-				$source = fread($stream, 4096 * 2);
+				$source = fread($stream, 8192);
 				if ($handler) {
 					$handler($source);
 					continue;
@@ -88,7 +88,7 @@
 		}
 
 		public function write(string $buffer): IConnection {
-			$limit = 2048;
+			$limit = 8192;
 			$length = strlen($buffer);
 			$count = 0;
 			$read = $except = null;
