@@ -3,15 +3,20 @@
 
 	namespace Edde\Common\Stream;
 
+	use Edde\Api\Stream\IConnection;
 	use Edde\Api\Stream\IStreamServer;
 	use Edde\Api\Stream\StreamServerException;
 	use Edde\Common\Object;
 
 	class StreamServer extends Object implements IStreamServer {
 		/**
-		 * @var resource
+		 * @var IConnection
 		 */
-		protected $stream;
+		protected $connection;
+		/**
+		 * @var IConnection[]
+		 */
+		protected $connectionList;
 		/**
 		 * @var string
 		 */
@@ -20,15 +25,12 @@
 		 * @var bool
 		 */
 		protected $online;
-		/**
-		 * @var resource[]
-		 */
-		protected $connectionList;
 
 		public function server(string $socket): IStreamServer {
-			if (($this->stream = stream_socket_server($this->socket = $socket)) === false) {
+			if (($stream = stream_socket_server($this->socket = $socket)) === false) {
 				throw new StreamServerException('Cannot open server socket [%s].', $socket);
 			}
+			$this->connectionList[] = $this->connection = new Connection($stream, stream_socket_get_name($stream, false));
 			return $this->online();
 		}
 
@@ -45,23 +47,17 @@
 		public function close() {
 			$this->offline();
 			usleep(50);
-			foreach ($this->connectionList as $client) {
-				fflush($client);
-				stream_socket_shutdown($client, STREAM_SHUT_RDWR);
-				fclose($client);
+			foreach ($this->connectionList as $connection) {
+				$connection->close();
 			}
-			$this->connectionList = null;
-			fflush($this->stream);
-			stream_socket_shutdown($this->stream, STREAM_SHUT_RDWR);
-			fclose($this->stream);
-			$this->stream = null;
+			$this->connectionList = $this->connection = null;
 		}
 
 		public function tick() {
-			$read = $this->connectionList;
-			$read[] = $this->stream;
-			$write = $except = [$this->stream];
-			if (($select = stream_select($read, $write, $except, 256000)) === false) {
+			$write = $except = $read = array_map(function (IConnection $connection) {
+				return $connection->getStream();
+			}, $this->connectionList);
+			if (($select = stream_select($read, $write, $except, 5)) === false) {
 				throw new StreamServerException('Stream select has failed.');
 			} else if ($select === 0) {
 				/**
@@ -69,11 +65,11 @@
 				 */
 				return false;
 			}
-			if (($index = array_search($this->stream, $read, true)) !== false) {
+			if (($index = array_search($this->connection->getStream(), $read, true)) !== false) {
 				unset($read[$index]);
-				if (($handle = stream_socket_accept($this->stream)) !== false) {
+				if (($handle = stream_socket_accept($this->connection->getStream())) !== false) {
 					// a new client
-					$this->connectionList[] = $handle;
+					$this->connectionList[] = new Connection($handle, stream_socket_get_name($this->stream, true));
 				}
 			}
 			foreach ($read as $stream) {
