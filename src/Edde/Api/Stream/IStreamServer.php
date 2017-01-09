@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Stream;
 
-	interface IStreamServer extends \IteratorAggregate {
+	interface IStreamServer {
 		/**
 		 * @param string $socket
 		 *
@@ -17,6 +17,11 @@
 		 * @return IStreamServer
 		 */
 		public function online(): IStreamServer;
+
+		/**
+		 * @return bool
+		 */
+		public function isOnline(): bool;
 
 		/**
 		 * ends server loop; server is not closed (so loop can be run again)

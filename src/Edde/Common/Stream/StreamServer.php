@@ -39,6 +39,10 @@
 			return $this;
 		}
 
+		public function isOnline(): bool {
+			return $this->online === true;
+		}
+
 		public function offline(): IStreamServer {
 			$this->online = false;
 			return $this;
@@ -63,7 +67,7 @@
 				/**
 				 * nothing happened
 				 */
-				return false;
+				return $this->isOnline();
 			}
 			if (($index = array_search($this->connection->getStream(), $read, true)) !== false) {
 				unset($read[$index]);
@@ -73,26 +77,16 @@
 				}
 			}
 			foreach ($read as $stream) {
+				$connection = $this->connectionList[$index = array_search($stream, $this->connectionList, true)];
 				/**
 				 * stream closed
 				 */
 				if (feof($stream)) {
-					$this->connectionList[$index = array_search($stream, $this->connectionList, true)]->close();
+					$$connection->close();
 					unset($this->connectionList[$index]);
 					continue;
 				}
 			}
-			return false;
-		}
-
-		/**
-		 * main loop of the server
-		 */
-		public function getIterator() {
-			while ($this->online) {
-				if (($tick = $this->tick()) !== false) {
-					yield $tick;
-				}
-			}
+			return $this->isOnline();
 		}
 	}

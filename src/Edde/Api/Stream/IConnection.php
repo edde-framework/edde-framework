@@ -24,4 +24,20 @@
 		 * @return IConnection
 		 */
 		public function close(): IConnection;
+
+		/**
+		 * read the data from the stream
+		 *
+		 * @return IConnection
+		 */
+		public function read(): IConnection;
+
+		/**
+		 * write the data to the stream
+		 *
+		 * @param string $buffer
+		 *
+		 * @return IConnection
+		 */
+		public function write(string $buffer): IConnection;
 	}

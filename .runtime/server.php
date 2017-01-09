@@ -7,7 +7,8 @@
 
 	$server = new StreamServer();
 	$server->server('tcp://0.0.0.0:8080');
-	$server->tick();
+	while ($server->tick()) {
+	}
 	$server->close();
 
 
