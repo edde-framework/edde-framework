@@ -22,6 +22,10 @@
 			return $this;
 		}
 
+		public function read(callback $handler = null): string {
+			return $this->connection->read($handler);
+		}
+
 		public function close(): IConnector {
 			$this->connection->close();
 			$this->connection = null;

@@ -5,6 +5,13 @@
 
 	interface IStreamClient extends IConnector {
 		/**
+		 * @param callable|null $handler
+		 *
+		 * @return string
+		 */
+		public function read(callback $handler = null): string;
+
+		/**
 		 * send data to the server
 		 *
 		 * @param string $buffer
