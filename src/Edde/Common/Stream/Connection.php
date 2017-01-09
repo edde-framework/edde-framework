@@ -66,7 +66,7 @@
 		}
 
 		public function isAlive(): bool {
-			return $this->stream !== null && feof($this->stream) === false;
+			return $this->stream !== null;
 		}
 
 		public function read(callable $handler = null): string {
