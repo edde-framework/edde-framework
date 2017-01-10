@@ -28,6 +28,7 @@
 		"defuse/php-encryption": "^2.0",
 		"phpunit/phpunit": "6.0.x-dev",
 		"theseer/phpdox": "0.9.0",
+		"fgrosse/phpasn1": "^1.5",
 		"roave/security-advisories": "dev-master"
 	},
 	"require-dev": {

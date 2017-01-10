@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "387f6e837acee4de4bd8c708e03aa57a",
-    "content-hash": "2e877a7e5302ed381d4a43da69909b8c",
+    "hash": "394394d0370e46ddf47310dbd70388c4",
+    "content-hash": "ab16b015ee8a84fdcb2a840a5498a48a",
     "packages": [
         {
             "name": "defuse/php-encryption",
@@ -119,6 +119,63 @@
                 "instantiate"
             ],
             "time": "2016-03-31 10:24:22"
+        },
+        {
+            "name": "fgrosse/phpasn1",
+            "version": "dev-compat/php5-5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fgrosse/PHPASN1.git",
+                "reference": "7f7b25ee26bc5bdba6fdcf97d3dc2f8f86bea629"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fgrosse/PHPASN1/zipball/7f7b25ee26bc5bdba6fdcf97d3dc2f8f86bea629",
+                "reference": "7f7b25ee26bc5bdba6fdcf97d3dc2f8f86bea629",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gmp": "*",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.5",
+                "satooshi/php-coveralls": "dev-master"
+            },
+            "suggest": {
+                "php-curl": "For loading OID information from the web if they have not bee defined statically"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.5.x-dev",
+                    "dev-compat/php5-5": "1.5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "FG\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Friedrich Große",
+                    "email": "friedrich.grosse@gmail.com",
+                    "homepage": "https://github.com/FGrosse",
+                    "role": "Author"
+                },
+                {
+                    "name": "All contributors",
+                    "homepage": "https://github.com/FGrosse/PHPASN1/contributors"
+                }
+            ],
+            "description": "A PHP Framework that allows you to encode and decode arbitrary ASN.1 structures using the ITU-T X.690 Encoding Rules.",
+            "homepage": "https://github.com/FGrosse/PHPASN1",
+            "time": "2015-09-30 18:31:02"
         },
         {
             "name": "myclabs/deep-copy",
@@ -647,12 +704,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "363e14f0171a4fd7eeea36f19104cd9aa2e7de3e"
+                "reference": "ca72afdde86993a56a4b0bb21ed57e7b0f72ca30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/363e14f0171a4fd7eeea36f19104cd9aa2e7de3e",
-                "reference": "363e14f0171a4fd7eeea36f19104cd9aa2e7de3e",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/ca72afdde86993a56a4b0bb21ed57e7b0f72ca30",
+                "reference": "ca72afdde86993a56a4b0bb21ed57e7b0f72ca30",
                 "shasum": ""
             },
             "require": {
@@ -701,7 +758,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-12-20 15:23:52"
+            "time": "2017-01-02 08:00:31"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -890,12 +947,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "85f4a69ed9522deb4428da4cd0620cd56e6c04a5"
+                "reference": "7f7fbd142a5139e8290a7f4e3be6f10d388d5f73"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/85f4a69ed9522deb4428da4cd0620cd56e6c04a5",
-                "reference": "85f4a69ed9522deb4428da4cd0620cd56e6c04a5",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7f7fbd142a5139e8290a7f4e3be6f10d388d5f73",
+                "reference": "7f7fbd142a5139e8290a7f4e3be6f10d388d5f73",
                 "shasum": ""
             },
             "require": {
@@ -912,7 +969,7 @@
                 "phpunit/php-file-iterator": "^1.4",
                 "phpunit/php-text-template": "^1.2",
                 "phpunit/php-timer": "^1.0.6",
-                "phpunit/phpunit-mock-objects": "^3.2",
+                "phpunit/phpunit-mock-objects": "^4.0",
                 "sebastian/comparator": "^1.2.2",
                 "sebastian/diff": "^1.2",
                 "sebastian/environment": "^2.0",
@@ -964,33 +1021,33 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-12-29 06:53:44"
+            "time": "2017-01-05 07:40:08"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "3.4.3",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "3ab72b65b39b491e0c011e2e09bb2206c2aa8e24"
+                "reference": "a3632745970109a5f9f8dbc522a6f82dcd6f16d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/3ab72b65b39b491e0c011e2e09bb2206c2aa8e24",
-                "reference": "3ab72b65b39b491e0c011e2e09bb2206c2aa8e24",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/a3632745970109a5f9f8dbc522a6f82dcd6f16d5",
+                "reference": "a3632745970109a5f9f8dbc522a6f82dcd6f16d5",
                 "shasum": ""
             },
             "require": {
                 "doctrine/instantiator": "^1.0.2",
-                "php": "^5.6 || ^7.0",
+                "php": "^7.0",
                 "phpunit/php-text-template": "^1.2",
-                "sebastian/exporter": "^1.2 || ^2.0"
+                "sebastian/exporter": "^2.0"
             },
             "conflict": {
-                "phpunit/phpunit": "<5.4.0"
+                "phpunit/phpunit": "<6.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^5.4"
+                "phpunit/phpunit": "^6.0"
             },
             "suggest": {
                 "ext-soap": "*"
@@ -998,7 +1055,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2.x-dev"
+                    "dev-master": "4.0.x-dev"
                 }
             },
             "autoload": {
@@ -1023,7 +1080,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2016-12-08 20:27:08"
+            "time": "2016-12-31 08:26:59"
         },
         {
             "name": "roave/security-advisories",
@@ -1031,12 +1088,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "814b9f0eb4183d86bcc4832ad02476a9890eaca2"
+                "reference": "8b674956ac0ca9b4c90a98197f244cf81079e084"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/814b9f0eb4183d86bcc4832ad02476a9890eaca2",
-                "reference": "814b9f0eb4183d86bcc4832ad02476a9890eaca2",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/8b674956ac0ca9b4c90a98197f244cf81079e084",
+                "reference": "8b674956ac0ca9b4c90a98197f244cf81079e084",
                 "shasum": ""
             },
             "conflict": {
@@ -1077,7 +1134,7 @@
                 "namshi/jose": "<2.2",
                 "oro/crm": ">=1.7,<1.7.4",
                 "oro/platform": ">=1.7,<1.7.4",
-                "phpmailer/phpmailer": ">=5,<5.2.20",
+                "phpmailer/phpmailer": ">=5,<5.2.22",
                 "pusher/pusher-php-server": "<2.2.1",
                 "sabre/dav": ">=1.6,<1.6.99|>=1.7,<1.7.11|>=1.8,<1.8.9",
                 "shopware/shopware": "<4.3.7|>=5,<5.1.5",
@@ -1089,7 +1146,7 @@
                 "simplesamlphp/simplesamlphp": "<1.14.11",
                 "simplesamlphp/simplesamlphp-module-infocard": "<1.0.1",
                 "socalnick/scn-social-auth": "<1.15.2",
-                "swiftmailer/swiftmailer": ">=4,<4.99.99|>=5,<5.2.1",
+                "swiftmailer/swiftmailer": ">=4,<5.4.5",
                 "symfony/dependency-injection": ">=2,<2.0.17",
                 "symfony/form": ">=2.3,<2.3.35|>=2.4,<2.6.12|>=2.7,<2.7.7",
                 "symfony/framework-bundle": ">=2,<2.3.18|>=2.4,<2.4.8|>=2.5,<2.5.2",
@@ -1154,7 +1211,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2016-12-29 10:25:42"
+            "time": "2017-01-09 15:59:17"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -1162,12 +1219,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/code-unit-reverse-lookup.git",
-                "reference": "99805768a703b1b8200354f6cfe4269f4c5372b8"
+                "reference": "11606652af09e847cdbbbc3ca17df26b1173a454"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/code-unit-reverse-lookup/zipball/99805768a703b1b8200354f6cfe4269f4c5372b8",
-                "reference": "99805768a703b1b8200354f6cfe4269f4c5372b8",
+                "url": "https://api.github.com/repos/sebastianbergmann/code-unit-reverse-lookup/zipball/11606652af09e847cdbbbc3ca17df26b1173a454",
+                "reference": "11606652af09e847cdbbbc3ca17df26b1173a454",
                 "shasum": ""
             },
             "require": {
@@ -1199,7 +1256,7 @@
             ],
             "description": "Looks up which function or method a line of code belongs to",
             "homepage": "https://github.com/sebastianbergmann/code-unit-reverse-lookup/",
-            "time": "2016-12-06 20:00:09"
+            "time": "2016-12-06 20:05:00"
         },
         {
             "name": "sebastian/comparator",
@@ -1905,12 +1962,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tracy.git",
-                "reference": "7a5cb208d2efc3a39205a186fabbf1eb61f5865d"
+                "reference": "62c4c0feeb1312cde46a72bec772b615e2d96eb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tracy/zipball/7a5cb208d2efc3a39205a186fabbf1eb61f5865d",
-                "reference": "7a5cb208d2efc3a39205a186fabbf1eb61f5865d",
+                "url": "https://api.github.com/repos/nette/tracy/zipball/62c4c0feeb1312cde46a72bec772b615e2d96eb3",
+                "reference": "62c4c0feeb1312cde46a72bec772b615e2d96eb3",
                 "shasum": ""
             },
             "require": {
@@ -1959,7 +2016,7 @@
                 "debugger",
                 "nette"
             ],
-            "time": "2016-12-27 18:13:06"
+            "time": "2017-01-10 12:24:33"
         }
     ],
     "aliases": [],
