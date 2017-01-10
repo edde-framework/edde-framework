@@ -4,3 +4,4 @@
 *.sqlite
 *.pid
 **/cache/
+**/temp/

@@ -13,6 +13,11 @@
 		}
 
 		public function read(IConnection $connection): IConnectionHandler {
+			/**
+			 * empty lambda is here because it will throw away all the incoming data
+			 */
+			$connection->read(function ($data) {
+			});
 			return $this;
 		}
 
