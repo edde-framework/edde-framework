@@ -8,6 +8,10 @@
 	use Edde\Common\Object;
 
 	abstract class AbstractConnectionHandler extends Object implements IConnectionHandler {
+		public function hello(IConnection $connection): IConnectionHandler {
+			return $this;
+		}
+
 		public function read(IConnection $connection): IConnectionHandler {
 			return $this;
 		}

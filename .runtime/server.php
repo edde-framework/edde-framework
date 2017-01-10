@@ -2,10 +2,11 @@
 	declare(strict_types = 1);
 
 	use Edde\Common\Stream\StreamServer;
+	use Edde\Ext\Stream\LdapConnectionHandler;
 
 	require_once __DIR__ . '/loader.php';
 
-	$server = new StreamServer();
+	$server = new StreamServer(new LdapConnectionHandler());
 	$server->server($socket = 'tcp://0.0.0.0:389');
 	printf("we're on [%s]\n", $socket);
 	while ($server->tick()) {
