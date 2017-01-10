@@ -61,10 +61,6 @@
 			return $this->stream;
 		}
 
-		public function hello(): IConnection {
-			return $this;
-		}
-
 		public function isAlive(): bool {
 			return $this->stream !== null;
 		}

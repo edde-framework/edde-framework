@@ -4,11 +4,16 @@
 	namespace Edde\Common\Stream;
 
 	use Edde\Api\Stream\IConnection;
+	use Edde\Api\Stream\IConnectionHandler;
 	use Edde\Api\Stream\IConnector;
 	use Edde\Api\Stream\IStreamServer;
 	use Edde\Api\Stream\StreamServerException;
 
 	class StreamServer extends AbstractConnector implements IStreamServer {
+		/**
+		 * @var IConnectionHandler
+		 */
+		protected $connectionHandler;
 		/**
 		 * @var IConnection[]
 		 */
@@ -21,6 +26,15 @@
 		 * @var bool
 		 */
 		protected $online;
+
+		/**
+		 * StreamServer constructor.
+		 *
+		 * @param IConnectionHandler $connectionHandler
+		 */
+		public function __construct(IConnectionHandler $connectionHandler) {
+			$this->connectionHandler = $connectionHandler;
+		}
 
 		public function server(string $socket): IStreamServer {
 			if (($stream = stream_socket_server($this->socket = $socket)) === false) {
@@ -56,10 +70,10 @@
 		}
 
 		public function tick() {
-			$connectionList = $writeList = $exceptList = $readList = array_map(function (IConnection $connection) {
+			$connectionList = $ignore = $readList = array_map(function (IConnection $connection) {
 				return $connection->getStream();
 			}, $this->connectionList);
-			if (($select = stream_select($readList, $writeList, $exceptList, 3)) === false) {
+			if (($select = stream_select($readList, $ignore, $ignore, 3)) === false) {
 				throw new StreamServerException('Stream select has failed.');
 			} else if ($select === 0) {
 				/**
@@ -71,8 +85,7 @@
 				unset($readList[$index]);
 				if (($handle = stream_socket_accept($this->connection->getStream())) !== false) {
 					stream_set_blocking($handle, false);
-					$this->connectionList[] = $connection = new Connection($this, $handle, stream_socket_get_name($handle, true));
-					$connection->hello();
+					$this->connectionHandler->hello($this->connectionList[] = $connection = new Connection($this, $handle, stream_socket_get_name($handle, true)));
 				}
 			}
 			foreach ($readList as $stream) {
@@ -85,7 +98,7 @@
 					unset($this->connectionList[$index]);
 					continue;
 				}
-				$connection->read();
+				$this->connectionHandler->read($connection);
 			}
 			return $this->isOnline();
 		}

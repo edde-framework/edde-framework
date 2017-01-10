@@ -17,13 +17,6 @@
 		public function getStream();
 
 		/**
-		 * when connection is accepted, hello is executed
-		 *
-		 * @return IConnection
-		 */
-		public function hello(): IConnection;
-
-		/**
 		 * is connection still alive?
 		 *
 		 * @return bool
