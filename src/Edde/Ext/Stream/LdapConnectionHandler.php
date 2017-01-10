@@ -15,6 +15,7 @@
 			// $asn[2]->getContent()[0][0]->getBinaryContent()
 			// MEECAQFgHQIBAwQRY249c2FmZXEsZGM9c2FmZXGABXNhZmVxoB0wGwQZMS4zLjYuMS40LjEuNDIuMi4yNy44LjUuMQ==
 			// MCQCAQJCAKAdMBsEGTEuMy42LjEuNC4xLjQyLjIuMjcuOC41LjE= (1234568)
+			// nice tool: https://lapo.it/asn1js/
 			return $this;
 		}
 	}
