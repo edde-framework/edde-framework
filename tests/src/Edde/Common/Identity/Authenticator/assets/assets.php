@@ -72,6 +72,10 @@
 			return $this;
 		}
 
+		public function clear(): ISessionManager {
+			return $this;
+		}
+
 		protected function prepare() {
 		}
 	}
