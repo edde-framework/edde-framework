@@ -97,6 +97,16 @@
 
 		/**
 		 * @inheritdoc
+		 */
+		public function clear(): ISessionManager {
+			foreach ($_SESSION[$this->namespace] as $name => &$section) {
+				$section = [];
+			}
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
 		 * @throws SessionException
 		 */
 		public function close(): ISessionManager {

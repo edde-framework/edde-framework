@@ -40,6 +40,13 @@
 		public function &session(string $name): array;
 
 		/**
+		 * clear the current session
+		 *
+		 * @return ISessionManager
+		 */
+		public function clear(): ISessionManager;
+
+		/**
 		 * excplicitly close a session (to release session locks)
 		 *
 		 * @return ISessionManager
