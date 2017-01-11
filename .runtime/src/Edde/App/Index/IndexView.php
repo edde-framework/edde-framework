@@ -8,6 +8,7 @@
 	class IndexView extends ViewControl {
 		public function actionFoo() {
 			$this->template();
+			$this->response();
 		}
 
 		public function actionBar() {

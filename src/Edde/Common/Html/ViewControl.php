@@ -75,7 +75,6 @@
 				$this->head->addJavaScript($this->javaScriptCompiler->compile()
 					->getRelativePath());
 			}
-			$this->dirty();
 			return parent::render($indent);
 		}
 

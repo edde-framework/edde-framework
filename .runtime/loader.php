@@ -30,6 +30,8 @@
 	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Web\IJavaScriptCompiler;
+	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\App\Converter\ConverterManagerConfigHandler;
 	use Edde\App\Router\RouterServiceConfigHandler;
@@ -51,6 +53,8 @@
 	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\Runtime;
 	use Edde\Common\Template\TemplateManager;
+	use Edde\Common\Web\JavaScriptCompiler;
+	use Edde\Common\Web\StyleSheetCompiler;
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Ext\Container\ClassFactory;
@@ -96,6 +100,8 @@
 		IXmlParser::class => XmlParser::class,
 		IConverterManager::class => ConverterManager::class,
 		IResourceManager::class => ResourceManager::class,
+		IStyleSheetCompiler::class => StyleSheetCompiler::class,
+		IJavaScriptCompiler::class => JavaScriptCompiler::class,
 		ITemplateManager::class => TemplateManager::class,
 		IMacroSet::class => DefaultMacroSet::class . '::macroSet',
 		IHelperSet::class => DefaultMacroSet::class . '::helperSet',
