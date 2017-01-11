@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Crate;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\Crate\LazyCrateDirectoryTrait;
@@ -23,7 +24,7 @@
 	/**
 	 * Simple crate php class generator.
 	 */
-	class CrateGenerator extends Object implements ICrateGenerator {
+	class CrateGenerator extends Object implements ICrateGenerator, IConfigurable {
 		use LazySchemaManagerTrait;
 		use LazyCrateDirectoryTrait;
 		use LazyTempDirectoryTrait;
