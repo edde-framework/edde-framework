@@ -17,7 +17,7 @@
 			return $this;
 		}
 
-		public function read(callback $handler = null): string {
+		public function read(callable $handler = null): string {
 			return $this->connection->read($handler);
 		}
 

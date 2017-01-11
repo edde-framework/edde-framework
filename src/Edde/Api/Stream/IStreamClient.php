@@ -9,7 +9,7 @@
 		 *
 		 * @return string
 		 */
-		public function read(callback $handler = null): string;
+		public function read(callable $handler = null): string;
 
 		/**
 		 * send data to the server
