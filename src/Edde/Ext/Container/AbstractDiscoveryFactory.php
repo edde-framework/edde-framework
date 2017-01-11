@@ -50,5 +50,5 @@
 		 *
 		 * @return string[]|false
 		 */
-		abstract protected function discovery(string $name);
+		abstract protected function discovery(string $name): array;
 	}
