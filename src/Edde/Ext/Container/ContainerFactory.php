@@ -158,7 +158,7 @@
 				}
 			}
 			foreach ($factoryList as $factory) {
-				$container->autowire($factory, true);
+				$container->autowire($factory);
 			}
 			return $container;
 		}

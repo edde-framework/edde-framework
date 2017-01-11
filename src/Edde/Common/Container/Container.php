@@ -116,7 +116,7 @@
 					$instance->lazy($reflectionParameter->getName(), $this, $reflectionParameter->getClass());
 					continue;
 				}
-				$instance->inject($reflectionParameter->getName(), $reflectionParameter->getClass());
+				$instance->inject($reflectionParameter->getName(), $this->create($reflectionParameter->getClass(), [], $class));
 			}
 			return $instance;
 		}
