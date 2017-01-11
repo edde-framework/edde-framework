@@ -17,13 +17,13 @@
 			return $this;
 		}
 
+		public function read(callback $handler = null): string {
+			return $this->connection->read($handler);
+		}
+
 		public function write(string $buffer): IStreamClient {
 			$this->connection->write($buffer);
 			return $this;
-		}
-
-		public function read(callback $handler = null): string {
-			return $this->connection->read($handler);
 		}
 
 		public function close(): IConnector {
