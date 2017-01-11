@@ -8,7 +8,6 @@
 	use Edde\Common\Html\AbstractHtmlControl;
 
 	class CaptionControl extends AbstractHtmlControl {
-		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws HtmlException
@@ -20,8 +19,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function handleInit() {
+			parent::handleInit();
 			parent::setTag('caption', true);
 		}
 	}

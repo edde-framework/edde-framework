@@ -16,8 +16,8 @@
 			return $this;
 		}
 
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function handleInit() {
+			parent::handleInit();
 			$this->javascript(self::class)
 				->setTag('input', false)
 				->addAttributeList([

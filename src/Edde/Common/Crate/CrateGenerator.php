@@ -39,10 +39,6 @@
 		 * @throws FileException
 		 */
 		public function generate(bool $force = false): ICrateGenerator {
-			if ($this->isCofnigured()) {
-				return $this;
-			}
-			$this->config();
 			$lock = $this->tempDirectory->file('.crate-generator');
 			$lock->lock();
 			/** @noinspection NotOptimalIfConditionsInspection */
@@ -69,7 +65,6 @@
 		 * @inheritdoc
 		 */
 		public function compile(ISchema $schema): array {
-			$this->config();
 			$sourceList = [];
 			$source[] = "<?php\n";
 			$source[] = "\tdeclare(strict_types = 1);\n\n";
@@ -226,9 +221,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function onBootstrap() {
-			parent::onBootstrap();
-			$this->cache();
+		protected function handleInit() {
 			$this->parent = Crate::class;
 		}
 	}

@@ -3,13 +3,14 @@
 
 	namespace Edde\Api\Asset;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Resource\IResource;
 
 	/**
 	 * General storage for saving application data.
 	 */
-	interface IAssetStorage {
+	interface IAssetStorage extends IConfigurable {
 		/**
 		 * save the given resource to the file storage and return a new resource (local resource file)
 		 *

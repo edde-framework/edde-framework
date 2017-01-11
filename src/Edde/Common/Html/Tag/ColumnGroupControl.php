@@ -11,7 +11,6 @@
 	 * Table column group html tag.
 	 */
 	class ColumnGroupControl extends AbstractHtmlControl {
-		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws HtmlException
@@ -23,8 +22,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function handleInit() {
+			parent::handleInit();
 			parent::setTag('colgroup', true);
 		}
 	}

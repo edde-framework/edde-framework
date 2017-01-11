@@ -5,6 +5,7 @@
 
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheManager;
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Database\IDatabaseStorage;
@@ -25,7 +26,7 @@
 	/**
 	 * Database (persistant) storage implementation.
 	 */
-	class DatabaseStorage extends AbstractStorage implements IDatabaseStorage {
+	class DatabaseStorage extends AbstractStorage implements IDatabaseStorage, IConfigurable {
 		use ConfigurableTrait;
 		/**
 		 * @var IDriver
@@ -63,7 +64,6 @@
 		 * @throws StorageException
 		 */
 		public function start(bool $exclusive = false): IStorage {
-			$this->config();
 			if ($this->transaction++ > 0) {
 				if ($exclusive === false) {
 					return $this;
@@ -78,7 +78,6 @@
 		 * @inheritdoc
 		 */
 		public function commit(): IStorage {
-			$this->config();
 			if (--$this->transaction <= 0) {
 				$this->driver->commit();
 			}
@@ -89,7 +88,6 @@
 		 * @inheritdoc
 		 */
 		public function rollback(): IStorage {
-			$this->config();
 			if ($this->transaction === 0) {
 				return $this;
 			}
@@ -104,7 +102,6 @@
 		 * @throws StorageException
 		 */
 		public function store(ICrate $crate): IStorage {
-			$this->config();
 			$schema = $crate->getSchema();
 			if ($schema->getMeta('storable', false) === false) {
 				throw new StorageException(sprintf('Crate [%s] is not marked as storable (in meta data).', $schema->getSchemaName()));
@@ -157,7 +154,6 @@
 		 * @throws DriverException
 		 */
 		public function execute(IQuery $query) {
-			$this->config();
 			try {
 				return $this->driver->execute($query);
 			} catch (PDOException $e) {
@@ -170,7 +166,6 @@
 		 * @throws DriverException
 		 */
 		public function native(IStaticQuery $staticQuery) {
-			$this->config();
 			try {
 				return $this->driver->native($staticQuery);
 			} catch (PDOException $e) {
@@ -181,9 +176,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function onBootstrap() {
-			parent::onBootstrap();
-			$this->cache = $this->cacheManager->cache(static::class);
+		protected function handleInit() {
 			$this->sourceNodeQuery = new NodeQuery('/**/source');
 		}
 	}

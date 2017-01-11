@@ -3,19 +3,22 @@
 
 	namespace Edde\Common\Translator\Dictionary;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Resource\LazyResourceManagerTrait;
 	use Edde\Common\Cache\CacheTrait;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\File\CsvFile;
 	use Edde\Common\Translator\AbstractDictionary;
 
 	/**
 	 * Csv file support.
 	 */
-	class CsvDictionary extends AbstractDictionary {
+	class CsvDictionary extends AbstractDictionary implements IConfigurable {
 		use LazyResourceManagerTrait;
 		use CacheTrait;
+		use ConfigurableTrait;
 		/**
 		 * @var IFile[]
 		 */
@@ -38,14 +41,9 @@
 			return $this;
 		}
 
-		protected function onBootstrap() {
-			parent::onBootstrap();
-			$this->cache();
-		}
-
-		protected function onPrepare() {
-			parent::onPrepare();
-			if (($this->translationList = $this->cache->load($cacheId = implode(',', array_keys($this->fileList)))) === null) {
+		protected function handleSetup() {
+			$cache = $this->cache();
+			if (($this->translationList = $cache->load($cacheId = implode(',', array_keys($this->fileList)))) === null) {
 				foreach ($this->fileList as $file) {
 					$file->open('r');
 					/** @var $langList array */
@@ -62,7 +60,7 @@
 						$iterator->next();
 					}
 				}
-				$this->cache->save($cacheId, $this->translationList);
+				$cache->save($cacheId, $this->translationList);
 			}
 		}
 	}

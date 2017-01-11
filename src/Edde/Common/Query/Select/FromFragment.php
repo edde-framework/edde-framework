@@ -3,11 +3,14 @@
 
 	namespace Edde\Common\Query\Select;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Node\INode;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractFragment;
 
-	class FromFragment extends AbstractFragment {
+	class FromFragment extends AbstractFragment implements IConfigurable {
+		use ConfigurableTrait;
 		/**
 		 * @var SelectQuery
 		 */
@@ -60,8 +63,7 @@
 			return $this->selectQuery->order();
 		}
 
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function handleInit() {
 			$this->joinFragment = new JoinFragment($this->node);
 		}
 	}

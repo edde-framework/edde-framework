@@ -3,11 +3,13 @@
 
 	namespace Edde\Common\Html\Macro;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Crypt\LazyCryptEngineTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelper;
 	use Edde\Api\Template\MacroException;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Strings\StringException;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\HelperSet;
@@ -15,8 +17,9 @@
 	/**
 	 * Macro for loop support.
 	 */
-	class LoopMacro extends AbstractHtmlMacro implements IHelper {
+	class LoopMacro extends AbstractHtmlMacro implements IHelper, IConfigurable {
 		use LazyCryptEngineTrait;
+		use ConfigurableTrait;
 
 		/**
 		 * You never finish a program, you just stop working on it.
@@ -115,8 +118,7 @@
 			return var_export($src, true);
 		}
 
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function handleInit() {
 			$this->helperSet = new HelperSet();
 			$this->helperSet->registerHelper($this);
 		}

@@ -11,7 +11,6 @@
 	 * Htm table header cell control (th).
 	 */
 	class TableHeaderControl extends AbstractHtmlControl {
-		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws HtmlException
@@ -23,8 +22,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function handleInit() {
+			parent::handleInit();
 			parent::setTag('th', true);
 		}
 	}

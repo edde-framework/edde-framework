@@ -4,6 +4,7 @@
 	namespace Edde\Common\Event\Handler;
 
 	use Edde\Api\Callback\IParameter;
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEvent;
 	use Edde\Common\Callback\Callback;
@@ -13,7 +14,7 @@
 	/**
 	 * Simple lamda handler.
 	 */
-	class CallableHandler extends AbstractHandler {
+	class CallableHandler extends AbstractHandler implements IConfigurable {
 		use ConfigurableTrait;
 		/**
 		 * @var callable
@@ -49,8 +50,7 @@
 		 * @inheritdoc
 		 * @throws EventException
 		 */
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function handleInit() {
 			$callback = new Callback($this->callable);
 			$parameterList = $callback->getParameterList();
 			if (count($parameterList) !== 1) {

@@ -12,10 +12,10 @@
 	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\ResourceException;
-	use Edde\Common\Object;
 	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
+	use Edde\Common\Object;
 
 	/**
 	 * Simple and uniform way how to handle file storing.
@@ -32,7 +32,6 @@
 		 * @throws FileException
 		 */
 		public function store(IResource $resource) {
-			$this->config();
 			$url = $resource->getUrl();
 			$directory = $this->storageDirectory->directory(sha1(dirname($url->getPath())));
 			try {
@@ -45,7 +44,6 @@
 		}
 
 		public function allocate(string $name): IFile {
-			$this->config();
 			return $this->assetDirectory->file($name);
 		}
 
@@ -53,15 +51,19 @@
 		 * @inheritdoc
 		 * @throws ResourceException
 		 */
-		protected function onBootstrap() {
-			parent::onBootstrap();
-			$this->assetDirectory->create();
-			$this->storageDirectory->create();
+		protected function handleInit() {
+			$this->assetDirectory->normalize();
+			$this->storageDirectory->normalize();
 			if (strpos($this->assetDirectory->getDirectory(), $this->rootDirectory->getDirectory()) === false) {
 				throw new ResourceException(sprintf('Asset path [%s] is not in the given root [%s].', $this->assetDirectory, $this->rootDirectory));
 			}
 			if (strpos($this->storageDirectory->getDirectory(), $this->assetDirectory->getDirectory()) === false) {
 				throw new ResourceException(sprintf('Storage path [%s] is not in the given root [%s].', $this->storageDirectory, $this->rootDirectory));
 			}
+		}
+
+		protected function handleConfig() {
+			$this->assetDirectory->create();
+			$this->storageDirectory->create();
 		}
 	}

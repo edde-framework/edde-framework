@@ -3,9 +3,10 @@
 
 	namespace Edde\Api\Crate;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Schema\ISchema;
 
-	interface ICrateGenerator {
+	interface ICrateGenerator extends IConfigurable {
 		/**
 		 * generate source class (php source code) for the given schema
 		 *

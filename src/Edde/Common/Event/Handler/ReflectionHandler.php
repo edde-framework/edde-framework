@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Event\Handler;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEvent;
 	use Edde\Common\Container\ConfigurableTrait;
@@ -11,7 +12,7 @@
 	/**
 	 * This should take instance on input and return all methods accepting exactly one IEvent parameter.
 	 */
-	class ReflectionHandler extends AbstractHandler {
+	class ReflectionHandler extends AbstractHandler implements IConfigurable {
 		use ConfigurableTrait;
 
 		protected $handler;
@@ -49,8 +50,7 @@
 		 * @inheritdoc
 		 * @throws EventException
 		 */
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function handleInit() {
 			/**
 			 * @var $cache \ReflectionMethod[][][]
 			 */

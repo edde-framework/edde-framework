@@ -41,8 +41,8 @@
 			return $this;
 		}
 
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function handleInit() {
+			parent::handleInit();
 			$this->setTag('div', true)
 				->addClass('button');
 		}

@@ -3,19 +3,20 @@
 
 	namespace Edde\Common\Translator;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Translator\IDictionary;
 	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Translator\TranslatorException;
-	use Edde\Common\Object;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Object;
 
 	/**
 	 * General class for translations support.
 	 */
-	class Translator extends Object implements ITranslator {
+	class Translator extends Object implements ITranslator, IConfigurable {
 		use LazyConverterManagerTrait;
 		use CacheTrait;
 		use ConfigurableTrait;
@@ -49,7 +50,7 @@
 		public function registerSource(IFile $source, string $scope = null): ITranslator {
 			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
 			$scope = $scope ?: ($this->scopeStack->isEmpty() ? null : $this->scopeStack->top());
-			if ($this->isCofnigured()) {
+			if ($this->isConfigured()) {
 				$this->registerDictionary($this->converterManager->convert($source, $source->getMime(), IDictionary::class), $scope);
 				return $this;
 			}
@@ -97,11 +98,11 @@
 		 * @throws TranslatorException
 		 */
 		public function translate(string $id, string $scope = null, string $language = null): string {
-			$this->config();
 			if (($language = $language ?: $this->language) === null) {
 				throw new TranslatorException('Cannot use translator without set language.');
 			}
-			if (($string = $this->cache->load($cacheId = ($id . $language . ($scope = $scope ?: $this->scopeStack->top())))) !== null) {
+			$cache = $this->cache();
+			if (($string = $cache->load($cacheId = ($id . $language . ($scope = $scope ?: $this->scopeStack->top())))) !== null) {
 				return $string;
 			}
 			if (isset($this->dictionaryList[$scope]) === false) {
@@ -109,19 +110,13 @@
 			}
 			foreach ($this->dictionaryList[$scope] as $dictionary) {
 				if (($string = $dictionary->translate($id, $language)) !== null) {
-					return $this->cache->save($cacheId, $string);
+					return $cache->save($cacheId, $string);
 				}
 			}
 			throw new TranslatorException(sprintf('Cannot translate [%s]; the given id is not available in no dictionary.', $id));
 		}
 
-		protected function onBootstrap() {
-			parent::onBootstrap();
-			$this->cache();
-		}
-
-		protected function onPrepare() {
-			parent::onPrepare();
+		protected function handleSetup() {
 			if ($this->scopeStack->isEmpty()) {
 				$this->scopeStack->push(null);
 			}
