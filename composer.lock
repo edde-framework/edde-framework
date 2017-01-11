@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "394394d0370e46ddf47310dbd70388c4",
-    "content-hash": "ab16b015ee8a84fdcb2a840a5498a48a",
+    "content-hash": "2e877a7e5302ed381d4a43da69909b8c",
     "packages": [
         {
             "name": "defuse/php-encryption",
@@ -64,7 +63,7 @@
                 "security",
                 "symmetric key cryptography"
             ],
-            "time": "2016-10-10 15:20:26"
+            "time": "2016-10-10T15:20:26+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -121,63 +120,6 @@
             "time": "2016-03-31 10:24:22"
         },
         {
-            "name": "fgrosse/phpasn1",
-            "version": "dev-compat/php5-5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fgrosse/PHPASN1.git",
-                "reference": "7f7b25ee26bc5bdba6fdcf97d3dc2f8f86bea629"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fgrosse/PHPASN1/zipball/7f7b25ee26bc5bdba6fdcf97d3dc2f8f86bea629",
-                "reference": "7f7b25ee26bc5bdba6fdcf97d3dc2f8f86bea629",
-                "shasum": ""
-            },
-            "require": {
-                "ext-gmp": "*",
-                "php": ">=5.5.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.5",
-                "satooshi/php-coveralls": "dev-master"
-            },
-            "suggest": {
-                "php-curl": "For loading OID information from the web if they have not bee defined statically"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.5.x-dev",
-                    "dev-compat/php5-5": "1.5.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "FG\\": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Friedrich Große",
-                    "email": "friedrich.grosse@gmail.com",
-                    "homepage": "https://github.com/FGrosse",
-                    "role": "Author"
-                },
-                {
-                    "name": "All contributors",
-                    "homepage": "https://github.com/FGrosse/PHPASN1/contributors"
-                }
-            ],
-            "description": "A PHP Framework that allows you to encode and decode arbitrary ASN.1 structures using the ITU-T X.690 Encoding Rules.",
-            "homepage": "https://github.com/FGrosse/PHPASN1",
-            "time": "2015-09-30 18:31:02"
-        },
-        {
             "name": "myclabs/deep-copy",
             "version": "1.5.5",
             "source": {
@@ -217,7 +159,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2016-10-31 17:19:45"
+            "time": "2016-10-31T17:19:45+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -329,7 +271,7 @@
                 "hex2bin",
                 "rfc4648"
             ],
-            "time": "2016-07-11 20:32:06"
+            "time": "2016-07-11T20:32:06+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -377,7 +319,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2016-11-07 23:38:38"
+            "time": "2016-11-07T23:38:38+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -440,12 +382,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phar-io/version.git",
-                "reference": "8129d823903ed6f81f84362c6fef02aab4269fb2"
+                "reference": "7161fa8ada17ca4c19906faa93b9481c037e7cac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/version/zipball/8129d823903ed6f81f84362c6fef02aab4269fb2",
-                "reference": "8129d823903ed6f81f84362c6fef02aab4269fb2",
+                "url": "https://api.github.com/repos/phar-io/version/zipball/7161fa8ada17ca4c19906faa93b9481c037e7cac",
+                "reference": "7161fa8ada17ca4c19906faa93b9481c037e7cac",
                 "shasum": ""
             },
             "require": {
@@ -487,7 +429,7 @@
                 }
             ],
             "description": "Library for handling version information and constraints",
-            "time": "2016-12-02 09:56:56"
+            "time": "2017-01-10 22:03:33"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -586,7 +528,7 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2016-09-30 07:12:33"
+            "time": "2016-09-30T07:12:33+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -633,7 +575,7 @@
                     "email": "me@mikevanriel.com"
                 }
             ],
-            "time": "2016-11-25 06:54:22"
+            "time": "2016-11-25T06:54:22+00:00"
         },
         {
             "name": "phpspec/prophecy",
@@ -846,7 +788,7 @@
             "keywords": [
                 "template"
             ],
-            "time": "2015-06-21 13:50:34"
+            "time": "2015-06-21T13:50:34+00:00"
         },
         {
             "name": "phpunit/php-timer",
@@ -890,7 +832,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2016-05-12 18:03:57"
+            "time": "2016-05-12T18:03:57+00:00"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -1211,7 +1153,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2017-01-09 15:59:17"
+            "time": "2017-01-09T15:59:17+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -1902,7 +1844,7 @@
                 }
             ],
             "description": "A fast Documentation generator for PHP Code using standard technology (SRC, DOCBLOCK, XML and XSLT) with event based processing",
-            "time": "2016-08-26 16:18:10"
+            "time": "2016-08-26T16:18:10+00:00"
         },
         {
             "name": "webmozart/assert",
