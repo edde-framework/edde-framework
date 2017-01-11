@@ -20,6 +20,7 @@
 		 * @var string
 		 */
 		protected $method;
+		protected $parameterList;
 
 		/**
 		 * A bus full of Nuns falls of a cliff and they all die.
@@ -35,11 +36,13 @@
 		 * @param string $name
 		 * @param string $target
 		 * @param string $method
+		 * @param array  $parameterList
 		 */
-		public function __construct(string $name, string $target, string $method) {
+		public function __construct(string $name, string $target, string $method, array $parameterList = []) {
 			$this->name = $name;
 			$this->target = $target;
 			$this->method = $method;
+			$this->parameterList = $parameterList;
 		}
 
 		public function canHandle(IContainer $container, string $dependency): bool {
@@ -54,6 +57,6 @@
 		public function execute(IContainer $container, array $parameterList, string $name = null) {
 			$method = $this->method;
 			return $container->create($this->target, $parameterList, $this->name)
-				->{$method}();
+				->{$method}(...$this->parameterList);
 		}
 	}

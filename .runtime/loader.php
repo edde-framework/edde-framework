@@ -5,9 +5,11 @@
 	declare(strict_types = 1);
 
 	use Edde\Api\Converter\IConverterManager;
+	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Router\IRouterService;
 	use Edde\App\Converter\ConverterManagerConfigHandler;
 	use Edde\App\Router\RouterServiceConfigHandler;
+	use Edde\Common\File\RootDirectory;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Framework;
@@ -26,8 +28,7 @@
 
 	/** @noinspection PhpIncludeInspection */
 	return ContainerFactory::cache($factoryList = array_merge(ContainerFactory::getDefaultFactoryList(), [
-		// custom factories
-//		IRootDirectory::class => ContainerFactory::instance(RootDirectory::class, [__DIR__]),
+		IRootDirectory::class => ContainerFactory::instance(RootDirectory::class, [__DIR__]),
 	], is_array($local = @include __DIR__ . '/loader.local.php') ? $local : [], [
 		new ClassFactory(),
 	]), [

@@ -81,7 +81,19 @@
 			$factories = [];
 			foreach ($factoryList as $name => $factory) {
 				$current = null;
-				if (is_string($factory) && strpos($factory, '::') !== false) {
+				if ($factory instanceof \stdClass) {
+					switch ($factory->type) {
+						case 'instance':
+							$current = new InstanceFactory($name, $factory->class, $factory->parameterList);
+							break;
+						case 'exception':
+							$current = new ExceptionFactory($name, $factory->message, $factory->class);
+							break;
+						case 'proxy':
+							$current = new ProxyFactory($name, $factory->factory, $factory->method, $factory->parameterList);
+							break;
+					}
+				} else if (is_string($factory) && strpos($factory, '::') !== false) {
 					list($target, $method) = explode('::', $factory);
 					$reflectionMethod = new \ReflectionMethod($target, $method);
 					$current = new ProxyFactory($name, $target, $method);
