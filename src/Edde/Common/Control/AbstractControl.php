@@ -4,6 +4,7 @@
 	namespace Edde\Common\Control;
 
 	use Edde\Api\Callback\ICallback;
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Control\ControlException;
 	use Edde\Api\Control\IControl;
@@ -11,11 +12,6 @@
 	use Edde\Api\Node\NodeException;
 	use Edde\Common\Callback\Callback;
 	use Edde\Common\Container\ConfigurableTrait;
-	use Edde\Common\Control\Event\CancelEvent;
-	use Edde\Common\Control\Event\DoneEvent;
-	use Edde\Common\Control\Event\HandleEvent;
-	use Edde\Common\Control\Event\UpdateEvent;
-	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Object;
@@ -24,9 +20,9 @@
 	/**
 	 * Root implementation of all controls.
 	 */
-	abstract class AbstractControl extends Object implements IControl {
+	abstract class AbstractControl extends Object implements IConfigurable, IControl {
 		use LazyContainerTrait;
-		use EventTrait;
+//		use EventTrait;
 		use ConfigurableTrait;
 		/**
 		 * @var INode
@@ -37,7 +33,6 @@
 		 * @inheritdoc
 		 */
 		public function getNode(): INode {
-			$this->config();
 			return $this->node;
 		}
 
@@ -45,7 +40,6 @@
 		 * @inheritdoc
 		 */
 		public function getRoot(): IControl {
-			$this->config();
 			if ($this->node->isRoot()) {
 				return $this;
 			}
@@ -58,7 +52,6 @@
 		 * @inheritdoc
 		 */
 		public function getParent() {
-			$this->config();
 			$parent = $this->node->getParent();
 			return $parent ? $parent->getMeta('control') : null;
 		}
@@ -67,7 +60,6 @@
 		 * @inheritdoc
 		 */
 		public function isLeaf(): bool {
-			$this->config();
 			return $this->node->isLeaf();
 		}
 
@@ -75,7 +67,6 @@
 		 * @inheritdoc
 		 */
 		public function disconnect(): IControl {
-			$this->config();
 			if ($this->node->isRoot() === false) {
 				$this->node->getParent()
 					->removeNode($this->node);
@@ -97,7 +88,6 @@
 		 * @inheritdoc
 		 */
 		public function addControl(IControl $control): IControl {
-			$this->config();
 			$this->node->addNode($control->getNode(), true);
 			$control->attached($this);
 			return $this;
@@ -114,7 +104,6 @@
 		 * @inheritdoc
 		 */
 		public function isDirty(): bool {
-			$this->config();
 			return $this->node->getMeta('dirty', false);
 		}
 
@@ -122,7 +111,6 @@
 		 * @inheritdoc
 		 */
 		public function dirty(bool $dirty = true): IControl {
-			$this->config();
 			$this->node->setMeta('dirty', $dirty);
 			return $this;
 		}
@@ -142,7 +130,6 @@
 		 * @inheritdoc
 		 */
 		public function invalidate(): array {
-			$this->config();
 			$invalidList = [];
 			foreach ($this as $control) {
 				if ($control->isDirty()) {
@@ -156,8 +143,7 @@
 		 * @inheritdoc
 		 */
 		public function update(): IControl {
-			$this->config();
-			$this->event(new UpdateEvent($this));
+//			$this->event(new UpdateEvent($this));
 			foreach ($this->getControlList() as $control) {
 				$control->update();
 			}
@@ -169,7 +155,6 @@
 		 * @throws ControlException
 		 */
 		public function fill($fill): IControl {
-			$this->config();
 			$reflectionClass = new \ReflectionClass($this);
 			/** @noinspection ForeachSourceInspection */
 			foreach ($fill as $k => $v) {
@@ -188,15 +173,14 @@
 		 * @throws ControlException
 		 */
 		public function handle(string $method, array $parameterList) {
-			$this->config();
-			$this->event($handleEvent = new HandleEvent($this, $method, $parameterList));
-			if ($handleEvent->isCanceled()) {
-				$this->event(new CancelEvent($this));
-				return null;
-			}
+//			$this->event($handleEvent = new HandleEvent($this, $method, $parameterList));
+//			if ($handleEvent->isCanceled()) {
+//				$this->event(new CancelEvent($this));
+//				return null;
+//			}
 			$result = $this->execute($method, $parameterList);
 			$this->update();
-			$this->event(new DoneEvent($this, $result));
+//			$this->event(new DoneEvent($this, $result));
 			return $result;
 		}
 
@@ -259,7 +243,6 @@
 		 * @throws NodeException
 		 */
 		public function getIterator() {
-			$this->config();
 			foreach (NodeIterator::recursive($this->node, true) as $node) {
 				yield $node->getMeta('control');
 			}
@@ -269,8 +252,7 @@
 		 * @inheritdoc
 		 */
 		protected function handleInit() {
-//			parent::handleInit();
-			$this->listen($this);
+//			$this->listen($this);
 			$this->node = new Node();
 			$this->node->setMeta('control', $this);
 		}

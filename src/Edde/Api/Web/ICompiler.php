@@ -27,5 +27,5 @@
 		 *
 		 * @return IFile
 		 */
-		public function compile(IResourceList $resourceList): IFile;
+		public function compile(IResourceList $resourceList = null): IFile;
 	}

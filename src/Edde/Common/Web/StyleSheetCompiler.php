@@ -35,9 +35,10 @@
 		 * @throws StringException
 		 * @throws FileException
 		 */
-		public function compile(IResourceList $resourceList): IFile {
+		public function compile(IResourceList $resourceList = null): IFile {
 			$content = [];
 			$pathList = [];
+			$resourceList = $resourceList ?: $this;
 			if (($file = $this->cache->load($cacheId = $resourceList->getResourceName())) === null) {
 				foreach ($resourceList as $resource) {
 					if ($resource->isAvailable() === false) {

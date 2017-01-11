@@ -3,14 +3,13 @@
 
 	namespace Edde\Api\Control;
 
-	use Edde\Api\Event\IEventBus;
 	use Edde\Api\Node\INode;
 
 	/**
 	 * Control is general element for transfering incoming request into the internal system service and for
 	 * generating response.
 	 */
-	interface IControl extends IEventBus, \IteratorAggregate {
+	interface IControl extends \IteratorAggregate {
 		/**
 		 * return node of this control
 		 *

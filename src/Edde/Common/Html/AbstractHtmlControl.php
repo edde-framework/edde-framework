@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Html;
 
+	use Edde\Api\Control\IControl;
 	use Edde\Api\Crypt\LazyCryptEngineTrait;
 	use Edde\Api\File\FileException;
 	use Edde\Api\Html\IHtmlControl;
@@ -21,7 +22,6 @@
 		use LazyCryptEngineTrait;
 
 		public function setTag(string $tag, bool $pair = true): IHtmlControl {
-			$this->config();
 			$this->node->addMetaList([
 				'tag' => $tag,
 				'pair' => $pair,
@@ -30,7 +30,6 @@
 		}
 
 		public function setId(string $id) {
-			$this->config();
 			$this->setAttribute('id', $id);
 			return $this;
 		}
@@ -39,7 +38,6 @@
 		 * @inheritdoc
 		 */
 		public function setAttribute($attribute, $value) {
-			$this->config();
 			/** @noinspection DegradedSwitchInspection */
 			switch ($attribute) {
 				case 'class':
@@ -55,7 +53,6 @@
 		 * @inheritdoc
 		 */
 		public function addAttribute(string $attribute, $value) {
-			$this->config();
 			$attributeList = $this->node->getAttributeList();
 			$attributeList[$attribute][] = $value;
 			$this->node->setAttributeList($attributeList);
@@ -99,7 +96,6 @@
 		 * @inheritdoc
 		 */
 		public function getId(): string {
-			$this->config();
 			return $this->getAttribute('id', '');
 		}
 
@@ -107,7 +103,6 @@
 		 * @inheritdoc
 		 */
 		public function getAttribute(string $name, $default = '') {
-			$this->config();
 			return $this->node->getAttribute($name, $default);
 		}
 
@@ -115,13 +110,11 @@
 		 * @inheritdoc
 		 */
 		public function setText(string $text) {
-			$this->config();
 			$this->node->setValue($text);
 			return $this;
 		}
 
 		public function getText(): string {
-			$this->config();
 			return $this->node->getValue('');
 		}
 
@@ -129,7 +122,6 @@
 		 * @inheritdoc
 		 */
 		public function addAttributeList(array $attributeList): IHtmlControl {
-			$this->config();
 			$this->node->addAttributeList($attributeList);
 			return $this;
 		}
@@ -138,7 +130,6 @@
 		 * @inheritdoc
 		 */
 		public function setAttributeList(array $attributeList): IHtmlControl {
-			$this->config();
 			/**
 			 * intentional loop, because control can simply alter attributes
 			 */
@@ -152,12 +143,10 @@
 		 * @inheritdoc
 		 */
 		public function hasAttribute($attribute) {
-			$this->config();
 			return $this->node->hasAttribute($attribute);
 		}
 
 		public function toggleClass(string $class, bool $enable = null): IHtmlControl {
-			$this->config();
 			$hasClass = $this->hasClass($class);
 			if ($enable === null) {
 				if ($hasClass === false) {
@@ -177,7 +166,6 @@
 		 * @inheritdoc
 		 */
 		public function hasClass(string $class) {
-			$this->config();
 			return in_array($class, $this->getClassList(), true);
 		}
 
@@ -185,7 +173,6 @@
 		 * @inheritdoc
 		 */
 		public function getClassList() {
-			$this->config();
 			return $this->getAttribute('class', []);
 		}
 
@@ -202,7 +189,6 @@
 		}
 
 		public function removeClass(string $class) {
-			$this->config();
 			$diff = array_diff($this->getClassList(), [$class]);
 			$this->node->removeAttribute('class');
 			if (empty($diff) === false) {
@@ -215,7 +201,6 @@
 		 * @inheritdoc
 		 */
 		public function render(int $indent = 0): string {
-			$this->config();
 			$content = [];
 			/** @var $control IHtmlControl */
 			if (($tag = $this->getTag()) === null) {
@@ -259,7 +244,6 @@
 		 * @inheritdoc
 		 */
 		public function getTag(): string {
-			$this->config();
 			return $this->node->getMeta('tag');
 		}
 
@@ -267,7 +251,6 @@
 		 * @inheritdoc
 		 */
 		public function getAttributeList(): array {
-			$this->config();
 			return $this->node->getAttributeList();
 		}
 
@@ -284,7 +267,6 @@
 		 * @inheritdoc
 		 */
 		public function isPair(): bool {
-			$this->config();
 			return $this->node->getMeta('pair', true);
 		}
 
@@ -292,5 +274,14 @@
 			return $this->addControl($this->createControl(PlaceholderControl::class)
 				->setId($id)
 				->dirty());
+		}
+
+		/**
+		 * @inheritdoc
+		 *
+		 * @return IHtmlControl|IControl
+		 */
+		public function createControl(string $control, ...$parameterList): IControl {
+			return parent::createControl($control, ...$parameterList);
 		}
 	}

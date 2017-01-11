@@ -60,8 +60,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function onBootstrap() {
-			parent::onBootstrap();
+		protected function handleInit() {
+			parent::handleInit();
 			$this->addControl($this->createControl(MetaControl::class)
 				->setAttribute('charset', 'utf-8'));
 			$this->addControl($this->title = $this->createControl(TitleControl::class));
