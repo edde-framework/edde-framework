@@ -9,8 +9,8 @@
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\ResourceManagerException;
-	use Edde\Common\Object;
 	use Edde\Common\File\File;
+	use Edde\Common\Object;
 	use Edde\Common\Url\Url;
 
 	/**
@@ -34,6 +34,7 @@
 		 */
 		public function resource(IResource $resource, string $mime = null, INode $root = null): INode {
 			$mime = $mime ?: $resource->getMime();
+			$this->converterManager->setup();
 			/** @var $node INode */
 			if (($node = $this->converterManager->convert($resource, $mime, INode::class)) instanceof INode === false) {
 				throw new ResourceManagerException(sprintf('Convertion has failed: converter for [%s] did not returned an instance of [%s].', $mime, INode::class));

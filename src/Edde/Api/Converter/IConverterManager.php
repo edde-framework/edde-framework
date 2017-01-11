@@ -3,7 +3,9 @@
 
 	namespace Edde\Api\Converter;
 
-	interface IConverterManager {
+	use Edde\Api\Container\IConfigurable;
+
+	interface IConverterManager extends IConfigurable {
 		/**
 		 * register a converter
 		 *

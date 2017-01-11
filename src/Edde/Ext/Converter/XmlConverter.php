@@ -26,7 +26,7 @@
 		public function __construct() {
 			$this->register([
 				'text/xml',
-				'applicaiton/xml',
+				'application/xml',
 				'xml',
 			], INode::class);
 		}

@@ -15,6 +15,7 @@
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\MacroException;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Object;
 	use Edde\Common\Reflection\ReflectionUtils;
 
@@ -26,6 +27,7 @@
 		use LazyResourceManagerTrait;
 		use LazyCryptEngineTrait;
 		use LazyRootDirectoryTrait;
+		use ConfigurableTrait;
 		/**
 		 * @var IFile
 		 */
@@ -162,7 +164,8 @@
 				}
 				return $this->macro($this->file($this->source));
 			} catch (\Exception $exception) {
-				$root = $this->rootDirectory->getDirectory();
+				$root = $this->rootDirectory->normalize()
+					->getDirectory();
 				/**
 				 * Ugly hack to set exception message without messing with a trace.
 				 */
@@ -280,9 +283,14 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function prepare() {
-			parent::prepare();
+		protected function handleInit() {
 			$this->stack = new \SplStack();
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		protected function handleSetup() {
 			foreach ($this->macroList as $macro) {
 				if ($macro->hasHelperSet()) {
 					$this->registerHelperSet($macro->getHelperSet());

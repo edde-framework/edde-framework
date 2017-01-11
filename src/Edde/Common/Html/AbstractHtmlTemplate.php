@@ -39,16 +39,16 @@
 		static public function template(IFile $file, IContainer $container): IHtmlTemplate {
 			/** @noinspection UnnecessaryParenthesesInspection */
 			(function (IUrl $url) {
+				/** @noinspection PhpIncludeInspection */
 				require_once $url->getAbsoluteUrl();
 			})($file->getUrl());
-			$class = str_replace('.php', '', $file->getName());
-//			return $container->inject(new $class(),);
+			return $container->create(str_replace('.php', '', $file->getName()));
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function embedd(IHtmlTemplate $htmlTemplate): IHtmlTemplate {
+		public function embed(IHtmlTemplate $htmlTemplate): IHtmlTemplate {
 			foreach ($htmlTemplate->getBlockList() as $block) {
 				$this->embeddedList[$block] = $htmlTemplate;
 			}

@@ -3,10 +3,11 @@
 
 	namespace Edde\Api\Template;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 
-	interface ICompiler {
+	interface ICompiler extends IConfigurable {
 		/**
 		 * use the given macroset
 		 *

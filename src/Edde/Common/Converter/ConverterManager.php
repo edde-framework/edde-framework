@@ -6,8 +6,8 @@
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Converter\IConverter;
 	use Edde\Api\Converter\IConverterManager;
-	use Edde\Common\Object;
 	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Object;
 
 	/**
 	 * Default implementation of a convertion manager.

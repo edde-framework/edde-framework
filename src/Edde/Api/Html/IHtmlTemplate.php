@@ -18,13 +18,13 @@
 		public function snippet(IHtmlControl $root, string $snippet = null): IHtmlControl;
 
 		/**
-		 * embedd the given html template (import it's block list)
+		 * embed the given html template (import it's block list)
 		 *
 		 * @param IHtmlTemplate $htmlTemplate
 		 *
 		 * @return IHtmlTemplate
 		 */
-		public function embedd(IHtmlTemplate $htmlTemplate): IHtmlTemplate;
+		public function embed(IHtmlTemplate $htmlTemplate): IHtmlTemplate;
 
 		/**
 		 * similar to snippet; block name is searched in all currently embedded templates

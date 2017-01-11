@@ -7,8 +7,8 @@
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\ResourceException;
 	use Edde\Api\Url\IUrl;
-	use Edde\Common\Object;
 	use Edde\Common\File\FileUtils;
+	use Edde\Common\Object;
 
 	/**
 	 * Abstract definition of some "resource".
@@ -58,11 +58,11 @@
 		 * @throws ResourceException
 		 */
 		public function getRelativePath(string $base = null) {
-			if ($this->base === null && $base === null) {
+			if (($base = $base ?: $this->base) === null) {
 				throw new ResourceException(sprintf('Cannot compute relative path of a resource [%s]; there is not base path.', $this->url->getPath()));
 			}
 			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
-			if (strpos($path = $this->url->getPath(), $base = $base ?: $this->base) === false) {
+			if (strpos($path = $this->url->getPath(), $base) === false) {
 				throw new ResourceException(sprintf('Cannot compute relative path of resource; given base path [%s] is not subset of the current path [%s].', $base, $path));
 			}
 			return str_replace($base, null, $path);

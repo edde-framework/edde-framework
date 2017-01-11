@@ -47,7 +47,7 @@
 			$this->write($compiler, ' */', 1);
 			$this->write($compiler, sprintf('class %s extends %s {', $class, AbstractHtmlTemplate::class), 1);
 			$this->write($compiler, sprintf("public function snippet(%s \$root, string \$snippet = null): %s {", IHtmlControl::class, IHtmlControl::class), 2);
-			$this->write($compiler, '$this->embedd($this);', 3);
+			$this->write($compiler, '$this->embed($this);', 3);
 			$this->write($compiler, sprintf("\$stack = new SplStack();
 			\$stack->push(\$control = \$parent = \$root);
 			switch (\$snippet) {

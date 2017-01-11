@@ -37,6 +37,7 @@
 			unset($import);
 			$compiler->registerMacroSet($this->macroSet);
 			$compiler->registerHelperSet($this->helperSet);
+			$compiler->setup();
 			return $cache->save($cacheId, $compiler->template($importList));
 		}
 	}
