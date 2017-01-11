@@ -3,19 +3,72 @@
 
 	namespace Edde\Ext\Container;
 
+	use Edde\Api\Application\IApplication;
+	use Edde\Api\Application\IRequest;
+	use Edde\Api\Application\IResponseManager;
+	use Edde\Api\Asset\IAssetDirectory;
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheable;
+	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
+	use Edde\Api\Converter\IConverterManager;
+	use Edde\Api\EddeException;
+	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\File\ITempDirectory;
+	use Edde\Api\Html\ITemplateDirectory;
+	use Edde\Api\Http\ICookieFactory;
+	use Edde\Api\Http\ICookieList;
+	use Edde\Api\Http\IHeaderFactory;
+	use Edde\Api\Http\IHeaderList;
+	use Edde\Api\Http\IHttpRequest;
+	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Http\IPostFactory;
+	use Edde\Api\Http\IPostList;
+	use Edde\Api\Http\IRequestUrl;
+	use Edde\Api\Http\IRequestUrlFactory;
+	use Edde\Api\Log\ILogService;
+	use Edde\Api\Resource\IResourceManager;
+	use Edde\Api\Router\IRouterService;
+	use Edde\Api\Runtime\IRuntime;
+	use Edde\Api\Template\IHelperSet;
+	use Edde\Api\Template\IMacroSet;
+	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Web\IJavaScriptCompiler;
+	use Edde\Api\Web\IStyleSheetCompiler;
+	use Edde\Api\Xml\IXmlParser;
+	use Edde\Common\Application\Application;
+	use Edde\Common\Application\ResponseManager;
+	use Edde\Common\Asset\AssetDirectory;
 	use Edde\Common\Cache\Cache;
+	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Container\Container;
+	use Edde\Common\Converter\ConverterManager;
+	use Edde\Common\File\TempDirectory;
+	use Edde\Common\Html\TemplateDirectory;
+	use Edde\Common\Http\CookieFactory;
+	use Edde\Common\Http\HeaderFactory;
+	use Edde\Common\Http\HttpRequest;
+	use Edde\Common\Http\HttpResponse;
+	use Edde\Common\Http\PostFactory;
+	use Edde\Common\Http\RequestUrlFactory;
+	use Edde\Common\Log\LogService;
 	use Edde\Common\Object;
+	use Edde\Common\Resource\ResourceManager;
+	use Edde\Common\Router\RouterService;
+	use Edde\Common\Runtime\Runtime;
+	use Edde\Common\Template\TemplateManager;
+	use Edde\Common\Web\JavaScriptCompiler;
+	use Edde\Common\Web\StyleSheetCompiler;
+	use Edde\Common\Xml\XmlParser;
+	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
+	use Edde\Ext\Template\DefaultMacroSet;
 
 	class ContainerFactory extends Object {
 		/**
@@ -133,5 +186,101 @@
 				file_put_contents($cache, serialize($container));
 			}, $container = self::container($factoryList, $configHandlerList, $cacheId), $cacheId);
 			return $container;
+		}
+
+		/**
+		 * create instance factory
+		 *
+		 * @param string $class
+		 * @param array  $parameterList
+		 *
+		 * @return object
+		 */
+		static public function instance(string $class, array $parameterList) {
+			return (object)[
+				'type' => __FUNCTION__,
+				'class' => $class,
+				'parameterList' => $parameterList,
+			];
+		}
+
+		/**
+		 * special kind of factory which will thrown an exception of the given message; it's useful for say which internal dependencies are not met
+		 *
+		 * @param string $message
+		 *
+		 * @return object
+		 */
+		static public function exception(string $message, string $class = null) {
+			return (object)[
+				'type' => __FUNCTION__,
+				'message' => $message,
+				'class' => $class ?: EddeException::class,
+			];
+		}
+
+		/**
+		 * create proxy call factory
+		 *
+		 * @param string $factory
+		 * @param string $method
+		 * @param array  $parameterList
+		 *
+		 * @return object
+		 */
+		static public function proxy(string $factory, string $method, array $parameterList) {
+			return (object)[
+				'type' => __FUNCTION__,
+				'factory' => $factory,
+				'method' => $method,
+				'parameterList' => $parameterList,
+			];
+		}
+
+		static public function getDefaultFactoryList(): array {
+			return [
+				IRootDirectory::class => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
+				ITempDirectory::class => self::proxy(IRootDirectory::class, 'directory', [
+					'temp',
+					TempDirectory::class,
+				]),
+				ICacheDirectory::class => self::proxy(ITempDirectory::class, 'directory', [
+					'cache',
+					CacheDirectory::class,
+				]),
+				IAssetDirectory::class => self::proxy(IRootDirectory::class, 'directory', [
+					'.assets',
+					AssetDirectory::class,
+				]),
+				ITemplateDirectory::class => self::proxy(IAssetDirectory::class, 'directory', [
+					'template',
+					TemplateDirectory::class,
+				]),
+				ICacheStorage::class => FlatFileCacheStorage::class,
+				IRuntime::class => Runtime::class,
+				IHttpResponse::class => HttpResponse::class,
+				IApplication::class => Application::class,
+				ILogService::class => LogService::class,
+				IRouterService::class => RouterService::class,
+				IRequest::class => IRouterService::class . '::createRequest',
+				IPostFactory::class => PostFactory::class,
+				IPostList::class => IPostFactory::class . '::create',
+				ICookieFactory::class => CookieFactory::class,
+				ICookieList::class => ICookieFactory::class . '::create',
+				IRequestUrlFactory::class => RequestUrlFactory::class,
+				IRequestUrl::class => IRequestUrlFactory::class . '::create',
+				IHeaderFactory::class => HeaderFactory::class,
+				IHeaderList::class => IHeaderFactory::class . '::create',
+				IHttpRequest::class => HttpRequest::class,
+				IResponseManager::class => ResponseManager::class,
+				IXmlParser::class => XmlParser::class,
+				IConverterManager::class => ConverterManager::class,
+				IResourceManager::class => ResourceManager::class,
+				IStyleSheetCompiler::class => StyleSheetCompiler::class,
+				IJavaScriptCompiler::class => JavaScriptCompiler::class,
+				ITemplateManager::class => TemplateManager::class,
+				IMacroSet::class => DefaultMacroSet::class . '::macroSet',
+				IHelperSet::class => DefaultMacroSet::class . '::helperSet',
+			];
 		}
 	}
