@@ -157,6 +157,9 @@
 					$container->registerConfigHandler($name, $container->create($config, [], __METHOD__));
 				}
 			}
+			foreach ($factoryList as $factory) {
+				$container->autowire($factory, true);
+			}
 			return $container;
 		}
 
