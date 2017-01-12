@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Storage;
 
@@ -45,6 +45,7 @@
 				->getSchema();
 			$targetSchemaName = $targetSchema->getSchemaName();
 			$selectQuery = new SelectQuery();
+			$selectQuery->init();
 			$relationAlias = sha1(random_bytes(64));
 			$targetAlias = sha1(random_bytes(64));
 			foreach ($targetSchema->getPropertyList() as $schemaProperty) {
@@ -76,6 +77,7 @@
 			$schema = $schema ?: $crate;
 			if ($query === null) {
 				$query = new SelectQuery();
+				$query->init();
 				$query->select()
 					->all()
 					->from()
@@ -92,6 +94,7 @@
 			$link = $crate->getSchema()
 				->getLink($name);
 			$selectQuery = new SelectQuery();
+			$selectQuery->init();
 			$targetSchemaName = $link->getTarget()
 				->getSchema()
 				->getSchemaName();
