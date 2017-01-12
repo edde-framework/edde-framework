@@ -1,16 +1,18 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Database;
 
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Database\IDriver;
+	use Edde\Api\Database\LazyDsnTrait;
 	use Edde\Common\Object;
 
 	/**
 	 * Common stuff for database driver implementation.
 	 */
 	abstract class AbstractDriver extends Object implements IDriver {
+		use LazyDsnTrait;
 		/**
 		 * @var string[]
 		 */

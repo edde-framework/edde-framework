@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Container;
 
@@ -17,6 +17,8 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Converter\IConverterManager;
+	use Edde\Api\Database\IDriver;
+	use Edde\Api\Database\IDsn;
 	use Edde\Api\EddeException;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\File\ITempDirectory;
@@ -35,6 +37,7 @@
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Runtime\IRuntime;
+	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\ITemplateManager;
@@ -49,6 +52,7 @@
 	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Container\Container;
 	use Edde\Common\Converter\ConverterManager;
+	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\TemplateDirectory;
 	use Edde\Common\Http\CookieFactory;
@@ -68,6 +72,7 @@
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
+	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Template\DefaultMacroSet;
 
 	class ContainerFactory extends Object {
@@ -296,6 +301,9 @@
 				ITemplateManager::class => TemplateManager::class,
 				IMacroSet::class => DefaultMacroSet::class . '::macroSet',
 				IHelperSet::class => DefaultMacroSet::class . '::helperSet',
+				IStorage::class => DatabaseStorage::class,
+				IDriver::class => SqliteDriver::class,
+				IDsn::class => self::exception('Dsn configuration is missing; please define [%s] interface.', IDsn::class),
 			];
 		}
 	}
