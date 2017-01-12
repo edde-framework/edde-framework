@@ -309,7 +309,7 @@
 				IHelperSet::class => DefaultMacroSet::class . '::helperSet',
 				IStorage::class => DatabaseStorage::class,
 				IDriver::class => SqliteDriver::class,
-				IDsn::class => self::exception('Dsn configuration is missing; please define [%s] interface.', IDsn::class),
+				IDsn::class => self::exception(sprintf('Dsn configuration is missing; please define [%s] interface.', IDsn::class)),
 				ICrateFactory::class => CrateFactory::class,
 				ISchemaFactory::class => SchemaFactory::class,
 				ISchemaManager::class => SchemaManager::class,
