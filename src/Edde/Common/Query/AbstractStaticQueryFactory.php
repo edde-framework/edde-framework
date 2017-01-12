@@ -1,16 +1,18 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Query;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\INodeQuery;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Query\IStaticQueryFactory;
 	use Edde\Api\Query\StaticQueryException;
-	use Edde\Common\Object;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Node\NodeQuery;
+	use Edde\Common\Object;
 	use Edde\Common\Strings\StringUtils;
 	use ReflectionClass;
 	use ReflectionMethod;
@@ -18,7 +20,8 @@
 	/**
 	 * Helper class for IQL to string building.
 	 */
-	abstract class AbstractStaticQueryFactory extends Object implements IStaticQueryFactory {
+	abstract class AbstractStaticQueryFactory extends Object implements IStaticQueryFactory, IConfigurable {
+		use ConfigurableTrait;
 		/**
 		 * @var array
 		 */
@@ -476,8 +479,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function prepare() {
-			parent::prepare();
+		protected function handleInit() {
 			$reflectionClass = new ReflectionClass($this);
 			foreach ($reflectionClass->getMethods(ReflectionMethod::IS_PROTECTED) as $reflectionMethod) {
 				if (strpos($reflectionMethod->getName(), 'format') === false) {
