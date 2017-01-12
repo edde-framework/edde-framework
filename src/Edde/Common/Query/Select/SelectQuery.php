@@ -1,15 +1,18 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Query\Select;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Query\QueryException;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractQuery;
 	use Edde\Common\Query\Where\WhereExpressionFragment;
 
-	class SelectQuery extends AbstractQuery {
+	class SelectQuery extends AbstractQuery implements IConfigurable {
+		use ConfigurableTrait;
 		/**
 		 * @var INode
 		 */
@@ -74,8 +77,7 @@
 			return $this->selectNode;
 		}
 
-		protected function prepare() {
-			parent::prepare();
+		protected function handleInit() {
 			$this->selectNode = new Node('select-query');
 			$this->selectNode->addNodeList([
 				$selectListNode = new Node('select'),
