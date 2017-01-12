@@ -135,6 +135,7 @@
 				'datetime' => 'TIMESTAMP',
 			]);
 			$this->staticQueryFactory = new SqliteQueryFactory($this);
+			$this->staticQueryFactory->init();
 		}
 
 		protected function handleSetup() {
