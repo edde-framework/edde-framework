@@ -1,15 +1,15 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Database;
 
 	use Edde\Api\Cache\ICache;
-	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Database\IDatabaseStorage;
 	use Edde\Api\Database\IDriver;
+	use Edde\Api\Database\LazyDriverTrait;
 	use Edde\Api\Node\INodeQuery;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
@@ -27,15 +27,12 @@
 	 * Database (persistant) storage implementation.
 	 */
 	class DatabaseStorage extends AbstractStorage implements IDatabaseStorage, IConfigurable {
+		use LazyDriverTrait;
 		use ConfigurableTrait;
 		/**
 		 * @var IDriver
 		 */
 		protected $driver;
-		/**
-		 * @var ICacheManager
-		 */
-		protected $cacheManager;
 		/**
 		 * @var ICache
 		 */
@@ -48,16 +45,6 @@
 		 * @var int
 		 */
 		protected $transaction = 0;
-
-		/**
-		 * @param IDriver       $driver
-		 * @param ICacheManager $cacheManager
-		 */
-		public function __construct(IDriver $driver, ICacheManager $cacheManager) {
-			$this->driver = $driver;
-			$this->cacheManager = $cacheManager;
-			$this->transaction = 0;
-		}
 
 		/**
 		 * @inheritdoc
@@ -155,6 +142,7 @@
 		 */
 		public function execute(IQuery $query) {
 			try {
+				$this->driver->setup();
 				return $this->driver->execute($query);
 			} catch (PDOException $e) {
 				throw new DriverException(sprintf('Driver [%s] execution failed: %s.', get_class($this->driver), $e->getMessage()), 0, $e);
@@ -167,6 +155,7 @@
 		 */
 		public function native(IStaticQuery $staticQuery) {
 			try {
+				$this->driver->setup();
 				return $this->driver->native($staticQuery);
 			} catch (PDOException $e) {
 				throw new DriverException(sprintf('Driver [%s] execution failed: %s.', get_class($this->driver), $e->getMessage()), 0, $e);
@@ -178,5 +167,6 @@
 		 */
 		protected function handleInit() {
 			$this->sourceNodeQuery = new NodeQuery('/**/source');
+			$this->transaction = 0;
 		}
 	}

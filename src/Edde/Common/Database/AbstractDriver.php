@@ -6,6 +6,7 @@
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\Database\LazyDsnTrait;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	/**
@@ -13,6 +14,7 @@
 	 */
 	abstract class AbstractDriver extends Object implements IDriver {
 		use LazyDsnTrait;
+		use ConfigurableTrait;
 		/**
 		 * @var string[]
 		 */
