@@ -17,6 +17,7 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Converter\IConverterManager;
+	use Edde\Api\Crate\ICrateDirectory;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\Database\IDsn;
@@ -34,6 +35,7 @@
 	use Edde\Api\Http\IPostList;
 	use Edde\Api\Http\IRequestUrl;
 	use Edde\Api\Http\IRequestUrlFactory;
+	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Router\IRouterService;
@@ -55,8 +57,10 @@
 	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Container\Container;
 	use Edde\Common\Converter\ConverterManager;
+	use Edde\Common\Crate\CrateDirectory;
 	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Database\DatabaseStorage;
+	use Edde\Common\Database\Dsn;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\TemplateDirectory;
 	use Edde\Common\Http\CookieFactory;
@@ -65,6 +69,7 @@
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Http\PostFactory;
 	use Edde\Common\Http\RequestUrlFactory;
+	use Edde\Common\Log\LogDirectory;
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Object;
 	use Edde\Common\Resource\ResourceManager;
@@ -117,10 +122,10 @@
 					} else if (interface_exists($factory)) {
 						$current = new LinkFactory($name, $factory);
 					}
-				} else if ($factory instanceof IFactory) {
+				} else if ($factory instanceof IFactory || is_callable($factory)) {
 					$current = $factory;
 				} else if (is_callable($factory)) {
-					throw new FactoryException(sprintf('Closures are not supported in factory definition [%s].', $name));
+					throw new FactoryException(sprintf('Closure is not supported in factory definition [%s].', $name));
 				} else if (is_object($factory)) {
 					if ($factory instanceof ICacheable === false) {
 						throw new FactoryException(sprintf('Class instances [%s] are not supported in factory definition [%s]. You can use [%s] interface to bypass this error.', get_class($factory), $name, ICacheable::class));
@@ -130,7 +135,7 @@
 				if ($current === null) {
 					throw new FactoryException(sprintf('Unsupported factory definition [%s; %s].', is_string($name) ? $name : (is_object($name) ? get_class($name) : gettype($name)), is_string($factory) ? $factory : (is_object($factory) ? get_class($factory) : gettype($factory))));
 				}
-				$factories[] = $current;
+				$factories[$name] = $current;
 			}
 			return $factories;
 		}
@@ -156,7 +161,14 @@
 			 */
 			/** @var $container IContainer */
 			$container = new Container(new Cache(new InMemoryCacheStorage()));
-			$container->registerFactoryList($factoryList = self::createFactoryList($factoryList));
+			$closureList = array_filter($factoryList = self::createFactoryList($factoryList), function ($factory, $id) use (&$factoryList) {
+				if (is_callable($factory)) {
+					$factoryList[$id] = new ExceptionFactory((string)$id, sprintf('Using placeholder factory instead of callback [%s].', $id), EddeException::class);
+					return true;
+				}
+				return false;
+			}, ARRAY_FILTER_USE_BOTH);
+			$container->registerFactoryList($factoryList);
 			$container = $container->create(IContainer::class);
 			if ($cacheId !== null) {
 				$container->getCache()
@@ -170,6 +182,9 @@
 			}
 			foreach ($factoryList as $factory) {
 				$container->autowire($factory);
+			}
+			foreach ($closureList as $id => $closure) {
+				$container->registerFactory(new InstanceFactory((string)$id, get_class($instance = $container->call($closure, [], 'factory/' . $id)), [], $instance), $id);
 			}
 			return $container;
 		}
@@ -282,6 +297,14 @@
 					'template',
 					TemplateDirectory::class,
 				]),
+				ICrateDirectory::class => self::proxy(IAssetDirectory::class, 'directory', [
+					'crate',
+					CrateDirectory::class,
+				]),
+				ILogDirectory::class => self::proxy(IRootDirectory::class, 'directory', [
+					'logs',
+					LogDirectory::class,
+				]),
 				ICacheStorage::class => FlatFileCacheStorage::class,
 				IRuntime::class => Runtime::class,
 				IHttpResponse::class => HttpResponse::class,
@@ -309,7 +332,9 @@
 				IHelperSet::class => DefaultMacroSet::class . '::helperSet',
 				IStorage::class => DatabaseStorage::class,
 				IDriver::class => SqliteDriver::class,
-				IDsn::class => self::exception(sprintf('Dsn configuration is missing; please define [%s] interface.', IDsn::class)),
+				IDsn::class => function (IAssetDirectory $assetDirectory) {
+					return new Dsn('sqlite:' . $assetDirectory->filename('storage.sqlite'));
+				},
 				ICrateFactory::class => CrateFactory::class,
 				ISchemaFactory::class => SchemaFactory::class,
 				ISchemaManager::class => SchemaManager::class,

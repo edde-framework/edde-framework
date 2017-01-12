@@ -18,10 +18,11 @@
 
 		/**
 		 * @param IFactory $factory
+		 * @param string   $id
 		 *
 		 * @return IContainer
 		 */
-		public function registerFactory(IFactory $factory): IContainer;
+		public function registerFactory(IFactory $factory, string $id = null): IContainer;
 
 		/**
 		 * shorthand for cache registration

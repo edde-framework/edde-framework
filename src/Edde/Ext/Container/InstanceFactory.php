@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Container;
 
+	use Edde\Api\Cache\ICache;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 
@@ -41,10 +42,11 @@
 		 * @param string $class
 		 * @param array  $parameterList
 		 */
-		public function __construct(string $name, string $class, array $parameterList) {
+		public function __construct(string $name, string $class, array $parameterList, $instance = null) {
 			$this->name = $name;
 			$this->class = $class;
 			$this->parameterList = $parameterList;
+			$this->instance = $instance;
 		}
 
 		public function canHandle(IContainer $container, string $dependency): bool {
@@ -53,6 +55,10 @@
 
 		public function dependency(IContainer $container, string $dependency = null): IDependency {
 			return parent::dependency($container, $this->class);
+		}
+
+		public function fetch(IContainer $container, string $id, ICache $cache) {
+			return $this->instance;
 		}
 
 		public function execute(IContainer $container, array $parameterList, string $name = null) {

@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Container;
 
@@ -43,7 +43,11 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function registerFactory(IFactory $factory): IContainer {
+		public function registerFactory(IFactory $factory, string $id = null): IContainer {
+			if ($id) {
+				$this->factoryList[$id] = $factory;
+				return $this;
+			}
 			$this->factoryList[] = $factory;
 			return $this;
 		}
@@ -52,7 +56,10 @@
 		 * @inheritdoc
 		 */
 		public function registerFactoryList(array $factoryList): IContainer {
-			$this->factoryList = $factoryList;
+			$this->factoryList = [];
+			foreach ($factoryList as $id => $factory) {
+				$this->registerFactory($factory, is_string($id) ? $id : null);
+			}
 			return $this;
 		}
 

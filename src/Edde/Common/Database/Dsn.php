@@ -18,8 +18,9 @@
 		 *
 		 * @param string $dsn
 		 */
-		public function __construct(string $dsn) {
+		public function __construct(string $dsn, array $optionList = []) {
 			$this->dsn = $dsn;
+			$this->optionList = $optionList;
 		}
 
 		public function getDsn(): string {
