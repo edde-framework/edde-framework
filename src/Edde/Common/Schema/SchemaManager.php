@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Schema;
 
@@ -7,10 +7,12 @@
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Schema\LazySchemaFactoryTrait;
 	use Edde\Api\Schema\SchemaException;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	class SchemaManager extends Object implements ISchemaManager {
 		use LazySchemaFactoryTrait;
+		use ConfigurableTrait;
 		/**
 		 * @var ISchema[]
 		 */
@@ -48,8 +50,8 @@
 			return $this->schemaList;
 		}
 
-		protected function prepare() {
-			parent::prepare();
+		protected function handleConfig() {
+			$this->schemaFactory->config();
 			foreach ($this->schemaFactory->create() as $schema) {
 				$this->addSchema($schema);
 			}

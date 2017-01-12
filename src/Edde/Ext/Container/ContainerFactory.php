@@ -17,6 +17,7 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Converter\IConverterManager;
+	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\Database\IDsn;
 	use Edde\Api\EddeException;
@@ -37,6 +38,8 @@
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Runtime\IRuntime;
+	use Edde\Api\Schema\ISchemaFactory;
+	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacroSet;
@@ -52,6 +55,7 @@
 	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Container\Container;
 	use Edde\Common\Converter\ConverterManager;
+	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\TemplateDirectory;
@@ -66,6 +70,8 @@
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\Runtime;
+	use Edde\Common\Schema\SchemaFactory;
+	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Template\TemplateManager;
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
@@ -304,6 +310,9 @@
 				IStorage::class => DatabaseStorage::class,
 				IDriver::class => SqliteDriver::class,
 				IDsn::class => self::exception('Dsn configuration is missing; please define [%s] interface.', IDsn::class),
+				ICrateFactory::class => CrateFactory::class,
+				ISchemaFactory::class => SchemaFactory::class,
+				ISchemaManager::class => SchemaManager::class,
 			];
 		}
 	}

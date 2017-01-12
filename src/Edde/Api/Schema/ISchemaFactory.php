@@ -1,14 +1,15 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Schema;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Node\INode;
 
 	/**
 	 * Simple way how to load and build schemas from abstract source.
 	 */
-	interface ISchemaFactory {
+	interface ISchemaFactory extends IConfigurable {
 		/**
 		 * add a schema node
 		 *

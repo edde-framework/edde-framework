@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Schema;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\INodeQuery;
@@ -10,6 +11,7 @@
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\SchemaFactoryException;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Filter\BoolFilter;
 	use Edde\Common\Node\NodeQuery;
 	use Edde\Common\Object;
@@ -17,6 +19,7 @@
 	class SchemaFactory extends Object implements ISchemaFactory {
 		use LazyContainerTrait;
 		use LazyResourceManagerTrait;
+		use ConfigurableTrait;
 		/**
 		 * @var INode[]
 		 */
@@ -111,13 +114,13 @@
 				}
 				/** @noinspection DisconnectedForeachInstructionInspection */
 				/**
-				 * magicall thing can be turned off
+				 * magical things can be turned off
 				 */
 				if ($magic === false) {
 					$type = null;
 				}
 				/**
-				 * support for automagical type convertions
+				 * support for automagical type conversions
 				 */
 				switch ($type) {
 					case 'bool':
@@ -128,8 +131,7 @@
 			return $schema;
 		}
 
-		protected function prepare() {
-			parent::prepare();
+		protected function handleInit() {
 			$this->propertyListNodeQuery = new NodeQuery('/*/property-list/*');
 			$this->propertyFilterNodeQuery = new NodeQuery('/*/property-list/*/filter/*');
 			$this->propertySetterFilterNodeQuery = new NodeQuery('/*/property-list/*/setter-filter/*');

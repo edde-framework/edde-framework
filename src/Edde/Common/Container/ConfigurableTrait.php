@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Container;
 
@@ -89,10 +89,10 @@
 			}
 			$this->tConfig = true;
 			$this->warmup($force);
-			$this->handleConfig();
-			foreacH ($this->tConfigHandlerList as $configHandler) {
+			foreach ($this->tConfigHandlerList as $configHandler) {
 				$configHandler->config($this);
 			}
+			$this->handleConfig();
 			return $this;
 		}
 
