@@ -4,6 +4,7 @@
 	namespace Edde\Ext\Database\Sqlite;
 
 	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
@@ -18,6 +19,7 @@
 	 * Sqlite database support.
 	 */
 	class SqliteDriver extends AbstractDriver implements IConfigurable {
+		use LazyContainerTrait;
 		use ConfigurableTrait;
 		/**
 		 * @var PDO
@@ -134,8 +136,7 @@
 				'text' => 'TEXT',
 				'datetime' => 'TIMESTAMP',
 			]);
-			$this->staticQueryFactory = new SqliteQueryFactory($this);
-			$this->staticQueryFactory->init();
+			$this->staticQueryFactory = $this->container->create(SqliteQueryFactory::class, [$this], __METHOD__);
 		}
 
 		protected function handleSetup() {
