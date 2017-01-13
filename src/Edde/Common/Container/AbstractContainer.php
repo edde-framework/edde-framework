@@ -75,7 +75,10 @@
 		 * @inheritdoc
 		 */
 		public function registerConfigHandlerList(array $configHandlerList): IContainer {
-			$this->configHandlerList = $configHandlerList;
+			$this->configHandlerList = [];
+			foreach ($configHandlerList as $name => $configHandler) {
+				$this->registerConfigHandler($name, $configHandler);
+			}
 			return $this;
 		}
 

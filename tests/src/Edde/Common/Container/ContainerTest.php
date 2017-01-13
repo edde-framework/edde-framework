@@ -18,6 +18,23 @@
 
 	/**
 	 * @covers \Edde\Common\Container\Container<extended>
+	 *
+	 * @uses \Edde\Common\Cache\Cache<extended>
+	 * @uses \Edde\Common\Container\AbstractFactory
+	 * @uses \Edde\Common\Container\ConfigurableTrait
+	 * @uses \Edde\Common\Container\Dependency
+	 * @uses \Edde\Common\File\Directory
+	 * @uses \Edde\Common\File\FileUtils
+	 * @uses \Edde\Common\Reflection\ReflectionParameter
+	 * @uses \Edde\Common\Reflection\ReflectionUtils
+	 * @uses \Edde\Ext\Cache\FlatFileCacheStorage
+	 * @uses \Edde\Ext\Cache\InMemoryCacheStorage
+	 * @uses \Edde\Ext\Container\ClassFactory
+	 * @uses \Edde\Ext\Container\ContainerFactory
+	 * @uses \Edde\Ext\Container\InterfaceFactory
+	 * @uses \Edde\Ext\Container\LinkFactory
+	 * @uses \Edde\Ext\Container\ProxyFactory
+	 * @uses \Edde\Ext\Container\SerializableFactory
 	 */
 	class ContainerTest extends TestCase {
 		/**

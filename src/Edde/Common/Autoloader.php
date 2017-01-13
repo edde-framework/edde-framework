@@ -5,8 +5,6 @@
 
 	/**
 	 * Simple autoloader class.
-	 *
-	 * @codeCoverageIgnore
 	 */
 	class Autoloader {
 		/**
