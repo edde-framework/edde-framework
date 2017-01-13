@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Router;
 
@@ -27,13 +27,11 @@
 			if ($this->request) {
 				return $this->request;
 			}
-			$this->config();
-			$e = null;
 			foreach ($this->routerList as $router) {
-				if (($request = $router->createRequest()) !== null) {
-					return $this->request = $request;
+				if (($this->request = $router->createRequest()) !== null) {
+					return $this->request;
 				}
 			}
-			throw new BadRequestException('Cannot handle current application request.' . (empty($this->routerList) ? ' There are no registered routers.' : ''), 0, $e);
+			throw new BadRequestException('Cannot handle current application request.' . (empty($this->routerList) ? ' There are no registered routers.' : ''));
 		}
 	}

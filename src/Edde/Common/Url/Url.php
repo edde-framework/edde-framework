@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Url;
 
@@ -42,7 +42,7 @@
 		 */
 		protected $fragment = '';
 
-		static public function create($url = null) {
+		static public function create($url = null): IUrl {
 			if ($url instanceof IUrl) {
 				return $url;
 			}

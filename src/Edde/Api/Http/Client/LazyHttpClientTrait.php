@@ -1,6 +1,7 @@
 <?php
-	declare(strict_types = 1);
-	namespace Edde\Api\Client;
+	declare(strict_types=1);
+
+	namespace Edde\Api\Http\Client;
 
 	/**
 	 * Lazy http client dependency.

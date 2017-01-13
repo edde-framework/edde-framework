@@ -3,11 +3,10 @@
 
 	namespace Edde\Common\Client;
 
-	use Edde\Api\Client\ClientException;
-	use Edde\Api\Client\IHttpHandler;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyTempDirectoryTrait;
+	use Edde\Api\Http\Client\IHttpHandler;
 	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
@@ -65,7 +64,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function basic(string $user, string $password): IHttpHandler {
+		public function basic(string $user, string $password): \Edde\Api\Http\Client\IHttpHandler {
 			curl_setopt_array($this->curl, [
 				CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
 				CURLOPT_USERPWD => vsprintf('%s:%s', func_get_args()),
@@ -87,7 +86,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function header(string $name, string $value): IHttpHandler {
+		public function header(string $name, string $value): \Edde\Api\Http\Client\IHttpHandler {
 			$this->httpRequest->getHeaderList()
 				->set($name, $value);
 			return $this;
@@ -138,12 +137,12 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws ClientException
+		 * @throws \Edde\Api\Http\Client\ClientException
 		 * @throws StringException
 		 */
 		public function execute(): IHttpResponse {
 			if ($this->curl === null) {
-				throw new ClientException(sprintf('Cannot execute handler for the url [%s] more than once.', (string)$this->httpRequest->getRequestUrl()));
+				throw new \Edde\Api\Http\Client\ClientException(sprintf('Cannot execute handler for the url [%s] more than once.', (string)$this->httpRequest->getRequestUrl()));
 			}
 			$options = [];
 			if ($body = $this->httpRequest->getBody()) {
@@ -186,7 +185,7 @@
 			curl_setopt_array($this->curl, $options);
 			$this->event($onRequestEvent = new OnRequestEvent($this->httpRequest, $this));
 			if ($onRequestEvent->isCanceled()) {
-				throw new ClientException(sprintf('%s: request has been canceled', (string)$this->httpRequest->getRequestUrl()));
+				throw new \Edde\Api\Http\Client\ClientException(sprintf('%s: request has been canceled', (string)$this->httpRequest->getRequestUrl()));
 			}
 			$time = microtime(true);
 			if (($content = curl_exec($this->curl)) === false) {
@@ -195,7 +194,7 @@
 				curl_close($this->curl);
 				$this->curl = null;
 				$this->event(new RequestFailedEvent($this->httpRequest, $this, microtime(true) - $time));
-				throw new ClientException(sprintf('%s: %s', (string)$this->httpRequest->getRequestUrl(), $error), $errorCode);
+				throw new \Edde\Api\Http\Client\ClientException(sprintf('%s: %s', (string)$this->httpRequest->getRequestUrl(), $error), $errorCode);
 			}
 			$time = microtime(true) - $time;
 			if (is_string($contentType = $headerList->get('Content-Type', curl_getinfo($this->curl, CURLINFO_CONTENT_TYPE)))) {

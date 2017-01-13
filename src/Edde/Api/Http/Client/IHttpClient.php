@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Api\Client;
+	namespace Edde\Api\Http\Client;
 
 	use Edde\Api\Event\IEventBus;
 	use Edde\Api\Http\IBody;

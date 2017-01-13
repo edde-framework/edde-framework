@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Client\Event;
 
-	use Edde\Api\Client\IHttpHandler;
+	use Edde\Api\Http\Client\IHttpHandler;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
 
