@@ -17,17 +17,6 @@
 		public function setNamespace(string $namespace): ICache;
 
 		/**
-		 * cache method result
-		 *
-		 * @param string   $name
-		 * @param callable $callback
-		 * @param array    ...$parameterList
-		 *
-		 * @return mixed
-		 */
-		public function callback(string $name, callable $callback, ...$parameterList);
-
-		/**
 		 * save given value into the cache
 		 *
 		 * @param string $id

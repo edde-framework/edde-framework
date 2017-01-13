@@ -29,6 +29,9 @@
 		}
 	}
 
+	class FooNotCacheable extends Object {
+	}
+
 	class CompositeObject extends Object implements ICacheable {
 		/**
 		 * @var FooObject

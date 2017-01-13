@@ -40,16 +40,6 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function callback(string $name, callable $callback, ...$parameterList) {
-			if (($result = $this->load($name)) !== null) {
-				return $result;
-			}
-			return $this->save($name, call_user_func_array($callback, $parameterList));
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function load(string $id, $default = null) {
 			if (($value = $this->cacheStorage->load($this->cacheId($id))) === null) {
 				return is_callable($default) ? call_user_func($default) : $default;
