@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Container\IConfigHandler;
@@ -70,6 +70,37 @@
 
 	class AnotherSomething extends Object implements IConfigurable, ICacheable {
 		use ConfigurableTrait;
+
+		public $init = 0;
+		public $warmup = 0;
+		public $config = 0;
+		public $setup = 0;
+		public $ok = false;
+
+		protected function handleInit() {
+			$this->init++;
+		}
+
+		protected function handleWarmup() {
+			$this->warmup++;
+		}
+
+		protected function handleConfig() {
+			$this->config++;
+		}
+
+		protected function handleSetup() {
+			$this->setup++;
+		}
+	}
+
+	class AnotherSomethingConfigurator extends AbstractConfigHandler {
+		/**
+		 * @param AnotherSomething $instance
+		 */
+		public function config($instance) {
+			$instance->ok = true;
+		}
 	}
 
 	class InjectedSomething extends Object implements ICacheable {

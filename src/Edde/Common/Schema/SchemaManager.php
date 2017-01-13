@@ -51,6 +51,7 @@
 		}
 
 		protected function handleConfig() {
+			parent::handleConfig();
 			$this->schemaFactory->config();
 			foreach ($this->schemaFactory->create() as $schema) {
 				$this->addSchema($schema);

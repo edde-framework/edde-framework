@@ -104,6 +104,7 @@
 		}
 
 		protected function handleInit() {
+			parent::handleInit();
 			$this->helperSet = new HelperSet();
 			$this->helperSet->registerHelper($this);
 		}

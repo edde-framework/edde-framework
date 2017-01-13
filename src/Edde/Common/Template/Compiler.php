@@ -284,6 +284,7 @@
 		 * @inheritdoc
 		 */
 		protected function handleInit() {
+			parent::handleInit();
 			$this->stack = new \SplStack();
 		}
 
@@ -291,6 +292,7 @@
 		 * @inheritdoc
 		 */
 		protected function handleSetup() {
+			parent::handleSetup();
 			foreach ($this->macroList as $macro) {
 				if ($macro->hasHelperSet()) {
 					$this->registerHelperSet($macro->getHelperSet());

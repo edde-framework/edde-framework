@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Asset;
 
@@ -52,6 +52,7 @@
 		 * @throws ResourceException
 		 */
 		protected function handleInit() {
+			parent::handleInit();
 			$this->assetDirectory->normalize();
 			$this->storageDirectory->normalize();
 			if (strpos($this->assetDirectory->getDirectory(), $this->rootDirectory->getDirectory()) === false) {
@@ -63,6 +64,7 @@
 		}
 
 		protected function handleConfig() {
+			parent::handleConfig();
 			$this->assetDirectory->create();
 			$this->storageDirectory->create();
 		}

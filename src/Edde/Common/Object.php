@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common;
 
@@ -38,6 +38,18 @@
 		}
 
 		protected function prepare() {
+		}
+
+		protected function handleInit() {
+		}
+
+		protected function handleWarmup() {
+		}
+
+		protected function handleConfig() {
+		}
+
+		protected function handleSetup() {
 		}
 
 		public function inject(string $property, $dependency) {

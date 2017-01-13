@@ -47,9 +47,6 @@
 			return $this;
 		}
 
-		protected function handleInit() {
-		}
-
 		/**
 		 * @inheritdoc
 		 */
@@ -68,9 +65,6 @@
 			$this->init($force);
 			$this->handleWarmup();
 			return $this;
-		}
-
-		protected function handleWarmup() {
 		}
 
 		/**
@@ -96,9 +90,6 @@
 			return $this;
 		}
 
-		protected function handleConfig() {
-		}
-
 		/**
 		 * @inheritdoc
 		 */
@@ -117,9 +108,6 @@
 			$this->config($force);
 			$this->handleSetup();
 			return $this;
-		}
-
-		protected function handleSetup() {
 		}
 
 		/**

@@ -252,6 +252,7 @@
 		 * @inheritdoc
 		 */
 		protected function handleInit() {
+			parent::handleInit();
 //			$this->listen($this);
 			$this->node = new Node();
 			$this->node->setMeta('control', $this);

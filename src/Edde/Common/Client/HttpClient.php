@@ -192,6 +192,7 @@
 		 * @throws ClientException
 		 */
 		protected function handleInit() {
+			parent::handleInit();
 			if (extension_loaded('curl') === false) {
 				throw new ClientException('Curl extension is not loaded in PHP.');
 			}
