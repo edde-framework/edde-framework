@@ -25,6 +25,7 @@
 		protected $configList;
 
 		public function testContainer() {
+//			pclose(popen('start /B "" ' . escapeshellarg(PHP_BINARY) . ' -f runme.php', 'r'));
 			self::assertSame($this->container, $this->container->create(IContainer::class));
 			self::assertInstanceOf(ICache::class, $this->container->create(ICache::class));
 			self::assertInstanceOf(ICacheManager::class, $cache = $this->container->create(ICache::class));

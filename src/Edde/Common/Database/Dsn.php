@@ -3,7 +3,9 @@
 
 	namespace Edde\Common\Database;
 
-	class Dsn extends AbstractDsn {
+	use Edde\Api\Cache\ICacheable;
+
+	class Dsn extends AbstractDsn implements ICacheable {
 		/**
 		 * @var string
 		 */
