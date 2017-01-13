@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Container;
 
@@ -8,6 +8,10 @@
 
 	require_once __DIR__ . '/assets/assets.php';
 
+	/**
+	 * @covers \AnotherSomething<extended>
+	 * @covers \Edde\Common\Container\ConfigurableTrait
+	 */
 	class ConfigurableTest extends TestCase {
 		/**
 		 * @var IConfigurable
@@ -66,6 +70,9 @@
 			self::assertTrue($object->isSetup());
 		}
 
+		/**
+		 * @codeCoverageIgnore
+		 */
 		protected function setUp() {
 			$this->configurable = new \AnotherSomething();
 		}

@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Container;
 
@@ -16,6 +16,9 @@
 
 	require_once __DIR__ . '/assets/assets.php';
 
+	/**
+	 * @covers \Edde\Common\Container\Container<extended>
+	 */
 	class ContainerTest extends TestCase {
 		/**
 		 * @var IContainer
@@ -72,6 +75,9 @@
 			self::assertEquals('fill-me-up', $instance->someParameter);
 		}
 
+		/**
+		 * @codeCoverageIgnore
+		 */
 		protected function setUp() {
 			$cacheDirectory = new CacheDirectory(__DIR__ . '/cache');
 			$cacheDirectory->purge();

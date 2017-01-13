@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common;
 
@@ -54,6 +54,9 @@
 			self::assertSame($this->fooObject->hash(), $this->fooObject->hash());
 		}
 
+		/**
+		 * @codeCoverageIgnore
+		 */
 		protected function setUp() {
 			$this->composite = new CompositeObject($this->fooObject = new FooObject(), $this->barObject = new BarObject($this->fooObject));
 		}

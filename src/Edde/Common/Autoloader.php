@@ -1,10 +1,12 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common;
 
 	/**
 	 * Simple autoloader class.
+	 *
+	 * @codeCoverageIgnore
 	 */
 	class Autoloader {
 		/**
