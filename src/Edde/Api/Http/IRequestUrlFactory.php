@@ -10,5 +10,5 @@
 		/**
 		 * @return IRequestUrl
 		 */
-		public function create(): IRequestUrl;
+		public function createRequestUrl(): IRequestUrl;
 	}

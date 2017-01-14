@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Service\Http;
 
@@ -9,7 +9,10 @@
 	use Edde\Common\Object;
 
 	class RequestUrlFactory extends Object implements IRequestUrlFactory {
-		public function create(): IRequestUrl {
+		/**
+		 * @inheritdoc
+		 */
+		public function createRequestUrl(): IRequestUrl {
 			return RequestUrl::create((isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
 		}
 	}

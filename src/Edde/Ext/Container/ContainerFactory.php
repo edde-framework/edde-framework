@@ -321,7 +321,7 @@
 				ICookieFactory::class => CookieFactory::class,
 				ICookieList::class => ICookieFactory::class . '::create',
 				IRequestUrlFactory::class => RequestUrlFactory::class,
-				IRequestUrl::class => IRequestUrlFactory::class . '::create',
+				IRequestUrl::class => IRequestUrlFactory::class . '::createRequestUrl',
 				IHeaderFactory::class => HeaderFactory::class,
 				IHeaderList::class => IHeaderFactory::class . '::create',
 				IHttpRequest::class => HttpRequest::class,

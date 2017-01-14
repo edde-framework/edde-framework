@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Container;
 
@@ -7,6 +7,7 @@
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
 	use Edde\Common\Container\AbstractFactory;
+	use Edde\Common\Container\Dependency;
 
 	/**
 	 * Translate the given factory into another one.
@@ -22,6 +23,10 @@
 		 * @var string
 		 */
 		protected $target;
+		/**
+		 * @var mixed
+		 */
+		protected $instance;
 
 		/**
 		 * A young man goes into a drug store to buy condoms.
@@ -61,6 +66,9 @@
 		 * @inheritdoc
 		 */
 		public function dependency(IContainer $container, string $dependency = null): IDependency {
+			if ($this->instance) {
+				return new Dependency([], [], []);
+			}
 			return $container->getFactory($this->target, $this->source)
 				->dependency($container, $dependency);
 		}
@@ -69,7 +77,10 @@
 		 * @inheritdoc
 		 */
 		public function execute(IContainer $container, array $parameterList, string $name = null) {
-			return $container->getFactory($this->target, $this->source)
-				->execute($container, $parameterList, $name);
+			if ($this->instance === null) {
+				$this->instance = $container->getFactory($this->target, $this->source)
+					->execute($container, $parameterList, $name);
+			}
+			return $this->instance;
 		}
 	}
