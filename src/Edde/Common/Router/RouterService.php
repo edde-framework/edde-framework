@@ -19,7 +19,6 @@
 		 */
 		protected $request;
 
-		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws RouterException
