@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Http;
 
@@ -54,12 +54,12 @@
 			return $this;
 		}
 
-		public function header(string $header, string $value) {
+		public function header(string $header, string $value): IHttp {
 			$this->headerList->set($header, $value);
 			return $this;
 		}
 
-		public function setContentType(string $contentType) {
+		public function setContentType(string $contentType): IHttp {
 			$this->headerList->set('Content-Type', $contentType);
 			return $this;
 		}

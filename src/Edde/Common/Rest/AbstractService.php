@@ -19,7 +19,7 @@
 		const OK_CREATED = 201;
 
 		const ERROR_NOT_FOUND = 404;
-		const ERROR_NOT_ALOWED = 405;
+		const ERROR_NOT_ALLOWED = 405;
 
 		protected static $methodList = [
 			'GET',
@@ -34,13 +34,13 @@
 			if (in_array($method = strtoupper($method), self::$methodList, true) === false) {
 				$headerList = $this->httpResponse->getHeaderList();
 				$headerList->set('Allowed', $allowed = implode(', ', array_keys($methodList)));
-				$this->error(self::ERROR_NOT_ALOWED, sprintf('The requested method [%s] is not supported; supported methods are [%s].', $method, $allowed));
+				$this->error(self::ERROR_NOT_ALLOWED, sprintf('The requested method [%s] is not supported; supported methods are [%s].', $method, $allowed));
 				return null;
 			}
 			if (isset($methodList[$method]) === false) {
 				$headerList = $this->httpResponse->getHeaderList();
 				$headerList->set('Allowed', $allowed = implode(', ', array_keys($methodList)));
-				$this->error(self::ERROR_NOT_ALOWED, sprintf('The requested method [%s] is not implemented; available methods are [%s].', $method, $allowed));
+				$this->error(self::ERROR_NOT_ALLOWED, sprintf('The requested method [%s] is not implemented; available methods are [%s].', $method, $allowed));
 				return null;
 			}
 			return parent::execute($methodList[$method], $parameterList);
@@ -72,9 +72,5 @@
 			}
 			$this->responseManager->response(new Response($mime, $response));
 			return $this;
-		}
-
-		public function link($generate, ...$parameterList) {
-			return null;
 		}
 	}

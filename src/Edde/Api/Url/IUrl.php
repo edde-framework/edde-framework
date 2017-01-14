@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Url;
 
@@ -107,6 +107,16 @@
 		 * @return $this
 		 */
 		public function build($url);
+
+		/**
+		 * run regular expression against absolute url
+		 *
+		 * @param string $match
+		 * @param bool   $path === true, match only path
+		 *
+		 * @return array
+		 */
+		public function match(string $match, bool $path = true);
 
 		public function __toString();
 	}

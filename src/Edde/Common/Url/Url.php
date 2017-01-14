@@ -7,6 +7,7 @@
 	use Edde\Api\Url\IUrl;
 	use Edde\Api\Url\UrlException;
 	use Edde\Common\Object;
+	use Edde\Common\Strings\StringUtils;
 
 	class Url extends Object implements ICacheable, IUrl {
 		/**
@@ -53,6 +54,9 @@
 			return $self;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function build($url) {
 			if (($parsed = parse_url($url)) === false) {
 				throw new UrlException(sprintf('Malformed URL [%s].', $url));
@@ -78,21 +82,33 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getResourceName() {
 			$pathList = $this->getPathList();
 			return end($pathList);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getPathList() {
 			return explode('/', ltrim($this->path, '/'));
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getBasePath(): string {
 			$pathList = $this->getPathList();
 			array_pop($pathList);
 			return implode('/', $pathList);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getExtension() {
 			$path = $this->getPath();
 			$subpath = substr($path, strrpos($path, '/'));
@@ -102,6 +118,9 @@
 			return substr($subpath, $index + 1);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getPath() {
 			return $this->path;
 		}
@@ -114,10 +133,16 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function __toString() {
 			return $this->getAbsoluteUrl();
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getAbsoluteUrl(): string {
 			$scheme = $this->getScheme();
 			$url = '';
@@ -146,6 +171,9 @@
 			return $url;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getScheme() {
 			return $this->scheme;
 		}
@@ -155,6 +183,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getUser() {
 			return $this->user;
 		}
@@ -164,6 +195,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getPassword() {
 			return $this->password;
 		}
@@ -173,6 +207,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getHost() {
 			return $this->host;
 		}
@@ -182,6 +219,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getPort() {
 			return $this->port;
 		}
@@ -191,15 +231,24 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getQuery() {
 			return $this->query;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function setQuery(array $query): IUrl {
 			$this->query = $query;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getFragment() {
 			return $this->fragment;
 		}
@@ -209,10 +258,20 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getParameter($name, $default = null) {
 			if (isset($this->query[$name]) === false) {
 				return $default;
 			}
 			return $this->query[$name];
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function match(string $match, bool $path = true) {
+			return StringUtils::match($path ? $this->getPath() : $this->getAbsoluteUrl(), $match);
 		}
 	}

@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Http;
 
@@ -23,9 +23,18 @@
 		 * @param string $header
 		 * @param string $value
 		 *
-		 * @return $this
+		 * @return IHttp
 		 */
-		public function header(string $header, string $value);
+		public function header(string $header, string $value): IHttp;
+
+		/**
+		 * set a content type
+		 *
+		 * @param string $contentType
+		 *
+		 * @return IHttp
+		 */
+		public function setContentType(string $contentType): IHttp;
 
 		/**
 		 * @return IBody|null
