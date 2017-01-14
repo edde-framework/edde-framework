@@ -6,7 +6,6 @@
 	use Edde\Api\Event\IEvent;
 	use Edde\Api\Event\IEventBus;
 	use Edde\Api\Event\IHandler;
-	use Edde\Service\Event\EventBus;
 
 	trait EventTrait {
 		/**
