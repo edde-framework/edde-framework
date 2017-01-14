@@ -5,6 +5,7 @@ stages:
     - test
     - composer
     - review
+    - staging
     - production
 
 test:
@@ -41,8 +42,19 @@ review:
     except:
         - master
 
+staging:
+    stage: staging
+    script:
+        - echo 'staging'
+    environment:
+        name: staging
+        url: https://staging.edde-framework.org:8080/
+    only:
+        - staging
+
 production:
     stage: production
+#    when: manual
     script:
         - echo 'production'
     environment:
