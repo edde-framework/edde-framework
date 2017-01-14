@@ -3,12 +3,13 @@
 
 	namespace Edde\Api\Translator;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\File\IFile;
 
 	/**
 	 * Implementation of a translator.
 	 */
-	interface ITranslator {
+	interface ITranslator extends IConfigurable {
 		/**
 		 * register source to translator; this will be convertet via converter to target dictionary (and registered with register
 		 *

@@ -17,7 +17,7 @@
 	require_once __DIR__ . '/assets/assets.php';
 
 	/**
-	 * @covers \Edde\Common\Container\Container<extended>
+	 * @covers \Edde\Service\Container\Container<extended>
 	 *
 	 * @uses \Edde\Common\Cache\Cache<extended>
 	 * @uses \Edde\Common\Container\AbstractFactory

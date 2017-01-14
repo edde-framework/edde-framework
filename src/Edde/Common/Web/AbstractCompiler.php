@@ -68,10 +68,4 @@
 			}
 			return $content;
 		}
-
-		protected function prepare() {
-			parent::prepare();
-			$this->cache();
-			$this->cache->setNamespace($this->fingerprint->fingerprint());
-		}
 	}

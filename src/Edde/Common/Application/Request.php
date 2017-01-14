@@ -37,6 +37,16 @@
 			$this->type = $type;
 		}
 
+		public function getId(): string {
+			if ($this->id === null) {
+				$action = $this->action;
+				$handle = $this->handle;
+				unset($action[2], $handle[2]);
+				$this->id = hash('sha256', json_encode($action) . json_encode($handle));
+			}
+			return $this->id;
+		}
+
 		public function getType(): string {
 			return $this->type;
 		}
@@ -94,15 +104,5 @@
 
 		public function getCurrentName(): string {
 			return StringUtils::recamel($this->getCurrent()[1], '-', 1);
-		}
-
-		public function getId(): string {
-			if ($this->id === null) {
-				$action = $this->action;
-				$handle = $this->handle;
-				unset($action[2], $handle[2]);
-				$this->id = hash('sha256', json_encode($action) . json_encode($handle));
-			}
-			return $this->id;
 		}
 	}

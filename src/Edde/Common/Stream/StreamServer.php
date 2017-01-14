@@ -1,19 +1,16 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Stream;
 
 	use Edde\Api\Stream\IConnection;
-	use Edde\Api\Stream\IConnectionHandler;
 	use Edde\Api\Stream\IConnector;
 	use Edde\Api\Stream\IStreamServer;
+	use Edde\Api\Stream\LazyConnectionHandlerTrait;
 	use Edde\Api\Stream\StreamServerException;
 
 	class StreamServer extends AbstractConnector implements IStreamServer {
-		/**
-		 * @var IConnectionHandler
-		 */
-		protected $connectionHandler;
+		use LazyConnectionHandlerTrait;
 		/**
 		 * @var IConnection[]
 		 */
@@ -26,15 +23,6 @@
 		 * @var bool
 		 */
 		protected $online;
-
-		/**
-		 * StreamServer constructor.
-		 *
-		 * @param IConnectionHandler $connectionHandler
-		 */
-		public function __construct(IConnectionHandler $connectionHandler) {
-			$this->connectionHandler = $connectionHandler;
-		}
 
 		public function server(string $socket): IStreamServer {
 			if (($stream = stream_socket_server($this->socket = $socket)) === false) {

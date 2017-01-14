@@ -3,6 +3,7 @@
 
 	namespace Edde\Ext\Container;
 
+	use Edde\Api\Acl\IAclManager;
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Application\IRequest;
 	use Edde\Api\Application\IResponseManager;
@@ -50,43 +51,44 @@
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Xml\IXmlParser;
-	use Edde\Common\Application\Application;
-	use Edde\Common\Application\ResponseManager;
 	use Edde\Common\Asset\AssetDirectory;
 	use Edde\Common\Cache\Cache;
 	use Edde\Common\Cache\CacheDirectory;
-	use Edde\Common\Cache\CacheManager;
-	use Edde\Common\Container\Container;
-	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crate\CrateDirectory;
-	use Edde\Common\Crate\CrateFactory;
-	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\Database\Dsn;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\TemplateDirectory;
 	use Edde\Common\Http\Client\HttpClient;
-	use Edde\Common\Http\CookieFactory;
 	use Edde\Common\Http\HeaderFactory;
 	use Edde\Common\Http\HttpRequest;
 	use Edde\Common\Http\HttpResponse;
-	use Edde\Common\Http\PostFactory;
 	use Edde\Common\Http\RequestUrlFactory;
 	use Edde\Common\Log\LogDirectory;
-	use Edde\Common\Log\LogService;
 	use Edde\Common\Object;
-	use Edde\Common\Resource\ResourceManager;
-	use Edde\Common\Router\RouterService;
-	use Edde\Common\Runtime\Runtime;
-	use Edde\Common\Schema\SchemaFactory;
-	use Edde\Common\Schema\SchemaManager;
-	use Edde\Common\Template\TemplateManager;
-	use Edde\Common\Web\JavaScriptCompiler;
-	use Edde\Common\Web\StyleSheetCompiler;
-	use Edde\Common\Xml\XmlParser;
 	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Template\DefaultMacroSet;
+	use Edde\Service\Acl\AclManager;
+	use Edde\Service\Application\Application;
+	use Edde\Service\Application\ResponseManager;
+	use Edde\Service\Cache\CacheManager;
+	use Edde\Service\Container\Container;
+	use Edde\Service\Converter\ConverterManager;
+	use Edde\Service\Crate\CrateFactory;
+	use Edde\Service\Database\DatabaseStorage;
+	use Edde\Service\Http\CookieFactory;
+	use Edde\Service\Http\PostFactory;
+	use Edde\Service\Log\LogService;
+	use Edde\Service\Resource\ResourceManager;
+	use Edde\Service\Router\RouterService;
+	use Edde\Service\Runtime\Runtime;
+	use Edde\Service\Schema\SchemaFactory;
+	use Edde\Service\Schema\SchemaManager;
+	use Edde\Service\Template\TemplateManager;
+	use Edde\Service\Web\JavaScriptCompiler;
+	use Edde\Service\Web\StyleSheetCompiler;
+	use Edde\Service\Xml\XmlParser;
 
 	class ContainerFactory extends Object {
 		/**
@@ -341,6 +343,7 @@
 				ISchemaFactory::class => SchemaFactory::class,
 				ISchemaManager::class => SchemaManager::class,
 				IHttpClient::class => HttpClient::class,
+				IAclManager::class => AclManager::class,
 			];
 		}
 	}

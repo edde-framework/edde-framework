@@ -4,7 +4,7 @@
 	namespace Edde\Api\Http;
 
 	/**
-	 * "Abstract" interface holding common stuff between request and repsonse.
+	 * "Abstract" interface holding common stuff between request and response.
 	 */
 	interface IHttp {
 		/**

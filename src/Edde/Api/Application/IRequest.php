@@ -8,6 +8,13 @@
 	 */
 	interface IRequest {
 		/**
+		 * return request id
+		 *
+		 * @return string
+		 */
+		public function getId(): string;
+
+		/**
 		 * "mime" type (it can be arbitrary string) of a request
 		 *
 		 * @return string
@@ -91,11 +98,4 @@
 		 * @return string
 		 */
 		public function getCurrentName(): string;
-
-		/**
-		 * return request id
-		 *
-		 * @return string
-		 */
-		public function getId(): string;
 	}
