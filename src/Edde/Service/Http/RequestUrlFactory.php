@@ -1,10 +1,11 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Http;
+	namespace Edde\Service\Http;
 
 	use Edde\Api\Http\IRequestUrl;
 	use Edde\Api\Http\IRequestUrlFactory;
+	use Edde\Common\Http\RequestUrl;
 	use Edde\Common\Object;
 
 	class RequestUrlFactory extends Object implements IRequestUrlFactory {

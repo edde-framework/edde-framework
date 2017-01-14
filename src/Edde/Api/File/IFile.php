@@ -3,7 +3,6 @@
 
 	namespace Edde\Api\File;
 
-	use Brick\Math\BigInteger;
 	use Edde\Api\Resource\IResource;
 
 	interface IFile extends IResource {

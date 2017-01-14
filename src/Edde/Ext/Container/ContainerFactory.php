@@ -62,7 +62,6 @@
 	use Edde\Common\Http\HeaderFactory;
 	use Edde\Common\Http\HttpRequest;
 	use Edde\Common\Http\HttpResponse;
-	use Edde\Common\Http\RequestUrlFactory;
 	use Edde\Common\Log\LogDirectory;
 	use Edde\Common\Object;
 	use Edde\Ext\Cache\FlatFileCacheStorage;
@@ -79,6 +78,7 @@
 	use Edde\Service\Database\DatabaseStorage;
 	use Edde\Service\Http\CookieFactory;
 	use Edde\Service\Http\PostFactory;
+	use Edde\Service\Http\RequestUrlFactory;
 	use Edde\Service\Log\LogService;
 	use Edde\Service\Resource\ResourceManager;
 	use Edde\Service\Router\RouterService;
