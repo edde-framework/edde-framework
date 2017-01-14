@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Http\Client;
 
@@ -29,12 +29,12 @@
 		 * get & execute & body
 		 *
 		 * @param string|IUrl $url
-		 * @param string      $target
+		 * @param string|null $target
 		 * @param string|null $mime
 		 *
 		 * @return mixed
 		 */
-		public function gete($url, string $target, string $mime = null);
+		public function gete($url, string $target = null, string $mime = null);
 
 		/**
 		 * @param string|IUrl $url target url address

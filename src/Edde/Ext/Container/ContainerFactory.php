@@ -25,6 +25,7 @@
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Html\ITemplateDirectory;
+	use Edde\Api\Http\Client\IHttpClient;
 	use Edde\Api\Http\ICookieFactory;
 	use Edde\Api\Http\ICookieList;
 	use Edde\Api\Http\IHeaderFactory;
@@ -55,6 +56,7 @@
 	use Edde\Common\Cache\Cache;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheManager;
+	use Edde\Common\Client\HttpClient;
 	use Edde\Common\Container\Container;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crate\CrateDirectory;
@@ -338,6 +340,7 @@
 				ICrateFactory::class => CrateFactory::class,
 				ISchemaFactory::class => SchemaFactory::class,
 				ISchemaManager::class => SchemaManager::class,
+				IHttpClient::class => HttpClient::class,
 			];
 		}
 	}

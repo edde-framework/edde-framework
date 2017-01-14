@@ -13,7 +13,6 @@
 	class HttpRequest extends AbstractHttp implements IHttpRequest {
 		use LazyRequestUrlTrait;
 		use LazyHeaderListTrait;
-
 		/**
 		 * @var string
 		 */

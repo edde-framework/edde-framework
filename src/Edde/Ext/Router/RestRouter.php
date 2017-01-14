@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Router;
 
@@ -53,7 +53,7 @@
 				if ($service->match($this->requestUrl)) {
 					$this->httpResponse->setContentType($mime);
 					$this->responseManager->setMime($mime = ('http+' . $mime));
-					return (new Request($mime, $this->requestUrl->getQuery()))->registerActionHandler(get_class($service), $this->httpRequest->getMethod());
+					return (new Request($mime))->registerActionHandler(get_class($service), $this->httpRequest->getMethod(), $this->requestUrl->getQuery());
 				}
 			}
 			return null;

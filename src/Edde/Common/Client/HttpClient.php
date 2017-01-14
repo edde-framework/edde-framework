@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Client;
 
@@ -23,7 +23,6 @@
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpRequest;
-	use Edde\Common\Http\PostList;
 	use Edde\Common\Http\RequestUrl;
 	use Edde\Common\Object;
 
@@ -39,21 +38,22 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function gete($url, string $target, string $mime = null) {
-			return $this->get($url)
-				->execute()
-				->body($target, $mime);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function get($url): IHttpHandler {
 			$httpRequest = $this->createRequest($url)
 				->setMethod('GET');
 			$this->event(new GetEvent($httpRequest, $httpHandler = $this->request($httpRequest)));
 			$this->event(new HandlerEvent($httpRequest, $httpHandler));
 			return $httpHandler;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function gete($url, string $target = null, string $mime = null) {
+			$httpResponse = $this->get($url)
+				->execute();
+			return $target ? $httpResponse->body($target, $mime) : $httpResponse->getBody()
+				->getBody();
 		}
 
 		/**
@@ -180,7 +180,7 @@
 		 * @throws UrlException
 		 */
 		protected function createRequest($url) {
-			$httpRequest = new HttpRequest(new PostList(), new HeaderList(), new CookieList());
+			$httpRequest = new HttpRequest(new HeaderList(), new CookieList());
 			$httpRequest->setRequestUrl(RequestUrl::create($url));
 			$this->event(new RequestEvent($httpRequest));
 			return $httpRequest;
