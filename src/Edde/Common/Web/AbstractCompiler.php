@@ -4,27 +4,25 @@
 	namespace Edde\Common\Web;
 
 	use Edde\Api\Asset\LazyAssetStorageTrait;
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Filter\IFilter;
+	use Edde\Api\Session\LazyFingerprintTrait;
 	use Edde\Api\Web\ICompiler;
 	use Edde\Common\Cache\CacheTrait;
-	use Edde\Common\Deffered\DefferedTrait;
 	use Edde\Common\Resource\ResourceList;
 
 	/**
 	 * Base class for all compilers (js/css).
 	 */
-	abstract class AbstractCompiler extends ResourceList implements ICompiler, ILazyInject {
+	abstract class AbstractCompiler extends ResourceList implements ICompiler {
 		use LazyAssetStorageTrait;
+		use LazyFingerprintTrait;
 		use CacheTrait;
-		use DefferedTrait;
 		/**
 		 * filters applied during compilation (or after)
 		 *
 		 * @var IFilter[]
 		 */
 		protected $filterList = [];
-		protected $namespace = '';
 
 		/**
 		 * @inheritdoc
@@ -38,7 +36,7 @@
 		 * @inheritdoc
 		 */
 		public function setNamespace(string $namespace): ICompiler {
-			$this->namespace = $namespace;
+
 			return $this;
 		}
 
@@ -72,7 +70,8 @@
 		}
 
 		protected function prepare() {
+			parent::prepare();
 			$this->cache();
-			$this->cache->setNamespace($this->namespace);
+			$this->cache->setNamespace($this->fingerprint->fingerprint());
 		}
 	}

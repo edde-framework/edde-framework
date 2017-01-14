@@ -14,7 +14,7 @@
 		 * @inheritdoc
 		 */
 		public function render(int $indent = 0): string {
-			$this->use();
+			$this->config();
 			$renderList = [];
 			/** @var $control IHtmlControl */
 			foreach ($this->getControlList() as $control) {

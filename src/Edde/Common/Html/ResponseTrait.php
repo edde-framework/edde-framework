@@ -11,7 +11,6 @@
 	 */
 	trait ResponseTrait {
 		public function response() {
-			$this->use();
 			$this->responseManager->response(new Response(IHtmlControl::class, $this));
 		}
 	}

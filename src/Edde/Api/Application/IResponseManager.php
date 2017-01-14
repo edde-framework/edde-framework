@@ -3,12 +3,10 @@
 
 	namespace Edde\Api\Application;
 
-	use Edde\Api\Deffered\IDeffered;
-
 	/**
 	 * Response manager holds current Response (to keep responses immutable).
 	 */
-	interface IResponseManager extends IDeffered {
+	interface IResponseManager {
 		/**
 		 * set the current response
 		 *
@@ -16,7 +14,7 @@
 		 *
 		 * @return IResponseManager
 		 */
-		public function response(IResponse $response): IResponseManager;
+		public function response(IResponse $response = null): IResponseManager;
 
 		/**
 		 * if a response is not set, internal default should be applied or empty response should be returned

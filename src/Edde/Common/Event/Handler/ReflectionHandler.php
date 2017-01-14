@@ -3,16 +3,18 @@
 
 	namespace Edde\Common\Event\Handler;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEvent;
-	use Edde\Common\Deffered\DefferedTrait;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Event\AbstractHandler;
 
 	/**
 	 * This should take instance on input and return all methods accepting exactly one IEvent parameter.
 	 */
-	class ReflectionHandler extends AbstractHandler {
-		use DefferedTrait;
+	class ReflectionHandler extends AbstractHandler implements IConfigurable {
+		use ConfigurableTrait;
+
 		protected $handler;
 		/**
 		 * @var array[]
@@ -24,7 +26,7 @@
 		 *
 		 * Optimist: "Nah, of course they can!"
 		 *
-		 * @param string $handler
+		 * @param string      $handler
 		 * @param string|null $scope
 		 */
 		public function __construct($handler, string $scope = null) {
@@ -36,7 +38,7 @@
 		 * @inheritdoc
 		 */
 		public function getIterator() {
-			$this->use();
+			$this->config();
 			foreach ($this->methodList as $event => $closureList) {
 				foreach ($closureList as $closure) {
 					yield $event => $closure;
@@ -48,7 +50,7 @@
 		 * @inheritdoc
 		 * @throws EventException
 		 */
-		protected function prepare() {
+		protected function handleInit() {
 			/**
 			 * @var $cache \ReflectionMethod[][][]
 			 */

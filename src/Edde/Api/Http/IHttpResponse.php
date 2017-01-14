@@ -35,7 +35,7 @@
 		/**
 		 * retrieve decoded body or exception should be thrown
 		 *
-		 * @param string $target
+		 * @param string      $target
 		 * @param string|null $mime override incoming mime; it is not recommanded to use this option in common
 		 *
 		 * @return mixed

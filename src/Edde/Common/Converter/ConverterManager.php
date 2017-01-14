@@ -6,12 +6,14 @@
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Converter\IConverter;
 	use Edde\Api\Converter\IConverterManager;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Object;
 
 	/**
 	 * Default implementation of a convertion manager.
 	 */
-	class ConverterManager extends AbstractDeffered implements IConverterManager {
+	class ConverterManager extends Object implements IConverterManager {
+		use ConfigurableTrait;
 		/**
 		 * @var IConverter[]
 		 */
@@ -39,7 +41,7 @@
 			if (empty($source) || empty($target)) {
 				return $convert;
 			}
-			$this->use();
+			$this->config();
 			if (isset($this->converterList[$mime = ($source . '|' . $target)]) === false) {
 				throw new ConverterException(sprintf('Cannot convert unknown source mime [%s] to [%s].', $source, $target));
 			}

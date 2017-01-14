@@ -3,11 +3,13 @@
 
 	namespace Edde\Common\Html\Macro;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Crypt\LazyCryptEngineTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelper;
 	use Edde\Api\Template\MacroException;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Strings\StringException;
 	use Edde\Common\Strings\StringUtils;
@@ -16,8 +18,9 @@
 	/**
 	 * Condition macro support.
 	 */
-	class IfMacro extends AbstractHtmlMacro implements IHelper {
+	class IfMacro extends AbstractHtmlMacro implements IHelper, IConfigurable {
 		use LazyCryptEngineTrait;
+		use ConfigurableTrait;
 
 		/**
 		 * MS-DOS is like the US railroad system. It's there, but people just ignore it and find other ways of getting where they want to go.
@@ -83,7 +86,7 @@
 		}
 
 		/**
-		 * @param INode $macro
+		 * @param INode  $macro
 		 * @param string $src
 		 *
 		 * @return string
@@ -100,8 +103,8 @@
 			return sprintf('%s::getProperty(%s, %s)', ReflectionUtils::class, $this->reference($macro, $type), var_export($src, true));
 		}
 
-		protected function prepare() {
-			parent::prepare();
+		protected function handleInit() {
+			parent::handleInit();
 			$this->helperSet = new HelperSet();
 			$this->helperSet->registerHelper($this);
 		}

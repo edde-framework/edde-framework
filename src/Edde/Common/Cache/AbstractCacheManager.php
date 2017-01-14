@@ -4,15 +4,16 @@
 	namespace Edde\Common\Cache;
 
 	use Edde\Api\Cache\ICache;
+	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Cache\ICacheStorage;
-	use Edde\Common\Deffered\DefferedTrait;
+	use Edde\Common\Container\ConfigurableTrait;
 
 	/**
 	 * Common stuff for a cache cache implementation.
 	 */
 	abstract class AbstractCacheManager extends AbstractCache implements ICacheManager {
-		use DefferedTrait;
+		use ConfigurableTrait;
 		/**
 		 * @var ICacheStorage[]
 		 */
@@ -38,7 +39,6 @@
 		 * @inheritdoc
 		 */
 		public function cache(string $namespace = null, ICacheStorage $cacheStorage = null): ICache {
-			$this->use();
 			return (new Cache($cacheStorage ?: ($this->cacheStorageList[$namespace] ?? $this->cacheStorage)))->setNamespace($this->namespace . $namespace);
 		}
 	}

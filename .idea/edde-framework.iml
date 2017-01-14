@@ -6,41 +6,73 @@
       <sourceFolder url="file://$MODULE_DIR$/tests/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/app/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/.runtime/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/.runtime/.apache" />
+      <excludeFolder url="file://$MODULE_DIR$/.runtime/.php" />
+      <excludeFolder url="file://$MODULE_DIR$/.runtime/.redis" />
+      <excludeFolder url="file://$MODULE_DIR$/.runtime/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/.runtime/db" />
+      <excludeFolder url="file://$MODULE_DIR$/.runtime/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/.runtime/logs" />
       <excludeFolder url="file://$MODULE_DIR$/artwork" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/defuse/php-encryption" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/doctrine/instantiator" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/myclabs/deep-copy" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/nikic/php-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/paragonie/constant_time_encoding" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/paragonie/random_compat" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phar-io/manifest" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phar-io/version" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpdocumentor/reflection-common" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpdocumentor/reflection-docblock" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpdocumentor/type-resolver" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpspec/prophecy" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-code-coverage" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-file-iterator" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-text-template" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-timer" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-token-stream" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/phpunit" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/phpunit-mock-objects" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/code-unit-reverse-lookup" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/comparator" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/diff" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/environment" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/exporter" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/global-state" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/object-enumerator" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/recursion-context" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/resource-operations" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/version" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/theseer/directoryscanner" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/theseer/fdomdocument" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/theseer/fxsl" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/theseer/phpdox" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/tracy/tracy" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/webmozart/assert" />
       <excludeFolder url="file://$MODULE_DIR$/release" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/defuse/php-encryption" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library name="PHARS">
         <CLASSES>
-          <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.0.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/phar-io/manifest/tests/_fixture/test.phar/" />
-          <root url="phar://$MODULE_DIR$/vendor/phar-io/manifest/tests/_fixture/test.phar/" />
-          <root url="phar://$MODULE_DIR$/bin/phpcs.phar/" />
-          <root url="phar://$MODULE_DIR$/vendor/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.0.phar/" />
-          <root url="phar://$MODULE_DIR$/bin/phpmd.phar/" />
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/phar-io/manifest/tests/_fixture/test.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.0.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
         </CLASSES>
         <SOURCES>
-          <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.0.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/phar-io/manifest/tests/_fixture/test.phar/" />
-          <root url="phar://$MODULE_DIR$/vendor/phar-io/manifest/tests/_fixture/test.phar/" />
-          <root url="phar://$MODULE_DIR$/bin/phpcs.phar/" />
-          <root url="phar://$MODULE_DIR$/vendor/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.0.phar/" />
-          <root url="phar://$MODULE_DIR$/bin/phpmd.phar/" />
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/phar-io/manifest/tests/_fixture/test.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.0.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
         </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="PHP Runtime" type="php">
+      <library name="PHP Runtime">
         <CLASSES>
           <root url="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/standard" />
         </CLASSES>
@@ -52,16 +84,80 @@
     <orderEntry type="module-library">
       <library name="PHP" type="php">
         <CLASSES>
-          <root url="file://$MODULE_DIR$/vendor/composer" />
-          <root url="file://$MODULE_DIR$/vendor/defuse/php-encryption" />
-          <root url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
-          <root url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
+          <root url="file://$MODULE_DIR$/lib/composer" />
+          <root url="file://$MODULE_DIR$/lib/defuse/php-encryption" />
+          <root url="file://$MODULE_DIR$/lib/doctrine/instantiator" />
+          <root url="file://$MODULE_DIR$/lib/myclabs/deep-copy" />
+          <root url="file://$MODULE_DIR$/lib/nikic/php-parser" />
+          <root url="file://$MODULE_DIR$/lib/paragonie/constant_time_encoding" />
+          <root url="file://$MODULE_DIR$/lib/paragonie/random_compat" />
+          <root url="file://$MODULE_DIR$/lib/phar-io/manifest" />
+          <root url="file://$MODULE_DIR$/lib/phar-io/version" />
+          <root url="file://$MODULE_DIR$/lib/phpdocumentor/reflection-common" />
+          <root url="file://$MODULE_DIR$/lib/phpdocumentor/reflection-docblock" />
+          <root url="file://$MODULE_DIR$/lib/phpdocumentor/type-resolver" />
+          <root url="file://$MODULE_DIR$/lib/phpspec/prophecy" />
+          <root url="file://$MODULE_DIR$/lib/phpunit/php-code-coverage" />
+          <root url="file://$MODULE_DIR$/lib/phpunit/php-file-iterator" />
+          <root url="file://$MODULE_DIR$/lib/phpunit/php-text-template" />
+          <root url="file://$MODULE_DIR$/lib/phpunit/php-timer" />
+          <root url="file://$MODULE_DIR$/lib/phpunit/php-token-stream" />
+          <root url="file://$MODULE_DIR$/lib/phpunit/phpunit" />
+          <root url="file://$MODULE_DIR$/lib/phpunit/phpunit-mock-objects" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/code-unit-reverse-lookup" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/comparator" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/diff" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/environment" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/exporter" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/global-state" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/object-enumerator" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/recursion-context" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/resource-operations" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/version" />
+          <root url="file://$MODULE_DIR$/lib/theseer/directoryscanner" />
+          <root url="file://$MODULE_DIR$/lib/theseer/fdomdocument" />
+          <root url="file://$MODULE_DIR$/lib/theseer/fxsl" />
+          <root url="file://$MODULE_DIR$/lib/theseer/phpdox" />
+          <root url="file://$MODULE_DIR$/lib/tracy/tracy" />
+          <root url="file://$MODULE_DIR$/lib/webmozart/assert" />
         </CLASSES>
         <SOURCES>
-          <root url="file://$MODULE_DIR$/vendor/composer" />
-          <root url="file://$MODULE_DIR$/vendor/defuse/php-encryption" />
-          <root url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
-          <root url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
+          <root url="file://$MODULE_DIR$/lib/composer" />
+          <root url="file://$MODULE_DIR$/lib/defuse/php-encryption" />
+          <root url="file://$MODULE_DIR$/lib/doctrine/instantiator" />
+          <root url="file://$MODULE_DIR$/lib/myclabs/deep-copy" />
+          <root url="file://$MODULE_DIR$/lib/nikic/php-parser" />
+          <root url="file://$MODULE_DIR$/lib/paragonie/constant_time_encoding" />
+          <root url="file://$MODULE_DIR$/lib/paragonie/random_compat" />
+          <root url="file://$MODULE_DIR$/lib/phar-io/manifest" />
+          <root url="file://$MODULE_DIR$/lib/phar-io/version" />
+          <root url="file://$MODULE_DIR$/lib/phpdocumentor/reflection-common" />
+          <root url="file://$MODULE_DIR$/lib/phpdocumentor/reflection-docblock" />
+          <root url="file://$MODULE_DIR$/lib/phpdocumentor/type-resolver" />
+          <root url="file://$MODULE_DIR$/lib/phpspec/prophecy" />
+          <root url="file://$MODULE_DIR$/lib/phpunit/php-code-coverage" />
+          <root url="file://$MODULE_DIR$/lib/phpunit/php-file-iterator" />
+          <root url="file://$MODULE_DIR$/lib/phpunit/php-text-template" />
+          <root url="file://$MODULE_DIR$/lib/phpunit/php-timer" />
+          <root url="file://$MODULE_DIR$/lib/phpunit/php-token-stream" />
+          <root url="file://$MODULE_DIR$/lib/phpunit/phpunit" />
+          <root url="file://$MODULE_DIR$/lib/phpunit/phpunit-mock-objects" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/code-unit-reverse-lookup" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/comparator" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/diff" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/environment" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/exporter" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/global-state" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/object-enumerator" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/recursion-context" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/resource-operations" />
+          <root url="file://$MODULE_DIR$/lib/sebastian/version" />
+          <root url="file://$MODULE_DIR$/lib/theseer/directoryscanner" />
+          <root url="file://$MODULE_DIR$/lib/theseer/fdomdocument" />
+          <root url="file://$MODULE_DIR$/lib/theseer/fxsl" />
+          <root url="file://$MODULE_DIR$/lib/theseer/phpdox" />
+          <root url="file://$MODULE_DIR$/lib/tracy/tracy" />
+          <root url="file://$MODULE_DIR$/lib/webmozart/assert" />
         </SOURCES>
       </library>
     </orderEntry>

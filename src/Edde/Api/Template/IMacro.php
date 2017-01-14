@@ -27,7 +27,7 @@
 		/**
 		 * pre-compile preparation of node tree; may return the same or a new macro which will be used as a new root
 		 *
-		 * @param INode $macro
+		 * @param INode     $macro
 		 * @param ICompiler $compiler
 		 *
 		 * @return INode|null
@@ -37,7 +37,7 @@
 		/**
 		 * executed in compile time
 		 *
-		 * @param INode $macro
+		 * @param INode     $macro
 		 * @param ICompiler $compiler
 		 *
 		 * @return mixed
@@ -47,7 +47,7 @@
 		/**
 		 * executed in runtime phase
 		 *
-		 * @param INode $macro
+		 * @param INode     $macro
 		 * @param ICompiler $compiler
 		 */
 		public function macro(INode $macro, ICompiler $compiler);

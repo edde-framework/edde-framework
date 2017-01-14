@@ -5,9 +5,9 @@
 
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\IMacroSet;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Object;
 
-	class MacroSet extends AbstractDeffered implements IMacroSet {
+	class MacroSet extends Object implements IMacroSet {
 		/**
 		 * @var IMacro[]
 		 */
@@ -17,7 +17,6 @@
 		 * @inheritdoc
 		 */
 		public function getMacroList(): array {
-			$this->use();
 			return $this->macroList;
 		}
 

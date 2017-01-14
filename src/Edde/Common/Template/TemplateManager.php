@@ -3,21 +3,19 @@
 
 	namespace Edde\Common\Template;
 
-	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\File\FileException;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Template\LazyHelperSetTrait;
 	use Edde\Api\Template\LazyMacroSetTrait;
 	use Edde\Common\Cache\CacheTrait;
-	use Edde\Common\Deffered\AbstractDeffered;
 	use Edde\Common\File\File;
+	use Edde\Common\Object;
 
 	/**
 	 * Default implementation of a template manager.
 	 */
-	class TemplateManager extends AbstractDeffered implements ITemplateManager {
-		use LazyContainerTrait;
+	class TemplateManager extends Object implements ITemplateManager {
 		use LazyMacroSetTrait;
 		use LazyHelperSetTrait;
 		use CacheTrait;
@@ -27,19 +25,20 @@
 		 * @throws FileException
 		 */
 		public function template(string $template, array $importList = []) {
-			$this->use();
-			if ($result = $this->cache->load($cacheId = $template . implode(',', $importList))) {
+			$cache = $this->cache();
+			if ($result = $cache->load($cacheId = $template . implode(',', $importList))) {
 				return $result;
 			}
 			/** @var $compiler ICompiler */
-			$this->container->inject($compiler = new Compiler(new File($template)));
+			$compiler = $this->container->create(Compiler::class, [new File($template)], __METHOD__);
 			foreach ($importList as &$import) {
 				$import = new File($import);
 			}
 			unset($import);
 			$compiler->registerMacroSet($this->macroSet);
 			$compiler->registerHelperSet($this->helperSet);
-			return $this->cache->save($cacheId, $compiler->template($importList));
+			$compiler->setup();
+			return $cache->save($cacheId, $compiler->template($importList));
 		}
 
 		protected function prepare() {

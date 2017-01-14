@@ -3,11 +3,14 @@
 
 	namespace Edde\Common\Query\Schema;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Schema\ISchema;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractQuery;
 
-	class CreateSchemaQuery extends AbstractQuery {
+	class CreateSchemaQuery extends AbstractQuery implements IConfigurable {
+		use ConfigurableTrait;
 		/**
 		 * @var ISchema
 		 */
@@ -20,7 +23,7 @@
 			$this->schema = $schema;
 		}
 
-		protected function prepare() {
+		protected function handleInit() {
 			$this->node = new Node('create-schema-query', $this->schema->getSchemaName());
 			foreach ($this->schema->getPropertyList() as $schemaProperty) {
 				$this->node->addNode($propertyNode = new Node($schemaProperty->getName()));

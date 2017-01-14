@@ -7,9 +7,9 @@
 		/**
 		 * register resource for this acl list
 		 *
-		 * @param bool $grant
-		 * @param string $resource
-		 * @param \DateTime $from
+		 * @param bool           $grant
+		 * @param string         $resource
+		 * @param \DateTime      $from
 		 * @param \DateTime|null $until
 		 *
 		 * @return IAcl
@@ -19,9 +19,9 @@
 		/**
 		 * check if the given right is granted for this acl
 		 *
-		 * @param string $resource
+		 * @param string         $resource
 		 * @param \DateTime|null $dateTime
-		 * @param bool $default
+		 * @param bool           $default
 		 *
 		 * @return bool
 		 */

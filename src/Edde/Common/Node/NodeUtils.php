@@ -5,14 +5,14 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Set of tools for work with nodes.
 	 */
-	class NodeUtils extends AbstractObject {
+	class NodeUtils extends Object {
 		/**
-		 * @param INode $root
+		 * @param INode                        $root
 		 * @param \Traversable|\Iterator|array $source
 		 *
 		 * @return INode
@@ -81,7 +81,7 @@
 		 * convert input of stdClass to node tree
 		 *
 		 * @param \stdClass $stdClass
-		 * @param INode $root
+		 * @param INode     $root
 		 *
 		 * @return INode
 		 * @throws NodeException

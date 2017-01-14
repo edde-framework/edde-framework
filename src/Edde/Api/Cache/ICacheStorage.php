@@ -3,15 +3,13 @@
 
 	namespace Edde\Api\Cache;
 
-	use Edde\Api\Deffered\IDeffered;
-
 	/**
 	 * Cache storage implementation.
 	 */
-	interface ICacheStorage extends IDeffered {
+	interface ICacheStorage {
 		/**
 		 * @param string $id
-		 * @param mixed $save must be serializable
+		 * @param mixed  $save must be serializable
 		 *
 		 * @return mixed returns input $save
 		 */

@@ -5,9 +5,9 @@
 
 	use Edde\Api\Acl\AclException;
 	use Edde\Api\Acl\IAcl;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class Acl extends AbstractObject implements IAcl {
+	class Acl extends Object implements IAcl {
 		/**
 		 * @var array[]
 		 */

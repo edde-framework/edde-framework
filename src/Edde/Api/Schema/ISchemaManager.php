@@ -1,12 +1,14 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Schema;
+
+	use Edde\Api\Container\IConfigurable;
 
 	/**
 	 * General way how to handle schemas.
 	 */
-	interface ISchemaManager {
+	interface ISchemaManager extends IConfigurable {
 		/**
 		 * register a new schema to this manager; if there is schema with schema name, it is silently replaced
 		 *

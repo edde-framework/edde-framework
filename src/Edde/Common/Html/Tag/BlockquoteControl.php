@@ -32,8 +32,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function prepare() {
-			parent::prepare();
+		protected function handleInit() {
+			parent::handleInit();
 			parent::setTag('blockquote', true);
 		}
 	}

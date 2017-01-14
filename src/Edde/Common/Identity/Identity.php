@@ -7,9 +7,9 @@
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Identity\IdentityException;
 	use Edde\Api\Identity\IIdentity;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Object;
 
-	class Identity extends AbstractDeffered implements IIdentity {
+	class Identity extends Object implements IIdentity {
 		/**
 		 * @var ICrate
 		 */

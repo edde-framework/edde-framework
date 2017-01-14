@@ -7,7 +7,7 @@
 	use Edde\Api\Upgrade\IUpgrade;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Upgrade\UpgradeException;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Object;
 	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Upgrade\Event\OnUpgradeEvent;
 	use Edde\Common\Upgrade\Event\UpgradeEndEvent;
@@ -17,7 +17,7 @@
 	/**
 	 * Default implementation of a upgrade manager.
 	 */
-	class UpgradeManager extends AbstractDeffered implements IUpgradeManager {
+	class UpgradeManager extends Object implements IUpgradeManager {
 		use EventTrait;
 		use LazyStorageTrait;
 		/**
@@ -47,7 +47,6 @@
 		 * @throws UpgradeException
 		 */
 		public function setCurrentVersion(string $currentVersion = null): IUpgradeManager {
-			$this->use();
 			if ($currentVersion && isset($this->upgradeList[$currentVersion]) === false) {
 				throw new UpgradeException(sprintf('Setting unknown current version [%s].', $currentVersion));
 			}
@@ -59,7 +58,6 @@
 		 * @inheritdoc
 		 */
 		public function getUpgradeList(): array {
-			$this->use();
 			return $this->upgradeList;
 		}
 
@@ -76,7 +74,6 @@
 		 * @throws \Exception
 		 */
 		public function upgradeTo(string $version = null): IUpgrade {
-			$this->use();
 			if ($version === null) {
 				end($this->upgradeList);
 				$version = key($this->upgradeList);

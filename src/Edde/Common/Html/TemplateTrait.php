@@ -4,7 +4,6 @@
 	namespace Edde\Common\Html;
 
 	use Edde\Api\Application\LazyRequestTrait;
-	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Control\ControlException;
 	use Edde\Api\Html\HtmlException;
 	use Edde\Api\Html\IHtmlControl;
@@ -19,26 +18,29 @@
 	 * Template trait can be used by any html control; it gives simple way to load a template (or snippet) with some little magic around.
 	 */
 	trait TemplateTrait {
-		use LazyContainerTrait;
 		use LazyTemplateManagerTrait;
 		use LazyRequestTrait;
 		use CacheTrait;
 
 		public function template(array $snippetList = null) {
 			$reflectionClass = new \ReflectionClass($this);
-			if (($template = $this->cache->load($cacheId = ('template-list/' . $this->request->getId() . $reflectionClass->getName()))) === null) {
+			$cache = $this->cache();
+			if (($template = $cache->load($cacheId = ('template-list/' . $this->request->getId() . $reflectionClass->getName()))) === null) {
 				$parent = $reflectionClass;
 				$fileList = [];
 				while ($parent) {
 					$directory = dirname($parent->getFileName());
-					$fileList[] = $directory . '/../template/layout.xml';
 					$fileList[] = $directory . '/layout.xml';
 					$fileList[] = $directory . '/template/layout.xml';
+					$fileList[] = $directory . '/../template/layout.xml';
+					$fileList[] = $directory . '/../../template/layout.xml';
 					if ($this->request->hasAction()) {
-						$fileList[] = $directory . '/template/action-' . $this->request->getActionName() . '.xml';
+						$fileList[] = $directory . '/' . ($action = 'action-' . $this->request->getActionName() . '.xml');
+						$fileList[] = $directory . '/template/' . $action;
 					}
 					if ($this->request->hasHandle()) {
-						$fileList[] = $directory . '/template/handle-' . $this->request->getHandleName() . '.xml';
+						$fileList[] = $directory . '/' . ($handle = 'handle-' . $this->request->getHandleName() . '.xml');
+						$fileList[] = $directory . '/template/' . $handle;
 					}
 					$parent = $parent->getParentClass();
 				}
@@ -57,7 +59,7 @@
 					$layout = array_shift($importList);
 				}
 				/** @noinspection PhpUndefinedVariableInspection */
-				$this->cache->save($cacheId, $template = [
+				$cache->save($cacheId, $template = [
 					$layout,
 					$importList,
 				]);

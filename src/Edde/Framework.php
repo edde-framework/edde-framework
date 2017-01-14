@@ -3,12 +3,12 @@
 
 	namespace Edde;
 
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Information about framework hidden in this class.
 	 */
-	class Framework extends AbstractObject {
+	class Framework extends Object {
 		/**
 		 * return full version string
 		 *
@@ -24,7 +24,7 @@
 		 * @return string
 		 */
 		public function getVersion() {
-			return '2.6.0.13';
+			return '3.0.772.0';
 		}
 
 		/**
@@ -33,6 +33,10 @@
 		 * @return string
 		 */
 		public function getCodename() {
-			return 'The Blueprint';
+			return 'The Unepic Epicness';
+		}
+
+		public function __toString() {
+			return $this->getVersionString();
 		}
 	}

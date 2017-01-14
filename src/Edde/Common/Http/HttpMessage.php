@@ -6,9 +6,9 @@
 	use Edde\Api\Http\HttpMessageException;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttpMessage;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Object;
 
-	class HttpMessage extends AbstractDeffered implements IHttpMessage {
+	class HttpMessage extends Object implements IHttpMessage {
 		/**
 		 * @var string
 		 */
@@ -41,7 +41,6 @@
 		 * @inheritdoc
 		 */
 		public function getHeaderList(): IHeaderList {
-			$this->use();
 			return $this->headerList;
 		}
 
@@ -49,7 +48,6 @@
 		 * @inheritdoc
 		 */
 		public function getContentType(string $default = ''): string {
-			$this->use();
 			return $this->headerList->getContentType()
 				->getMime($default);
 		}
@@ -90,6 +88,7 @@
 		 * @inheritdoc
 		 */
 		protected function prepare() {
+			parent::prepare();
 			$this->headerList = new HeaderList();
 			$this->headerList->put(HttpUtils::headerList($this->headers, false));
 			$contentType = $this->headerList->getContentType();
@@ -108,7 +107,6 @@
 		 * @inheritdoc
 		 */
 		public function getContentId() {
-			$this->use();
 			return trim($this->headerList->get('Content-ID'), '<>');
 		}
 	}

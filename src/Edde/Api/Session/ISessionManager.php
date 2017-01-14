@@ -3,12 +3,10 @@
 
 	namespace Edde\Api\Session;
 
-	use Edde\Api\Deffered\IDeffered;
-
 	/**
 	 * Session manager is responsible for updating session state (starting, modifying, closing, ...).
 	 */
-	interface ISessionManager extends IDeffered {
+	interface ISessionManager {
 		/**
 		 * excplicitly open a session
 		 *

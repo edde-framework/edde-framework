@@ -1,5 +1,7 @@
-/vendor/
-/doc/
+**/lib/
 /.idea/workspace.xml
 *.log
 *.sqlite
+*.pid
+**/cache/
+**/temp/

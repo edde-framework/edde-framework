@@ -10,14 +10,16 @@
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Api\Schema\SchemaException;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Object;
 
 	/**
 	 * Factory for... creating crates.
 	 */
-	class CrateFactory extends AbstractDeffered implements ICrateFactory {
+	class CrateFactory extends Object implements ICrateFactory {
 		use LazySchemaManagerTrait;
 		use LazyContainerTrait;
+		use ConfigurableTrait;
 
 		/**
 		 * @inheritdoc
@@ -25,7 +27,7 @@
 		 * @throws CrateException
 		 */
 		public function build(array $crateList): array {
-			$this->use();
+			$this->config();
 			$crates = [];
 			foreach ($crateList as $schema => $source) {
 				$this->load($crates[] = $crate = $this->crate($this->container->has($schema) ? $schema : Crate::class, $schema, null), $source);
@@ -35,7 +37,7 @@
 
 		/**
 		 * @param ICrate $crate
-		 * @param array $source
+		 * @param array  $source
 		 *
 		 * @return ICrate
 		 * @throws SchemaException
@@ -77,8 +79,11 @@
 		 * @inheritdoc
 		 */
 		public function collection(string $schema, string $crate = null): ICollection {
-			$this->use();
-			return $this->container->create(Collection::class, $schema, $crate);
+			$this->config();
+			return $this->container->create(Collection::class, [
+				$schema,
+				$crate,
+			], __METHOD__);
 		}
 
 		/**
@@ -87,9 +92,9 @@
 		 * @throws CrateException
 		 */
 		public function crate(string $crate, string $schema = null, array $load = null): ICrate {
-			$this->use();
+			$this->config();
 			/** @var $crate ICrate */
-			$crate = $this->container->create($crate);
+			$crate = $this->container->create($crate, [], __METHOD__);
 			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
 			$crate->setSchema($schema = $this->schemaManager->getSchema($schema ?: get_class($crate)));
 			foreach ($schema->getPropertyList() as $schemaProperty) {

@@ -3,9 +3,7 @@
 
 	namespace Edde\Api\Schema;
 
-	use Edde\Api\Deffered\IDeffered;
-
-	interface ISchema extends IDeffered {
+	interface ISchema {
 		/**
 		 * return only the name of this schema without namespace
 		 *
@@ -57,10 +55,10 @@
 		/**
 		 * make a link between the given source and destination property (1:1); if the name is present and force === false, exception should be thrown
 		 *
-		 * @param string $name
+		 * @param string          $name
 		 * @param ISchemaProperty $source
 		 * @param ISchemaProperty $target
-		 * @param bool $force
+		 * @param bool            $force
 		 *
 		 * @return ISchema
 		 */
@@ -94,10 +92,10 @@
 		/**
 		 * connect the given source property to the target property as 1:n collection
 		 *
-		 * @param string $name
+		 * @param string          $name
 		 * @param ISchemaProperty $source
 		 * @param ISchemaProperty $target
-		 * @param bool $force
+		 * @param bool            $force
 		 *
 		 * @return ISchema
 		 */
@@ -125,8 +123,8 @@
 		/**
 		 * link the given source property to the given target property in both directions (link + collection in reverse); this is only shorthand for link(source, target) + collection(target, source)
 		 *
-		 * @param string $link
-		 * @param string $collection
+		 * @param string          $link
+		 * @param string          $collection
 		 * @param ISchemaProperty $source
 		 * @param ISchemaProperty $target
 		 *
@@ -137,7 +135,7 @@
 		/**
 		 * retrieve named metadata
 		 *
-		 * @param string $name
+		 * @param string     $name
 		 * @param mixed|null $default
 		 *
 		 * @return mixed

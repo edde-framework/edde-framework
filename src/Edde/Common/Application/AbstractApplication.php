@@ -4,12 +4,10 @@
 	namespace Edde\Common\Application;
 
 	use Edde\Api\Application\IApplication;
-	use Edde\Common\Deffered\AbstractDeffered;
-	use Edde\Common\Event\EventTrait;
+	use Edde\Common\Object;
 
 	/**
 	 * Common implementation for all applications.
 	 */
-	abstract class AbstractApplication extends AbstractDeffered implements IApplication {
-		use EventTrait;
+	abstract class AbstractApplication extends Object implements IApplication {
 	}

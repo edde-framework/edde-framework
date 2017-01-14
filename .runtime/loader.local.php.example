@@ -1,0 +1,9 @@
+<?php
+	declare(strict_types = 1);
+
+	use Edde\Api\Cache\ICacheManager;
+	use Edde\Common\Cache\DummyCacheManager;
+
+	return [
+		ICacheManager::class => DummyCacheManager::class,
+	];

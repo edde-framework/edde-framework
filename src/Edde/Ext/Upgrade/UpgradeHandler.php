@@ -3,11 +3,10 @@
 
 	namespace Edde\Ext\Upgrade;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Crate\LazyCrateFactoryTrait;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Api\Storage\LazyStorageTrait;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Query\Schema\CreateSchemaQuery;
 	use Edde\Common\Query\Select\SelectQuery;
 	use Edde\Common\Storage\UnknownSourceException;
@@ -18,7 +17,7 @@
 	/**
 	 * Upgrade Event Handler.
 	 */
-	class UpgradeHandler extends AbstractObject implements ILazyInject {
+	class UpgradeHandler extends Object {
 		use LazyStorageTrait;
 		use LazySchemaManagerTrait;
 		use LazyCrateFactoryTrait;

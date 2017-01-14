@@ -16,9 +16,9 @@
 			return $this;
 		}
 
-		protected function prepare() {
-			parent::prepare()
-				->javascript(self::class)
+		protected function handleInit() {
+			parent::handleInit();
+			$this->javascript(self::class)
 				->setTag('input', false)
 				->addAttributeList([
 					'type' => 'text',

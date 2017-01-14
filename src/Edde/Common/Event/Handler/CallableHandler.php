@@ -4,17 +4,18 @@
 	namespace Edde\Common\Event\Handler;
 
 	use Edde\Api\Callback\IParameter;
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEvent;
 	use Edde\Common\Callback\Callback;
-	use Edde\Common\Deffered\DefferedTrait;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Event\AbstractHandler;
 
 	/**
 	 * Simple lamda handler.
 	 */
-	class CallableHandler extends AbstractHandler {
-		use DefferedTrait;
+	class CallableHandler extends AbstractHandler implements IConfigurable {
+		use ConfigurableTrait;
 		/**
 		 * @var callable
 		 */
@@ -26,7 +27,7 @@
 
 		/**
 		 * @param callable $callable
-		 * @param string $scope
+		 * @param string   $scope
 		 */
 		public function __construct(callable $callable, string $scope = null) {
 			parent::__construct($scope);
@@ -38,7 +39,7 @@
 		 * @inheritdoc
 		 */
 		public function getIterator() {
-			$this->use();
+			$this->config();
 			if (empty($this->event)) {
 				return new \ArrayIterator([]);
 			}
@@ -49,7 +50,7 @@
 		 * @inheritdoc
 		 * @throws EventException
 		 */
-		protected function prepare() {
+		protected function handleInit() {
 			$callback = new Callback($this->callable);
 			$parameterList = $callback->getParameterList();
 			if (count($parameterList) !== 1) {

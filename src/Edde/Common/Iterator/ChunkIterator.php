@@ -3,9 +3,9 @@
 
 	namespace Edde\Common\Iterator;
 
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class ChunkIterator extends AbstractObject implements \Iterator {
+	class ChunkIterator extends Object implements \Iterator {
 		/**
 		 * @var callable
 		 */
@@ -20,7 +20,7 @@
 		protected $sourceIterator;
 
 		/**
-		 * @param callable $chunkIteratorCallback
+		 * @param callable  $chunkIteratorCallback
 		 * @param \Iterator $sourceIterator
 		 */
 		public function __construct(callable $chunkIteratorCallback, \Iterator $sourceIterator) {

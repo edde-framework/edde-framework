@@ -1,0 +1,13 @@
+{
+	"config": {
+		"optimize-autoloader": true,
+		"vendor-dir": "lib"
+	},
+	"require": {
+		"php": ">=7.0",
+		"roave/security-advisories": "dev-master"
+	},
+	"require-dev": {
+		"tracy/tracy": "@dev"
+	}
+}

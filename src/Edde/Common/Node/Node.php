@@ -30,9 +30,9 @@
 		/**
 		 * FORTRAN is not a language. It's a way of turning a multi-million dollar mainframe into a $50 programmable scientific calculator.
 		 *
-		 * @param string $name
+		 * @param string     $name
 		 * @param mixed|null $value
-		 * @param array $attributeList
+		 * @param array      $attributeList
 		 */
 		public function __construct($name = null, $value = null, array $attributeList = []) {
 			parent::__construct();
@@ -42,8 +42,8 @@
 		}
 
 		/**
-		 * @param string $name
-		 * @param array $attributeList
+		 * @param string     $name
+		 * @param array      $attributeList
 		 * @param mixed|null $value
 		 *
 		 * @return INode|static

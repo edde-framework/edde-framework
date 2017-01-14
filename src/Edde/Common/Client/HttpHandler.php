@@ -3,17 +3,13 @@
 
 	namespace Edde\Common\Client;
 
-	use Edde\Api\Client\ClientException;
-	use Edde\Api\Client\IHttpHandler;
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyTempDirectoryTrait;
+	use Edde\Api\Http\Client\IHttpHandler;
 	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
-	use Edde\Api\Http\IPostList;
-	use Edde\Common\AbstractObject;
 	use Edde\Common\Client\Event\OnRequestEvent;
 	use Edde\Common\Client\Event\RequestDoneEvent;
 	use Edde\Common\Client\Event\RequestFailedEvent;
@@ -23,12 +19,13 @@
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Http\HttpUtils;
+	use Edde\Common\Object;
 	use Edde\Common\Strings\StringException;
 
 	/**
 	 * Http client handler; this should not be used in common; only as a result from HttpClient calls
 	 */
-	class HttpHandler extends AbstractObject implements IHttpHandler, ILazyInject {
+	class HttpHandler extends Object implements IHttpHandler {
 		use LazyContainerTrait;
 		use LazyTempDirectoryTrait;
 		use EventTrait;
@@ -67,7 +64,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function basic(string $user, string $password): IHttpHandler {
+		public function basic(string $user, string $password): \Edde\Api\Http\Client\IHttpHandler {
 			curl_setopt_array($this->curl, [
 				CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
 				CURLOPT_USERPWD => vsprintf('%s:%s', func_get_args()),
@@ -89,7 +86,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function header(string $name, string $value): IHttpHandler {
+		public function header(string $name, string $value): \Edde\Api\Http\Client\IHttpHandler {
 			$this->httpRequest->getHeaderList()
 				->set($name, $value);
 			return $this;
@@ -107,7 +104,7 @@
 		 * @inheritdoc
 		 */
 		public function content($content, string $mime = null, string $target = null): IHttpHandler {
-			$content instanceof IPostList ? $this->httpRequest->setPostList($content) : $this->httpRequest->setBody($this->container->inject(new Body($content, $mime, $target)));
+			$this->httpRequest->setBody($this->container->create(Body::class, [$content], __METHOD__));
 			return $this;
 		}
 
@@ -115,7 +112,7 @@
 		 * @inheritdoc
 		 */
 		public function body(IBody $body): IHttpHandler {
-			$this->httpRequest->setBody($this->container->inject($body));
+			$this->httpRequest->setBody($body);
 			return $this;
 		}
 
@@ -140,12 +137,12 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws ClientException
+		 * @throws \Edde\Api\Http\Client\ClientException
 		 * @throws StringException
 		 */
 		public function execute(): IHttpResponse {
 			if ($this->curl === null) {
-				throw new ClientException(sprintf('Cannot execute handler for the url [%s] more than once.', (string)$this->httpRequest->getRequestUrl()));
+				throw new \Edde\Api\Http\Client\ClientException(sprintf('Cannot execute handler for the url [%s] more than once.', (string)$this->httpRequest->getRequestUrl()));
 			}
 			$options = [];
 			if ($body = $this->httpRequest->getBody()) {
@@ -155,6 +152,7 @@
 				}
 			}
 			$postList = $this->httpRequest->getPostList();
+			$options[CURLOPT_POST] = false;
 			if ($postList->isEmpty() === false) {
 				$options[CURLOPT_POST] = true;
 				$options[CURLOPT_POSTFIELDS] = $postList->array();
@@ -187,7 +185,7 @@
 			curl_setopt_array($this->curl, $options);
 			$this->event($onRequestEvent = new OnRequestEvent($this->httpRequest, $this));
 			if ($onRequestEvent->isCanceled()) {
-				throw new ClientException(sprintf('%s: request has been canceled', (string)$this->httpRequest->getRequestUrl()));
+				throw new \Edde\Api\Http\Client\ClientException(sprintf('%s: request has been canceled', (string)$this->httpRequest->getRequestUrl()));
 			}
 			$time = microtime(true);
 			if (($content = curl_exec($this->curl)) === false) {
@@ -196,7 +194,7 @@
 				curl_close($this->curl);
 				$this->curl = null;
 				$this->event(new RequestFailedEvent($this->httpRequest, $this, microtime(true) - $time));
-				throw new ClientException(sprintf('%s: %s', (string)$this->httpRequest->getRequestUrl(), $error), $errorCode);
+				throw new \Edde\Api\Http\Client\ClientException(sprintf('%s: %s', (string)$this->httpRequest->getRequestUrl(), $error), $errorCode);
 			}
 			$time = microtime(true) - $time;
 			if (is_string($contentType = $headerList->get('Content-Type', curl_getinfo($this->curl, CURLINFO_CONTENT_TYPE)))) {
@@ -205,7 +203,12 @@
 			$headerList->set('Content-Type', $contentType);
 			curl_close($this->curl);
 			$this->curl = null;
-			$this->container->inject($httpResponse = new HttpResponse($this->container->inject(new Body($content, isset($type) ? $type->mime : $contentType))));
+			$httpResponse = $this->container->create(HttpResponse::class, [
+				$this->container->create(Body::class, [
+					$content,
+					isset($type) ? $type->mime : $contentType,
+				], __METHOD__),
+			], __METHOD__);
 			$httpResponse->setHeaderList($headerList);
 			$httpResponse->setCookieList($cookieList);
 			$this->event(new RequestDoneEvent($this->httpRequest, $this, $httpResponse, $time));

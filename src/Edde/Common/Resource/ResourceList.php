@@ -6,10 +6,10 @@
 	use ArrayIterator;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceList;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\File\File;
 
-	class ResourceList extends AbstractObject implements IResourceList {
+	class ResourceList extends Object implements IResourceList {
 		/**
 		 * @var IResource[]
 		 */

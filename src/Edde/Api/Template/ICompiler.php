@@ -3,11 +3,11 @@
 
 	namespace Edde\Api\Template;
 
-	use Edde\Api\Container\ILazyInject;
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 
-	interface ICompiler extends ILazyInject {
+	interface ICompiler extends IConfigurable {
 		/**
 		 * use the given macroset
 		 *
@@ -120,7 +120,7 @@
 		 * add a value to compiler context
 		 *
 		 * @param string $name
-		 * @param mixed $value
+		 * @param mixed  $value
 		 *
 		 * @return ICompiler
 		 */
@@ -130,7 +130,7 @@
 		 * retrieve the given value from compiler's context
 		 *
 		 * @param string $name
-		 * @param null $default
+		 * @param null   $default
 		 *
 		 * @return mixed
 		 */
@@ -139,7 +139,7 @@
 		/**
 		 * execute all available helpers agains the given value of attribute
 		 *
-		 * @param INode $macro
+		 * @param INode  $macro
 		 * @param string $value
 		 *
 		 * @return null|string
@@ -150,7 +150,7 @@
 		 * block under the given id
 		 *
 		 * @param string $name
-		 * @param INode $block
+		 * @param INode  $block
 		 *
 		 * @return ICompiler
 		 */

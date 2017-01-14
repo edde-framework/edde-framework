@@ -3,12 +3,10 @@
 
 	namespace Edde\Api\Crate;
 
-	use Edde\Api\Deffered\IDeffered;
-
 	/**
 	 * This mechanism is inteded to use as conversion from an input data to crates.
 	 */
-	interface ICrateFactory extends IDeffered {
+	interface ICrateFactory {
 		/**
 		 * is possible to create crate with the given name
 		 *
@@ -23,7 +21,7 @@
 		 *
 		 * @param string $crate
 		 * @param string $schema
-		 * @param array $load
+		 * @param array  $load
 		 *
 		 * @return ICrate
 		 */

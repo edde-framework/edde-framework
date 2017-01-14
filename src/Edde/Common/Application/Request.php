@@ -5,10 +5,10 @@
 
 	use Edde\Api\Application\ApplicationException;
 	use Edde\Api\Application\IRequest;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Strings\StringUtils;
 
-	class Request extends AbstractObject implements IRequest {
+	class Request extends Object implements IRequest {
 		/**
 		 * @var string
 		 */

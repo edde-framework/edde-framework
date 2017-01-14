@@ -3,22 +3,21 @@
 
 	namespace Edde\Common\Converter;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Converter\IConverter;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Common stuff for converter implementation.
 	 */
-	abstract class AbstractConverter extends AbstractObject implements IConverter, ILazyInject {
+	abstract class AbstractConverter extends Object implements IConverter {
 		/**
 		 * @var string[]
 		 */
 		protected $mimeList;
 
 		/**
-		 * @param array|string $source
+		 * @param array|string      $source
 		 * @param array|string|null $target
 		 *
 		 * @return $this
@@ -47,8 +46,8 @@
 		/**
 		 * helper method to throw an exception if input is not supported
 		 *
-		 * @param mixed $convert
-		 * @param string $target
+		 * @param mixed     $convert
+		 * @param string    $target
 		 * @param bool|null $check
 		 *
 		 * @throws ConverterException

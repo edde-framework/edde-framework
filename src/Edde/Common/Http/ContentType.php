@@ -4,11 +4,9 @@
 	namespace Edde\Common\Http;
 
 	use Edde\Api\Http\IContentType;
-	use Edde\Common\Collection\AbstractDefferedList;
-	use Edde\Common\Deffered\DefferedTrait;
+	use Edde\Common\Collection\AbstractList;
 
-	class ContentType extends AbstractDefferedList implements IContentType {
-		use DefferedTrait;
+	class ContentType extends AbstractList implements IContentType {
 		/**
 		 * source content type
 		 *
@@ -32,7 +30,6 @@
 		}
 
 		public function getCharset(string $default = 'utf-8'): string {
-			$this->use();
 			return $this->get('charset', $default);
 		}
 
@@ -41,16 +38,15 @@
 		}
 
 		public function getMime(string $default = ''): string {
-			$this->use();
 			return $this->object ? $this->object->mime : $default;
 		}
 
 		public function getParameterList(): array {
-			$this->use();
 			return $this->array();
 		}
 
-		protected function prepare() {
+		public function prepare() {
+			parent::prepare();
 			if ($this->contentType) {
 				$this->object = HttpUtils::contentType($this->contentType);
 				$this->put($this->object->params);

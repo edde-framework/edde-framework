@@ -26,7 +26,7 @@
 		public function __construct() {
 			$this->register([
 				'text/xml',
-				'applicaiton/xml',
+				'application/xml',
 				'xml',
 			], INode::class);
 		}
@@ -53,7 +53,7 @@
 		}
 
 		/**
-		 * @param IResource $resource
+		 * @param IResource  $resource
 		 * @param INode|null $root
 		 *
 		 * @return INode

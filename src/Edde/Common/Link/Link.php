@@ -4,9 +4,9 @@
 	namespace Edde\Common\Link;
 
 	use Edde\Api\Link\ILink;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class Link extends AbstractObject implements ILink {
+	class Link extends Object implements ILink {
 		/**
 		 * @var mixed
 		 */

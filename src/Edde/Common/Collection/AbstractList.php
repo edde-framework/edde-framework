@@ -5,13 +5,13 @@
 
 	use ArrayIterator;
 	use Edde\Api\Collection\IList;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * This list implementation is abstract because it should be not possible to use
 	 * untyped lists accross an application.
 	 */
-	abstract class AbstractList extends AbstractObject implements IList {
+	abstract class AbstractList extends Object implements IList {
 		/**
 		 * @var string[]
 		 */

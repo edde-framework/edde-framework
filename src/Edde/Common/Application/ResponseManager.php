@@ -7,11 +7,13 @@
 	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Application\LazyRequestTrait;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Object;
+	use Edde\Common\Container\ConfigurableTrait;
 
-	class ResponseManager extends AbstractDeffered implements IResponseManager {
+	class ResponseManager extends Object implements IResponseManager {
 		use LazyConverterManagerTrait;
 		use LazyRequestTrait;
+		use ConfigurableTrait;
 		/**
 		 * @var IResponse
 		 */
@@ -21,7 +23,7 @@
 		 */
 		protected $mime;
 
-		public function response(IResponse $response): IResponseManager {
+		public function response(IResponse $response = null): IResponseManager {
 			$this->response = $response;
 			return $this;
 		}
@@ -39,7 +41,7 @@
 			if ($this->response === null) {
 				return;
 			}
-			$this->use();
+			$this->config();
 			$this->converterManager->convert($this->response->getResponse(), $this->response->getType(), $this->mime);
 		}
 	}

@@ -3,13 +3,13 @@
 
 	namespace Edde\Common\Strings;
 
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Callback\CallbackUtils;
 
 	/**
 	 * StringsUtils are set of independent methods for UTF-8 string manipulation.
 	 */
-	class StringUtils extends AbstractObject {
+	class StringUtils extends Object {
 		private static $SEPARATOR_LIST = [
 			'|',
 			':',
@@ -33,8 +33,8 @@
 		/**
 		 * compare two strings
 		 *
-		 * @param string $left
-		 * @param string $right
+		 * @param string   $left
+		 * @param string   $right
 		 * @param int|null $length
 		 *
 		 * @return bool
@@ -50,8 +50,8 @@
 		/**
 		 * return subset of the given string
 		 *
-		 * @param string $string
-		 * @param int $start
+		 * @param string   $string
+		 * @param int      $start
 		 * @param int|null $length
 		 *
 		 * @return string
@@ -152,7 +152,7 @@
 		 *
 		 * @param string $string
 		 * @param string $glue
-		 * @param int $index
+		 * @param int    $index
 		 *
 		 * @return string
 		 */
@@ -165,7 +165,7 @@
 		 * split the given string by capital letters (e.g. FooBar will became [Foo, Bar])
 		 *
 		 * @param string $string
-		 * @param int $index
+		 * @param int    $index
 		 *
 		 * @return array
 		 */
@@ -213,9 +213,9 @@
 		/**
 		 * remove invalid character from an "url" string
 		 *
-		 * @param string $string
+		 * @param string      $string
 		 * @param string|null $charlist
-		 * @param bool $lower
+		 * @param bool        $lower
 		 *
 		 * @return string
 		 */
@@ -272,10 +272,10 @@
 		/**
 		 * preg_match
 		 *
-		 * @param string $string
-		 * @param string $pattern
-		 * @param bool|false $named return only named parameters from token
-		 * @param array|bool|false $trim if array is provided, its used for named parameters defaults
+		 * @param string           $string
+		 * @param string           $pattern
+		 * @param bool|false       $named return only named parameters from token
+		 * @param array|bool|false $trim  if array is provided, its used for named parameters defaults
 		 *
 		 * @return array|null
 		 * @throws StringException
@@ -338,10 +338,10 @@
 		}
 
 		/**
-		 * @param string $string
-		 * @param string $pattern
-		 * @param bool|false $named return only named parameters from token
-		 * @param array|bool|false $trim if array is provided, its used for named parameters defaults
+		 * @param string           $string
+		 * @param string           $pattern
+		 * @param bool|false       $named return only named parameters from token
+		 * @param array|bool|false $trim  if array is provided, its used for named parameters defaults
 		 *
 		 * @return array|null
 		 * @throws StringException
@@ -373,10 +373,10 @@
 		/**
 		 * preg_replace
 		 *
-		 * @param string $subject
-		 * @param string $pattern
+		 * @param string      $subject
+		 * @param string      $pattern
 		 * @param string|null $replacement
-		 * @param int $limit
+		 * @param int         $limit
 		 *
 		 * @return string
 		 * @throws StringException
@@ -395,7 +395,7 @@
 		 *
 		 * @param string $subject
 		 * @param string $pattern
-		 * @param int $flags
+		 * @param int    $flags
 		 *
 		 * @return array
 		 * @throws StringException
@@ -481,7 +481,7 @@
 		 *
 		 * @param string $source
 		 * @param string $separator
-		 * @param int $index
+		 * @param int    $index
 		 *
 		 * @return string
 		 */

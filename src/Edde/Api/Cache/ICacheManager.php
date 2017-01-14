@@ -3,13 +3,11 @@
 
 	namespace Edde\Api\Cache;
 
-	use Edde\Api\Deffered\IDeffered;
-
-	interface ICacheManager extends ICache, IDeffered {
+	interface ICacheManager extends ICache {
 		/**
 		 * register cache storage to a namespace, so if cache will be created with same namespace, the given cache storage will be used
 		 *
-		 * @param string $namespace
+		 * @param string        $namespace
 		 * @param ICacheStorage $cacheStorage
 		 *
 		 * @return ICacheManager
@@ -19,7 +17,7 @@
 		/**
 		 * create a new cache
 		 *
-		 * @param string|null $namespace
+		 * @param string|null   $namespace
 		 * @param ICacheStorage $cacheStorage
 		 *
 		 * @return ICache

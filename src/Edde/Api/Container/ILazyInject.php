@@ -3,17 +3,26 @@
 
 	namespace Edde\Api\Container;
 
-	/**
-	 * Marker interface for classes supporting lazy inject.
-	 */
 	interface ILazyInject {
 		/**
-		 * marks property as lazy and provide callback which should fill a property; must work even for existing and private properties
+		 * inject the given dependency to the property
 		 *
 		 * @param string $property
-		 * @param callable $callback
+		 * @param mixed  $dependency
 		 *
 		 * @return $this
 		 */
-		public function lazy(string $property, callable $callback);
+		public function inject(string $property, $dependency);
+
+		/**
+		 * register the given container dependency on the given property
+		 *
+		 * @param string     $property
+		 * @param IContainer $container
+		 * @param string     $dependency
+		 * @param array      $parameterList
+		 *
+		 * @return $this
+		 */
+		public function lazy(string $property, IContainer $container, string $dependency, array $parameterList = []);
 	}

@@ -31,14 +31,14 @@
 		 * @throws MacroException
 		 */
 		public function macro(INode $macro, ICompiler $compiler) {
-			$this->write($compiler, sprintf('$this->embedd($template = self::template($this->templateManager->template(%s), $this->container));', ($helper = $compiler->helper($macro, $src = $this->attribute($macro, $compiler, 'src', false))) ? $helper : $this->load($src, $compiler)), 5);
+			$this->write($compiler, sprintf('$this->embed($template = self::template($this->templateManager->template(%s), $this->container));', ($helper = $compiler->helper($macro, $src = $this->attribute($macro, $compiler, 'src', false))) ? $helper : $this->load($src, $compiler)), 5);
 			$this->write($compiler, '$template->snippet($stack->top());', 5);
 		}
 
 		/**
 		 * compute path from macro's source attribute
 		 *
-		 * @param string $src
+		 * @param string    $src
 		 * @param ICompiler $compiler
 		 *
 		 * @return string

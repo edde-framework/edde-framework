@@ -6,12 +6,12 @@
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\IProperty;
 	use Edde\Api\Schema\ISchemaProperty;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Crate property implementation.
 	 */
-	class Property extends AbstractObject implements IProperty {
+	class Property extends Object implements IProperty {
 		/**
 		 * property definition of this value
 		 *
@@ -41,7 +41,7 @@
 		 * My wife’s cooking is so bad we usually pray after our food.
 		 *
 		 * @param ISchemaProperty $schemaProperty
-		 * @param mixed|null $value
+		 * @param mixed|null      $value
 		 */
 		public function __construct(ISchemaProperty $schemaProperty = null, $value = null) {
 			$this->schemaProperty = $schemaProperty;

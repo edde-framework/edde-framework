@@ -9,9 +9,9 @@
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class Collection extends AbstractObject implements ICollection {
+	class Collection extends Object implements ICollection {
 		/**
 		 * @var ICrateFactory
 		 */
@@ -28,8 +28,8 @@
 
 		/**
 		 * @param ICrateFactory $crateFactory
-		 * @param string $schema
-		 * @param string $crate
+		 * @param string        $schema
+		 * @param string        $crate
 		 */
 		public function __construct(ICrateFactory $crateFactory, string $schema, string $crate = null) {
 			$this->crateFactory = $crateFactory;

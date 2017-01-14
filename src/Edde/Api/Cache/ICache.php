@@ -17,21 +17,10 @@
 		public function setNamespace(string $namespace): ICache;
 
 		/**
-		 * cache method result
-		 *
-		 * @param string $name
-		 * @param callable $callback
-		 * @param array ...$parameterList
-		 *
-		 * @return mixed
-		 */
-		public function callback(string $name, callable $callback, ...$parameterList);
-
-		/**
 		 * save given value into the cache
 		 *
 		 * @param string $id
-		 * @param mixed $save must be serializable (neonable, jsonable, serializable, ...)
+		 * @param mixed  $save must be serializable (neonable, jsonable, serializable, ...)
 		 *
 		 * @return mixed
 		 */
@@ -40,7 +29,7 @@
 		/**
 		 * load value be the id - if the value doesn't exists, default is returned
 		 *
-		 * @param string $id
+		 * @param string     $id
 		 * @param mixed|null $default
 		 *
 		 * @return mixed

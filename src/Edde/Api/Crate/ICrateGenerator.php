@@ -3,10 +3,9 @@
 
 	namespace Edde\Api\Crate;
 
-	use Edde\Api\Deffered\IDeffered;
 	use Edde\Api\Schema\ISchema;
 
-	interface ICrateGenerator extends IDeffered {
+	interface ICrateGenerator {
 		/**
 		 * generate source class (php source code) for the given schema
 		 *

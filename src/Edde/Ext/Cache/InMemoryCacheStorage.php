@@ -3,21 +3,20 @@
 
 	namespace Edde\Ext\Cache;
 
+	use Edde\Api\Cache\ICacheable;
 	use Edde\Common\Cache\AbstractCacheStorage;
 
 	/**
 	 * Simple in-memory cache (per-request).
 	 */
-	class InMemoryCacheStorage extends AbstractCacheStorage {
+	class InMemoryCacheStorage extends AbstractCacheStorage implements ICacheable {
 		protected $storage;
 
 		public function save(string $id, $save) {
-			$this->use();
 			return $this->storage[$id] = $save;
 		}
 
 		public function load($id) {
-			$this->use();
 			if (isset($this->storage[$id]) === false) {
 				return null;
 			}
@@ -25,8 +24,12 @@
 		}
 
 		public function invalidate() {
-			$this->use();
 			$this->storage = [];
 			return $this;
+		}
+
+		public function __sleep() {
+			$this->storage = [];
+			return parent::__sleep();
 		}
 	}

@@ -5,9 +5,9 @@
 
 	use Edde\Api\Template\IHelper;
 	use Edde\Api\Template\IHelperSet;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Object;
 
-	class HelperSet extends AbstractDeffered implements IHelperSet {
+	class HelperSet extends Object implements IHelperSet {
 		/**
 		 * @var IHelper[]
 		 */
@@ -19,7 +19,6 @@
 		}
 
 		public function getHelperList(): array {
-			$this->use();
 			return $this->helperList;
 		}
 	}

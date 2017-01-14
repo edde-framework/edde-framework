@@ -8,7 +8,7 @@
 
 	class JoinFragment extends AbstractFragment {
 		/**
-		 * @param string $source
+		 * @param string      $source
 		 * @param string|null $alias
 		 *
 		 * @return JoinOnFragment

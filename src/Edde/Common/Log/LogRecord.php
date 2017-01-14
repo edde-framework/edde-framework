@@ -4,12 +4,12 @@
 	namespace Edde\Common\Log;
 
 	use Edde\Api\Log\ILogRecord;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Simple log recorord; holds record without any modifications.
 	 */
-	class LogRecord extends AbstractObject implements ILogRecord {
+	class LogRecord extends Object implements ILogRecord {
 		/**
 		 * @var string
 		 */
@@ -26,7 +26,7 @@
 		 * The blonde says, "Thanks!" and hangs up the phone.
 		 *
 		 * @param string $log
-		 * @param array $tagList
+		 * @param array  $tagList
 		 */
 		public function __construct($log, array $tagList = null) {
 			$this->log = $log;

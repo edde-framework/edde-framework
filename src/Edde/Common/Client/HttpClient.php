@@ -3,14 +3,14 @@
 
 	namespace Edde\Common\Client;
 
-	use Edde\Api\Client\ClientException;
-	use Edde\Api\Client\IHttpClient;
-	use Edde\Api\Client\IHttpHandler;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
+	use Edde\Api\Http\Client\ClientException;
+	use Edde\Api\Http\Client\IHttpHandler;
 	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Url\IUrl;
+	use Edde\Api\Url\UrlException;
 	use Edde\Common\Client\Event\DeleteEvent;
 	use Edde\Common\Client\Event\GetEvent;
 	use Edde\Common\Client\Event\HandlerEvent;
@@ -18,21 +18,23 @@
 	use Edde\Common\Client\Event\PostEvent;
 	use Edde\Common\Client\Event\PutEvent;
 	use Edde\Common\Client\Event\RequestEvent;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpRequest;
 	use Edde\Common\Http\PostList;
 	use Edde\Common\Http\RequestUrl;
+	use Edde\Common\Object;
 
 	/**
 	 * Simple http client implementation.
 	 */
-	class HttpClient extends AbstractDeffered implements IHttpClient {
+	class HttpClient extends Object implements \Edde\Api\Http\Client\IHttpClient {
 		use LazyContainerTrait;
 		use LazyConverterManagerTrait;
 		use EventTrait;
+		use ConfigurableTrait;
 
 		/**
 		 * @inheritdoc
@@ -150,7 +152,7 @@
 		 * @inheritdoc
 		 */
 		public function request(IHttpRequest $httpRequest): IHttpHandler {
-			$this->use();
+			$this->config();
 			curl_setopt_array($curl = curl_init($url = (string)$httpRequest->getRequestUrl()), [
 				CURLOPT_SSL_VERIFYPEER => false,
 				CURLOPT_FOLLOWLOCATION => true,
@@ -163,7 +165,10 @@
 				CURLOPT_CUSTOMREQUEST => $method = $httpRequest->getMethod(),
 				CURLOPT_POST => strtoupper($method) === 'POST',
 			]);
-			$this->container->inject($httpHandler = new HttpHandler($httpRequest, $curl));
+			$httpHandler = $this->container->create(HttpHandler::class, [
+				$httpRequest,
+				$curl,
+			], __METHOD__);
 			$httpHandler->chain($this);
 			return $httpHandler;
 		}
@@ -172,6 +177,7 @@
 		 * @param IUrl|string $url
 		 *
 		 * @return HttpRequest
+		 * @throws UrlException
 		 */
 		protected function createRequest($url) {
 			$httpRequest = new HttpRequest(new PostList(), new HeaderList(), new CookieList());
@@ -184,7 +190,8 @@
 		 * @inheritdoc
 		 * @throws ClientException
 		 */
-		protected function prepare() {
+		protected function handleInit() {
+			parent::handleInit();
 			if (extension_loaded('curl') === false) {
 				throw new ClientException('Curl extension is not loaded in PHP.');
 			}

@@ -24,22 +24,20 @@
 		}
 
 		public function save(string $id, $save) {
-			$this->use();
 			$this->memcache->set($id, $save);
 			return $this;
 		}
 
 		public function load($id) {
-			$this->use();
 			return ($item = $this->memcache->get($id)) === false ? null : $item;
 		}
 
 		public function invalidate() {
-			$this->use();
 			$this->memcache->flush();
 		}
 
 		protected function prepare() {
+			parent::prepare();
 			$this->memcache = new \Memcache();
 			foreach ($this->serverList as $item) {
 				$this->memcache->addServer($item[0], $item[1]);

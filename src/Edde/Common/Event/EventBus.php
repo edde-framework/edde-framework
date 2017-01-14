@@ -3,18 +3,17 @@
 
 	namespace Edde\Common\Event;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEvent;
 	use Edde\Api\Event\IEventBus;
 	use Edde\Api\Event\IHandler;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Default simple implementation of an EventBus.
 	 */
-	class EventBus extends AbstractObject implements IEventBus, ILazyInject {
+	class EventBus extends Object implements IEventBus {
 		use LazyContainerTrait;
 		/**
 		 * @var bool
@@ -54,6 +53,17 @@
 		 * @inheritdoc
 		 * @throws EventException
 		 */
+		public function handlerList(array $handlerList): IEventBus {
+			foreach ($handlerList as $handler) {
+				$this->handler($handler);
+			}
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws EventException
+		 */
 		public function listen($listen, string $scope = null): IEventBus {
 			if (($listen instanceof IHandler) === false) {
 				$listen = HandlerFactory::handler($listen, $scope);
@@ -82,7 +92,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws \Edde\Api\Event\EventException
+		 * @throws EventException
 		 */
 		public function scope(callable $callback, ...$handlerList) {
 			$this->prepare();

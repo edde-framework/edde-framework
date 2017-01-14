@@ -4,7 +4,7 @@
 	namespace Edde\Common\Xml;
 
 	use Edde\Api\Xml\IXmlHandler;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	abstract class AbstractXmlHandler extends AbstractObject implements IXmlHandler {
+	abstract class AbstractXmlHandler extends Object implements IXmlHandler {
 	}

@@ -5,9 +5,9 @@
 
 	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Object;
 
-	class DummyCrateGenerator extends AbstractDeffered implements ICrateGenerator {
+	class DummyCrateGenerator extends Object implements ICrateGenerator {
 		public function compile(ISchema $schema): array {
 			return [];
 		}

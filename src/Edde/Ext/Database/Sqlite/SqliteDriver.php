@@ -1,12 +1,15 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Database\Sqlite;
 
+	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Query\IStaticQueryFactory;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Database\AbstractDriver;
 	use Edde\Common\Storage\UniqueException;
 	use Edde\Common\Storage\UnknownSourceException;
@@ -15,32 +18,22 @@
 	/**
 	 * Sqlite database support.
 	 */
-	class SqliteDriver extends AbstractDriver {
+	class SqliteDriver extends AbstractDriver implements IConfigurable {
+		use LazyContainerTrait;
+		use ConfigurableTrait;
 		/**
 		 * @var PDO
 		 */
 		public $pdo;
-		/**
-		 * @var string
-		 */
-		protected $dsn;
 		/**
 		 * @var IStaticQueryFactory
 		 */
 		protected $staticQueryFactory;
 
 		/**
-		 * @param string $dsn
-		 */
-		public function __construct(string $dsn) {
-			$this->dsn = $dsn;
-		}
-
-		/**
 		 * @inheritdoc
 		 */
 		public function start(bool $exclusive = false) {
-			$this->use();
 			$this->pdo->beginTransaction();
 			return $this;
 		}
@@ -49,7 +42,6 @@
 		 * @inheritdoc
 		 */
 		public function commit() {
-			$this->use();
 			$this->pdo->commit();
 			return $this;
 		}
@@ -58,7 +50,6 @@
 		 * @inheritdoc
 		 */
 		public function rollback() {
-			$this->use();
 			$this->pdo->rollBack();
 			return $this;
 		}
@@ -74,7 +65,6 @@
 		 * @inheritdoc
 		 */
 		public function quote(string $quote): string {
-			$this->use();
 			return $this->pdo->quote($quote);
 		}
 
@@ -83,7 +73,6 @@
 		 * @throws DriverException
 		 */
 		public function type(string $type): string {
-			$this->use();
 			if (isset($this->typeList[$type]) === false) {
 				throw new DriverException(sprintf('Unknown type [%s] for driver [%s].', $type, static::class));
 			}
@@ -97,7 +86,6 @@
 		 * @throws \PDOException
 		 */
 		public function execute(IQuery $query): \PDOStatement {
-			$this->use();
 			return $this->native($this->staticQueryFactory->create($query));
 		}
 
@@ -108,7 +96,6 @@
 		 * @throws \PDOException
 		 */
 		public function native(IStaticQuery $staticQuery) {
-			$this->use();
 			try {
 				$statement = $this->pdo->prepare($staticQuery->getQuery());
 				$statement->setFetchMode(PDO::FETCH_ASSOC);
@@ -138,15 +125,7 @@
 		 * @inheritdoc
 		 * @throws DriverException
 		 */
-		protected function prepare() {
-			if (extension_loaded('pdo_sqlite') === false) {
-				throw new DriverException('Sqlite PDO is not available, oops!');
-			}
-			$this->pdo = new PDO($this->dsn);
-			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$this->pdo->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
-			$this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-			$this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+		protected function handleInit() {
 			$this->setTypeList([
 				null => 'TEXT',
 				'int' => 'INTEGER',
@@ -157,6 +136,17 @@
 				'text' => 'TEXT',
 				'datetime' => 'TIMESTAMP',
 			]);
-			$this->staticQueryFactory = new SqliteQueryFactory($this);
+			$this->staticQueryFactory = $this->container->create(SqliteQueryFactory::class, [$this], __METHOD__);
+		}
+
+		protected function handleSetup() {
+			if (extension_loaded('pdo_sqlite') === false) {
+				throw new DriverException('Sqlite PDO is not available, oops!');
+			}
+			$this->pdo = new PDO($this->dsn->getDsn());
+			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$this->pdo->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
+			$this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+			$this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
 		}
 	}

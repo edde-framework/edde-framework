@@ -17,6 +17,15 @@
 		public function handler(IHandler $handler): IEventBus;
 
 		/**
+		 * register multiple handlers at the one time
+		 *
+		 * @param IHandler[] $handlerList
+		 *
+		 * @return IEventBus
+		 */
+		public function handlerList(array $handlerList): IEventBus;
+
+		/**
 		 * register the given "something" as event listener (input should be converted into single listen() calls)
 		 *
 		 * @param $listen
@@ -28,7 +37,7 @@
 		/**
 		 * register event handler
 		 *
-		 * @param string $event
+		 * @param string   $event
 		 * @param callable $handler
 		 *
 		 * @return IEventBus
@@ -48,7 +57,7 @@
 		 * execute the callback; the callback can emit event which will be listened only during callback execution
 		 *
 		 * @param callable $callback
-		 * @param array ...$handlerList
+		 * @param array    ...$handlerList
 		 *
 		 * @return mixed result of the callback
 		 */

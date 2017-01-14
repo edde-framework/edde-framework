@@ -13,7 +13,7 @@
 		 * set the given tag to this control; pair if the given tag is in a pair (div, span, ...)
 		 *
 		 * @param string $tag
-		 * @param bool $pair
+		 * @param bool   $pair
 		 *
 		 * @return IHtmlControl
 		 */
@@ -95,7 +95,7 @@
 		 * return attribute by the given namw
 		 *
 		 * @param string $name
-		 * @param mixed $default
+		 * @param mixed  $default
 		 *
 		 * @return mixed
 		 */
@@ -131,7 +131,7 @@
 		 * set a given data to control (data-* attribute)
 		 *
 		 * @param string $name
-		 * @param mixed $data
+		 * @param mixed  $data
 		 *
 		 * @return IHtmlControl
 		 */
@@ -141,7 +141,7 @@
 		 * retrieve the given data from control
 		 *
 		 * @param string $name
-		 * @param null $default
+		 * @param null   $default
 		 *
 		 * @return string|mixed
 		 */
@@ -159,7 +159,7 @@
 		/**
 		 * toggle class presence
 		 *
-		 * @param string $class
+		 * @param string    $class
 		 * @param bool|null $enable
 		 *
 		 * @return IHtmlControl

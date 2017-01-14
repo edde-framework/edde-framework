@@ -10,13 +10,11 @@
 		use LazyLinkFactoryTrait;
 
 		public function setTitle($title) {
-			$this->use();
 			$this->setAttribute('title', $title);
 			return $this;
 		}
 
 		public function setAttribute($attribute, $value) {
-			$this->use();
 			switch ($attribute) {
 				case 'value':
 					$this->node->setValue($value);
@@ -43,9 +41,9 @@
 			return $this;
 		}
 
-		protected function prepare() {
-			parent::prepare()
-				->setTag('div', true)
+		protected function handleInit() {
+			parent::handleInit();
+			$this->setTag('div', true)
 				->addClass('button');
 		}
 	}

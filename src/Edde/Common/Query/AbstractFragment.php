@@ -4,9 +4,9 @@
 	namespace Edde\Common\Query;
 
 	use Edde\Api\Node\INode;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	abstract class AbstractFragment extends AbstractObject {
+	abstract class AbstractFragment extends Object {
 		/**
 		 * @var INode
 		 */

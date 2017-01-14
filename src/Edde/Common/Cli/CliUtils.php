@@ -3,12 +3,12 @@
 
 	namespace Edde\Common\Cli;
 
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Usefull set of command line utilities.
 	 */
-	class CliUtils extends AbstractObject {
+	class CliUtils extends Object {
 		/**
 		 * credit for this method goes here:
 		 * https://github.com/pwfisher/CommandLine.php/blob/master/CommandLine.php

@@ -3,10 +3,9 @@
 
 	namespace Edde\Api\Identity;
 
-	use Edde\Api\Deffered\IDeffered;
 	use Edde\Api\Storage\IRepository;
 
-	interface IIdentityManager extends IRepository, IDeffered {
+	interface IIdentityManager extends IRepository {
 		/**
 		 * return current identity build from session
 		 *

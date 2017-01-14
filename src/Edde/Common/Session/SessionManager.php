@@ -9,13 +9,13 @@
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Session\LazySessionDirectoryTrait;
 	use Edde\Api\Session\SessionException;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Object;
 
 	/**
 	 * Session manager is... session managing tool ;). It's responsible for whole session lifetime and section
 	 * assigment (and collision preventing).
 	 */
-	class SessionManager extends AbstractDeffered implements ISessionManager {
+	class SessionManager extends Object implements ISessionManager {
 		use LazyHttpResponseTrait;
 		use LazySessionDirectoryTrait;
 		/**
@@ -55,7 +55,6 @@
 		 * @throws SessionException
 		 */
 		public function &session(string $name): array {
-			$this->use();
 			$this->start();
 			/** @noinspection PhpVariableNamingConventionInspection */
 			$_SESSION[$this->namespace] = $_SESSION[$this->namespace] ?? [];

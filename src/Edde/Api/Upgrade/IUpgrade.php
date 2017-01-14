@@ -3,12 +3,10 @@
 
 	namespace Edde\Api\Upgrade;
 
-	use Edde\Api\Deffered\IDeffered;
-
 	/**
 	 * Simple way how to run arbitrary application upgrades; this can be storage modification, filesystem operations, ...
 	 */
-	interface IUpgrade extends IDeffered {
+	interface IUpgrade {
 		/**
 		 * version can be arbitrary string; for IUpgradeManager is important order of versions (they should NOT be parsed)
 		 *

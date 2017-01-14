@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Schema;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\INodeQuery;
@@ -10,13 +11,15 @@
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\SchemaFactoryException;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Filter\BoolFilter;
 	use Edde\Common\Node\NodeQuery;
+	use Edde\Common\Object;
 
-	class SchemaFactory extends AbstractDeffered implements ISchemaFactory {
+	class SchemaFactory extends Object implements ISchemaFactory {
 		use LazyContainerTrait;
 		use LazyResourceManagerTrait;
+		use ConfigurableTrait;
 		/**
 		 * @var INode[]
 		 */
@@ -61,7 +64,6 @@
 		}
 
 		public function create() {
-			$this->use();
 			/** @var $schemaList ISchema[] */
 			$schemaList = [];
 			foreach ($this->schemaNodeList as $schemaNode) {
@@ -95,30 +97,30 @@
 			foreach ($this->propertyListNodeQuery->filter($schemaNode) as $propertyNode) {
 				$schema->addProperty($property = new SchemaProperty($schema, $propertyNode->getName(), str_replace('[]', '', $type = $propertyNode->getAttribute('type', 'string')), filter_var($propertyNode->getAttribute('required', true), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('unique'), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('identifier'), FILTER_VALIDATE_BOOLEAN), strpos($type, '[]') !== false));
 				if (($generator = $propertyNode->getAttribute('generator')) !== null) {
-					$property->setGenerator($this->container->create($generator));
+					$property->setGenerator($this->container->create($generator, [], __METHOD__));
 				}
 				$type = $property->getType();
 				foreach ($this->propertyFilterNodeQuery->filter($propertyNode) as $filterNode) {
 					$type = null;
-					$property->addFilter($this->container->create($filterNode->getValue()));
+					$property->addFilter($this->container->create($filterNode->getValue(), [], __METHOD__));
 				}
 				foreach ($this->propertySetterFilterNodeQuery->filter($propertyNode) as $filterNode) {
 					$type = null;
-					$property->addSetterFilter($this->container->create($filterNode->getValue()));
+					$property->addSetterFilter($this->container->create($filterNode->getValue(), [], __METHOD__));
 				}
 				foreach ($this->propertyGetterFilterNodeQuery->filter($propertyNode) as $filterNode) {
 					$type = null;
-					$property->addGetterFilter($this->container->create($filterNode->getValue()));
+					$property->addGetterFilter($this->container->create($filterNode->getValue(), [], __METHOD__));
 				}
 				/** @noinspection DisconnectedForeachInstructionInspection */
 				/**
-				 * magicall thing can be turned off
+				 * magical things can be turned off
 				 */
 				if ($magic === false) {
 					$type = null;
 				}
 				/**
-				 * support for automagical type convertions
+				 * support for automagical type conversions
 				 */
 				switch ($type) {
 					case 'bool':
@@ -129,7 +131,7 @@
 			return $schema;
 		}
 
-		protected function prepare() {
+		protected function handleInit() {
 			$this->propertyListNodeQuery = new NodeQuery('/*/property-list/*');
 			$this->propertyFilterNodeQuery = new NodeQuery('/*/property-list/*/filter/*');
 			$this->propertySetterFilterNodeQuery = new NodeQuery('/*/property-list/*/setter-filter/*');

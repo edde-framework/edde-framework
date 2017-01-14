@@ -7,9 +7,9 @@
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Api\Schema\SchemaException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class SchemaProperty extends AbstractObject implements ISchemaProperty {
+	class SchemaProperty extends Object implements ISchemaProperty {
 		/**
 		 * @var ISchema
 		 */
@@ -61,12 +61,12 @@
 
 		/**
 		 * @param ISchema $schema
-		 * @param string $name
-		 * @param string $type
-		 * @param bool $required
-		 * @param bool $unique
-		 * @param bool $identifier
-		 * @param bool $array
+		 * @param string  $name
+		 * @param string  $type
+		 * @param bool    $required
+		 * @param bool    $unique
+		 * @param bool    $identifier
+		 * @param bool    $array
 		 */
 		public function __construct(ISchema $schema, string $name, string $type = 'string', bool $required = true, bool $unique = false, bool $identifier = false, bool $array = false) {
 			$this->schema = $schema;

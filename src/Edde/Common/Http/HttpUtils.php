@@ -4,14 +4,14 @@
 	namespace Edde\Common\Http;
 
 	use Edde\Api\Http\ICookie;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Strings\StringException;
 	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Static set of helper functions around http protocol.
 	 */
-	class HttpUtils extends AbstractObject {
+	class HttpUtils extends Object {
 		/**
 		 * parse accept header and return an ordered array with accept mime types
 		 *

@@ -3,21 +3,26 @@
 
 	namespace Edde\Api\Container;
 
-	use Edde\Api\Deffered\IDeffered;
+	use Edde\Api\Cache\ICache;
 
 	/**
-	 * Implementation of Dependency Inject Container.
+	 * Implementation of Dependency Injection Container.
 	 */
-	interface IContainer extends IDeffered {
+	interface IContainer {
 		/**
-		 * shorthand for cache registration
+		 * if container is using cache, it must be configurable; do not use this as cache solution!
 		 *
-		 * @param string $name
+		 * @return ICache
+		 */
+		public function getCache(): ICache;
+
+		/**
 		 * @param IFactory $factory
+		 * @param string   $id
 		 *
 		 * @return IContainer
 		 */
-		public function registerFactory(string $name, IFactory $factory): IContainer;
+		public function registerFactory(IFactory $factory, string $id = null): IContainer;
 
 		/**
 		 * shorthand for cache registration
@@ -29,51 +34,76 @@
 		public function registerFactoryList(array $factoryList): IContainer;
 
 		/**
-		 * check if the given name is available (known) in a container
+		 * register a new config handler for the given dependency
 		 *
-		 * @param string $name
+		 * @param string         $name
+		 * @param IConfigHandler $configHandler
 		 *
-		 * @return bool
+		 * @return IContainer
 		 */
-		public function has(string $name);
+		public function registerConfigHandler(string $name, IConfigHandler $configHandler): IContainer;
+
+		/**
+		 * register list of config handlers bound to the given factories (key is factory name, value is config handler)
+		 *
+		 * @param IConfigHandler[] $configHandlerList
+		 *
+		 * @return IContainer
+		 */
+		public function registerConfigHandlerList(array $configHandlerList): IContainer;
+
+		/**
+		 * get factory which is able to create the given dependency
+		 *
+		 * @param mixed  $dependency
+		 *
+		 * @param string $source
+		 *
+		 * @return IFactory
+		 */
+		public function getFactory(string $dependency, string $source = null): IFactory;
 
 		/**
 		 * create the dependency by it's identifier (name)
 		 *
 		 * @param string $name
-		 * @param array ...$parameterList
+		 * @param array  $parameterList
+		 * @param string $source who has requested this dependency
 		 *
 		 * @return mixed
 		 */
-		public function create(string $name, ...$parameterList);
+		public function create(string $name, array $parameterList = [], string $source = null);
 
 		/**
 		 * execute given callback with autowired dependencies
 		 *
 		 * @param callable $callable
-		 * @param array $parameterList
+		 * @param array    $parameterList
+		 * @param string   $source
 		 *
 		 * @return mixed
 		 */
-		public function call(callable $callable, ...$parameterList);
+		public function call(callable $callable, array $parameterList = [], string $source = null);
 
 		/**
-		 * low-level method for factory execution (other container methods should be using this)
+		 * general method for dependency creation (so call and create should call this one)
 		 *
-		 * @param IFactory $factory
-		 * @param string $name optional dependency name (name given from outside)
-		 * @param array $parameterList
+		 * @param IFactory    $factory
+		 * @param array       $parameterList
+		 * @param string|null $name
+		 * @param string      $source
 		 *
-		 * @return mixed return created instance of the given factory (result of factory execution)
+		 * @return mixed
 		 */
-		public function factory(IFactory $factory, string $name = null, array $parameterList = []);
+		public function factory(IFactory $factory, array $parameterList = [], string $name = null, string $source = null);
 
 		/**
-		 * provides all aditional dependencies for the given instance
+		 * try to autowire dependencies to $instance
 		 *
 		 * @param mixed $instance
+		 * @param bool  $force if true, dependencies will be autowired regardless of lazy injects
 		 *
-		 * @return mixed return input instance (input is same as output)
+		 * @return mixed
 		 */
-		public function inject($instance);
+		public function autowire($instance, bool $force = false);
 	}

@@ -3,9 +3,8 @@
 
 	namespace Edde\Common\Template;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Template\IHelper;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	abstract class AbstractHelper extends AbstractObject implements IHelper, ILazyInject {
+	abstract class AbstractHelper extends Object implements IHelper {
 	}

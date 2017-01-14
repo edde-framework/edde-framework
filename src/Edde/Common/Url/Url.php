@@ -1,13 +1,14 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Url;
 
+	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Url\IUrl;
 	use Edde\Api\Url\UrlException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class Url extends AbstractObject implements IUrl {
+	class Url extends Object implements ICacheable, IUrl {
 		/**
 		 * @var string
 		 */

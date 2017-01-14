@@ -3,11 +3,13 @@
 
 	namespace Edde\Common\Html\Macro;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Crypt\LazyCryptEngineTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelper;
 	use Edde\Api\Template\MacroException;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Strings\StringException;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\HelperSet;
@@ -15,8 +17,9 @@
 	/**
 	 * Macro for loop support.
 	 */
-	class LoopMacro extends AbstractHtmlMacro implements IHelper {
+	class LoopMacro extends AbstractHtmlMacro implements IHelper, IConfigurable {
 		use LazyCryptEngineTrait;
+		use ConfigurableTrait;
 
 		/**
 		 * You never finish a program, you just stop working on it.
@@ -96,9 +99,9 @@
 		}
 
 		/**
-		 * @param INode $macro
+		 * @param INode     $macro
 		 * @param ICompiler $compiler
-		 * @param string $src
+		 * @param string    $src
 		 *
 		 * @return mixed|string
 		 * @throws MacroException
@@ -106,7 +109,7 @@
 		protected function loop(INode $macro, ICompiler $compiler, string $src) {
 			$type = $src[0];
 			if (isset(self::$reference[$type])) {
-				return sprintf('%s->%s', $this->reference($macro, $type), StringUtils::toCamelHump(substr($src, 1)));
+				return sprintf('%s->%s', self::reference($macro, $type), StringUtils::toCamelHump(substr($src, 1)));
 			} else if ($src === '$:') {
 				list(, $value) = $compiler->getVariable(static::class)
 					->top();
@@ -115,8 +118,7 @@
 			return var_export($src, true);
 		}
 
-		protected function prepare() {
-			parent::prepare();
+		protected function handleInit() {
 			$this->helperSet = new HelperSet();
 			$this->helperSet->registerHelper($this);
 		}

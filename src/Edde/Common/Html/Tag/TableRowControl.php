@@ -11,7 +11,6 @@
 	 * Html table row (tr) control.
 	 */
 	class TableRowControl extends AbstractHtmlControl {
-		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws HtmlException
@@ -23,8 +22,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function prepare() {
-			parent::prepare();
+		protected function handleInit() {
+			parent::handleInit();
 			parent::setTag('tr', true);
 		}
 	}

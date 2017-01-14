@@ -3,9 +3,9 @@
 
 	namespace Edde\Api\Converter;
 
-	use Edde\Api\Deffered\IDeffered;
+	use Edde\Api\Container\IConfigurable;
 
-	interface IConverterManager extends IDeffered {
+	interface IConverterManager extends IConfigurable {
 		/**
 		 * register a converter
 		 *

@@ -21,7 +21,7 @@
 		/**
 		 * select property of a schema; it's something similar to a column
 		 *
-		 * @param string $property
+		 * @param string      $property
 		 * @param string|null $prefix
 		 * @param string|null $alias
 		 *
@@ -43,7 +43,7 @@
 		/**
 		 * select count of the given property
 		 *
-		 * @param string $property
+		 * @param string      $property
 		 * @param string|null $prefix
 		 * @param string|null $alias
 		 *

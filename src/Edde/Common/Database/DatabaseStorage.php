@@ -1,19 +1,21 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Database;
 
 	use Edde\Api\Cache\ICache;
-	use Edde\Api\Cache\ICacheManager;
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Database\IDatabaseStorage;
 	use Edde\Api\Database\IDriver;
+	use Edde\Api\Database\LazyDriverTrait;
 	use Edde\Api\Node\INodeQuery;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Storage\StorageException;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Node\NodeQuery;
 	use Edde\Common\Query\Insert\InsertQuery;
 	use Edde\Common\Query\Select\SelectQuery;
@@ -24,15 +26,13 @@
 	/**
 	 * Database (persistant) storage implementation.
 	 */
-	class DatabaseStorage extends AbstractStorage implements IDatabaseStorage {
+	class DatabaseStorage extends AbstractStorage implements IDatabaseStorage, IConfigurable {
+		use LazyDriverTrait;
+		use ConfigurableTrait;
 		/**
 		 * @var IDriver
 		 */
 		protected $driver;
-		/**
-		 * @var ICacheManager
-		 */
-		protected $cacheManager;
 		/**
 		 * @var ICache
 		 */
@@ -47,21 +47,10 @@
 		protected $transaction = 0;
 
 		/**
-		 * @param IDriver $driver
-		 * @param ICacheManager $cacheManager
-		 */
-		public function __construct(IDriver $driver, ICacheManager $cacheManager) {
-			$this->driver = $driver;
-			$this->cacheManager = $cacheManager;
-			$this->transaction = 0;
-		}
-
-		/**
 		 * @inheritdoc
 		 * @throws StorageException
 		 */
 		public function start(bool $exclusive = false): IStorage {
-			$this->use();
 			if ($this->transaction++ > 0) {
 				if ($exclusive === false) {
 					return $this;
@@ -76,7 +65,6 @@
 		 * @inheritdoc
 		 */
 		public function commit(): IStorage {
-			$this->use();
 			if (--$this->transaction <= 0) {
 				$this->driver->commit();
 			}
@@ -87,7 +75,6 @@
 		 * @inheritdoc
 		 */
 		public function rollback(): IStorage {
-			$this->use();
 			if ($this->transaction === 0) {
 				return $this;
 			}
@@ -102,7 +89,6 @@
 		 * @throws StorageException
 		 */
 		public function store(ICrate $crate): IStorage {
-			$this->use();
 			$schema = $crate->getSchema();
 			if ($schema->getMeta('storable', false) === false) {
 				throw new StorageException(sprintf('Crate [%s] is not marked as storable (in meta data).', $schema->getSchemaName()));
@@ -155,8 +141,8 @@
 		 * @throws DriverException
 		 */
 		public function execute(IQuery $query) {
-			$this->use();
 			try {
+				$this->driver->setup();
 				return $this->driver->execute($query);
 			} catch (PDOException $e) {
 				throw new DriverException(sprintf('Driver [%s] execution failed: %s.', get_class($this->driver), $e->getMessage()), 0, $e);
@@ -168,8 +154,8 @@
 		 * @throws DriverException
 		 */
 		public function native(IStaticQuery $staticQuery) {
-			$this->use();
 			try {
+				$this->driver->setup();
 				return $this->driver->native($staticQuery);
 			} catch (PDOException $e) {
 				throw new DriverException(sprintf('Driver [%s] execution failed: %s.', get_class($this->driver), $e->getMessage()), 0, $e);
@@ -179,8 +165,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function prepare() {
-			$this->cache = $this->cacheManager->cache(static::class);
+		protected function handleInit() {
 			$this->sourceNodeQuery = new NodeQuery('/**/source');
+			$this->transaction = 0;
 		}
 	}

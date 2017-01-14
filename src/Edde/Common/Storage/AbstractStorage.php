@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Storage;
 
@@ -14,19 +14,19 @@
 	use Edde\Api\Storage\ICollection;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Common\Crate\Crate;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Object;
 	use Edde\Common\Query\Select\SelectQuery;
 
 	/**
 	 * Base for all storage implementations.
 	 */
-	abstract class AbstractStorage extends AbstractDeffered implements IStorage {
+	abstract class AbstractStorage extends Object implements IStorage {
 		use LazySchemaManagerTrait;
 		use LazyCrateFactoryTrait;
 		use LazyContainerTrait;
 
 		public function bound(string $query, ...$parameterList): IBoundQuery {
-			return (new BoundQuery())->bind($this->container->create($query, ...$parameterList), $this);
+			return (new BoundQuery())->bind($this->container->create($query, $parameterList, __METHOD__), $this);
 		}
 
 		public function query(): IBoundQuery {
@@ -45,6 +45,7 @@
 				->getSchema();
 			$targetSchemaName = $targetSchema->getSchemaName();
 			$selectQuery = new SelectQuery();
+			$selectQuery->init();
 			$relationAlias = sha1(random_bytes(64));
 			$targetAlias = sha1(random_bytes(64));
 			foreach ($targetSchema->getPropertyList() as $schemaProperty) {
@@ -76,6 +77,7 @@
 			$schema = $schema ?: $crate;
 			if ($query === null) {
 				$query = new SelectQuery();
+				$query->init();
 				$query->select()
 					->all()
 					->from()
@@ -92,6 +94,7 @@
 			$link = $crate->getSchema()
 				->getLink($name);
 			$selectQuery = new SelectQuery();
+			$selectQuery->init();
 			$targetSchemaName = $link->getTarget()
 				->getSchema()
 				->getSchemaName();

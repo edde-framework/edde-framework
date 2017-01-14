@@ -9,7 +9,6 @@
 	 * Script tag support.
 	 */
 	class JavaScriptControl extends AbstractHtmlControl {
-		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 */
@@ -17,7 +16,6 @@
 			return 'script';
 		}
 
-		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 */

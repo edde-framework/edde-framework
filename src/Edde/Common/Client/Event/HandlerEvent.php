@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Client\Event;
 
-	use Edde\Api\Client\IHttpHandler;
+	use Edde\Api\Http\Client\IHttpHandler;
 	use Edde\Api\Http\IHttpRequest;
 
 	/**
@@ -15,13 +15,13 @@
 		 */
 		protected $httpRequest;
 		/**
-		 * @var IHttpHandler
+		 * @var \Edde\Api\Http\Client\IHttpHandler
 		 */
 		protected $httpHandler;
 
 		/**
-		 * @param IHttpRequest $httpRequest
-		 * @param IHttpHandler $httpHandler
+		 * @param IHttpRequest                       $httpRequest
+		 * @param \Edde\Api\Http\Client\IHttpHandler $httpHandler
 		 */
 		public function __construct(IHttpRequest $httpRequest, IHttpHandler $httpHandler) {
 			$this->httpRequest = $httpRequest;
@@ -36,7 +36,7 @@
 		}
 
 		/**
-		 * @return IHttpHandler
+		 * @return \Edde\Api\Http\Client\IHttpHandler
 		 */
 		public function getHttpHandler(): IHttpHandler {
 			return $this->httpHandler;

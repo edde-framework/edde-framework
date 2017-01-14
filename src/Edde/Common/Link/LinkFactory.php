@@ -6,9 +6,9 @@
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Api\Link\LinkException;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Object;
 
-	class LinkFactory extends AbstractDeffered implements ILinkFactory {
+	class LinkFactory extends Object implements ILinkFactory {
 		/**
 		 * @var ILinkGenerator[]
 		 */
@@ -27,7 +27,6 @@
 		 * @throws LinkException
 		 */
 		public function link($generate, ...$parameterList) {
-			$this->use();
 			foreach ($this->linkGeneratorList as $linkGenerator) {
 				if (($url = $linkGenerator->link($generate, ...$parameterList)) !== null) {
 					return $url;

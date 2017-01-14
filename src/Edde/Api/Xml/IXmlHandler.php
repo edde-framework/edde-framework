@@ -19,7 +19,7 @@
 
 		/**
 		 * @param string $tag
-		 * @param array $attributeList
+		 * @param array  $attributeList
 		 */
 		public function onOpenTagEvent(string $tag, array $attributeList);
 
@@ -30,7 +30,7 @@
 
 		/**
 		 * @param string $tag
-		 * @param array $attributeList
+		 * @param array  $attributeList
 		 */
 		public function onShortTagEvent(string $tag, array $attributeList);
 

@@ -84,7 +84,7 @@
 		public function getQuery();
 
 		/**
-		 * @param string $name
+		 * @param string      $name
 		 * @param string|null $default
 		 *
 		 * @return string

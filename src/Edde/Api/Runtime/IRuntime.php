@@ -3,13 +3,9 @@
 
 	namespace Edde\Api\Runtime;
 
-	use Edde\Api\Deffered\IDeffered;
-
-	interface IRuntime extends IDeffered {
-		public function run(callable $callback);
-
+	interface IRuntime {
 		/***
 		 * @return bool
 		 */
-		public function isConsoleMode();
+		public function isConsoleMode(): bool;
 	}

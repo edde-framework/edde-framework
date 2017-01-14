@@ -3,21 +3,18 @@
 
 	namespace Edde\Common\Template;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\AbstractObject;
-	use Edde\Common\Deffered\DefferedTrait;
+	use Edde\Common\Object;
 	use Edde\Common\Node\Node;
 
 	/**
 	 * Base macro for all template macros.
 	 */
-	abstract class AbstractMacro extends AbstractObject implements IMacro, ILazyInject {
-		use DefferedTrait;
+	abstract class AbstractMacro extends Object implements IMacro {
 		/**
 		 * @var string
 		 */
@@ -58,7 +55,6 @@
 		 * @inheritdoc
 		 */
 		public function hasHelperSet(): bool {
-			$this->use();
 			return $this->helperSet !== null;
 		}
 
@@ -66,7 +62,6 @@
 		 * @inheritdoc
 		 */
 		public function getHelperSet(): IHelperSet {
-			$this->use();
 			return $this->helperSet;
 		}
 
@@ -97,7 +92,7 @@
 		/**
 		 * include node when root, otherwise switch node
 		 *
-		 * @param INode $macro
+		 * @param INode  $macro
 		 * @param string $attribute
 		 *
 		 * @return INode|Node
@@ -112,7 +107,7 @@
 		/**
 		 * insert node under the given macro
 		 *
-		 * @param INode $macro
+		 * @param INode  $macro
 		 * @param string $attribute
 		 *
 		 * @return Node
@@ -132,9 +127,9 @@
 		/**
 		 * extract an attribute and remove it from attribute list
 		 *
-		 * @param INode $macro
+		 * @param INode  $macro
 		 * @param string $name
-		 * @param null $default
+		 * @param null   $default
 		 *
 		 * @return mixed|null|string
 		 */
@@ -148,7 +143,7 @@
 		/**
 		 * switch macro and node and extract attribute from macro node
 		 *
-		 * @param INode $macro
+		 * @param INode  $macro
 		 * @param string $attribute
 		 *
 		 * @return INode
@@ -161,10 +156,10 @@
 		/**
 		 * return attribute from the given macro; throws exception if the attribute is not present
 		 *
-		 * @param INode $macro
-		 * @param ICompiler $compiler
+		 * @param INode       $macro
+		 * @param ICompiler   $compiler
 		 * @param string|null $name
-		 * @param bool $helper
+		 * @param bool        $helper
 		 *
 		 * @return mixed
 		 * @throws MacroException
@@ -180,8 +175,8 @@
 		/**
 		 * return attribute list
 		 *
-		 * @param INode $macro
-		 * @param ICompiler $compiler
+		 * @param INode         $macro
+		 * @param ICompiler     $compiler
 		 * @param callable|null $default
 		 *
 		 * @return array

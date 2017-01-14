@@ -3,20 +3,23 @@
 
 	namespace Edde\Common\Translator;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Translator\IDictionary;
 	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Translator\TranslatorException;
 	use Edde\Common\Cache\CacheTrait;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Object;
 
 	/**
 	 * General class for translations support.
 	 */
-	class Translator extends AbstractDeffered implements ITranslator {
+	class Translator extends Object implements ITranslator, IConfigurable {
 		use LazyConverterManagerTrait;
 		use CacheTrait;
+		use ConfigurableTrait;
 		/**
 		 * @var array
 		 */
@@ -47,7 +50,7 @@
 		public function registerSource(IFile $source, string $scope = null): ITranslator {
 			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
 			$scope = $scope ?: ($this->scopeStack->isEmpty() ? null : $this->scopeStack->top());
-			if ($this->isUsed()) {
+			if ($this->isConfigured()) {
 				$this->registerDictionary($this->converterManager->convert($source, $source->getMime(), IDictionary::class), $scope);
 				return $this;
 			}
@@ -95,34 +98,30 @@
 		 * @throws TranslatorException
 		 */
 		public function translate(string $id, string $scope = null, string $language = null): string {
-			$this->use();
 			if (($language = $language ?: $this->language) === null) {
 				throw new TranslatorException('Cannot use translator without set language.');
 			}
-			if (($string = $this->cache->load($cacheId = ($id . $language . ($scope = $scope ?: $this->scopeStack->top())))) !== null) {
+			$cache = $this->cache();
+			if (($string = $cache->load($cacheId = ($id . $language . ($scope = $scope ?: $this->scopeStack->top())))) !== null) {
 				return $string;
 			}
 			if (isset($this->dictionaryList[$scope]) === false) {
 				throw new TranslatorException(sprintf('Scope [%s] has no dictionaries.', $scope));
 			}
-			$dictionaryList = $this->dictionaryList[$scope];
-			foreach ($dictionaryList as $dictionary) {
+			foreach ($this->dictionaryList[$scope] as $dictionary) {
 				if (($string = $dictionary->translate($id, $language)) !== null) {
-					return $this->cache->save($cacheId, $string);
+					return $cache->save($cacheId, $string);
 				}
 			}
 			throw new TranslatorException(sprintf('Cannot translate [%s]; the given id is not available in no dictionary.', $id));
 		}
 
-		protected function prepare() {
-			parent::prepare();
-			$this->cache();
+		protected function handleSetup() {
 			if ($this->scopeStack->isEmpty()) {
 				$this->scopeStack->push(null);
 			}
-			foreach ($this->sourceList as $item) {
+			foreach ($this->sourceList as list($file, $scope)) {
 				/** @var $file IFile */
-				list($file, $scope) = $item;
 				$this->registerDictionary($this->converterManager->convert($file, $file->getMime(), IDictionary::class), $scope);
 			}
 			if (empty($this->dictionaryList)) {

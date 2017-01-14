@@ -21,6 +21,20 @@
 		public function getFileList();
 
 		/**
+		 * normalize directory path
+		 *
+		 * @return IDirectory
+		 */
+		public function normalize(): IDirectory;
+
+		/**
+		 * execute realpath on directory to check if everything is correct (directory must exists)
+		 *
+		 * @return IDirectory
+		 */
+		public function realpath(): IDirectory;
+
+		/**
 		 * create a file with the given name in this directory
 		 *
 		 * @param string $file

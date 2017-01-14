@@ -4,12 +4,12 @@
 	namespace Edde\Common\Translator;
 
 	use Edde\Api\Translator\IDictionary;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Object;
 
 	/**
 	 * Common dictionary implementation.
 	 */
-	abstract class AbstractDictionary extends AbstractDeffered implements IDictionary {
+	abstract class AbstractDictionary extends Object implements IDictionary {
 		/**
 		 * @var string[]
 		 */
@@ -19,7 +19,6 @@
 		 * @inheritdoc
 		 */
 		public function translate(string $id, string $language) {
-			$this->use();
 			if (isset($this->translationList[$language][$id]) === false) {
 				return null;
 			}

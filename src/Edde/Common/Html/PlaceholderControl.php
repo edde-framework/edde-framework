@@ -10,7 +10,6 @@
 	 * Simple invisible control used for controls created via ajax.
 	 */
 	class PlaceholderControl extends AbstractHtmlControl {
-		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 * @throws HtmlException
@@ -30,8 +29,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function prepare() {
-			parent::prepare();
+		protected function handleInit() {
+			parent::handleInit();
 			parent::setTag('div');
 			$this->addClass('edde-placeholder');
 		}

@@ -182,11 +182,11 @@ if (typeof JSON !== "object") {
 
 			return isFinite(this.valueOf())
 				? this.getUTCFullYear() + "-" +
-			f(this.getUTCMonth() + 1) + "-" +
-			f(this.getUTCDate()) + "T" +
-			f(this.getUTCHours()) + ":" +
-			f(this.getUTCMinutes()) + ":" +
-			f(this.getUTCSeconds()) + "Z"
+				f(this.getUTCMonth() + 1) + "-" +
+				f(this.getUTCDate()) + "T" +
+				f(this.getUTCHours()) + ":" +
+				f(this.getUTCMinutes()) + ":" +
+				f(this.getUTCSeconds()) + "Z"
 				: null;
 		};
 
@@ -211,11 +211,11 @@ if (typeof JSON !== "object") {
 		rx_escapable.lastIndex = 0;
 		return rx_escapable.test(string)
 			? "\"" + string.replace(rx_escapable, function (a) {
-			var c = meta[a];
-			return typeof c === "string"
-				? c
-				: "\\u" + ("0000" + a.charCodeAt(0).toString(16)).slice(-4);
-		}) + "\""
+				var c = meta[a];
+				return typeof c === "string"
+					? c
+					: "\\u" + ("0000" + a.charCodeAt(0).toString(16)).slice(-4);
+			}) + "\""
 			: "\"" + string + "\"";
 	}
 
@@ -304,8 +304,8 @@ if (typeof JSON !== "object") {
 					v = partial.length === 0
 						? "[]"
 						: gap
-						? "[\n" + gap + partial.join(",\n" + gap) + "\n" + mind + "]"
-						: "[" + partial.join(",") + "]";
+							? "[\n" + gap + partial.join(",\n" + gap) + "\n" + mind + "]"
+							: "[" + partial.join(",") + "]";
 					gap = mind;
 					return v;
 				}
@@ -351,8 +351,8 @@ if (typeof JSON !== "object") {
 				v = partial.length === 0
 					? "{}"
 					: gap
-					? "{\n" + gap + partial.join(",\n" + gap) + "\n" + mind + "}"
-					: "{" + partial.join(",") + "}";
+						? "{\n" + gap + partial.join(",\n" + gap) + "\n" + mind + "}"
+						: "{" + partial.join(",") + "}";
 				gap = mind;
 				return v;
 		}

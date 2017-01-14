@@ -19,7 +19,7 @@
 		 *
 		 * @param string $control
 		 * @param string $action
-		 * @param array $parameterList
+		 * @param array  $parameterList
 		 *
 		 * @return IRequest
 		 */
@@ -51,7 +51,7 @@
 		 *
 		 * @param string $control
 		 * @param string $handle
-		 * @param array $parameterList
+		 * @param array  $parameterList
 		 *
 		 * @return IRequest
 		 */

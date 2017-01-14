@@ -9,8 +9,8 @@
 			return $this;
 		}
 
-		protected function prepare() {
-			parent::prepare();
+		protected function handleInit() {
+			parent::handleInit();
 			$this->setAttribute('rel', 'stylesheet')
 				->setAttribute('media', 'all');
 		}

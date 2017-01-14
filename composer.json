@@ -8,22 +8,29 @@
 	],
 	"authors": [
 		{
-			"name": "Marek Hanzal"
+			"name": "Marek Hanzal",
+			"email": "marek.hanzal@edde-framework.org"
 		}
 	],
 	"config": {
-		"optimize-autoloader": true
+		"optimize-autoloader": true,
+		"vendor-dir": "lib"
 	},
 	"autoload": {
 		"files": [
 			"src/loader.php"
 		]
 	},
+	"minimum-stability": "dev",
 	"require": {
 		"php": ">=7.0",
-		"ext-mbstring": "*",
 		"paragonie/constant_time_encoding": "^2.0",
 		"defuse/php-encryption": "^2.0",
+		"phpunit/phpunit": "6.0.x-dev",
+		"theseer/phpdox": "0.9.0",
 		"roave/security-advisories": "dev-master"
+	},
+	"require-dev": {
+		"tracy/tracy": "^2.4"
 	}
 }

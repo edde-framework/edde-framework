@@ -13,7 +13,7 @@
 		/**
 		 * select property of a schema; it's something similar to a column
 		 *
-		 * @param string $property
+		 * @param string      $property
 		 * @param string|null $prefix
 		 * @param string|null $alias
 		 *
@@ -42,7 +42,7 @@
 		/**
 		 * input is parameter; parameters can be extracted and used for bound (in case of RDBM supporting parameter binding)
 		 *
-		 * @param mixed $parameter
+		 * @param mixed       $parameter
 		 * @param string|null $name
 		 *
 		 * @return $this

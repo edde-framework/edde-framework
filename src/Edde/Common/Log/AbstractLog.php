@@ -4,12 +4,12 @@
 	namespace Edde\Common\Log;
 
 	use Edde\Api\Log\ILog;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Common stuff for loggers.
 	 */
-	abstract class AbstractLog extends AbstractObject implements ILog {
+	abstract class AbstractLog extends Object implements ILog {
 		/**
 		 * @inheritdoc
 		 */

@@ -15,5 +15,10 @@
 			"method": "crate",
 			"position": 0
 		}
+		{
+			"class": "\\Edde\\Common\\Html\\AbstractHtmlControl",
+			"method": "createControl",
+			"position": 0
+		}
 	]
 }

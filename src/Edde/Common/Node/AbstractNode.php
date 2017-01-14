@@ -5,12 +5,12 @@
 
 	use Edde\Api\Node\IAbstractNode;
 	use Edde\Api\Node\NodeException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Pure node tree implementation; this class holds all common methods for node manipulation.
 	 */
-	abstract class AbstractNode extends AbstractObject implements IAbstractNode {
+	abstract class AbstractNode extends Object implements IAbstractNode {
 		/**
 		 * @var IAbstractNode
 		 */

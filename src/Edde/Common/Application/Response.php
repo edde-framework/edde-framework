@@ -4,9 +4,9 @@
 	namespace Edde\Common\Application;
 
 	use Edde\Api\Application\IResponse;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class Response extends AbstractObject implements IResponse {
+	class Response extends Object implements IResponse {
 		/**
 		 * @var string
 		 */
@@ -15,7 +15,7 @@
 
 		/**
 		 * @param string $type
-		 * @param $response
+		 * @param        $response
 		 */
 		public function __construct(string $type = null, $response = null) {
 			$this->type = $type;

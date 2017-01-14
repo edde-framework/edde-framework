@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Crate;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\Crate\LazyCrateDirectoryTrait;
@@ -14,19 +15,21 @@
 	use Edde\Api\Schema\ISchemaLink;
 	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
+	use Edde\Common\Object;
 	use Edde\Common\Cache\CacheTrait;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Simple crate php class generator.
 	 */
-	class CrateGenerator extends AbstractDeffered implements ICrateGenerator {
+	class CrateGenerator extends Object implements ICrateGenerator, IConfigurable {
 		use LazySchemaManagerTrait;
 		use LazyCrateDirectoryTrait;
 		use LazyTempDirectoryTrait;
 		use CacheTrait;
+		use ConfigurableTrait;
 		/**
 		 * @var string
 		 */
@@ -37,10 +40,6 @@
 		 * @throws FileException
 		 */
 		public function generate(bool $force = false): ICrateGenerator {
-			if ($this->isUsed()) {
-				return $this;
-			}
-			$this->use();
 			$lock = $this->tempDirectory->file('.crate-generator');
 			$lock->lock();
 			/** @noinspection NotOptimalIfConditionsInspection */
@@ -67,7 +66,6 @@
 		 * @inheritdoc
 		 */
 		public function compile(ISchema $schema): array {
-			$this->use();
 			$sourceList = [];
 			$source[] = "<?php\n";
 			$source[] = "\tdeclare(strict_types = 1);\n\n";
@@ -215,6 +213,7 @@
 		public function include (): ICrateGenerator {
 			/** @noinspection UnnecessaryParenthesesInspection */
 			(function (IResource $resource) {
+				/** @noinspection PhpIncludeInspection */
 				require_once $resource->getUrl();
 			})($this->crateDirectory->file('loader.php'));
 			return $this;
@@ -223,9 +222,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function prepare() {
-			parent::prepare();
-			$this->cache();
+		protected function handleInit() {
 			$this->parent = Crate::class;
 		}
 	}
