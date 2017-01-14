@@ -54,8 +54,6 @@
       <excludeFolder url="file://$MODULE_DIR$/lib/webmozart/assert" />
       <excludeFolder url="file://$MODULE_DIR$/release" />
     </content>
-    <content url="file://$MODULE_DIR$/.runtime/lib/tracy" />
-    <content url="file://$MODULE_DIR$/.runtime/lib/tracy/tracy" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
