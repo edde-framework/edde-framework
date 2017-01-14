@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Html;
 
+	use Edde\Api\Control\ControlException;
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Crypt\LazyCryptEngineTrait;
 	use Edde\Api\File\FileException;
@@ -11,6 +12,7 @@
 	use Edde\Api\Web\LazyStyleSheetCompilerTrait;
 	use Edde\Common\Control\AbstractControl;
 	use Edde\Common\File\File;
+	use Edde\Common\Node\NodeQuery;
 	use Edde\Common\Strings\StringResource;
 
 	/**
@@ -268,6 +270,35 @@
 		 */
 		public function isPair(): bool {
 			return $this->node->getMeta('pair', true);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function remove(string $id): IHtmlControl {
+			foreach (NodeQuery::node($this->getNode(), '/**/[id]') as $node) {
+				if ($node->getAttribute('id') === $id) {
+					$node->getParent()
+						->removeNode($node);
+				}
+			}
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function replace(IHtmlControl $htmlControl): IHtmlControl {
+			if (($id = $htmlControl->getId()) === null) {
+				throw new ControlException(sprintf('Cannot replace control [%s] without id.', get_class($htmlControl)));
+			}
+			foreach (NodeQuery::node($this->getNode(), '/**/[id]') as $node) {
+				if ($node->getAttribute('id') === $id) {
+					$node->setMeta('control', $htmlControl);
+					break;
+				}
+			}
+			return $this;
 		}
 
 		protected function placeholder(string $id) {
