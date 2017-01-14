@@ -2,12 +2,13 @@ variables:
     PROJECT: edde-framework
 
 stages:
-    - test-lightweight
+    - prepare
     - composer
-    - test-full
+    - test
+    - production
 
-test-lightweight:
-    stage: test-lightweight
+prepare:
+    stage: prepare
     script:
         - php bin/composer.phar install
         - php bin/composer.phar exec phpunit -- --coverage-text --colors=never
@@ -25,8 +26,8 @@ composer:
         - tags
         - /^\d+\.\d+$/
 
-test-full:
-    stage: test-full
+test:
+    stage: test
     script:
         - php bin/composer.phar install
         - php bin/composer.phar exec phpunit -- --coverage-text --colors=never
@@ -37,3 +38,12 @@ test-full:
     environment:
         name: test/$CI_BUILD_REF_NAME
         url: https://$CI_ENVIRONMENT_SLUG.edde-framework.org:8080/
+
+production:
+    stage: production
+    script:
+        - echo 'production'
+    environment:
+        name: production
+        url: https://edde-framework.org:8080/
+
