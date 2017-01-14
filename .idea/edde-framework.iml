@@ -13,6 +13,7 @@
       <excludeFolder url="file://$MODULE_DIR$/.runtime/bin" />
       <excludeFolder url="file://$MODULE_DIR$/.runtime/db" />
       <excludeFolder url="file://$MODULE_DIR$/.runtime/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/.runtime/lib/tracy" />
       <excludeFolder url="file://$MODULE_DIR$/.runtime/logs" />
       <excludeFolder url="file://$MODULE_DIR$/artwork" />
       <excludeFolder url="file://$MODULE_DIR$/lib/composer" />
