@@ -12,7 +12,7 @@
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Http\IPostList;
 	use Edde\Api\Http\IRequestUrl;
-	use Edde\Common\Client\HttpClient;
+	use Edde\Common\Http\Client\HttpClient;
 	use Edde\Common\Http\HttpRequestFactory;
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Runtime\AbstractModule;

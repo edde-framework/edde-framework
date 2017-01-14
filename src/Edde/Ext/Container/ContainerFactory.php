@@ -56,7 +56,6 @@
 	use Edde\Common\Cache\Cache;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheManager;
-	use Edde\Common\Client\HttpClient;
 	use Edde\Common\Container\Container;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crate\CrateDirectory;
@@ -65,6 +64,7 @@
 	use Edde\Common\Database\Dsn;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\TemplateDirectory;
+	use Edde\Common\Http\Client\HttpClient;
 	use Edde\Common\Http\CookieFactory;
 	use Edde\Common\Http\HeaderFactory;
 	use Edde\Common\Http\HttpRequest;

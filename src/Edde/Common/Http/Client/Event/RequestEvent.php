@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Client\Event;
+	namespace Edde\Common\Http\Client\Event;
 
 	use Edde\Api\Http\IHttpRequest;
 

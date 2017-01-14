@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Client;
+	namespace Edde\Common\Http\Client;
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\File\IFile;
@@ -10,11 +10,11 @@
 	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
-	use Edde\Common\Client\Event\OnRequestEvent;
-	use Edde\Common\Client\Event\RequestDoneEvent;
-	use Edde\Common\Client\Event\RequestFailedEvent;
 	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Http\Body;
+	use Edde\Common\Http\Client\Event\OnRequestEvent;
+	use Edde\Common\Http\Client\Event\RequestDoneEvent;
+	use Edde\Common\Http\Client\Event\RequestFailedEvent;
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpResponse;

@@ -1,25 +1,26 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Common\Client;
+	namespace Edde\Common\Http\Client;
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Http\Client\ClientException;
+	use Edde\Api\Http\Client\IHttpClient;
 	use Edde\Api\Http\Client\IHttpHandler;
 	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Url\IUrl;
 	use Edde\Api\Url\UrlException;
-	use Edde\Common\Client\Event\DeleteEvent;
-	use Edde\Common\Client\Event\GetEvent;
-	use Edde\Common\Client\Event\HandlerEvent;
-	use Edde\Common\Client\Event\PatchEvent;
-	use Edde\Common\Client\Event\PostEvent;
-	use Edde\Common\Client\Event\PutEvent;
-	use Edde\Common\Client\Event\RequestEvent;
 	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Event\EventTrait;
+	use Edde\Common\Http\Client\Event\DeleteEvent;
+	use Edde\Common\Http\Client\Event\GetEvent;
+	use Edde\Common\Http\Client\Event\HandlerEvent;
+	use Edde\Common\Http\Client\Event\PatchEvent;
+	use Edde\Common\Http\Client\Event\PostEvent;
+	use Edde\Common\Http\Client\Event\PutEvent;
+	use Edde\Common\Http\Client\Event\RequestEvent;
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpRequest;
@@ -29,7 +30,7 @@
 	/**
 	 * Simple http client implementation.
 	 */
-	class HttpClient extends Object implements \Edde\Api\Http\Client\IHttpClient {
+	class HttpClient extends Object implements IHttpClient {
 		use LazyContainerTrait;
 		use LazyConverterManagerTrait;
 		use EventTrait;
