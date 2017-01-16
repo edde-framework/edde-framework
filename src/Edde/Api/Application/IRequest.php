@@ -1,7 +1,9 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Application;
+
+	use Edde\Api\Converter\IContent;
 
 	/**
 	 * General application request (it should not be necessarily be handled by an application).
@@ -15,11 +17,13 @@
 		public function getId(): string;
 
 		/**
-		 * "mime" type (it can be arbitrary string) of a request
+		 * return content; if there is target specified, conversion will be executed
 		 *
-		 * @return string
+		 * @param array $targetList
+		 *
+		 * @return IContent|mixed
 		 */
-		public function getType();
+		public function getContent(array $targetList = null);
 
 		/**
 		 * register an action handler (target control and target method to be called)

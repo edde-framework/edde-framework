@@ -4,6 +4,7 @@
 	namespace Edde\Common\Converter;
 
 	use Edde\Api\Converter\ConverterException;
+	use Edde\Api\Converter\IContent;
 	use Edde\Api\Converter\IConvertable;
 	use Edde\Api\Converter\IConverter;
 	use Edde\Api\Converter\IConverterManager;
@@ -38,18 +39,26 @@
 		 * @inheritdoc
 		 * @throws ConverterException
 		 */
-		public function convert($convert, string $source, array $targetList): IConvertable {
+		public function convert($content, string $mime, array $targetList): IConvertable {
+			return $this->content(new Content($content, $mime), $targetList);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function content(IContent $content, array $targetList): IConvertable {
 			$exception = null;
 			$unknown = true;
+			$mime = $content->getMime();
 			foreach ($targetList as $target) {
-				if (isset($this->converterList[$mime = ($source . '|' . $target)])) {
+				if (isset($this->converterList[$id = ($mime . '|' . $target)])) {
 					$unknown = false;
 					try {
-						return new Convertable($this->converterList[$mime], $convert, $source, $target, $mime);
+						return new Convertable($this->converterList[$id], $content, $target);
 					} catch (\Exception $exception) {
 					}
 				}
 			}
-			throw new ConverterException(sprintf('Cannot convert %ssource mime [%s] to any of [%s].', $unknown ? 'unknown/unsupported ' : '', $source, implode(', ', $targetList)), 0, $exception);
+			throw new ConverterException(sprintf('Cannot convert %ssource mime [%s] to any of [%s].', $unknown ? 'unknown/unsupported ' : '', $mime, implode(', ', $targetList)), 0, $exception);
 		}
 	}

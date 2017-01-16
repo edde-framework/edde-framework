@@ -19,11 +19,19 @@
 		/**
 		 * magical method for generic data conversion; ideologically it is based on a mime type conversion, but identifiers can be arbitrary
 		 *
-		 * @param mixed  $convert    generic input which will be converted in a generic output (defined by mime a target)
-		 * @param string $source     generic identifier, it can be formal mime type or anything else (but there must be known converter)
+		 * @param mixed  $content    generic input which will be converted in a generic output (defined by mime a target)
+		 * @param string $mime       generic identifier, it can be formal mime type or anything else (but there must be known converter)
 		 * @param array  $targetList list if targets; first registered would win; initial idea was http accept header
 		 *
 		 * @return IConvertable
 		 */
-		public function convert($convert, string $source, array $targetList): IConvertable;
+		public function convert($content, string $mime, array $targetList): IConvertable;
+
+		/**
+		 * @param IContent $content
+		 * @param array    $targetList
+		 *
+		 * @return IConvertable
+		 */
+		public function content(IContent $content, array $targetList): IConvertable;
 	}

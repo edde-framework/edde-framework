@@ -5,6 +5,13 @@
 
 	interface IConvertable {
 		/**
+		 * return subject content
+		 *
+		 * @return IContent
+		 */
+		public function getContent(): IContent;
+
+		/**
 		 * return target mime type
 		 *
 		 * @return string

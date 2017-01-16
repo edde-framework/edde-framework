@@ -37,7 +37,7 @@
 		 * @throws XmlParserException
 		 * @throws ConverterException
 		 */
-		public function convert($convert, string $source, string $target, string $mime) {
+		public function convert($convert, string $mime, string $target) {
 			$this->unsupported($convert, $target, $convert instanceof IResource || is_string($convert));
 			try {
 				switch ($target) {
@@ -49,7 +49,7 @@
 			} catch (XmlParserException $e) {
 				throw new XmlParserException(sprintf('Cannot handle resource [%s]: %s', (string)$convert->getUrl(), $e->getMessage()), 0, $e);
 			}
-			$this->exception($source, $target);
+			$this->exception($mime, $target);
 		}
 
 		/**

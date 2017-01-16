@@ -74,8 +74,8 @@
 		 * @throws ConverterException
 		 * @throws NodeException
 		 */
-		public function convert($convert, string $source, string $target, string $mime) {
-			switch ($source) {
+		public function convert($convert, string $mime, string $target) {
+			switch ($mime) {
 				case 'application/json':
 				case 'json':
 					$this->unsupported($convert, $target, $convert instanceof IFile || is_string($convert));
@@ -103,6 +103,6 @@
 					}
 					break;
 			}
-			$this->exception($source, $target);
+			$this->exception($mime, $target);
 		}
 	}

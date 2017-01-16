@@ -36,15 +36,15 @@
 		 * @throws ConverterException
 		 * @throws NodeException
 		 */
-		public function convert($convert, string $source, string $target, string $mime) {
+		public function convert($convert, string $mime, string $target) {
 			$this->unsupported($convert, $target, $convert instanceof IResource);
 			switch ($target) {
 				case INode::class:
 					/** @noinspection UnnecessaryParenthesesInspection */
 					return (function (IResource $resource, string $source, string $mime) {
-						NodeUtils::node($root = new Node(), $this->convert($resource, $source, 'array', $mime));
+						NodeUtils::node($root = new Node(), $this->convert($resource, $source, 'array'));
 						return $root;
-					})($convert, $source, $mime);
+					})($convert, $mime, $mime);
 				case 'array':
 					/** @noinspection UsingInclusionReturnValueInspection */
 					/** @noinspection PhpIncludeInspection */
@@ -53,6 +53,6 @@
 					}
 					return $include;
 			}
-			$this->exception($source, $target);
+			$this->exception($mime, $target);
 		}
 	}

@@ -3,5 +3,64 @@
 
 	namespace Edde\Common\Converter;
 
-	class Convertable extends AbstractConvertable {
+	use Edde\Api\Converter\IContent;
+	use Edde\Api\Converter\IConvertable;
+	use Edde\Api\Converter\IConverter;
+	use Edde\Common\Object;
+
+	class Convertable extends Object implements IConvertable {
+		/**
+		 * @var IConverter
+		 */
+		protected $converter;
+		protected $content;
+		protected $result;
+		/**
+		 * @var string
+		 */
+		protected $target;
+		/**
+		 * @var string
+		 */
+		protected $mime;
+
+		/**
+		 * A biologist, a chemist and a statistician are out hunting.
+		 * The biologist shoots at a deer and misses 5th to the left.
+		 * The chemist takes a shot and misses 5th to the right.
+		 * The statistician yells "We got 'em!"
+		 *
+		 * @param IConverter $converter
+		 * @param mixed      $content
+		 * @param string     $target
+		 */
+		public function __construct(IConverter $converter, IContent $content, string $target) {
+			$this->converter = $converter;
+			$this->content = $content;
+			$this->target = $target;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getContent(): IContent {
+			return $this->content;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getTarget(): string {
+			return $this->target;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function convert() {
+			if ($this->result === null) {
+				$this->result = $this->converter->convert($this->content, $this->mime, $this->target);
+			}
+			return $this->result;
+		}
 	}

@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Converter;
 
@@ -19,11 +19,10 @@
 		 * convert input type to a output defined by a target; same target however can have more output types (for example string, node, ...)
 		 *
 		 * @param mixed  $convert what to convert
-		 * @param string $source  source mime (should match "convert"
+		 * @param string $mime    source mime (should match "convert"
 		 * @param string $target  target mime (general identifier); converter should throw an exception if a target is unknown/unsuporrted
-		 * @param string $mime    concated source|target mime types
 		 *
 		 * @return mixed
 		 */
-		public function convert($convert, string $source, string $target, string $mime);
+		public function convert($convert, string $mime, string $target);
 	}

@@ -4,7 +4,6 @@
 	namespace Edde\Ext\Router;
 
 	use Edde\Api\Application\LazyResponseManagerTrait;
-	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Http\LazyHeaderListTrait;
 	use Edde\Api\Http\LazyHttpRequestTrait;
 	use Edde\Api\Http\LazyHttpResponseTrait;
@@ -22,10 +21,6 @@
 		use LazyHttpRequestTrait;
 		use LazyHttpResponseTrait;
 		use LazyRuntimeTrait;
-		/**
-		 * @var ICrateFactory
-		 */
-		protected $crateFactory;
 		/**
 		 * @var IService[]
 		 */

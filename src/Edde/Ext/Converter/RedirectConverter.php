@@ -31,7 +31,7 @@
 		 * @inheritdoc
 		 * @throws ConverterException
 		 */
-		public function convert($convert, string $source, string $target, string $mime) {
+		public function convert($convert, string $mime, string $target) {
 			$this->unsupported($convert, $target, is_string($convert));
 			switch ($target) {
 				case 'http+text/html':
@@ -44,6 +44,6 @@
 					echo $convert = json_encode(['redirect' => $convert]);
 					return $convert;
 			}
-			$this->exception($source, $target);
+			$this->exception($mime, $target);
 		}
 	}

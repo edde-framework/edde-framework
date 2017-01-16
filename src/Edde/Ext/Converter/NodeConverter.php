@@ -20,12 +20,12 @@
 		 * @throws ConverterException
 		 * @throws NodeException
 		 */
-		public function convert($convert, string $source, string $target, string $mime) {
+		public function convert($convert, string $mime, string $target) {
 			$this->unsupported($convert, $target, $convert instanceof \stdClass);
 			switch ($target) {
 				case INode::class:
 					return NodeUtils::convert($convert);
 			}
-			$this->exception($source, $target);
+			$this->exception($mime, $target);
 		}
 	}

@@ -38,7 +38,7 @@
 		 * @throws ConverterException
 		 * @throws FileException
 		 */
-		public function convert($convert, string $source, string $target, string $mime) {
+		public function convert($convert, string $mime, string $target) {
 			/** @var $convert IFile */
 			$this->unsupported($convert, $target, $convert instanceof IFile);
 			switch ($target) {
@@ -47,6 +47,6 @@
 					$csvDictionary->addFile($convert->getPath());
 					return $csvDictionary;
 			}
-			$this->exception($source, $target);
+			$this->exception($mime, $target);
 		}
 	}
