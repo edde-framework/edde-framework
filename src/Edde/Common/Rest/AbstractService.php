@@ -68,7 +68,7 @@
 			}
 			if ($target) {
 				$this->httpResponse->setContentType($target);
-				$this->responseManager->setMime('http+' . $target);
+				$this->responseManager->setTarget('http+' . $target);
 			}
 			$this->responseManager->response(new Response($mime, $response));
 			return $this;

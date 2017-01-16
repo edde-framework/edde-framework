@@ -41,9 +41,7 @@
 			if (isset($parameterList['action']) === false && isset($parameterList['handle']) === false) {
 				return null;
 			}
-			$this->httpResponse->setContentType($mime = $this->headerList->getContentType()
-				->getMime($this->headerList->getAccept()));
-			$this->responseManager->setMime($mime = ('http+' . $mime));
+			$this->responseManager->setTarget($this->headerList->getAcceptList());
 			if ($this->httpRequest->isMethod('GET') === false && ($source = ($this->postList->isEmpty() ? $this->body->convert('array') : $this->postList->array())) !== null) {
 				/**
 				 * support for control property filling
@@ -56,7 +54,8 @@
 					$parameterList = array_merge($parameterList, $this->crateFactory->build($source));
 				}
 			}
-			$request = new Request($mime);
+			$contentType = $this->headerList->getContentType();
+			$request = new Request($contentType->getMime());
 			if (isset($parameterList['handle'])) {
 				list($control, $handle) = explode('.', $parameterList['handle']);
 				unset($parameterList['handle']);

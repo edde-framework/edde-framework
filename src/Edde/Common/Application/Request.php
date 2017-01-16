@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Application;
 
@@ -33,7 +33,7 @@
 		 *
 		 * @param string $type
 		 */
-		public function __construct(string $type) {
+		public function __construct(string $type = null) {
 			$this->type = $type;
 		}
 
@@ -47,7 +47,7 @@
 			return $this->id;
 		}
 
-		public function getType(): string {
+		public function getType() {
 			return $this->type;
 		}
 

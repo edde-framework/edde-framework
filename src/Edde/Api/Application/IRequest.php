@@ -19,7 +19,7 @@
 		 *
 		 * @return string
 		 */
-		public function getType(): string;
+		public function getType();
 
 		/**
 		 * register an action handler (target control and target method to be called)

@@ -19,29 +19,28 @@
 		 */
 		protected $response;
 		/**
-		 * @var string
+		 * @var string[]
 		 */
-		protected $mime;
+		protected $targetList;
 
 		public function response(IResponse $response = null): IResponseManager {
 			$this->response = $response;
 			return $this;
 		}
 
-		public function getMime(): string {
-			return $this->mime;
+		public function setTarget(array $targetList): IResponseManager {
+			$this->targetList = $targetList;
+			return $this;
 		}
 
-		public function setMime(string $mime): IResponseManager {
-			$this->mime = $mime;
-			return $this;
+		public function getTarget(): array {
+			return $this->targetList;
 		}
 
 		public function execute() {
 			if ($this->response === null) {
 				return;
 			}
-			$this->config();
-			$this->converterManager->convert($this->response->getResponse(), $this->response->getType(), [$this->mime]);
+			$this->converterManager->convert($this->response->getResponse(), $this->response->getType(), $this->targetList);
 		}
 	}
