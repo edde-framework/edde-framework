@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Router;
 
@@ -37,13 +37,13 @@
 			if ($this->runtime->isConsoleMode()) {
 				return null;
 			}
-			$this->httpResponse->setContentType($mime = $this->headerList->getContentType()
-				->getMime($this->headerList->getAccept()));
-			$this->responseManager->setMime($mime = ('http+' . $mime));
 			$parameterList = $this->requestUrl->getQuery();
 			if (isset($parameterList['action']) === false && isset($parameterList['handle']) === false) {
 				return null;
 			}
+			$this->httpResponse->setContentType($mime = $this->headerList->getContentType()
+				->getMime($this->headerList->getAccept()));
+			$this->responseManager->setMime($mime = ('http+' . $mime));
 			if ($this->httpRequest->isMethod('GET') === false && ($source = ($this->postList->isEmpty() ? $this->body->convert('array') : $this->postList->array())) !== null) {
 				/**
 				 * support for control property filling

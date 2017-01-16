@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Converter;
 
@@ -37,14 +37,18 @@
 		 * @inheritdoc
 		 * @throws ConverterException
 		 */
-		public function convert($convert, string $source = null, string $target = null) {
-			if (empty($source) || empty($target)) {
-				return $convert;
+		public function convert($convert, string $source, array $targetList) {
+			$exception = null;
+			$unknown = true;
+			foreach ($targetList as $target) {
+				if (isset($this->converterList[$mime = ($source . '|' . $target)])) {
+					$unknown = false;
+					try {
+						return $this->converterList[$mime]->convert($convert, $source, $target, $mime);
+					} catch (\Exception $exception) {
+					}
+				}
 			}
-			$this->config();
-			if (isset($this->converterList[$mime = ($source . '|' . $target)]) === false) {
-				throw new ConverterException(sprintf('Cannot convert unknown source mime [%s] to [%s].', $source, $target));
-			}
-			return $this->converterList[$mime]->convert($convert, $source, $target, $mime);
+			throw new ConverterException(sprintf('Cannot convert %ssource mime [%s] to any of [%s].', $unknown ? 'unknown/unsupported ' : '', $source, implode(', ', $targetList)), 0, $exception);
 		}
 	}

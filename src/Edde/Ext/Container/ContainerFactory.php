@@ -58,6 +58,7 @@
 	use Edde\Common\Cache\Cache;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheManager;
+	use Edde\Common\Container\Container;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crate\CrateDirectory;
 	use Edde\Common\Crate\CrateFactory;
@@ -163,7 +164,7 @@
 			 * “Well, I should have mentioned this before, but I’m actually a taxi driver, and the fare back to town is $25…”
 			 */
 			/** @var $container IContainer */
-			$container = new \Edde\Common\Container\Container(new Cache(new InMemoryCacheStorage()));
+			$container = new Container(new Cache(new InMemoryCacheStorage()));
 			$closureList = array_filter($factoryList = self::createFactoryList($factoryList), function ($factory, $id) use (&$factoryList) {
 				if (is_callable($factory)) {
 					$factoryList[$id] = new ExceptionFactory((string)$id, sprintf('Using placeholder factory instead of callback [%s].', $id), EddeException::class);
@@ -179,7 +180,7 @@
 			}
 			$container->registerFactoryList($factoryList);
 			foreach ($configHandlerList as $name => $configHandler) {
-				foreach ($configHandler as $config) {
+				foreach ((array)$configHandler as $config) {
 					$container->registerConfigHandler($name, $container->create($config, [], __METHOD__));
 				}
 			}
@@ -202,12 +203,7 @@
 		 * @return IContainer
 		 */
 		static public function container(array $factoryList = [], array $configHandlerList = [], string $cacheId = null): IContainer {
-			return self::create(array_merge([
-				IContainer::class => \Edde\Common\Container\Container::class,
-				ICacheStorage::class => InMemoryCacheStorage::class,
-				ICacheManager::class => CacheManager::class,
-				ICache::class => ICacheManager::class,
-			], $factoryList), array_merge([], $configHandlerList), $cacheId);
+			return self::create(array_merge(self::getDefaultFactoryList(), $factoryList), array_merge([], $configHandlerList), $cacheId);
 		}
 
 		/**
@@ -283,6 +279,7 @@
 
 		static public function getDefaultFactoryList(): array {
 			return [
+				IContainer::class => Container::class,
 				IRootDirectory::class => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
 				ITempDirectory::class => self::proxy(IRootDirectory::class, 'directory', [
 					'temp',
@@ -308,6 +305,8 @@
 					'logs',
 					LogDirectory::class,
 				]),
+				ICacheManager::class => CacheManager::class,
+				ICache::class => ICacheManager::class,
 				ICacheStorage::class => FlatFileCacheStorage::class,
 				IRuntime::class => Runtime::class,
 				IHttpResponse::class => HttpResponse::class,

@@ -66,6 +66,6 @@
 		 * @throws ConverterException
 		 */
 		protected function exception(string $source, string $target) {
-			throw new ConverterException(sprintf('Unsuported conversion in [%s] from [%s] to [%s].', static::class, $source, $target));
+			throw new ConverterException(sprintf('Unsupported conversion in [%s] from [%s] to [%s].', static::class, $source, $target));
 		}
 	}

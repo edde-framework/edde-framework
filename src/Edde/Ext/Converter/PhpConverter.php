@@ -47,8 +47,9 @@
 					})($convert, $source, $mime);
 				case 'array':
 					/** @noinspection UsingInclusionReturnValueInspection */
+					/** @noinspection PhpIncludeInspection */
 					if (is_array($include = require (string)$convert->getUrl()) === false) {
-						throw new ConverterException(sprintf('Convertion to [%s] failed: php file [%s] has not returned array.', $target, (string)$convert->getUrl()));
+						throw new ConverterException(sprintf('Conversion to [%s] failed: php file [%s] has not returned array.', $target, (string)$convert->getUrl()));
 					}
 					return $include;
 			}
