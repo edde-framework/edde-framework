@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Application;
 
@@ -42,6 +42,6 @@
 				return;
 			}
 			$this->config();
-			$this->converterManager->convert($this->response->getResponse(), $this->response->getType(), $this->mime);
+			$this->converterManager->convert($this->response->getResponse(), $this->response->getType(), [$this->mime]);
 		}
 	}

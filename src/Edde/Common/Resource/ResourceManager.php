@@ -36,8 +36,9 @@
 			$mime = $mime ?: $resource->getMime();
 			$this->converterManager->setup();
 			/** @var $node INode */
-			if (($node = $this->converterManager->convert($resource, $mime, INode::class)) instanceof INode === false) {
-				throw new ResourceManagerException(sprintf('Convertion has failed: converter for [%s] did not returned an instance of [%s].', $mime, INode::class));
+			$convertable = $this->converterManager->convert($resource, $mime, [INode::class]);
+			if (($node = $convertable->convert()) instanceof INode === false) {
+				throw new ResourceManagerException(sprintf('Conversion has failed: converter for [%s] did not returned an instance of [%s].', $mime, INode::class));
 			}
 			if ($root) {
 				$root->setNodeList($node->getNodeList(), true);

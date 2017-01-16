@@ -23,7 +23,8 @@
 				'string',
 				'text/plain',
 				'json',
-			]));
+			])
+				->convert());
 		}
 
 		public function testKaboom() {
@@ -32,7 +33,8 @@
 			self::assertEquals(json_encode($source = ['foo']), $this->converterManager->convert($source, 'array', [
 				'string',
 				'text/plain',
-			]));
+			])
+				->convert());
 		}
 
 		protected function setUp() {

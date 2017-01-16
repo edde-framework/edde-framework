@@ -23,7 +23,7 @@
 		 * @param string $source     generic identifier, it can be formal mime type or anything else (but there must be known converter)
 		 * @param array  $targetList list if targets; first registered would win; initial idea was http accept header
 		 *
-		 * @return mixed return converted source; result depends on mime+target combination
+		 * @return IConvertable
 		 */
-		public function convert($convert, string $source, array $targetList);
+		public function convert($convert, string $source, array $targetList): IConvertable;
 	}

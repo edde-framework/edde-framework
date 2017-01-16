@@ -27,10 +27,10 @@
 		/**
 		 * try to convert a request body to specified target using system-wide converter manager
 		 *
-		 * @param string $target
-		 * @param string $mime override the original mime type for convesion
+		 * @param array|string $target
+		 * @param string       $mime override the original mime type for convesion
 		 *
 		 * @return mixed
 		 */
-		public function convert(string $target = null, string $mime = null);
+		public function convert(array $target = [], string $mime = null);
 	}

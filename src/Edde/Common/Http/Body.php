@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Http;
 
@@ -18,17 +18,17 @@
 		 */
 		protected $mime;
 		/**
-		 * @var string
+		 * @var string[]
 		 */
 		protected $target;
 
-		public function __construct($body = null, string $mime = null, string $target = null) {
+		public function __construct($body = null, string $mime = null, array $target = []) {
 			$this->body = $body;
 			$this->mime = $mime;
 			$this->target = $target;
 		}
 
-		public function convert(string $target = null, string $mime = null) {
+		public function convert(array $target = [], string $mime = null) {
 			return $this->converterManager->convert($this->getBody(), $mime ?: $this->mime, $this->target ?: $target);
 		}
 

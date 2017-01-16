@@ -4,6 +4,7 @@
 	namespace Edde\Common\Converter;
 
 	use Edde\Api\Converter\ConverterException;
+	use Edde\Api\Converter\IConvertable;
 	use Edde\Api\Converter\IConverter;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Common\Container\ConfigurableTrait;
@@ -37,14 +38,14 @@
 		 * @inheritdoc
 		 * @throws ConverterException
 		 */
-		public function convert($convert, string $source, array $targetList) {
+		public function convert($convert, string $source, array $targetList): IConvertable {
 			$exception = null;
 			$unknown = true;
 			foreach ($targetList as $target) {
 				if (isset($this->converterList[$mime = ($source . '|' . $target)])) {
 					$unknown = false;
 					try {
-						return $this->converterList[$mime]->convert($convert, $source, $target, $mime);
+						return new Convertable($this->converterList[$mime], $convert, $source, $target, $mime);
 					} catch (\Exception $exception) {
 					}
 				}
