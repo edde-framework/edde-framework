@@ -11,7 +11,7 @@
 
 	/**
 	 * @group http
-	 * @group wwip
+	 * @group wip
 	 */
 	class HttpClientTest extends TestCase {
 		/**
