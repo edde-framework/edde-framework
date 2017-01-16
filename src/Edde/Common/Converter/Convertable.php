@@ -13,16 +13,18 @@
 		 * @var IConverter
 		 */
 		protected $converter;
+		/**
+		 * @var IContent
+		 */
 		protected $content;
+		/**
+		 * @var mixed
+		 */
 		protected $result;
 		/**
 		 * @var string
 		 */
 		protected $target;
-		/**
-		 * @var string
-		 */
-		protected $mime;
 
 		/**
 		 * A biologist, a chemist and a statistician are out hunting.
@@ -59,7 +61,7 @@
 		 */
 		public function convert() {
 			if ($this->result === null) {
-				$this->result = $this->converter->convert($this->content, $this->mime, $this->target);
+				$this->result = $this->converter->content($this->content, $this->target);
 			}
 			return $this->result;
 		}

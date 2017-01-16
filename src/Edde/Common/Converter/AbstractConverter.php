@@ -1,9 +1,10 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Converter;
 
 	use Edde\Api\Converter\ConverterException;
+	use Edde\Api\Converter\IContent;
 	use Edde\Api\Converter\IConverter;
 	use Edde\Common\Object;
 
@@ -41,6 +42,13 @@
 		 */
 		public function getMimeList(): array {
 			return $this->mimeList;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function content(IContent $content, string $target) {
+			return $this->convert($content->getContent(), $content->getMime(), $target);
 		}
 
 		/**
