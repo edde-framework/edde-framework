@@ -36,7 +36,7 @@
 		 *
 		 * @param IContent $content
 		 */
-		public function __construct(IContent $content) {
+		public function __construct(IContent $content = null) {
 			$this->content = $content;
 		}
 
@@ -57,6 +57,9 @@
 		 * @inheritdoc
 		 */
 		public function getContent(array $targetList = null) {
+			if ($this->content === null) {
+				throw new ApplicationException('There is no body with current application request.');
+			}
 			if ($targetList) {
 				return $this->converterManager->content($this->content, $targetList);
 			}

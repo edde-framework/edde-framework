@@ -23,7 +23,7 @@
 		 * @param mixed  $content
 		 * @param string $mime
 		 */
-		public function __construct($content, string $mime = null) {
+		public function __construct($content, string $mime) {
 			$this->content = $content;
 			$this->mime = $mime;
 		}
@@ -38,7 +38,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getMime() {
+		public function getMime(): string {
 			return $this->mime;
 		}
 	}

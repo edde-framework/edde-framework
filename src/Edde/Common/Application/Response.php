@@ -4,29 +4,8 @@
 	namespace Edde\Common\Application;
 
 	use Edde\Api\Application\IResponse;
+	use Edde\Common\Converter\Content;
 	use Edde\Common\Object;
 
-	class Response extends Object implements IResponse {
-		/**
-		 * @var string
-		 */
-		protected $type;
-		protected $response;
-
-		/**
-		 * @param string $type
-		 * @param        $response
-		 */
-		public function __construct(string $type = null, $response = null) {
-			$this->type = $type;
-			$this->response = $response;
-		}
-
-		public function getType(): string {
-			return $this->type;
-		}
-
-		public function getResponse() {
-			return $this->response;
-		}
+	class Response extends Content implements IResponse {
 	}

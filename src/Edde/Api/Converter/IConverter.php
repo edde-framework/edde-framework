@@ -9,7 +9,7 @@
 	interface IConverter {
 		/**
 		 * get list of supported mime types (or generic identifiers); they should be used only as alias (for example application/json, text/json, ...) and not for
-		 * logical differenciating of types; in other words - all mime list must be compatible with all (internally supported) targets (not only combinations)
+		 * logical differentiating of types; in other words - all mime list must be compatible with all (internally supported) targets (not only combinations)
 		 *
 		 * @return array
 		 */

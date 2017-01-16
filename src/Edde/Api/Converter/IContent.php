@@ -16,5 +16,5 @@
 		 *
 		 * @return string
 		 */
-		public function getMime();
+		public function getMime(): string;
 	}

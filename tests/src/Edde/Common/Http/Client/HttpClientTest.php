@@ -11,7 +11,7 @@
 
 	/**
 	 * @group http
-	 * @group wip
+	 * @group wwip
 	 */
 	class HttpClientTest extends TestCase {
 		/**
@@ -24,9 +24,9 @@
 		}
 
 		protected function setUp() {
-			$this->httpClient = ContainerFactory::container(array_merge(ContainerFactory::getDefaultFactoryList(), [
+			$this->httpClient = ContainerFactory::container([
 				IRootDirectory::class => new RootDirectory(__DIR__),
-			]))
+			])
 				->create(IHttpClient::class, [], __METHOD__);
 		}
 	}

@@ -9,7 +9,6 @@
 	use Edde\Api\Http\LazyRequestUrlTrait;
 	use Edde\Api\Runtime\LazyRuntimeTrait;
 	use Edde\Common\Application\Request;
-	use Edde\Common\Converter\Content;
 	use Edde\Common\Router\AbstractRouter;
 	use Edde\Common\Strings\StringUtils;
 
@@ -35,8 +34,7 @@
 				return null;
 			}
 			$this->responseManager->setTarget($this->headerList->getAcceptList());
-			$contentType = $this->headerList->getContentType();
-			$request = new Request(new Content(null, $contentType->getMime()));
+			$request = new Request();
 			if (isset($parameterList['handle'])) {
 				list($control, $handle) = explode('.', $parameterList['handle']);
 				unset($parameterList['handle']);

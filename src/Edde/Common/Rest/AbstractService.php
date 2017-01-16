@@ -1,10 +1,9 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Rest;
 
 	use Edde\Api\Application\LazyResponseManagerTrait;
-	use Edde\Api\Http\LazyBodyTrait;
 	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Api\Rest\IService;
 	use Edde\Common\Application\Response;
@@ -13,7 +12,6 @@
 
 	abstract class AbstractService extends AbstractControl implements IService {
 		use LazyResponseManagerTrait;
-		use LazyBodyTrait;
 		use LazyHttpResponseTrait;
 
 		const OK_CREATED = 201;
@@ -32,14 +30,12 @@
 		public function execute(string $method, array $parameterList) {
 			$methodList = $this->getMethodList();
 			if (in_array($method = strtoupper($method), self::$methodList, true) === false) {
-				$headerList = $this->httpResponse->getHeaderList();
-				$headerList->set('Allowed', $allowed = implode(', ', array_keys($methodList)));
+				$this->httpResponse->header('Allowed', $allowed = implode(', ', array_keys($methodList)));
 				$this->error(self::ERROR_NOT_ALLOWED, sprintf('The requested method [%s] is not supported; supported methods are [%s].', $method, $allowed));
 				return null;
 			}
 			if (isset($methodList[$method]) === false) {
-				$headerList = $this->httpResponse->getHeaderList();
-				$headerList->set('Allowed', $allowed = implode(', ', array_keys($methodList)));
+				$this->httpResponse->header('Allowed', $allowed = implode(', ', array_keys($methodList)));
 				$this->error(self::ERROR_NOT_ALLOWED, sprintf('The requested method [%s] is not implemented; available methods are [%s].', $method, $allowed));
 				return null;
 			}
