@@ -63,7 +63,6 @@
 	use Edde\Common\Crate\CrateDirectory;
 	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Database\DatabaseStorage;
-	use Edde\Common\Database\Dsn;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\TemplateDirectory;
 	use Edde\Common\Http\Client\HttpClient;
@@ -88,6 +87,7 @@
 	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
+	use Edde\Ext\Database\Sqlite\SqliteDsn;
 	use Edde\Ext\Template\DefaultMacroSet;
 
 	class ContainerFactory extends Object {
@@ -126,7 +126,7 @@
 					} else if (interface_exists($factory)) {
 						$current = new LinkFactory($name, $factory);
 					}
-				} else if ($factory instanceof IFactory || is_callable($factory)) {
+				} else if ($factory instanceof IFactory) {
 					$current = $factory;
 				} else if (is_callable($factory)) {
 					throw new FactoryException(sprintf('Closure is not supported in factory definition [%s].', $name));
@@ -165,14 +165,7 @@
 			 */
 			/** @var $container IContainer */
 			$container = new Container(new Cache(new InMemoryCacheStorage()));
-			$closureList = array_filter($factoryList = self::createFactoryList($factoryList), function ($factory, $id) use (&$factoryList) {
-				if (is_callable($factory)) {
-					$factoryList[$id] = new ExceptionFactory((string)$id, sprintf('Using placeholder factory instead of callback [%s].', $id), EddeException::class);
-					return true;
-				}
-				return false;
-			}, ARRAY_FILTER_USE_BOTH);
-			$container->registerFactoryList($factoryList);
+			$container->registerFactoryList($factoryList = self::createFactoryList($factoryList));
 			$container = $container->create(IContainer::class);
 			if ($cacheId !== null) {
 				$container->getCache()
@@ -186,9 +179,6 @@
 			}
 			foreach ($factoryList as $factory) {
 				$container->autowire($factory);
-			}
-			foreach ($closureList as $id => $closure) {
-				$container->registerFactory(new InstanceFactory((string)$id, get_class($instance = $container->call($closure, [], 'factory/' . $id)), [], $instance), $id);
 			}
 			return $container;
 		}
@@ -334,9 +324,7 @@
 				IHelperSet::class => DefaultMacroSet::class . '::helperSet',
 				IStorage::class => DatabaseStorage::class,
 				IDriver::class => SqliteDriver::class,
-				IDsn::class => function (IAssetDirectory $assetDirectory) {
-					return new Dsn('sqlite:' . $assetDirectory->filename('storage.sqlite'));
-				},
+				IDsn::class => self::instance(SqliteDsn::class, ['storage.sqlite']),
 				ICrateFactory::class => CrateFactory::class,
 				ISchemaFactory::class => SchemaFactory::class,
 				ISchemaManager::class => SchemaManager::class,
