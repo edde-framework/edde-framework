@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Acl;
 
@@ -26,4 +26,11 @@
 		 * @return bool
 		 */
 		public function can(string $resource, \DateTime $dateTime = null, bool $default = null): bool;
+
+		/**
+		 * reset whole ACL so nothing would be basically allowed
+		 *
+		 * @return IAcl
+		 */
+		public function reset(): IAcl;
 	}

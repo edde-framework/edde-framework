@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Acl;
 
@@ -45,5 +45,13 @@
 				$can = $grant;
 			}
 			return $can;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function reset(): IAcl {
+			$this->aclList = [];
+			return $this;
 		}
 	}
