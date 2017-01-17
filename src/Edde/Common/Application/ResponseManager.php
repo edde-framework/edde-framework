@@ -41,6 +41,6 @@
 			if ($this->response === null) {
 				return;
 			}
-			$this->converterManager->convert($this->response->getResponse(), $this->response->getType(), $this->targetList);
+			$this->converterManager->content($this->response->getContent(), $this->targetList);
 		}
 	}

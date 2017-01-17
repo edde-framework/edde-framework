@@ -47,7 +47,7 @@
 			foreach ($this->serviceList as $service) {
 				if ($service->match($this->requestUrl)) {
 					$this->httpResponse->setContentType($mime);
-					$this->responseManager->setTarget($mime = ('http+' . $mime));
+					$this->responseManager->setTarget([$mime = ('http+' . $mime)]);
 					return (new Request($mime))->registerActionHandler(get_class($service), $this->httpRequest->getMethod(), $this->requestUrl->getQuery());
 				}
 			}
