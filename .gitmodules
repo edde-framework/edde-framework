@@ -1,7 +1,0 @@
-[submodule "src/Edde/Api"]
-	path = src/Edde/Api
-	url = git@edde-framework.org:edde/edde-api-src.git
-	branch = master
-[submodule "src/Edde/Common/Container"]
-	path = src/Edde/Common/Container
-	url = git@edde-framework.org:edde/edde-container-src.git
