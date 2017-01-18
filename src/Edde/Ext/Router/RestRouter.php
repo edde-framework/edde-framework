@@ -42,8 +42,7 @@
 			if ($this->runtime->isConsoleMode()) {
 				return null;
 			}
-			$mime = $this->headerList->getContentType()
-				->getMime($this->headerList->getAccept());
+			$this->responseManager->setTarget($this->headerList->getAcceptList());
 			foreach ($this->serviceList as $service) {
 				if ($service->match($this->requestUrl)) {
 					$this->httpResponse->setContentType($mime);
