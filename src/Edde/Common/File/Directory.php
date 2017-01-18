@@ -58,7 +58,6 @@
 		 * @inheritdoc
 		 */
 		public function getDirectory(): string {
-			$this->use();
 			return $this->directory;
 		}
 
