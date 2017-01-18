@@ -1,0 +1,4 @@
+[submodule "src/Edde/Api"]
+	path = src/Edde/Api
+	url = git@edde-framework.org:edde/edde-api-src.git
+	branch = master
