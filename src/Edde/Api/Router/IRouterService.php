@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Router;
 
@@ -9,7 +9,17 @@
 	/**
 	 * Implementation of application router service.
 	 */
-	interface IRouterService extends IRouterList, IConfigurable {
+	interface IRouterService extends IConfigurable {
+		/**
+		 * routers should be created on demand
+		 *
+		 * @param string $router
+		 * @param array  $parameterList
+		 *
+		 * @return IRouterService
+		 */
+		public function registerRouter(string $router, array $parameterList = []): IRouterService;
+
 		/**
 		 * @return IRequest
 		 */

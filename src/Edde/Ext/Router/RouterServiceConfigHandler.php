@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Router;
 
@@ -14,8 +14,8 @@
 		 * @param IRouterService $instance
 		 */
 		public function config($instance) {
-			$instance->registerRouter($this->container->create(EddeRouter::class, [], __METHOD__));
-			$instance->registerRouter($this->container->create(RestRouter::class, [], __METHOD__));
-			$instance->registerRouter($this->container->create(HttpRouter::class, [], __METHOD__));
+			$instance->registerRouter(EddeRouter::class);
+			$instance->registerRouter(RestRouter::class);
+			$instance->registerRouter(HttpRouter::class);
 		}
 	}

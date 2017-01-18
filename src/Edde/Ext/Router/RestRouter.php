@@ -4,6 +4,7 @@
 	namespace Edde\Ext\Router;
 
 	use Edde\Api\Application\LazyResponseManagerTrait;
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Http\LazyHeaderListTrait;
 	use Edde\Api\Http\LazyHttpRequestTrait;
 	use Edde\Api\Http\LazyHttpResponseTrait;
@@ -14,7 +15,7 @@
 	use Edde\Common\Application\Request;
 	use Edde\Common\Router\AbstractRouter;
 
-	class RestRouter extends AbstractRouter implements ILinkGenerator {
+	class RestRouter extends AbstractRouter implements IConfigurable, ILinkGenerator {
 		use LazyResponseManagerTrait;
 		use LazyRequestUrlTrait;
 		use LazyHeaderListTrait;
@@ -39,15 +40,13 @@
 		}
 
 		public function createRequest() {
-			if ($this->runtime->isConsoleMode()) {
+			if ($this->runtime->isConsoleMode() || empty($this->serviceList)) {
 				return null;
 			}
 			$this->responseManager->setTarget($this->headerList->getAcceptList());
 			foreach ($this->serviceList as $service) {
 				if ($service->match($this->requestUrl)) {
-					$this->httpResponse->setContentType($mime);
-					$this->responseManager->setTarget([$mime = ('http+' . $mime)]);
-					return (new Request($mime))->registerActionHandler(get_class($service), $this->httpRequest->getMethod(), $this->requestUrl->getQuery());
+					return (new Request())->registerActionHandler(get_class($service), $this->httpRequest->getMethod(), $this->requestUrl->getQuery());
 				}
 			}
 			return null;
