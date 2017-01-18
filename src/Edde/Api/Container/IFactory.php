@@ -52,13 +52,14 @@
 		public function fetch(IContainer $container, string $id, ICache $cache);
 
 		/**
-		 * @param IContainer $container
-		 * @param array      $parameterList
-		 * @param string     $name
+		 * @param IContainer  $container
+		 * @param array       $parameterList
+		 * @param IDependency $dependency
+		 * @param string      $name
 		 *
 		 * @return mixed
 		 */
-		public function execute(IContainer $container, array $parameterList, string $name = null);
+		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null);
 
 		/**
 		 * factory can optionally push dependency to some kind of cache (this instance should be returned on fetch())

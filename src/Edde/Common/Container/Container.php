@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Container;
 
@@ -59,15 +59,7 @@
 				if (($dependency = $this->cache->load($cacheId = (__METHOD__ . '/' . $name))) === null) {
 					$this->cache->save($cacheId, $dependency = $factory->dependency($this, $name));
 				}
-				$grab = count($parameterList);
-				$dependencyList = [];
-				foreach ($dependency->getParameterList() as $reflectionParameter) {
-					if (--$grab >= 0 || $reflectionParameter->isOptional()) {
-						continue;
-					}
-					$dependencyList[] = $this->factory($this->getFactory($class = (($class = $reflectionParameter->getClass()) ? $class : $reflectionParameter->getName()), $source), [], $class, $name);
-				}
-				$this->dependency($instance = $factory->execute($this, array_merge($parameterList, $dependencyList), $name), $dependency);
+				$this->dependency($instance = $factory->execute($this, $parameterList, $dependency, $name), $dependency);
 				if ($instance instanceof IConfigurable) {
 					/** @var $instance IConfigurable */
 					$instance->registerConfigHandlerList(isset($this->configHandlerList[$name]) ? $this->configHandlerList[$name] : []);

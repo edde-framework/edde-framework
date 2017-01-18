@@ -54,7 +54,7 @@
 				->dependency($container, $this->target);
 		}
 
-		public function execute(IContainer $container, array $parameterList, string $name = null) {
+		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
 			$method = $this->method;
 			return $container->create($this->target, $parameterList, $this->name)
 				->{$method}(...$this->parameterList);

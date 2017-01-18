@@ -26,8 +26,8 @@
 			return parent::dependency($container, $this->discover($dependency));
 		}
 
-		public function execute(IContainer $container, array $parameterList, string $name = null) {
-			return parent::execute($container, $parameterList, $this->discover($name));
+		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
+			return parent::execute($container, $parameterList, $dependency, $this->discover($name));
 		}
 
 		protected function discover(string $name) {

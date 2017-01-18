@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Container;
 
@@ -7,6 +7,7 @@
 	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
+	use Edde\Common\Container\Dependency;
 
 	/**
 	 * Interface to class binding factory.
@@ -50,6 +51,9 @@
 		 * @inheritdoc
 		 */
 		public function dependency(IContainer $container, string $dependency = null): IDependency {
+			if ($this->instance) {
+				return new Dependency([], [], []);
+			}
 			return parent::dependency($container, $this->class);
 		}
 
@@ -57,17 +61,14 @@
 		 * @inheritdoc
 		 */
 		public function fetch(IContainer $container, string $id, ICache $cache) {
-			if ($this->instance) {
-				return $this->instance;
-			}
-			return $this->instance = $cache->load($id);
+			return $this->instance ?: $this->instance = $cache->load($id);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(IContainer $container, array $parameterList, string $name = null) {
-			return $this->instance ?: $this->instance = parent::execute($container, $parameterList, $this->class);
+		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
+			return $this->instance ?: $this->instance = parent::execute($container, $parameterList, $dependency, $this->class);
 		}
 
 		/**

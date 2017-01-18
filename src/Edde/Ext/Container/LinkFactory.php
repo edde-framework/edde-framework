@@ -76,11 +76,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(IContainer $container, array $parameterList, string $name = null) {
-			if ($this->instance === null) {
-				$this->instance = $container->getFactory($this->target, $this->source)
-					->execute($container, $parameterList, $name);
-			}
-			return $this->instance;
+		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
+			return $this->instance ?: $this->instance = $container->getFactory($this->target, $this->source)
+				->execute($container, $parameterList, $dependency, $name);
 		}
 	}

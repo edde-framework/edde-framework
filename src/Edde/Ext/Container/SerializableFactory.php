@@ -45,7 +45,7 @@
 			return new Dependency([], [], []);
 		}
 
-		public function execute(IContainer $container, array $parameterList, string $name = null) {
+		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
 			return $this->instance;
 		}
 	}

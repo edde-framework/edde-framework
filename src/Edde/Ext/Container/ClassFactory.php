@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Container;
 
@@ -68,7 +68,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(IContainer $container, array $parameterList, string $name = null) {
+		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
+			$parameterList = $this->parameters($container, $parameterList, $dependency);
 			if (empty($parameterList)) {
 				return new $name();
 			}

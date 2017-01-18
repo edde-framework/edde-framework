@@ -6,6 +6,7 @@
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
+	use Edde\Common\Container\Dependency;
 
 	/**
 	 * This factory will create singleton instance of the given class.
@@ -54,6 +55,9 @@
 		}
 
 		public function dependency(IContainer $container, string $dependency = null): IDependency {
+			if ($this->instance) {
+				return new Dependency([], [], []);
+			}
 			return parent::dependency($container, $this->class);
 		}
 
@@ -61,10 +65,7 @@
 			return $this->instance;
 		}
 
-		public function execute(IContainer $container, array $parameterList, string $name = null) {
-			if ($this->instance === null) {
-				$this->instance = parent::execute($container, $this->parameterList, $this->class);
-			}
-			return $this->instance;
+		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
+			return $this->instance ?: $this->instance = parent::execute($container, $this->parameterList, $dependency, $this->class);
 		}
 	}
