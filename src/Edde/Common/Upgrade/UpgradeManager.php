@@ -18,8 +18,8 @@
 	 * Default implementation of a upgrade manager.
 	 */
 	class UpgradeManager extends Object implements IUpgradeManager {
-		use EventTrait;
 		use LazyStorageTrait;
+		use EventTrait;
 		/**
 		 * @var IUpgrade[]
 		 */

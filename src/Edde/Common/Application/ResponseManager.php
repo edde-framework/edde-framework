@@ -18,29 +18,17 @@
 		 * @var IResponse
 		 */
 		protected $response;
-		/**
-		 * @var string[]
-		 */
-		protected $targetList;
 
 		public function response(IResponse $response = null): IResponseManager {
 			$this->response = $response;
 			return $this;
 		}
 
-		public function setTarget(array $targetList): IResponseManager {
-			$this->targetList = $targetList;
-			return $this;
-		}
-
-		public function getTarget(): array {
-			return $this->targetList;
-		}
-
 		public function execute() {
 			if ($this->response === null) {
 				return;
 			}
-			$this->converterManager->content($this->response->getContent(), $this->targetList);
+			$this->converterManager->content($this->response, $this->response->getTargetList())
+				->convert();
 		}
 	}

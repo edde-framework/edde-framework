@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Converter;
 
@@ -22,9 +22,11 @@
 				'string',
 				'callback',
 			], [
+				'http',
 				'http+text/plain',
 				'text/plain',
 				'string',
+				'http+string',
 			]);
 		}
 
@@ -38,21 +40,22 @@
 				$this->unsupported($convert, $target);
 			}
 			switch ($target) {
-				/** @noinspection PhpMissingBreakStatementInspection */
+				case 'http':
 				case 'http+text/plain':
+					/** @noinspection PhpMissingBreakStatementInspection */
+				case 'http+string':
+					$headerList = $this->httpResponse->getHeaderList();
+					if ($headerList->has('Content-Type') === false) {
+						$this->httpResponse->header('Content-Type', 'text/plain');
+					}
 					$this->httpResponse->send();
 				case 'text/plain':
+				case 'string':
 					if (is_callable($convert)) {
-						$convert();
-						return null;
+						$convert = $convert();
 					}
 					echo $convert;
 					return null;
-				case 'string':
-					if (is_callable($convert)) {
-						return $convert();
-					}
-					return $convert;
 			}
 			$this->exception($mime, $target);
 		}

@@ -3,9 +3,6 @@
 
 	namespace Edde\Ext\Router;
 
-	use Edde\Api\Application\LazyResponseManagerTrait;
-	use Edde\Api\Http\LazyBodyTrait;
-	use Edde\Api\Http\LazyHeaderListTrait;
 	use Edde\Api\Http\LazyRequestUrlTrait;
 	use Edde\Api\Runtime\LazyRuntimeTrait;
 	use Edde\Common\Application\Request;
@@ -18,9 +15,6 @@
 	class HttpRouter extends AbstractRouter {
 		use LazyRuntimeTrait;
 		use LazyRequestUrlTrait;
-		use LazyResponseManagerTrait;
-		use LazyBodyTrait;
-		use LazyHeaderListTrait;
 
 		/**
 		 * @inheritdoc
@@ -33,7 +27,6 @@
 			if (isset($parameterList['action']) === false && isset($parameterList['handle']) === false) {
 				return null;
 			}
-			$this->responseManager->setTarget($this->headerList->getAcceptList());
 			$request = new Request();
 			if (isset($parameterList['handle'])) {
 				list($control, $handle) = explode('.', $parameterList['handle']);

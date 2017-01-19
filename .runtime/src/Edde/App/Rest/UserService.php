@@ -11,13 +11,10 @@
 		use LazyHostUrlTrait;
 
 		public function link($generate, ...$parameterList) {
-			$url = clone $this->hostUrl;
-			$url->setPath('/v1/user');
-			$url->setQuery($parameterList);
-			return $url;
+			return parent::link('/api/v1/user', ...$parameterList);
 		}
 
 		public function match(IUrl $url): bool {
-			return $url->match('~^/v1/user$~') !== null;
+			return $url->match('~^/api/v1/user$~') !== null;
 		}
 	}
