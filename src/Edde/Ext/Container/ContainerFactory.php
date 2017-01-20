@@ -48,6 +48,7 @@
 	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Xml\IXmlParser;
@@ -81,6 +82,7 @@
 	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Template\TemplateManager;
+	use Edde\Common\Upgrade\AbstractUpgradeManager;
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
 	use Edde\Common\Xml\XmlParser;
@@ -330,6 +332,10 @@
 				ISchemaManager::class => SchemaManager::class,
 				IHttpClient::class => HttpClient::class,
 				IAclManager::class => AclManager::class,
+				/**
+				 * need to be defined
+				 */
+				IUpgradeManager::class => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
 			];
 		}
 	}

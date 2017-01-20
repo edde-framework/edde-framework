@@ -13,6 +13,7 @@
 	use Edde\Api\Storage\IBoundQuery;
 	use Edde\Api\Storage\ICollection;
 	use Edde\Api\Storage\IStorage;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Crate\Crate;
 	use Edde\Common\Object;
 	use Edde\Common\Query\Select\SelectQuery;
@@ -24,6 +25,7 @@
 		use LazySchemaManagerTrait;
 		use LazyCrateFactoryTrait;
 		use LazyContainerTrait;
+		use ConfigurableTrait;
 
 		public function bound(string $query, ...$parameterList): IBoundQuery {
 			return (new BoundQuery())->bind($this->container->create($query, $parameterList, __METHOD__), $this);

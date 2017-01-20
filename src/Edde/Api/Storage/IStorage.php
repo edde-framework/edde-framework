@@ -3,6 +3,7 @@
 
 	namespace Edde\Api\Storage;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
@@ -10,7 +11,7 @@
 	/**
 	 * This is abstracted way how to store (serialize) almost any object; storage can be arbitrary technology with ability to understand Edde's IQL.
 	 */
-	interface IStorage {
+	interface IStorage extends IConfigurable {
 		/**
 		 * start a transaction
 		 *

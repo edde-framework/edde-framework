@@ -1,33 +1,29 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Upgrade;
 
+	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Api\Storage\LazyStorageTrait;
 	use Edde\Api\Upgrade\IUpgrade;
 	use Edde\Api\Upgrade\IUpgradeManager;
+	use Edde\Api\Upgrade\IUpgradeStorable;
 	use Edde\Api\Upgrade\UpgradeException;
-	use Edde\Common\Event\EventTrait;
+	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Object;
-	use Edde\Common\Upgrade\Event\OnUpgradeEvent;
-	use Edde\Common\Upgrade\Event\UpgradeEndEvent;
-	use Edde\Common\Upgrade\Event\UpgradeFailEvent;
-	use Edde\Common\Upgrade\Event\UpgradeStartEvent;
+	use Edde\Common\Query\Schema\CreateSchemaQuery;
 
 	/**
 	 * Default implementation of a upgrade manager.
 	 */
-	class UpgradeManager extends Object implements IUpgradeManager {
+	abstract class AbstractUpgradeManager extends Object implements IUpgradeManager {
 		use LazyStorageTrait;
-		use EventTrait;
+		use LazySchemaManagerTrait;
+		use ConfigurableTrait;
 		/**
 		 * @var IUpgrade[]
 		 */
 		protected $upgradeList = [];
-		/**
-		 * @var string
-		 */
-		protected $currentVersion;
 
 		/**
 		 * @inheritdoc
@@ -39,18 +35,6 @@
 				throw new UpgradeException(sprintf('Cannot register upgrade [%s] with version [%s] - version is already present.', get_class($upgrade), $version));
 			}
 			$this->upgradeList[$upgrade->getVersion()] = $upgrade;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 * @throws UpgradeException
-		 */
-		public function setCurrentVersion(string $currentVersion = null): IUpgradeManager {
-			if ($currentVersion && isset($this->upgradeList[$currentVersion]) === false) {
-				throw new UpgradeException(sprintf('Setting unknown current version [%s].', $currentVersion));
-			}
-			$this->currentVersion = $currentVersion;
 			return $this;
 		}
 
@@ -86,35 +70,48 @@
 			}
 			$last = null;
 			try {
-				$this->storage->start();
-				$this->event(new UpgradeStartEvent($this));
-				$upgradeList = $this->currentVersion ? array_slice($this->upgradeList, $index = array_search($this->currentVersion, array_keys($this->upgradeList), true) + 1, null, true) : $this->upgradeList;
+				$current = $this->getCurrentVersion();
+				$this->onUpgradeStart();
+				/** @var $upgradeList IUpgrade[] */
+				$upgradeList = $current ? array_slice($this->upgradeList, $index = array_search($current, array_keys($this->upgradeList), true) + 1, null, true) : $this->upgradeList;
 				if (isset($index) && $index >= count($this->upgradeList)) {
-					throw new CurrentVersionException(sprintf('Version [%s] is current; no upgrades has been run.', $this->currentVersion));
+					throw new CurrentVersionException(sprintf('Version [%s] is current; no upgrades has been run.', $current));
 				}
 				foreach ($upgradeList as $upgrade) {
-					$this->event($onUpgradeEvent = new OnUpgradeEvent($this, $upgrade));
-					if ($onUpgradeEvent->isSuppressed()) {
-						continue;
-					}
 					$last = $upgrade;
+					$this->onUpgrade($upgrade);
 					$upgrade->upgrade();
 					if ($upgrade->getVersion() === $version) {
 						break;
 					}
 				}
-				$this->event(new UpgradeEndEvent($this));
-				$this->storage->commit();
+				$this->onUpgradeEnd();
 			} catch (\Exception $e) {
-				if ($last) {
-					$this->event(new UpgradeFailEvent($this, $last));
-				}
-				$this->storage->rollback();
-				throw $e;
+				$this->onUpgradeFailed($e, $last);
 			}
 			if ($last === null) {
 				throw new UpgradeException(sprintf('No upgrades has been run for version [%s].', $version));
 			}
 			return $last;
+		}
+
+		protected function onUpgradeStart() {
+			$this->storage->setup();
+			$this->storage->start();
+			$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema(IUpgradeStorable::class)));
+			$this->storage->commit();
+			$this->storage->start();
+		}
+
+		protected function onUpgrade(IUpgrade $upgrade) {
+		}
+
+		protected function onUpgradeEnd() {
+			$this->storage->commit();
+		}
+
+		protected function onUpgradeFailed(\Exception $exception, IUpgrade $last = null) {
+			$this->storage->rollback();
+			throw $exception;
 		}
 	}

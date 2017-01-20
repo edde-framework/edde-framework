@@ -4,7 +4,6 @@
 	namespace Edde\Common\Database;
 
 	use Edde\Api\Cache\ICache;
-	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Database\IDatabaseStorage;
@@ -15,7 +14,6 @@
 	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Storage\StorageException;
-	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Node\NodeQuery;
 	use Edde\Common\Query\Insert\InsertQuery;
 	use Edde\Common\Query\Select\SelectQuery;
@@ -26,9 +24,8 @@
 	/**
 	 * Database (persistant) storage implementation.
 	 */
-	class DatabaseStorage extends AbstractStorage implements IDatabaseStorage, IConfigurable {
+	class DatabaseStorage extends AbstractStorage implements IDatabaseStorage {
 		use LazyDriverTrait;
-		use ConfigurableTrait;
 		/**
 		 * @var IDriver
 		 */
@@ -57,6 +54,7 @@
 				}
 				throw new StorageException('Cannot start exclusive transaction, there is already running another one.');
 			}
+			$this->driver->setup();
 			$this->driver->start();
 			return $this;
 		}
@@ -89,6 +87,7 @@
 		 * @throws StorageException
 		 */
 		public function store(ICrate $crate): IStorage {
+			$this->driver->setup();
 			$schema = $crate->getSchema();
 			if ($schema->getMeta('storable', false) === false) {
 				throw new StorageException(sprintf('Crate [%s] is not marked as storable (in meta data).', $schema->getSchemaName()));

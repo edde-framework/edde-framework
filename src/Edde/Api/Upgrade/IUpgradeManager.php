@@ -1,14 +1,14 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Upgrade;
 
-	use Edde\Api\Event\IEventBus;
+	use Edde\Api\Container\IConfigurable;
 
 	/**
 	 * This class is responsible for proper application upgrades.
 	 */
-	interface IUpgradeManager extends IEventBus {
+	interface IUpgradeManager extends IConfigurable {
 		/**
 		 * register the given upgrade under it's version; exception should be thrown if version is already present
 		 *
@@ -20,13 +20,11 @@
 		public function registerUpgrade(IUpgrade $upgrade, bool $force = false): IUpgradeManager;
 
 		/**
-		 * set current application version; if ommitted, upgrade will run from the first upgrade
+		 * retrieve current application version; if null, application is still virgin
 		 *
-		 * @param string $currentVersion
-		 *
-		 * @return IUpgradeManager
+		 * @return string|null
 		 */
-		public function setCurrentVersion(string $currentVersion = null): IUpgradeManager;
+		public function getCurrentVersion();
 
 		/**
 		 * return current list of upgrades

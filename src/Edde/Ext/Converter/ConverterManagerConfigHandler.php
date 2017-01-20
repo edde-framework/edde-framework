@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Converter;
 
@@ -22,5 +22,6 @@
 			$instance->registerConverter($this->container->create(PhpConverter::class));
 			$instance->registerConverter($this->container->create(RedirectConverter::class));
 			$instance->registerConverter($this->container->create(XmlConverter::class));
+			$instance->registerConverter($this->container->create(ExceptionConverter::class));
 		}
 	}
