@@ -6,9 +6,10 @@
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\INodeQuery;
-	use Edde\Api\Resource\LazyResourceManagerTrait;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaFactory;
+	use Edde\Api\Schema\ISchemaProvider;
+	use Edde\Api\Schema\SchemaException;
 	use Edde\Api\Schema\SchemaFactoryException;
 	use Edde\Common\Container\ConfigurableTrait;
 	use Edde\Common\Filter\BoolFilter;
@@ -17,12 +18,11 @@
 
 	class SchemaFactory extends Object implements ISchemaFactory {
 		use LazyContainerTrait;
-		use LazyResourceManagerTrait;
 		use ConfigurableTrait;
 		/**
-		 * @var INode[]
+		 * @var ISchemaProvider[]
 		 */
-		protected $schemaNodeList = [];
+		protected $schemaProviderList = [];
 		/**
 		 * @var INodeQuery
 		 */
@@ -48,13 +48,11 @@
 		 */
 		protected $linkNodeQuery;
 
-		public function load(string $file): INode {
-			$this->addSchemaNode($node = $this->resourceManager->file($file));
-			return $node;
-		}
-
-		public function addSchemaNode(INode $node) {
-			$this->schemaNodeList[$this->getSchemaName($node)] = $node;
+		/**
+		 * @inheritdoc
+		 */
+		public function registerSchemaProvider(ISchemaProvider $schemaProvider): ISchemaFactory {
+			$this->schemaProviderList[] = $schemaProvider;
 			return $this;
 		}
 
@@ -62,38 +60,14 @@
 			return (($namespace = $schemaNode->getAttribute('namespace')) ? ($namespace . '\\') : null) . $schemaNode->getName();
 		}
 
-		public function create() {
-			/** @var $schemaList ISchema[] */
-			$schemaList = [];
-			foreach ($this->schemaNodeList as $schemaNode) {
-				$schema = $this->createSchema($schemaNode);
-				$schemaList[$schema->getSchemaName()] = $schema;
-			}
-			foreach ($this->schemaNodeList as $schemaNode) {
-				$sourceSchema = $schemaList[$this->getSchemaName($schemaNode)];
-				foreach ($this->collectionNodeQuery->filter($schemaNode) as $collectionNode) {
-					if (isset($schemaList[$schemaName = $collectionNode->getAttribute('schema')]) === false) {
-						throw new SchemaFactoryException(sprintf('Cannot use collection to an unknown schema [%s].', $schemaName));
-					}
-					$targetSchema = $schemaList[$schemaName];
-					$sourceSchema->collection($collectionNode->getName(), $sourceSchema->getProperty($collectionNode->getValue()), $targetSchema->getProperty($collectionNode->getAttribute('property')));
-				}
-				foreach ($this->linkNodeQuery->filter($schemaNode) as $linkNode) {
-					if (isset($schemaList[$schemaName = $linkNode->getAttribute('schema')]) === false) {
-						throw new SchemaFactoryException(sprintf('Cannot use link to an unknown schema [%s].', $schemaName));
-					}
-					$targetSchema = $schemaList[$schemaName];
-					$sourceSchema->link($linkNode->getName(), $sourceSchema->getProperty($linkNode->getValue($linkNode->getName())), $targetSchema->getProperty($linkNode->getAttribute('property')));
-				}
-			}
-			return $schemaList;
-		}
-
-		protected function createSchema(INode $schemaNode) {
-			$schema = new Schema($schemaNode->getName(), $schemaNode->getAttribute('namespace'));
-			$schema->setMetaList($schemaNode->getMetaList());
+		/**
+		 * @inheritdoc
+		 */
+		public function createSchema(INode $node): ISchema {
+			$schema = new Schema($node->getName(), $node->getAttribute('namespace'));
+			$schema->setMetaList($node->getMetaList());
 			$magic = $schema->getMeta('magic', true);
-			foreach ($this->propertyListNodeQuery->filter($schemaNode) as $propertyNode) {
+			foreach ($this->propertyListNodeQuery->filter($node) as $propertyNode) {
 				$schema->addProperty($property = new SchemaProperty($schema, $propertyNode->getName(), str_replace('[]', '', $type = $propertyNode->getAttribute('type', 'string')), filter_var($propertyNode->getAttribute('required', true), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('unique'), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('identifier'), FILTER_VALIDATE_BOOLEAN), strpos($type, '[]') !== false));
 				if (($generator = $propertyNode->getAttribute('generator')) !== null) {
 					$property->setGenerator($this->container->create($generator, [], __METHOD__));
@@ -130,7 +104,45 @@
 			return $schema;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
+		public function create(): array {
+			/** @var $schemaList ISchema[] */
+			if (empty($this->schemaProviderList)) {
+				throw new SchemaException(sprintf("There are no schema providers or you didn't run [%s::setup()] method.", static::class));
+			}
+			$schemaList = [];
+			foreach ($this->schemaProviderList as $schemaProvider) {
+				foreach ($schemaProvider as $node) {
+					$schema = $this->createSchema($node);
+					$schemaList[$schema->getSchemaName()] = $schema;
+				}
+			}
+			foreach ($this->schemaProviderList as $schemaProvider) {
+				foreach ($schemaProvider as $node) {
+					$sourceSchema = $schemaList[$this->getSchemaName($node)];
+					foreach ($this->collectionNodeQuery->filter($node) as $collectionNode) {
+						if (isset($schemaList[$schemaName = $collectionNode->getAttribute('schema')]) === false) {
+							throw new SchemaFactoryException(sprintf('Cannot use collection to an unknown schema [%s].', $schemaName));
+						}
+						$targetSchema = $schemaList[$schemaName];
+						$sourceSchema->collection($collectionNode->getName(), $sourceSchema->getProperty($collectionNode->getValue()), $targetSchema->getProperty($collectionNode->getAttribute('property')));
+					}
+					foreach ($this->linkNodeQuery->filter($node) as $linkNode) {
+						if (isset($schemaList[$schemaName = $linkNode->getAttribute('schema')]) === false) {
+							throw new SchemaFactoryException(sprintf('Cannot use link to an unknown schema [%s].', $schemaName));
+						}
+						$targetSchema = $schemaList[$schemaName];
+						$sourceSchema->link($linkNode->getName(), $sourceSchema->getProperty($linkNode->getValue($linkNode->getName())), $targetSchema->getProperty($linkNode->getAttribute('property')));
+					}
+				}
+			}
+			return $schemaList;
+		}
+
 		protected function handleInit() {
+			parent::handleInit();
 			$this->propertyListNodeQuery = new NodeQuery('/*/property-list/*');
 			$this->propertyFilterNodeQuery = new NodeQuery('/*/property-list/*/filter/*');
 			$this->propertySetterFilterNodeQuery = new NodeQuery('/*/property-list/*/setter-filter/*');

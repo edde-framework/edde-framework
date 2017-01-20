@@ -11,27 +11,25 @@
 	 */
 	interface ISchemaFactory extends IConfigurable {
 		/**
-		 * add a schema node
+		 * @param ISchemaProvider $schemaProvider
+		 *
+		 * @return ISchemaFactory
+		 */
+		public function registerSchemaProvider(ISchemaProvider $schemaProvider): ISchemaFactory;
+
+		/**
+		 * create schema from the input node
 		 *
 		 * @param INode $node
 		 *
-		 * @return $this
+		 * @return ISchema
 		 */
-		public function addSchemaNode(INode $node);
-
-		/**
-		 * load the specific file as INode and add it to this cache
-		 *
-		 * @param string $file
-		 *
-		 * @return INode
-		 */
-		public function load(string $file): INode;
+		public function createSchema(INode $node): ISchema;
 
 		/**
 		 * create list of schemas based on a given schema nodes
 		 *
 		 * @return ISchema[]
 		 */
-		public function create();
+		public function create(): array;
 	}

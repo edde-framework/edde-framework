@@ -50,9 +50,12 @@
 			return $this->schemaList;
 		}
 
-		protected function handleConfig() {
-			parent::handleConfig();
-			$this->schemaFactory->config();
+		/**
+		 * @inheritdoc
+		 */
+		protected function handleSetup() {
+			parent::handleSetup();
+			$this->schemaFactory->setup();
 			foreach ($this->schemaFactory->create() as $schema) {
 				$this->addSchema($schema);
 			}
