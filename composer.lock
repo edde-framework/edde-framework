@@ -177,7 +177,7 @@
             },
             "require": {
                 "ext-tokenizer": "*",
-                "php": ">=5.5"
+                "php": ">=5.6"
             },
             "require-dev": {
                 "phpunit/phpunit": "~4.0|~5.0"
@@ -382,12 +382,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phar-io/version.git",
-                "reference": "7161fa8ada17ca4c19906faa93b9481c037e7cac"
+                "reference": "0610ccfa8f9d795d3aaaa3291abb4ad68bebc94b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/version/zipball/7161fa8ada17ca4c19906faa93b9481c037e7cac",
-                "reference": "7161fa8ada17ca4c19906faa93b9481c037e7cac",
+                "url": "https://api.github.com/repos/phar-io/version/zipball/0610ccfa8f9d795d3aaaa3291abb4ad68bebc94b",
+                "reference": "0610ccfa8f9d795d3aaaa3291abb4ad68bebc94b",
                 "shasum": ""
             },
             "require": {
@@ -429,7 +429,7 @@
                 }
             ],
             "description": "Library for handling version information and constraints",
-            "time": "2017-01-10 22:03:33"
+            "time": "2017-01-15 06:36:29"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -646,12 +646,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "ca72afdde86993a56a4b0bb21ed57e7b0f72ca30"
+                "reference": "ef5387868b88d7a72cf284c7e962b91e19ec5682"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/ca72afdde86993a56a4b0bb21ed57e7b0f72ca30",
-                "reference": "ca72afdde86993a56a4b0bb21ed57e7b0f72ca30",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/ef5387868b88d7a72cf284c7e962b91e19ec5682",
+                "reference": "ef5387868b88d7a72cf284c7e962b91e19ec5682",
                 "shasum": ""
             },
             "require": {
@@ -700,7 +700,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-01-02 08:00:31"
+            "time": "2017-01-20 15:05:42"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -889,12 +889,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "7f7fbd142a5139e8290a7f4e3be6f10d388d5f73"
+                "reference": "c39f0e8dafa24d91528ed3e29723b8170e3dd9c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7f7fbd142a5139e8290a7f4e3be6f10d388d5f73",
-                "reference": "7f7fbd142a5139e8290a7f4e3be6f10d388d5f73",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c39f0e8dafa24d91528ed3e29723b8170e3dd9c7",
+                "reference": "c39f0e8dafa24d91528ed3e29723b8170e3dd9c7",
                 "shasum": ""
             },
             "require": {
@@ -922,7 +922,8 @@
                 "sebastian/version": "^2.0"
             },
             "conflict": {
-                "phpdocumentor/reflection-docblock": "3.0.2"
+                "phpdocumentor/reflection-docblock": "3.0.2",
+                "phpunit/dbunit": "<3.0"
             },
             "require-dev": {
                 "ext-pdo": "*"
@@ -963,7 +964,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-01-05 07:40:08"
+            "time": "2017-01-20 10:16:53"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1030,12 +1031,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "8b674956ac0ca9b4c90a98197f244cf81079e084"
+                "reference": "1991086b35313dd4e3c5b351f4b22760deea0910"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/8b674956ac0ca9b4c90a98197f244cf81079e084",
-                "reference": "8b674956ac0ca9b4c90a98197f244cf81079e084",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/1991086b35313dd4e3c5b351f4b22760deea0910",
+                "reference": "1991086b35313dd4e3c5b351f4b22760deea0910",
                 "shasum": ""
             },
             "conflict": {
@@ -1084,7 +1085,7 @@
                 "silverstripe/forum": "<=0.6.1|>=0.7,<=0.7.3",
                 "silverstripe/framework": ">=3,<3.3",
                 "silverstripe/userforms": "<3",
-                "simplesamlphp/saml2": ">=1.9,<1.9.1|>=1.10,<1.10.3|>=2.3,<2.3.3",
+                "simplesamlphp/saml2": "<1.8.1|>=1.9,<1.9.1|>=1.10,<1.10.3|>=2,<2.3.3",
                 "simplesamlphp/simplesamlphp": "<1.14.11",
                 "simplesamlphp/simplesamlphp-module-infocard": "<1.0.1",
                 "socalnick/scn-social-auth": "<1.15.2",
@@ -1107,7 +1108,7 @@
                 "thelia/backoffice-default-template": ">=2.1,<2.1.2",
                 "thelia/thelia": ">=2.1.0-beta1,<2.1.3|>=2.1,<2.1.2",
                 "twig/twig": "<1.20",
-                "typo3/cms": ">=6.2,<6.2.29|>=8,<8.4.1|>=7,<7.6.13",
+                "typo3/cms": ">=6.2,<6.2.30|>=8,<8.4.1|>=7,<7.6.13",
                 "typo3/flow": ">=2.3,<2.3.16|>=3,<3.0.10|>=3.1,<3.1.7|>=3.2,<3.2.7|>=3.3,<3.3.5|>=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1",
                 "typo3/neos": ">=1.1,<1.1.3|>=1.2,<1.2.13|>=2,<2.0.4",
                 "willdurand/js-translation-bundle": "<2.1.1",
@@ -1153,7 +1154,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2017-01-09T15:59:17+00:00"
+            "time": "2017-01-19T15:04:18+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -1904,12 +1905,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tracy.git",
-                "reference": "62c4c0feeb1312cde46a72bec772b615e2d96eb3"
+                "reference": "65c8e02af4ae1f954314a56b852000d9bfa98eac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tracy/zipball/62c4c0feeb1312cde46a72bec772b615e2d96eb3",
-                "reference": "62c4c0feeb1312cde46a72bec772b615e2d96eb3",
+                "url": "https://api.github.com/repos/nette/tracy/zipball/65c8e02af4ae1f954314a56b852000d9bfa98eac",
+                "reference": "65c8e02af4ae1f954314a56b852000d9bfa98eac",
                 "shasum": ""
             },
             "require": {
@@ -1958,7 +1959,7 @@
                 "debugger",
                 "nette"
             ],
-            "time": "2017-01-10 12:24:33"
+            "time": "2017-01-20T14:10:09+00:00"
         }
     ],
     "aliases": [],
