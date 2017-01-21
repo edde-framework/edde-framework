@@ -1,12 +1,11 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Html\Macro;
 
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyRootDirectoryTrait;
-	use Edde\Api\LazyAssetsDirectoryTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
@@ -17,7 +16,6 @@
 	 */
 	class JsMacro extends AbstractHtmlMacro {
 		use LazyRootDirectoryTrait;
-		use LazyAssetsDirectoryTrait;
 
 		/**
 		 * God called a meeting of George Bush, Vladimir Putin, and Bill Gates and said: "I've given you all the tools you needed to make a better world - you've blown it and I'm ending the world in two weeks."

@@ -6,7 +6,6 @@
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyRootDirectoryTrait;
-	use Edde\Api\LazyAssetsDirectoryTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\MacroException;
@@ -17,7 +16,6 @@
 	 */
 	class DictionaryMacro extends AbstractHtmlMacro {
 		use LazyRootDirectoryTrait;
-		use LazyAssetsDirectoryTrait;
 
 		/**
 		 * How can you tell you have a really bad case of acne?
