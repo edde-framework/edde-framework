@@ -17,8 +17,8 @@
 		"vendor-dir": "lib"
 	},
 	"autoload": {
-		"files": [
-			"src/loader.php"
+		"classmap": [
+			"src/"
 		]
 	},
 	"minimum-stability": "dev",
