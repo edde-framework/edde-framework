@@ -1,5 +1,7 @@
 {
 	"name": "edde-framework/edde-framework",
+	"homepage": "https://edde-framework.org",
+	"license": "Apache-2.0",
 	"type": "library",
 	"description": "Fast and full featured modern PHP framework.",
 	"keywords": [
