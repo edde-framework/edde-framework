@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\File;
 
@@ -155,4 +155,14 @@
 		 * @return IFile
 		 */
 		public function unlock(): IFile;
+
+		/**
+		 * run regexp against file path
+		 *
+		 * @param string $match
+		 * @param bool   $filename
+		 *
+		 * @return mixed
+		 */
+		public function match(string $match, bool $filename = true);
 	}

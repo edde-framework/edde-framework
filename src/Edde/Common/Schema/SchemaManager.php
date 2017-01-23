@@ -47,6 +47,10 @@
 		 * @var INodeQuery
 		 */
 		protected $linkNodeQuery;
+		/**
+		 * @var ISchema[]
+		 */
+		protected $schemaList = [];
 
 		/**
 		 * @inheritdoc
@@ -104,9 +108,15 @@
 		 * @inheritdoc
 		 */
 		public function getSchema(string $name): ISchema {
-			$this->checkSetup();
+			if (isset($this->schemaList[$name]) === false) {
+				throw new UnknownSchemaException(sprintf('Requested unknown schema [%s].', $name));
+			}
+			return $this->schemaList[$name];
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function handleInit() {
 			parent::handleInit();
 			$this->propertyListNodeQuery = new NodeQuery('/*/property-list/*');
@@ -121,39 +131,39 @@
 			return (($namespace = $schemaNode->getAttribute('namespace')) ? ($namespace . '\\') : null) . $schemaNode->getName();
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function handleSetup() {
 			parent::handleSetup();
 			if (empty($this->schemaLoaderList)) {
 				throw new SchemaManagerException(sprintf('There are no schema loaders in [%s].', static::class));
 			}
-			$schemaList = [];
+			$nodeList = [];
 			foreach ($this->schemaLoaderList as $schemaLoader) {
 				$schemaLoader->setup();
 				foreach ($schemaLoader->load() as $node) {
+					$nodeList[] = $node;
 					$schema = $this->createSchema($node);
-					$schemaList[$schema->getSchemaName()] = $schema;
+					$this->schemaList[$schema->getSchemaName()] = $schema;
 				}
 			}
-			foreach ($this->schemaLoaderList as $schemaLoader) {
-				$schemaLoader->setup();
-				foreach ($schemaLoader->load() as $node) {
-					$sourceSchema = $schemaList[$this->getSchemaName($node)];
-					foreach ($this->collectionNodeQuery->filter($node) as $collectionNode) {
-						if (isset($schemaList[$schemaName = $collectionNode->getAttribute('schema')]) === false) {
-							throw new SchemaManagerException(sprintf('Cannot use collection to an unknown schema [%s].', $schemaName));
-						}
-						$targetSchema = $schemaList[$schemaName];
-						$sourceSchema->collection($collectionNode->getName(), $sourceSchema->getProperty($collectionNode->getValue()), $targetSchema->getProperty($collectionNode->getAttribute('property')));
+			foreach ($nodeList as $node) {
+				$sourceSchema = $this->schemaList[$this->getSchemaName($node)];
+				foreach ($this->collectionNodeQuery->filter($node) as $collectionNode) {
+					if (isset($this->schemaList[$schemaName = $collectionNode->getAttribute('schema')]) === false) {
+						throw new SchemaManagerException(sprintf('Cannot use collection to an unknown schema [%s].', $schemaName));
 					}
-					foreach ($this->linkNodeQuery->filter($node) as $linkNode) {
-						if (isset($schemaList[$schemaName = $linkNode->getAttribute('schema')]) === false) {
-							throw new SchemaManagerException(sprintf('Cannot use link to an unknown schema [%s].', $schemaName));
-						}
-						$targetSchema = $schemaList[$schemaName];
-						$sourceSchema->link($linkNode->getName(), $sourceSchema->getProperty($linkNode->getValue($linkNode->getName())), $targetSchema->getProperty($linkNode->getAttribute('property')));
+					$targetSchema = $this->schemaList[$schemaName];
+					$sourceSchema->collection($collectionNode->getName(), $sourceSchema->getProperty($collectionNode->getValue()), $targetSchema->getProperty($collectionNode->getAttribute('property')));
+				}
+				foreach ($this->linkNodeQuery->filter($node) as $linkNode) {
+					if (isset($this->schemaList[$schemaName = $linkNode->getAttribute('schema')]) === false) {
+						throw new SchemaManagerException(sprintf('Cannot use link to an unknown schema [%s].', $schemaName));
 					}
+					$targetSchema = $this->schemaList[$schemaName];
+					$sourceSchema->link($linkNode->getName(), $sourceSchema->getProperty($linkNode->getValue($linkNode->getName())), $targetSchema->getProperty($linkNode->getAttribute('property')));
 				}
 			}
-			return $schemaList;
 		}
 	}

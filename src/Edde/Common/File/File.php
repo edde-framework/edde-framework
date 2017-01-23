@@ -1,15 +1,15 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\File;
 
-	use Brick\Math\BigInteger;
 	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\Resource\Resource;
+	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * File class; this is just file. Simple goold old classic file. Really.
@@ -281,6 +281,9 @@
 			return FileUtils::size($this->getPath());
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function lock(bool $exclusive = true): IFile {
 			if ($this->isOpen()) {
 				throw new FileException(sprintf('File [%s] must be closed to use lock.', $this->getPath()));
@@ -292,10 +295,20 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function unlock(): IFile {
 			fflush($handle = $this->getHandle());
 			flock($handle, LOCK_UN);
 			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function match(string $match, bool $filename = true) {
+			return StringUtils::match($filename ? $this->getName() : $this->url->getAbsoluteUrl(), $match);
 		}
 
 		public function __sleep() {
