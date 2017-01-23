@@ -96,6 +96,7 @@
 		}
 
 		protected function onUpgradeStart() {
+			$this->schemaManager->setup();
 			$this->storage->setup();
 			$this->storage->start();
 			$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema(IUpgradeStorable::class)));
