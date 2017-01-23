@@ -32,14 +32,23 @@
 			$this->target = $target;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getName(): string {
 			return $this->name;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getSource(): IProperty {
 			return $this->source;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getTarget(): IProperty {
 			return $this->target;
 		}

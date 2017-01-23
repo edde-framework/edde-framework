@@ -1,11 +1,11 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Schema;
 
 	use Edde\Api\Filter\IFilter;
-	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\IProperty;
+	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\SchemaException;
 	use Edde\Common\Object;
 
@@ -78,10 +78,16 @@
 			$this->array = $array;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getSchema(): ISchema {
 			return $this->schema;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getName(): string {
 			return $this->name;
 		}
@@ -111,18 +117,30 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isIdentifier(): bool {
 			return $this->identifier;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getType(): string {
 			return $this->type;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isRequired(): bool {
 			return $this->required;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isUnique(): bool {
 			return $this->unique;
 		}
@@ -132,6 +150,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function generator() {
 			if ($this->hasGenerator() === false) {
 				throw new SchemaException(sprintf('Property [%s] has no generator.', $this->getPropertyName()));
@@ -139,10 +160,16 @@
 			return $this->generator->filter(null, $this);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function hasGenerator(): bool {
 			return $this->generator !== null;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getPropertyName(): string {
 			if ($this->propertyName === null) {
 				$this->propertyName = $this->schema->getSchemaName() . '::' . $this->name;
@@ -165,6 +192,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function filter($value) {
 			foreach ($this->filterList as $filter) {
 				$value = $filter->filter($value, $this);
@@ -172,6 +202,9 @@
 			return $value;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function setterFilter($value) {
 			foreach ($this->setterFilterList as $filter) {
 				$value = $filter->filter($value, $this);
@@ -179,6 +212,9 @@
 			return $value;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getterFilter($value) {
 			foreach ($this->getterFilterList as $filter) {
 				$value = $filter->filter($value, $this);
@@ -186,6 +222,9 @@
 			return $value;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isDirty($current, $value): bool {
 			if ($current === null && $value === null) {
 				return false;
@@ -199,6 +238,9 @@
 			return $this->diff($current, $value);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isArray(): bool {
 			return $this->array;
 		}

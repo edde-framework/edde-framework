@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Crate;
 
+	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrate;
@@ -11,13 +12,13 @@
 	use Edde\Api\Schema\ISchema;
 	use Edde\Common\Object;
 	use Edde\Common\Reflection\ReflectionUtils;
-	use Edde\Common\Schema\Schema;
 	use Edde\Common\Schema\Property;
+	use Edde\Common\Schema\Schema;
 
 	/**
 	 * Simple (...advanced...) crate implementation.
 	 */
-	class Crate extends Object implements ICrate {
+	class Crate extends Object implements ICrate, ICacheable {
 		/**
 		 * @var ISchema
 		 */

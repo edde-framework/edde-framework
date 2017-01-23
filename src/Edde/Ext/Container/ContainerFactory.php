@@ -18,8 +18,10 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Converter\IConverterManager;
+	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\ICrateDirectory;
 	use Edde\Api\Crate\ICrateFactory;
+	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\Database\IDsn;
 	use Edde\Api\EddeException;
@@ -60,8 +62,10 @@
 	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Container\Container;
 	use Edde\Common\Converter\ConverterManager;
+	use Edde\Common\Crate\Crate;
 	use Edde\Common\Crate\CrateDirectory;
 	use Edde\Common\Crate\CrateFactory;
+	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\TemplateDirectory;
@@ -104,7 +108,7 @@
 				if ($factory instanceof \stdClass) {
 					switch ($factory->type) {
 						case 'instance':
-							$current = new InstanceFactory($name, $factory->class, $factory->parameterList);
+							$current = new InstanceFactory($name, $factory->class, $factory->parameterList, null, $factory->cloneable);
 							break;
 						case 'exception':
 							$current = new ExceptionFactory($name, $factory->message, $factory->class);
@@ -223,14 +227,16 @@
 		 *
 		 * @param string $class
 		 * @param array  $parameterList
+		 * @param bool   $cloneable
 		 *
 		 * @return object
 		 */
-		static public function instance(string $class, array $parameterList) {
+		static public function instance(string $class, array $parameterList, bool $cloneable = false) {
 			return (object)[
 				'type' => __FUNCTION__,
 				'class' => $class,
 				'parameterList' => $parameterList,
+				'cloneable' => $cloneable,
 			];
 		}
 
@@ -325,6 +331,7 @@
 				IStorage::class => DatabaseStorage::class,
 				IDriver::class => SqliteDriver::class,
 				IDsn::class => self::instance(SqliteDsn::class, ['storage.sqlite']),
+				ICrate::class => self::instance(Crate::class, [], true),
 				ICrateFactory::class => CrateFactory::class,
 				ISchemaManager::class => SchemaManager::class,
 				IHttpClient::class => HttpClient::class,
@@ -333,6 +340,7 @@
 				 * need to be defined
 				 */
 				IUpgradeManager::class => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
+				ICryptEngine::class => CryptEngine::class,
 			];
 		}
 	}

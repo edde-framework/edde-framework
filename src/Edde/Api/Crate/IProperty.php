@@ -1,20 +1,20 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Crate;
 
-	use Edde\Api\Schema\IProperty;
+	use Edde\Api\Schema\IProperty as ISchemaProperty;
 
 	/**
 	 * The physical value of the crate.
 	 */
 	interface IProperty {
 		/**
-		 * return value's properties (property definition)
+		 * return schema definition of this property
 		 *
-		 * @return IProperty
+		 * @return ISchemaProperty
 		 */
-		public function getSchemaProperty(): IProperty;
+		public function getSchemaProperty(): ISchemaProperty;
 
 		/**
 		 * set value to this property; the original value is preserved

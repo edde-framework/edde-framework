@@ -96,8 +96,8 @@
 			if ($crate->isDirty() === false) {
 				return $this;
 			}
-			$schema = $crate->getSchema();
 			$selectQuery = new SelectQuery();
+			$selectQuery->init();
 			$identifierList = [];
 			foreach ($crate->getIdentifierList() as $property) {
 				$schemaProperty = $property->getSchemaProperty();
@@ -121,9 +121,9 @@
 				$schemaProperty = $property->getSchemaProperty();
 				$source[$schemaProperty->getName()] = $property->get();
 			}
-			$query = new InsertQuery($schema, $source);
-			if (((int)reset($count)) > 0) {
-				$query = new UpdateQuery($schema, $source);
+			$query = ($count = ((int)reset($count) > 0)) ? new UpdateQuery($schema, $source) : new InsertQuery($schema, $source);
+			$query->init();
+			if ($count) {
 				$where = $query->where();
 				foreach ($identifierList as $name => $value) {
 					$where->eq()

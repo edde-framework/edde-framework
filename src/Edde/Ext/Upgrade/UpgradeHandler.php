@@ -17,7 +17,7 @@
 		use LazyCrateFactoryTrait;
 
 		public function eventOnUpgrade() {
-			$upgradeStorable = $this->crateFactory->crate(UpgradeStorable::class);
+			$upgradeStorable = $this->crateFactory->crate(, UpgradeStorable::class);
 			$upgradeStorable->setStamp(microtime(true));
 			$upgradeStorable->setVersion($onUpgradeEvent->getUpgrade()
 				->getVersion());

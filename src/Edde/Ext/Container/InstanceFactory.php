@@ -28,6 +28,10 @@
 		 * @var mixed
 		 */
 		protected $instance;
+		/**
+		 * @var bool
+		 */
+		protected $cloneable;
 
 		/**
 		 * Little Billy came home from school to see the families pet rooster dead in the front yard.
@@ -39,15 +43,18 @@
 		 * "What do you mean?" said Dad.
 		 * "Well Dad, I got home from school early today and went up to your bedroom and there was Mom flat on her back with her legs in the air screaming, "Jesus I'm coming, I'm coming" If it hadn't of been for Uncle George holding her down we'd have lost her for sure!"
 		 *
-		 * @param string $name
-		 * @param string $class
-		 * @param array  $parameterList
+		 * @param string     $name
+		 * @param string     $class
+		 * @param array      $parameterList
+		 * @param mixed|null $instance
+		 * @param bool       $cloneable
 		 */
-		public function __construct(string $name, string $class, array $parameterList, $instance = null) {
+		public function __construct(string $name, string $class, array $parameterList, $instance = null, bool $cloneable = false) {
 			$this->name = $name;
 			$this->class = $class;
 			$this->parameterList = $parameterList;
 			$this->instance = $instance;
+			$this->cloneable = $cloneable;
 		}
 
 		public function canHandle(IContainer $container, string $dependency): bool {
@@ -62,10 +69,11 @@
 		}
 
 		public function fetch(IContainer $container, string $id, ICache $cache) {
-			return $this->instance;
+			return $this->cloneable && $this->instance ? clone $this->instance : $this->instance;
 		}
 
 		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
-			return $this->instance ?: $this->instance = parent::execute($container, $this->parameterList, $dependency, $this->class);
+			$this->instance ?: $this->instance = parent::execute($container, $this->parameterList, $dependency, $this->class);
+			return $this->cloneable ? clone $this->instance : $this->instance;
 		}
 	}

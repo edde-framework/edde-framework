@@ -3,6 +3,8 @@
 
 	namespace Edde\Common\Upgrade;
 
+	use Edde\Api\Crate\ICrate;
+	use Edde\Api\Crate\LazyCrateFactoryTrait;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Api\Storage\LazyStorageTrait;
 	use Edde\Api\Upgrade\IUpgrade;
@@ -19,6 +21,7 @@
 	abstract class AbstractUpgradeManager extends Object implements IUpgradeManager {
 		use LazyStorageTrait;
 		use LazySchemaManagerTrait;
+		use LazyCrateFactoryTrait;
 		use ConfigurableTrait;
 		/**
 		 * @var IUpgrade[]
@@ -36,6 +39,13 @@
 			}
 			$this->upgradeList[$upgrade->getVersion()] = $upgrade;
 			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function createUpgradeStorable(array $load = null): ICrate {
+			return $this->crateFactory->crate(IUpgradeStorable::class, $load);
 		}
 
 		/**
@@ -100,8 +110,6 @@
 			$this->storage->setup();
 			$this->storage->start();
 			$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema(IUpgradeStorable::class)));
-			$this->storage->commit();
-			$this->storage->start();
 		}
 
 		protected function onUpgrade(IUpgrade $upgrade) {

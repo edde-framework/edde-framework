@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Crate;
 
@@ -26,10 +26,36 @@
 		 * @throws SchemaException
 		 * @throws CrateException
 		 */
+		public function crate(string $schema, array $load = null, string $crate = null): ICrate {
+			/** @var $crate ICrate */
+			$crate = $this->container->create(ICrate::class, [], __METHOD__);
+			$crate->setSchema($schema = $this->schemaManager->getSchema($schema));
+			foreach ($schema->getPropertyList() as $property) {
+				$crate->addProperty(new Property($property));
+			}
+			$load ? $this->load($crate, $load) : null;
+			return $crate;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function collection(string $schema, string $crate = null): ICollection {
+			return $this->container->create(Collection::class, [
+				$schema,
+				$crate,
+			], __METHOD__);
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws SchemaException
+		 * @throws CrateException
+		 */
 		public function build(array $crateList): array {
 			$crates = [];
 			foreach ($crateList as $schema => $source) {
-				$this->load($crates[] = $crate = $this->crate($this->container->has($schema) ? $schema : Crate::class, $schema, null), $source);
+				$this->load($crates[] = $this->crate($schema), $source);
 			}
 			return $crates;
 		}
@@ -50,14 +76,13 @@
 					$targetSchema = $schemaCollection->getTarget()
 						->getSchema()
 						->getSchemaName();
-					$targetCrate = $this->container->has($targetSchema) ? $targetSchema : Crate::class;
 					$crate->collection($property, $collection = $this->collection($targetSchema));
 					/** @var $value array */
 					foreach ($value as $collectionValue) {
 						if (is_array($collectionValue) === false) {
 							throw new CrateException(sprintf('Cannot push source value into the crate [%s]; value [%s] is not an array (collection).', $schema->getSchemaName(), $property));
 						}
-						$collection->addCrate($this->crate($targetCrate, $targetSchema, $collectionValue));
+						$collection->addCrate($this->crate($targetSchema, $collectionValue));
 					}
 					unset($source[$property]);
 				} else if (is_array($value) && $schema->hasLink($property)) {
@@ -65,48 +90,11 @@
 						->getTarget()
 						->getSchema()
 						->getSchemaName();
-					$targetCrate = $this->container->has($targetSchema) ? $targetSchema : Crate::class;
-					$crate->link($property, $this->crate($targetCrate, $targetSchema, $value));
+					$crate->link($property, $this->crate($targetSchema, $value));
 					unset($source[$property]);
 				}
 			}
 			$crate->push($source);
 			return $crate;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function collection(string $schema, string $crate = null): ICollection {
-			return $this->container->create(Collection::class, [
-				$schema,
-				$crate,
-			], __METHOD__);
-		}
-
-		/**
-		 * @inheritdoc
-		 * @throws SchemaException
-		 * @throws CrateException
-		 */
-		public function crate(string $crate, string $schema = null, array $load = null): ICrate {
-			/** @var $crate ICrate */
-			$crate = $this->container->create($crate, [], __METHOD__);
-			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
-			$crate->setSchema($schema = $this->schemaManager->getSchema($schema ?: get_class($crate)));
-			foreach ($schema->getPropertyList() as $schemaProperty) {
-				$crate->addProperty(new Property($schemaProperty));
-			}
-			if ($load !== null) {
-				$this->load($crate, $load);
-			}
-			return $crate;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function hasCrate(string $crate): bool {
-			return $this->container->has($crate);
 		}
 	}

@@ -8,24 +8,15 @@
 	 */
 	interface ICrateFactory {
 		/**
-		 * is possible to create crate with the given name
-		 *
-		 * @param string $crate
-		 *
-		 * @return bool
-		 */
-		public function hasCrate(string $crate): bool;
-
-		/**
 		 * create crate with a given class (should be through container) and with the given schema
 		 *
-		 * @param string $crate
 		 * @param string $schema
 		 * @param array  $load
+		 * @param string $crate
 		 *
 		 * @return ICrate
 		 */
-		public function crate(string $crate, string $schema = null, array $load = null): ICrate;
+		public function crate(string $schema, array $load = null, string $crate = null): ICrate;
 
 		/**
 		 * create crate collection

@@ -4,6 +4,7 @@
 	namespace Edde\Api\Upgrade;
 
 	use Edde\Api\Config\IConfigurable;
+	use Edde\Api\Crate\ICrate;
 
 	/**
 	 * This class is responsible for proper application upgrades.
@@ -25,6 +26,15 @@
 		 * @return string|null
 		 */
 		public function getCurrentVersion();
+
+		/**
+		 * factory method for upgrade storables; internally should use IUpgradeStorable
+		 *
+		 * @param array $load
+		 *
+		 * @return ICrate
+		 */
+		public function createUpgradeStorable(array $load = null): ICrate;
 
 		/**
 		 * return current list of upgrades
