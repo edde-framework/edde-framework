@@ -3,5 +3,5 @@
 
 	namespace Edde\Api\Schema;
 
-	class SchemaFactoryException extends SchemaException {
+	class SchemaManagerException extends SchemaException {
 	}

@@ -42,7 +42,6 @@
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Runtime\IRuntime;
-	use Edde\Api\Schema\ISchemaFactory;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Template\IHelperSet;
@@ -79,7 +78,6 @@
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\Runtime;
-	use Edde\Common\Schema\SchemaFactory;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Template\TemplateManager;
 	use Edde\Common\Upgrade\AbstractUpgradeManager;
@@ -328,7 +326,6 @@
 				IDriver::class => SqliteDriver::class,
 				IDsn::class => self::instance(SqliteDsn::class, ['storage.sqlite']),
 				ICrateFactory::class => CrateFactory::class,
-				ISchemaFactory::class => SchemaFactory::class,
 				ISchemaManager::class => SchemaManager::class,
 				IHttpClient::class => HttpClient::class,
 				IAclManager::class => AclManager::class,

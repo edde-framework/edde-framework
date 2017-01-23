@@ -3,16 +3,16 @@
 
 	namespace Edde\Api\Schema;
 
+	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Node\INode;
-	use IteratorAggregate;
 	use Traversable;
 
 	/**
 	 * Schema provider should provide schema definition in node.
 	 */
-	interface ISchemaProvider extends IteratorAggregate {
+	interface ISchemaLoader extends IConfigurable {
 		/**
 		 * @return INode[]|Traversable
 		 */
-		public function getIterator(): Traversable;
+		public function load();
 	}
