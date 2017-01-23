@@ -142,6 +142,7 @@
 		public function execute(IQuery $query) {
 			try {
 				$this->driver->setup();
+				$query->setup();
 				return $this->driver->execute($query);
 			} catch (PDOException $e) {
 				throw new DriverException(sprintf('Driver [%s] execution failed: %s.', get_class($this->driver), $e->getMessage()), 0, $e);

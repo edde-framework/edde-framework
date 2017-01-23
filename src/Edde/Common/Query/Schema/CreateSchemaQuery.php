@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Query\Schema;
 
@@ -25,7 +25,7 @@
 
 		protected function handleInit() {
 			parent::handleInit();
-			$this->node = new Node('create-schema-query', $this->schema->getSchemaName());
+			$this->node = new Node('create-schema-query', $this->schema->getMeta('storable', false) ?: $this->schema->getSchemaName());
 			foreach ($this->schema->getPropertyList() as $schemaProperty) {
 				$this->node->addNode($propertyNode = new Node($schemaProperty->getName()));
 				$propertyNode->setAttributeList([

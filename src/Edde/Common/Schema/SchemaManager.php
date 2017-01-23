@@ -117,6 +117,13 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function getSchemaList(): array {
+			return $this->schemaList;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		protected function handleInit() {
 			parent::handleInit();
 			$this->propertyListNodeQuery = new NodeQuery('/*/property-list/*');

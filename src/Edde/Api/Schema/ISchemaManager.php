@@ -36,4 +36,11 @@
 		 * @return ISchema
 		 */
 		public function getSchema(string $name): ISchema;
+
+		/**
+		 * return list of all available schemas
+		 *
+		 * @return ISchema[]
+		 */
+		public function getSchemaList(): array;
 	}

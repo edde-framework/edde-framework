@@ -23,6 +23,7 @@
 		}
 
 		protected function onUpgrade() {
+			$this->schemaManager->setup();
 			foreach ($this->schemaManager->getSchemaList() as $schema) {
 				if ($schema->getMeta('storable', false)) {
 					$this->storage->execute(new CreateSchemaQuery($schema));
