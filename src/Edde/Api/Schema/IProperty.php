@@ -6,7 +6,7 @@
 	/**
 	 * Definition of a schema property.
 	 */
-	interface ISchemaProperty {
+	interface IProperty {
 		/**
 		 * return schema to which this property belongs
 		 *

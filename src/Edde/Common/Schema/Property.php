@@ -5,11 +5,11 @@
 
 	use Edde\Api\Filter\IFilter;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Schema\ISchemaProperty;
+	use Edde\Api\Schema\IProperty;
 	use Edde\Api\Schema\SchemaException;
 	use Edde\Common\Object;
 
-	class SchemaProperty extends Object implements ISchemaProperty {
+	class Property extends Object implements IProperty {
 		/**
 		 * @var ISchema
 		 */

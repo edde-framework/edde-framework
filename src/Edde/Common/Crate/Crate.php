@@ -12,7 +12,7 @@
 	use Edde\Common\Object;
 	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Schema\Schema;
-	use Edde\Common\Schema\SchemaProperty;
+	use Edde\Common\Schema\Property;
 
 	/**
 	 * Simple (...advanced...) crate implementation.
@@ -174,7 +174,7 @@
 		public function dynamic($source): ICrate {
 			$schema = new Schema(static::class);
 			foreach ($source as $k => $v) {
-				$schema->addProperty($schemaProperty = new SchemaProperty($schema, (string)$k, gettype($v), false));
+				$schema->addProperty($schemaProperty = new Property($schema, (string)$k, gettype($v), false));
 				$this->addProperty(new Property($schemaProperty, $v));
 			}
 			return $this;

@@ -68,7 +68,7 @@
 			$schema->setMetaList($node->getMetaList());
 			$magic = $schema->getMeta('magic', true);
 			foreach ($this->propertyListNodeQuery->filter($node) as $propertyNode) {
-				$schema->addProperty($property = new SchemaProperty($schema, $propertyNode->getName(), str_replace('[]', '', $type = $propertyNode->getAttribute('type', 'string')), filter_var($propertyNode->getAttribute('required', true), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('unique'), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('identifier'), FILTER_VALIDATE_BOOLEAN), strpos($type, '[]') !== false));
+				$schema->addProperty($property = new Property($schema, $propertyNode->getName(), str_replace('[]', '', $type = $propertyNode->getAttribute('type', 'string')), filter_var($propertyNode->getAttribute('required', true), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('unique'), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('identifier'), FILTER_VALIDATE_BOOLEAN), strpos($type, '[]') !== false));
 				if (($generator = $propertyNode->getAttribute('generator')) !== null) {
 					$property->setGenerator($this->container->create($generator, [], __METHOD__));
 				}

@@ -11,9 +11,9 @@
 	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Schema\ISchemaCollection;
-	use Edde\Api\Schema\ISchemaLink;
-	use Edde\Api\Schema\ISchemaProperty;
+	use Edde\Api\Schema\ICollection;
+	use Edde\Api\Schema\ILink;
+	use Edde\Api\Schema\IProperty;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Container\ConfigurableTrait;
@@ -95,11 +95,11 @@
 		}
 
 		/**
-		 * @param ISchemaProperty $schemaProperty
+		 * @param IProperty $schemaProperty
 		 *
 		 * @return string
 		 */
-		protected function generateSchemaProperty(ISchemaProperty $schemaProperty) {
+		protected function generateSchemaProperty(IProperty $schemaProperty) {
 			$source[] = $this->generateGetter($schemaProperty);
 			$source[] = $this->generateSetter($schemaProperty);
 			if ($schemaProperty->isArray()) {
@@ -110,11 +110,11 @@
 		}
 
 		/**
-		 * @param ISchemaProperty $schemaProperty
+		 * @param IProperty $schemaProperty
 		 *
 		 * @return string
 		 */
-		protected function generateGetter(ISchemaProperty $schemaProperty) {
+		protected function generateGetter(IProperty $schemaProperty) {
 			$source[] = "\t\t/**\n";
 			$type = $schemaProperty->isArray() ? 'array
 				' : $schemaProperty->getType();
@@ -127,11 +127,11 @@
 		}
 
 		/**
-		 * @param ISchemaProperty $schemaProperty
+		 * @param IProperty $schemaProperty
 		 *
 		 * @return string
 		 */
-		protected function generateSetter(ISchemaProperty $schemaProperty) {
+		protected function generateSetter(IProperty $schemaProperty) {
 			$parameter = '_' . StringUtils::firstLower($camelCase = StringUtils::toCamelCase($propertyName = $schemaProperty->getName()));
 			$source[] = "\t\t/**\n";
 			$type = $schemaProperty->isArray() ? 'array
@@ -148,11 +148,11 @@
 		}
 
 		/**
-		 * @param ISchemaProperty $schemaProperty
+		 * @param IProperty $schemaProperty
 		 *
 		 * @return string
 		 */
-		protected function generateArray(ISchemaProperty $schemaProperty) {
+		protected function generateArray(IProperty $schemaProperty) {
 			$parameter = StringUtils::firstLower($camelCase = StringUtils::toCamelCase($propertyName = $schemaProperty->getName()));
 			$source[] = "\t\t/**\n";
 			$source[] = sprintf("\t\t * @param %s $%s\n", $schemaProperty->getType(), $parameter);
@@ -167,11 +167,11 @@
 		}
 
 		/**
-		 * @param ISchemaCollection $schemaCollection
+		 * @param ICollection $schemaCollection
 		 *
 		 * @return string
 		 */
-		protected function generateCollection(ISchemaCollection $schemaCollection) {
+		protected function generateCollection(ICollection $schemaCollection) {
 			$source[] = '';
 			$source[] = "\t\t/**\n";
 			$source[] = "\t\t * \n";
@@ -184,11 +184,11 @@
 		}
 
 		/**
-		 * @param ISchemaLink $schemaLink
+		 * @param ILink $schemaLink
 		 *
 		 * @return string
 		 */
-		protected function generateLink(ISchemaLink $schemaLink) {
+		protected function generateLink(ILink $schemaLink) {
 			$targetSchemaName = $schemaLink->getTarget()
 				->getSchema()
 				->getSchemaName();

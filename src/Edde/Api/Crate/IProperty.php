@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Crate;
 
-	use Edde\Api\Schema\ISchemaProperty;
+	use Edde\Api\Schema\IProperty;
 
 	/**
 	 * The physical value of the crate.
@@ -12,9 +12,9 @@
 		/**
 		 * return value's properties (property definition)
 		 *
-		 * @return ISchemaProperty
+		 * @return IProperty
 		 */
-		public function getSchemaProperty(): ISchemaProperty;
+		public function getSchemaProperty(): IProperty;
 
 		/**
 		 * set value to this property; the original value is preserved

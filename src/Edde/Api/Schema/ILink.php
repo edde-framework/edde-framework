@@ -7,7 +7,7 @@
 	 * Defines relation between properties; every property which is link must point to another
 	 * property.
 	 */
-	interface ISchemaLink {
+	interface ILink {
 		/**
 		 * link name
 		 *
@@ -18,14 +18,14 @@
 		/**
 		 * initial property
 		 *
-		 * @return ISchemaProperty
+		 * @return IProperty
 		 */
-		public function getSource(): ISchemaProperty;
+		public function getSource(): IProperty;
 
 		/**
 		 * target property
 		 *
-		 * @return ISchemaProperty
+		 * @return IProperty
 		 */
-		public function getTarget(): ISchemaProperty;
+		public function getTarget(): IProperty;
 	}

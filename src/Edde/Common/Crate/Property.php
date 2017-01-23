@@ -5,7 +5,7 @@
 
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\IProperty;
-	use Edde\Api\Schema\ISchemaProperty;
+	use Edde\Api\Schema\IProperty;
 	use Edde\Common\Object;
 
 	/**
@@ -15,7 +15,7 @@
 		/**
 		 * property definition of this value
 		 *
-		 * @var ISchemaProperty
+		 * @var IProperty
 		 */
 		protected $schemaProperty;
 		/**
@@ -40,10 +40,10 @@
 		/**
 		 * My wife’s cooking is so bad we usually pray after our food.
 		 *
-		 * @param ISchemaProperty $schemaProperty
-		 * @param mixed|null      $value
+		 * @param IProperty  $schemaProperty
+		 * @param mixed|null $value
 		 */
-		public function __construct(ISchemaProperty $schemaProperty = null, $value = null) {
+		public function __construct(IProperty $schemaProperty = null, $value = null) {
 			$this->schemaProperty = $schemaProperty;
 			$this->value = $value;
 			$this->dirty = false;
@@ -53,7 +53,7 @@
 		 * @inheritdoc
 		 * @throws CrateException
 		 */
-		public function getSchemaProperty(): ISchemaProperty {
+		public function getSchemaProperty(): IProperty {
 			if ($this->schemaProperty === null) {
 				throw new CrateException(sprintf('Property [%s] has no schema property definition.', static::class));
 			}

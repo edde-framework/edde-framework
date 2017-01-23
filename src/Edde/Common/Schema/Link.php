@@ -3,30 +3,30 @@
 
 	namespace Edde\Common\Schema;
 
-	use Edde\Api\Schema\ISchemaLink;
-	use Edde\Api\Schema\ISchemaProperty;
+	use Edde\Api\Schema\ILink;
+	use Edde\Api\Schema\IProperty;
 	use Edde\Common\Object;
 
-	class SchemaLink extends Object implements ISchemaLink {
+	class Link extends Object implements ILink {
 		/**
 		 * @var string
 		 */
 		protected $name;
 		/**
-		 * @var ISchemaProperty
+		 * @var IProperty
 		 */
 		protected $source;
 		/**
-		 * @var ISchemaProperty
+		 * @var IProperty
 		 */
 		protected $target;
 
 		/**
-		 * @param string          $name
-		 * @param ISchemaProperty $source
-		 * @param ISchemaProperty $target
+		 * @param string    $name
+		 * @param IProperty $source
+		 * @param IProperty $target
 		 */
-		public function __construct(string $name, ISchemaProperty $source, ISchemaProperty $target) {
+		public function __construct(string $name, IProperty $source, IProperty $target) {
 			$this->name = $name;
 			$this->source = $source;
 			$this->target = $target;
@@ -42,14 +42,14 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getSource(): ISchemaProperty {
+		public function getSource(): IProperty {
 			return $this->source;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function getTarget(): ISchemaProperty {
+		public function getTarget(): IProperty {
 			return $this->target;
 		}
 	}
