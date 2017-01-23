@@ -5,7 +5,7 @@
 
 	use Edde\Api\Router\IRouter;
 	use Edde\Api\Router\IRouterList;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	/**

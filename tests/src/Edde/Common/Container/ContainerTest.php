@@ -21,7 +21,7 @@
 	 *
 	 * @uses   \Edde\Common\Cache\Cache<extended>
 	 * @uses   \Edde\Common\Container\AbstractFactory
-	 * @uses   \Edde\Common\Container\ConfigurableTrait
+	 * @uses   \Edde\Common\Config\ConfigurableTrait
 	 * @uses   \Edde\Common\Container\Dependency
 	 * @uses   \Edde\Common\File\Directory
 	 * @uses   \Edde\Common\File\FileUtils

@@ -1,14 +1,14 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Translator\Dictionary;
 
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Resource\LazyResourceManagerTrait;
 	use Edde\Common\Cache\CacheTrait;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\File\CsvFile;
 	use Edde\Common\Translator\AbstractDictionary;
 
@@ -42,6 +42,7 @@
 		}
 
 		protected function handleSetup() {
+			parent::handleSetup();
 			$cache = $this->cache();
 			if (($this->translationList = $cache->load($cacheId = implode(',', array_keys($this->fileList)))) === null) {
 				foreach ($this->fileList as $file) {

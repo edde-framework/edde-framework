@@ -1,14 +1,14 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Event\Handler;
 
 	use Edde\Api\Callback\IParameter;
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEvent;
 	use Edde\Common\Callback\Callback;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Event\AbstractHandler;
 
 	/**
@@ -39,7 +39,6 @@
 		 * @inheritdoc
 		 */
 		public function getIterator() {
-			$this->config();
 			if (empty($this->event)) {
 				return new \ArrayIterator([]);
 			}
@@ -51,6 +50,7 @@
 		 * @throws EventException
 		 */
 		protected function handleInit() {
+			parent::handleInit();
 			$callback = new Callback($this->callable);
 			$parameterList = $callback->getParameterList();
 			if (count($parameterList) !== 1) {

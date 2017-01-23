@@ -9,7 +9,7 @@
 	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Translator\TranslatorException;
 	use Edde\Common\Cache\CacheTrait;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	/**
@@ -46,7 +46,7 @@
 			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
 			$scope = $scope ?: ($this->scopeStack->isEmpty() ? null : $this->scopeStack->top());
 			if ($this->isConfigured()) {
-				$convertable = $this->converterManager->convert($source, $source->getMime(), IDictionary::class);
+				$convertable = $this->converterManager->convert($source, $source->getMime(), [IDictionary::class]);
 				$this->registerDictionary($convertable->convert(), $scope);
 				return $this;
 			}

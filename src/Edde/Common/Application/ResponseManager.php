@@ -7,7 +7,7 @@
 	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Application\LazyRequestTrait;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	class ResponseManager extends Object implements IResponseManager {
@@ -28,6 +28,7 @@
 			if ($this->response === null) {
 				return;
 			}
+			$this->converterManager->setup();
 			$this->converterManager->content($this->response, $this->response->getTargetList())
 				->convert();
 		}

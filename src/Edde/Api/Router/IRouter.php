@@ -1,10 +1,10 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Router;
 
 	use Edde\Api\Application\IRequest;
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 
 	interface IRouter extends IConfigurable {
 		/**

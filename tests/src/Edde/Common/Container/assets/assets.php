@@ -2,19 +2,19 @@
 	declare(strict_types=1);
 
 	use Edde\Api\Cache\ICacheable;
-	use Edde\Api\Container\IConfigHandler;
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
+	use Edde\Api\Config\IConfigurator;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Common\Cache\CacheableTrait;
-	use Edde\Common\Container\AbstractConfigHandler;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\AbstractConfigurator;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	interface ISomething {
 		public function registerSomeething(string $something);
 	}
 
-	class FirstSomethingSetup extends AbstractConfigHandler implements IConfigHandler, ICacheable {
+	class FirstSomethingSetup extends AbstractConfigurator implements IConfigurator, ICacheable {
 		/**
 		 * @param ISomething $instance
 		 */
@@ -27,7 +27,7 @@
 		}
 	}
 
-	class AnotherSomethingSetup extends AbstractConfigHandler implements IConfigHandler, ICacheable {
+	class AnotherSomethingSetup extends AbstractConfigurator implements IConfigurator, ICacheable {
 		use LazyContainerTrait;
 
 		/**
@@ -94,7 +94,7 @@
 		}
 	}
 
-	class AnotherSomethingConfigurator extends AbstractConfigHandler {
+	class AnotherSomethingConfigurator extends AbstractConfigurator {
 		/**
 		 * @param AnotherSomething $instance
 		 */

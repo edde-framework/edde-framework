@@ -1,22 +1,21 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Crate;
 
-	use Edde\Api\Container\IConfigurable;
-	use Edde\Api\Crate\ICollection;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Crate\ICrateGenerator;
 	use Edde\Api\Crate\LazyCrateDirectoryTrait;
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Resource\IResource;
-	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ICollection;
 	use Edde\Api\Schema\ILink;
 	use Edde\Api\Schema\IProperty;
+	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Common\Cache\CacheTrait;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\Object;
 	use Edde\Common\Strings\StringUtils;

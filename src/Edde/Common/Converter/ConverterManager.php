@@ -8,11 +8,11 @@
 	use Edde\Api\Converter\IConvertable;
 	use Edde\Api\Converter\IConverter;
 	use Edde\Api\Converter\IConverterManager;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	/**
-	 * Default implementation of a convertion manager.
+	 * Default implementation of a conversion manager.
 	 */
 	class ConverterManager extends Object implements IConverterManager {
 		use ConfigurableTrait;

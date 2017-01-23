@@ -1,7 +1,7 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
-	namespace Edde\Api\Container;
+	namespace Edde\Api\Config;
 
 	/**
 	 * Marker interface for classes supporting external configuration.
@@ -10,11 +10,11 @@
 		/**
 		 * register set of config handlers
 		 *
-		 * @param IConfigHandler[] $configHandlerList
+		 * @param IConfigurator[] $configuratorList
 		 *
 		 * @return $this
 		 */
-		public function registerConfigHandlerList(array $configHandlerList);
+		public function registerConfiguratorList(array $configuratorList);
 
 		/**
 		 * this method should be called after all dependencies are
@@ -31,6 +31,13 @@
 		public function isInitialized(): bool;
 
 		/**
+		 * throws an exception if configurable has not been initialized
+		 *
+		 * @return IConfigurable
+		 */
+		public function checkInit();
+
+		/**
 		 * execute object initialization; object must be serializable after this method
 		 *
 		 * @param bool $force
@@ -41,6 +48,13 @@
 		 * @return bool
 		 */
 		public function isWarmedup(): bool;
+
+		/**
+		 * check if configurable has been warmedup
+		 *
+		 * @return IConfigurable
+		 */
+		public function checkWarmup();
 
 		/**
 		 * execute object configuration (so after this method object should be fully prepared for use)
@@ -57,6 +71,13 @@
 		public function isConfigured(): bool;
 
 		/**
+		 * check if configurable has been configured
+		 *
+		 * @return IConfigurable
+		 */
+		public function checkConfig();
+
+		/**
 		 * do any heavy computations; after this object is usualy not serializable
 		 *
 		 * @param bool $force
@@ -67,4 +88,11 @@
 		 * has benn object set up?
 		 */
 		public function isSetup(): bool;
+
+		/**
+		 * check if configurable has been setup
+		 *
+		 * @return IConfigurable
+		 */
+		public function checkSetup();
 	}

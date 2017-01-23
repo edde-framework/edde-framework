@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Upgrade;
 
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 
 	/**
 	 * This class is responsible for proper application upgrades.

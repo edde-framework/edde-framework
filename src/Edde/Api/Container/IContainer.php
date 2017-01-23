@@ -4,6 +4,7 @@
 	namespace Edde\Api\Container;
 
 	use Edde\Api\Cache\ICache;
+	use Edde\Api\Config\IConfigurator;
 
 	/**
 	 * Implementation of Dependency Injection Container.
@@ -36,17 +37,17 @@
 		/**
 		 * register a new config handler for the given dependency
 		 *
-		 * @param string         $name
-		 * @param IConfigHandler $configHandler
+		 * @param string        $name
+		 * @param IConfigurator $configHandler
 		 *
 		 * @return IContainer
 		 */
-		public function registerConfigHandler(string $name, IConfigHandler $configHandler): IContainer;
+		public function registerConfigHandler(string $name, IConfigurator $configHandler): IContainer;
 
 		/**
 		 * register list of config handlers bound to the given factories (key is factory name, value is config handler)
 		 *
-		 * @param IConfigHandler[] $configHandlerList
+		 * @param IConfigurator[] $configHandlerList
 		 *
 		 * @return IContainer
 		 */

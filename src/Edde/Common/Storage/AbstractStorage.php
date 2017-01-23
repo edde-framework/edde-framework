@@ -13,7 +13,7 @@
 	use Edde\Api\Storage\IBoundQuery;
 	use Edde\Api\Storage\ICollection;
 	use Edde\Api\Storage\IStorage;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Crate\Crate;
 	use Edde\Common\Object;
 	use Edde\Common\Query\Select\SelectQuery;

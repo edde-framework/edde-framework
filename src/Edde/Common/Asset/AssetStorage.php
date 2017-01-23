@@ -12,7 +12,7 @@
 	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\ResourceException;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
 	use Edde\Common\Object;

@@ -3,14 +3,14 @@
 
 	namespace Edde\Common\Query;
 
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\INodeQuery;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Query\IStaticQueryFactory;
 	use Edde\Api\Query\StaticQueryException;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\NodeQuery;
 	use Edde\Common\Object;
 	use Edde\Common\Strings\StringUtils;
@@ -20,7 +20,7 @@
 	/**
 	 * Helper class for IQL to string building.
 	 */
-	abstract class AbstractStaticQueryFactory extends Object implements IStaticQueryFactory, IConfigurable {
+	abstract class AbstractStaticQueryFactory extends Object implements IStaticQueryFactory{
 		use ConfigurableTrait;
 		/**
 		 * @var array

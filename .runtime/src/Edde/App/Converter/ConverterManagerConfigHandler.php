@@ -3,7 +3,7 @@
 
 	namespace Edde\App\Converter;
 
-	use Edde\Ext\Converter\ConverterManagerConfigHandler as ExtConverterManagerConfigHandler;
+	use Edde\Ext\Converter\ConverterManagerConfigurator as ExtConverterManagerConfigHandler;
 
-	class ConverterManagerConfigHandler extends ExtConverterManagerConfigHandler {
+	class ConverterManagerConfigurator extends ExtConverterManagerConfigHandler {
 	}

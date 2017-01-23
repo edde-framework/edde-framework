@@ -1,17 +1,17 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Control;
 
 	use Edde\Api\Callback\ICallback;
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Control\ControlException;
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
 	use Edde\Common\Callback\Callback;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Object;
@@ -22,7 +22,6 @@
 	 */
 	abstract class AbstractControl extends Object implements IConfigurable, IControl {
 		use LazyContainerTrait;
-//		use EventTrait;
 		use ConfigurableTrait;
 		/**
 		 * @var INode

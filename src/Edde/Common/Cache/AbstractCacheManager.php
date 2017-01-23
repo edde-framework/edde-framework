@@ -1,13 +1,12 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Cache;
 
 	use Edde\Api\Cache\ICache;
-	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Cache\ICacheStorage;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 
 	/**
 	 * Common stuff for a cache cache implementation.

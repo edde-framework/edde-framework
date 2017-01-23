@@ -5,7 +5,7 @@
 
 	use Edde\Api\Http\IContentType;
 	use Edde\Common\Collection\AbstractList;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 
 	class ContentType extends AbstractList implements IContentType {
 		use ConfigurableTrait;
@@ -32,17 +32,14 @@
 		}
 
 		public function getCharset(string $default = 'utf-8'): string {
-			$this->init();
 			return $this->get('charset', $default);
 		}
 
 		public function getMime(string $default = null) {
-			$this->init();
 			return $this->object ? $this->object->mime : $default;
 		}
 
 		public function getParameterList(): array {
-			$this->init();
 			return $this->array();
 		}
 
@@ -55,7 +52,6 @@
 		}
 
 		public function __toString(): string {
-			$this->init();
 			return $this->getMime();
 		}
 	}

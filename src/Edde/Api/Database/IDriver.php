@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Database;
 
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
 	use PDOStatement;

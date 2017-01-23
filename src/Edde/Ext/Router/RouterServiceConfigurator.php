@@ -5,9 +5,9 @@
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Router\IRouterService;
-	use Edde\Common\Container\AbstractConfigHandler;
+	use Edde\Common\Config\AbstractConfigurator;
 
-	class RouterServiceConfigHandler extends AbstractConfigHandler {
+	class RouterServiceConfigurator extends AbstractConfigurator {
 		use LazyContainerTrait;
 
 		/**

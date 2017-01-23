@@ -1,12 +1,12 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Api\Container;
+	namespace Edde\Api\Config;
 
 	/**
 	 * This interface is general way how to implement service configuration (or configuration of almost enything).
 	 */
-	interface IConfigHandler {
+	interface IConfigurator {
 		/**
 		 * run config over the given instance
 		 *

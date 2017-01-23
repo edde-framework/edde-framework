@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Template;
 
@@ -15,7 +15,7 @@
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 	use Edde\Common\Reflection\ReflectionUtils;
 

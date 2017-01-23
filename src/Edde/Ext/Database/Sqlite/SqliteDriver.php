@@ -3,13 +3,13 @@
 
 	namespace Edde\Ext\Database\Sqlite;
 
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Query\IStaticQueryFactory;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Database\AbstractDriver;
 	use Edde\Common\Storage\UniqueException;
 	use Edde\Common\Storage\UnknownSourceException;
@@ -126,6 +126,7 @@
 		 * @throws DriverException
 		 */
 		protected function handleInit() {
+			parent::handleInit();
 			$this->setTypeList([
 				null => 'TEXT',
 				'int' => 'INTEGER',
@@ -140,6 +141,7 @@
 		}
 
 		protected function handleSetup() {
+			parent::handleSetup();
 			if (extension_loaded('pdo_sqlite') === false) {
 				throw new DriverException('Sqlite PDO is not available, oops!');
 			}

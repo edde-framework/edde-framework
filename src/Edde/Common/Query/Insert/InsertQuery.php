@@ -1,11 +1,11 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Query\Insert;
 
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractQuery;
 
@@ -36,6 +36,7 @@
 		 * @inheritdoc
 		 */
 		protected function handleInit() {
+			parent::handleInit();
 			$this->node = new Node('insert-query', $this->schema->getSchemaName());
 			foreach ($this->insert as $name => $value) {
 				$this->node->addNode(new Node($name, $value));

@@ -3,9 +3,9 @@
 
 	namespace Edde\Common\Query\Schema;
 
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractQuery;
 
@@ -24,6 +24,7 @@
 		}
 
 		protected function handleInit() {
+			parent::handleInit();
 			$this->node = new Node('create-schema-query', $this->schema->getSchemaName());
 			foreach ($this->schema->getPropertyList() as $schemaProperty) {
 				$this->node->addNode($propertyNode = new Node($schemaProperty->getName()));

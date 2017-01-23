@@ -8,7 +8,7 @@
 	use Edde\Api\Router\IRouter;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Router\RouterException;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	/**
@@ -47,7 +47,7 @@
 				list($class, $parameterList) = $router;
 				/** @var $router IRouter */
 				$router = $this->container->create($class, $parameterList, __METHOD__);
-				$router->config();
+				$router->setup();
 				if (($this->request = $router->createRequest()) !== null) {
 					return $this->request;
 				}

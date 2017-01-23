@@ -5,9 +5,9 @@
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Template\ICompiler;
-	use Edde\Common\Container\AbstractConfigHandler;
+	use Edde\Common\Config\AbstractConfigurator;
 
-	class CompilerConfigHandler extends AbstractConfigHandler {
+	class CompilerConfigurator extends AbstractConfigurator {
 		use LazyContainerTrait;
 
 		/**

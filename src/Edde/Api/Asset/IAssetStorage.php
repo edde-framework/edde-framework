@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Asset;
 
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Resource\IResource;
 

@@ -4,9 +4,9 @@
 	namespace Edde\Ext\Router;
 
 	use Edde\Api\Container\LazyContainerTrait;
-	use Edde\Common\Container\AbstractConfigHandler;
+	use Edde\Common\Config\AbstractConfigurator;
 
-	class RestRouterConfigHandler extends AbstractConfigHandler {
+	class RestRouterConfigurator extends AbstractConfigurator {
 		use LazyContainerTrait;
 
 		/**

@@ -1,15 +1,15 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Html\Macro;
 
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Crypt\LazyCryptEngineTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelper;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Strings\StringException;
 	use Edde\Common\Strings\StringUtils;

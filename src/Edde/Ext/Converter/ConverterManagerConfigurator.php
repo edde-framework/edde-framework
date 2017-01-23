@@ -5,10 +5,10 @@
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Converter\IConverterManager;
-	use Edde\Common\Container\AbstractConfigHandler;
+	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Html\Converter\HtmlConverter;
 
-	class ConverterManagerConfigHandler extends AbstractConfigHandler {
+	class ConverterManagerConfigurator extends AbstractConfigurator {
 		use LazyContainerTrait;
 
 		/**

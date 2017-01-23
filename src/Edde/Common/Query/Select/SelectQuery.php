@@ -3,10 +3,10 @@
 
 	namespace Edde\Common\Query\Select;
 
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Query\QueryException;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractQuery;
 	use Edde\Common\Query\Where\WhereExpressionFragment;
@@ -78,6 +78,7 @@
 		}
 
 		protected function handleInit() {
+			parent::handleInit();
 			$this->selectNode = new Node('select-query');
 			$this->selectNode->addNodeList([
 				$selectListNode = new Node('select'),

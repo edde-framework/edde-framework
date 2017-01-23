@@ -4,9 +4,9 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Cache\ICache;
+	use Edde\Api\Config\IConfigurator;
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
-	use Edde\Api\Container\IConfigHandler;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
 	use Edde\Common\Object;
@@ -22,7 +22,7 @@
 		 */
 		protected $factoryList = [];
 		/**
-		 * @var IConfigHandler[][]
+		 * @var \Edde\Api\Config\IConfigurator[][]
 		 */
 		protected $configHandlerList = [];
 
@@ -66,7 +66,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function registerConfigHandler(string $name, IConfigHandler $configHandler): IContainer {
+		public function registerConfigHandler(string $name, \Edde\Api\Config\IConfigurator $configHandler): IContainer {
 			$this->configHandlerList[$name][] = $configHandler;
 			return $this;
 		}

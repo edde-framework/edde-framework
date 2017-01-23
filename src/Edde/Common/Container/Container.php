@@ -5,9 +5,9 @@
 
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheable;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
-	use Edde\Api\Container\IConfigurable;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\ILazyInject;
@@ -60,9 +60,9 @@
 					$this->cache->save($cacheId, $dependency = $factory->dependency($this, $name));
 				}
 				$this->dependency($instance = $factory->execute($this, $parameterList, $dependency, $name), $dependency);
-				if ($instance instanceof IConfigurable) {
-					/** @var $instance IConfigurable */
-					$instance->registerConfigHandlerList(isset($this->configHandlerList[$name]) ? $this->configHandlerList[$name] : []);
+				if ($instance instanceof \Edde\Api\Config\IConfigurable) {
+					/** @var $instance \Edde\Api\Config\IConfigurable */
+					$instance->registerConfiguratorList(isset($this->configHandlerList[$name]) ? $this->configHandlerList[$name] : []);
 					$instance->init();
 				}
 				$factory->push($this, $fetchId, $instance, $this->cache);

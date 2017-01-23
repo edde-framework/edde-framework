@@ -4,7 +4,7 @@
 	namespace Edde\Api\Router;
 
 	use Edde\Api\Application\IRequest;
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 
 	/**
 	 * Implementation of application router service.

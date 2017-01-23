@@ -10,7 +10,7 @@
 	use Edde\Api\Schema\ISchemaLoader;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Schema\SchemaManagerException;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Filter\BoolFilter;
 	use Edde\Common\Node\NodeQuery;
 	use Edde\Common\Object;
@@ -98,6 +98,13 @@
 				}
 			}
 			return $schema;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getSchema(string $name): ISchema {
+			$this->checkSetup();
 		}
 
 		protected function handleInit() {

@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Application;
 
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 
 	/**
 	 * Response manager holds current Response (to keep responses immutable).

@@ -5,9 +5,9 @@
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Upgrade\IUpgradeManager;
-	use Edde\Common\Container\AbstractConfigHandler;
+	use Edde\Common\Config\AbstractConfigurator;
 
-	class UpgradeManagerConfigHandler extends AbstractConfigHandler {
+	class UpgradeManagerConfigurator extends AbstractConfigurator {
 		use LazyContainerTrait;
 
 		/**

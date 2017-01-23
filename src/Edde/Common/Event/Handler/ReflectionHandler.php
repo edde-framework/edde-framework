@@ -1,12 +1,12 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Event\Handler;
 
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Event\EventException;
 	use Edde\Api\Event\IEvent;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Event\AbstractHandler;
 
 	/**
@@ -38,7 +38,6 @@
 		 * @inheritdoc
 		 */
 		public function getIterator() {
-			$this->config();
 			foreach ($this->methodList as $event => $closureList) {
 				foreach ($closureList as $closure) {
 					yield $event => $closure;
@@ -51,6 +50,7 @@
 		 * @throws EventException
 		 */
 		protected function handleInit() {
+			parent::handleInit();
 			/**
 			 * @var $cache \ReflectionMethod[][][]
 			 */

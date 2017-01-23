@@ -1,15 +1,16 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Common\Container;
+	namespace Edde\Common\Config;
 
-	use Edde\Api\Container\IConfigHandler;
+	use Edde\Api\Config\ConfigException;
+	use Edde\Api\Config\IConfigurator;
 
 	trait ConfigurableTrait {
 		/**
-		 * @var IConfigHandler[]
+		 * @var IConfigurator[]
 		 */
-		protected $tConfigHandlerList = [];
+		protected $tConfiguratorList = [];
 		/**
 		 * @var bool
 		 */
@@ -30,8 +31,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function registerConfigHandlerList(array $configHandlerList) {
-			$this->tConfigHandlerList = $configHandlerList;
+		public function registerConfiguratorList(array $configuratorList) {
+			$this->tConfiguratorList = $configuratorList;
 			return $this;
 		}
 
@@ -54,6 +55,12 @@
 			return $this->tInit;
 		}
 
+		public function checkInit() {
+			if ($this->tInit === false) {
+				throw new ConfigException(sprintf('Class [%s] has not been initialized!', static::class));
+			}
+		}
+
 		/**
 		 * @inheritdoc
 		 */
@@ -74,6 +81,12 @@
 			return $this->tWarmup;
 		}
 
+		public function checkWarmup() {
+			if ($this->tWarmup === false) {
+				throw new ConfigException(sprintf('Class [%s] has not been warmed up!', static::class));
+			}
+		}
+
 		/**
 		 * @inheritdoc
 		 */
@@ -83,7 +96,7 @@
 			}
 			$this->tConfig = true;
 			$this->warmup($force);
-			foreach ($this->tConfigHandlerList as $configHandler) {
+			foreach ($this->tConfiguratorList as $configHandler) {
 				$configHandler->config($this);
 			}
 			$this->handleConfig();
@@ -95,6 +108,12 @@
 		 */
 		public function isConfigured(): bool {
 			return $this->tConfig;
+		}
+
+		public function checkConfig() {
+			if ($this->tConfig === false) {
+				throw new ConfigException(sprintf('Class [%s] has not been configured!', static::class));
+			}
 		}
 
 		/**
@@ -115,5 +134,11 @@
 		 */
 		public function isSetup(): bool {
 			return $this->tSetup;
+		}
+
+		public function checkSetup() {
+			if ($this->tSetup === false) {
+				throw new ConfigException(sprintf('Class [%s] has not been set up!', static::class));
+			}
 		}
 	}

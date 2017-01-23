@@ -3,9 +3,9 @@
 
 	namespace Edde\Common\Query\Select;
 
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Node\INode;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractFragment;
 
@@ -64,6 +64,7 @@
 		}
 
 		protected function handleInit() {
+			parent::handleInit();
 			$this->joinFragment = new JoinFragment($this->node);
 		}
 	}

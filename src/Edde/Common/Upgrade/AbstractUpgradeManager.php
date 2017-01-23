@@ -9,7 +9,7 @@
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Upgrade\IUpgradeStorable;
 	use Edde\Api\Upgrade\UpgradeException;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 	use Edde\Common\Query\Schema\CreateSchemaQuery;
 

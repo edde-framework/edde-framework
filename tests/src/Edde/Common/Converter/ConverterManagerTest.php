@@ -9,7 +9,7 @@
 	use Edde\Common\File\RootDirectory;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
-	use Edde\Ext\Converter\ConverterManagerConfigHandler;
+	use Edde\Ext\Converter\ConverterManagerConfigurator;
 	use PHPUnit\Framework\TestCase;
 
 	class ConverterManagerTest extends TestCase {
@@ -42,7 +42,7 @@
 				IRootDirectory::class => new RootDirectory(__DIR__),
 				new ClassFactory(),
 			], [
-				IConverterManager::class => ConverterManagerConfigHandler::class,
+				IConverterManager::class => ConverterManagerConfigurator::class,
 			])
 				->create(IConverterManager::class);
 		}

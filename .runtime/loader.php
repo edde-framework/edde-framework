@@ -7,8 +7,8 @@
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Router\IRouterService;
-	use Edde\App\Converter\ConverterManagerConfigHandler;
-	use Edde\App\Router\RouterServiceConfigHandler;
+	use Edde\App\Converter\ConverterManagerConfigurator;
+	use Edde\App\Router\RouterServiceConfigurator;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
@@ -33,9 +33,9 @@
 		new ClassFactory(),
 	]), [
 		IRouterService::class => [
-			RouterServiceConfigHandler::class,
+			RouterServiceConfigurator::class,
 		],
 		IConverterManager::class => [
-			ConverterManagerConfigHandler::class,
+			ConverterManagerConfigurator::class,
 		],
 	], __DIR__ . '/temp/container-' . sha1(implode('', array_keys($factoryList)) . new Framework()) . '.cache');

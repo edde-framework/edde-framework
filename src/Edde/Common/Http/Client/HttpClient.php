@@ -12,7 +12,7 @@
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Url\IUrl;
 	use Edde\Api\Url\UrlException;
-	use Edde\Common\Container\ConfigurableTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Http\Client\Event\DeleteEvent;
 	use Edde\Common\Http\Client\Event\GetEvent;
@@ -153,7 +153,6 @@
 		 * @inheritdoc
 		 */
 		public function request(IHttpRequest $httpRequest): IHttpHandler {
-			$this->config();
 			curl_setopt_array($curl = curl_init($url = (string)$httpRequest->getRequestUrl()), [
 				CURLOPT_SSL_VERIFYPEER => false,
 				CURLOPT_FOLLOWLOCATION => true,

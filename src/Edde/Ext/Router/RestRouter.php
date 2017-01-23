@@ -3,7 +3,7 @@
 
 	namespace Edde\Ext\Router;
 
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Http\LazyHttpRequestTrait;
 	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Api\Http\LazyRequestUrlTrait;

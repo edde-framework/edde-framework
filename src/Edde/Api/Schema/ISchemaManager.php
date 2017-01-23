@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Schema;
 
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Node\INode;
 
 	/**
@@ -27,4 +27,13 @@
 		 * @return ISchema
 		 */
 		public function createSchema(INode $node): ISchema;
+
+		/**
+		 * retrieve schema based on the name
+		 *
+		 * @param string $name
+		 *
+		 * @return ISchema
+		 */
+		public function getSchema(string $name): ISchema;
 	}

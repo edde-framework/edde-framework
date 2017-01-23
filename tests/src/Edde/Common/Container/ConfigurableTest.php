@@ -3,14 +3,14 @@
 
 	namespace Edde\Common\Container;
 
-	use Edde\Api\Container\IConfigurable;
+	use Edde\Api\Config\IConfigurable;
 	use PHPUnit\Framework\TestCase;
 
 	require_once __DIR__ . '/assets/assets.php';
 
 	/**
 	 * @covers \AnotherSomething<extended>
-	 * @covers \Edde\Common\Container\ConfigurableTrait
+	 * @covers \Edde\Common\Config\ConfigurableTrait
 	 */
 	class ConfigurableTest extends TestCase {
 		/**
@@ -60,7 +60,7 @@
 			self::assertFalse($object->isSetup());
 			self::assertFalse($object->ok);
 			self::assertEquals(0, $object->config);
-			$object->registerConfigHandlerList([new \AnotherSomethingConfigurator()]);
+			$object->registerConfiguratorList([new \AnotherSomethingConfigurator()]);
 			$object->config();
 			self::assertEquals(1, $object->config);
 			$object->config();
