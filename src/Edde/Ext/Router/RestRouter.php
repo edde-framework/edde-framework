@@ -11,6 +11,7 @@
 	use Edde\Api\Rest\IService;
 	use Edde\Api\Runtime\LazyRuntimeTrait;
 	use Edde\Common\Application\Request;
+	use Edde\Common\Converter\Content;
 	use Edde\Common\Router\AbstractRouter;
 
 	class RestRouter extends AbstractRouter implements IConfigurable, ILinkGenerator {
@@ -35,18 +36,24 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function createRequest() {
 			if ($this->runtime->isConsoleMode() || empty($this->serviceList)) {
 				return null;
 			}
 			foreach ($this->serviceList as $service) {
 				if ($service->match($this->requestUrl)) {
-					return (new Request())->registerActionHandler(get_class($service), $this->httpRequest->getMethod(), $this->requestUrl->getQuery());
+					return (new Request(new Content($this->body->getBody(), $this->body->getMime())))->registerActionHandler(get_class($service), $this->httpRequest->getMethod(), $this->requestUrl->getQuery());
 				}
 			}
 			return null;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function link($generate, ...$parameterList) {
 			if (is_string($generate) === false || isset($this->serviceList[$generate]) === false) {
 				return null;

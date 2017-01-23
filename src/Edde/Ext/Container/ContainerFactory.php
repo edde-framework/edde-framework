@@ -29,10 +29,9 @@
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Html\ITemplateDirectory;
 	use Edde\Api\Http\Client\IHttpClient;
+	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\ICookieFactory;
 	use Edde\Api\Http\ICookieList;
-	use Edde\Api\Http\IHeaderFactory;
-	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Http\IPostFactory;
@@ -71,7 +70,6 @@
 	use Edde\Common\Html\TemplateDirectory;
 	use Edde\Common\Http\Client\HttpClient;
 	use Edde\Common\Http\CookieFactory;
-	use Edde\Common\Http\HeaderFactory;
 	use Edde\Common\Http\HttpRequest;
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Http\PostFactory;
@@ -316,8 +314,8 @@
 				ICookieList::class => ICookieFactory::class . '::create',
 				IRequestUrlFactory::class => RequestUrlFactory::class,
 				IRequestUrl::class => IRequestUrlFactory::class . '::createRequestUrl',
-				IHeaderFactory::class => HeaderFactory::class,
-				IHeaderList::class => IHeaderFactory::class . '::create',
+//				IHeaderFactory::class => HeaderFactory::class,
+//				IHeaderList::class => IHeaderFactory::class . '::create',
 				IHttpRequest::class => HttpRequest::class,
 				IResponseManager::class => ResponseManager::class,
 				IXmlParser::class => XmlParser::class,

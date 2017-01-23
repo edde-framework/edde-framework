@@ -1,17 +1,16 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Http\Client;
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyTempDirectoryTrait;
+	use Edde\Api\Http\Client\ClientException;
 	use Edde\Api\Http\Client\IHttpHandler;
-	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Common\Event\EventTrait;
-	use Edde\Common\Http\Body;
 	use Edde\Common\Http\Client\Event\OnRequestEvent;
 	use Edde\Common\Http\Client\Event\RequestDoneEvent;
 	use Edde\Common\Http\Client\Event\RequestFailedEvent;
@@ -103,22 +102,6 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function content($content, string $mime = null, string $target = null): IHttpHandler {
-			$this->httpRequest->setBody($this->container->create(Body::class, [$content], __METHOD__));
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function body(IBody $body): IHttpHandler {
-			$this->httpRequest->setBody($body);
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function cookie($file, bool $reset = false): IHttpHandler {
 			$this->cookie = [
 				is_string($file) ? $this->tempDirectory->file($file) : $file,
@@ -137,12 +120,12 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws \Edde\Api\Http\Client\ClientException
+		 * @throws ClientException
 		 * @throws StringException
 		 */
 		public function execute(): IHttpResponse {
 			if ($this->curl === null) {
-				throw new \Edde\Api\Http\Client\ClientException(sprintf('Cannot execute handler for the url [%s] more than once.', (string)$this->httpRequest->getRequestUrl()));
+				throw new ClientException(sprintf('Cannot execute handler for the url [%s] more than once.', (string)$this->httpRequest->getRequestUrl()));
 			}
 			$options = [];
 			if ($body = $this->httpRequest->getBody()) {
@@ -185,7 +168,7 @@
 			curl_setopt_array($this->curl, $options);
 			$this->event($onRequestEvent = new OnRequestEvent($this->httpRequest, $this));
 			if ($onRequestEvent->isCanceled()) {
-				throw new \Edde\Api\Http\Client\ClientException(sprintf('%s: request has been canceled', (string)$this->httpRequest->getRequestUrl()));
+				throw new ClientException(sprintf('%s: request has been canceled', (string)$this->httpRequest->getRequestUrl()));
 			}
 			$time = microtime(true);
 			if (($content = curl_exec($this->curl)) === false) {
@@ -194,7 +177,7 @@
 				curl_close($this->curl);
 				$this->curl = null;
 				$this->event(new RequestFailedEvent($this->httpRequest, $this, microtime(true) - $time));
-				throw new \Edde\Api\Http\Client\ClientException(sprintf('%s: %s', (string)$this->httpRequest->getRequestUrl(), $error), $errorCode);
+				throw new ClientException(sprintf('%s: %s', (string)$this->httpRequest->getRequestUrl(), $error), $errorCode);
 			}
 			$time = microtime(true) - $time;
 			if (is_string($contentType = $headerList->get('Content-Type', curl_getinfo($this->curl, CURLINFO_CONTENT_TYPE)))) {

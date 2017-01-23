@@ -26,13 +26,6 @@
 		public function getUserAgent(string $default = ''): string;
 
 		/**
-		 * return prioritized accept mime
-		 *
-		 * @return string
-		 */
-		public function getAccept(): string;
-
-		/**
 		 * return an ordered array of accepted mime types
 		 *
 		 * @return array
