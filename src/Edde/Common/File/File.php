@@ -152,7 +152,7 @@
 		 * @inheritdoc
 		 * @throws FileException
 		 */
-		public function write($write): IFile {
+		public function write($write, int $length = null): IFile {
 			if ($this->isOpen() === false) {
 				$this->openForWrite();
 			}
@@ -165,9 +165,9 @@
 				$this->writeCacheData = [];
 				$this->writeCacheIndex = 0;
 			}
-			$written = fwrite($this->getHandle(), $write);
-			if ($written !== ($lengh = strlen($write))) {
-				throw new FileException(sprintf('Failed to write into file [%s]: expected %d bytes, %d has been written.', $this->url->getPath(), $lengh, $written));
+			$count = fwrite($this->getHandle(), $write, $length);
+			if ($count !== ($length = strlen($write))) {
+				throw new FileException(sprintf('Failed to write into file [%s]: expected %d bytes, %d has been written.', $this->url->getPath(), $length, $count));
 			}
 			return $this;
 		}
@@ -252,8 +252,8 @@
 		 * @inheritdoc
 		 * @throws FileException
 		 */
-		public function read() {
-			if (($line = fgets($this->getHandle())) === false && $this->isAutoClose()) {
+		public function read(int $length = null) {
+			if (($line = fgets($this->getHandle(), $length)) === false && $this->isAutoClose()) {
 				$this->close();
 			}
 			return $line;

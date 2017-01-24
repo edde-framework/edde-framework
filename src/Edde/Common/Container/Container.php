@@ -60,8 +60,8 @@
 					$this->cache->save($cacheId, $dependency = $factory->dependency($this, $name));
 				}
 				$this->dependency($instance = $factory->execute($this, $parameterList, $dependency, $name), $dependency);
-				if ($instance instanceof \Edde\Api\Config\IConfigurable) {
-					/** @var $instance \Edde\Api\Config\IConfigurable */
+				if ($instance instanceof IConfigurable) {
+					/** @var $instance IConfigurable */
 					$instance->registerConfiguratorList(isset($this->configHandlerList[$name]) ? $this->configHandlerList[$name] : []);
 					$instance->init();
 				}

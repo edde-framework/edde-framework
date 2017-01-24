@@ -29,15 +29,8 @@
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Html\ITemplateDirectory;
 	use Edde\Api\Http\Client\IHttpClient;
-	use Edde\Api\Http\IBody;
-	use Edde\Api\Http\ICookieFactory;
-	use Edde\Api\Http\ICookieList;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
-	use Edde\Api\Http\IPostFactory;
-	use Edde\Api\Http\IPostList;
-	use Edde\Api\Http\IRequestUrl;
-	use Edde\Api\Http\IRequestUrlFactory;
 	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
 	use Edde\Api\Resource\IResourceManager;
@@ -69,11 +62,8 @@
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\TemplateDirectory;
 	use Edde\Common\Http\Client\HttpClient;
-	use Edde\Common\Http\CookieFactory;
 	use Edde\Common\Http\HttpRequest;
 	use Edde\Common\Http\HttpResponse;
-	use Edde\Common\Http\PostFactory;
-	use Edde\Common\Http\RequestUrlFactory;
 	use Edde\Common\Log\LogDirectory;
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Object;
@@ -308,15 +298,7 @@
 				ILogService::class => LogService::class,
 				IRouterService::class => RouterService::class,
 				IRequest::class => IRouterService::class . '::createRequest',
-				IPostFactory::class => PostFactory::class,
-				IPostList::class => IPostFactory::class . '::create',
-				ICookieFactory::class => CookieFactory::class,
-				ICookieList::class => ICookieFactory::class . '::create',
-				IRequestUrlFactory::class => RequestUrlFactory::class,
-				IRequestUrl::class => IRequestUrlFactory::class . '::createRequestUrl',
-//				IHeaderFactory::class => HeaderFactory::class,
-//				IHeaderList::class => IHeaderFactory::class . '::create',
-				IHttpRequest::class => HttpRequest::class,
+				IHttpRequest::class => HttpRequest::class . '::createHttpRequest',
 				IResponseManager::class => ResponseManager::class,
 				IXmlParser::class => XmlParser::class,
 				IConverterManager::class => ConverterManager::class,

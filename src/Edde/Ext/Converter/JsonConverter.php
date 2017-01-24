@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Converter;
 
@@ -59,6 +59,7 @@
 			]);
 			$this->register([
 				'application/json',
+				'stream+application/json',
 				'json',
 			], [
 				'array',
@@ -76,6 +77,9 @@
 		 */
 		public function convert($convert, string $mime, string $target) {
 			switch ($mime) {
+				/** @noinspection PhpMissingBreakStatementInspection */
+				case 'stream+application/json':
+					$convert = file_get_contents($convert);
 				case 'application/json':
 				case 'json':
 					$this->unsupported($convert, $target, $convert instanceof IFile || is_string($convert));

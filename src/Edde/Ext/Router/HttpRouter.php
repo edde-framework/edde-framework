@@ -3,7 +3,7 @@
 
 	namespace Edde\Ext\Router;
 
-	use Edde\Api\Http\LazyRequestUrlTrait;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Runtime\LazyRuntimeTrait;
 	use Edde\Common\Application\Request;
 	use Edde\Common\Router\AbstractRouter;
@@ -13,8 +13,8 @@
 	 * Simple http router implementation without any additional magic.
 	 */
 	class HttpRouter extends AbstractRouter {
+		use LazyContainerTrait;
 		use LazyRuntimeTrait;
-		use LazyRequestUrlTrait;
 
 		/**
 		 * @inheritdoc
@@ -27,7 +27,7 @@
 			if (isset($parameterList['action']) === false && isset($parameterList['handle']) === false) {
 				return null;
 			}
-			$request = new Request();
+			$request = $this->container->create(Request::class);
 			if (isset($parameterList['handle'])) {
 				list($control, $handle) = explode('.', $parameterList['handle']);
 				unset($parameterList['handle']);

@@ -1,14 +1,16 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Http;
 
 	use Edde\Api\Http\HttpMessageException;
 	use Edde\Api\Http\IHeaderList;
-	use Edde\Api\Http\IHttpMessage;
+	use Edde\Api\Http\IMessage;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
-	class HttpMessage extends Object implements IHttpMessage {
+	class Message extends Object implements IMessage {
+		use ConfigurableTrait;
 		/**
 		 * @var string
 		 */
@@ -22,12 +24,12 @@
 		 */
 		protected $headerList;
 		/**
-		 * @var IHttpMessage[]
+		 * @var IMessage[]
 		 */
 		protected $messageList = [];
 
 		/**
-		 * HttpMessage constructor.
+		 * Message constructor.
 		 *
 		 * @param string $message
 		 * @param string $headers
@@ -70,7 +72,7 @@
 		 * @inheritdoc
 		 * @throws HttpMessageException
 		 */
-		public function getMessage(string $contentId): IHttpMessage {
+		public function getMessage(string $contentId): IMessage {
 			if (isset($this->messageList[$contentId]) === false) {
 				throw new HttpMessageException(sprintf('Requested unknown content id [%s] in http message.', $contentId));
 			}
@@ -87,8 +89,15 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function prepare() {
-			parent::prepare();
+		public function getContentId() {
+			return trim($this->headerList->get('Content-ID'), '<>');
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		protected function handleInit() {
+			parent::handleInit();
 			$this->headerList = new HeaderList();
 			$this->headerList->put(HttpUtils::headerList($this->headers, false));
 			$contentType = $this->headerList->getContentType();
@@ -101,12 +110,5 @@
 					}
 				}
 			}
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getContentId() {
-			return trim($this->headerList->get('Content-ID'), '<>');
 		}
 	}

@@ -3,6 +3,8 @@
 
 	namespace Edde\Api\Http;
 
+	use Edde\Api\Converter\IContent;
+
 	/**
 	 * "Abstract" interface holding common stuff between request and response.
 	 */
@@ -13,7 +15,7 @@
 		public function getHeaderList(): IHeaderList;
 
 		/**
-		 * @return ICookieList
+		 * @return ICookieList|ICookie[]
 		 */
 		public function getCookieList(): ICookieList;
 
@@ -28,16 +30,18 @@
 		public function header(string $header, string $value): IHttp;
 
 		/**
-		 * set a content type
+		 * set content of the request/response
 		 *
-		 * @param string $contentType
+		 * @param IContent|null $content
 		 *
 		 * @return IHttp
 		 */
-		public function setContentType(string $contentType): IHttp;
+		public function setContent(IContent $content = null): IHttp;
 
 		/**
-		 * @return IBody|null
+		 * retrieve current content
+		 *
+		 * @return IContent|null
 		 */
-		public function getBody();
+		public function getContent();
 	}

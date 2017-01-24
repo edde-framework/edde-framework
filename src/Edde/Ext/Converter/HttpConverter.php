@@ -28,6 +28,7 @@
 				'string',
 				'http+string',
 			]);
+			$this->register('post', 'array');
 		}
 
 		/** @noinspection PhpInconsistentReturnPointsInspection */
@@ -36,26 +37,31 @@
 		 * @throws ConverterException
 		 */
 		public function convert($convert, string $mime, string $target) {
-			if (is_callable($convert) === false && is_string($convert) === false) {
-				$this->unsupported($convert, $target);
-			}
-			switch ($target) {
-				case 'http':
-				case 'http+text/plain':
-					/** @noinspection PhpMissingBreakStatementInspection */
-				case 'http+string':
-					$headerList = $this->httpResponse->getHeaderList();
-					if ($headerList->has('Content-Type') === false) {
-						$this->httpResponse->header('Content-Type', 'text/plain');
-					}
-					$this->httpResponse->send();
+			switch ($mime) {
 				case 'text/plain':
 				case 'string':
-					if (is_callable($convert)) {
-						$convert = $convert();
+				case 'callback':
+					switch ($target) {
+						case 'http':
+						case 'http+text/plain':
+							/** @noinspection PhpMissingBreakStatementInspection */
+						case 'http+string':
+							$headerList = $this->httpResponse->getHeaderList();
+							if ($headerList->has('Content-Type') === false) {
+								$this->httpResponse->header('Content-Type', 'text/plain');
+							}
+							$this->httpResponse->send();
+						case 'text/plain':
+						case 'string':
+							if (is_callable($convert)) {
+								$convert = $convert();
+							}
+							echo $convert;
+							return null;
 					}
-					echo $convert;
-					return null;
+					break;
+				case 'post':
+					return $convert;
 			}
 			$this->exception($mime, $target);
 		}

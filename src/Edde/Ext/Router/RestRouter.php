@@ -3,19 +3,19 @@
 
 	namespace Edde\Ext\Router;
 
+	use Edde\Api\Application\IRequest;
 	use Edde\Api\Config\IConfigurable;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Http\LazyHttpRequestTrait;
 	use Edde\Api\Http\LazyHttpResponseTrait;
-	use Edde\Api\Http\LazyRequestUrlTrait;
 	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Api\Rest\IService;
 	use Edde\Api\Runtime\LazyRuntimeTrait;
 	use Edde\Common\Application\Request;
-	use Edde\Common\Converter\Content;
 	use Edde\Common\Router\AbstractRouter;
 
 	class RestRouter extends AbstractRouter implements IConfigurable, ILinkGenerator {
-		use LazyRequestUrlTrait;
+		use LazyContainerTrait;
 		use LazyHttpRequestTrait;
 		use LazyHttpResponseTrait;
 		use LazyRuntimeTrait;
@@ -43,9 +43,12 @@
 			if ($this->runtime->isConsoleMode() || empty($this->serviceList)) {
 				return null;
 			}
+			$requestUrl = $this->httpRequest->getRequestUrl();
 			foreach ($this->serviceList as $service) {
-				if ($service->match($this->requestUrl)) {
-					return (new Request(new Content($this->body->getBody(), $this->body->getMime())))->registerActionHandler(get_class($service), $this->httpRequest->getMethod(), $this->requestUrl->getQuery());
+				if ($service->match($requestUrl)) {
+					/** @var $request IRequest */
+					$request = $this->container->create(Request::class, [$this->httpRequest->getContent()]);
+					return $request->registerActionHandler(get_class($service), $this->httpRequest->getMethod(), $requestUrl->getQuery());
 				}
 			}
 			return null;

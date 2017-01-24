@@ -92,18 +92,21 @@
 		/**
 		 * read bunch of data
 		 *
+		 * @param int $length
+		 *
 		 * @return mixed
 		 */
-		public function read();
+		public function read(int $length = null);
 
 		/**
 		 * write bunch of data
 		 *
 		 * @param mixed $write
+		 * @param int   $length
 		 *
 		 * @return IFile
 		 */
-		public function write($write): IFile;
+		public function write($write, int $length = null): IFile;
 
 		/**
 		 * override current file with the given content

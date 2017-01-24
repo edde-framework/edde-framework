@@ -61,7 +61,8 @@
 				throw new ApplicationException('There is no body with current application request.');
 			}
 			if ($targetList) {
-				return $this->converterManager->content($this->content, $targetList);
+				return $this->converterManager->content($this->content, $targetList)
+					->convert();
 			}
 			return $this->content;
 		}

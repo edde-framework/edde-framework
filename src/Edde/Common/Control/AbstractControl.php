@@ -172,14 +172,8 @@
 		 * @throws ControlException
 		 */
 		public function handle(string $method, array $parameterList) {
-//			$this->event($handleEvent = new HandleEvent($this, $method, $parameterList));
-//			if ($handleEvent->isCanceled()) {
-//				$this->event(new CancelEvent($this));
-//				return null;
-//			}
 			$result = $this->execute($method, $parameterList);
 			$this->update();
-//			$this->event(new DoneEvent($this, $result));
 			return $result;
 		}
 

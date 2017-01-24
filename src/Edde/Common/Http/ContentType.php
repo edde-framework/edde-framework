@@ -28,6 +28,7 @@
 		 * @param string $contentType can be only content type part or whole content type header
 		 */
 		public function __construct(string $contentType) {
+			parent::__construct();
 			$this->contentType = $contentType;
 		}
 

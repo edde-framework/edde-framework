@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 
 	namespace Edde\Api\Http;
+
 	use Edde\Api\Url\IUrl;
 
 	/**
@@ -31,9 +32,14 @@
 		public function getRemoteHost();
 
 		/**
+		 * @return IRequestUrl
+		 */
+		public function getRequestUrl(): IRequestUrl;
+
+		/**
 		 * @return IUrl|null
 		 */
-		public function getReferrer();
+		public function getReferer();
 
 		/**
 		 * @return bool

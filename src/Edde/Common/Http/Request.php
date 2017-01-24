@@ -3,11 +3,18 @@
 
 	namespace Edde\Common\Http;
 
+	use Edde\Api\Http\ICookieList;
+	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IRequest;
+	use Edde\Api\Http\IRequestUrl;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\Url\Url;
 
 	class Request extends AbstractHttp implements IRequest {
+		/**
+		 * @var IRequestUrl
+		 */
+		protected $requestUrl;
 		/**
 		 * @var string
 		 */
@@ -23,32 +30,82 @@
 		/**
 		 * @var IUrl
 		 */
-		protected $referrer;
+		protected $referer;
 
+		/**
+		 * A small boy was awoken in the middle of the night by strange noises from his parents’ room, and he decided to investigate.
+		 * As he entered their bedroom, he was shocked to see his mom and dad shagging for all they were worth.
+		 * “DAD!” he shouted. “What are you doing?”
+		 * “It’s ok,” his father replied. “Your mother wants a baby, that’s all.”
+		 * The small boy, excited at the prospect of a new baby brother, was pleased and went back to bed with a smile on his face.
+		 *
+		 * Several weeks later, the little boy was walking past the bathroom and was shocked to discover his mother giving oral gratification to his
+		 * father.
+		 * “DAD!” he shouted. “What are you doing now?”
+		 * “Son, there’s been a change of plan,” his father replied.
+		 * “Your mother did want a baby, but now she wants a BMW.”
+		 *
+		 * @param IRequestUrl $requestUrl
+		 * @param IHeaderList $headerList
+		 * @param ICookieList $cookieList
+		 */
+		public function __construct(IRequestUrl $requestUrl, IHeaderList $headerList, ICookieList $cookieList) {
+			parent::__construct($headerList, $cookieList);
+			$this->requestUrl = $requestUrl;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function getMethod(): string {
 			return $_SERVER['REQUEST_METHOD'] ?? '';
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isMethod(string $method): bool {
 			return strcasecmp($this->getMethod(), $method) === 0;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getRemoteAddress() {
 			return $this->remoteAddress;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getRemoteHost() {
 			$this->remoteHost === null && $this->remoteAddress !== null ? $this->remoteHost = gethostbyaddr($this->remoteAddress) : null;
 		}
 
-		public function getReferrer() {
-			$this->referrer === null && $this->headerList->has('referer') ? $this->referrer = Url::create($this->headerList->get('referer')) : null;
+		/**
+		 * @inheritdoc
+		 */
+		public function getRequestUrl(): IRequestUrl {
+			return $this->requestUrl;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
+		public function getReferer() {
+			$this->referer === null && $this->headerList->has('referer') ? $this->referer = Url::create($this->headerList->get('referer')) : null;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function isSecured(): bool {
 			return $this->requestUrl->getScheme() === 'https';
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isAjax(): bool {
 			return $this->headerList->get('X-Requested-With') === 'XMLHttpRequest';
 		}

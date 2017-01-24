@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Collection;
 
@@ -13,9 +13,18 @@
 	 */
 	abstract class AbstractList extends Object implements IList {
 		/**
-		 * @var string[]
+		 * @var array
 		 */
 		protected $list = [];
+
+		/**
+		 * AbstractList constructor.
+		 *
+		 * @param array $list
+		 */
+		public function __construct(array $list = []) {
+			$this->list = $list;
+		}
 
 		/**
 		 * @inheritdoc

@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Session;
 
@@ -22,10 +22,14 @@
 		protected $name;
 
 		/**
+		 * Q: Why did the computer go to the dentist?
+		 * A: Because it had Bluetooth.
+		 *
 		 * @param ISessionManager $sessionManager
 		 * @param string          $name
 		 */
 		public function __construct(ISessionManager $sessionManager, string $name) {
+			parent::__construct();
 			$this->sessionManager = $sessionManager;
 			$this->name = $name;
 		}

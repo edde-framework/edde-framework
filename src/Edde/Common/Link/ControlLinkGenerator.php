@@ -4,12 +4,10 @@
 	namespace Edde\Common\Link;
 
 	use Edde\Api\Application\LazyRequestTrait;
-	use Edde\Api\Http\LazyRequestUrlTrait;
 	use Edde\Common\Url\Url;
 
 	class ControlLinkGenerator extends AbstractLinkGenerator {
 		use LazyRequestTrait;
-		use LazyRequestUrlTrait;
 
 		public function link($generate, ...$parameterList) {
 			list($generate, $parameterList) = $this->list($generate, $parameterList);

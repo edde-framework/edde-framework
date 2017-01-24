@@ -1,12 +1,14 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Http;
+
+	use Edde\Api\Config\IConfigurable;
 
 	/**
 	 * Http message implementation; message parsing can be heavy, so it is useful to make it deffered.
 	 */
-	interface IHttpMessage {
+	interface IMessage extends IConfigurable {
 		/**
 		 * return parsed input list of headers
 		 *
@@ -49,9 +51,9 @@
 		 *
 		 * @param string $contentId
 		 *
-		 * @return IHttpMessage
+		 * @return IMessage
 		 */
-		public function getMessage(string $contentId): IHttpMessage;
+		public function getMessage(string $contentId): IMessage;
 
 		/**
 		 * return message body
