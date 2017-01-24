@@ -3,12 +3,19 @@
 
 	namespace Edde\Api\Application;
 
-	use Edde\Api\Config\IConfigurable;
-
 	/**
 	 * Response manager holds current Response (to keep responses immutable).
 	 */
-	interface IResponseManager extends IConfigurable {
+	interface IResponseManager extends IResponseHandler {
+		/**
+		 * who will take care about response when execute() is called?
+		 *
+		 * @param IResponseHandler $responseHandler
+		 *
+		 * @return IResponseManager
+		 */
+		public function registerResponseHandler(IResponseHandler $responseHandler): IResponseManager;
+
 		/**
 		 * set the current response
 		 *
@@ -16,7 +23,7 @@
 		 *
 		 * @return IResponseManager
 		 */
-		public function response(IResponse $response = null): IResponseManager;
+		public function response(IResponse $response): IResponseManager;
 
 		/**
 		 * execute response
