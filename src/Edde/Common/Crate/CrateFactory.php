@@ -29,6 +29,7 @@
 		public function crate(string $schema, array $load = null, string $crate = null): ICrate {
 			/** @var $crate ICrate */
 			$crate = $this->container->create(ICrate::class, [], __METHOD__);
+			$this->schemaManager->setup();
 			$crate->setSchema($schema = $this->schemaManager->getSchema($schema));
 			foreach ($schema->getPropertyList() as $property) {
 				$crate->addProperty(new Property($property));

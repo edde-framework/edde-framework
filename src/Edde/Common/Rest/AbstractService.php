@@ -4,6 +4,7 @@
 	namespace Edde\Common\Rest;
 
 	use Edde\Api\Application\IResponse;
+	use Edde\Api\Application\LazyRequestTrait;
 	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Api\Rest\IService;
@@ -13,12 +14,15 @@
 	abstract class AbstractService extends AbstractControl implements IService {
 		use LazyResponseManagerTrait;
 		use LazyHttpResponseTrait;
+		use LazyRequestTrait;
 
-		const OK = 200;
-		const OK_CREATED = 201;
+		const CODE_OK = 200;
+		const CODE_OK_CREATED = 201;
 
-		const ERROR_NOT_FOUND = 404;
-		const ERROR_NOT_ALLOWED = 405;
+		const CODE_ERROR_NOT_FOUND = 404;
+		const CODE_ERROR_NOT_ALLOWED = 405;
+
+		const CODE_SERVER_ERROR = 405;
 
 		protected static $methodList = [
 			'GET',
@@ -42,12 +46,12 @@
 			$methodList = $this->getMethodList();
 			if (in_array($method = strtoupper($method), self::$methodList, true) === false) {
 				$this->httpResponse->header('Allowed', $allowed = implode(', ', array_keys($methodList)));
-				$this->error(self::ERROR_NOT_ALLOWED, sprintf('The requested method [%s] is not supported; %s.', $method, empty($methodList) ? 'there are no supported methods' : 'available methods are [' . $allowed . ']'));
+				$this->error(self::CODE_ERROR_NOT_ALLOWED, sprintf('The requested method [%s] is not supported; %s.', $method, empty($methodList) ? 'there are no supported methods' : 'available methods are [' . $allowed . ']'));
 				return null;
 			}
 			if (isset($methodList[$method]) === false) {
 				$this->httpResponse->header('Allowed', $allowed = implode(', ', array_keys($methodList)));
-				$this->error(self::ERROR_NOT_ALLOWED, sprintf('The requested method [%s] is not implemented; %s.', $method, empty($methodList) ? 'there are no available methods' : 'available methods are [' . $allowed . ']'));
+				$this->error(self::CODE_ERROR_NOT_ALLOWED, sprintf('The requested method [%s] is not implemented; %s.', $method, empty($methodList) ? 'there are no available methods' : 'available methods are [' . $allowed . ']'));
 				return null;
 			}
 			return parent::execute($methodList[$method], $parameterList);

@@ -12,7 +12,7 @@
 		/**
 		 * return list of target mime types for this repsonse (basically defines conversion from content to target)
 		 *
-		 * @return string[]
+		 * @return string[]|null
 		 */
-		public function getTargetList(): array;
+		public function getTargetList();
 	}

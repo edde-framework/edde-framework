@@ -1,12 +1,14 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Crate;
+
+	use Edde\Api\Config\IConfigurable;
 
 	/**
 	 * This mechanism is inteded to use as conversion from an input data to crates.
 	 */
-	interface ICrateFactory {
+	interface ICrateFactory extends IConfigurable {
 		/**
 		 * create crate with a given class (should be through container) and with the given schema
 		 *
