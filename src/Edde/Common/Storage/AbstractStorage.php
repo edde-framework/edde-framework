@@ -69,14 +69,13 @@
 					->getName(), $relationAlias)
 				->property($targetLink->getTarget()
 					->getName(), $targetAlias);
-			return $this->collection($crateTo ?: $targetSchemaName, $selectQuery, $targetSchemaName);
+			return $this->collection($targetSchemaName, $selectQuery, $crateTo ?: $targetSchemaName);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function collection(string $crate, IQuery $query = null, string $schema = null): ICollection {
-			$schema = $schema ?: $crate;
+		public function collection(string $schema, IQuery $query = null, string $crate = null): ICollection {
 			if ($query === null) {
 				$query = new SelectQuery();
 				$query->init();
@@ -85,7 +84,7 @@
 					->from()
 					->source($schema);
 			}
-			return new Collection($crate, $this, $this->crateFactory, $query, $schema);
+			return new Collection($schema, $this, $this->crateFactory, $query, $crate);
 		}
 
 		/**
@@ -110,7 +109,7 @@
 					->getName())
 				->parameter($crate->get($link->getSource()
 					->getName()));
-			$crate->link($link->getName(), $link = $this->load($this->crateFactory->hasCrate($targetSchemaName) ? $targetSchemaName : Crate::class, $selectQuery, $targetSchemaName));
+			$crate->link($link->getName(), $link = $this->load($targetSchemaName, $selectQuery, $this->crateFactory->hasCrate($targetSchemaName) ? $targetSchemaName : Crate::class));
 			return $link;
 		}
 
@@ -118,11 +117,11 @@
 		 * @inheritdoc
 		 * @throws EmptyResultException
 		 */
-		public function load(string $crate, IQuery $query, string $schema = null): ICrate {
+		public function load(string $schema, IQuery $query, string $crate = null): ICrate {
 			/** @noinspection LoopWhichDoesNotLoopInspection */
-			foreach ($this->collection($crate, $query, $schema) as $item) {
+			foreach ($this->collection($schema, $query, $crate) as $item) {
 				return $item;
 			}
-			throw new EmptyResultException(sprintf('Cannot retrieve any crate [%s] by the given query.', $crate));
+			throw new EmptyResultException(sprintf('Cannot retrieve any crate [%s] by the given query.', $schema));
 		}
 	}

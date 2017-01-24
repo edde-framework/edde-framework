@@ -56,13 +56,13 @@
 		/**
 		 * return collection based on the input query; if storage doesn't understand the queery, exception should be thrown
 		 *
-		 * @param string $crate of Crate
-		 * @param IQuery $query
 		 * @param string $schema
+		 * @param IQuery $query
+		 * @param string $crate of Crate
 		 *
 		 * @return ICrate[]|ICollection
 		 */
-		public function collection(string $crate, IQuery $query = null, string $schema = null): ICollection;
+		public function collection(string $schema, IQuery $query = null, string $crate = null): ICollection;
 
 		/**
 		 * helper method for a m:n crate collection
@@ -89,13 +89,13 @@
 		/**
 		 * retrieve crate by the given query; it should formally go through a collection method; if there is no such crate, exception should be thrown
 		 *
-		 * @param string $crate
-		 * @param IQuery $query
 		 * @param string $schema
+		 * @param IQuery $query
+		 * @param string $crate
 		 *
 		 * @return ICrate
 		 */
-		public function load(string $crate, IQuery $query, string $schema = null): ICrate;
+		public function load(string $schema, IQuery $query, string $crate = null): ICrate;
 
 		/**
 		 * load crate by the given link name

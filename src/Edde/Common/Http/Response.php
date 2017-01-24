@@ -54,6 +54,10 @@
 			foreach ($this->getCookieList() as $cookie) {
 				setcookie($cookie->getName(), $cookie->getValue(), $cookie->getExpire(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly());
 			}
+			if ($this->content) {
+				$this->headerList->has('Content-Type') ? null : header('Content-Type: ' . $this->content->getMime());
+				echo $this->content->getContent();
+			}
 			return $this;
 		}
 	}

@@ -16,7 +16,7 @@
 		/**
 		 * @var string
 		 */
-		protected $crate;
+		protected $schema;
 		/**
 		 * @var IStorage
 		 */
@@ -32,21 +32,21 @@
 		/**
 		 * @var string
 		 */
-		protected $schema;
+		protected $crate;
 
 		/**
-		 * @param string        $crate
+		 * @param string        $schema
 		 * @param IStorage      $storage
 		 * @param ICrateFactory $crateFactory
 		 * @param IQuery        $query
-		 * @param string        $schema
+		 * @param string        $crate
 		 */
-		public function __construct(string $crate, IStorage $storage, ICrateFactory $crateFactory, IQuery $query, string $schema = null) {
-			$this->crate = $crate;
+		public function __construct(string $schema, IStorage $storage, ICrateFactory $crateFactory, IQuery $query, string $crate = null) {
+			$this->schema = $schema;
 			$this->storage = $storage;
 			$this->crateFactory = $crateFactory;
 			$this->query = $query;
-			$this->schema = $schema;
+			$this->crate = $crate;
 		}
 
 		/**

@@ -96,8 +96,10 @@
 					}
 				}
 				$this->onUpgradeEnd();
-			} catch (\Exception $e) {
-				$this->onUpgradeFailed($e, $last);
+			} catch (CurrentVersionException $exception) {
+				throw $exception;
+			} catch (\Exception $exception) {
+				$this->onUpgradeFailed($exception, $last);
 			}
 			if ($last === null) {
 				throw new UpgradeException(sprintf('No upgrades has been run for version [%s].', $version));
