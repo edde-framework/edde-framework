@@ -1,11 +1,10 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Http\Client;
 
 	use Edde\Api\Event\IEventBus;
 	use Edde\Api\File\IFile;
-	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpResponse;
 
 	/**
@@ -53,24 +52,6 @@
 		 * @return IHttpHandler
 		 */
 		public function header(string $name, string $value): IHttpHandler;
-
-		/**
-		 * method build round body method (internally should create IBody class)
-		 *
-		 * @param mixed  $content
-		 * @param string $mime
-		 * @param string $target
-		 *
-		 * @return IHttpHandler
-		 */
-		public function content($content, string $mime = null, string $target = null): IHttpHandler;
-
-		/**
-		 * @param IBody $body
-		 *
-		 * @return IHttpHandler
-		 */
-		public function body(IBody $body): IHttpHandler;
 
 		/**
 		 * if stirng is provided, temp dir will be used
