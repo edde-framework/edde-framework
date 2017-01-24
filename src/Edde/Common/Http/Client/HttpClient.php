@@ -13,9 +13,7 @@
 	use Edde\Api\Url\IUrl;
 	use Edde\Api\Url\UrlException;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Event\EventTrait;
 	use Edde\Common\Http\Client\Event\DeleteEvent;
-	use Edde\Common\Http\Client\Event\GetEvent;
 	use Edde\Common\Http\Client\Event\HandlerEvent;
 	use Edde\Common\Http\Client\Event\PatchEvent;
 	use Edde\Common\Http\Client\Event\PostEvent;
@@ -33,18 +31,14 @@
 	class HttpClient extends Object implements IHttpClient {
 		use LazyContainerTrait;
 		use LazyConverterManagerTrait;
-		use EventTrait;
 		use ConfigurableTrait;
 
 		/**
 		 * @inheritdoc
 		 */
 		public function get($url): IHttpHandler {
-			$httpRequest = $this->createRequest($url)
-				->setMethod('GET');
-			$this->event(new GetEvent($httpRequest, $httpHandler = $this->request($httpRequest)));
-			$this->event(new HandlerEvent($httpRequest, $httpHandler));
-			return $httpHandler;
+			return $this->request($this->createRequest($url)
+				->setMethod('GET'));
 		}
 
 		/**

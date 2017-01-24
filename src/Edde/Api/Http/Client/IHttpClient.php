@@ -3,12 +3,10 @@
 
 	namespace Edde\Api\Http\Client;
 
-	use Edde\Api\Event\IEventBus;
-	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Url\IUrl;
 
-	interface IHttpClient extends IEventBus {
+	interface IHttpClient {
 		/**
 		 * do an arbitrary request; the all others are shortcut to this method
 		 *

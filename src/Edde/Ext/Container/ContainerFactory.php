@@ -322,6 +322,7 @@
 				 */
 				IUpgradeManager::class => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
 				ICryptEngine::class => CryptEngine::class,
+				IHttpClient::class => HttpClient::class,
 			];
 		}
 	}
