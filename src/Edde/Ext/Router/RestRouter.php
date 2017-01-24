@@ -4,6 +4,7 @@
 	namespace Edde\Ext\Router;
 
 	use Edde\Api\Application\IRequest;
+	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Http\LazyHttpRequestTrait;
@@ -11,6 +12,7 @@
 	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Api\Rest\IService;
 	use Edde\Api\Runtime\LazyRuntimeTrait;
+	use Edde\Common\Application\HttpResponseHandler;
 	use Edde\Common\Application\Request;
 	use Edde\Common\Router\AbstractRouter;
 
@@ -19,6 +21,7 @@
 		use LazyHttpRequestTrait;
 		use LazyHttpResponseTrait;
 		use LazyRuntimeTrait;
+		use LazyResponseManagerTrait;
 		/**
 		 * @var IService[]
 		 */
@@ -46,6 +49,7 @@
 			$requestUrl = $this->httpRequest->getRequestUrl();
 			foreach ($this->serviceList as $service) {
 				if ($service->match($requestUrl)) {
+					$this->responseManager->registerResponseHandler($this->container->create(HttpResponseHandler::class));
 					/** @var $request IRequest */
 					$request = $this->container->create(Request::class, [$this->httpRequest->getContent()]);
 					return $request->registerActionHandler(get_class($service), $this->httpRequest->getMethod(), $requestUrl->getQuery());

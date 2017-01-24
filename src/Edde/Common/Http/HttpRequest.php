@@ -13,13 +13,13 @@
 		static protected $httpReqeust;
 
 		static public function createHttpRequest(): IHttpRequest {
-			self::$httpReqeust ?: self::$httpReqeust = new HttpRequest(RequestUrl::createRequestUrl(), $headerList = HeaderList::createHeaderList(), CookieList::createCookieList());
+			self::$httpReqeust ?: self::$httpReqeust = new HttpRequest(RequestUrl::createRequestUrl(), HeaderList::createHeaderList(), CookieList::createCookieList());
 			$input = fopen('php://input', 'r');
 			if (empty($_POST) === false) {
 				$content = new Content($_POST, 'post');
 			} else if (fgetc($input) !== false) {
+				$headerList = self::$httpReqeust->getHeaderList();
 				$contentType = $headerList->getContentType();
-				$contentType->init();
 				$content = new Content('php://input', 'stream+' . $contentType->getMime());
 			}
 			fclose($input);

@@ -5,10 +5,8 @@
 
 	use Edde\Api\Http\IContentType;
 	use Edde\Common\Collection\AbstractList;
-	use Edde\Common\Config\ConfigurableTrait;
 
 	class ContentType extends AbstractList implements IContentType {
-		use ConfigurableTrait;
 		/**
 		 * source content type
 		 *
@@ -29,29 +27,36 @@
 		 */
 		public function __construct(string $contentType) {
 			parent::__construct();
-			$this->contentType = $contentType;
-		}
-
-		public function getCharset(string $default = 'utf-8'): string {
-			return $this->get('charset', $default);
-		}
-
-		public function getMime(string $default = null) {
-			return $this->object ? $this->object->mime : $default;
-		}
-
-		public function getParameterList(): array {
-			return $this->array();
-		}
-
-		public function handleInit() {
-			parent::handleInit();
-			if ($this->contentType) {
+			if ($this->contentType = $contentType) {
 				$this->object = HttpUtils::contentType($this->contentType);
 				$this->put($this->object->params);
 			}
 		}
 
+		/**
+		 * @inheritdoc
+		 */
+		public function getCharset(string $default = 'utf-8'): string {
+			return (string)$this->get('charset', $default);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getMime(string $default = null) {
+			return $this->object ? $this->object->mime : $default;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getParameterList(): array {
+			return $this->array();
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function __toString(): string {
 			return $this->getMime();
 		}

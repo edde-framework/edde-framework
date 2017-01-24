@@ -6,4 +6,7 @@
 	use Edde\Api\Http\IHttpResponse;
 
 	class HttpResponse extends Response implements IHttpResponse {
+		static public function createHttpResponse(): IHttpResponse {
+			return new self(200, new HeaderList(), new CookieList());
+		}
 	}

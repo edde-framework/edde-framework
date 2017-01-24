@@ -299,6 +299,7 @@
 				IRouterService::class => RouterService::class,
 				IRequest::class => IRouterService::class . '::createRequest',
 				IHttpRequest::class => HttpRequest::class . '::createHttpRequest',
+				IHttpResponse::class => HttpResponse::class . '::createHttpResponse',
 				IResponseManager::class => ResponseManager::class,
 				IXmlParser::class => XmlParser::class,
 				IConverterManager::class => ConverterManager::class,

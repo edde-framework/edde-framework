@@ -29,7 +29,7 @@
 		 */
 		public function getContentType() {
 			if ($this->contentType === null && ($contentType = $this->get('Content-Type'))) {
-				$this->contentType = new ContentType($contentType);
+				$this->contentType = new ContentType((string)$contentType);
 			}
 			return $this->contentType;
 		}

@@ -6,10 +6,11 @@
 	use Edde\Api\Application\IResponse;
 	use Edde\Api\Application\IResponseHandler;
 	use Edde\Api\Application\IResponseManager;
+	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
 
-	class ResponseManager extends Object implements IResponseManager {
+	class ResponseManager extends AbstractResponseHandler implements IResponseManager {
+		use LazyConverterManagerTrait;
 		use ConfigurableTrait;
 		/**
 		 * @var IResponse
