@@ -3,14 +3,14 @@
 
 	namespace Edde\Api\Http\Client;
 
-	use Edde\Api\Event\IEventBus;
+	use Edde\Api\Converter\IContent;
 	use Edde\Api\File\IFile;
-	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Http\IResponse;
 
 	/**
 	 * When request is prepared bu a handler, client should create this handler for later execution.
 	 */
-	interface IHttpHandler extends IEventBus {
+	interface IHttpHandler {
 		/**
 		 * @param string $authorization
 		 *
@@ -73,9 +73,19 @@
 		public function agent(string $agent): IHttpHandler;
 
 		/**
+		 * set the content of the request and target list; selected mime type will be sent as header
+		 *
+		 * @param IContent $content
+		 * @param array    $targetList
+		 *
+		 * @return IHttpHandler
+		 */
+		public function content(IContent $content, array $targetList): IHttpHandler;
+
+		/**
 		 * execute a client request
 		 *
-		 * @return IHttpResponse
+		 * @return IResponse
 		 */
-		public function execute(): IHttpResponse;
+		public function execute(): IResponse;
 	}

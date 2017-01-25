@@ -4,21 +4,19 @@
 	namespace Edde\Common\Http\Client;
 
 	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Converter\IContent;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Http\Client\ClientException;
 	use Edde\Api\Http\Client\IHttpHandler;
 	use Edde\Api\Http\IHttpRequest;
-	use Edde\Api\Http\IHttpResponse;
-	use Edde\Common\Event\EventTrait;
-	use Edde\Common\Http\Client\Event\OnRequestEvent;
-	use Edde\Common\Http\Client\Event\RequestDoneEvent;
-	use Edde\Common\Http\Client\Event\RequestFailedEvent;
+	use Edde\Api\Http\IResponse;
+	use Edde\Common\Converter\Content;
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
-	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Http\HttpUtils;
+	use Edde\Common\Http\Response;
 	use Edde\Common\Object;
 	use Edde\Common\Strings\StringException;
 
@@ -29,7 +27,6 @@
 		use LazyContainerTrait;
 		use LazyConverterManagerTrait;
 		use LazyTempDirectoryTrait;
-		use EventTrait;
 		/**
 		 * @var IHttpRequest
 		 */
@@ -44,6 +41,10 @@
 		 * @var IFile
 		 */
 		protected $cookie;
+		/**
+		 * @var array
+		 */
+		protected $targetList;
 
 		/**
 		 * @param IHttpRequest $httpRequest
@@ -120,28 +121,33 @@
 			return $this;
 		}
 
+		public function content(IContent $content, array $targetList): IHttpHandler {
+			$this->httpRequest->setContent($content);
+			$this->targetList = $targetList;
+			return $this;
+		}
+
 		/**
 		 * @inheritdoc
 		 * @throws ClientException
 		 * @throws StringException
 		 */
-		public function execute(): IHttpResponse {
+		public function execute(): IResponse {
 			if ($this->curl === null) {
 				throw new ClientException(sprintf('Cannot execute handler for the url [%s] more than once.', (string)$this->httpRequest->getRequestUrl()));
 			}
 			$options = [];
 			if ($content = $this->httpRequest->getContent()) {
-//				$options[CURLOPT_POSTFIELDS] = $this->converterManager->content($content, );
-				if (($target = $content->getTarget()) !== null) {
-					$this->header('Content-Type', $target);
-				}
+				$convertable = $this->converterManager->content($content, $this->targetList);
+				$options[CURLOPT_POSTFIELDS] = $convertable->convert();
+				$this->header('Content-Type', $convertable->getTarget());
 			}
-			$postList = $this->httpRequest->getPostList();
-			$options[CURLOPT_POST] = false;
-			if ($postList->isEmpty() === false) {
-				$options[CURLOPT_POST] = true;
-				$options[CURLOPT_POSTFIELDS] = $postList->array();
-			}
+//			$postList = $this->httpRequest->getPostList();
+//			$options[CURLOPT_POST] = false;
+//			if ($postList->isEmpty() === false) {
+//				$options[CURLOPT_POST] = true;
+//				$options[CURLOPT_POSTFIELDS] = $postList->array();
+//			}
 			if ($this->cookie) {
 				/** @var $cookie IFile */
 				list($cookie, $reset) = $this->cookie;
@@ -168,35 +174,30 @@
 			$options[CURLOPT_HTTPHEADER] = $this->httpRequest->getHeaderList()
 				->headers();
 			curl_setopt_array($this->curl, $options);
-			$this->event($onRequestEvent = new OnRequestEvent($this->httpRequest, $this));
-			if ($onRequestEvent->isCanceled()) {
-				throw new ClientException(sprintf('%s: request has been canceled', (string)$this->httpRequest->getRequestUrl()));
-			}
-			$time = microtime(true);
 			if (($content = curl_exec($this->curl)) === false) {
 				$error = curl_error($this->curl);
 				$errorCode = curl_errno($this->curl);
 				curl_close($this->curl);
 				$this->curl = null;
-				$this->event(new RequestFailedEvent($this->httpRequest, $this, microtime(true) - $time));
 				throw new ClientException(sprintf('%s: %s', (string)$this->httpRequest->getRequestUrl(), $error), $errorCode);
 			}
-			$time = microtime(true) - $time;
 			if (is_string($contentType = $headerList->get('Content-Type', curl_getinfo($this->curl, CURLINFO_CONTENT_TYPE)))) {
-				$type = HttpUtils::contentType($contentType);
+				$type = HttpUtils::contentType((string)$contentType);
 			}
 			$headerList->set('Content-Type', $contentType);
+			$code = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
 			curl_close($this->curl);
 			$this->curl = null;
-			$httpResponse = $this->container->create(HttpResponse::class, [
-				$this->container->create(Body::class, [
-					$content,
-					isset($type) ? $type->mime : $contentType,
-				], __METHOD__),
+			/** @var $response IResponse */
+			$response = $this->container->create(Response::class, [
+				$code,
+				$headerList,
+				$cookieList,
 			], __METHOD__);
-			$httpResponse->setHeaderList($headerList);
-			$httpResponse->setCookieList($cookieList);
-			$this->event(new RequestDoneEvent($this->httpRequest, $this, $httpResponse, $time));
-			return $httpResponse;
+			$response->setContent($this->container->create(Content::class, [
+				$content,
+				isset($type) ? $type->mime : $contentType,
+			], __METHOD__));
+			return $response;
 		}
 	}
