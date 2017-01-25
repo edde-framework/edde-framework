@@ -59,7 +59,7 @@
 		 * @inheritdoc
 		 */
 		public function setMethod(string $method): IRequest {
-			$this->method = StringUtils::lower($method);
+			$this->method = StringUtils::upper($method);
 			return $this;
 		}
 

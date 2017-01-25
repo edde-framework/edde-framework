@@ -10,13 +10,12 @@
 	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Http\Client\ClientException;
 	use Edde\Api\Http\Client\IHttpHandler;
+	use Edde\Api\Http\Client\IResponse;
 	use Edde\Api\Http\IHttpRequest;
-	use Edde\Api\Http\IResponse;
 	use Edde\Common\Converter\Content;
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpUtils;
-	use Edde\Common\Http\Response;
 	use Edde\Common\Object;
 	use Edde\Common\Strings\StringException;
 
@@ -66,7 +65,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function basic(string $user, string $password): \Edde\Api\Http\Client\IHttpHandler {
+		public function basic(string $user, string $password): IHttpHandler {
 			curl_setopt_array($this->curl, [
 				CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
 				CURLOPT_USERPWD => vsprintf('%s:%s', func_get_args()),
@@ -88,7 +87,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function header(string $name, string $value): \Edde\Api\Http\Client\IHttpHandler {
+		public function header(string $name, string $value): IHttpHandler {
 			$this->httpRequest->getHeaderList()
 				->set($name, $value);
 			return $this;

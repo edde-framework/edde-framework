@@ -29,6 +29,7 @@
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Html\ITemplateDirectory;
 	use Edde\Api\Http\Client\IHttpClient;
+	use Edde\Api\Http\IHostUrl;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
 	use Edde\Api\Log\ILogDirectory;
@@ -323,6 +324,7 @@
 				IUpgradeManager::class => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
 				ICryptEngine::class => CryptEngine::class,
 				IHttpClient::class => HttpClient::class,
+				IHostUrl::class => self::exception(sprintf('Host url is not specified; you have to register [%s] interface.', IHostUrl::class)),
 			];
 		}
 	}

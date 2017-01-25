@@ -74,7 +74,7 @@
 				CURLOPT_CONNECTTIMEOUT => 5,
 				CURLOPT_TIMEOUT => 60,
 				CURLOPT_CUSTOMREQUEST => $method = $httpRequest->getMethod(),
-				CURLOPT_POST => strtoupper($method) === 'POST',
+				CURLOPT_POST => $method === 'POST',
 			]);
 			return $this->container->create(HttpHandler::class, [
 				$httpRequest,
