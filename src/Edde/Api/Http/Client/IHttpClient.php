@@ -3,18 +3,18 @@
 
 	namespace Edde\Api\Http\Client;
 
-	use Edde\Api\Http\IHttpRequest;
+	use Edde\Api\Http\IRequest;
 	use Edde\Api\Url\IUrl;
 
 	interface IHttpClient {
 		/**
 		 * do an arbitrary request; the all others are shortcut to this method
 		 *
-		 * @param IHttpRequest $httpRequest
+		 * @param IRequest $request
 		 *
 		 * @return IHttpHandler
 		 */
-		public function request(IHttpRequest $httpRequest): IHttpHandler;
+		public function request(IRequest $request): IHttpHandler;
 
 		/**
 		 * @param string|IUrl $url
