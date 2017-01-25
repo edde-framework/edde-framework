@@ -22,11 +22,8 @@
 				'string',
 				'callback',
 			], [
-				'http',
-				'http+text/plain',
 				'text/plain',
 				'string',
-				'http+string',
 			]);
 			$this->register('post', 'array');
 		}
@@ -42,26 +39,23 @@
 				case 'string':
 				case 'callback':
 					switch ($target) {
-						case 'http':
-						case 'http+text/plain':
-							/** @noinspection PhpMissingBreakStatementInspection */
-						case 'http+string':
-							$headerList = $this->httpResponse->getHeaderList();
-							if ($headerList->has('Content-Type') === false) {
-								$this->httpResponse->header('Content-Type', 'text/plain');
-							}
-							$this->httpResponse->send();
 						case 'text/plain':
 						case 'string':
 							if (is_callable($convert)) {
 								$convert = $convert();
 							}
-							echo $convert;
-							return null;
+							return $convert;
+						default:
+							$this->unsupported($convert, $target);
 					}
 					break;
 				case 'post':
-					return $convert;
+					switch ($target) {
+						case 'array':
+							return $convert;
+						default:
+							$this->unsupported($convert, $target);
+					}
 			}
 			$this->exception($mime, $target);
 		}

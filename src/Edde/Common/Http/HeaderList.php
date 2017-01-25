@@ -82,7 +82,7 @@
 		public function headers(): array {
 			$headers = [];
 			foreach ($this->list as $header => $value) {
-				$headers[$header] = $header . ': ' . $value;
+				$headers[] = $header . ': ' . $value;
 			}
 			return $headers;
 		}

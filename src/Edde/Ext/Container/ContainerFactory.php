@@ -32,6 +32,7 @@
 	use Edde\Api\Http\IHostUrl;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
 	use Edde\Api\Resource\IResourceManager;
@@ -325,6 +326,7 @@
 				ICryptEngine::class => CryptEngine::class,
 				IHttpClient::class => HttpClient::class,
 				IHostUrl::class => self::exception(sprintf('Host url is not specified; you have to register [%s] interface.', IHostUrl::class)),
+				ILinkFactory::class => \Edde\Common\Link\LinkFactory::class,
 			];
 		}
 	}

@@ -11,7 +11,7 @@
 	use Edde\Api\Http\Client\ClientException;
 	use Edde\Api\Http\Client\IHttpHandler;
 	use Edde\Api\Http\Client\IResponse;
-	use Edde\Api\Http\IHttpRequest;
+	use Edde\Api\Http\IRequest;
 	use Edde\Common\Converter\Content;
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
@@ -27,9 +27,9 @@
 		use LazyConverterManagerTrait;
 		use LazyTempDirectoryTrait;
 		/**
-		 * @var IHttpRequest
+		 * @var IRequest
 		 */
-		protected $httpRequest;
+		protected $request;
 		/**
 		 * @var resource
 		 */
@@ -46,11 +46,11 @@
 		protected $targetList;
 
 		/**
-		 * @param IHttpRequest $httpRequest
-		 * @param resource     $curl
+		 * @param IRequest $request
+		 * @param resource $curl
 		 */
-		public function __construct(IHttpRequest $httpRequest, $curl) {
-			$this->httpRequest = $httpRequest;
+		public function __construct(IRequest $request, $curl) {
+			$this->request = $request;
 			$this->curl = $curl;
 		}
 
@@ -88,8 +88,7 @@
 		 * @inheritdoc
 		 */
 		public function header(string $name, string $value): IHttpHandler {
-			$this->httpRequest->getHeaderList()
-				->set($name, $value);
+			$this->request->header($name, $value);
 			return $this;
 		}
 
@@ -120,9 +119,20 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function content(IContent $content, array $targetList): IHttpHandler {
-			$this->httpRequest->setContent($content);
+			$this->request->setContent($content);
 			$this->targetList = $targetList;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function contentType(string $contentType): IHttpHandler {
+			$this->request->header('Content-Type', $contentType);
 			return $this;
 		}
 
@@ -133,13 +143,16 @@
 		 */
 		public function execute(): IResponse {
 			if ($this->curl === null) {
-				throw new ClientException(sprintf('Cannot execute handler for the url [%s] more than once.', (string)$this->httpRequest->getRequestUrl()));
+				throw new ClientException(sprintf('Cannot execute handler for the url [%s] more than once.', (string)$this->request->getRequestUrl()));
 			}
 			$options = [];
-			if ($content = $this->httpRequest->getContent()) {
+			if ($content = $this->request->getContent()) {
 				$convertable = $this->converterManager->content($content, $this->targetList);
 				$options[CURLOPT_POSTFIELDS] = $convertable->convert();
-				$this->header('Content-Type', $convertable->getTarget());
+				$headerList = $this->request->getHeaderList();
+				if ($headerList->has('Content-Type') === false) {
+					$this->header('Content-Type', $convertable->getTarget());
+				}
 			}
 //			$postList = $this->httpRequest->getPostList();
 //			$options[CURLOPT_POST] = false;
@@ -170,7 +183,7 @@
 				}
 				return $length;
 			};
-			$options[CURLOPT_HTTPHEADER] = $this->httpRequest->getHeaderList()
+			$options[CURLOPT_HTTPHEADER] = $this->request->getHeaderList()
 				->headers();
 			curl_setopt_array($this->curl, $options);
 			if (($content = curl_exec($this->curl)) === false) {
@@ -178,7 +191,7 @@
 				$errorCode = curl_errno($this->curl);
 				curl_close($this->curl);
 				$this->curl = null;
-				throw new ClientException(sprintf('%s: %s', (string)$this->httpRequest->getRequestUrl(), $error), $errorCode);
+				throw new ClientException(sprintf('%s: %s', (string)$this->request->getRequestUrl(), $error), $errorCode);
 			}
 			if (is_string($contentType = $headerList->get('Content-Type', curl_getinfo($this->curl, CURLINFO_CONTENT_TYPE)))) {
 				$type = HttpUtils::contentType((string)$contentType);

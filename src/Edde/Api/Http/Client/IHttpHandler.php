@@ -82,6 +82,15 @@
 		public function content(IContent $content, array $targetList): IHttpHandler;
 
 		/**
+		 * explicitly set content type of the request
+		 *
+		 * @param string $contentType
+		 *
+		 * @return IHttpHandler
+		 */
+		public function contentType(string $contentType): IHttpHandler;
+
+		/**
 		 * execute a client request
 		 *
 		 * @return IResponse

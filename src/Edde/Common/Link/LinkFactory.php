@@ -1,14 +1,16 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Link;
 
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Api\Link\LinkException;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	class LinkFactory extends Object implements ILinkFactory {
+		use ConfigurableTrait;
 		/**
 		 * @var ILinkGenerator[]
 		 */
