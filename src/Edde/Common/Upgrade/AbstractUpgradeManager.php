@@ -80,8 +80,8 @@
 			}
 			$last = null;
 			try {
-				$current = $this->getCurrentVersion();
 				$this->onUpgradeStart();
+				$current = $this->getCurrentVersion();
 				/** @var $upgradeList IUpgrade[] */
 				$upgradeList = $current ? array_slice($this->upgradeList, $index = array_search($current, array_keys($this->upgradeList), true) + 1, null, true) : $this->upgradeList;
 				if (isset($index) && $index >= count($this->upgradeList)) {
