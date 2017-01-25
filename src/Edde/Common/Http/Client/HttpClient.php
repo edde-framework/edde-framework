@@ -8,17 +8,9 @@
 	use Edde\Api\Http\Client\ClientException;
 	use Edde\Api\Http\Client\IHttpClient;
 	use Edde\Api\Http\Client\IHttpHandler;
-	use Edde\Api\Http\IBody;
 	use Edde\Api\Http\IHttpRequest;
-	use Edde\Api\Url\IUrl;
-	use Edde\Api\Url\UrlException;
+	use Edde\Api\Http\IRequestUrl;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Http\Client\Event\DeleteEvent;
-	use Edde\Common\Http\Client\Event\HandlerEvent;
-	use Edde\Common\Http\Client\Event\PatchEvent;
-	use Edde\Common\Http\Client\Event\PostEvent;
-	use Edde\Common\Http\Client\Event\PutEvent;
-	use Edde\Common\Http\Client\Event\RequestEvent;
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpRequest;
@@ -37,110 +29,35 @@
 		 * @inheritdoc
 		 */
 		public function get($url): IHttpHandler {
-			return $this->request($this->createRequest($url)
-				->setMethod('GET'));
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function gete($url, string $target = null, string $mime = null) {
-			$httpResponse = $this->get($url)
-				->execute();
-			return $target ? $httpResponse->body($target, $mime) : $httpResponse->getBody()
-				->getBody();
+			return $this->request($this->createRequest($url, __FUNCTION__));
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function post($url): IHttpHandler {
-			$httpRequest = $this->createRequest($url)
-				->setMethod('POST');
-			$this->event(new PostEvent($httpRequest, $httpHandler = $this->request($httpRequest)));
-			$this->event(new HandlerEvent($httpRequest, $httpHandler));
-			return $httpHandler;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function poste($url, IBody $body = null, string $target, string $mime = null) {
-			$handler = $this->post($url);
-			if ($body) {
-				$handler->body($body);
-			}
-			return $handler->execute()
-				->body($target, $mime);
+			return $this->request($this->createRequest($url, __FUNCTION__));
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function put($url): IHttpHandler {
-			$httpRequest = $this->createRequest($url)
-				->setMethod('PUT');
-			$this->event(new PutEvent($httpRequest, $httpHandler = $this->request($httpRequest)));
-			$this->event(new HandlerEvent($httpRequest, $httpHandler));
-			return $httpHandler;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function pute($url, IBody $body = null, string $target, string $mime = null) {
-			$handler = $this->put($url);
-			if ($body) {
-				$handler->body($body);
-			}
-			return $handler->execute()
-				->body($target, $mime);
+			return $this->request($this->createRequest($url, __FUNCTION__));
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function patch($url): IHttpHandler {
-			$httpRequest = $this->createRequest($url)
-				->setMethod('PATCH');
-			$this->event(new PatchEvent($httpRequest, $httpHandler = $this->request($httpRequest)));
-			$this->event(new HandlerEvent($httpRequest, $httpHandler));
-			return $httpHandler;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function patche($url, IBody $body = null, string $target, string $mime = null) {
-			$handler = $this->patch($url);
-			if ($body) {
-				$handler->body($body);
-			}
-			return $handler->execute()
-				->body($target, $mime);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function deletee($url, IBody $body = null, string $target, string $mime = null) {
-			$handler = $this->delete($url);
-			if ($body) {
-				$handler->body($body);
-			}
-			return $handler->execute()
-				->body($target, $mime);
+			return $this->request($this->createRequest($url, __FUNCTION__));
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function delete($url): IHttpHandler {
-			$httpRequest = $this->createRequest($url)
-				->setMethod('DELETE');
-			$this->event(new DeleteEvent($httpRequest, $httpHandler = $this->request($httpRequest)));
-			$this->event(new HandlerEvent($httpRequest, $httpHandler));
-			return $httpHandler;
+			return $this->request($this->createRequest($url, __FUNCTION__));
 		}
 
 		/**
@@ -159,25 +76,25 @@
 				CURLOPT_CUSTOMREQUEST => $method = $httpRequest->getMethod(),
 				CURLOPT_POST => strtoupper($method) === 'POST',
 			]);
-			$httpHandler = $this->container->create(HttpHandler::class, [
+			return $this->container->create(HttpHandler::class, [
 				$httpRequest,
 				$curl,
 			], __METHOD__);
-			$httpHandler->chain($this);
-			return $httpHandler;
 		}
 
 		/**
-		 * @param IUrl|string $url
+		 * @param IRequestUrl|string $url
+		 * @param string             $method
 		 *
 		 * @return HttpRequest
-		 * @throws UrlException
 		 */
-		protected function createRequest($url) {
-			$httpRequest = new HttpRequest(new HeaderList(), new CookieList());
-			$httpRequest->setRequestUrl(RequestUrl::create($url));
-			$this->event(new RequestEvent($httpRequest));
-			return $httpRequest;
+		protected function createRequest($url, string $method) {
+			return $this->container->create(HttpRequest::class, [
+				RequestUrl::create($url),
+				new HeaderList(),
+				new CookieList(),
+			])
+				->setMethod($method);
 		}
 
 		/**

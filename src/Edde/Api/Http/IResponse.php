@@ -28,11 +28,4 @@
 		 * @return IResponse
 		 */
 		public function redirect(string $redirect): IResponse;
-
-		/**
-		 * execute response "rendering"; basically it "echoes" output
-		 *
-		 * @return IResponse
-		 */
-		public function send(): IResponse;
 	}

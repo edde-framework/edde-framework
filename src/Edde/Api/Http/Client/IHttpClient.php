@@ -24,34 +24,11 @@
 		public function get($url): IHttpHandler;
 
 		/**
-		 * get & execute & body
-		 *
-		 * @param string|IUrl $url
-		 * @param string|null $target
-		 * @param string|null $mime
-		 *
-		 * @return mixed
-		 */
-		public function gete($url, string $target = null, string $mime = null);
-
-		/**
 		 * @param string|IUrl $url target url address
 		 *
 		 * @return IHttpHandler
 		 */
 		public function post($url): IHttpHandler;
-
-		/**
-		 * post & execute & body
-		 *
-		 * @param string|IUrl $url
-		 * @param IBody       $body
-		 * @param string      $target
-		 * @param string|null $mime
-		 *
-		 * @return mixed
-		 */
-		public function poste($url, IBody $body = null, string $target, string $mime = null);
 
 		/**
 		 * @param string|IUrl $url
@@ -61,18 +38,6 @@
 		public function put($url): IHttpHandler;
 
 		/**
-		 * put & execute & body
-		 *
-		 * @param string|IUrl $url
-		 * @param IBody       $body
-		 * @param string      $target
-		 * @param string|null $mime
-		 *
-		 * @return mixed
-		 */
-		public function pute($url, IBody $body = null, string $target, string $mime = null);
-
-		/**
 		 * @param string|IUrl $url
 		 *
 		 * @return IHttpHandler
@@ -80,33 +45,9 @@
 		public function patch($url): IHttpHandler;
 
 		/**
-		 * patch & execute & body
-		 *
-		 * @param string|IUrl $url
-		 * @param IBody       $body
-		 * @param string      $target
-		 * @param string|null $mime
-		 *
-		 * @return mixed
-		 */
-		public function patche($url, IBody $body = null, string $target, string $mime = null);
-
-		/**
 		 * @param string|IUrl $url
 		 *
 		 * @return IHttpHandler
 		 */
 		public function delete($url): IHttpHandler;
-
-		/**
-		 * delete & execute & body
-		 *
-		 * @param string|IUrl $url
-		 * @param IBody       $body
-		 * @param string      $target
-		 * @param string|null $mime
-		 *
-		 * @return mixed
-		 */
-		public function deletee($url, IBody $body = null, string $target, string $mime = null);
 	}

@@ -10,20 +10,20 @@
 		/**
 		 * @var IHttpRequest
 		 */
-		static protected $httpReqeust;
+		static protected $httpRequest;
 
 		static public function createHttpRequest(): IHttpRequest {
-			self::$httpReqeust ?: self::$httpReqeust = new HttpRequest(RequestUrl::createRequestUrl(), HeaderList::createHeaderList(), CookieList::createCookieList());
+			self::$httpRequest ?: self::$httpRequest = new HttpRequest(RequestUrl::createRequestUrl(), HeaderList::createHeaderList(), CookieList::createCookieList());
 			$input = fopen('php://input', 'r');
 			if (empty($_POST) === false) {
 				$content = new Content($_POST, 'post');
 			} else if (fgetc($input) !== false) {
-				$headerList = self::$httpReqeust->getHeaderList();
+				$headerList = self::$httpRequest->getHeaderList();
 				$contentType = $headerList->getContentType();
 				$content = new Content('php://input', 'stream+' . $contentType->getMime());
 			}
 			fclose($input);
-			isset($content) ? self::$httpReqeust->setContent($content) : null;
-			return self::$httpReqeust;
+			isset($content) ? self::$httpRequest->setContent($content) : null;
+			return self::$httpRequest;
 		}
 	}

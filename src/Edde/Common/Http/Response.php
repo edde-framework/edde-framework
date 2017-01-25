@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Http\ICookie;
 	use Edde\Api\Http\ICookieList;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IResponse;
@@ -39,25 +38,6 @@
 		 */
 		public function redirect(string $redirect): IResponse {
 			$this->headerList->set('location', $redirect);
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function send(): IResponse {
-			http_response_code($this->getCode());
-			foreach ($this->getHeaderList() as $header => $value) {
-				header("$header: $value");
-			}
-			/** @var $cookie ICookie */
-			foreach ($this->getCookieList() as $cookie) {
-				setcookie($cookie->getName(), $cookie->getValue(), $cookie->getExpire(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly());
-			}
-			if ($this->content) {
-				$this->headerList->has('Content-Type') ? null : header('Content-Type: ' . $this->content->getMime());
-				echo $this->content->getContent();
-			}
 			return $this;
 		}
 	}

@@ -10,6 +10,15 @@
 	 */
 	interface IRequest extends IHttp {
 		/**
+		 * set the request method
+		 *
+		 * @param string $method
+		 *
+		 * @return IRequest
+		 */
+		public function setMethod(string $method): IRequest;
+
+		/**
 		 * @return string
 		 */
 		public function getMethod(): string;

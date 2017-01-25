@@ -8,6 +8,7 @@
 	use Edde\Api\Http\IRequest;
 	use Edde\Api\Http\IRequestUrl;
 	use Edde\Api\Url\IUrl;
+	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Url\Url;
 
 	class Request extends AbstractHttp implements IRequest {
@@ -57,8 +58,16 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function setMethod(string $method): IRequest {
+			$this->method = StringUtils::lower($method);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function getMethod(): string {
-			return $_SERVER['REQUEST_METHOD'] ?? '';
+			return $this->method ?: $this->method = $_SERVER['REQUEST_METHOD'] ?? '';
 		}
 
 		/**

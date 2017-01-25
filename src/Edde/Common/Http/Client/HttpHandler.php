@@ -4,6 +4,7 @@
 	namespace Edde\Common\Http\Client;
 
 	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Http\Client\ClientException;
@@ -26,6 +27,7 @@
 	 */
 	class HttpHandler extends Object implements IHttpHandler {
 		use LazyContainerTrait;
+		use LazyConverterManagerTrait;
 		use LazyTempDirectoryTrait;
 		use EventTrait;
 		/**
@@ -128,9 +130,9 @@
 				throw new ClientException(sprintf('Cannot execute handler for the url [%s] more than once.', (string)$this->httpRequest->getRequestUrl()));
 			}
 			$options = [];
-			if ($body = $this->httpRequest->getBody()) {
-				$options[CURLOPT_POSTFIELDS] = $body->convert();
-				if (($target = $body->getTarget()) !== null) {
+			if ($content = $this->httpRequest->getContent()) {
+//				$options[CURLOPT_POSTFIELDS] = $this->converterManager->content($content, );
+				if (($target = $content->getTarget()) !== null) {
 					$this->header('Content-Type', $target);
 				}
 			}
