@@ -101,7 +101,7 @@
 		public function setAcl(IAcl $acl): IIdentity;
 
 		/**
-		 * return current acl set
+		 * return current update set
 		 *
 		 * @return IAcl
 		 */

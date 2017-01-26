@@ -3,6 +3,7 @@
 
 	namespace Edde\Ext\Container;
 
+	use Edde\Api\Acl\IAcl;
 	use Edde\Api\Acl\IAclManager;
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Application\IRequest;
@@ -32,6 +33,7 @@
 	use Edde\Api\Http\IHostUrl;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Identity\IAuthenticatorManager;
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Api\Identity\IIdentityManager;
 	use Edde\Api\Link\ILinkFactory;
@@ -52,6 +54,7 @@
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Xml\IXmlParser;
+	use Edde\Common\Acl\Acl;
 	use Edde\Common\Acl\AclManager;
 	use Edde\Common\Application\Application;
 	use Edde\Common\Application\ResponseManager;
@@ -71,6 +74,7 @@
 	use Edde\Common\Http\Client\HttpClient;
 	use Edde\Common\Http\HttpRequest;
 	use Edde\Common\Http\HttpResponse;
+	use Edde\Common\Identity\AuthenticatorManager;
 	use Edde\Common\Identity\IdentityManager;
 	use Edde\Common\Log\LogDirectory;
 	use Edde\Common\Log\LogService;
@@ -343,6 +347,9 @@
 				IIdentityManager::class => IdentityManager::class,
 				IIdentity::class => IIdentityManager::class . '::createIdentity',
 				IFingerprint::class => self::exception(sprintf('You have to register or implement fingerprint interface [%s].', IFingerprint::class)),
+				IAuthenticatorManager::class => AuthenticatorManager::class,
+				IAclManager::class => AclManager::class,
+				IAcl::class => Acl::class,
 			];
 		}
 	}

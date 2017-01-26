@@ -165,8 +165,7 @@
 				$this->writeCacheData = [];
 				$this->writeCacheIndex = 0;
 			}
-			$count = fwrite($this->getHandle(), $write, $length);
-			if ($count !== ($length = strlen($write))) {
+			if (($count = $length ? fwrite($this->getHandle(), $write, $length) : fwrite($this->getHandle(), $write)) !== ($length = strlen($write))) {
 				throw new FileException(sprintf('Failed to write into file [%s]: expected %d bytes, %d has been written.', $this->url->getPath(), $length, $count));
 			}
 			return $this;
@@ -253,7 +252,7 @@
 		 * @throws FileException
 		 */
 		public function read(int $length = null) {
-			if (($line = fgets($this->getHandle(), $length)) === false && $this->isAutoClose()) {
+			if (($line = ($length ? fgets($this->getHandle(), $length) : fgets($this->getHandle()))) === false && $this->isAutoClose()) {
 				$this->close();
 			}
 			return $line;

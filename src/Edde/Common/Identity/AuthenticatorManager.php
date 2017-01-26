@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Identity;
 
@@ -9,6 +9,7 @@
 	use Edde\Api\Identity\LazyAuthorizatorTrait;
 	use Edde\Api\Identity\LazyIdentityManagerTrait;
 	use Edde\Api\Identity\LazyIdentityTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 	use Edde\Common\Session\SessionTrait;
 
@@ -17,6 +18,8 @@
 		use LazyIdentityManagerTrait;
 		use LazyAuthorizatorTrait;
 		use SessionTrait;
+		use ConfigurableTrait;
+
 		/**
 		 * @var IAuthenticator[]
 		 */
@@ -26,11 +29,17 @@
 		 */
 		protected $flowList = [];
 
+		/**
+		 * @inheritdoc
+		 */
 		public function registerAuthenticator(IAuthenticator $authenticator): IAuthenticatorManager {
 			$this->authenticatorList[$authenticator->getName()] = $authenticator;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function registerStepList(array $stepList): IAuthenticatorManager {
 			foreach ($stepList as $name => $flow) {
 				if (is_string($flow)) {
@@ -42,11 +51,17 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function registerStep(string $initial, string ...$authenticatorList): IAuthenticatorManager {
 			$this->flowList[$initial] = empty($authenticatorList) ? [$initial] : $authenticatorList;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function step(string $step, ...$credentials): IAuthenticatorManager {
 			if (($currentList = $this->session->get('flow', false)) === false) {
 				throw new AuthenticatorException(sprintf('Flow was not started; please use [%s::select()] method before.', static::class));
@@ -65,6 +80,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function authenticate(string $name, ...$credentials): IAuthenticatorManager {
 			if (isset($this->authenticatorList[$name]) === false) {
 				throw new AuthenticatorException(sprintf('Cannot authenticate identity by unknown authenticator [%s]; did you registered it before?', $name));
@@ -73,6 +91,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function select(string $step): IAuthenticatorManager {
 			$this->reset();
 			if (isset($this->flowList[$step]) === false) {
@@ -82,12 +103,18 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function reset(): IAuthenticatorManager {
 			$this->session->set('flow', null);
 			$this->identityManager->reset(true);
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getCurrentStep(): string {
 			if ($this->isDone()) {
 				throw new AuthenticatorException('There are no more steps!');
@@ -96,16 +123,25 @@
 			return reset($flow);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isDone(): bool {
 			return $this->session->get('flow', false) === false;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getStepList(): array {
 			return $this->session->get('flow', []);
 		}
 
-		protected function prepare() {
-			parent::prepare();
+		/**
+		 * @inheritdoc
+		 */
+		protected function handleSetup() {
+			parent::handleSetup();
 			foreach ($this->flowList as $name => $authList) {
 				foreach ($authList as $authenticator) {
 					if (isset($this->authenticatorList[$authenticator]) === false) {

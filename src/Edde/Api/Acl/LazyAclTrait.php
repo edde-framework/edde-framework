@@ -1,10 +1,11 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Acl;
 
 	trait LazyAclTrait {
 		/**
+		 * @no-cache
 		 * @var IAcl
 		 */
 		protected $acl;

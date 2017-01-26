@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Acl;
 
@@ -44,9 +44,10 @@
 		/**
 		 * build effective ACL from the given list of groups
 		 *
+		 * @param IAcl  $acl
 		 * @param array $groupList
 		 *
-		 * @return IAcl
+		 * @return IAclManager
 		 */
-		public function acl(array $groupList): IAcl;
+		public function update(IAcl $acl, array $groupList): IAclManager;
 	}

@@ -81,7 +81,7 @@
 		 * @inheritdoc
 		 */
 		public function getRemoteAddress() {
-			return $this->remoteAddress;
+			return $this->remoteAddress ?: $this->remoteAddress = $_SERVER['REMOTE_ADDR'];
 		}
 
 		/**

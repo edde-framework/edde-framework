@@ -51,7 +51,7 @@
 			$this->createIdentity();
 			$this->identity->setAuthenticated(false);
 			if ($this->acl !== $this->identity->getAcl()) {
-				throw new IdentityException('Acl in identity differs from acl in container. This can lead to a security hole like a Hell!');
+				throw new IdentityException('Acl in identity differs from update in container. This can lead to a security hole like a Hell!');
 			}
 			$this->acl->reset();
 			if ($hard) {

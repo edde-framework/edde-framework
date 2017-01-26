@@ -3,7 +3,9 @@
 
 	namespace Edde\Api\Identity;
 
-	interface IAuthenticatorManager {
+	use Edde\Api\Config\IConfigurable;
+
+	interface IAuthenticatorManager extends IConfigurable {
 		/**
 		 * @param IAuthenticator $authenticator
 		 *

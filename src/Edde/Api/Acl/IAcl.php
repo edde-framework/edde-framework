@@ -5,7 +5,7 @@
 
 	interface IAcl {
 		/**
-		 * register resource for this acl list
+		 * register resource for this update list
 		 *
 		 * @param bool           $grant
 		 * @param string         $resource
@@ -17,7 +17,7 @@
 		public function register(bool $grant, string $resource = null, \DateTime $from = null, \DateTime $until = null): IAcl;
 
 		/**
-		 * check if the given right is granted for this acl
+		 * check if the given right is granted for this update
 		 *
 		 * @param string         $resource
 		 * @param \DateTime|null $dateTime
