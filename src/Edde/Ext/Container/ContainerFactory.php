@@ -47,6 +47,7 @@
 	use Edde\Api\Session\ISessionDirectory;
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Storage\IStorage;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\ITemplateManager;
@@ -85,6 +86,7 @@
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Session\SessionDirectory;
 	use Edde\Common\Session\SessionManager;
+	use Edde\Common\Template\Compiler;
 	use Edde\Common\Template\TemplateManager;
 	use Edde\Common\Upgrade\AbstractUpgradeManager;
 	use Edde\Common\Web\JavaScriptCompiler;
@@ -350,6 +352,7 @@
 				IAuthenticatorManager::class => AuthenticatorManager::class,
 				IAclManager::class => AclManager::class,
 				IAcl::class => Acl::class,
+				ICompiler::class => Compiler::class,
 			];
 		}
 	}

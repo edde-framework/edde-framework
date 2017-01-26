@@ -14,6 +14,8 @@
 	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\IMacroSet;
+	use Edde\Api\Template\LazyHelperSetTrait;
+	use Edde\Api\Template\LazyMacroSetTrait;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
@@ -23,6 +25,8 @@
 	 * Default implementation of template compiler.
 	 */
 	class Compiler extends Object implements ICompiler {
+		use LazyMacroSetTrait;
+		use LazyHelperSetTrait;
 		use LazyContainerTrait;
 		use LazyResourceManagerTrait;
 		use LazyCryptEngineTrait;
@@ -54,10 +58,11 @@
 		protected $context = [];
 
 		/**
-		 * @param IFile $source
+		 * @inheritdoc
 		 */
-		public function __construct(IFile $source) {
+		public function setSource(IFile $source): ICompiler {
 			$this->source = $source;
+			return $this;
 		}
 
 		/**
@@ -293,6 +298,8 @@
 		 */
 		protected function handleSetup() {
 			parent::handleSetup();
+			$this->registerMacroSet($this->macroSet);
+			$this->registerHelperSet($this->helperSet);
 			foreach ($this->macroList as $macro) {
 				if ($macro->hasHelperSet()) {
 					$this->registerHelperSet($macro->getHelperSet());

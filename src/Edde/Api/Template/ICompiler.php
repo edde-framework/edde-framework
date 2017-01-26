@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Template;
 
@@ -8,6 +8,15 @@
 	use Edde\Api\Node\INode;
 
 	interface ICompiler extends IConfigurable {
+		/**
+		 * set the output file
+		 *
+		 * @param IFile $file
+		 *
+		 * @return ICompiler
+		 */
+		public function setSource(IFile $file): ICompiler;
+
 		/**
 		 * use the given macroset
 		 *

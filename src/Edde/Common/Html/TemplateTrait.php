@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Html;
 
@@ -44,6 +44,7 @@
 					}
 					$parent = $parent->getParentClass();
 				}
+				$fileList = array_reverse($fileList, true);
 				$importList = [];
 				foreach ($fileList as $file) {
 					if (file_exists($file)) {
@@ -77,6 +78,7 @@
 			/** @var $template IHtmlTemplate */
 			$control = $this;
 			try {
+				$this->templateManager->setup();
 				$template = AbstractHtmlTemplate::template($this->templateManager->template($file, $importList), $this->container);
 				foreach ($snippetList ?: [null] as $snippet) {
 					$template->snippet($control, $snippet);
