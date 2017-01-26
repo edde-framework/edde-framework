@@ -19,8 +19,9 @@
 		 * @inheritdoc
 		 */
 		public function send(IResponse $response): IResponseHandler {
-			$convertable = $this->converterManager->content($response, $this->httpRequest->getHeaderList()
-				->getAcceptList());
+			$targetList = ($targetList = $response->getTargetList()) ? $targetList : $this->httpRequest->getHeaderList()
+				->getAcceptList();
+			$convertable = $this->converterManager->content($response, $targetList);
 			$this->httpResponse->setContent(new Content($convertable->convert(), $convertable->getTarget()));
 			$this->httpResponse->send();
 			return $this;

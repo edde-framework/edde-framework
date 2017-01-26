@@ -18,6 +18,7 @@
 
 		public function session(): ISession {
 			if ($this->session === null) {
+				$this->sessionManager->setup();
 				$this->session = $this->sessionManager->getSession(static::class);
 			}
 			return $this->session;

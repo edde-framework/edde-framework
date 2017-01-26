@@ -1,14 +1,16 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Session;
+
+	use Edde\Api\Config\IConfigurable;
 
 	/**
 	 * Session manager is responsible for updating session state (starting, modifying, closing, ...).
 	 */
-	interface ISessionManager {
+	interface ISessionManager extends IConfigurable {
 		/**
-		 * excplicitly open a session
+		 * explicitly open a session
 		 *
 		 * @return ISessionManager
 		 */

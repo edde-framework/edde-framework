@@ -14,6 +14,7 @@
 		 * @inheritdoc
 		 */
 		public function convert(array $targetList) {
-			return $this->converterManager->content($this->getContent(), $targetList);
+			return $this->converterManager->content($this->getContent(), $targetList)
+				->convert();
 		}
 	}

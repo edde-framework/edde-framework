@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Identity;
 
@@ -11,7 +11,7 @@
 		 *
 		 * @return IIdentity
 		 */
-		public function identity(): IIdentity;
+		public function createIdentity(): IIdentity;
 
 		/**
 		 * update session data with current identity

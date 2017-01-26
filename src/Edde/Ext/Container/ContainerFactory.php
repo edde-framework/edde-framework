@@ -32,6 +32,8 @@
 	use Edde\Api\Http\IHostUrl;
 	use Edde\Api\Http\IHttpRequest;
 	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Identity\IIdentity;
+	use Edde\Api\Identity\IIdentityManager;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
@@ -39,6 +41,9 @@
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Api\Schema\ISchemaManager;
+	use Edde\Api\Session\IFingerprint;
+	use Edde\Api\Session\ISessionDirectory;
+	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacroSet;
@@ -66,6 +71,7 @@
 	use Edde\Common\Http\Client\HttpClient;
 	use Edde\Common\Http\HttpRequest;
 	use Edde\Common\Http\HttpResponse;
+	use Edde\Common\Identity\IdentityManager;
 	use Edde\Common\Log\LogDirectory;
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Object;
@@ -73,6 +79,8 @@
 	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\Runtime;
 	use Edde\Common\Schema\SchemaManager;
+	use Edde\Common\Session\SessionDirectory;
+	use Edde\Common\Session\SessionManager;
 	use Edde\Common\Template\TemplateManager;
 	use Edde\Common\Upgrade\AbstractUpgradeManager;
 	use Edde\Common\Web\JavaScriptCompiler;
@@ -291,6 +299,10 @@
 					'logs',
 					LogDirectory::class,
 				]),
+				ISessionDirectory::class => self::proxy(ITempDirectory::class, 'directory', [
+					'session',
+					SessionDirectory::class,
+				]),
 				ICacheManager::class => CacheManager::class,
 				ICache::class => ICacheManager::class,
 				ICacheStorage::class => FlatFileCacheStorage::class,
@@ -327,6 +339,10 @@
 				IHttpClient::class => HttpClient::class,
 				IHostUrl::class => self::exception(sprintf('Host url is not specified; you have to register [%s] interface.', IHostUrl::class)),
 				ILinkFactory::class => \Edde\Common\Link\LinkFactory::class,
+				ISessionManager::class => SessionManager::class,
+				IIdentityManager::class => IdentityManager::class,
+				IIdentity::class => IIdentityManager::class . '::createIdentity',
+				IFingerprint::class => self::exception(sprintf('You have to register or implement fingerprint interface [%s].', IFingerprint::class)),
 			];
 		}
 	}

@@ -1,32 +1,33 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Session;
 
 	use Edde\Api\Http\LazyHttpResponseTrait;
-	use Edde\Api\Session\IFingerprint;
 	use Edde\Api\Session\ISession;
 	use Edde\Api\Session\ISessionManager;
+	use Edde\Api\Session\LazyFingerprintTrait;
 	use Edde\Api\Session\LazySessionDirectoryTrait;
 	use Edde\Api\Session\SessionException;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	/**
 	 * Session manager is... session managing tool ;). It's responsible for whole session lifetime and section
-	 * assigment (and collision preventing).
+	 * assignment (and collision preventing).
 	 */
 	class SessionManager extends Object implements ISessionManager {
 		use LazyHttpResponseTrait;
 		use LazySessionDirectoryTrait;
-		/**
-		 * @var IFingerprint
-		 */
-		protected $fingerprint;
+		use LazyFingerprintTrait;
+		use ConfigurableTrait;
+
 		/**
 		 * @var string
 		 */
 		protected $namespace;
 		/**
+		 * @no-cache
 		 * @var ISession[]
 		 */
 		protected $sessionList = [];
@@ -36,18 +37,17 @@
 		 *
 		 * Your girlfriend says communication is important to her, so you buy another computer and install an instant messenger so the two of you can chat.
 		 *
-		 * @param IFingerprint $fingerprint
+		 * @param string $namespace
 		 */
-		public function __construct(IFingerprint $fingerprint) {
-			$this->fingerprint = $fingerprint;
-			$this->namespace = 'edde';
+		public function __construct(string $namespace = 'edde') {
+			$this->namespace = $namespace;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function getSession(string $name): ISession {
-			return $this->sessionList[$name] ?? $this->sessionList[$name] = new Session($this, $name);
+			return $this->sessionList[$name] ?? $this->sessionList[$name] = new Session($this->session($name), $name);
 		}
 
 		/**
@@ -115,5 +115,10 @@
 			}
 			session_write_close();
 			return $this;
+		}
+
+		protected function handleSetup() {
+			parent::handleSetup();
+			$this->sessionDirectory->create();
 		}
 	}

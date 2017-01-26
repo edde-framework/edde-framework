@@ -22,7 +22,7 @@
 		const CODE_ERROR_NOT_FOUND = 404;
 		const CODE_ERROR_NOT_ALLOWED = 405;
 
-		const CODE_SERVER_ERROR = 405;
+		const CODE_SERVER_ERROR = 500;
 
 		protected static $methodList = [
 			'GET',

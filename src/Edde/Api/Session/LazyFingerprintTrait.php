@@ -8,6 +8,7 @@
 	 */
 	trait LazyFingerprintTrait {
 		/**
+		 * @no-cache
 		 * @var IFingerprint
 		 */
 		protected $fingerprint;

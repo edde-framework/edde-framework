@@ -11,7 +11,7 @@
 	 */
 	interface IIdentity {
 		/**
-		 * identity can have optionaly additional data (for example user's row from database)
+		 * identity can have optional additional data (for example user's row from database)
 		 *
 		 * @param ICrate $crate
 		 *
