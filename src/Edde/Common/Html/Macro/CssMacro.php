@@ -50,8 +50,6 @@
 			} else if (strpos($src, './') === 0) {
 				return $source->getDirectory()
 					->file(substr($src, 2));
-			} else if (strpos($src, 'edde://') !== false) {
-				return $this->assetsDirectory->file(str_replace('edde://', '', $src));
 			}
 			return new File($src);
 		}

@@ -142,7 +142,6 @@
 		 * @inheritdoc
 		 */
 		public function update(): IControl {
-//			$this->event(new UpdateEvent($this));
 			foreach ($this->getControlList() as $control) {
 				$control->update();
 			}
@@ -246,7 +245,6 @@
 		 */
 		protected function handleInit() {
 			parent::handleInit();
-//			$this->listen($this);
 			$this->node = new Node();
 			$this->node->setMeta('control', $this);
 		}

@@ -3,22 +3,19 @@
 
 	namespace Edde\Common\Translator\Dictionary;
 
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Resource\LazyResourceManagerTrait;
 	use Edde\Common\Cache\CacheTrait;
-	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\File\CsvFile;
 	use Edde\Common\Translator\AbstractDictionary;
 
 	/**
 	 * Csv file support.
 	 */
-	class CsvDictionary extends AbstractDictionary implements IConfigurable {
+	class CsvDictionary extends AbstractDictionary {
 		use LazyResourceManagerTrait;
 		use CacheTrait;
-		use ConfigurableTrait;
 		/**
 		 * @var IFile[]
 		 */

@@ -105,6 +105,7 @@
 				throw new TranslatorException(sprintf('Scope [%s] has no dictionaries.', $scope));
 			}
 			foreach ($this->dictionaryList[$scope] as $dictionary) {
+				$dictionary->setup();
 				if (($string = $dictionary->translate($id, $language)) !== null) {
 					return $cache->save($cacheId, $string);
 				}

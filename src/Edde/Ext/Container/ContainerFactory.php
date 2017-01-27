@@ -51,6 +51,7 @@
 	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
@@ -88,6 +89,7 @@
 	use Edde\Common\Session\SessionManager;
 	use Edde\Common\Template\Compiler;
 	use Edde\Common\Template\TemplateManager;
+	use Edde\Common\Translator\Translator;
 	use Edde\Common\Upgrade\AbstractUpgradeManager;
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
@@ -353,6 +355,7 @@
 				IAclManager::class => AclManager::class,
 				IAcl::class => Acl::class,
 				ICompiler::class => Compiler::class,
+				ITranslator::class => Translator::class,
 			];
 		}
 	}

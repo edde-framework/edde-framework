@@ -1,15 +1,17 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Translator;
 
 	use Edde\Api\Translator\IDictionary;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	/**
 	 * Common dictionary implementation.
 	 */
 	abstract class AbstractDictionary extends Object implements IDictionary {
+		use ConfigurableTrait;
 		/**
 		 * @var string[]
 		 */

@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Html;
 
@@ -11,6 +11,6 @@
 	 */
 	trait ResponseTrait {
 		public function response() {
-			$this->responseManager->response(new Response(IHtmlControl::class, $this));
+			$this->responseManager->response(new Response($this, IHtmlControl::class));
 		}
 	}
