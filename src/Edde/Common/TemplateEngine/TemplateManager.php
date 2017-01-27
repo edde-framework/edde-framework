@@ -1,11 +1,11 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Common\Template;
+	namespace Edde\Common\TemplateEngine;
 
 	use Edde\Api\File\FileException;
-	use Edde\Api\Template\ICompiler;
-	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\TemplateEngine\ICompiler;
+	use Edde\Api\TemplateEngine\ITemplateManager;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\File\File;

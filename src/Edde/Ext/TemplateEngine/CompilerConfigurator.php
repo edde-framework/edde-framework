@@ -1,10 +1,10 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Ext\Template;
+	namespace Edde\Ext\TemplateEngine;
 
 	use Edde\Api\Container\LazyContainerTrait;
-	use Edde\Api\Template\ICompiler;
+	use Edde\Api\TemplateEngine\ICompiler;
 	use Edde\Common\Config\AbstractConfigurator;
 
 	class CompilerConfigurator extends AbstractConfigurator {

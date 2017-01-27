@@ -1,14 +1,14 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Template\Macro;
+	namespace Edde\Common\TemplateEngine\Macro;
 
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Template\ICompiler;
-	use Edde\Api\Template\MacroException;
-	use Edde\Common\Template\AbstractMacro;
+	use Edde\Api\TemplateEngine\ICompiler;
+	use Edde\Api\TemplateEngine\MacroException;
+	use Edde\Common\TemplateEngine\AbstractMacro;
 
 	/**
 	 * Import macro will load the given template in compile time.

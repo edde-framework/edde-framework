@@ -7,8 +7,8 @@
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Template\ICompiler;
-	use Edde\Api\Template\MacroException;
+	use Edde\Api\TemplateEngine\ICompiler;
+	use Edde\Api\TemplateEngine\MacroException;
 	use Edde\Common\File\File;
 
 	/**

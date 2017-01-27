@@ -1,15 +1,15 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Common\Template;
+	namespace Edde\Common\TemplateEngine;
 
 	use Edde\Api\Node\INode;
-	use Edde\Api\Template\ICompiler;
-	use Edde\Api\Template\IHelperSet;
-	use Edde\Api\Template\IMacro;
-	use Edde\Api\Template\MacroException;
-	use Edde\Common\Object;
+	use Edde\Api\TemplateEngine\ICompiler;
+	use Edde\Api\TemplateEngine\IHelperSet;
+	use Edde\Api\TemplateEngine\IMacro;
+	use Edde\Api\TemplateEngine\MacroException;
 	use Edde\Common\Node\Node;
+	use Edde\Common\Object;
 
 	/**
 	 * Base macro for all template macros.

@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Html;
 
-	use Edde\Api\Template\ITemplate;
+	use Edde\Api\TemplateEngine\ITemplate;
 
 	/**
 	 * Formal interface for all html based templates (html control package).

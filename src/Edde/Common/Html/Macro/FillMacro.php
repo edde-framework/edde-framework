@@ -4,7 +4,7 @@
 	namespace Edde\Common\Html\Macro;
 
 	use Edde\Api\Node\INode;
-	use Edde\Api\Template\ICompiler;
+	use Edde\Api\TemplateEngine\ICompiler;
 
 	class FillMacro extends AbstractHtmlMacro {
 		public function __construct() {

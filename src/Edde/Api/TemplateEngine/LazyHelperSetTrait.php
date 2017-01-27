@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Api\Template;
+	namespace Edde\Api\TemplateEngine;
 
 	/**
 	 * Lazy dependency for the global set of helpers.

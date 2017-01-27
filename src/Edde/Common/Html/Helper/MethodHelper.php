@@ -4,12 +4,12 @@
 	namespace Edde\Common\Html\Helper;
 
 	use Edde\Api\Node\INode;
-	use Edde\Api\Template\ICompiler;
-	use Edde\Api\Template\MacroException;
+	use Edde\Api\TemplateEngine\ICompiler;
+	use Edde\Api\TemplateEngine\MacroException;
 	use Edde\Common\Html\Macro\AbstractHtmlMacro;
 	use Edde\Common\Strings\StringException;
 	use Edde\Common\Strings\StringUtils;
-	use Edde\Common\Template\AbstractHelper;
+	use Edde\Common\TemplateEngine\AbstractHelper;
 
 	/**
 	 * This helper will translate "standard" call format into methods reffering to root or current control; it also supports container call reference.

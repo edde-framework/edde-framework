@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Common\Template;
+	namespace Edde\Common\TemplateEngine;
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Crypt\LazyCryptEngineTrait;
@@ -9,14 +9,14 @@
 	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\LazyResourceManagerTrait;
-	use Edde\Api\Template\CompilerException;
-	use Edde\Api\Template\ICompiler;
-	use Edde\Api\Template\IHelperSet;
-	use Edde\Api\Template\IMacro;
-	use Edde\Api\Template\IMacroSet;
-	use Edde\Api\Template\LazyHelperSetTrait;
-	use Edde\Api\Template\LazyMacroSetTrait;
-	use Edde\Api\Template\MacroException;
+	use Edde\Api\TemplateEngine\CompilerException;
+	use Edde\Api\TemplateEngine\ICompiler;
+	use Edde\Api\TemplateEngine\IHelperSet;
+	use Edde\Api\TemplateEngine\IMacro;
+	use Edde\Api\TemplateEngine\IMacroSet;
+	use Edde\Api\TemplateEngine\LazyHelperSetTrait;
+	use Edde\Api\TemplateEngine\LazyMacroSetTrait;
+	use Edde\Api\TemplateEngine\MacroException;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 	use Edde\Common\Reflection\ReflectionUtils;

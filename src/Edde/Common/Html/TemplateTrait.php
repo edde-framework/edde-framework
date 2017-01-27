@@ -9,9 +9,9 @@
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\IHtmlTemplate;
 	use Edde\Api\Html\IHtmlView;
-	use Edde\Api\Template\CompilerException;
-	use Edde\Api\Template\LazyTemplateManagerTrait;
-	use Edde\Api\Template\TemplateException;
+	use Edde\Api\TemplateEngine\CompilerException;
+	use Edde\Api\TemplateEngine\LazyTemplateManagerTrait;
+	use Edde\Api\TemplateEngine\TemplateException;
 	use Edde\Common\Cache\CacheTrait;
 
 	/**

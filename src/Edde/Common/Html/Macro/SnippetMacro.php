@@ -5,8 +5,8 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
-	use Edde\Api\Template\ICompiler;
-	use Edde\Api\Template\MacroException;
+	use Edde\Api\TemplateEngine\ICompiler;
+	use Edde\Api\TemplateEngine\MacroException;
 
 	/**
 	 * Snippet is piece of template which can be called without any other dependencies.

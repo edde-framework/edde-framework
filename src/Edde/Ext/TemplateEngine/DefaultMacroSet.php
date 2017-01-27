@@ -1,11 +1,11 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Ext\Template;
+	namespace Edde\Ext\TemplateEngine;
 
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Template\IHelperSet;
-	use Edde\Api\Template\IMacroSet;
+	use Edde\Api\TemplateEngine\IHelperSet;
+	use Edde\Api\TemplateEngine\IMacroSet;
 	use Edde\Common\Html\Input\PasswordControl;
 	use Edde\Common\Html\Input\TextControl;
 	use Edde\Common\Html\Macro\AttrMacro;
@@ -49,11 +49,11 @@
 	use Edde\Common\Html\Tag\TableHeaderControl;
 	use Edde\Common\Html\Tag\TableRowControl;
 	use Edde\Common\Object;
-	use Edde\Common\Template\HelperSet;
-	use Edde\Common\Template\Macro\BlockMacro;
-	use Edde\Common\Template\Macro\ImportMacro;
-	use Edde\Common\Template\Macro\IncludeMacro;
-	use Edde\Common\Template\MacroSet;
+	use Edde\Common\TemplateEngine\HelperSet;
+	use Edde\Common\TemplateEngine\Macro\BlockMacro;
+	use Edde\Common\TemplateEngine\Macro\ImportMacro;
+	use Edde\Common\TemplateEngine\Macro\IncludeMacro;
+	use Edde\Common\TemplateEngine\MacroSet;
 
 	/**
 	 * Factory class for default macro and helper set creation.

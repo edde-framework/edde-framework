@@ -4,9 +4,9 @@
 	namespace Edde\Common\Html\Helper;
 
 	use Edde\Api\Node\INode;
-	use Edde\Api\Template\ICompiler;
+	use Edde\Api\TemplateEngine\ICompiler;
 	use Edde\Api\Translator\LazyTranslatorTrait;
-	use Edde\Common\Template\AbstractHelper;
+	use Edde\Common\TemplateEngine\AbstractHelper;
 
 	/**
 	 * Translate helper support.

@@ -5,9 +5,9 @@
 
 	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Template\ICompiler;
-	use Edde\Api\Template\MacroException;
-	use Edde\Common\Template\AbstractMacro;
+	use Edde\Api\TemplateEngine\ICompiler;
+	use Edde\Api\TemplateEngine\MacroException;
+	use Edde\Common\TemplateEngine\AbstractMacro;
 
 	/**
 	 * Abstract class for all html package based macros.

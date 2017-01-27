@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types = 1);
 
-	namespace Edde\Api\Template;
+	namespace Edde\Api\TemplateEngine;
 
 	/**
 	 * Formal marker interface for all templates

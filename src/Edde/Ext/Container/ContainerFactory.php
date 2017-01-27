@@ -49,10 +49,10 @@
 	use Edde\Api\Session\ISessionDirectory;
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Storage\IStorage;
-	use Edde\Api\Template\ICompiler;
-	use Edde\Api\Template\IHelperSet;
-	use Edde\Api\Template\IMacroSet;
-	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\TemplateEngine\ICompiler;
+	use Edde\Api\TemplateEngine\IHelperSet;
+	use Edde\Api\TemplateEngine\IMacroSet;
+	use Edde\Api\TemplateEngine\ITemplateManager;
 	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
@@ -91,8 +91,8 @@
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Session\SessionDirectory;
 	use Edde\Common\Session\SessionManager;
-	use Edde\Common\Template\Compiler;
-	use Edde\Common\Template\TemplateManager;
+	use Edde\Common\TemplateEngine\Compiler;
+	use Edde\Common\TemplateEngine\TemplateManager;
 	use Edde\Common\Translator\Translator;
 	use Edde\Common\Upgrade\AbstractUpgradeManager;
 	use Edde\Common\Web\JavaScriptCompiler;
@@ -102,7 +102,7 @@
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Database\Sqlite\SqliteDsn;
-	use Edde\Ext\Template\DefaultMacroSet;
+	use Edde\Ext\TemplateEngine\DefaultMacroSet;
 
 	class ContainerFactory extends Object {
 		/**

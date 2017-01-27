@@ -6,14 +6,14 @@
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Crypt\LazyCryptEngineTrait;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Template\ICompiler;
-	use Edde\Api\Template\IHelper;
-	use Edde\Api\Template\MacroException;
+	use Edde\Api\TemplateEngine\ICompiler;
+	use Edde\Api\TemplateEngine\IHelper;
+	use Edde\Api\TemplateEngine\MacroException;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Strings\StringException;
 	use Edde\Common\Strings\StringUtils;
-	use Edde\Common\Template\HelperSet;
+	use Edde\Common\TemplateEngine\HelperSet;
 
 	/**
 	 * Condition macro support.

@@ -6,8 +6,8 @@
 	use Edde\Api\Html\IHtmlControl;
 	use Edde\Api\Html\LazyTemplateDirectoryTrait;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Template\ICompiler;
-	use Edde\Api\Template\TemplateException;
+	use Edde\Api\TemplateEngine\ICompiler;
+	use Edde\Api\TemplateEngine\TemplateException;
 	use Edde\Common\Html\AbstractHtmlTemplate;
 
 	/**
