@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Html;
 
@@ -67,10 +67,12 @@
 		 * @inheritdoc
 		 */
 		public function render(int $indent = 0): string {
+			$this->styleSheetCompiler->setup();
 			if ($this->styleSheetCompiler->isEmpty() === false) {
 				$this->head->addStyleSheet($this->styleSheetCompiler->compile()
 					->getRelativePath());
 			}
+			$this->javaScriptCompiler->setup();
 			if ($this->javaScriptCompiler->isEmpty() === false) {
 				$this->head->addJavaScript($this->javaScriptCompiler->compile()
 					->getRelativePath());

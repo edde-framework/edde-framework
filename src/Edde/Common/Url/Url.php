@@ -5,9 +5,9 @@
 
 	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Url\IUrl;
-	use Edde\Api\Url\UrlException;
 	use Edde\Common\Object;
 	use Edde\Common\Strings\StringUtils;
+	use League\Uri\Parser;
 
 	class Url extends Object implements ICacheable, IUrl {
 		/**
@@ -35,9 +35,10 @@
 		 */
 		protected $path = '';
 		/**
-		 * @var array
+		 * @var string
 		 */
-		protected $query = [];
+		protected $query;
+		protected $parameterList = [];
 		/**
 		 * @var string
 		 */
@@ -49,7 +50,7 @@
 			}
 			$self = new static();
 			if ($url !== null) {
-				$self->build($url);
+				$self->parse((string)$url);
 			}
 			return $self;
 		}
@@ -57,12 +58,10 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function build($url) {
-			if (($parsed = parse_url($url)) === false) {
-				throw new UrlException(sprintf('Malformed URL [%s].', $url));
-			}
+		public function parse(string $url) {
+			$parsed = (new Parser())($url);
 			if (isset($parsed['query'])) {
-				parse_str($parsed['query'], $parsed['query']);
+				parse_str($parsed['query'], $parsed['parameter-list']);
 			}
 			static $copy = [
 				'scheme' => 'setScheme',
@@ -72,6 +71,7 @@
 				'port' => 'setPort',
 				'path' => 'setPath',
 				'query' => 'setQuery',
+				'parameter-list' => 'setParameterList',
 				'fragment' => 'setFragment',
 			];
 			foreach ($copy as $item => $func) {
@@ -129,7 +129,7 @@
 		 * @inheritdoc
 		 */
 		public function setPath(string $path): IUrl {
-			$this->path = $path;
+			$this->path = ltrim($path, '/');
 			return $this;
 		}
 
@@ -241,8 +241,31 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setQuery(array $query): IUrl {
+		public function setQuery(string $query): IUrl {
 			$this->query = $query;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setParameterList(array $parameterList): IUrl {
+			$this->parameterList = $parameterList;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getParameterList(): array {
+			return $this->parameterList;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setParameter(string $name, $value): IUrl {
+			$this->parameterList[$name] = $value;
 			return $this;
 		}
 
@@ -261,11 +284,11 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getParameter($name, $default = null) {
-			if (isset($this->query[$name]) === false) {
+		public function getParameter(string $name, $default = null) {
+			if (isset($this->parameterList[$name]) === false) {
 				return $default;
 			}
-			return $this->query[$name];
+			return $this->parameterList[$name];
 		}
 
 		/**

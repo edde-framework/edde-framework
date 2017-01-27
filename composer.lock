@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2e877a7e5302ed381d4a43da69909b8c",
+    "content-hash": "a181b22da45534f4c08406f37700f568",
     "packages": [
         {
             "name": "defuse/php-encryption",
@@ -71,12 +71,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "416fb8ad1d095a87f1d21bc40711843cd122fd4a"
+                "reference": "68099b02b60bbf3b088ff5cb67bf506770ef9cac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/416fb8ad1d095a87f1d21bc40711843cd122fd4a",
-                "reference": "416fb8ad1d095a87f1d21bc40711843cd122fd4a",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/68099b02b60bbf3b088ff5cb67bf506770ef9cac",
+                "reference": "68099b02b60bbf3b088ff5cb67bf506770ef9cac",
                 "shasum": ""
             },
             "require": {
@@ -117,20 +117,79 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2016-03-31 10:24:22"
+            "time": "2017-01-23 09:23:06"
         },
         {
-            "name": "myclabs/deep-copy",
-            "version": "1.5.5",
+            "name": "league/uri-parser",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "399c1f9781e222f6eb6cc238796f5200d1b7f108"
+                "url": "https://github.com/thephpleague/uri-parser.git",
+                "reference": "6cbb098f50e1c3db11a0c12cf9b0838f7f0f102f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/399c1f9781e222f6eb6cc238796f5200d1b7f108",
-                "reference": "399c1f9781e222f6eb6cc238796f5200d1b7f108",
+                "url": "https://api.github.com/repos/thephpleague/uri-parser/zipball/6cbb098f50e1c3db11a0c12cf9b0838f7f0f102f",
+                "reference": "6cbb098f50e1c3db11a0c12cf9b0838f7f0f102f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-intl": "*",
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^1.9",
+                "phpbench/phpbench": "^0.12.2",
+                "phpunit/phpunit": "^5.0"
+            },
+            "suggest": {
+                "league/uri-schemes": "Allow validating and normalizing URI parsing results"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\Uri\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ignace Nyamagana Butera",
+                    "email": "nyamsprod@gmail.com",
+                    "homepage": "https://nyamsprod.com"
+                }
+            ],
+            "description": "userland URI parser RFC 3986 compliant",
+            "homepage": "https://github.com/thephpleague/uri-parser",
+            "keywords": [
+                "parse_url",
+                "parser",
+                "rfc3986",
+                "uri",
+                "url"
+            ],
+            "time": "2017-01-19 08:04:36"
+        },
+        {
+            "name": "myclabs/deep-copy",
+            "version": "1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/myclabs/DeepCopy.git",
+                "reference": "5a5a9fc8025a08d8919be87d6884d5a92520cefe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/5a5a9fc8025a08d8919be87d6884d5a92520cefe",
+                "reference": "5a5a9fc8025a08d8919be87d6884d5a92520cefe",
                 "shasum": ""
             },
             "require": {
@@ -159,7 +218,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2016-10-31T17:19:45+00:00"
+            "time": "2017-01-26T22:05:40+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -646,12 +705,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "ef5387868b88d7a72cf284c7e962b91e19ec5682"
+                "reference": "fd82ada9393eb773b64db2a83e1078dbcb4426e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/ef5387868b88d7a72cf284c7e962b91e19ec5682",
-                "reference": "ef5387868b88d7a72cf284c7e962b91e19ec5682",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/fd82ada9393eb773b64db2a83e1078dbcb4426e5",
+                "reference": "fd82ada9393eb773b64db2a83e1078dbcb4426e5",
                 "shasum": ""
             },
             "require": {
@@ -700,7 +759,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-01-20 15:05:42"
+            "time": "2017-01-24 16:35:16"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -889,12 +948,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "c39f0e8dafa24d91528ed3e29723b8170e3dd9c7"
+                "reference": "8734a1bab53511d68e2344736662e960389ea2bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c39f0e8dafa24d91528ed3e29723b8170e3dd9c7",
-                "reference": "c39f0e8dafa24d91528ed3e29723b8170e3dd9c7",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/8734a1bab53511d68e2344736662e960389ea2bb",
+                "reference": "8734a1bab53511d68e2344736662e960389ea2bb",
                 "shasum": ""
             },
             "require": {
@@ -964,7 +1023,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-01-20 10:16:53"
+            "time": "2017-01-27 05:49:54"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1031,12 +1090,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "1991086b35313dd4e3c5b351f4b22760deea0910"
+                "reference": "3db4b0df21d1f527304650e717c66af48981f1c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/1991086b35313dd4e3c5b351f4b22760deea0910",
-                "reference": "1991086b35313dd4e3c5b351f4b22760deea0910",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/3db4b0df21d1f527304650e717c66af48981f1c4",
+                "reference": "3db4b0df21d1f527304650e717c66af48981f1c4",
                 "shasum": ""
             },
             "conflict": {
@@ -1080,7 +1139,7 @@
                 "phpmailer/phpmailer": ">=5,<5.2.22",
                 "pusher/pusher-php-server": "<2.2.1",
                 "sabre/dav": ">=1.6,<1.6.99|>=1.7,<1.7.11|>=1.8,<1.8.9",
-                "shopware/shopware": "<4.3.7|>=5,<5.1.5",
+                "shopware/shopware": "<4.4|>=5,<5.2.15",
                 "silverstripe/cms": ">=3.1,<3.1.11|>=3,<=3.0.11",
                 "silverstripe/forum": "<=0.6.1|>=0.7,<=0.7.3",
                 "silverstripe/framework": ">=3,<3.3",
@@ -1154,7 +1213,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2017-01-19T15:04:18+00:00"
+            "time": "2017-01-24T18:32:04+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -1905,12 +1964,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tracy.git",
-                "reference": "65c8e02af4ae1f954314a56b852000d9bfa98eac"
+                "reference": "bd15a04c7d4c9e5620a3b9803bb28a615156bcc5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tracy/zipball/65c8e02af4ae1f954314a56b852000d9bfa98eac",
-                "reference": "65c8e02af4ae1f954314a56b852000d9bfa98eac",
+                "url": "https://api.github.com/repos/nette/tracy/zipball/bd15a04c7d4c9e5620a3b9803bb28a615156bcc5",
+                "reference": "bd15a04c7d4c9e5620a3b9803bb28a615156bcc5",
                 "shasum": ""
             },
             "require": {
@@ -1959,7 +2018,7 @@
                 "debugger",
                 "nette"
             ],
-            "time": "2017-01-20T14:10:09+00:00"
+            "time": "2017-01-27T00:11:00+00:00"
         }
     ],
     "aliases": [],

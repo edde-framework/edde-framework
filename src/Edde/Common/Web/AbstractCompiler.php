@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Web;
 
@@ -8,6 +8,7 @@
 	use Edde\Api\Session\LazyFingerprintTrait;
 	use Edde\Api\Web\ICompiler;
 	use Edde\Common\Cache\CacheTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Resource\ResourceList;
 
 	/**
@@ -17,6 +18,7 @@
 		use LazyAssetStorageTrait;
 		use LazyFingerprintTrait;
 		use CacheTrait;
+		use ConfigurableTrait;
 		/**
 		 * filters applied during compilation (or after)
 		 *
@@ -29,14 +31,6 @@
 		 */
 		public function registerFilter(IFilter $filter): ICompiler {
 			$this->filterList[] = $filter;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function setNamespace(string $namespace): ICompiler {
-
 			return $this;
 		}
 
@@ -64,8 +58,14 @@
 		 */
 		protected function filter(string $content): string {
 			foreach ($this->filterList as $filter) {
+				$filter->setup();
 				$content = $filter->filter($content);
 			}
 			return $content;
+		}
+
+		protected function handleSetup() {
+			parent::handleSetup();
+			$this->cache();
 		}
 	}

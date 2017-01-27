@@ -72,16 +72,36 @@
 		/**
 		 * set query part of an url
 		 *
-		 * @param array $query
-		 *
 		 * @return IUrl
 		 */
-		public function setQuery(array $query): IUrl;
+		public function setQuery(string $query): IUrl;
+
+		/**
+		 * @return string
+		 */
+		public function getQuery();
 
 		/**
 		 * @return array
 		 */
-		public function getQuery();
+		public function getParameterList(): array;
+
+		/**
+		 * @param array $parameterList
+		 *
+		 * @return IUrl
+		 */
+		public function setParameterList(array $parameterList): IUrl;
+
+		/**
+		 * update the given parameter
+		 *
+		 * @param string $name
+		 * @param        $value
+		 *
+		 * @return IUrl
+		 */
+		public function setParameter(string $name, $value): IUrl;
 
 		/**
 		 * @param string      $name
@@ -89,7 +109,7 @@
 		 *
 		 * @return string
 		 */
-		public function getParameter($name, $default = null);
+		public function getParameter(string $name, $default = null);
 
 		/**
 		 * @return string
@@ -106,7 +126,7 @@
 		 *
 		 * @return $this
 		 */
-		public function build($url);
+		public function parse(string $url);
 
 		/**
 		 * run regular expression against absolute url

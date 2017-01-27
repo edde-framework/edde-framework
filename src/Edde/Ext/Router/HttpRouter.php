@@ -29,7 +29,7 @@
 				return null;
 			}
 			$requestUrl = $this->httpRequest->getRequestUrl();
-			$parameterList = $requestUrl->getQuery();
+			$parameterList = $requestUrl->getParameterList();
 			if (isset($parameterList['action']) === false && isset($parameterList['handle']) === false) {
 				return null;
 			}

@@ -31,16 +31,16 @@
 				while ($parent) {
 					$directory = dirname($parent->getFileName());
 					$fileList[] = $directory . '/layout.xml';
-					$fileList[] = $directory . '/template/layout.xml';
-					$fileList[] = $directory . '/../template/layout.xml';
-					$fileList[] = $directory . '/../../template/layout.xml';
+					$fileList[] = $directory . '/templates/layout.xml';
+					$fileList[] = $directory . '/../templates/layout.xml';
+					$fileList[] = $directory . '/../../templates/layout.xml';
 					if ($this->request->hasAction()) {
 						$fileList[] = $directory . '/' . ($action = 'action-' . $this->request->getActionName() . '.xml');
-						$fileList[] = $directory . '/template/' . $action;
+						$fileList[] = $directory . '/templates/' . $action;
 					}
 					if ($this->request->hasHandle()) {
 						$fileList[] = $directory . '/' . ($handle = 'handle-' . $this->request->getHandleName() . '.xml');
-						$fileList[] = $directory . '/template/' . $handle;
+						$fileList[] = $directory . '/templates/' . $handle;
 					}
 					$parent = $parent->getParentClass();
 				}

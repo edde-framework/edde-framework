@@ -53,6 +53,7 @@
 		 */
 		protected function handleInit() {
 			parent::handleInit();
+			$this->rootDirectory->normalize();
 			$this->assetDirectory->normalize();
 			$this->storageDirectory->normalize();
 			if (strpos($this->assetDirectory->getDirectory(), $this->rootDirectory->getDirectory()) === false) {
@@ -63,8 +64,8 @@
 			}
 		}
 
-		protected function handleConfig() {
-			parent::handleConfig();
+		protected function handleSetup() {
+			parent::handleSetup();
 			$this->assetDirectory->create();
 			$this->storageDirectory->create();
 		}

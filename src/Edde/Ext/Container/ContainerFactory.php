@@ -9,6 +9,8 @@
 	use Edde\Api\Application\IRequest;
 	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Asset\IAssetDirectory;
+	use Edde\Api\Asset\IAssetStorage;
+	use Edde\Api\Asset\IStorageDirectory;
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Cache\ICacheDirectory;
@@ -61,6 +63,8 @@
 	use Edde\Common\Application\Application;
 	use Edde\Common\Application\ResponseManager;
 	use Edde\Common\Asset\AssetDirectory;
+	use Edde\Common\Asset\AssetStorage;
+	use Edde\Common\Asset\StorageDirectory;
 	use Edde\Common\Cache\Cache;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheManager;
@@ -311,6 +315,10 @@
 					'session',
 					SessionDirectory::class,
 				]),
+				IStorageDirectory::class => self::proxy(IAssetDirectory::class, 'directory', [
+					'storage',
+					StorageDirectory::class,
+				]),
 				ICacheManager::class => CacheManager::class,
 				ICache::class => ICacheManager::class,
 				ICacheStorage::class => FlatFileCacheStorage::class,
@@ -356,6 +364,7 @@
 				IAcl::class => Acl::class,
 				ICompiler::class => Compiler::class,
 				ITranslator::class => Translator::class,
+				IAssetStorage::class => AssetStorage::class,
 			];
 		}
 	}
