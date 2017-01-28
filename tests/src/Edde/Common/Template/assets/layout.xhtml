@@ -1,0 +1,18 @@
+<html>
+	<head>
+		<title>This should be a title of the page!</title>
+	</head>
+	<body>
+		<div t:snippet="foo bar">
+			<span>this is hidden piece</span>
+		</div>
+		<h1>This is static header</h1>
+		<div>
+			<section t:include="foo bar"/>
+			<p>
+				Blah blah blah!
+			</p>
+			<div t:include="gimme some include here"/>
+		</div>
+	</body>
+</html>

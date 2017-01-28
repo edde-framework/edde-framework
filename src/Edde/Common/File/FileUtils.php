@@ -11,6 +11,7 @@
 	class FileUtils extends Object {
 		static protected $mimeTypeList = [
 			'xml' => 'text/xml',
+			'xhtml' => 'application/xhtml+xml',
 			'json' => 'application/json',
 			'csv' => 'text/csv',
 			'php' => 'text/x-php',

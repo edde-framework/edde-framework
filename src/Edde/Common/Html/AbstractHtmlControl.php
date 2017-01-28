@@ -220,8 +220,7 @@
 				}
 				$content[] = ' ' . $name . '="' . $list . '"';
 			}
-			$pair = '>';
-			$content[] = $pair;
+			$content[] = '>';
 			$newline = "\n";
 			if (($value = $this->node->getValue()) !== null) {
 				$newline = null;

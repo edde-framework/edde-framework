@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Xml;
 
@@ -119,7 +119,6 @@
 							throw new XmlParserException(sprintf('Unexpected token [%s] while reading open tag.', $char));
 						}
 						$type = self::XML_TYPE_HEADER;
-						$name .= $char;
 						break;
 					case '-':
 						switch ($type) {

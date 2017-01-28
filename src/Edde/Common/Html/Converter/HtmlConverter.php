@@ -1,12 +1,11 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Html\Converter;
 
 	use Edde\Api\Control\ControlException;
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Html\IHtmlControl;
-	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Api\Web\LazyJavaScriptCompilerTrait;
 	use Edde\Api\Web\LazyStyleSheetCompilerTrait;
 	use Edde\Common\Converter\AbstractConverter;
@@ -15,7 +14,6 @@
 	 * IHtmlControl conversion to html output.
 	 */
 	class HtmlConverter extends AbstractConverter {
-		use LazyHttpResponseTrait;
 		use LazyJavaScriptCompilerTrait;
 		use LazyStyleSheetCompilerTrait;
 
@@ -24,11 +22,9 @@
 		 */
 		public function __construct() {
 			$this->register(IHtmlControl::class, [
-				'http+application/json',
 				'application/json',
-				'http+text/html',
+				'application/json',
 				'text/html',
-				'http+application/xml',
 			]);
 		}
 
@@ -43,9 +39,6 @@
 				$this->unsupported($convert, $target);
 			}
 			switch ($target) {
-				/** @noinspection PhpMissingBreakStatementInspection */
-				case 'http+application/json':
-					$this->httpResponse->send();
 				case 'application/json':
 					$json = [];
 					foreach ($convert->invalidate() as $control) {
@@ -72,10 +65,6 @@
 					}
 					echo $json = json_encode($json);
 					return $json;
-				/** @noinspection PhpMissingBreakStatementInspection */
-				case 'http+text/html':
-				case 'http+application/xml':
-					$this->httpResponse->send();
 				case 'text/html':
 					echo $render = $convert->render();
 					return $render;

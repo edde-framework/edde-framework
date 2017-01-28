@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Converter;
 
@@ -27,6 +27,7 @@
 			$this->register([
 				'text/xml',
 				'application/xml',
+				'application/xhtml+xml',
 				'xml',
 			], INode::class);
 		}
