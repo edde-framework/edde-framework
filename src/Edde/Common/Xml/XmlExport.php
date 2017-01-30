@@ -9,15 +9,21 @@
 	class XmlExport extends AbstractXmlExport {
 		public function export(\Iterator $iterator, IFile $file): IFile {
 			$file->open('w+');
-			$closeList = [];
+			$stack = new \SplStack();
+			$level = -1;
 			/**
 			 * @var $node INode
 			 */
 			foreach ($iterator as $node) {
+				$value = null;
+				if ($node->getLevel() < $level) {
+					$file->write($stack->pop());
+				}
 				$indentation = str_repeat("\t", $node->getLevel());
-				$isClosed = ($node->isLeaf() || $node->getMeta('pair', false));
-				if ($isClosed === false) {
-					$closeList[] = $indentation . '</' . $node->getName() . ">\n";
+				$isClosed = (($value = $node->getValue()) === null) && ($node->isLeaf() || $node->getMeta('pair', false));
+				$close = '</' . $node->getName() . ">\n";
+				if ($isClosed === false && ($node->isLeaf() === false || $value === null)) {
+					$stack->push($indentation . $close);
 				}
 				$content = [];
 				$content[] = $indentation . '<' . $node->getName();
@@ -27,11 +33,18 @@
 				if ($isClosed) {
 					$content[] = '/';
 				}
-				$content[] = ">\n";
+				$content[] = '>' . (($value && $node->isLeaf()) ? '' : "\n");
 				$file->write(implode('', $content));
+				if ($value && $node->isLeaf()) {
+					$file->write($value);
+				}
+				if ($isClosed === false && $value && $node->isLeaf()) {
+					$file->write($close);
+				}
+				$level = $node->getLevel();
 			}
-			foreach (array_reverse($closeList) as $node) {
-				$file->write($node);
+			while ($stack->isEmpty() === false) {
+				$file->write($stack->pop());
 			}
 			$file->close();
 			return $file;

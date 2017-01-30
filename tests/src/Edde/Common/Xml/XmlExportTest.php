@@ -18,7 +18,8 @@
 
 		public function testSimple() {
 			$this->xmlExport->export(NodeIterator::recursive(new Node('root'), true), $file = new File(__DIR__ . '/temp/export.xml'));
-			self::assertSame('<root/>', $file->get());
+			self::assertSame('<root/>
+', $file->get());
 		}
 
 		public function testSimpleAttribute() {
@@ -26,7 +27,8 @@
 				'foo' => 'bar',
 				'bar' => 'foo',
 			]), true), $file = new File(__DIR__ . '/temp/export.xml'));
-			self::assertSame('<root foo="bar" bar="foo"/>', $file->get());
+			self::assertSame('<root foo="bar" bar="foo"/>
+', $file->get());
 		}
 
 		public function testSimpleAttributeEscape() {
@@ -34,7 +36,8 @@
 				'foo' => 'bar',
 				'bar' => 'fo"o',
 			]), true), $file = new File(__DIR__ . '/temp/export.xml'));
-			self::assertSame('<root foo="bar" bar="fo&quot;o"/>', $file->get());
+			self::assertSame('<root foo="bar" bar="fo&quot;o"/>
+', $file->get());
 		}
 
 		public function testSmallNode() {
@@ -43,16 +46,19 @@
 				'bar' => 'fo"o',
 			]);
 			$node->addNode(new Node('foo'));
-			$node->addNode($bar = new Node('bar'));
-			$bar->addNode(new Node('node-inside-node'));
-			$bar->addNode(new Node('node-inside-node'));
+			$node->addNode($bar = new Node('bar', 'this-will-be-ignored'));
+			$bar->addNode(new Node('node-inside-node', null, ['moo' => 'hello']));
+			$bar->addNode($hidden = new Node('node-inside-node'));
+			$hidden->addNode(new Node('a-little-secret-here', 'whoaaaaa'));
 			$bar->addNode(new Node('node-inside-node-node'));
 			$this->xmlExport->export(NodeIterator::recursive($node, true), $file = new File(__DIR__ . '/temp/export.xml'));
 			self::assertSame('<root foo="bar" bar="fo&quot;o">
 	<foo/>
 	<bar>
-		<node-inside-node/>
-		<node-inside-node/>
+		<node-inside-node moo="hello"/>
+		<node-inside-node>
+			<a-little-secret-here>whoaaaaa</a-little-secret-here>
+		</node-inside-node>
 		<node-inside-node-node/>
 	</bar>
 </root>
