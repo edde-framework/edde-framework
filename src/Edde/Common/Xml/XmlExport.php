@@ -9,38 +9,29 @@
 	class XmlExport extends AbstractXmlExport {
 		public function export(\Iterator $iterator, IFile $file): IFile {
 			$file->open('w+');
-			$level = -1;
+			$closeList = [];
 			/**
 			 * @var $node INode
 			 */
 			foreach ($iterator as $node) {
+				$indentation = str_repeat("\t", $node->getLevel());
+				$isClosed = ($node->isLeaf() || $node->getMeta('pair', false));
+				if ($isClosed === false) {
+					$closeList[] = $indentation . '</' . $node->getName() . ">\n";
+				}
 				$content = [];
-				$content[] = $indentation = str_repeat("\t", $node->getLevel());
-				$content[] = '<' . $node->getName();
+				$content[] = $indentation . '<' . $node->getName();
 				foreach ($node->getAttributeList() as $name => $list) {
 					$content[] = ' ' . $name . '="' . htmlspecialchars($list, ENT_XML1 | ENT_COMPAT, 'UTF-8') . '"';
 				}
-				if (($isPair = $node->getMeta('pair'))) {
-					$content[] = '>';
-					$newline = "\n";
-					if (($value = $node->getValue()) !== null) {
-						$newline = null;
-						$indentation = null;
-						$content[] = htmlspecialchars($value, ENT_XML1, 'UTF-8');
-					}
-					if ($node->isLeaf() && $isPair === true) {
-						$newline = null;
-						$indentation = null;
-					}
-					$content[] = $newline;
-					if ($isPair && $node->getLevel() < $level) {
-						$content[] = $indentation . '</' . $node->getName() . ">\n";
-					}
-				} else {
-					$content[] = '/>';
+				if ($isClosed) {
+					$content[] = '/';
 				}
-				$level = $node->getLevel();
+				$content[] = ">\n";
 				$file->write(implode('', $content));
+			}
+			foreach (array_reverse($closeList) as $node) {
+				$file->write($node);
 			}
 			$file->close();
 			return $file;
