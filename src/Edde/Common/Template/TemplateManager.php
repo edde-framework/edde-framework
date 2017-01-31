@@ -6,6 +6,11 @@
 	use Edde\Api\Template\ITemplate;
 
 	class TemplateManager extends AbstractTemplateManager {
-		public function compile(array $snippetList = null): ITemplate {
+		public function template(array $nameList): ITemplate {
+			$template = $this->createTemplate();
+			foreach ($nameList as $name) {
+				$template->import($name, $this->getResource($name));
+			}
+			return $template;
 		}
 	}

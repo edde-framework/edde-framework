@@ -5,7 +5,7 @@
 
 	use Edde\Api\Config\IConfigurable;
 
-	interface ITemplateManager extends IConfigurable {
+	interface ITemplateManager extends ITemplateProvider, IConfigurable {
 		/**
 		 * @param ITemplateProvider $templateProvider
 		 *
@@ -16,9 +16,9 @@
 		/**
 		 * build a template from the given (already registered) snippets
 		 *
-		 * @param array|null $snippetList
+		 * @param array $nameList
 		 *
 		 * @return ITemplate
 		 */
-		public function compile(array $snippetList = null): ITemplate;
+		public function template(array $nameList): ITemplate;
 	}
