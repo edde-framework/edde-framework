@@ -45,7 +45,7 @@
 						throw new WebException(sprintf('Cannot compile stylesheets: resource [%s] is not available (does not exists?).', (string)$resource->getUrl()));
 					}
 					$current = $this->filter($resource->get());
-					$urlList = StringUtils::matchAll($current, "~url\\((?<url>.*?)\\)~", true);
+					$urlList = StringUtils::matchAll($current, "~url\\(['\"](?<url>.*?)['\"]\\)~", true);
 					$resourcePath = $source = $resource->getUrl()
 						->getPath();
 					$resourcePath = dirname($resourcePath);
