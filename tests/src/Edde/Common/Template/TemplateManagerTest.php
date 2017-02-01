@@ -3,12 +3,14 @@
 
 	namespace Edde\Common\Template;
 
+	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Common\File\RootDirectory;
+	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Converter\ConverterManagerConfigurator;
@@ -59,6 +61,7 @@
 				IRootDirectory::class => $this->rootDirectory = new RootDirectory(__DIR__),
 				ITemplateManager::class => TemplateManager::class,
 				ITemplate::class => Template::class,
+				ICacheStorage::class => InMemoryCacheStorage::class,
 				new ClassFactory(),
 			], [
 				IConverterManager::class => ConverterManagerConfigurator::class,

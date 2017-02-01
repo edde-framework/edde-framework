@@ -14,7 +14,7 @@
 		 */
 		protected $templateProvider;
 		/**
-		 * @var array
+		 * @var IResource[]
 		 */
 		protected $resourceList;
 

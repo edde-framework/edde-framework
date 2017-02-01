@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Node;
 
@@ -13,27 +13,12 @@
 		 *
 		 * @return $this
 		 */
-		public function setName($name);
+		public function setName(string $name);
 
 		/**
 		 * @return string
 		 */
 		public function getName();
-
-		/**
-		 * generate materialized path from node names
-		 *
-		 * @return INode
-		 */
-		public function getParent();
-
-		/**
-		 * @param bool $attributes include attribute names (e.g. [foo][bar], ....)
-		 * @param bool $meta       include meta names (e.g. (foo)(bar)
-		 *
-		 * @return string
-		 */
-		public function getPath($attributes = false, $meta = false);
 
 		/**
 		 * @param mixed $value
@@ -50,114 +35,33 @@
 		public function getValue($default = null);
 
 		/**
-		 * @param string $name
-		 * @param mixed  $value
+		 * return list of attributes for this node
 		 *
-		 * @return $this
+		 * @return IAttributeList
 		 */
-		public function setAttribute($name, $value);
+		public function getAttributeList(): IAttributeList;
 
 		/**
-		 * @param string $name
+		 * return list of meta data
 		 *
-		 * @return bool
+		 * @return IAttributeList
 		 */
-		public function hasAttribute($name);
+		public function getMetaList(): IAttributeList;
 
 		/**
-		 * @param string     $name
-		 * @param mixed|null $default
+		 * generate materialized path from node names
 		 *
-		 * @return mixed
+		 * @return INode|null
 		 */
-		public function getAttribute($name, $default = null);
+		public function getParent();
 
 		/**
-		 * remove the given attribute from list
+		 * @param bool $attributes include attribute names (e.g. [foo][bar], ....)
+		 * @param bool $meta       include meta names (e.g. (foo)(bar)
 		 *
-		 * @param string $name
-		 *
-		 * @return INode
+		 * @return string
 		 */
-		public function removeAttribute(string $name): INode;
-
-		/**
-		 * replace current attribute list by the given one
-		 *
-		 * @param array $attributeList
-		 *
-		 * @return $this
-		 */
-		public function setAttributeList(array $attributeList);
-
-		/**
-		 * add the given attribute list to the current one (overriding same keys)
-		 *
-		 * @param array $attributeList
-		 *
-		 * @return $this
-		 */
-		public function addAttributeList(array $attributeList);
-
-		/**
-		 * has this node attributes with a given namespace
-		 *
-		 * @param string $namespace
-		 *
-		 * @return bool
-		 */
-		public function hasAttributeList(string $namespace): bool;
-
-		/**
-		 * @param string $namespace
-		 *
-		 * @return array
-		 */
-		public function getAttributeList(string $namespace = null): array;
-
-		public function removeAttributeList(string $namespace): INode;
-
-		/**
-		 * @param array $metaList
-		 *
-		 * @return $this
-		 */
-		public function setMetaList(array $metaList);
-
-		/**
-		 * @param array $metaList
-		 *
-		 * @return $this
-		 */
-		public function addMetaList(array $metaList);
-
-		/**
-		 * @param string $name
-		 * @param mixed  $value
-		 *
-		 * @return $this
-		 */
-		public function setMeta($name, $value);
-
-		/**
-		 * @param string $name
-		 *
-		 * @return bool
-		 */
-		public function hasMeta($name);
-
-		/**
-		 * @param string     $name
-		 * @param mixed|null $default
-		 *
-		 * @return mixed
-		 */
-		public function getMeta($name, $default = null);
-
-		/**
-		 * @return array
-		 */
-		public function getMetaList();
+		public function getPath($attributes = false, $meta = false);
 
 		/**
 		 * @return INode[]
