@@ -706,9 +706,9 @@
 				'a:too' => 'oot',
 				'b:foo' => 'foo',
 			], $node->getAttributeList());
-			self::assertTrue($node->hasAttributeList('a'));
-			self::assertTrue($node->hasAttributeList('b'));
-			self::assertFalse($node->hasAttributeList('poo'));
+			self::assertTrue($attributeList->hasAttributeList('a'));
+			self::assertTrue($attributeList->hasAttributeList('b'));
+			self::assertFalse($attributeList->hasAttributeList('poo'));
 		}
 
 		public function testSwitch() {
