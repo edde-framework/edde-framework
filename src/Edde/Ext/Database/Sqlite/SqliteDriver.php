@@ -100,7 +100,6 @@
 				$statement = $this->pdo->prepare($staticQuery->getQuery());
 				$statement->setFetchMode(PDO::FETCH_ASSOC);
 				$statement->execute($staticQuery->getParameterList());
-				$statement->closeCursor();
 				return $statement;
 			} catch (\PDOException $exception) {
 				if (strpos($message = $exception->getMessage(), 'no such table') !== false) {
