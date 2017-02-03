@@ -5,6 +5,7 @@
 
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\File\File;
@@ -221,9 +222,11 @@
 			$resourceManager = $container->create(IResourceManager::class);
 			$converterManager = $container->create(IConverterManager::class);
 			$converterManager->registerConverter($container->create(XmlConverter::class));
+			/** @var $node INode */
 			$node = $resourceManager->file(__DIR__ . '/assets/a-bit-less-simple.xml');
 			self::assertEquals('root', $node->getName());
-			self::assertEquals(['r' => 'oot'], $node->getAttributeList());
+			self::assertEquals(['r' => 'oot'], $node->getAttributeList()
+				->array());
 			self::assertCount(3, $node->getNodeList());
 			$nodeIterator = new \ArrayIterator($node->getNodeList());
 			$nodeIterator->rewind();
