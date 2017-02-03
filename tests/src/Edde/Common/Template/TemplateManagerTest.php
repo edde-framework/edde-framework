@@ -66,6 +66,7 @@
 			], [
 				IConverterManager::class => ConverterManagerConfigurator::class,
 			]);
+			$this->rootDirectory->normalize();
 			$this->templateManager = $this->container->create(ITemplateManager::class);
 		}
 	}
