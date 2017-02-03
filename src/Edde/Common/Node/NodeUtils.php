@@ -1,11 +1,12 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Node;
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
 	use Edde\Common\Object;
+	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Set of tools for work with nodes.
@@ -25,6 +26,7 @@
 			}
 			/** @noinspection UnnecessaryParenthesesInspection */
 			return ($callback = function (callable $callback, INode $root, $source) {
+				$attributeList = $root->getAttributeList();
 				/** @noinspection ForeachSourceInspection */
 				foreach ($source as $key => $value) {
 					switch ($key) {
@@ -35,10 +37,11 @@
 							$root->setValue($value);
 							continue 2;
 						case 'attribute-list':
-							$root->addAttributeList((array)$value);
+							$attributeList->put((array)$value);
 							continue 2;
 						case 'meta-list':
-							$root->addMetaList((array)$value);
+							$root->getMetaList()
+								->put((array)$value);
 							continue 2;
 						case 'node-list':
 							/** @noinspection ForeachSourceInspection */
@@ -71,7 +74,7 @@
 						}
 						continue;
 					}
-					$root->setAttribute($key, $value);
+					$attributeList->set($key, $value);
 				}
 				return $root;
 			})($callback, $root, $source);
@@ -88,6 +91,7 @@
 		 */
 		static public function convert(\stdClass $stdClass, INode $root = null): INode {
 			$root = $root ?: new Node();
+			$attributeList = $root->getAttributeList();
 			/** @noinspection ForeachSourceInspection */
 			foreach ($stdClass as $k => $v) {
 				if ($v instanceof \stdClass) {
@@ -102,8 +106,27 @@
 					}
 					continue;
 				}
-				$root->setAttribute($k, $v);
+				$attributeList->set($k, $v);
 			}
 			return $root;
+		}
+
+		/**
+		 * namespecize the given node tree; attributes matching the given preg will be converted to namespace structure
+		 *
+		 * @param INode  $root
+		 * @param string $preg
+		 */
+		static public function namespace(INode $root, string $preg) {
+			foreach (NodeIterator::recursive($root, true) as $node) {
+				$attributeList = $node->getAttributeList();
+				foreach ($attributeList as $k => $value) {
+					if (($match = StringUtils::match($k, $preg, true)) !== null) {
+						$attributeList->set($match['namespace'], $namespace = $attributeList->get($match['namespace'], new AttributeList()));
+						$namespace->set($match['name'], $value);
+						$attributeList->remove($k);
+					}
+				}
+			}
 		}
 	}

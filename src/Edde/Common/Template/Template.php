@@ -3,16 +3,30 @@
 
 	namespace Edde\Common\Template;
 
+	use Edde\Api\Node\IAttributeList;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\LazyResourceManagerTrait;
 	use Edde\Api\Template\TemplateException;
 	use Edde\Common\Node\NodeIterator;
+	use Edde\Common\Node\NodeUtils;
 
 	class Template extends AbstractTemplate {
 		use LazyResourceManagerTrait;
 
+		protected function inline(INode $node, IAttributeList $attributeList) {
+			foreach ($attributeList->get('t', []) as $k => $v) {
+				$k = $v;
+			}
+		}
+
 		protected function template(INode $root) {
+			NodeUtils::namespace($root, '~^(?<namespace>[a-z]):(?<name>[a-zA-Z0-9_-]+)$~');
 			foreach (NodeIterator::recursive($root, true) as $node) {
+				$attributeList = $node->getAttributeList();
+				/**
+				 * there are some fucking macros, oops!
+				 */
+				$this->inline($node, $attributeList);
 			}
 		}
 
