@@ -13,8 +13,9 @@
 	class Template extends AbstractTemplate {
 		use LazyResourceManagerTrait;
 
-		protected function inline(INode $node, IAttributeList $attributeList) {
+		protected function namespace(INode $node, IAttributeList $attributeList) {
 			foreach ($attributeList->get('t', []) as $k => $v) {
+				$this->inline($node, $k, $v);
 			}
 		}
 
@@ -25,7 +26,7 @@
 				/**
 				 * there are some fucking macros, oops!
 				 */
-				$this->inline($node, $attributeList);
+				$this->namespace($node, $attributeList);
 			}
 		}
 

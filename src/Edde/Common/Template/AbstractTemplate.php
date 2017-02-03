@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Template;
 
+	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\ITemplate;
@@ -28,8 +29,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function registerMacro(IMacro $macro): ITemplate {
-			$this->macroList[] = $macro;
+		public function registerMacro(string $name, IMacro $macro): ITemplate {
+			$this->macroList[$name] = $macro;
 			return $this;
 		}
 
@@ -47,5 +48,14 @@
 		public function import(string $name, IResource $resource): ITemplate {
 			$this->resourceList[$name] = $resource;
 			return $this;
+		}
+
+		protected function inline(INode $node, string $name, string $value = null) {
+			if (isset($this->macroList[$name])) {
+				$this->macroList[$name]->inline($node);
+			}
+		}
+
+		protected function macro(INode $node) {
 		}
 	}

@@ -8,11 +8,12 @@
 
 	interface ITemplate extends IConfigurable {
 		/**
+		 * @param string $name
 		 * @param IMacro $macro
 		 *
 		 * @return ITemplate
 		 */
-		public function registerMacro(IMacro $macro): ITemplate;
+		public function registerMacro(string $name, IMacro $macro): ITemplate;
 
 		/**
 		 * from where this template can got another templates?
