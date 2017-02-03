@@ -6,4 +6,10 @@
 	use Edde\Api\Collection\IList;
 
 	interface IAttributeList extends IList {
+		/**
+		 * @param string $name
+		 *
+		 * @return bool
+		 */
+		public function hasAttributeList(string $name): bool;
 	}

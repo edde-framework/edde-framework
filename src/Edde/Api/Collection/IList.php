@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Collection;
 
@@ -44,7 +44,7 @@
 		 * @param string               $name
 		 * @param string|callable|null $default
 		 *
-		 * @return mixed
+		 * @return mixed|IList
 		 */
 		public function get(string $name, $default = null);
 

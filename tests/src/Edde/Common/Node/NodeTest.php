@@ -35,7 +35,8 @@
 					self::assertCount(1, $nodeList, sprintf('Node count missmatch for (%s)', $query));
 					$node = reset($nodeList);
 					self::assertEquals('big-poo', $node->getName());
-					self::assertTrue(array_key_exists('footribute', $node->getAttributeList()));
+					self::assertTrue(array_key_exists('footribute', $node->getAttributeList()
+						->array()));
 				},
 				/**
 				 * skipping path and waiting for a node
@@ -88,7 +89,8 @@
 					self::assertCount(1, $nodeList, sprintf('Node count missmatch for (%s)', $query));
 					$node = reset($nodeList);
 					self::assertEquals('going-deeper', $node->getName());
-					self::assertContains('fobar', array_keys($node->getAttributeList()));
+					self::assertContains('fobar', array_keys($node->getAttributeList()
+						->array()));
 				},
 				/**
 				 * return all nodes under the given path
@@ -148,9 +150,11 @@
 						202,
 					];
 					$testList = [];
+					/**@var $node INode */
 					foreach ($nodeList as $node) {
 						self::assertEquals('catch', $node->getName());
-						self::assertEquals('banana', $node->getAttribute('fruit'));
+						self::assertEquals('banana', $node->getAttributeList()
+							->get('fruit'));
 						$testList[] = $node->getValue();
 					}
 					sort($valueList);
@@ -696,16 +700,23 @@
 			self::assertEquals([
 				'foo' => 'bar',
 				'too' => 'oot',
-			], $attributeList->get('a'));
+			], $attributeList->get('a')
+				->array());
 			self::assertEquals([
 				'foo' => 'foo',
-			], $attributeList->get('b'));
+			], $attributeList->get('b')
+				->array());
 			self::assertEquals([
 				'foo' => 'bar',
-				'a:foo' => 'bar',
-				'a:too' => 'oot',
-				'b:foo' => 'foo',
-			], $node->getAttributeList());
+				'a' => [
+					'foo' => 'bar',
+					'too' => 'oot',
+				],
+				'b' => [
+					'foo' => 'foo',
+				],
+			], $node->getAttributeList()
+				->array());
 			self::assertTrue($attributeList->hasAttributeList('a'));
 			self::assertTrue($attributeList->hasAttributeList('b'));
 			self::assertFalse($attributeList->hasAttributeList('poo'));

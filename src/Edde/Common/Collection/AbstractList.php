@@ -70,7 +70,11 @@
 		 * @inheritdoc
 		 */
 		public function array(): array {
-			return $this->list;
+			$array = [];
+			foreach ($this->list as $k => $v) {
+				$array[$k] = $v instanceof IList ? $v->array() : $v;
+			}
+			return $array;
 		}
 
 		/**
