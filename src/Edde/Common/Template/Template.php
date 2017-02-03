@@ -15,7 +15,6 @@
 
 		protected function inline(INode $node, IAttributeList $attributeList) {
 			foreach ($attributeList->get('t', []) as $k => $v) {
-				$k = $v;
 			}
 		}
 

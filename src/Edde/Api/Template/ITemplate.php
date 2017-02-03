@@ -3,9 +3,17 @@
 
 	namespace Edde\Api\Template;
 
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Resource\IResource;
 
-	interface ITemplate {
+	interface ITemplate extends IConfigurable {
+		/**
+		 * @param IMacro $macro
+		 *
+		 * @return ITemplate
+		 */
+		public function registerMacro(IMacro $macro): ITemplate;
+
 		/**
 		 * from where this template can got another templates?
 		 *
