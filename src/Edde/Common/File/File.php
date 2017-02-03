@@ -96,8 +96,8 @@
 			if ($this->isOpen()) {
 				throw new FileException(sprintf('Current file [%s] is already opened.', $this->url));
 			}
-			if (($this->handle = @fopen($this->url->getPath(), $mode)) === false) {
-				throw new FileException(sprintf('Cannot open file [%s (%s)].', $this->url->getPath(), $mode));
+			if (($this->handle = @fopen($path = $this->url->getPath(), $mode)) === false) {
+				throw new FileException(sprintf('Cannot open file [%s (%s)].', $path, $mode));
 			}
 			return $this;
 		}
