@@ -1,10 +1,10 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\TemplateEngine;
 
-	use Edde\Api\Template\IMacroSet;
 	use Edde\Api\TemplateEngine\IMacro;
+	use Edde\Api\TemplateEngine\IMacroSet;
 	use Edde\Common\Object;
 
 	class MacroSet extends Object implements IMacroSet {
