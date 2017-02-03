@@ -3,8 +3,8 @@
 
 	namespace Edde\Common\TemplateEngine;
 
-	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\TemplateEngine\IHelper;
+	use Edde\Api\TemplateEngine\IHelperSet;
 	use Edde\Common\Object;
 
 	class HelperSet extends Object implements IHelperSet {
