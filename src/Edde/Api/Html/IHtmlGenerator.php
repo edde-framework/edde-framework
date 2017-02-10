@@ -1,0 +1,42 @@
+<?php
+	declare(strict_types=1);
+
+	namespace Edde\Api\Html;
+
+	use Edde\Api\Node\INode;
+
+	interface IHtmlGenerator {
+		/**
+		 * return set of supported tags
+		 *
+		 * @return array
+		 */
+		public function getTagList(): array;
+
+		/**
+		 * try to generate a html output from the given node
+		 *
+		 * @param INode $root
+		 *
+		 * @return string
+		 */
+		public function generate(INode $root): string;
+
+		/**
+		 * generate open tag only for the given node
+		 *
+		 * @param INode $node
+		 *
+		 * @return string
+		 */
+		public function open(INode $node): string;
+
+		/**
+		 * generate close tag only for the given node
+		 *
+		 * @param INode $node
+		 *
+		 * @return string
+		 */
+		public function close(INode $node): string;
+	}

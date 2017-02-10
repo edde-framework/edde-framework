@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Node;
 
@@ -100,10 +100,11 @@
 				if ($this->filter->fixed && $level !== $this->filter->level) {
 					continue;
 				}
-				if ($this->filter->static && $this->filter->attributes === false && $this->filter->metas === false && $node->getPath() !== $this->query) {
-					continue;
-				}
-				if (preg_match($this->filter->preg, $node->getPath($this->filter->attributes, $this->filter->metas)) !== 1) {
+//				if ($this->filter->static && $this->filter->attributes === false && $this->filter->metas === false && $node->getPath() !== $this->query) {
+//					continue;
+//				}
+				$path = $node->getPath($this->filter->attributes, $this->filter->metas);
+				if (preg_match($this->filter->preg, $path) !== 1) {
 					continue;
 				}
 				yield $node;
@@ -140,7 +141,7 @@
 					$preg .= '(.*?/)?';
 					continue;
 				} else if ($fragment === '*') {
-					$preg .= '[' . $name . ']*(\\[.*?\\])*(\\(.*?\\))*/';
+					$preg .= '[' . $name . ']*(\\[.*?\\])*(\\(.*?\\))*(:\d+)?/';
 					continue;
 				}
 				$fragment = str_replace([
@@ -160,7 +161,7 @@
 				if (preg_match('~^[' . $name . ']+$~', $fragment)) {
 					$fragment .= '(\\[.*?\\])*(\\(.*?\\))*';
 				}
-				$preg .= $fragment . '/';
+				$preg .= $fragment . '(:\d+)?/';
 			}
 
 			$filter->preg = '~^/' . rtrim($preg, '/') . '$~';

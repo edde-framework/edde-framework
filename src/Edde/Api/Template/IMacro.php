@@ -25,18 +25,36 @@
 		/**
 		 * when there is inline node detected over the macro
 		 *
-		 * @param INode $node
+		 * @param ITemplate $template
+		 * @param INode     $node
+		 * @param string    $name
+		 * @param string    $value
 		 *
-		 * @return IMacro
+		 * @return
 		 */
-		public function inline(INode $node): IMacro;
+		public function inline(ITemplate $template, INode $node, string $name, string $value = null);
 
 		/**
-		 * main macro execution
+		 * open macro event (initial macro code)
 		 *
-		 * @param INode $node
-		 *
-		 * @return IMacro
+		 * @param ITemplate $template
+		 * @param INode     $node
 		 */
-		public function macro(INode $node): IMacro;
+		public function open(ITemplate $template, INode $node);
+
+		/**
+		 *
+		 *
+		 * @param ITemplate $template
+		 * @param INode     $node
+		 */
+		public function macro(ITemplate $template, INode $node);
+
+		/**
+		 * ending macro code (end of macro code)
+		 *
+		 * @param ITemplate $template
+		 * @param INode     $node
+		 */
+		public function close(ITemplate $template, INode $node);
 	}

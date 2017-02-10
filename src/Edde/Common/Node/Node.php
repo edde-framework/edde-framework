@@ -73,6 +73,9 @@
 				if ($meta && empty($metaList = $current->metaList->array()) === false) {
 					$fragment .= '(' . implode(')(', array_keys($metaList)) . ')';
 				}
+				if (($parent = $current->getParent()) && ($index = array_search($current, $parent->getNodeList(), true)) !== false) {
+					$fragment .= ':' . $index;
+				}
 				$path[] = $fragment;
 				$current = $current->getParent();
 			}

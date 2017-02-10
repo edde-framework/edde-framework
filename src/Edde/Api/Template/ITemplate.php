@@ -4,6 +4,7 @@
 	namespace Edde\Api\Template;
 
 	use Edde\Api\Config\IConfigurable;
+	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResource;
 
 	interface ITemplate extends IConfigurable {
@@ -27,6 +28,7 @@
 		/**
 		 * add list of resources of this template
 		 *
+		 * @param string    $name
 		 * @param IResource $resource
 		 *
 		 * @return ITemplate
@@ -37,4 +39,24 @@
 		 * execute template compilation
 		 */
 		public function compile();
+
+		/**
+		 * register the given block to the template; the block should NOT be modified by template
+		 *
+		 * @param string $name
+		 * @param INode  $node
+		 *
+		 * @return ITemplate
+		 */
+		public function block(string $name, INode $node): ITemplate;
+
+		/**
+		 * retrieve block with the given name; node is current macro; returned block should NOT be modified (or cloned) by template
+		 *
+		 * @param string $name
+		 * @param INode  $node
+		 *
+		 * @return INode
+		 */
+		public function getBlock(string $name, INode $node): INode;
 	}

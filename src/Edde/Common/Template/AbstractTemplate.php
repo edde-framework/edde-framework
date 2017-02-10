@@ -8,11 +8,13 @@
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\ITemplateProvider;
+	use Edde\Api\Template\MacroException;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	abstract class AbstractTemplate extends Object implements ITemplate {
 		use ConfigurableTrait;
+
 		/**
 		 * @var IMacro[]
 		 */
@@ -25,6 +27,10 @@
 		 * @var IResource[]
 		 */
 		protected $resourceList;
+		/**
+		 * @var INode[]
+		 */
+		protected $blockList = [];
 
 		/**
 		 * @inheritdoc
@@ -50,12 +56,35 @@
 			return $this;
 		}
 
-		protected function inline(INode $node, string $name, string $value = null) {
-			if (isset($this->macroList[$name])) {
-				$this->macroList[$name]->inline($node);
-			}
+		/**
+		 * @inheritdoc
+		 */
+		public function block(string $name, INode $node): ITemplate {
+			$this->blockList[$name] = $node;
+			return $this;
 		}
 
-		protected function macro(INode $node) {
+		/**
+		 * @inheritdoc
+		 */
+		public function getBlock(string $name, INode $node): INode {
+			if (isset($this->blockList[$name]) === false) {
+				throw new MacroException(sprintf('Requested unknown block [%s] on macro [%s].', $name, $node->getPath()));
+			}
+			return $this->blockList[$name];
+		}
+
+		protected function inline(INode $node, string $name, string $value = null) {
+			if (isset($this->macroList[$name]) === false) {
+				throw new MacroException(sprintf('Unknown inline macro [%s] on node [%s].', $name, $node->getPath()));
+			}
+			$this->macroList[$name]->inline($this, $node, $name, $value);
+		}
+
+		protected function macro(ITemplate $template, INode $node) {
+			if (isset($this->macroList[$name = $node->getName()]) === false) {
+				throw new MacroException(sprintf('Unknown macro [%s] on node [%s].', $name, $node->getPath()));
+			}
+			$this->macroList[$name]->macro($template, $node);
 		}
 	}

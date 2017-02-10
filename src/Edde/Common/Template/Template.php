@@ -27,6 +27,7 @@
 				 * there are some fucking macros, oops!
 				 */
 				$this->namespace($node, $attributeList);
+				$this->macro($this, $node);
 			}
 		}
 

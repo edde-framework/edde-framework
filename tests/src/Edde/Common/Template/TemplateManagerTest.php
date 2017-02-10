@@ -7,13 +7,16 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\Html\IHtmlGenerator;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Common\File\RootDirectory;
+	use Edde\Common\Html\Html5Generator;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Converter\ConverterManagerConfigurator;
+	use Edde\Ext\Template\TemplateConfigurator;
 	use PHPUnit\Framework\TestCase;
 
 	class TemplateManagerTest extends TestCase {
@@ -50,8 +53,8 @@
 		public function testTemplate() {
 			$this->templateManager->registerTemplateProvider($this->container->create(DirectoryTemplateProvider::class, [$this->rootDirectory]));
 			$template = $this->templateManager->template([
-				'layout',
 				'here-is-hidden-content-of-the-fucking-template',
+				'layout',
 			]);
 			$file = $template->compile();
 		}
@@ -62,9 +65,11 @@
 				ITemplateManager::class => TemplateManager::class,
 				ITemplate::class => Template::class,
 				ICacheStorage::class => InMemoryCacheStorage::class,
+				IHtmlGenerator::class => Html5Generator::class,
 				new ClassFactory(),
 			], [
 				IConverterManager::class => ConverterManagerConfigurator::class,
+				ITemplate::class => TemplateConfigurator::class,
 			]);
 			$this->rootDirectory->normalize();
 			$this->templateManager = $this->container->create(ITemplateManager::class);
