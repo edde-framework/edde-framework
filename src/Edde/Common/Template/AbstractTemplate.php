@@ -81,10 +81,10 @@
 			$this->macroList[$name]->inline($this, $node, $name, $value);
 		}
 
-		protected function macro(ITemplate $template, INode $node) {
+		public function getMacro(INode $node) {
 			if (isset($this->macroList[$name = $node->getName()]) === false) {
 				throw new MacroException(sprintf('Unknown macro [%s] on node [%s].', $name, $node->getPath()));
 			}
-			$this->macroList[$name]->macro($template, $node);
+			return $this->macroList[$name];
 		}
 	}

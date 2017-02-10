@@ -14,6 +14,10 @@
 	class Html5Generator extends Object implements IHtmlGenerator {
 		public function getTagList(): array {
 			return [
+				'html',
+				'head',
+				'title',
+				'body',
 				'div',
 			];
 		}
