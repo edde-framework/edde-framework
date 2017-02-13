@@ -8,14 +8,8 @@
       <sourceFolder url="file://$MODULE_DIR$/.runtime/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/lib/composer" />
       <excludeFolder url="file://$MODULE_DIR$/lib/defuse/php-encryption" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/nikic/php-parser" />
       <excludeFolder url="file://$MODULE_DIR$/lib/paragonie/constant_time_encoding" />
       <excludeFolder url="file://$MODULE_DIR$/lib/paragonie/random_compat" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-timer" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/theseer/directoryscanner" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/theseer/fdomdocument" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/theseer/fxsl" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/theseer/phpdox" />
       <excludeFolder url="file://$MODULE_DIR$/lib/tracy/tracy" />
     </content>
     <orderEntry type="inheritedJdk" />
@@ -49,27 +43,15 @@
         <CLASSES>
           <root url="file://$MODULE_DIR$/lib/composer" />
           <root url="file://$MODULE_DIR$/lib/defuse/php-encryption" />
-          <root url="file://$MODULE_DIR$/lib/nikic/php-parser" />
           <root url="file://$MODULE_DIR$/lib/paragonie/constant_time_encoding" />
           <root url="file://$MODULE_DIR$/lib/paragonie/random_compat" />
-          <root url="file://$MODULE_DIR$/lib/phpunit/php-timer" />
-          <root url="file://$MODULE_DIR$/lib/theseer/directoryscanner" />
-          <root url="file://$MODULE_DIR$/lib/theseer/fdomdocument" />
-          <root url="file://$MODULE_DIR$/lib/theseer/fxsl" />
-          <root url="file://$MODULE_DIR$/lib/theseer/phpdox" />
           <root url="file://$MODULE_DIR$/lib/tracy/tracy" />
         </CLASSES>
         <SOURCES>
           <root url="file://$MODULE_DIR$/lib/composer" />
           <root url="file://$MODULE_DIR$/lib/defuse/php-encryption" />
-          <root url="file://$MODULE_DIR$/lib/nikic/php-parser" />
           <root url="file://$MODULE_DIR$/lib/paragonie/constant_time_encoding" />
           <root url="file://$MODULE_DIR$/lib/paragonie/random_compat" />
-          <root url="file://$MODULE_DIR$/lib/phpunit/php-timer" />
-          <root url="file://$MODULE_DIR$/lib/theseer/directoryscanner" />
-          <root url="file://$MODULE_DIR$/lib/theseer/fdomdocument" />
-          <root url="file://$MODULE_DIR$/lib/theseer/fxsl" />
-          <root url="file://$MODULE_DIR$/lib/theseer/phpdox" />
           <root url="file://$MODULE_DIR$/lib/tracy/tracy" />
         </SOURCES>
       </library>
