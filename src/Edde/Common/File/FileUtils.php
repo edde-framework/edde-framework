@@ -217,7 +217,7 @@
 		 * @return IUrl
 		 * @throws FileException
 		 */
-		static public function url($file) {
+		static public function url(string $file) {
 			if (strpos($file, 'file:///') === false) {
 				$file = 'file:///' . ltrim(self::realpath($file, false), '/');
 			}

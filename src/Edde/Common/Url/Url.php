@@ -44,17 +44,6 @@
 		 */
 		protected $fragment = '';
 
-		static public function create($url = null): IUrl {
-			if ($url instanceof IUrl) {
-				return $url;
-			}
-			$self = new static();
-			if ($url !== null) {
-				$self->parse((string)$url);
-			}
-			return $self;
-		}
-
 		/**
 		 * @inheritdoc
 		 */
@@ -129,15 +118,8 @@
 		 * @inheritdoc
 		 */
 		public function setPath(string $path): IUrl {
-			$this->path = ltrim($path, '/');
+			$this->path = $path;
 			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function __toString() {
-			return $this->getAbsoluteUrl();
 		}
 
 		/**
@@ -161,9 +143,9 @@
 				$url .= ':' . $port;
 			}
 			$url .= '/' . ltrim($this->getPath(), '/');
-			$query = $this->getQuery();
+			$query = $this->getParameterList();
 			if (empty($query) === false) {
-				$url .= '?' . http_build_query($this->getQuery());
+				$url .= '?' . http_build_query($query);
 			}
 			if (($fragment = $this->getFragment()) !== '') {
 				$url .= '#' . $fragment;
@@ -296,5 +278,23 @@
 		 */
 		public function match(string $match, bool $path = true) {
 			return StringUtils::match($path ? $this->getPath() : $this->getAbsoluteUrl(), $match);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function __toString() {
+			return $this->getAbsoluteUrl();
+		}
+
+		static public function create($url = null): IUrl {
+			if ($url instanceof IUrl) {
+				return $url;
+			}
+			$self = new static();
+			if ($url !== null) {
+				$self->parse((string)$url);
+			}
+			return $self;
 		}
 	}
