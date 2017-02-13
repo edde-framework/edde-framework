@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3347632785663767bee4b3a7f3af68f3",
+    "content-hash": "ebc2588003ab2b963f4f8198278c4588",
     "packages": [
         {
             "name": "defuse/php-encryption",
@@ -64,65 +64,6 @@
                 "symmetric key cryptography"
             ],
             "time": "2016-10-10T15:20:26+00:00"
-        },
-        {
-            "name": "league/uri-parser",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thephpleague/uri-parser.git",
-                "reference": "129e088392cb80cf5431fe9d3b384fc0d06f3a2c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/uri-parser/zipball/129e088392cb80cf5431fe9d3b384fc0d06f3a2c",
-                "reference": "129e088392cb80cf5431fe9d3b384fc0d06f3a2c",
-                "shasum": ""
-            },
-            "require": {
-                "ext-intl": "*",
-                "php": ">=7.0.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^1.9",
-                "phpbench/phpbench": "^0.12.2",
-                "phpunit/phpunit": "^6.0"
-            },
-            "suggest": {
-                "league/uri-schemes": "Allow validating and normalizing URI parsing results"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "League\\Uri\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ignace Nyamagana Butera",
-                    "email": "nyamsprod@gmail.com",
-                    "homepage": "https://nyamsprod.com"
-                }
-            ],
-            "description": "userland URI parser RFC 3986 compliant",
-            "homepage": "https://github.com/thephpleague/uri-parser",
-            "keywords": [
-                "parse_url",
-                "parser",
-                "rfc3986",
-                "uri",
-                "url"
-            ],
-            "time": "2017-02-06 08:25:03"
         },
         {
             "name": "nikic/php-parser",

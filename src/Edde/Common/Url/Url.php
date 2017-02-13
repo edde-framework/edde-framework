@@ -5,9 +5,9 @@
 
 	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Url\IUrl;
+	use Edde\Api\Url\UrlException;
 	use Edde\Common\Object;
 	use Edde\Common\Strings\StringUtils;
-	use League\Uri\Parser;
 
 	class Url extends Object implements ICacheable, IUrl {
 		/**
@@ -48,9 +48,11 @@
 		 * @inheritdoc
 		 */
 		public function parse(string $url) {
-			$parsed = (new Parser())($url);
+			if (($parsed = parse_url($url)) === false) {
+				throw new UrlException(sprintf('Malformed URL [%s].', $url));
+			}
 			if (isset($parsed['query'])) {
-				parse_str($parsed['query'], $parsed['parameter-list']);
+				parse_str($parsed['query'], $parsed['query']);
 			}
 			static $copy = [
 				'scheme' => 'setScheme',
