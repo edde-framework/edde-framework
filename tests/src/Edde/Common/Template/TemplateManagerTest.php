@@ -19,6 +19,9 @@
 	use Edde\Ext\Template\TemplateConfigurator;
 	use PHPUnit\Framework\TestCase;
 
+	/**
+	 * @group wip
+	 */
 	class TemplateManagerTest extends TestCase {
 		/**
 		 * @var IContainer
