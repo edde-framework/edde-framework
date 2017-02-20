@@ -4,6 +4,8 @@
 	namespace Edde\Common\Template\Macro;
 
 	use Edde\Api\Html\LazyHtmlGeneratorTrait;
+	use Edde\Api\Node\INode;
+	use Edde\Api\Template\ITemplate;
 	use Edde\Common\Template\AbstractMacro;
 
 	class HtmlMacro extends AbstractMacro {
@@ -14,5 +16,13 @@
 		 */
 		public function getNameList(): array {
 			return $this->htmlGenerator->getTagList();
+		}
+
+		public function open(ITemplate $template, INode $node) {
+//			$file = $template->getFile();
+			$foo = $this->htmlGenerator->open($node);
+		}
+
+		public function close(ITemplate $template, INode $node) {
 		}
 	}

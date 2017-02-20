@@ -3,17 +3,22 @@
 
 	namespace Edde\Common\Template;
 
+	use Edde\Api\Crypt\LazyCryptEngineTrait;
+	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\ITemplateProvider;
+	use Edde\Api\Template\LazyTemplateDirectoryTrait;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	abstract class AbstractTemplate extends Object implements ITemplate {
 		use ConfigurableTrait;
+		use LazyTemplateDirectoryTrait;
+		use LazyCryptEngineTrait;
 
 		/**
 		 * @var IMacro[]
@@ -31,6 +36,10 @@
 		 * @var INode[]
 		 */
 		protected $blockList = [];
+		/**
+		 * @var IFile
+		 */
+		protected $file;
 
 		/**
 		 * @inheritdoc
@@ -86,5 +95,16 @@
 				throw new MacroException(sprintf('Unknown macro [%s] on node [%s].', $name, $node->getPath()));
 			}
 			return $this->macroList[$name];
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getFile(): IFile {
+			if ($this->file === null) {
+				$this->file = $this->templateDirectory->file($this->cryptEngine->guid());
+				$this->file->openForWrite();
+			}
+			return $this->file;
 		}
 	}

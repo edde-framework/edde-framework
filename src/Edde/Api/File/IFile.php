@@ -50,10 +50,32 @@
 		 * create file handle; if the file is not availble, exceptio nshould be thrown
 		 *
 		 * @param string $mode
+		 * @param bool   $exclusive if the file is already opened, exception should be thrown
 		 *
 		 * @return IFile
 		 */
-		public function open(string $mode): IFile;
+		public function open(string $mode, bool $exclusive = false): IFile;
+
+		/**
+		 * @param bool $exclusive
+		 *
+		 * @return IFile
+		 */
+		public function openForRead(bool $exclusive = false): IFile;
+
+		/**
+		 * @param bool $exclusive
+		 *
+		 * @return IFile
+		 */
+		public function openForWrite(bool $exclusive = false): IFile;
+
+		/**
+		 * @param bool $exclusive
+		 *
+		 * @return IFile
+		 */
+		public function openForAppend(bool $exclusive = false): IFile;
 
 		/**
 		 * @return bool
@@ -73,21 +95,6 @@
 		 * @return IFile
 		 */
 		public function close(): IFile;
-
-		/**
-		 * @return IFile
-		 */
-		public function openForRead(): IFile;
-
-		/**
-		 * @return IFile
-		 */
-		public function openForWrite(): IFile;
-
-		/**
-		 * @return IFile
-		 */
-		public function openForAppend(): IFile;
 
 		/**
 		 * read bunch of data

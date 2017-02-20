@@ -4,6 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+    "hash": "943a92d0f8e124102195b742a1d55aab",
     "content-hash": "5a9d028e1c9efefc9936aa3516d3e06a",
     "packages": [
         {
@@ -63,7 +64,7 @@
                 "security",
                 "symmetric key cryptography"
             ],
-            "time": "2016-10-10T15:20:26+00:00"
+            "time": "2016-10-10 15:20:26"
         },
         {
             "name": "paragonie/constant_time_encoding",
@@ -124,7 +125,7 @@
                 "hex2bin",
                 "rfc4648"
             ],
-            "time": "2016-07-11T20:32:06+00:00"
+            "time": "2016-07-11 20:32:06"
         },
         {
             "name": "paragonie/random_compat",
@@ -172,7 +173,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2016-11-07T23:38:38+00:00"
+            "time": "2016-11-07 23:38:38"
         },
         {
             "name": "roave/security-advisories",
@@ -306,7 +307,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2017-02-08T16:26:47+00:00"
+            "time": "2017-02-08 16:26:47"
         }
     ],
     "packages-dev": [

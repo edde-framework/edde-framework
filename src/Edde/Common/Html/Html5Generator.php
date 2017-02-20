@@ -30,6 +30,8 @@
 		}
 
 		public function open(INode $node): string {
+//			$content[] = $indentation = str_repeat("\t", $this->node->getLevel());
+//			$content[] = '<' . $node->getName();
 		}
 
 		public function close(INode $node): string {

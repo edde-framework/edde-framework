@@ -6,7 +6,6 @@
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Common\Config\AbstractConfigurator;
-	use Edde\Common\Html\Converter\HtmlConverter;
 	use Edde\Common\Translator\Dictionary\CsvDictionaryConverter;
 
 	class ConverterManagerConfigurator extends AbstractConfigurator {
@@ -17,7 +16,6 @@
 		 */
 		public function config($instance) {
 			$instance->registerConverter($this->container->create(HttpConverter::class));
-			$instance->registerConverter($this->container->create(HtmlConverter::class));
 			$instance->registerConverter($this->container->create(JsonConverter::class));
 			$instance->registerConverter($this->container->create(NodeConverter::class));
 			$instance->registerConverter($this->container->create(PhpConverter::class));

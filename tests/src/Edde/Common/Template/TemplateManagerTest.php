@@ -20,7 +20,7 @@
 	use PHPUnit\Framework\TestCase;
 
 	/**
-	 * @group wip
+	 * @group wipp
 	 */
 	class TemplateManagerTest extends TestCase {
 		/**

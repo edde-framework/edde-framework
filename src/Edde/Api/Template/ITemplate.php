@@ -4,6 +4,7 @@
 	namespace Edde\Api\Template;
 
 	use Edde\Api\Config\IConfigurable;
+	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResource;
 
@@ -59,4 +60,11 @@
 		 * @return INode
 		 */
 		public function getBlock(string $name, INode $node): INode;
+
+		/**
+		 * return template's source file (output)
+		 *
+		 * @return IFile
+		 */
+		public function getFile(): IFile;
 	}
