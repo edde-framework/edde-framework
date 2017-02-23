@@ -19,7 +19,6 @@
 		use ConfigurableTrait;
 		use LazyTemplateDirectoryTrait;
 		use LazyCryptEngineTrait;
-
 		/**
 		 * @var IMacro[]
 		 */
@@ -40,6 +39,7 @@
 		 * @var IFile
 		 */
 		protected $file;
+		protected $id;
 
 		/**
 		 * @inheritdoc
@@ -97,12 +97,21 @@
 			return $this->macroList[$name];
 		}
 
+		protected function getId() {
+			if ($this->id !== null) {
+				return $this->id;
+			}
+			$id = array_keys($this->resourceList);
+			asort($id);
+			return $this->id = $this->cryptEngine->guid(implode(', ', $id));
+		}
+
 		/**
 		 * @inheritdoc
 		 */
 		public function getFile(): IFile {
 			if ($this->file === null) {
-				$this->file = $this->templateDirectory->file($this->cryptEngine->guid());
+				$this->file = $this->templateDirectory->file($this->getId() . '.php');
 				$this->file->openForWrite();
 			}
 			return $this->file;

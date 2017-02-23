@@ -19,10 +19,12 @@
 		}
 
 		public function open(ITemplate $template, INode $node) {
-//			$file = $template->getFile();
-			$foo = $this->htmlGenerator->open($node);
+			$file = $template->getFile();
+			$file->write(sprintf("%s", $this->htmlGenerator->open($node)));
 		}
 
 		public function close(ITemplate $template, INode $node) {
+			$file = $template->getFile();
+			$file->write(sprintf("%s\n", $this->htmlGenerator->close($node)));
 		}
 	}

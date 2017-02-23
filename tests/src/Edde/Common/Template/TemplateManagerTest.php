@@ -9,6 +9,7 @@
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Html\IHtmlGenerator;
 	use Edde\Api\Template\ITemplate;
+	use Edde\Api\Template\ITemplateDirectory;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\Html\Html5Generator;
@@ -65,6 +66,7 @@
 		protected function setUp() {
 			$this->container = ContainerFactory::container([
 				IRootDirectory::class => $this->rootDirectory = new RootDirectory(__DIR__),
+				ITemplateDirectory::class => $this->rootDirectory->directory('temp'),
 				ITemplateManager::class => TemplateManager::class,
 				ITemplate::class => Template::class,
 				ICacheStorage::class => InMemoryCacheStorage::class,
