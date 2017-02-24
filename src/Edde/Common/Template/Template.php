@@ -25,13 +25,13 @@
 			$stack = new \SplStack();
 			$level = -1;
 			foreach (NodeIterator::recursive($root, true) as $node) {
-				$attributeList = $node->getAttributeList();
 				/**
 				 * there are some fucking macros, oops!
 				 */
-				$this->namespace($node, $attributeList);
+				$this->namespace($node, $node->getAttributeList());
 				if ($node->getLevel() < $level) {
 					/** @var $macro IMacro */
+					/** @var $close INode */
 					list($macro, $close) = $stack->pop();
 					$macro->close($this, $close);
 				}

@@ -21,6 +21,7 @@
 		public function inline(ITemplate $template, INode $node, string $name, string $value = null) {
 			$metaList = $node->getMetaList();
 			$metaList->set('block-root', true);
+			$metaList->set('skip', true);
 			$template->block($value, $node);
 		}
 
@@ -30,6 +31,7 @@
 		public function macro(ITemplate $template, INode $node) {
 			$attributeList = $node->getAttributeList();
 			$metaList = $node->getMetaList();
+			$metaList->set('skip', true);
 			$template->block((string)$attributeList->get('name'), $node);
 			$metaList->set('block-root', false);
 		}
