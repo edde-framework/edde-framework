@@ -71,7 +71,7 @@
 				$file->write(sprintf("\t * - resource [%s]\n\t *\t in [%s]\n", $name, $resource->getUrl()));
 			}
 			$file->write("\t */\n");
-			$file->write(sprintf("\tclass Template_%s {\n", str_replace('-', null, $this->getId())));
+			$file->write(sprintf("\tclass %s {\n", $this->getClass()));
 			$file->write("?>\n");
 			foreach ($this->resourceList as $resource) {
 				$this->template($this->resourceManager->resource($resource));

@@ -52,6 +52,13 @@
 		public function block(string $name, INode $node): ITemplate;
 
 		/**
+		 * return template class name
+		 *
+		 * @return string
+		 */
+		public function getClass(): string;
+
+		/**
 		 * retrieve block with the given name; node is current macro; returned block should NOT be modified (or cloned) by template
 		 *
 		 * @param string $name

@@ -97,6 +97,10 @@
 			return $this->macroList[$name];
 		}
 
+		public function getClass(): string {
+			return sprintf('Template_%s', str_replace('-', null, $this->getId()));
+		}
+
 		protected function getId() {
 			if ($this->id !== null) {
 				return $this->id;
@@ -111,7 +115,7 @@
 		 */
 		public function getFile(): IFile {
 			if ($this->file === null) {
-				$this->file = $this->templateDirectory->file($this->getId() . '.php');
+				$this->file = $this->templateDirectory->file($this->getClass() . '.php');
 				$this->file->openForWrite();
 			}
 			return $this->file;
