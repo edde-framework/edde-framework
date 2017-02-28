@@ -19,18 +19,11 @@
 		 * @inheritdoc
 		 */
 		public function inline(ITemplate $template, INode $node, string $name, string $value = null) {
-			$metaList = $node->getMetaList();
-			$metaList->set('block-root', true);
-			$template->block($value, $node);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function macro(ITemplate $template, INode $node) {
-			$attributeList = $node->getAttributeList();
-			$metaList = $node->getMetaList();
-			$template->block((string)$attributeList->get('name'), $node);
-			$metaList->set('block-root', false);
 		}
 	}

@@ -97,6 +97,14 @@
 			return $this->macroList[$name];
 		}
 
+		public function execute(INode $node) {
+			$macro = $this->getMacro($node);
+			return $macro->macro($this, $node);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function getClass(): string {
 			return sprintf('Template_%s', str_replace('-', null, $this->getId()));
 		}
