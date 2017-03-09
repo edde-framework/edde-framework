@@ -74,7 +74,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getExtension(): string {
+		public function getExtension() {
 			return $this->url->getExtension();
 		}
 

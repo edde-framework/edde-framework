@@ -21,9 +21,9 @@
 		public function getPath(): string;
 
 		/**
-		 * @return string
+		 * @return string|null
 		 */
-		public function getExtension(): string;
+		public function getExtension();
 
 		/**
 		 * return directory of this file
