@@ -24,6 +24,25 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function macro(ITemplate $template, INode $node) {
+		public function macro(ITemplate $template, INode $node, \Iterator $iterator) {
+			$level = $node->getLevel();
+			$stack = new \SplStack();
+			ob_start();
+			while ($iterator->valid() && $current = $iterator->current()) {
+				/**
+				 * we are out ot current subtree
+				 */
+				if (($current->getLevel()) <= $level) {
+					break;
+				}
+				$macro = $template->getMacro($current);
+				$macro->open($template, $current);
+				$macro->macro($template, $current, $iterator);
+				$iterator->next();
+			}
+			while ($stack->isEmpty() === false) {
+				// $file->write($stack->pop());
+			}
+			$source = ob_get_clean();
 		}
 	}

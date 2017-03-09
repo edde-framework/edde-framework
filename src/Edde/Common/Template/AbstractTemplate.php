@@ -13,6 +13,7 @@
 	use Edde\Api\Template\LazyTemplateDirectoryTrait;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Config\ConfigurableTrait;
+	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Object;
 
 	abstract class AbstractTemplate extends Object implements ITemplate {
@@ -83,14 +84,20 @@
 			return $this->blockList[$name];
 		}
 
-		protected function inline(INode $node, string $name, string $value = null) {
+		/**
+		 * @inheritdoc
+		 */
+		public function inline(INode $node, string $name, string $value = null) {
 			if (isset($this->macroList[$name]) === false) {
 				throw new MacroException(sprintf('Unknown inline macro [%s] on node [%s].', $name, $node->getPath()));
 			}
-			$this->macroList[$name]->inline($this, $node, $name, $value);
+			return $this->macroList[$name]->inline($this, $node, $name, $value);
 		}
 
-		public function getMacro(INode $node) {
+		/**
+		 * @inheritdoc
+		 */
+		public function getMacro(INode $node): IMacro {
 			if (isset($this->macroList[$name = $node->getName()]) === false) {
 				throw new MacroException(sprintf('Unknown macro [%s] on node [%s].', $name, $node->getPath()));
 			}
@@ -99,7 +106,9 @@
 
 		public function execute(INode $node) {
 			$macro = $this->getMacro($node);
-			return $macro->macro($this, $node);
+			$iterator = NodeIterator::recursive($node);
+			$iterator->rewind();
+			return $macro->macro($this, $node, $iterator);
 		}
 
 		/**

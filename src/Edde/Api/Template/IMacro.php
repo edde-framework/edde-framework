@@ -43,12 +43,11 @@
 		public function open(ITemplate $template, INode $node);
 
 		/**
-		 *
-		 *
 		 * @param ITemplate $template
 		 * @param INode     $node
+		 * @param \Iterator $iterator
 		 */
-		public function macro(ITemplate $template, INode $node);
+		public function macro(ITemplate $template, INode $node, \Iterator $iterator);
 
 		/**
 		 * ending macro code (end of macro code)

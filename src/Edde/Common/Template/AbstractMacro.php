@@ -9,18 +9,33 @@
 	use Edde\Common\Object;
 
 	abstract class AbstractMacro extends Object implements IMacro {
+		/**
+		 * @inheritdoc
+		 */
 		public function inline(ITemplate $template, INode $node, string $name, string $value = null) {
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function open(ITemplate $template, INode $node) {
 		}
 
-		public function macro(ITemplate $template, INode $node) {
+		/**
+		 * @inheritdoc
+		 */
+		public function macro(ITemplate $template, INode $node, \Iterator $iterator) {
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function close(ITemplate $template, INode $node) {
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function register(ITemplate $template): IMacro {
 			foreach ($this->getNameList() as $name) {
 				$template->registerMacro($name, $this);

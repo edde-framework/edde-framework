@@ -20,7 +20,6 @@
 					$file->write($stack->pop());
 				}
 				$indentation = str_repeat("\t", $node->getLevel());
-				$attributeList = $node->getAttributeList();
 				$metaList = $node->getMetaList();
 				$isClosed = (($value = $node->getValue()) === null) && ($node->isLeaf() || $metaList->get('pair', false));
 				$close = '</' . $node->getName() . ">\n";
