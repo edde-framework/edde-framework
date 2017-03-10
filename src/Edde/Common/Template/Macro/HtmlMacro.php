@@ -5,7 +5,6 @@
 
 	use Edde\Api\Html\LazyHtmlGeneratorTrait;
 	use Edde\Api\Node\INode;
-	use Edde\Api\Template\ITemplate;
 	use Edde\Common\Template\AbstractMacro;
 
 	class HtmlMacro extends AbstractMacro {
@@ -18,17 +17,26 @@
 			return $this->htmlGenerator->getTagList();
 		}
 
-		public function open(ITemplate $template, INode $node) {
+		/**
+		 * @inheritdoc
+		 */
+		public function enter(INode $node, ...$parameters) {
 			echo sprintf("%s", $this->htmlGenerator->open($node));
 		}
 
-		public function macro(ITemplate $template, INode $node, \Iterator $iterator) {
+		/**
+		 * @inheritdoc
+		 */
+		public function node(INode $node, \Iterator $iterator, ...$parameters) {
 			if (($value = $node->getValue()) !== null) {
 				echo trim($value);
 			}
 		}
 
-		public function close(ITemplate $template, INode $node) {
+		/**
+		 * @inheritdoc
+		 */
+		public function leave(INode $node, ...$parameters) {
 			echo sprintf("%s\n", $this->htmlGenerator->close($node));
 		}
 	}

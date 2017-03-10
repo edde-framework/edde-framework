@@ -4,11 +4,12 @@
 	namespace Edde\Common\Template;
 
 	use Edde\Api\Node\INode;
+	use Edde\Api\Node\ITreeTraversal;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\ITemplate;
-	use Edde\Common\Object;
+	use Edde\Common\Node\AbstractTreeTraversal;
 
-	abstract class AbstractMacro extends Object implements IMacro {
+	abstract class AbstractMacro extends AbstractTreeTraversal implements IMacro {
 		/**
 		 * @inheritdoc
 		 */
@@ -18,19 +19,10 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function open(ITemplate $template, INode $node) {
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function macro(ITemplate $template, INode $node, \Iterator $iterator) {
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function close(ITemplate $template, INode $node) {
+		public function traverse(INode $node, ...$parameters): ITreeTraversal {
+			/** @var $template ITemplate */
+			$template = reset($parameters);
+			return $template->getMacro($node);
 		}
 
 		/**

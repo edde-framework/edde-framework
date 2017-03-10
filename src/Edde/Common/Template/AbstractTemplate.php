@@ -6,6 +6,7 @@
 	use Edde\Api\Crypt\LazyCryptEngineTrait;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
+	use Edde\Api\Node\ITreeTraversal;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\ITemplate;
@@ -13,10 +14,9 @@
 	use Edde\Api\Template\LazyTemplateDirectoryTrait;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Node\NodeIterator;
-	use Edde\Common\Object;
+	use Edde\Common\Node\AbstractTreeTraversal;
 
-	abstract class AbstractTemplate extends Object implements ITemplate {
+	abstract class AbstractTemplate extends AbstractTreeTraversal implements ITemplate {
 		use ConfigurableTrait;
 		use LazyTemplateDirectoryTrait;
 		use LazyCryptEngineTrait;
@@ -104,11 +104,12 @@
 			return $this->macroList[$name];
 		}
 
-		public function execute(INode $node) {
-			$macro = $this->getMacro($node);
-			$iterator = NodeIterator::recursive($node);
-			$iterator->rewind();
-			return $macro->macro($this, $node, $iterator);
+		/**
+		 * @inheritdoc
+		 */
+		public function traverse(INode $node, ...$parameters): ITreeTraversal {
+			$template = reset($parameters);
+			return $template->getMacro($node);
 		}
 
 		/**

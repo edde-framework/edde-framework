@@ -23,20 +23,21 @@
 		 * ability to change tree traversal based on the node; by default the current instance
 		 *
 		 * @param INode $node
+		 * @param array $parameters parameters passed to open/content/close
 		 *
 		 * @return ITreeTraversal
 		 */
-		public function traverse(INode $node): ITreeTraversal;
+		public function traverse(INode $node, ...$parameters): ITreeTraversal;
 
 		/**
-		 * open node event
+		 * open node event (when traversal enters the node)
 		 *
 		 * @param INode $node
 		 * @param array ...$parameters
 		 *
 		 * @return mixed
 		 */
-		public function open(INode $node, ...$parameters);
+		public function enter(INode $node, ...$parameters);
 
 		/**
 		 * content of node (usually main logic, another tree traversals, ...)
@@ -47,15 +48,15 @@
 		 *
 		 * @return mixed
 		 */
-		public function content(INode $node, \Iterator $iterator, ...$parameters);
+		public function node(INode $node, \Iterator $iterator, ...$parameters);
 
 		/**
-		 * close the node (for example draw closing tag ;))
+		 * close the node (executed when leaving; for example draw closing tag ;))
 		 *
 		 * @param INode $node
 		 * @param array ...$parameters
 		 *
 		 * @return mixed
 		 */
-		public function close(INode $node, ...$parameters);
+		public function leave(INode $node, ...$parameters);
 	}

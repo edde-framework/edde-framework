@@ -4,8 +4,9 @@
 	namespace Edde\Api\Template;
 
 	use Edde\Api\Node\INode;
+	use Edde\Api\Node\ITreeTraversal;
 
-	interface IMacro {
+	interface IMacro extends ITreeTraversal {
 		/**
 		 * register to the template all supported "names" related to this macro
 		 *
@@ -33,27 +34,4 @@
 		 * @return
 		 */
 		public function inline(ITemplate $template, INode $node, string $name, string $value = null);
-
-		/**
-		 * open macro event (initial macro code)
-		 *
-		 * @param ITemplate $template
-		 * @param INode     $node
-		 */
-		public function open(ITemplate $template, INode $node);
-
-		/**
-		 * @param ITemplate $template
-		 * @param INode     $node
-		 * @param \Iterator $iterator
-		 */
-		public function macro(ITemplate $template, INode $node, \Iterator $iterator);
-
-		/**
-		 * ending macro code (end of macro code)
-		 *
-		 * @param ITemplate $template
-		 * @param INode     $node
-		 */
-		public function close(ITemplate $template, INode $node);
 	}

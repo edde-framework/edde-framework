@@ -5,6 +5,7 @@
 
 	use Edde\Api\Resource\LazyResourceManagerTrait;
 	use Edde\Api\Template\TemplateException;
+	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Node\NodeUtils;
 
 	class Template extends AbstractTemplate {
@@ -30,7 +31,12 @@
 			$file->write("?>\n");
 			foreach ($this->resourceList as $resource) {
 				NodeUtils::namespace($root = $this->resourceManager->resource($resource), '~^(?<namespace>[a-z]):(?<name>[a-zA-Z0-9_-]+)$~');
-				$this->execute($root);
+				$iterator = NodeIterator::recursive($root);
+				$iterator->rewind();
+				$treeTraverse = $this->traverse($root, $this);
+				$treeTraverse->enter($root, $this);
+				$treeTraverse->node($root, $iterator, $this);
+				$treeTraverse->leave($root, $this);
 			}
 			$file->write("<?php\n");
 			$file->write("\t}\n");
