@@ -6,6 +6,7 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
 	use Edde\Common\Object;
+	use Edde\Common\Strings\StringException;
 	use Edde\Common\Strings\StringUtils;
 
 	/**
@@ -116,6 +117,9 @@
 		 *
 		 * @param INode  $root
 		 * @param string $preg
+		 *
+		 * @throws NodeException
+		 * @throws StringException
 		 */
 		static public function namespace(INode $root, string $preg) {
 			foreach (NodeIterator::recursive($root, true) as $node) {

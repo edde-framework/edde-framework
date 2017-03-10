@@ -26,13 +26,12 @@
 		 * @inheritdoc
 		 */
 		public function macro(ITemplate $template, INode $node, \Iterator $iterator) {
+			ob_start();
 			$level = $node->getLevel();
 			$stack = new \SplStack();
-			ob_start();
-			/** @var $current INode */
-			$currentLevel = 0;
 			/** @var $levelMacro IMacro */
 			/** @var $levelCurrent INode */
+			/** @var $current INode */
 			while ($iterator->valid() && $current = $iterator->current()) {
 				/**
 				 * we are out ot current subtree
