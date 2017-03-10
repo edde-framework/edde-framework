@@ -22,6 +22,12 @@
 			echo sprintf("%s", $this->htmlGenerator->open($node));
 		}
 
+		public function macro(ITemplate $template, INode $node, \Iterator $iterator) {
+			if (($value = $node->getValue()) !== null) {
+				echo trim($value);
+			}
+		}
+
 		public function close(ITemplate $template, INode $node) {
 			echo sprintf("%s\n", $this->htmlGenerator->close($node));
 		}
