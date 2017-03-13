@@ -21,6 +21,7 @@
 		 * @inheritdoc
 		 */
 		public function enter(INode $node, \Iterator $iterator, ...$parameters) {
+			parent::enter($node, $iterator, ...$parameters);
 			echo sprintf("%s", $this->htmlGenerator->open($node));
 		}
 

@@ -4,6 +4,7 @@
 	namespace Edde\Common\Template;
 
 	use Edde\Api\Resource\LazyResourceManagerTrait;
+	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\TemplateException;
 	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Node\NodeUtils;
@@ -36,10 +37,11 @@
 				NodeUtils::namespace($root = $this->resourceManager->resource($resource), '~^(?<namespace>[a-z]):(?<name>[a-zA-Z0-9_-]+)$~');
 				$iterator = NodeIterator::recursive($root);
 				$iterator->rewind();
-				$treeTraverse = $this->traverse($root, $this);
-				$treeTraverse->enter($root, $iterator, $this);
-				$treeTraverse->node($root, $iterator, $this);
-				$treeTraverse->leave($root, $iterator, $this);
+				/** @var $macro IMacro */
+				$macro = $this->traverse($root, $this);
+				$macro->enter($root, $iterator, $this);
+				$macro->node($root, $iterator, $this);
+				$macro->leave($root, $iterator, $this);
 			}
 			echo "<?php
 		}

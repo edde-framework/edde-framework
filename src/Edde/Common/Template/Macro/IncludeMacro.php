@@ -12,6 +12,6 @@
 			return ['include'];
 		}
 
-		public function inline(ITemplate $template, \Iterator $iterator, INode $node) {
+		public function inline(ITemplate $template, \Iterator $iterator, INode $node, $value = null) {
 		}
 	}

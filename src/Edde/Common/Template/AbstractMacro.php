@@ -8,12 +8,13 @@
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Common\Node\AbstractTreeTraversal;
+	use Edde\Common\Node\SkipException;
 
 	abstract class AbstractMacro extends AbstractTreeTraversal implements IMacro {
 		/**
 		 * @inheritdoc
 		 */
-		public function inline(ITemplate $template, \Iterator $iterator, INode $node) {
+		public function inline(ITemplate $template, \Iterator $iterator, INode $node, $value = null) {
 		}
 
 		/**
@@ -21,14 +22,31 @@
 		 */
 		public function traverse(INode $node, ...$parameters): ITreeTraversal {
 			/** @var $template ITemplate */
-			$template = reset($parameters);
-			return $template->getMacro($node);
+			list($template) = $parameters;
+			return $template->getMacro($node->getName(), $node);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function enter(INode $node, \Iterator $iterator, ...$parameters) {
+			/** @var $template ITemplate */
+			list($template) = $parameters;
+			$attributeList = $node->getAttributeList();
+			$inlineList = $attributeList->get('t', []);
+			$attributeList->remove('t');
+			$skip = null;
+			foreach ($inlineList as $name => $value) {
+				$macro = $template->getMacro($name, $node);
+				try {
+					$macro->inline($template, $iterator, $node, $value);
+				} catch (SkipException $exception) {
+					$skip = $exception;
+				}
+			}
+			if ($skip) {
+				throw $skip;
+			}
 		}
 
 		/**

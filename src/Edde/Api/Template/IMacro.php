@@ -29,6 +29,7 @@
 		 * @param ITemplate $template
 		 * @param \Iterator $iterator
 		 * @param INode     $node
+		 * @param null      $value
 		 */
-		public function inline(ITemplate $template, \Iterator $iterator, INode $node);
+		public function inline(ITemplate $template, \Iterator $iterator, INode $node, $value = null);
 	}

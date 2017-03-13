@@ -6,6 +6,7 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\LazyTemplateDirectoryTrait;
+	use Edde\Common\Node\SkipException;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\AbstractMacro;
 
@@ -22,20 +23,22 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function inline(ITemplate $template, \Iterator $iterator, INode $node) {
+		public function inline(ITemplate $template, \Iterator $iterator, INode $node, $value = null) {
 			ob_start();
 			$macro = $this->traverse($node, $template);
 			$iterator->next();
 			$macro->enter($node, $iterator, $template);
 			$macro->node($node, $iterator, $template);
 			$macro->leave($node, $iterator, $template);
-			$this->templateDirectory->save($this->getSnippetFile($node), ob_get_clean());
+			$this->templateDirectory->save($this->getSnippetFile($node, $value), ob_get_clean());
+			throw new SkipException();
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function enter(INode $node, \Iterator $iterator, ...$parameters) {
+			parent::enter($node, $iterator, ...$parameters);
 			ob_start();
 		}
 
@@ -46,8 +49,8 @@
 			$this->templateDirectory->save($this->getSnippetFile($node), ob_get_clean());
 		}
 
-		protected function getSnippetFile(INode $node) {
+		protected function getSnippetFile(INode $node, string $name = null) {
 			$attributeList = $node->getAttributeList();
-			return 'snippet-' . StringUtils::webalize((string)$attributeList->get('name')) . '.php';
+			return 'snippet-' . StringUtils::webalize($name ?? (string)$attributeList->get('name')) . '.php';
 		}
 	}

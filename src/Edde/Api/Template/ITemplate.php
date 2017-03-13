@@ -41,11 +41,12 @@
 		/**
 		 * return macro or throw an exception
 		 *
-		 * @param INode $node
+		 * @param string $name
+		 * @param INode  $source
 		 *
 		 * @return IMacro
 		 */
-		public function getMacro(INode $node): IMacro;
+		public function getMacro(string $name, INode $source): IMacro;
 
 		/**
 		 * add list of resources of this template

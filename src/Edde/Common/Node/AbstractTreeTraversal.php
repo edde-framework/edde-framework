@@ -55,15 +55,26 @@
 					$stack->pop();
 				}
 				if ($current->isLeaf() === false) {
-					$stack->push([
-						$treeTraversal,
-						$current,
-					]);
+					$stack->push(
+						[
+							$treeTraversal,
+							$current,
+						]
+					);
 				}
-				$treeTraversal->enter($current, $iterator, ...$parameters);
-				$treeTraversal->node($current, $iterator, ...$parameters);
-				if ($current->isLeaf()) {
-					$treeTraversal->leave($current, $iterator, $parameters);
+				try {
+					$treeTraversal->enter($current, $iterator, ...$parameters);
+					$treeTraversal->node($current, $iterator, ...$parameters);
+					if ($current->isLeaf()) {
+						$treeTraversal->leave($current, $iterator, $parameters);
+					}
+				} catch (SkipException $exception) {
+					/**
+					 * skip exception could be safely ignored
+					 */
+					if ($current->isLeaf() === false) {
+						$stack->pop();
+					}
 				}
 				$iterator->next();
 			}

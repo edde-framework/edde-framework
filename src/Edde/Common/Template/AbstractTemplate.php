@@ -65,9 +65,9 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getMacro(INode $node): IMacro {
-			if (isset($this->macroList[$name = $node->getName()]) === false) {
-				throw new MacroException(sprintf('Unknown macro [%s] on node [%s].', $name, $node->getPath()));
+		public function getMacro(string $name, INode $source): IMacro {
+			if (isset($this->macroList[$name]) === false) {
+				throw new MacroException(sprintf('Unknown macro [%s] on node [%s].', $name, $source->getPath()));
 			}
 			return $this->macroList[$name];
 		}
@@ -76,8 +76,9 @@
 		 * @inheritdoc
 		 */
 		public function traverse(INode $node, ...$parameters): ITreeTraversal {
-			$template = reset($parameters);
-			return $template->getMacro($node);
+			/** @var $template ITemplate */
+			list($template) = $parameters;
+			return $template->getMacro($node->getName(), $node);
 		}
 
 		/**
