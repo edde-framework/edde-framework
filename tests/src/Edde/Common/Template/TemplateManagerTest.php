@@ -61,6 +61,10 @@
 				'layout',
 			]);
 			$file = $template->compile();
+			include $file->getPath();
+			$t = $template->getClass();
+			$t = new $t();
+			$t->template();
 		}
 
 		protected function setUp() {
