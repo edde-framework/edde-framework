@@ -68,6 +68,7 @@
 					if ($current->isLeaf()) {
 						$treeTraversal->leave($current, $iterator, $parameters);
 					}
+					$iterator->next();
 				} catch (SkipException $exception) {
 					/**
 					 * skip exception could be safely ignored
@@ -76,7 +77,6 @@
 						$stack->pop();
 					}
 				}
-				$iterator->next();
 			}
 			while ($stack->isEmpty() === false) {
 				list($levelTreeTraversal, $levelCurrent) = $stack->pop();
