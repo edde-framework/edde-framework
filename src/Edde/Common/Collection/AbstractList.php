@@ -52,6 +52,18 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function add(string $name, $value, $key = null): IList {
+			if ($key) {
+				$this->list[$name][$key] = $value;
+				return $this;
+			}
+			$this->list[$name][] = $value;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function get(string $name, $default = null) {
 			if ($this->has($name) === false) {
 				return is_callable($default) ? call_user_func($default) : $default;
