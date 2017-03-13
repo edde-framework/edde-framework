@@ -20,7 +20,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function enter(INode $node, ...$parameters) {
+		public function enter(INode $node, \Iterator $iterator, ...$parameters) {
+			parent::enter($node, $iterator, ...$parameters);
 			echo sprintf("%s", $this->htmlGenerator->open($node));
 		}
 
@@ -28,15 +29,17 @@
 		 * @inheritdoc
 		 */
 		public function node(INode $node, \Iterator $iterator, ...$parameters) {
-			if (($value = $node->getValue()) !== null) {
-				echo trim($value);
+			if (($value = trim((string)$node->getValue())) !== '') {
+				echo $value;
+				return;
 			}
+			parent::node($node, $iterator, ...$parameters);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function leave(INode $node, ...$parameters) {
+		public function leave(INode $node, \Iterator $iterator, ...$parameters) {
 			echo sprintf("%s\n", $this->htmlGenerator->close($node));
 		}
 	}

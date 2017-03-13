@@ -13,7 +13,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function inline(ITemplate $template, INode $node, string $name, string $value = null) {
+		public function inline(ITemplate $template, \Iterator $iterator, INode $node, string $name, string $value = null) {
 		}
 
 		/**
@@ -23,6 +23,20 @@
 			/** @var $template ITemplate */
 			$template = reset($parameters);
 			return $template->getMacro($node);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function enter(INode $node, \Iterator $iterator, ...$parameters) {
+			/** @var $template ITemplate */
+			list($template) = $parameters;
+			$attributeList = $node->getAttributeList();
+			$inlineList = $attributeList->get('t', []);
+			$attributeList->remove('t');
+			foreach ($inlineList as $name => $value) {
+				$template->inline($iterator, $node, $name, $value);
+			}
 		}
 
 		/**

@@ -32,12 +32,13 @@
 		/**
 		 * open node event (when traversal enters the node)
 		 *
-		 * @param INode $node
-		 * @param array ...$parameters
+		 * @param INode     $node
+		 * @param \Iterator $iterator
+		 * @param array     ...$parameters
 		 *
 		 * @return mixed
 		 */
-		public function enter(INode $node, ...$parameters);
+		public function enter(INode $node, \Iterator $iterator, ...$parameters);
 
 		/**
 		 * content of node (usually main logic, another tree traversals, ...)
@@ -53,10 +54,11 @@
 		/**
 		 * close the node (executed when leaving; for example draw closing tag ;))
 		 *
-		 * @param INode $node
-		 * @param array ...$parameters
+		 * @param INode     $node
+		 * @param \Iterator $iterator
+		 * @param array     ...$parameters
 		 *
 		 * @return mixed
 		 */
-		public function leave(INode $node, ...$parameters);
+		public function leave(INode $node, \Iterator $iterator, ...$parameters);
 	}

@@ -25,7 +25,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function enter(INode $node, ...$parameters) {
+		public function enter(INode $node, \Iterator $iterator, ...$parameters) {
 		}
 
 		/**
@@ -51,7 +51,7 @@
 					if ($levelCurrent->getLevel() < $currentLevel) {
 						break;
 					}
-					$levelTreeTraversal->leave($levelCurrent, ...$parameters);
+					$levelTreeTraversal->leave($levelCurrent, $iterator, $parameters);
 					$stack->pop();
 				}
 				if ($current->isLeaf() === false) {
@@ -60,22 +60,22 @@
 						$current,
 					]);
 				}
-				$treeTraversal->enter($current, ...$parameters);
+				$treeTraversal->enter($current, $iterator, ...$parameters);
 				$treeTraversal->node($current, $iterator, ...$parameters);
 				if ($current->isLeaf()) {
-					$treeTraversal->leave($current, ...$parameters);
+					$treeTraversal->leave($current, $iterator, $parameters);
 				}
 				$iterator->next();
 			}
 			while ($stack->isEmpty() === false) {
 				list($levelTreeTraversal, $levelCurrent) = $stack->pop();
-				$levelTreeTraversal->leave($levelCurrent, ...$parameters);
+				$levelTreeTraversal->leave($levelCurrent, $iterator, $parameters);
 			}
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function leave(INode $node, ...$parameters) {
+		public function leave(INode $node, \Iterator $iterator, ...$parameters) {
 		}
 	}

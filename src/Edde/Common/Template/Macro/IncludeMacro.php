@@ -12,13 +12,6 @@
 			return ['include'];
 		}
 
-		public function inline(ITemplate $template, INode $node, string $name, string $value = null) {
-			$block = clone $template->getBlock($value, $node);
-			$metaList = $block->getMetaList();
-			if ($metaList->get('block-root', false)) {
-				$node->addNodeList($block->getNodeList(), true);
-				return;
-			}
-			$node->addNode($block);
+		public function inline(ITemplate $template, \Iterator $iterator, INode $node, string $name, string $value = null) {
 		}
 	}

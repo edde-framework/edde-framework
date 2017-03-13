@@ -27,11 +27,12 @@
 		 * when there is inline node detected over the macro
 		 *
 		 * @param ITemplate $template
+		 * @param \Iterator $iterator
 		 * @param INode     $node
 		 * @param string    $name
 		 * @param string    $value
 		 *
 		 * @return
 		 */
-		public function inline(ITemplate $template, INode $node, string $name, string $value = null);
+		public function inline(ITemplate $template, \Iterator $iterator, INode $node, string $name, string $value = null);
 	}

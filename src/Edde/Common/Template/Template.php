@@ -31,16 +31,15 @@
 			}
 			echo "\t*/
 	class " . $this->getClass() . " {
-		public function template() {
-			?>";
+		public function template() { ?>\n";
 			foreach ($this->resourceList as $resource) {
 				NodeUtils::namespace($root = $this->resourceManager->resource($resource), '~^(?<namespace>[a-z]):(?<name>[a-zA-Z0-9_-]+)$~');
 				$iterator = NodeIterator::recursive($root);
 				$iterator->rewind();
 				$treeTraverse = $this->traverse($root, $this);
-				$treeTraverse->enter($root, $this);
+				$treeTraverse->enter($root, $iterator, $this);
 				$treeTraverse->node($root, $iterator, $this);
-				$treeTraverse->leave($root, $this);
+				$treeTraverse->leave($root, $iterator, $this);
 			}
 			echo "<?php
 		}

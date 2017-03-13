@@ -39,6 +39,16 @@
 		public function registerTemplateProvider(ITemplateProvider $templateProvider): ITemplate;
 
 		/**
+		 * @param \Iterator   $iterator
+		 * @param INode       $node
+		 * @param string      $name
+		 * @param string|null $value
+		 *
+		 * @return mixed
+		 */
+		public function inline(\Iterator $iterator, INode $node, string $name, string $value = null);
+
+		/**
 		 * return macro or throw an exception
 		 *
 		 * @param INode $node
@@ -68,26 +78,6 @@
 		 * @return string
 		 */
 		public function getClass(): string;
-
-		/**
-		 * register the given block to the template; the block should NOT be modified by template
-		 *
-		 * @param string $name
-		 * @param INode  $node
-		 *
-		 * @return ITemplate
-		 */
-		public function block(string $name, INode $node): ITemplate;
-
-		/**
-		 * retrieve block with the given name; node is current macro; returned block should NOT be modified (or cloned) by template
-		 *
-		 * @param string $name
-		 * @param INode  $node
-		 *
-		 * @return INode
-		 */
-		public function getBlock(string $name, INode $node): INode;
 
 		/**
 		 * return template's source file (output)

@@ -21,20 +21,28 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function inline(ITemplate $template, INode $node, string $name, string $value = null) {
+		public function inline(ITemplate $template, \Iterator $iterator, INode $node, string $name, string $value = null) {
+			ob_start();
+			$macro = $this->traverse($node, $template);
+			$iterator->next();
+			$macro->enter($node, $iterator, $template);
+			$macro->node($node, $iterator, $template);
+			$macro->leave($node, $iterator, $template);
+			$this->templateDirectory->save($this->getSnippetFile($node), ob_get_clean());
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function enter(INode $node, ...$parameters) {
+		public function enter(INode $node, \Iterator $iterator, ...$parameters) {
+			parent::enter($node, $iterator, ...$parameters);
 			ob_start();
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function leave(INode $node, ...$parameters) {
+		public function leave(INode $node, \Iterator $iterator, ...$parameters) {
 			$this->templateDirectory->save($this->getSnippetFile($node), ob_get_clean());
 		}
 

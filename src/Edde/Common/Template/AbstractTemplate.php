@@ -33,10 +33,6 @@
 		 */
 		protected $resourceList;
 		/**
-		 * @var INode[]
-		 */
-		protected $blockList = [];
-		/**
 		 * @var IFile
 		 */
 		protected $file;
@@ -69,29 +65,11 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function block(string $name, INode $node): ITemplate {
-			$this->blockList[$name] = $node;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getBlock(string $name, INode $node): INode {
-			if (isset($this->blockList[$name]) === false) {
-				throw new MacroException(sprintf('Requested unknown block [%s] on macro [%s].', $name, $node->getPath()));
-			}
-			return $this->blockList[$name];
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function inline(INode $node, string $name, string $value = null) {
+		public function inline(\Iterator $iterator, INode $node, string $name, string $value = null) {
 			if (isset($this->macroList[$name]) === false) {
 				throw new MacroException(sprintf('Unknown inline macro [%s] on node [%s].', $name, $node->getPath()));
 			}
-			return $this->macroList[$name]->inline($this, $node, $name, $value);
+			return $this->macroList[$name]->inline($this, $iterator, $node, $name, $value);
 		}
 
 		/**
