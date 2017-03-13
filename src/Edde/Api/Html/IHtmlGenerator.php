@@ -25,11 +25,12 @@
 		/**
 		 * generate open tag only for the given node
 		 *
-		 * @param INode $node
+		 * @param INode    $node
+		 * @param int|null $level explicitly export html element level
 		 *
 		 * @return string
 		 */
-		public function open(INode $node): string;
+		public function open(INode $node, int $level = null): string;
 
 		/**
 		 * generate close tag only for the given node
@@ -38,5 +39,5 @@
 		 *
 		 * @return string
 		 */
-		public function close(INode $node): string;
+		public function close(INode $node, int $level = null): string;
 	}

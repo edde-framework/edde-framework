@@ -13,6 +13,9 @@
 	 * Common html5 generator.
 	 */
 	class Html5Generator extends Object implements IHtmlGenerator {
+		/**
+		 * @inheritdoc
+		 */
 		public function getTagList(): array {
 			return [
 				'html',
@@ -47,8 +50,11 @@
 			}
 		}
 
-		public function open(INode $node): string {
-			$content = $indentation = str_repeat("\t", $node->getLevel());
+		/**
+		 * @inheritdoc
+		 */
+		public function open(INode $node, int $level = null): string {
+			$content = $indentation = str_repeat("\t", $level ?? $node->getLevel());
 			$content .= '<' . $node->getName();
 			foreach ($node->getAttributeList() as $name => $value) {
 				if ($value instanceof IAttributeList) {
@@ -63,10 +69,12 @@
 			return $content;
 		}
 
-		public function close(INode $node): string {
-			$content = $node->isLeaf() === false ? str_repeat("\t", $node->getLevel()) : '';
-			$content .= '</' . $node->getName();
-			$content .= '>';
+		/**
+		 * @inheritdoc
+		 */
+		public function close(INode $node, int $level = null): string {
+			$content = $node->isLeaf() === false ? str_repeat("\t", $level?? $node->getLevel()) : '';
+			$content .= '</' . $node->getName() . '>';
 			return $content;
 		}
 	}

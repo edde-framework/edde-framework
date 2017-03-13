@@ -6,6 +6,7 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\LazyTemplateDirectoryTrait;
+	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\AbstractMacro;
 
 	class SnippetMacro extends AbstractMacro {
@@ -21,7 +22,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function inline(ITemplate $template, \Iterator $iterator, INode $node, string $name, string $value = null) {
+		public function inline(ITemplate $template, \Iterator $iterator, INode $node) {
 			ob_start();
 			$macro = $this->traverse($node, $template);
 			$iterator->next();
@@ -35,7 +36,6 @@
 		 * @inheritdoc
 		 */
 		public function enter(INode $node, \Iterator $iterator, ...$parameters) {
-			parent::enter($node, $iterator, ...$parameters);
 			ob_start();
 		}
 
@@ -48,6 +48,6 @@
 
 		protected function getSnippetFile(INode $node) {
 			$attributeList = $node->getAttributeList();
-			return 'snippet-' . sha1($attributeList->get('name') . '.php');
+			return 'snippet-' . StringUtils::webalize((string)$attributeList->get('name')) . '.php';
 		}
 	}

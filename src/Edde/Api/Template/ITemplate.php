@@ -39,16 +39,6 @@
 		public function registerTemplateProvider(ITemplateProvider $templateProvider): ITemplate;
 
 		/**
-		 * @param \Iterator   $iterator
-		 * @param INode       $node
-		 * @param string      $name
-		 * @param string|null $value
-		 *
-		 * @return mixed
-		 */
-		public function inline(\Iterator $iterator, INode $node, string $name, string $value = null);
-
-		/**
 		 * return macro or throw an exception
 		 *
 		 * @param INode $node

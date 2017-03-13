@@ -46,8 +46,8 @@
 	}
 ";
 			$file = $this->getFile();
-			$file->write(ob_get_clean())
-				->close();
+			$file->write(ob_get_clean());
+			$file->close();
 			return $file;
 		}
 	}

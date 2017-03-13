@@ -65,16 +65,6 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function inline(\Iterator $iterator, INode $node, string $name, string $value = null) {
-			if (isset($this->macroList[$name]) === false) {
-				throw new MacroException(sprintf('Unknown inline macro [%s] on node [%s].', $name, $node->getPath()));
-			}
-			return $this->macroList[$name]->inline($this, $iterator, $node, $name, $value);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function getMacro(INode $node): IMacro {
 			if (isset($this->macroList[$name = $node->getName()]) === false) {
 				throw new MacroException(sprintf('Unknown macro [%s] on node [%s].', $name, $node->getPath()));
