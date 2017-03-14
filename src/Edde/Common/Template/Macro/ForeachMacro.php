@@ -6,7 +6,6 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\ITemplate;
-	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\AbstractMacro;
 
 	class ForeachMacro extends AbstractMacro {
@@ -14,9 +13,8 @@
 		 * @inheritdoc
 		 */
 		public function inline(IMacro $source, ITemplate $template, \Iterator $iterator, INode $node, $value = null) {
-			$value = StringUtils::toCamelHump($value);
 			$source->on(self::EVENT_PRE_ENTER, function () use ($value) {
-				echo '<?php foreach($context[null]->' . $value . " as \$a => \$b) {?>";
+				echo '<?php foreach(' . $this->delimite($value) . ' as $a => $b) {?>' . "\n";
 			});
 			$source->on(self::EVENT_POST_LEAVE, function () use ($value) {
 				echo "<?php } ?>\n";

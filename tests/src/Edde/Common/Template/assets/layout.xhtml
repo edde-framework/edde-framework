@@ -7,6 +7,8 @@
 			<span>this is hidden piece</span>
 		</div>
 		<h1>This is static header</h1>
+		<span t:foreach=":num-of-iterations()"/>
+		<span t:foreach="doo-bar:num-of-iterations(5, 'foo')"/>
 		<div>
 			<section t:include="foo bar"/>
 			<section class="second-section" t:include="foo bar"/>
@@ -14,8 +16,8 @@
 				Blah blah blah!
 			</p>
 			<span class="repetative-stuff" t:snippet="to-be-foreached"/>
-			<div class="tricky-include" t:foreach="iterate-over-some-include()" t:include="gimme some include here"/>
-			<div class="inner-tricky-include" t:inner-foreach="iterate-over-some-include()" t:include="to-be-foreached"/>
+			<div class="tricky-include" t:foreach=":iterate-over-some-include()" t:include="gimme some include here"/>
+			<div class="inner-tricky-include" t:inner-foreach=":iterate-over-some-include()" t:include="to-be-foreached"/>
 		</div>
 	</body>
 </html>

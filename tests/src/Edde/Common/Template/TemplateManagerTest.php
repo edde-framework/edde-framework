@@ -62,7 +62,10 @@
 				'here-is-hidden-content-of-the-fucking-template',
 				'layout',
 			]);
-			$template->execute(new \SomeTemplateContext());
+			$template->execute([
+				null => $context = new \SomeTemplateContext(),
+				'doo-bar' => $context,
+			]);
 		}
 
 		protected function setUp() {
