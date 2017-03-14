@@ -11,7 +11,6 @@
 	use Edde\Common\Template\Macro\HtmlMacro;
 	use Edde\Common\Template\Macro\IfMacro;
 	use Edde\Common\Template\Macro\IncludeMacro;
-	use Edde\Common\Template\Macro\InnerForeachMacro;
 	use Edde\Common\Template\Macro\SnippetMacro;
 
 	class TemplateConfigurator extends AbstractConfigurator {
@@ -26,7 +25,6 @@
 				IncludeMacro::class,
 				HtmlMacro::class,
 				ForeachMacro::class,
-				InnerForeachMacro::class,
 				IfMacro::class,
 			];
 			foreach ($macroList as $name) {

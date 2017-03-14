@@ -30,9 +30,10 @@
 		 * @param ITemplate  $template
 		 * @param \Iterator  $iterator
 		 * @param INode      $node
+		 * @param string     $name
 		 * @param mixed|null $value
 		 */
-		public function inline(IMacro $source, ITemplate $template, \Iterator $iterator, INode $node, $value = null);
+		public function inline(IMacro $source, ITemplate $template, \Iterator $iterator, INode $node, string $name, $value = null);
 
 		/**
 		 * register macro event around enter/node/leave

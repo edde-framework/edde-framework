@@ -33,7 +33,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function inline(IMacro $source, ITemplate $template, \Iterator $iterator, INode $node, $value = null) {
+		public function inline(IMacro $source, ITemplate $template, \Iterator $iterator, INode $node, string $name, $value = null) {
 		}
 
 		/**
@@ -71,7 +71,7 @@
 			$attributeList->remove('t');
 			foreach ($inlineList as $name => $value) {
 				$macro = $template->getMacro($name, $node);
-				$macro->inline($this, $template, $iterator, $node, $value);
+				$macro->inline($this, $template, $iterator, $node, $name, $value);
 			}
 			$this->event(self::EVENT_PRE_ENTER);
 			$this->onEnter($node, $iterator, ...$parameters);

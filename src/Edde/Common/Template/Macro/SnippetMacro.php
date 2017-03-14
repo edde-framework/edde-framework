@@ -17,7 +17,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function inline(IMacro $source, ITemplate $template, \Iterator $iterator, INode $node, $value = null) {
+		public function inline(IMacro $source, ITemplate $template, \Iterator $iterator, INode $node, string $name, $value = null) {
 			$source->on(self::EVENT_PRE_ENTER, function () use ($template, $iterator, $node, $value) {
 				ob_start();
 				$macro = $this->traverse($node, $template);
