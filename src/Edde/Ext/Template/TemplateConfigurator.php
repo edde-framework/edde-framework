@@ -12,6 +12,7 @@
 	use Edde\Common\Template\Macro\IfMacro;
 	use Edde\Common\Template\Macro\IncludeMacro;
 	use Edde\Common\Template\Macro\SnippetMacro;
+	use Edde\Common\Template\Macro\SwitchMacro;
 
 	class TemplateConfigurator extends AbstractConfigurator {
 		use LazyContainerTrait;
@@ -26,6 +27,7 @@
 				HtmlMacro::class,
 				ForeachMacro::class,
 				IfMacro::class,
+				SwitchMacro::class,
 			];
 			foreach ($macroList as $name) {
 				/** @var $macro IMacro */

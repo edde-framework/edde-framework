@@ -32,5 +32,21 @@
 		<if src=":this-is-true(true)">
 			<span class="the big if"/>
 		</if>
+		<div t:switch=":gimme-some-value-bitch()">
+			<span class="this will be visible" t:case="'visible'"/>
+			<span class="not so much visible" t:inner-case="'invisible'">
+				<div class="inner-cased"/>
+			</span>
+			<span class="another visible" t:case="'visible'">
+				<switch src=":gimme-another-value-bitch()">
+					<div class="as usual another shitty switch">
+						<span t:case="'fooo-ooo'"/>
+						<case value="5">
+							<span class="boo"/>
+						</case>
+					</div>
+				</switch>
+			</span>
+		</div>
 	</body>
 </html>
