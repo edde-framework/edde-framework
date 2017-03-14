@@ -9,13 +9,17 @@
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\AbstractMacro;
 
-	class IncludeMacro extends AbstractMacro {
+	class ForeachMacro extends AbstractMacro {
 		/**
 		 * @inheritdoc
 		 */
 		public function inline(IMacro $source, ITemplate $template, \Iterator $iterator, INode $node, $value = null) {
-			$source->on(self::EVENT_POST_ENTER, function () use ($template, $iterator, $node, $value) {
-				echo '<?php include __DIR__.\'/snippet-' . StringUtils::webalize((string)$value) . '.php\'; ?>';
+			$value = StringUtils::toCamelHump($value);
+			$source->on(self::EVENT_PRE_ENTER, function () use ($value) {
+				echo '<?php foreach($context[null]->' . $value . " as \$a => \$b) {?>";
+			});
+			$source->on(self::EVENT_POST_LEAVE, function () use ($value) {
+				echo "<?php } ?>\n";
 			});
 		}
 	}

@@ -13,7 +13,9 @@
 			<p>
 				Blah blah blah!
 			</p>
-			<div t:include="gimme some include here"/>
+			<span class="repetative-stuff" t:snippet="to-be-foreached"/>
+			<div class="tricky-include" t:foreach="iterate-over-some-include()" t:include="gimme some include here"/>
+			<div class="inner-tricky-include" t:inner-foreach="iterate-over-some-include()" t:include="to-be-foreached"/>
 		</div>
 	</body>
 </html>

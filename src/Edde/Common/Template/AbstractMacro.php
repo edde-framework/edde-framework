@@ -8,6 +8,7 @@
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Common\Node\AbstractTreeTraversal;
+	use Edde\Common\Strings\StringUtils;
 
 	abstract class AbstractMacro extends AbstractTreeTraversal implements IMacro {
 		const EVENT_PRE_ENTER = 0;
@@ -24,18 +25,25 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function getNameList(): array {
+			return [StringUtils::recamel(str_replace('Macro', '', StringUtils::extract(static::class, '\\', -1)))];
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function inline(IMacro $source, ITemplate $template, \Iterator $iterator, INode $node, $value = null) {
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function event($event, callable $callback): IMacro {
+		public function on($event, callable $callback): IMacro {
 			$this->eventList[$event][] = $callback;
 			return $this;
 		}
 
-		protected function call($event) {
+		protected function event($event) {
 			foreach ($this->eventList[$event] ?? [] as $callable) {
 				$callable();
 			}
@@ -64,27 +72,28 @@
 				$macro = $template->getMacro($name, $node);
 				$macro->inline($this, $template, $iterator, $node, $value);
 			}
-			$this->call(self::EVENT_PRE_ENTER);
+			$this->event(self::EVENT_PRE_ENTER);
 			$this->onEnter($node, $iterator, ...$parameters);
-			$this->call(self::EVENT_POST_ENTER);
+			$this->event(self::EVENT_POST_ENTER);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function node(INode $node, \Iterator $iterator, ...$parameters) {
-			$this->call(self::EVENT_PRE_NODE);
+			$this->event(self::EVENT_PRE_NODE);
 			$this->onNode($node, $iterator, ...$parameters);
-			$this->call(self::EVENT_POST_NODE);
+			$this->event(self::EVENT_POST_NODE);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function leave(INode $node, \Iterator $iterator, ...$parameters) {
-			$this->call(self::EVENT_PRE_LEAVE);
+			$this->event(self::EVENT_PRE_LEAVE);
 			$this->onLeave($node, $iterator, ...$parameters);
-			$this->call(self::EVENT_POST_LEAVE);
+			$this->event(self::EVENT_POST_LEAVE);
+			$this->eventList = [];
 		}
 
 		/**

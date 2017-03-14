@@ -4,7 +4,6 @@
 	namespace Edde\Api\Template;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\ITreeTraversal;
 	use Edde\Api\Resource\IResource;
@@ -64,16 +63,11 @@
 		public function compile();
 
 		/**
-		 * return template class name
+		 * execute the template
 		 *
-		 * @return string
-		 */
-		public function getClass(): string;
-
-		/**
-		 * return template's source file (output)
+		 * @param $context
 		 *
-		 * @return IFile
+		 * @return mixed
 		 */
-		public function getFile(): IFile;
+		public function execute($context = null);
 	}

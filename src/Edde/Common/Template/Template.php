@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Template;
 
+	use Edde\Api\File\IFile;
 	use Edde\Api\Resource\LazyResourceManagerTrait;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\TemplateException;
@@ -32,7 +33,8 @@
 			}
 			echo "\t*/
 	class " . $this->getClass() . " {
-		public function template() { ?>\n";
+		public function template(\$context = null) {
+			\$context = is_array(\$context) ? \$context : [null => \$context]; ?>\n";
 			foreach ($this->resourceList as $resource) {
 				NodeUtils::namespace($root = $this->resourceManager->resource($resource), '~^(?<namespace>[a-z]):(?<name>[a-zA-Z0-9_-]+)$~');
 				$iterator = NodeIterator::recursive($root);
@@ -51,5 +53,17 @@
 			$file->write(ob_get_clean());
 			$file->close();
 			return $file;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function execute($context = null) {
+			return (function (IFile $file, $context = null) {
+				include $file->getPath();
+				$template = $this->getClass();
+				$template = new $template();
+				return $template->template($context);
+			})($this->compile(), $context);
 		}
 	}

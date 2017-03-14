@@ -17,15 +17,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getNameList(): array {
-			return ['snippet'];
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function inline(IMacro $source, ITemplate $template, \Iterator $iterator, INode $node, $value = null) {
-			$source->event(self::EVENT_PRE_ENTER, function () use ($template, $iterator, $node, $value) {
+			$source->on(self::EVENT_PRE_ENTER, function () use ($template, $iterator, $node, $value) {
 				ob_start();
 				$macro = $this->traverse($node, $template);
 				$iterator->next();

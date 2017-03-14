@@ -42,5 +42,5 @@
 		 *
 		 * @return IMacro
 		 */
-		public function event($event, callable $callback): IMacro;
+		public function on($event, callable $callback): IMacro;
 	}
