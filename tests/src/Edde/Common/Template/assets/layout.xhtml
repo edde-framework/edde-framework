@@ -10,7 +10,9 @@
 		<span t:foreach=":num-of-iterations()">
 			<span class="another-foreach" t:foreach=":num-of-iterations(2)"/>
 		</span>
-		<span t:foreach="doo-bar:num-of-iterations(5, 'foo')"/>
+		<div class="conditional-div" t:if=":this-is-true(true)">
+			<span t:foreach="doo-bar:num-of-iterations(5, 'foo')"/>
+		</div>
 		<div>
 			<section t:include="foo bar"/>
 			<section class="second-section" t:include="foo bar"/>
