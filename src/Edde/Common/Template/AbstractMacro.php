@@ -8,7 +8,6 @@
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Common\Node\AbstractTreeTraversal;
-	use Edde\Common\Node\SkipException;
 
 	abstract class AbstractMacro extends AbstractTreeTraversal implements IMacro {
 		/**
@@ -30,23 +29,6 @@
 		 * @inheritdoc
 		 */
 		public function enter(INode $node, \Iterator $iterator, ...$parameters) {
-			/** @var $template ITemplate */
-			list($template) = $parameters;
-			$attributeList = $node->getAttributeList();
-			$inlineList = $attributeList->get('t', []);
-			$attributeList->remove('t');
-			$skip = null;
-			foreach ($inlineList as $name => $value) {
-				$macro = $template->getMacro($name, $node);
-				try {
-					$macro->inline($template, $iterator, $node, $value);
-				} catch (SkipException $exception) {
-					$skip = $exception;
-				}
-			}
-			if ($skip) {
-				throw $skip;
-			}
 		}
 
 		/**

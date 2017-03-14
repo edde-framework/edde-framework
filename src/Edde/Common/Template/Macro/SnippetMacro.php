@@ -38,7 +38,6 @@
 		 * @inheritdoc
 		 */
 		public function enter(INode $node, \Iterator $iterator, ...$parameters) {
-			parent::enter($node, $iterator, ...$parameters);
 			ob_start();
 		}
 
