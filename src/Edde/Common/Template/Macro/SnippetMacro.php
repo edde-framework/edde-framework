@@ -48,7 +48,15 @@
 			$this->templateDirectory->save($this->getSnippetFile($node), ob_get_clean());
 		}
 
-		protected function getSnippetFile(INode $node, string $name = null) {
+		/**
+		 * compute snippet filename
+		 *
+		 * @param INode       $node
+		 * @param string|null $name
+		 *
+		 * @return string
+		 */
+		protected function getSnippetFile(INode $node, string $name = null): string {
 			$attributeList = $node->getAttributeList();
 			return 'snippet-' . StringUtils::webalize($name ?? (string)$attributeList->get('name')) . '.php';
 		}

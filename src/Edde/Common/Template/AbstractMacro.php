@@ -28,12 +28,6 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function enter(INode $node, \Iterator $iterator, ...$parameters) {
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function register(ITemplate $template): IMacro {
 			foreach ($this->getNameList() as $name) {
 				$template->registerMacro($name, $this);
