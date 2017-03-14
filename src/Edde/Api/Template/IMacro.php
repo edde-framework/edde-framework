@@ -26,10 +26,21 @@
 		/**
 		 * when there is inline node detected over the macro
 		 *
-		 * @param ITemplate $template
-		 * @param \Iterator $iterator
-		 * @param INode     $node
-		 * @param null      $value
+		 * @param IMacro     $source
+		 * @param ITemplate  $template
+		 * @param \Iterator  $iterator
+		 * @param INode      $node
+		 * @param mixed|null $value
 		 */
-		public function inline(ITemplate $template, \Iterator $iterator, INode $node, $value = null);
+		public function inline(IMacro $source, ITemplate $template, \Iterator $iterator, INode $node, $value = null);
+
+		/**
+		 * register macro event around enter/node/leave
+		 *
+		 * @param mixed    $event
+		 * @param callable $callback
+		 *
+		 * @return IMacro
+		 */
+		public function event($event, callable $callback): IMacro;
 	}

@@ -4,6 +4,7 @@
 	namespace Edde\Common\Template\Macro;
 
 	use Edde\Api\Node\INode;
+	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\LazyTemplateDirectoryTrait;
 	use Edde\Common\Node\SkipException;
@@ -23,28 +24,30 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function inline(ITemplate $template, \Iterator $iterator, INode $node, $value = null) {
-			ob_start();
-			$macro = $this->traverse($node, $template);
-			$iterator->next();
-			$macro->enter($node, $iterator, $template);
-			$macro->node($node, $iterator, $template);
-			$macro->leave($node, $iterator, $template);
-			$this->templateDirectory->save($this->getSnippetFile($node, $value), ob_get_clean());
-			throw new SkipException();
+		public function inline(IMacro $source, ITemplate $template, \Iterator $iterator, INode $node, $value = null) {
+			$source->event(self::EVENT_PRE_ENTER, function () use ($template, $iterator, $node, $value) {
+				ob_start();
+				$macro = $this->traverse($node, $template);
+				$iterator->next();
+				$macro->enter($node, $iterator, $template);
+				$macro->node($node, $iterator, $template);
+				$macro->leave($node, $iterator, $template);
+				$this->templateDirectory->save($this->getSnippetFile($node, $value), ob_get_clean());
+				throw new SkipException();
+			});
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function enter(INode $node, \Iterator $iterator, ...$parameters) {
+		public function onEnter(INode $node, \Iterator $iterator, ...$parameters) {
 			ob_start();
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function leave(INode $node, \Iterator $iterator, ...$parameters) {
+		public function onLeave(INode $node, \Iterator $iterator, ...$parameters) {
 			$this->templateDirectory->save($this->getSnippetFile($node), ob_get_clean());
 		}
 
