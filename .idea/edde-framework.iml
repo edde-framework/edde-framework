@@ -17,18 +17,14 @@
     <orderEntry type="module-library">
       <library name="PHARS">
         <CLASSES>
-          <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
           <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.0.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/phar-io/manifest/tests/_fixture/test.phar/" />
         </CLASSES>
         <SOURCES>
-          <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
           <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.0.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/phar-io/manifest/tests/_fixture/test.phar/" />
         </SOURCES>
       </library>
     </orderEntry>

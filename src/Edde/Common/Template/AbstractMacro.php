@@ -21,6 +21,7 @@
 		 * @var callable[]
 		 */
 		protected $eventList = [];
+		protected $level = 0;
 
 		/**
 		 * @inheritdoc
@@ -39,12 +40,12 @@
 		 * @inheritdoc
 		 */
 		public function on($event, callable $callback): IMacro {
-			$this->eventList[$event][] = $callback;
+			$this->eventList[$this->level][$event][] = $callback;
 			return $this;
 		}
 
 		protected function event($event) {
-			foreach ($this->eventList[$event] ?? [] as $callable) {
+			foreach ($this->eventList[$this->level][$event] ?? [] as $callable) {
 				$callable();
 			}
 		}
@@ -62,7 +63,7 @@
 		 * @inheritdoc
 		 */
 		public function enter(INode $node, \Iterator $iterator, ...$parameters) {
-			$this->eventList = [];
+			$this->level++;
 			/** @var $template ITemplate */
 			list($template) = $parameters;
 			$attributeList = $node->getAttributeList();
@@ -93,7 +94,8 @@
 			$this->event(self::EVENT_PRE_LEAVE);
 			$this->onLeave($node, $iterator, ...$parameters);
 			$this->event(self::EVENT_POST_LEAVE);
-			$this->eventList = [];
+			$this->eventList[$this->level] = [];
+			$this->level--;
 		}
 
 		/**

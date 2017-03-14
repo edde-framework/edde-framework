@@ -7,7 +7,9 @@
 			<span>this is hidden piece</span>
 		</div>
 		<h1>This is static header</h1>
-		<span t:foreach=":num-of-iterations()"/>
+		<span t:foreach=":num-of-iterations()">
+			<span class="another-foreach" t:foreach=":num-of-iterations(2)"/>
+		</span>
 		<span t:foreach="doo-bar:num-of-iterations(5, 'foo')"/>
 		<div>
 			<section t:include="foo bar"/>
