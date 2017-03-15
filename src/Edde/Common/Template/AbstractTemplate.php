@@ -85,7 +85,7 @@
 		 * @inheritdoc
 		 */
 		public function getClass(): string {
-			return sprintf('Template_%s', str_replace('-', null, $this->getId()));
+			return sprintf('snippet-%s', str_replace('-', null, $this->getId()));
 		}
 
 		protected function getId() {

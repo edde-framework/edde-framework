@@ -11,6 +11,7 @@
 	use Edde\Common\Template\Macro\HtmlMacro;
 	use Edde\Common\Template\Macro\IfMacro;
 	use Edde\Common\Template\Macro\IncludeMacro;
+	use Edde\Common\Template\Macro\LoadMacro;
 	use Edde\Common\Template\Macro\SnippetMacro;
 	use Edde\Common\Template\Macro\SwitchMacro;
 
@@ -24,6 +25,7 @@
 			$macroList = [
 				SnippetMacro::class,
 				IncludeMacro::class,
+				LoadMacro::class,
 				HtmlMacro::class,
 				ForeachMacro::class,
 				IfMacro::class,

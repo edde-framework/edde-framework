@@ -6,7 +6,6 @@
 	use Edde\Api\Html\IHtmlGenerator;
 	use Edde\Api\Node\IAttributeList;
 	use Edde\Api\Node\INode;
-	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Object;
 
 	/**
@@ -43,18 +42,24 @@
 			];
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function generate(INode $root): string {
-			foreach (NodeIterator::recursive($root, true) as $node) {
-				$this->open($node);
-				$this->close($node);
-			}
+			throw new \Exception('not implemented yet: html5 generator generate');
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function open(INode $node, int $level = null): string {
-			$content = $indentation = str_repeat("\t", $level ?? $node->getLevel());
+			$content = '';
+			switch ($node->getName()) {
+				case 'html':
+					$content .= "<!DOCTYPE html>\n";
+					break;
+			}
+			$content .= $indentation = str_repeat("\t", $level ?? $node->getLevel());
 			$content .= '<' . $node->getName();
 			foreach ($node->getAttributeList() as $name => $value) {
 				if ($value instanceof IAttributeList) {
