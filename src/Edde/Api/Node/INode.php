@@ -42,11 +42,49 @@
 		public function getAttributeList(): IAttributeList;
 
 		/**
+		 * return attribute
+		 *
+		 * @param string $name
+		 * @param null   $default
+		 *
+		 * @return IAttributeList|mixed
+		 */
+		public function getAttribute(string $name, $default = null);
+
+		/**
+		 * set attribute value or attribute list as a namespaced attribute
+		 *
+		 * @param string               $name
+		 * @param IAttributeList|mixed $value
+		 *
+		 * @return INode
+		 */
+		public function setAttribute(string $name, $value): INode;
+
+		/**
 		 * return list of meta data
 		 *
 		 * @return IAttributeList
 		 */
 		public function getMetaList(): IAttributeList;
+
+		/**
+		 * get meta from node
+		 *
+		 * @param string $name
+		 * @param null   $default
+		 *
+		 * @return IAttributeList|mixed
+		 */
+		public function getMeta(string $name, $default = null);
+
+		/**
+		 * @param string               $name
+		 * @param IAttributeList|mixed $value
+		 *
+		 * @return INode
+		 */
+		public function setMeta(string $name, $value): INode;
 
 		/**
 		 * generate materialized path from node names

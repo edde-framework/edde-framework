@@ -501,17 +501,17 @@
 		public function testGetTreeHeight() {
 			$node = new Node();
 			self::assertEquals(0, $node->getTreeHeight());
-			$node->addNode((new Node)->addNode((new Node)->addNode(new Node)));
+			$node->addNode((new Node())->addNode((new Node())->addNode(new Node())));
 			self::assertEquals(3, $node->getTreeHeight());
 		}
 
 		public function testGetTreeSize() {
 			$node = new Node();
 			self::assertEquals(1, $node->getTreeSize());
-			$node->addNode((new Node)->addNodeList([
-				(new Node)->addNode(new Node),
-				(new Node)->addNode(new Node),
-				(new Node)->addNode(new Node),
+			$node->addNode((new Node())->addNodeList([
+				(new Node())->addNode(new Node()),
+				(new Node())->addNode(new Node()),
+				(new Node())->addNode(new Node()),
 			]));
 			self::assertEquals(8, $node->getTreeSize());
 		}

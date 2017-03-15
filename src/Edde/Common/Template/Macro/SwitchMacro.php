@@ -66,14 +66,13 @@
 		 * @inheritdoc
 		 */
 		protected function onEnter(INode $node, \Iterator $iterator, ...$parameters) {
-			$attributeList = $node->getAttributeList();
 			switch ($node->getName()) {
 				case 'switch':
-					echo '<?php $' . ($switch = 'switch_' . sha1((string)$this->switch->count())) . ' = ' . $this->delimite($attributeList->get('src')) . '; ?>';
+					echo '<?php $' . ($switch = 'switch_' . sha1((string)$this->switch->count())) . ' = ' . $this->delimite($node->getAttribute('src')) . '; ?>';
 					$this->switch->push($switch);
 					break;
 				case 'case':
-					echo '<?php if($' . $this->switch->top() . ' === ' . $attributeList->get('value') . ') {?>' . "\n";
+					echo '<?php if($' . $this->switch->top() . ' === ' . $node->getAttribute('value') . ') {?>' . "\n";
 					break;
 			}
 		}

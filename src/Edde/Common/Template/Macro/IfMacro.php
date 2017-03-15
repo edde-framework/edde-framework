@@ -42,8 +42,7 @@
 		 * @inheritdoc
 		 */
 		protected function onEnter(INode $node, \Iterator $iterator, ...$parameters) {
-			$attributeList = $node->getAttributeList();
-			echo '<?php if(' . $this->delimite($attributeList->get('src')) . ') {?>' . "\n";
+			echo '<?php if(' . $this->delimite($node->getAttribute('src')) . ') {?>' . "\n";
 		}
 
 		/**

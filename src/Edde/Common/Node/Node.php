@@ -55,8 +55,38 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function getAttribute(string $name, $default = null) {
+			return $this->attributeList->get($name, $default);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setAttribute(string $name, $value): INode {
+			$this->attributeList->set($name, $value);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function getMetaList(): IAttributeList {
 			return $this->metaList;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getMeta(string $name, $default = null) {
+			return $this->metaList->get($name, $default);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setMeta(string $name, $value): INode {
+			$this->metaList->set($name, $value);
+			return $this;
 		}
 
 		/**

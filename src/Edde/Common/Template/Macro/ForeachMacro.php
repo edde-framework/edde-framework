@@ -49,8 +49,7 @@
 		 * @inheritdoc
 		 */
 		protected function onEnter(INode $node, \Iterator $iterator, ...$parameters) {
-			$attributeList = $node->getAttributeList();
-			echo '<?php foreach(' . $this->delimite($attributeList->get('src')) . ' as $' . str_repeat('k', $this->foreach) . ' => $' . str_repeat('v', $this->foreach) . ') {?>' . "\n";
+			echo '<?php foreach(' . $this->delimite($node->getAttribute('src')) . ' as $' . str_repeat('k', $this->foreach) . ' => $' . str_repeat('v', $this->foreach) . ') {?>' . "\n";
 			$this->foreach++;
 		}
 
