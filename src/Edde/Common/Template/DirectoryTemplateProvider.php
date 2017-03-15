@@ -24,8 +24,11 @@
 			$this->directory = $directory;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getResource(string $name) {
-			$preg = sprintf('~^%s\.xhtml$~', preg_quote($name, '~'));
+			$preg = sprintf('~^%s\.x(ht)?ml$~', preg_quote($name, '~'));
 			foreach ($this->directory as $file) {
 				if ($file->match($preg)) {
 					return $file;
