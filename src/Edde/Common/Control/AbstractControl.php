@@ -96,7 +96,7 @@
 						if ($parameter->isOptional()) {
 							continue;
 						}
-						throw new ControlException(sprintf('Missing action parameter [%s::%s(, ...$%s, ...)].', static::class, $method, $parameter->getName()));
+						throw new MissingActionParameterException(sprintf('Missing action parameter [%s::%s(, ...$%s, ...)].', static::class, $method, $parameter->getName()));
 					}
 					$argumentList[] = $parameterList[$parameterName];
 				}
@@ -114,7 +114,7 @@
 		 * @throws ControlException
 		 */
 		protected function action(string $action, array $parameterList) {
-			throw new ControlException(sprintf('Unknown handle method [%s]; to disable this exception, override [%s::%s()] method or implement [%s::%s()].', $action, static::class, __FUNCTION__, static::class, StringUtils::toCamelHump($action)));
+			throw new UnknownActionException(sprintf('Unknown handle method [%s]; to disable this exception, override [%s::%s()] method or implement [%s::%s()].', $action, static::class, __FUNCTION__, static::class, StringUtils::toCamelHump($action)));
 		}
 
 		/**
