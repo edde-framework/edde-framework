@@ -30,6 +30,7 @@
 	use Edde\Api\EddeException;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\File\ITempDirectory;
+	use Edde\Api\Html\IHtmlGenerator;
 	use Edde\Api\Http\Client\IHttpClient;
 	use Edde\Api\Http\IHostUrl;
 	use Edde\Api\Http\IHttpRequest;
@@ -74,6 +75,7 @@
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
+	use Edde\Common\Html\Html5Generator;
 	use Edde\Common\Http\Client\HttpClient;
 	use Edde\Common\Http\HttpRequest;
 	use Edde\Common\Http\HttpResponse;
@@ -343,6 +345,7 @@
 				ISchemaManager::class => SchemaManager::class,
 				IHttpClient::class => HttpClient::class,
 				IAclManager::class => AclManager::class,
+				IHtmlGenerator::class => Html5Generator::class,
 				ITemplateManager::class => TemplateManager::class,
 				ITemplate::class => Template::class,
 				/**
