@@ -4,6 +4,7 @@
 	namespace Edde\Api\Template;
 
 	use Edde\Api\Config\IConfigurable;
+	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\ITreeTraversal;
 	use Edde\Api\Resource\IResource;
@@ -29,15 +30,6 @@
 		public function registerMacro(string $name, IMacro $macro): ITemplate;
 
 		/**
-		 * from where this template can got another templates?
-		 *
-		 * @param ITemplateProvider $templateProvider
-		 *
-		 * @return ITemplate
-		 */
-		public function registerTemplateProvider(ITemplateProvider $templateProvider): ITemplate;
-
-		/**
 		 * return macro or throw an exception
 		 *
 		 * @param string $name
@@ -60,7 +52,7 @@
 		/**
 		 * execute template compilation
 		 */
-		public function compile();
+		public function compile(): IFile;
 
 		/**
 		 * execute the template

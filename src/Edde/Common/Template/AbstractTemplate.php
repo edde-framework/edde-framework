@@ -10,24 +10,19 @@
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\ITemplate;
-	use Edde\Api\Template\ITemplateProvider;
 	use Edde\Api\Template\LazyTemplateDirectoryTrait;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\AbstractTreeTraversal;
 
 	abstract class AbstractTemplate extends AbstractTreeTraversal implements ITemplate {
-		use ConfigurableTrait;
 		use LazyTemplateDirectoryTrait;
 		use LazyCryptEngineTrait;
+		use ConfigurableTrait;
 		/**
 		 * @var IMacro[]
 		 */
 		protected $macroList;
-		/**
-		 * @var ITemplateProvider
-		 */
-		protected $templateProvider;
 		/**
 		 * @var IResource[]
 		 */
@@ -43,14 +38,6 @@
 		 */
 		public function registerMacro(string $name, IMacro $macro): ITemplate {
 			$this->macroList[$name] = $macro;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function registerTemplateProvider(ITemplateProvider $templateProvider): ITemplate {
-			$this->templateProvider = $templateProvider;
 			return $this;
 		}
 
@@ -75,7 +62,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function traverse(INode $node, ...$parameters): ITreeTraversal {
+		public function select(INode $node, ...$parameters): ITreeTraversal {
 			/** @var $template ITemplate */
 			list($template) = $parameters;
 			return $template->getMacro($node->getName(), $node);

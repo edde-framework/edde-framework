@@ -20,11 +20,8 @@
 		public function inline(IMacro $source, ITemplate $template, \Iterator $iterator, INode $node, string $name, $value = null) {
 			$source->on(self::EVENT_PRE_ENTER, function () use ($template, $iterator, $node, $value) {
 				ob_start();
-				$macro = $this->traverse($node, $template);
 				$iterator->next();
-				$macro->enter($node, $iterator, $template);
-				$macro->node($node, $iterator, $template);
-				$macro->leave($node, $iterator, $template);
+				$this->traverse($node, $iterator, $template);
 				$this->templateDirectory->save($this->getSnippetFile($node, $value), ob_get_clean());
 				throw new SkipException();
 			});

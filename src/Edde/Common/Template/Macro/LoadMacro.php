@@ -14,7 +14,7 @@
 		 */
 		public function inline(IMacro $source, ITemplate $template, \Iterator $iterator, INode $node, string $name, $value = null) {
 			$source->on(self::EVENT_POST_ENTER, function () use ($template, $iterator, $node, $value) {
-				echo '<?php include $this->templateProvider->getResource(' . $this->delimite($value) . ')->getPath(); ?>';
+				echo '<?php include $this->snippet(' . $this->delimite($value) . '); ?>';
 			});
 		}
 
@@ -22,6 +22,6 @@
 		 * @inheritdoc
 		 */
 		protected function onNode(INode $node, \Iterator $iterator, ...$parameters) {
-			echo '<?php include $this->templateProvider->getResource(' . $this->delimite($node->getAttribute('src')) . ')->getPath(); ?>';
+			echo '<?php include $this->snippet(' . $this->delimite($node->getAttribute('src')) . '); ?>';
 		}
 	}

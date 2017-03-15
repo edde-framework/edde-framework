@@ -27,7 +27,16 @@
 		 *
 		 * @return ITreeTraversal
 		 */
-		public function traverse(INode $node, ...$parameters): ITreeTraversal;
+		public function select(INode $node, ...$parameters): ITreeTraversal;
+
+		/**
+		 * execute common workflow of traversal (enter/node/leave) with traverse selection
+		 *
+		 * @param INode     $node
+		 * @param \Iterator $iterator
+		 * @param array     ...$parameters
+		 */
+		public function traverse(INode $node, \Iterator $iterator, ...$parameters);
 
 		/**
 		 * open node event (when traversal enters the node)

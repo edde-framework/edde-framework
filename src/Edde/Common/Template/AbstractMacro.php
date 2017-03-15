@@ -53,7 +53,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function traverse(INode $node, ...$parameters): ITreeTraversal {
+		public function select(INode $node, ...$parameters): ITreeTraversal {
 			/** @var $template ITemplate */
 			list($template) = $parameters;
 			return $template->getMacro($node->getName(), $node);

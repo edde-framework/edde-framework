@@ -38,9 +38,6 @@
 		}
 
 		protected function createTemplate(): ITemplate {
-			/** @var $template ITemplate */
-			$template = $this->container->create(ITemplate::class);
-			$template->registerTemplateProvider($this);
-			return $template;
+			return $this->container->create(ITemplate::class);
 		}
 	}

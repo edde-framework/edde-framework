@@ -18,8 +18,15 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function traverse(INode $node, ...$parameters): ITreeTraversal {
+		public function select(INode $node, ...$parameters): ITreeTraversal {
 			return $this;
+		}
+
+		public function traverse(INode $node, \Iterator $iterator, ...$parameters) {
+			$treeTraversal = $this->select($node, ...$parameters);
+			$treeTraversal->enter($node, $iterator, ...$parameters);
+			$treeTraversal->node($node, $iterator, ...$parameters);
+			$treeTraversal->leave($node, $iterator, ...$parameters);
 		}
 
 		/**
@@ -46,7 +53,7 @@
 				if (($currentLevel = $current->getLevel()) <= $level) {
 					break;
 				}
-				$treeTraversal = $this->traverse($current, ...$parameters);
+				$treeTraversal = $this->select($current, ...$parameters);
 				foreach ($stack as list($levelTreeTraversal, $levelCurrent)) {
 					if ($levelCurrent->getLevel() < $currentLevel) {
 						break;
@@ -55,12 +62,10 @@
 					$stack->pop();
 				}
 				if ($current->isLeaf() === false) {
-					$stack->push(
-						[
+					$stack->push([
 							$treeTraversal,
 							$current,
-						]
-					);
+					]);
 				}
 				try {
 					$treeTraversal->enter($current, $iterator, ...$parameters);
