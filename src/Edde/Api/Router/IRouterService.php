@@ -21,6 +21,15 @@
 		public function registerRouter(string $router, array $parameterList = []): IRouterService;
 
 		/**
+		 * when routers fail, execute this default request
+		 *
+		 * @param IRequest $request
+		 *
+		 * @return IRouterService
+		 */
+		public function setDefaultRequest(IRequest $request): IRouterService;
+
+		/**
 		 * @return IRequest
 		 */
 		public function createRequest(): IRequest;

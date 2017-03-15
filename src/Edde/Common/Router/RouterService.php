@@ -22,16 +22,31 @@
 		 */
 		protected $routerList = [];
 		/**
+		 * @var IRequest
+		 */
+		protected $defaultRequest;
+		/**
 		 * @no-cache
 		 * @var IRequest
 		 */
 		protected $request;
 
+		/**
+		 * @inheritdoc
+		 */
 		public function registerRouter(string $router, array $parameterList = []): IRouterService {
 			$this->routerList[$router] = [
 				$router,
 				$parameterList,
 			];
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setDefaultRequest(IRequest $request): IRouterService {
+			$this->defaultRequest = $request;
 			return $this;
 		}
 
@@ -51,6 +66,9 @@
 				if (($this->request = $router->createRequest()) !== null) {
 					return $this->request;
 				}
+			}
+			if ($this->defaultRequest) {
+				return $this->defaultRequest;
 			}
 			throw new BadRequestException('Cannot handle current application request.' . (empty($this->routerList) ? ' There are no registered routers.' : ''));
 		}
