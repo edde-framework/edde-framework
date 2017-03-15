@@ -16,9 +16,10 @@
 		/**
 		 * build a template from the given (already registered) snippets
 		 *
-		 * @param array $nameList
+		 * @param string     $name
+		 * @param mixed|null $context
 		 *
 		 * @return ITemplate
 		 */
-		public function template(array $nameList): ITemplate;
+		public function template(string $name, $context = null): ITemplate;
 	}

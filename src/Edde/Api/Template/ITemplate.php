@@ -40,26 +40,12 @@
 		public function getMacro(string $name, INode $source): IMacro;
 
 		/**
-		 * add list of resources of this template
+		 * execute template compilation
 		 *
 		 * @param string    $name
 		 * @param IResource $resource
 		 *
-		 * @return ITemplate
+		 * @return IFile
 		 */
-		public function import(string $name, IResource $resource): ITemplate;
-
-		/**
-		 * execute template compilation
-		 */
-		public function compile(): IFile;
-
-		/**
-		 * execute the template
-		 *
-		 * @param $context
-		 *
-		 * @return mixed
-		 */
-		public function execute($context = null);
+		public function compile(string $name, IResource $resource): IFile;
 	}
