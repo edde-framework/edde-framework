@@ -24,9 +24,15 @@
 
 		public function traverse(INode $node, \Iterator $iterator, ...$parameters) {
 			$treeTraversal = $this->select($node, ...$parameters);
-			$treeTraversal->enter($node, $iterator, ...$parameters);
-			$treeTraversal->node($node, $iterator, ...$parameters);
-			$treeTraversal->leave($node, $iterator, ...$parameters);
+			try {
+				$treeTraversal->enter($node, $iterator, ...$parameters);
+				$treeTraversal->node($node, $iterator, ...$parameters);
+				$treeTraversal->leave($node, $iterator, ...$parameters);
+			} catch (SkipException $exception) {
+				/**
+				 * skip exception could be safely ignored
+				 */
+			}
 		}
 
 		/**
@@ -63,8 +69,8 @@
 				}
 				if ($current->isLeaf() === false) {
 					$stack->push([
-							$treeTraversal,
-							$current,
+						$treeTraversal,
+						$current,
 					]);
 				}
 				try {
