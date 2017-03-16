@@ -14,6 +14,7 @@
 	use Edde\Common\Template\Macro\LoadMacro;
 	use Edde\Common\Template\Macro\SnippetMacro;
 	use Edde\Common\Template\Macro\SwitchMacro;
+	use Edde\Ext\Template\Macro\CssMacro;
 
 	class TemplateConfigurator extends AbstractConfigurator {
 		use LazyContainerTrait;
@@ -30,10 +31,11 @@
 				ForeachMacro::class,
 				IfMacro::class,
 				SwitchMacro::class,
+				CssMacro::class,
 			];
 			foreach ($macroList as $name) {
 				/** @var $macro IMacro */
-				$macro = $this->container->create($name);
+				$macro = $this->container->create($name, [], static::class);
 				$macro->register($instance);
 			}
 		}

@@ -95,7 +95,7 @@
 		}
 
 		protected function macroCloseSwitch() {
-			$this->switch->pop();
+			echo '<?php unset($' . ($switch = $this->switch->pop()) . '); ?>';
 		}
 
 		protected function macroOpenCase($value) {

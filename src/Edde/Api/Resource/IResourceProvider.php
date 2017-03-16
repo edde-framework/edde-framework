@@ -10,8 +10,9 @@
 		 * request resource by the name
 		 *
 		 * @param string $name
+		 * @param array  $parameters
 		 *
 		 * @return IResource|null
 		 */
-		public function getResource(string $name);
+		public function getResource(string $name, ...$parameters);
 	}

@@ -37,9 +37,9 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getResource(string $name) {
+		public function getResource(string $name, ...$parameters) {
 			foreach ($this->resourceProviderList as $resourceProvider) {
-				if (($resource = $resourceProvider->getResource($name)) !== null) {
+				if (($resource = $resourceProvider->getResource($name, ...$parameters)) !== null) {
 					return $resource;
 				}
 			}
