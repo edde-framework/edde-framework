@@ -5,30 +5,20 @@
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\File\IFile;
+	use Edde\Api\Resource\LazyResourceManagerTrait;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\ITemplateManager;
-	use Edde\Api\Template\ITemplateProvider;
 	use Edde\Common\Config\ConfigurableTrait;
+	use Edde\Common\Object;
 
-	abstract class AbstractTemplateManager extends AbstractTemplateProvider implements ITemplateManager {
+	abstract class AbstractTemplateManager extends Object implements ITemplateManager {
 		use LazyContainerTrait;
+		use LazyResourceManagerTrait;
 		use ConfigurableTrait;
-		/**
-		 * @var ITemplateProvider[]
-		 */
-		protected $templateProviderList = [];
 		/**
 		 * @var ITemplate
 		 */
 		protected $template;
-
-		/**
-		 * @inheritdoc
-		 */
-		public function registerTemplateProvider(ITemplateProvider $templateProvider): ITemplateManager {
-			$this->templateProviderList[] = $templateProvider;
-			return $this;
-		}
 
 		/**
 		 * @inheritdoc
@@ -43,21 +33,10 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getResource(string $name) {
-			foreach ($this->templateProviderList as $templateProvider) {
-				if ($resource = $templateProvider->getResource($name)) {
-					return $resource;
-				}
-			}
-			throw new UnknownTemplateException(sprintf('Requested template name [%s] cannot be found%s.', $name, empty($this->templateProviderList) ? '; there are no template providers - please register instance of [' . ITemplateProvider::class . ']' : ''));
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function snippet(string $name): IFile {
+			$this->resourceManager->setup();
 			$template = $this->createTemplate();
-			return $template->compile($name, $this->getResource($name));
+			return $template->compile($name, $this->resourceManager->getResource($name));
 		}
 
 		protected function createTemplate(): ITemplate {

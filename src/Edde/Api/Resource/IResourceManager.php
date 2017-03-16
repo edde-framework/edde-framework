@@ -1,11 +1,20 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Resource;
 
 	use Edde\Api\Node\INode;
 
-	interface IResourceManager {
+	interface IResourceManager extends IResourceProvider {
+		/**
+		 * register resource provider
+		 *
+		 * @param IResourceProvider $resourceProvider
+		 *
+		 * @return IResourceManager
+		 */
+		public function registerResourceProvider(IResourceProvider $resourceProvider): IResourceManager;
+
 		/**
 		 * IResource is created from the given url and then handler is selected based on a mime
 		 *

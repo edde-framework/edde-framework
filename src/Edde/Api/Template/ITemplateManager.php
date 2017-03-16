@@ -6,14 +6,7 @@
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\File\IFile;
 
-	interface ITemplateManager extends ITemplateProvider, IConfigurable {
-		/**
-		 * @param ITemplateProvider $templateProvider
-		 *
-		 * @return ITemplateManager
-		 */
-		public function registerTemplateProvider(ITemplateProvider $templateProvider): ITemplateManager;
-
+	interface ITemplateManager extends IConfigurable {
 		/**
 		 * @param array $nameList
 		 *

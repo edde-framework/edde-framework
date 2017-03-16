@@ -42,6 +42,7 @@
 	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
 	use Edde\Api\Resource\IResourceManager;
+	use Edde\Api\Resource\IResourceProvider;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Api\Schema\ISchemaManager;
@@ -335,6 +336,7 @@
 				IXmlParser::class => XmlParser::class,
 				IConverterManager::class => ConverterManager::class,
 				IResourceManager::class => ResourceManager::class,
+				IResourceProvider::class => IResourceManager::class,
 				IStyleSheetCompiler::class => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class => JavaScriptCompiler::class,
 				IStorage::class => DatabaseStorage::class,
@@ -353,7 +355,6 @@
 				 */
 				IUpgradeManager::class => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
 				ICryptEngine::class => CryptEngine::class,
-				IHttpClient::class => HttpClient::class,
 				IHostUrl::class => self::exception(sprintf('Host url is not specified; you have to register [%s] interface.', IHostUrl::class)),
 				ILinkFactory::class => \Edde\Common\Link\LinkFactory::class,
 				ISessionManager::class => SessionManager::class,
