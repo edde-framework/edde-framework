@@ -13,8 +13,8 @@
 		 * @inheritdoc
 		 */
 		public function inline(IMacro $source, ITemplate $template, \Iterator $iterator, INode $node, string $name, $value = null) {
-			$source->on(self::EVENT_POST_ENTER, function () use ($template, $iterator, $node, $value) {
-				echo '<?php include $this->snippet(' . $this->delimite($value) . '); ?>';
+			$source->on(self::EVENT_POST_ENTER, function () use ($value) {
+				$this->macro($value);
 			});
 		}
 
@@ -22,6 +22,10 @@
 		 * @inheritdoc
 		 */
 		protected function onNode(INode $node, \Iterator $iterator, ...$parameters) {
-			echo '<?php include $this->snippet(' . $this->delimite($node->getAttribute('src')) . '); ?>';
+			$this->macro($node->getAttribute('src'));
+		}
+
+		protected function macro($value) {
+			echo '<?php include $this->snippet(' . $this->delimite($value) . '); ?>';
 		}
 	}

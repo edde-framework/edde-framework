@@ -36,11 +36,10 @@
 			switch ($name) {
 				case'switch':
 					$source->on(self::EVENT_PRE_ENTER, function () use ($value) {
-						echo '<?php $' . ($switch = 'switch_' . sha1((string)$this->switch->count())) . ' = ' . $this->delimite($value) . '; ?>';
-						$this->switch->push($switch);
+						$this->macroOpenSwitch($value);
 					});
 					$source->on(self::EVENT_POST_LEAVE, function () {
-						$this->switch->pop();
+						$this->macroCloseSwitch();
 					});
 					break;
 				case 'case':
@@ -53,10 +52,10 @@
 						self::EVENT_PRE_LEAVE,
 					];
 					$source->on($events[0], function () use ($value) {
-						echo '<?php if($' . $this->switch->top() . ' === ' . $value . ') {?>' . "\n";
+						$this->macroOpenCase($value);
 					});
-					$source->on($events[1], function () use ($value) {
-						echo "<?php } ?>\n";
+					$source->on($events[1], function () {
+						$this->macroCloseCase();
 					});
 					break;
 			}
@@ -68,11 +67,10 @@
 		protected function onEnter(INode $node, \Iterator $iterator, ...$parameters) {
 			switch ($node->getName()) {
 				case 'switch':
-					echo '<?php $' . ($switch = 'switch_' . sha1((string)$this->switch->count())) . ' = ' . $this->delimite($node->getAttribute('src')) . '; ?>';
-					$this->switch->push($switch);
+					$this->macroOpenSwitch($node->getAttribute('src'));
 					break;
 				case 'case':
-					echo '<?php if($' . $this->switch->top() . ' === ' . $node->getAttribute('value') . ') {?>' . "\n";
+					$this->macroOpenCase($node->getAttribute('value'));
 					break;
 			}
 		}
@@ -83,11 +81,28 @@
 		protected function onLeave(INode $node, \Iterator $iterator, ...$parameters) {
 			switch ($node->getName()) {
 				case 'switch':
-					$this->switch->pop();
+					$this->macroCloseSwitch();
 					break;
 				case 'case':
-					echo "<?php } ?>\n";
+					$this->macroCloseCase();
 					break;
 			}
+		}
+
+		protected function macroOpenSwitch($value) {
+			echo '<?php $' . ($switch = 'switch_' . sha1((string)$this->switch->count())) . ' = ' . $this->delimite($value) . '; ?>';
+			$this->switch->push($switch);
+		}
+
+		protected function macroCloseSwitch() {
+			$this->switch->pop();
+		}
+
+		protected function macroOpenCase($value) {
+			echo '<?php if($' . $this->switch->top() . ' === ' . $value . ') {?>' . "\n";
+		}
+
+		protected function macroCloseCase() {
+			echo "<?php } ?>\n";
 		}
 	}
