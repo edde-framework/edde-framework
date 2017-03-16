@@ -16,6 +16,10 @@
 		 * @var ITemplateProvider[]
 		 */
 		protected $templateProviderList = [];
+		/**
+		 * @var ITemplate
+		 */
+		protected $template;
 
 		/**
 		 * @inheritdoc
@@ -38,6 +42,6 @@
 		}
 
 		protected function createTemplate(): ITemplate {
-			return $this->container->create(ITemplate::class);
+			return $this->template ? $this->template : $this->template = $this->container->create(ITemplate::class);
 		}
 	}

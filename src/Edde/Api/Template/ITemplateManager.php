@@ -18,8 +18,6 @@
 		 *
 		 * @param string     $name
 		 * @param mixed|null $context
-		 *
-		 * @return ITemplate
 		 */
-		public function template(string $name, $context = null): ITemplate;
+		public function template(string $name, $context = null);
 	}

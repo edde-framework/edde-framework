@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Strings;
 
@@ -489,5 +489,14 @@
 		static public function extract(string $source, string $separator = '\\', int $index = -1): string {
 			$sourceList = explode($separator, $source);
 			return isset($sourceList[$index = $index < 0 ? count($sourceList) + $index : $index]) ? $sourceList[$index] : '';
+		}
+
+		/**
+		 * @param string $string
+		 *
+		 * @return int
+		 */
+		static public function length(string $string): int {
+			return mb_strlen($string);
 		}
 	}

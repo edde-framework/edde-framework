@@ -317,4 +317,8 @@
 			}
 			return parent::__sleep();
 		}
+
+		public function __toString() {
+			return $this->getPath();
+		}
 	}

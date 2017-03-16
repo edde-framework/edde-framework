@@ -4,23 +4,23 @@
 	namespace Edde\Common\Template;
 
 	use Edde\Api\File\IFile;
-	use Edde\Api\Template\ITemplate;
 
 	class TemplateManager extends AbstractTemplateManager {
 		/**
 		 * @inheritdoc
 		 */
-		public function template(string $name, $context = null): ITemplate {
-			$template = $this->snippet($name, $context);
-			return $template;
+		public function template(string $name, $context = null) {
+			$context = $context ? (is_array($context) ? $context : [null => $context]) : null;
+			/** @noinspection PhpIncludeInspection */
+			require $this->snippet($name);
+			$this->template = null;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function snippet(string $name, $context = null): IFile {
+		public function snippet(string $name): IFile {
 			$template = $this->createTemplate();
-			$template->compile($name, $this->getResource($name));
-			// return
+			return $template->compile($name, $this->getResource($name));
 		}
 	}
