@@ -25,6 +25,9 @@
 			];
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function onEnter(INode $node, \Iterator $iterator, ...$parameters) {
 			switch ($node->getName()) {
 				case 'minify-css':
@@ -43,6 +46,9 @@
 			}
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function onLeave(INode $node, \Iterator $iterator, ...$parameters) {
 			switch ($node->getName()) {
 				case 'minify-css':
