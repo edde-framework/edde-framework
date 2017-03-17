@@ -37,11 +37,24 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getResource(string $name, ...$parameters) {
+		public function hasResource(string $name, ...$parameters): bool {
 			foreach ($this->resourceProviderList as $resourceProvider) {
-				if (($resource = $resourceProvider->getResource($name, ...$parameters)) !== null) {
-					return $resource;
+				if ($resourceProvider->hasResource($name, ...$parameters)) {
+					return true;
 				}
+			}
+			return false;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getResource(string $name, ...$parameters): IResource {
+			foreach ($this->resourceProviderList as $resourceProvider) {
+				if ($resourceProvider->hasResource($name, ...$parameters) === false) {
+					continue;
+				}
+				return $resourceProvider->getResource($name, ...$parameters);
 			}
 			throw new UnknownResourceException(sprintf('Requested unknown resource [%s].', $name));
 		}

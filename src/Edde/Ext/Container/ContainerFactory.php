@@ -6,6 +6,7 @@
 	use Edde\Api\Acl\IAcl;
 	use Edde\Api\Acl\IAclManager;
 	use Edde\Api\Application\IApplication;
+	use Edde\Api\Application\IContext;
 	use Edde\Api\Application\IRequest;
 	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Asset\IAssetDirectory;
@@ -99,6 +100,7 @@
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
 	use Edde\Common\Xml\XmlParser;
+	use Edde\Ext\Application\FrameworkContext;
 	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
@@ -361,6 +363,7 @@
 				IIdentityManager::class => IdentityManager::class,
 				IIdentity::class => IIdentityManager::class . '::createIdentity',
 				IFingerprint::class => self::exception(sprintf('You have to register or implement fingerprint interface [%s].', IFingerprint::class)),
+				IContext::class => FrameworkContext::class,
 				IAuthenticatorManager::class => AuthenticatorManager::class,
 				IAclManager::class => AclManager::class,
 				IAcl::class => Acl::class,

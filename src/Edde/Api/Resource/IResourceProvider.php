@@ -7,12 +7,22 @@
 
 	interface IResourceProvider extends IConfigurable {
 		/**
+		 * is the given resource name available as a resrouce?
+		 *
+		 * @param string $name
+		 * @param array  ...$parameters
+		 *
+		 * @return bool
+		 */
+		public function hasResource(string $name, ...$parameters): bool;
+
+		/**
 		 * request resource by the name
 		 *
 		 * @param string $name
 		 * @param array  $parameters
 		 *
-		 * @return IResource|null
+		 * @return IResource
 		 */
-		public function getResource(string $name, ...$parameters);
+		public function getResource(string $name, ...$parameters): IResource;
 	}
