@@ -155,15 +155,15 @@
 		/**
 		 * copies a file or directory
 		 *
-		 * @param string $source
-		 * @param string $destination
-		 * @param bool   $overwrite
+		 * @param string        $source
+		 * @param string        $destination
+		 * @param callable|null $filter
 		 *
 		 * @throws FileException
 		 */
-		static public function copy(string $source, string $destination, bool $overwrite = true) {
+		static public function copy(string $source, string $destination, callable $filter = null) {
 			if (is_dir($source)) {
-				self::copyDirectory($source, $destination);
+				self::copyDirectory($source, $destination, $filter);
 				return;
 			}
 			try {
@@ -179,17 +179,22 @@
 		/**
 		 * copy source directory tree to destination
 		 *
-		 * @param string $source
-		 * @param string $destination
+		 * @param string        $source
+		 * @param string        $destination
+		 * @param callable|null $filter
 		 *
 		 * @throws FileException
 		 */
-		static public function copyDirectory(string $source, string $destination) {
+		static public function copyDirectory(string $source, string $destination, callable $filter = null) {
 			$source = self::normalize($source);
 			$destination = self::normalize($destination);
 			/** @var $item \SplFileInfo */
 			foreach (new \RecursiveIteratorIterator($iterator = new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS), \RecursiveIteratorIterator::SELF_FIRST) as $item) {
-				static::createDir($path = self::normalize($destination . str_replace($source, '', self::normalize($item->getPath()))));
+				$path = self::normalize($destination . str_replace($source, '', self::normalize($item->getPath())));
+				if ($filter && $filter($item, $path, $iterator) === false) {
+					continue;
+				}
+				static::createDir($path);
 				if ($item->isDir()) {
 					continue;
 				}
