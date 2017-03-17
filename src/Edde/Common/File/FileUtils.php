@@ -156,33 +156,44 @@
 		 * copies a file or directory
 		 *
 		 * @param string $source
-		 * @param string $dest
+		 * @param string $destination
 		 * @param bool   $overwrite
 		 *
 		 * @throws FileException
 		 */
-		static public function copy(string $source, string $dest, bool $overwrite = true) {
-			if (stream_is_local($source) && file_exists($source) === false) {
-				throw new FileException ("File or directory [$source] not found.");
-			} else if ($overwrite === false && file_exists($dest)) {
-				throw new FileException("File or directory [$dest] already exists.");
-			} else if (is_dir($source)) {
-				static::createDir($dest);
-				foreach (new \FilesystemIterator($dest) as $item) {
-					static::delete($item);
-				}
-				foreach (new \RecursiveIteratorIterator($iterator = new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS), \RecursiveIteratorIterator::SELF_FIRST) as $item) {
-					if ($item->isDir()) {
-						static::createDir($dest . '/' . $iterator->getSubPathname());
-						continue;
-					}
-					static::copy($item, $dest . '/' . $iterator->getSubPathname());
-				}
+		static public function copy(string $source, string $destination, bool $overwrite = true) {
+			if (is_dir($source)) {
+				self::copyDirectory($source, $destination);
+				return;
 			}
-			static::createDir(dirname($dest));
-			/** @noinspection PhpUsageOfSilenceOperatorInspection */
-			if (is_dir($source) === false && @stream_copy_to_stream(fopen($source, 'r'), fopen($dest, 'w')) === false) {
-				throw new FileException("Unable to copy file [$source] to [$dest].");
+			try {
+				if (file_exists($source) && (($sourceHandler = fopen($source, 'r')) === false || ($destinationHandler = fopen($destination, 'w')) === false || @stream_copy_to_stream($sourceHandler, $destinationHandler) === false)) {
+					throw new FileException("Unable to copy file [$source] to [$destination].");
+				}
+			} finally {
+				isset($sourceHandler) ? fclose($sourceHandler) : null;
+				isset($destinationHandler) ? fclose($destinationHandler) : null;
+			}
+		}
+
+		/**
+		 * copy source directory tree to destination
+		 *
+		 * @param string $source
+		 * @param string $destination
+		 *
+		 * @throws FileException
+		 */
+		static public function copyDirectory(string $source, string $destination) {
+			$source = self::normalize($source);
+			$destination = self::normalize($destination);
+			/** @var $item \SplFileInfo */
+			foreach (new \RecursiveIteratorIterator($iterator = new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS), \RecursiveIteratorIterator::SELF_FIRST) as $item) {
+				static::createDir($path = self::normalize($destination . str_replace($source, '', self::normalize($item->getPath()))));
+				if ($item->isDir()) {
+					continue;
+				}
+				self::copy((string)$item, $path . '/' . $item->getFilename());
 			}
 		}
 
