@@ -10,17 +10,14 @@
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\IResourceProvider;
 	use Edde\Api\Resource\ResourceManagerException;
-	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\File\File;
-	use Edde\Common\Object;
 	use Edde\Common\Url\Url;
 
 	/**
 	 * Default implementation of a resource manager.
 	 */
-	class ResourceManager extends Object implements IResourceManager {
+	class ResourceManager extends AbstractResourceProvider implements IResourceManager {
 		use LazyConverterManagerTrait;
-		use ConfigurableTrait;
 		/**
 		 * @var IResourceProvider[]
 		 */
@@ -32,18 +29,6 @@
 		public function registerResourceProvider(IResourceProvider $resourceProvider): IResourceManager {
 			$this->resourceProviderList[] = $resourceProvider;
 			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function hasResource(string $name, ...$parameters): bool {
-			foreach ($this->resourceProviderList as $resourceProvider) {
-				if ($resourceProvider->hasResource($name, ...$parameters)) {
-					return true;
-				}
-			}
-			return false;
 		}
 
 		/**
