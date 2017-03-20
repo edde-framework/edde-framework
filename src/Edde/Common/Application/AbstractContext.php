@@ -23,7 +23,7 @@
 		 * @inheritdoc
 		 */
 		public function getResource(string $name, ...$parameters): IResource {
-			foreach ($this->cascade($name) as $name) {
+			foreach ($this->cascade($name, '/') as $name) {
 				if ($this->resourceManager->hasResource($name, ...$parameters)) {
 					return $this->resourceManager->getResource($name, ...$parameters);
 				}

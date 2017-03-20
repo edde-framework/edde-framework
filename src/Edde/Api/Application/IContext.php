@@ -32,7 +32,7 @@
 		 * @param string      $name
 		 * @param string|null $default
 		 *
-		 * @return string
+		 * @return array
 		 */
 		public function cascade(string $name, string $default = null): array;
 

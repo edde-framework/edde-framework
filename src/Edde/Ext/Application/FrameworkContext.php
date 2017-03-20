@@ -23,7 +23,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function cascade(string $name, string $default = null): string {
+		public function cascade(string $name, string $default = null): array {
 			throw new ApplicationException('Cascade is not supported in default context implementation.');
 		}
 	}
