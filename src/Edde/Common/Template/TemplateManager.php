@@ -8,7 +8,7 @@
 		 * @inheritdoc
 		 */
 		public function template(string $name, $context = null, string $namespace = null, ...$parameterList) {
-			parent::template($namespace, $context ? (is_array($context) ? $context : [
+			parent::template($name, $context ? (is_array($context) ? $context : [
 				null       => $context,
 				'.current' => $context,
 			]) : null, $namespace, ...$parameterList);
