@@ -15,13 +15,13 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function hasResource(string $name, ...$parameters): bool {
+		public function hasResource(string $name, string $namespace = null, ...$parameters): bool {
 			$cache = $this->cache();
-			if (($hasResource = $cache->load($cacheId = ('resource-' . $name))) !== null) {
+			if (($hasResource = $cache->load($cacheId = ('resource-' . $namespace . $name))) !== null) {
 				return $hasResource;
 			}
 			try {
-				$this->getResource($name, ...$parameters);
+				$this->getResource($name, $namespace, ...$parameters);
 				return $hasResource = true;
 			} catch (UnknownResourceException $exception) {
 				return $hasResource = false;

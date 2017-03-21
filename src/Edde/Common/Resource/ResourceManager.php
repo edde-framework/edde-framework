@@ -34,10 +34,10 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getResource(string $name, ...$parameters): IResource {
+		public function getResource(string $name, string $namespace = null, ...$parameters): IResource {
 			foreach ($this->resourceProviderList as $resourceProvider) {
-				if ($resourceProvider->hasResource($name, ...$parameters)) {
-					return $resourceProvider->getResource($name, ...$parameters);
+				if ($resourceProvider->hasResource($name, $namespace, ... $parameters)) {
+					return $resourceProvider->getResource($name, $namespace, ...$parameters);
 				}
 			}
 			throw new UnknownResourceException(sprintf('Requested unknown resource [%s].', $name));

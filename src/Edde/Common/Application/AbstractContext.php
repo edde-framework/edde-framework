@@ -29,10 +29,10 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getResource(string $name, ...$parameters): IResource {
+		public function getResource(string $name, string $namespace = null, ...$parameters): IResource {
 			foreach (array_merge([null], $this->cascade('/')) as $cascade) {
-				if ($this->resourceManager->hasResource($cascade . $name, ...$parameters)) {
-					return $this->resourceManager->getResource($cascade . $name, ...$parameters);
+				if ($this->resourceManager->hasResource($name, $cascade, ...$parameters)) {
+					return $this->resourceManager->getResource($name, $cascade, ...$parameters);
 				}
 			}
 			throw new UnknownResourceException(sprintf('Requested unknown resource [%s].', $name));

@@ -9,20 +9,22 @@
 		/**
 		 * is the given resource name available as a resrouce?
 		 *
-		 * @param string $name
-		 * @param array  ...$parameters
+		 * @param string      $name
+		 * @param string|null $namespace
+		 * @param array       ...$parameters
 		 *
 		 * @return bool
 		 */
-		public function hasResource(string $name, ...$parameters): bool;
+		public function hasResource(string $name, string $namespace = null, ...$parameters): bool;
 
 		/**
 		 * request resource by the name
 		 *
-		 * @param string $name
-		 * @param array  $parameters
+		 * @param string      $name
+		 * @param string|null $namespace
+		 * @param array       $parameters
 		 *
 		 * @return IResource
 		 */
-		public function getResource(string $name, ...$parameters): IResource;
+		public function getResource(string $name, string $namespace = null, ...$parameters): IResource;
 	}
