@@ -100,7 +100,6 @@
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
 	use Edde\Common\Xml\XmlParser;
-	use Edde\Ext\Application\FrameworkContext;
 	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
@@ -160,17 +159,27 @@
 			return $factories;
 		}
 
+		static protected function setupContainer(IContainer $container, array $factoryList, $configHandlerList): IContainer {
+			$container->registerFactoryList($factoryList);
+			foreach ($configHandlerList as $name => $configHandler) {
+				foreach ((array)$configHandler as $config) {
+					$container->registerConfigHandler($name, $container->create($config, [], __METHOD__));
+				}
+			}
+			return $container;
+		}
+
 		/**
 		 * pure way how to simple create a system container using another container
 		 *
 		 * @param array    $factoryList
 		 * @param string[] $configHandlerList
-		 * @param string   $cacheId
 		 *
 		 * @return IContainer
+		 * @throws ContainerException
 		 * @throws FactoryException
 		 */
-		static public function create(array $factoryList = [], array $configHandlerList = [], string $cacheId = null): IContainer {
+		static public function create(array $factoryList = [], array $configHandlerList = []): IContainer {
 			/**
 			 * A young man and his date were parked on a back road some distance from town.
 			 * They were about to have sex when the girl stopped.
@@ -180,24 +189,8 @@
 			 * “Why aren’t we going anywhere?” asked the girl.
 			 * “Well, I should have mentioned this before, but I’m actually a taxi driver, and the fare back to town is $25…”
 			 */
-			/** @var $container IContainer */
-			$container = new Container(new Cache(new InMemoryCacheStorage()));
-			$container->registerFactoryList($factoryList = self::createFactoryList($factoryList));
-			$container = $container->create(IContainer::class);
-			if ($cacheId !== null) {
-				$container->getCache()
-					->setNamespace($cacheId);
-			}
-			$container->registerFactoryList($factoryList);
-			foreach ($configHandlerList as $name => $configHandler) {
-				foreach ((array)$configHandler as $config) {
-					$container->registerConfigHandler($name, $container->create($config, [], __METHOD__));
-				}
-			}
-			foreach ($factoryList as $factory) {
-				$container->autowire($factory);
-			}
-			return $container;
+			self::setupContainer($container = new Container(new Cache(new InMemoryCacheStorage())), $factoryList = self::createFactoryList($factoryList), $configHandlerList);
+			return self::setupContainer($container->create(IContainer::class), $factoryList, $configHandlerList);
 		}
 
 		/**
@@ -205,13 +198,13 @@
 		 *
 		 * @param array    $factoryList
 		 * @param string[] $configHandlerList
-		 * @param string   $cacheId
 		 *
 		 * @return IContainer
+		 * @throws ContainerException
 		 * @throws FactoryException
 		 */
-		static public function container(array $factoryList = [], array $configHandlerList = [], string $cacheId = null): IContainer {
-			return self::create(array_merge(self::getDefaultFactoryList(), $factoryList), array_merge([], $configHandlerList), $cacheId);
+		static public function container(array $factoryList = [], array $configHandlerList = []): IContainer {
+			return self::create(array_merge(self::getDefaultFactoryList(), $factoryList), array_merge([], $configHandlerList));
 		}
 
 		/**
@@ -232,7 +225,7 @@
 			}
 			register_shutdown_function(function (IContainer $container, $cache) {
 				file_put_contents($cache, serialize($container));
-			}, $container = self::container($factoryList, $configHandlerList, $cacheId), $cacheId);
+			}, $container = self::container($factoryList, $configHandlerList), $cacheId);
 			return $container;
 		}
 
@@ -247,10 +240,10 @@
 		 */
 		static public function instance(string $class, array $parameterList, bool $cloneable = false) {
 			return (object)[
-				'type' => __FUNCTION__,
-				'class' => $class,
+				'type'          => __FUNCTION__,
+				'class'         => $class,
 				'parameterList' => $parameterList,
-				'cloneable' => $cloneable,
+				'cloneable'     => $cloneable,
 			];
 		}
 
@@ -263,9 +256,9 @@
 		 */
 		static public function exception(string $message, string $class = null) {
 			return (object)[
-				'type' => __FUNCTION__,
+				'type'    => __FUNCTION__,
 				'message' => $message,
-				'class' => $class ?: EddeException::class,
+				'class'   => $class ?: EddeException::class,
 			];
 		}
 
@@ -280,95 +273,95 @@
 		 */
 		static public function proxy(string $factory, string $method, array $parameterList) {
 			return (object)[
-				'type' => __FUNCTION__,
-				'factory' => $factory,
-				'method' => $method,
+				'type'          => __FUNCTION__,
+				'factory'       => $factory,
+				'method'        => $method,
 				'parameterList' => $parameterList,
 			];
 		}
 
 		static public function getDefaultFactoryList(): array {
 			return [
-				IContainer::class => Container::class,
-				IRootDirectory::class => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
-				ITempDirectory::class => self::proxy(IRootDirectory::class, 'directory', [
+				IContainer::class            => Container::class,
+				IRootDirectory::class        => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
+				ITempDirectory::class        => self::proxy(IRootDirectory::class, 'directory', [
 					'temp',
 					TempDirectory::class,
 				]),
-				ICacheDirectory::class => self::proxy(ITempDirectory::class, 'directory', [
+				ICacheDirectory::class       => self::proxy(ITempDirectory::class, 'directory', [
 					'cache',
 					CacheDirectory::class,
 				]),
-				IAssetDirectory::class => self::proxy(IRootDirectory::class, 'directory', [
+				IAssetDirectory::class       => self::proxy(IRootDirectory::class, 'directory', [
 					'.assets',
 					AssetDirectory::class,
 				]),
-				ITemplateDirectory::class => self::proxy(IAssetDirectory::class, 'directory', [
+				ITemplateDirectory::class    => self::proxy(IAssetDirectory::class, 'directory', [
 					'template',
 					TemplateDirectory::class,
 				]),
-				ICrateDirectory::class => self::proxy(IAssetDirectory::class, 'directory', [
+				ICrateDirectory::class       => self::proxy(IAssetDirectory::class, 'directory', [
 					'crate',
 					CrateDirectory::class,
 				]),
-				ILogDirectory::class => self::proxy(IRootDirectory::class, 'directory', [
+				ILogDirectory::class         => self::proxy(IRootDirectory::class, 'directory', [
 					'logs',
 					LogDirectory::class,
 				]),
-				ISessionDirectory::class => self::proxy(ITempDirectory::class, 'directory', [
+				ISessionDirectory::class     => self::proxy(ITempDirectory::class, 'directory', [
 					'session',
 					SessionDirectory::class,
 				]),
-				IStorageDirectory::class => self::proxy(IAssetDirectory::class, 'directory', [
+				IStorageDirectory::class     => self::proxy(IAssetDirectory::class, 'directory', [
 					'storage',
 					StorageDirectory::class,
 				]),
-				ICacheManager::class => CacheManager::class,
-				ICache::class => ICacheManager::class,
-				ICacheStorage::class => FlatFileCacheStorage::class,
-				IRuntime::class => Runtime::class,
-				IHttpResponse::class => HttpResponse::class,
-				IApplication::class => Application::class,
-				ILogService::class => LogService::class,
-				IRouterService::class => RouterService::class,
-				IRequest::class => IRouterService::class . '::createRequest',
-				IHttpRequest::class => HttpRequest::class . '::createHttpRequest',
-				IHttpResponse::class => HttpResponse::class . '::createHttpResponse',
-				IResponseManager::class => ResponseManager::class,
-				IXmlParser::class => XmlParser::class,
-				IConverterManager::class => ConverterManager::class,
-				IResourceManager::class => ResourceManager::class,
-				IResourceProvider::class => IResourceManager::class,
-				IStyleSheetCompiler::class => StyleSheetCompiler::class,
-				IJavaScriptCompiler::class => JavaScriptCompiler::class,
-				IStorage::class => DatabaseStorage::class,
-				IDriver::class => SqliteDriver::class,
-				IDsn::class => self::instance(SqliteDsn::class, ['storage.sqlite']),
-				ICrate::class => self::instance(Crate::class, [], true),
-				ICrateFactory::class => CrateFactory::class,
-				ISchemaManager::class => SchemaManager::class,
-				IHttpClient::class => HttpClient::class,
-				IAclManager::class => AclManager::class,
-				IHtmlGenerator::class => Html5Generator::class,
-				ITemplateManager::class => TemplateManager::class,
-				ITemplate::class => Template::class,
+				ICacheManager::class         => CacheManager::class,
+				ICache::class                => ICacheManager::class,
+				ICacheStorage::class         => FlatFileCacheStorage::class,
+				IRuntime::class              => Runtime::class,
+				IHttpResponse::class         => HttpResponse::class,
+				IApplication::class          => Application::class,
+				ILogService::class           => LogService::class,
+				IRouterService::class        => RouterService::class,
+				IRequest::class              => IRouterService::class . '::createRequest',
+				IHttpRequest::class          => HttpRequest::class . '::createHttpRequest',
+				IHttpResponse::class         => HttpResponse::class . '::createHttpResponse',
+				IResponseManager::class      => ResponseManager::class,
+				IXmlParser::class            => XmlParser::class,
+				IConverterManager::class     => ConverterManager::class,
+				IResourceManager::class      => ResourceManager::class,
+				IResourceProvider::class     => IResourceManager::class,
+				IStyleSheetCompiler::class   => StyleSheetCompiler::class,
+				IJavaScriptCompiler::class   => JavaScriptCompiler::class,
+				IStorage::class              => DatabaseStorage::class,
+				IDriver::class               => SqliteDriver::class,
+				IDsn::class                  => self::instance(SqliteDsn::class, ['storage.sqlite']),
+				ICrate::class                => self::instance(Crate::class, [], true),
+				ICrateFactory::class         => CrateFactory::class,
+				ISchemaManager::class        => SchemaManager::class,
+				IHttpClient::class           => HttpClient::class,
+				IAclManager::class           => AclManager::class,
+				IHtmlGenerator::class        => Html5Generator::class,
+				ITemplateManager::class      => TemplateManager::class,
+				ITemplate::class             => Template::class,
 				/**
 				 * need to be defined
 				 */
-				IUpgradeManager::class => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
-				ICryptEngine::class => CryptEngine::class,
-				IHostUrl::class => self::exception(sprintf('Host url is not specified; you have to register [%s] interface.', IHostUrl::class)),
-				ILinkFactory::class => \Edde\Common\Link\LinkFactory::class,
-				ISessionManager::class => SessionManager::class,
-				IIdentityManager::class => IdentityManager::class,
-				IIdentity::class => IIdentityManager::class . '::createIdentity',
-				IFingerprint::class => self::exception(sprintf('You have to register or implement fingerprint interface [%s].', IFingerprint::class)),
-				IContext::class => FrameworkContext::class,
+				IUpgradeManager::class       => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
+				ICryptEngine::class          => CryptEngine::class,
+				IHostUrl::class              => self::exception(sprintf('Host url is not specified; you have to register [%s] interface.', IHostUrl::class)),
+				ILinkFactory::class          => \Edde\Common\Link\LinkFactory::class,
+				ISessionManager::class       => SessionManager::class,
+				IIdentityManager::class      => IdentityManager::class,
+				IIdentity::class             => IIdentityManager::class . '::createIdentity',
+				IFingerprint::class          => self::exception(sprintf('You have to register or implement fingerprint interface [%s].', IFingerprint::class)),
+				IContext::class              => self::exception(sprintf('You have to register implementation of [%s] specific for you application.', IContext::class)),
 				IAuthenticatorManager::class => AuthenticatorManager::class,
-				IAclManager::class => AclManager::class,
-				IAcl::class => Acl::class,
-				ITranslator::class => Translator::class,
-				IAssetStorage::class => AssetStorage::class,
+				IAclManager::class           => AclManager::class,
+				IAcl::class                  => Acl::class,
+				ITranslator::class           => Translator::class,
+				IAssetStorage::class         => AssetStorage::class,
 			];
 		}
 	}

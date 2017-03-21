@@ -27,6 +27,7 @@
 		public function dependency(IContainer $container, string $dependency = null): IDependency {
 			$injectList = [];
 			$lazyList = [];
+			$configuratorList = [];
 			foreach (ReflectionUtils::getMethodList($dependency) as $reflectionMethod) {
 				$reflectionClass = $reflectionMethod->getDeclaringClass();
 				/** @noinspection NotOptimalIfConditionsInspection */
@@ -62,7 +63,11 @@
 			foreach (ReflectionUtils::getParameterList($dependency) as $reflectionParameter) {
 				$parameterList[] = new ReflectionParameter($reflectionParameter->getName(), $reflectionParameter->isOptional(), ($class = $reflectionParameter->getClass()) ? $class->getName() : null);
 			}
-			return new Dependency($parameterList, $injectList, $lazyList);
+			if ($dependency) {
+				$reflectionClass = ReflectionUtils::getReflectionClass($dependency);
+				$configuratorList = array_reverse(array_merge([$dependency], $reflectionClass->getInterfaceNames()));
+			}
+			return new Dependency($parameterList, $injectList, $lazyList, $configuratorList);
 		}
 
 		/**

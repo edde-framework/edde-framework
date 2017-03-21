@@ -23,15 +23,14 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws \Exception
 		 */
 		public function run() {
 			try {
-				list($class, $method, $parameterList) = $this->request->getCurrent();
-				if ((($control = $this->container->create($class, [], __METHOD__)) instanceof IControl) === false) {
+				/** @var $control IControl */
+				if ((($control = $this->container->create($class = $this->request->getControl(), [], __METHOD__)) instanceof IControl) === false) {
 					throw new ApplicationException(sprintf('Route class [%s] is not instance of [%s].', $class, IControl::class));
 				}
-				$result = $control->handle($method, $parameterList);
+				$result = $control->handle($this->request->getAction(), $this->request->getParameterList());
 				$this->responseManager->execute();
 				return $result;
 			} catch (\Exception $exception) {

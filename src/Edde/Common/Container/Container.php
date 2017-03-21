@@ -62,7 +62,13 @@
 				$this->dependency($instance = $factory->execute($this, $parameterList, $dependency, $name), $dependency);
 				if ($instance instanceof IConfigurable) {
 					/** @var $instance IConfigurable */
-					$instance->registerConfiguratorList(isset($this->configHandlerList[$name]) ? $this->configHandlerList[$name] : []);
+					$configuratorList = [];
+					foreach ($dependency->getConfiguratorList() as $configurator) {
+						if (isset($this->configHandlerList[$configurator])) {
+							$configuratorList = array_merge($configuratorList, $this->configHandlerList[$configurator]);
+						}
+					}
+					$instance->registerConfiguratorList($configuratorList);
 					$instance->init();
 				}
 				$factory->push($this, $fetchId, $instance, $this->cache);
@@ -115,6 +121,9 @@
 			return $instance;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function __wakeup() {
 			$this->stack = new \SplStack();
 			return parent::__wakeup();

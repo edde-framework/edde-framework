@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Container;
 
@@ -29,4 +29,11 @@
 		 * @return IReflectionParameter[]
 		 */
 		public function getLazyList(): array;
+
+		/**
+		 * return list of configurator names
+		 *
+		 * @return string[]
+		 */
+		public function getConfiguratorList(): array;
 	}

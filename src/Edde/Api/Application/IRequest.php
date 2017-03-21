@@ -17,6 +17,27 @@
 		public function getId(): string;
 
 		/**
+		 * return current control
+		 *
+		 * @return string
+		 */
+		public function getControl(): string;
+
+		/**
+		 * return action to be (hopefully) executed
+		 *
+		 * @return string
+		 */
+		public function getAction(): string;
+
+		/**
+		 * return current list of parameters of the request
+		 *
+		 * @return array
+		 */
+		public function getParameterList(): array;
+
+		/**
 		 * return content; if there is target specified, conversion will be executed
 		 *
 		 * @param array $targetList
@@ -24,82 +45,4 @@
 		 * @return IContent|mixed
 		 */
 		public function getContent(array $targetList = null);
-
-		/**
-		 * register an action handler (target control and target method to be called)
-		 *
-		 * @param string $control
-		 * @param string $action
-		 * @param array  $parameterList
-		 *
-		 * @return IRequest
-		 */
-		public function registerActionHandler(string $control, string $action, array $parameterList = []): IRequest;
-
-		/**
-		 * has this request action
-		 *
-		 * @return bool
-		 */
-		public function hasAction(): bool;
-
-		/**
-		 * return an action name (this should be executed)
-		 *
-		 * @return string[] return [control, method, parameter list]
-		 */
-		public function getAction(): array;
-
-		/**
-		 * return action name (for example foo-bar - without action-foo-bar)
-		 *
-		 * @return string
-		 */
-		public function getActionName(): string;
-
-		/**
-		 * register a target control to handle "handle"
-		 *
-		 * @param string $control
-		 * @param string $handle
-		 * @param array  $parameterList
-		 *
-		 * @return IRequest
-		 */
-		public function registerHandleHandler(string $control, string $handle, array $parameterList = []): IRequest;
-
-		/**
-		 * should be handler executed?
-		 *
-		 * @return bool
-		 */
-		public function hasHandle(): bool;
-
-		/**
-		 * return handle name to be executed
-		 *
-		 * @return string[] return [control, method, parameter list]
-		 */
-		public function getHandle(): array;
-
-		/**
-		 * return current handle name (e.g. foo-bar)
-		 *
-		 * @return string
-		 */
-		public function getHandleName(): string;
-
-		/**
-		 * return current call name (action/handle); handle should have a precedence
-		 *
-		 * @return string[] return [control, method, parameter list]
-		 */
-		public function getCurrent(): array;
-
-		/**
-		 * return name of current action
-		 *
-		 * @return string
-		 */
-		public function getCurrentName(): string;
 	}

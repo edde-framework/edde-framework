@@ -1,22 +1,14 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Container;
 
-	use Edde\Api\Cache\ICache;
 	use Edde\Api\Config\IConfigurator;
 
 	/**
 	 * Implementation of Dependency Injection Container.
 	 */
 	interface IContainer {
-		/**
-		 * if container is using cache, it must be configurable; do not use this as cache solution!
-		 *
-		 * @return ICache
-		 */
-		public function getCache(): ICache;
-
 		/**
 		 * @param IFactory $factory
 		 * @param string   $id

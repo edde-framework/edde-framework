@@ -4,7 +4,6 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Cache\ICache;
-	use Edde\Api\Config\IConfigurator;
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
@@ -31,13 +30,6 @@
 		 */
 		public function __construct(ICache $cache) {
 			$this->cache = $cache;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getCache(): ICache {
-			return $this->cache;
 		}
 
 		/**

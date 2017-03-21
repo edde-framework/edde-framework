@@ -1,14 +1,21 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\App\Index;
 
-	use Edde\Common\Html\ViewControl;
+	use Edde\Common\Cache\CacheTrait;
+	use Edde\Common\Control\AbstractControl;
 
-	class IndexView extends ViewControl {
+	class IndexView extends AbstractControl {
+		use CacheTrait;
+
+		public function actionIndex() {
+			$cache = $this->cache();
+			$cache->save('foo', true);
+			echo 'hello there';
+		}
+
 		public function actionFoo() {
-			$this->template();
-			$this->response();
 		}
 
 		public function actionBar() {

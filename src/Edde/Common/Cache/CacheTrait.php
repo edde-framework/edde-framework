@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Cache;
 
@@ -21,6 +21,7 @@
 		/** @noinspection ClassMethodNameMatchesFieldNameInspection */
 		protected function cache(): ICache {
 			if ($this->cache === null) {
+				$this->cacheManager->setup();
 				$this->cache = $this->cacheManager->cache(static::class);
 			}
 			return $this->cache;

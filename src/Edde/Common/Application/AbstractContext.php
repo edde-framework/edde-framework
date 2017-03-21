@@ -13,6 +13,13 @@
 		use LazyResourceManagerTrait;
 
 		/**
+		 * @return string
+		 */
+		public function getId(): string {
+			return static::class;
+		}
+
+		/**
 		 * @inheritdoc
 		 */
 		public function getGuid(): string {

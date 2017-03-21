@@ -4,6 +4,7 @@
 	namespace Edde\Ext\Container;
 
 	use Edde\Api\Cache\ICache;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 	use Edde\Common\Container\Dependency;
@@ -51,7 +52,7 @@
 		 */
 		public function dependency(IContainer $container, string $dependency = null): IDependency {
 			if ($this->instance) {
-				return new Dependency([], [], []);
+				return new Dependency();
 			}
 			return parent::dependency($container, $this->class);
 		}
@@ -74,7 +75,7 @@
 		 * @inheritdoc
 		 */
 		public function push(IContainer $container, string $id, $instance, ICache $cache) {
-			if ($instance instanceof \Edde\Api\Config\IConfigurable) {
+			if ($instance instanceof IConfigurable) {
 				$instance->config();
 			}
 			$cache->save($id, $instance);

@@ -26,6 +26,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function invalidate(): ICache {
 			parent::invalidate();
 			foreach ($this->cacheStorageList as $cacheStorage) {
