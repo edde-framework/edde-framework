@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Application;
 
-	use Edde\Api\Resource\IResource;
+	use Edde\Api\Resource\IResourceProvider;
 
 	/**
 	 * Application context; basically defines application type (so under one source root could run
@@ -11,7 +11,7 @@
 	 *
 	 * Parts of Edde supports context's
 	 */
-	interface IContext {
+	interface IContext extends IResourceProvider {
 		/**
 		 * return current id of context; could be any type of string
 		 *
@@ -27,22 +27,11 @@
 		public function getGuid(): string;
 
 		/**
-		 * return cascade of strings which should be searched for final result
+		 * return set of "base" namespaces where to search for the result
 		 *
-		 * @param string      $name
-		 * @param string|null $default
+		 * @param string $delimiter
 		 *
 		 * @return array
 		 */
-		public function cascade(string $name, string $default = null): array;
-
-		/**
-		 * resolve the given resource based on cascade; compatible with resource provider
-		 *
-		 * @param string $name
-		 * @param array  $parameters
-		 *
-		 * @return IResource
-		 */
-		public function getResource(string $name, ...$parameters): IResource;
+		public function cascade(string $delimiter): array;
 	}

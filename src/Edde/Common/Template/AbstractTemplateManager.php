@@ -5,7 +5,7 @@
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\File\IFile;
-	use Edde\Api\Resource\LazyResourceManagerTrait;
+	use Edde\Api\Resource\LazyResourceProviderTrait;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Common\Config\ConfigurableTrait;
@@ -13,7 +13,7 @@
 
 	abstract class AbstractTemplateManager extends Object implements ITemplateManager {
 		use LazyContainerTrait;
-		use LazyResourceManagerTrait;
+		use LazyResourceProviderTrait;
 		use ConfigurableTrait;
 		/**
 		 * @var ITemplate
@@ -34,9 +34,9 @@
 		 * @inheritdoc
 		 */
 		public function snippet(string $name): IFile {
-			$this->resourceManager->setup();
+			$this->resourceProvider->setup();
 			$template = $this->createTemplate();
-			return $template->compile($name, $this->resourceManager->getResource($name));
+			return $template->compile($name, $this->resourceProvider->getResource($name));
 		}
 
 		protected function createTemplate(): ITemplate {

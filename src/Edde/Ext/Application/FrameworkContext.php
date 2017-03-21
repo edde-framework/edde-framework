@@ -3,7 +3,6 @@
 
 	namespace Edde\Ext\Application;
 
-	use Edde\Api\Application\ApplicationException;
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Resource\LazyResourceManagerTrait;
 	use Edde\Common\Application\AbstractContext;
@@ -18,12 +17,5 @@
 		 */
 		public function getId(): string {
 			return $this->framework->getVersionString();
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function cascade(string $name, string $default = null): array {
-			throw new ApplicationException('Cascade is not supported in default context implementation.');
 		}
 	}

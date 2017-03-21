@@ -41,7 +41,7 @@
 					if ($this->minify === false) {
 						throw new MacroException(sprintf('Minify/external css tag is not opened.'));
 					}
-					echo '<?php $cssCompiler->addResource($this->resourceManager->getResource(' . $this->delimite($node->getAttribute('src')) . ')); ?>' . "\n";
+					echo '<?php $cssCompiler->addResource($this->resourceProvider->getResource(' . $this->delimite($node->getAttribute('src')) . ')); ?>' . "\n";
 					break;
 			}
 		}

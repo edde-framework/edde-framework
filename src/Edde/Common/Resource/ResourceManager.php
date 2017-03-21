@@ -36,10 +36,9 @@
 		 */
 		public function getResource(string $name, ...$parameters): IResource {
 			foreach ($this->resourceProviderList as $resourceProvider) {
-				if ($resourceProvider->hasResource($name, ...$parameters) === false) {
-					continue;
+				if ($resourceProvider->hasResource($name, ...$parameters)) {
+					return $resourceProvider->getResource($name, ...$parameters);
 				}
-				return $resourceProvider->getResource($name, ...$parameters);
 			}
 			throw new UnknownResourceException(sprintf('Requested unknown resource [%s].', $name));
 		}
