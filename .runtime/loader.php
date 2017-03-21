@@ -11,7 +11,7 @@
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\IResourceProvider;
 	use Edde\Api\Router\IRouterService;
-	use Edde\Api\Template\ITemplate;
+	use Edde\Api\Template\ICompiler;
 	use Edde\App\Application\AppContext;
 	use Edde\App\Converter\ConverterManagerConfigurator;
 	use Edde\App\Resource\ResourceManagerConfigurator;
@@ -20,7 +20,7 @@
 	use Edde\Ext\Cache\ContextCacheManagerConfigurator;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
-	use Edde\Ext\Template\TemplateConfigurator;
+	use Edde\Ext\Template\CompilerConfigurator;
 	use Edde\Framework;
 	use Tracy\Debugger;
 
@@ -73,5 +73,5 @@
 		/**
 		 * As other components, Template engine should be configured too; this will register default set of macros
 		 */
-		ITemplate::class         => TemplateConfigurator::class,
+		ICompiler::class         => CompilerConfigurator::class,
 	], __DIR__ . '/temp/container-' . sha1(implode('', array_keys($factoryList)) . new Framework()) . '.cache');

@@ -14,6 +14,5 @@
 			}
 			/** @noinspection PhpIncludeInspection */
 			require $this->snippet($name, $namespace, ...$parameterList);
-			$this->template = null;
 		}
 	}

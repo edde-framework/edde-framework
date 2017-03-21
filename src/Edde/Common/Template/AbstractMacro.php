@@ -5,8 +5,8 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\ITreeTraversal;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IMacro;
-	use Edde\Api\Template\ITemplate;
 	use Edde\Common\Node\AbstractTreeTraversal;
 	use Edde\Common\Strings\StringUtils;
 
@@ -33,7 +33,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function inline(IMacro $source, ITemplate $template, \Iterator $iterator, INode $node, string $name, $value = null) {
+		public function inline(IMacro $source, ICompiler $compiler, \Iterator $iterator, INode $node, string $name, $value = null) {
 		}
 
 		/**
@@ -54,9 +54,9 @@
 		 * @inheritdoc
 		 */
 		public function select(INode $node, ...$parameters): ITreeTraversal {
-			/** @var $template ITemplate */
-			list($template) = $parameters;
-			return $template->getMacro($node->getName(), $node);
+			/** @var $compiler ICompiler */
+			list($compiler) = $parameters;
+			return $compiler->getMacro($node->getName(), $node);
 		}
 
 		/**
@@ -64,14 +64,14 @@
 		 */
 		public function enter(INode $node, \Iterator $iterator, ...$parameters) {
 			$this->level++;
-			/** @var $template ITemplate */
-			list($template) = $parameters;
+			/** @var $compiler ICompiler */
+			list($compiler) = $parameters;
 			$attributeList = $node->getAttributeList();
 			$inlineList = $attributeList->get('t', []);
 			$attributeList->remove('t');
 			foreach ($inlineList as $name => $value) {
-				$macro = $template->getMacro($name, $node);
-				$macro->inline($this, $template, $iterator, $node, $name, $value);
+				$macro = $compiler->getMacro($name, $node);
+				$macro->inline($this, $compiler, $iterator, $node, $name, $value);
 			}
 			$this->event(self::EVENT_PRE_ENTER);
 			$this->onEnter($node, $iterator, ...$parameters);
@@ -101,9 +101,9 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function register(ITemplate $template): IMacro {
+		public function register(ICompiler $compiler): IMacro {
 			foreach ($this->getNameList() as $name) {
-				$template->registerMacro($name, $this);
+				$compiler->registerMacro($name, $this);
 			}
 			return $this;
 		}

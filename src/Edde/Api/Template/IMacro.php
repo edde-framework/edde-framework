@@ -10,11 +10,11 @@
 		/**
 		 * register to the template all supported "names" related to this macro
 		 *
-		 * @param ITemplate $template
+		 * @param ICompiler $compiler
 		 *
 		 * @return IMacro
 		 */
-		public function register(ITemplate $template): IMacro;
+		public function register(ICompiler $compiler): IMacro;
 
 		/**
 		 * return list of names to register
@@ -27,13 +27,13 @@
 		 * when there is inline node detected over the macro
 		 *
 		 * @param IMacro     $source
-		 * @param ITemplate  $template
+		 * @param ICompiler  $compiler
 		 * @param \Iterator  $iterator
 		 * @param INode      $node
 		 * @param string     $name
 		 * @param mixed|null $value
 		 */
-		public function inline(IMacro $source, ITemplate $template, \Iterator $iterator, INode $node, string $name, $value = null);
+		public function inline(IMacro $source, ICompiler $compiler, \Iterator $iterator, INode $node, string $name, $value = null);
 
 		/**
 		 * register macro event around enter/node/leave

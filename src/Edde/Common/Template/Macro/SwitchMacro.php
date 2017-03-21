@@ -4,8 +4,8 @@
 	namespace Edde\Common\Template\Macro;
 
 	use Edde\Api\Node\INode;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IMacro;
-	use Edde\Api\Template\ITemplate;
 	use Edde\Common\Template\AbstractMacro;
 
 	class SwitchMacro extends AbstractMacro {
@@ -32,7 +32,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function inline(IMacro $source, ITemplate $template, \Iterator $iterator, INode $node, string $name, $value = null) {
+		public function inline(IMacro $source, ICompiler $compiler, \Iterator $iterator, INode $node, string $name, $value = null) {
 			switch ($name) {
 				case'switch':
 					$source->on(self::EVENT_PRE_ENTER, function () use ($value) {

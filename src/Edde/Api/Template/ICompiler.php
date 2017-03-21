@@ -20,14 +20,14 @@
 	 * When they get to the car she informs his dad that he got the bet wrong and that she showed Johnny that she wasn't wearing any underwear.
 	 * His dad exclaims: "That mother fucker! He bet me $100 this morning that he'd see your pussy before the end of the day!"
 	 */
-	interface ITemplate extends IConfigurable, ITreeTraversal {
+	interface ICompiler extends IConfigurable, ITreeTraversal {
 		/**
 		 * @param string $name
 		 * @param IMacro $macro
 		 *
-		 * @return ITemplate
+		 * @return ICompiler
 		 */
-		public function registerMacro(string $name, IMacro $macro): ITemplate;
+		public function registerMacro(string $name, IMacro $macro): ICompiler;
 
 		/**
 		 * return macro or throw an exception

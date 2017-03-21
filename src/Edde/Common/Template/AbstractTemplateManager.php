@@ -6,19 +6,21 @@
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Resource\LazyResourceProviderTrait;
-	use Edde\Api\Template\ITemplate;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Template\LazyCompilerTrait;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	abstract class AbstractTemplateManager extends Object implements ITemplateManager {
 		use LazyContainerTrait;
 		use LazyResourceProviderTrait;
+		use LazyCompilerTrait;
 		use ConfigurableTrait;
 		/**
-		 * @var ITemplate
+		 * @var ICompiler
 		 */
-		protected $template;
+		protected $compiler;
 
 		/**
 		 * @inheritdoc
@@ -35,11 +37,7 @@
 		 */
 		public function snippet(string $name, string $namespace = null, ...$parameterList): IFile {
 			$this->resourceProvider->setup();
-			$template = $this->createTemplate();
-			return $template->compile($name, $this->resourceProvider->getResource($name, $namespace, ...$parameterList));
-		}
-
-		protected function createTemplate(): ITemplate {
-			return $this->template ? $this->template : $this->template = $this->container->create(ITemplate::class);
+			$this->compiler->setup();
+			return $this->compiler->compile($name, $this->resourceProvider->getResource($name, $namespace, ...$parameterList));
 		}
 	}

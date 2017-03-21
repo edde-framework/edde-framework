@@ -5,13 +5,13 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\ITreeTraversal;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IMacro;
-	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\MacroException;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\AbstractTreeTraversal;
 
-	abstract class AbstractTemplate extends AbstractTreeTraversal implements ITemplate {
+	abstract class AbstractCompiler extends AbstractTreeTraversal implements ICompiler {
 		use ConfigurableTrait;
 		/**
 		 * @var IMacro[]
@@ -21,7 +21,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function registerMacro(string $name, IMacro $macro): ITemplate {
+		public function registerMacro(string $name, IMacro $macro): ICompiler {
 			$this->macroList[$name] = $macro;
 			return $this;
 		}
@@ -40,8 +40,8 @@
 		 * @inheritdoc
 		 */
 		public function select(INode $node, ...$parameters): ITreeTraversal {
-			/** @var $template ITemplate */
-			list($template) = $parameters;
-			return $template->getMacro($node->getName(), $node);
+			/** @var $compiler ICompiler */
+			list($compiler) = $parameters;
+			return $compiler->getMacro($node->getName(), $node);
 		}
 	}

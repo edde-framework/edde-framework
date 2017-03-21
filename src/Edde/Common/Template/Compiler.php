@@ -13,7 +13,7 @@
 	use Edde\Common\Node\NodeUtils;
 	use Edde\Common\Strings\StringUtils;
 
-	class Template extends AbstractTemplate implements ILazyInject {
+	class Compiler extends AbstractCompiler implements ILazyInject {
 		use LazyTemplateDirectoryTrait;
 		use LazyResourceManagerTrait;
 		use CacheTrait;

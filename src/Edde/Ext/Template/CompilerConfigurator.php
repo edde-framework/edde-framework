@@ -4,8 +4,8 @@
 	namespace Edde\Ext\Template;
 
 	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IMacro;
-	use Edde\Api\Template\ITemplate;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Template\Macro\ForeachMacro;
 	use Edde\Common\Template\Macro\HtmlMacro;
@@ -16,11 +16,11 @@
 	use Edde\Common\Template\Macro\SwitchMacro;
 	use Edde\Ext\Template\Macro\CssMacro;
 
-	class TemplateConfigurator extends AbstractConfigurator {
+	class CompilerConfigurator extends AbstractConfigurator {
 		use LazyContainerTrait;
 
 		/**
-		 * @param ITemplate $instance
+		 * @param ICompiler $instance
 		 */
 		public function config($instance) {
 			$macroList = [

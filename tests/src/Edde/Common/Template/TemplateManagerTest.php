@@ -8,7 +8,7 @@
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Html\IHtmlGenerator;
-	use Edde\Api\Template\ITemplate;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\ITemplateDirectory;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Common\File\RootDirectory;
@@ -17,7 +17,7 @@
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Converter\ConverterManagerConfigurator;
-	use Edde\Ext\Template\TemplateConfigurator;
+	use Edde\Ext\Template\CompilerConfigurator;
 	use PHPUnit\Framework\TestCase;
 
 	require_once __DIR__ . '/assets/assets.php';
@@ -69,13 +69,13 @@
 				IRootDirectory::class     => $this->rootDirectory = new RootDirectory(__DIR__),
 				ITemplateDirectory::class => $tempDirectory = $this->rootDirectory->directory('temp'),
 				ITemplateManager::class   => TemplateManager::class,
-				ITemplate::class          => Template::class,
+				ICompiler::class          => Compiler::class,
 				ICacheStorage::class      => InMemoryCacheStorage::class,
 				IHtmlGenerator::class     => Html5Generator::class,
 				new ClassFactory(),
 			], [
 				IConverterManager::class => ConverterManagerConfigurator::class,
-				ITemplate::class         => TemplateConfigurator::class,
+				ICompiler::class         => CompilerConfigurator::class,
 			]);
 			$tempDirectory->purge();
 			$this->rootDirectory->normalize();

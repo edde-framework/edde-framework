@@ -51,7 +51,7 @@
 	use Edde\Api\Session\ISessionDirectory;
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Storage\IStorage;
-	use Edde\Api\Template\ITemplate;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\ITemplateDirectory;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Translator\ITranslator;
@@ -92,7 +92,7 @@
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Session\SessionDirectory;
 	use Edde\Common\Session\SessionManager;
-	use Edde\Common\Template\Template;
+	use Edde\Common\Template\Compiler;
 	use Edde\Common\Template\TemplateDirectory;
 	use Edde\Common\Template\TemplateManager;
 	use Edde\Common\Translator\Translator;
@@ -327,36 +327,36 @@
 				IRequest::class              => IRouterService::class . '::createRequest',
 				IHttpRequest::class          => HttpRequest::class . '::createHttpRequest',
 				IHttpResponse::class         => HttpResponse::class . '::createHttpResponse',
-				IResponseManager::class      => ResponseManager::class,
-				IXmlParser::class            => XmlParser::class,
-				IConverterManager::class     => ConverterManager::class,
-				IResourceManager::class      => ResourceManager::class,
-				IResourceProvider::class     => IResourceManager::class,
-				IStyleSheetCompiler::class   => StyleSheetCompiler::class,
-				IJavaScriptCompiler::class   => JavaScriptCompiler::class,
-				IStorage::class              => DatabaseStorage::class,
-				IDriver::class               => SqliteDriver::class,
-				IDsn::class                  => self::instance(SqliteDsn::class, ['storage.sqlite']),
-				ICrate::class                => self::instance(Crate::class, [], true),
-				ICrateFactory::class         => CrateFactory::class,
-				ISchemaManager::class        => SchemaManager::class,
-				IHttpClient::class           => HttpClient::class,
-				IAclManager::class           => AclManager::class,
-				IHtmlGenerator::class        => Html5Generator::class,
-				ITemplateManager::class      => TemplateManager::class,
-				ITemplate::class             => Template::class,
+				IResponseManager::class    => ResponseManager::class,
+				IXmlParser::class          => XmlParser::class,
+				IConverterManager::class   => ConverterManager::class,
+				IResourceManager::class    => ResourceManager::class,
+				IResourceProvider::class   => IResourceManager::class,
+				IStyleSheetCompiler::class => StyleSheetCompiler::class,
+				IJavaScriptCompiler::class => JavaScriptCompiler::class,
+				IStorage::class            => DatabaseStorage::class,
+				IDriver::class             => SqliteDriver::class,
+				IDsn::class                => self::instance(SqliteDsn::class, ['storage.sqlite']),
+				ICrate::class              => self::instance(Crate::class, [], true),
+				ICrateFactory::class       => CrateFactory::class,
+				ISchemaManager::class      => SchemaManager::class,
+				IHttpClient::class         => HttpClient::class,
+				IAclManager::class         => AclManager::class,
+				IHtmlGenerator::class      => Html5Generator::class,
+				ITemplateManager::class    => TemplateManager::class,
+				ICompiler::class           => Compiler::class,
 				/**
 				 * need to be defined
 				 */
-				IUpgradeManager::class       => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
-				ICryptEngine::class          => CryptEngine::class,
-				IHostUrl::class              => self::exception(sprintf('Host url is not specified; you have to register [%s] interface.', IHostUrl::class)),
-				ILinkFactory::class          => \Edde\Common\Link\LinkFactory::class,
-				ISessionManager::class       => SessionManager::class,
-				IIdentityManager::class      => IdentityManager::class,
-				IIdentity::class             => IIdentityManager::class . '::createIdentity',
-				IFingerprint::class          => self::exception(sprintf('You have to register or implement fingerprint interface [%s].', IFingerprint::class)),
-				IContext::class              => self::exception(sprintf('You have to register implementation of [%s] specific for you application.', IContext::class)),
+				IUpgradeManager::class     => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
+				ICryptEngine::class        => CryptEngine::class,
+				IHostUrl::class            => self::exception(sprintf('Host url is not specified; you have to register [%s] interface.', IHostUrl::class)),
+				ILinkFactory::class        => \Edde\Common\Link\LinkFactory::class,
+				ISessionManager::class     => SessionManager::class,
+				IIdentityManager::class    => IdentityManager::class,
+				IIdentity::class           => IIdentityManager::class . '::createIdentity',
+				IFingerprint::class        => self::exception(sprintf('You have to register or implement fingerprint interface [%s].', IFingerprint::class)),
+				IContext::class            => self::exception(sprintf('You have to register implementation of [%s] specific for you application.', IContext::class)),
 				IAuthenticatorManager::class => AuthenticatorManager::class,
 				IAclManager::class           => AclManager::class,
 				IAcl::class                  => Acl::class,

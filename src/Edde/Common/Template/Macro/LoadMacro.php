@@ -4,15 +4,15 @@
 	namespace Edde\Common\Template\Macro;
 
 	use Edde\Api\Node\INode;
+	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IMacro;
-	use Edde\Api\Template\ITemplate;
 	use Edde\Common\Template\AbstractMacro;
 
 	class LoadMacro extends AbstractMacro {
 		/**
 		 * @inheritdoc
 		 */
-		public function inline(IMacro $source, ITemplate $template, \Iterator $iterator, INode $node, string $name, $value = null) {
+		public function inline(IMacro $source, ICompiler $compiler, \Iterator $iterator, INode $node, string $name, $value = null) {
 			$source->on(self::EVENT_POST_ENTER, function () use ($value) {
 				$this->macro($value);
 			});
