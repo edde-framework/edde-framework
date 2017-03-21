@@ -14,7 +14,6 @@
 
 		public function actionIndex() {
 			$this->templateManager->template('layout', $this, null, $this);
-			echo 'hello there';
 		}
 
 		public function actionFoo() {
