@@ -1,0 +1,6 @@
+<html>
+	<head>
+		<title>Showcase Edde Application</title>
+	</head>
+	<body t:load=":get-action()"/>
+</html>

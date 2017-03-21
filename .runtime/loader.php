@@ -6,15 +6,21 @@
 
 	use Edde\Api\Application\IContext;
 	use Edde\Api\Cache\ICacheManager;
+	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\File\IRootDirectory;
+	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\IResourceProvider;
 	use Edde\Api\Router\IRouterService;
+	use Edde\Api\Template\ITemplate;
 	use Edde\App\Application\AppContext;
+	use Edde\App\Converter\ConverterManagerConfigurator;
+	use Edde\App\Resource\ResourceManagerConfigurator;
 	use Edde\App\Router\RouterServiceConfigurator;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Ext\Cache\ContextCacheManagerConfigurator;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
+	use Edde\Ext\Template\TemplateConfigurator;
 	use Edde\Framework;
 	use Tracy\Debugger;
 
@@ -47,10 +53,25 @@
 		/**
 		 * As we have some custom configuration for router service, we have to register proper configurator for it
 		 */
-		IRouterService::class => RouterServiceConfigurator::class,
+		IRouterService::class    => RouterServiceConfigurator::class,
 		/**
 		 * Because we are using context, we also have to properly setup cache manager (by setting proper namespace from
 		 * context)
 		 */
-		ICacheManager::class  => ContextCacheManagerConfigurator::class,
+		ICacheManager::class     => ContextCacheManagerConfigurator::class,
+		/**
+		 * We are using some custom resource providers, so we have to register them to resource manager and the current
+		 * point how to get resources
+		 */
+		IResourceManager::class  => ResourceManagerConfigurator::class,
+		/**
+		 * To enable general content exchange, we have to setup converter manager; it basically allows to do arbitrary
+		 * data convertions for example json to array, xml file to INode, ... this component is kind of fundamental part
+		 * of the framework.
+		 */
+		IConverterManager::class => ConverterManagerConfigurator::class,
+		/**
+		 * As other components, Template engine should be configured too; this will register default set of macros
+		 */
+		ITemplate::class         => TemplateConfigurator::class,
 	], __DIR__ . '/temp/container-' . sha1(implode('', array_keys($factoryList)) . new Framework()) . '.cache');

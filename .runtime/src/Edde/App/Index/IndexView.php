@@ -3,15 +3,17 @@
 
 	namespace Edde\App\Index;
 
-	use Edde\Common\Cache\CacheTrait;
+	use Edde\Api\Application\LazyRequestTrait;
+	use Edde\Api\Template\LazyTemplateManagerTrait;
 	use Edde\Common\Control\AbstractControl;
+	use Edde\Common\Strings\StringUtils;
 
 	class IndexView extends AbstractControl {
-		use CacheTrait;
+		use LazyTemplateManagerTrait;
+		use LazyRequestTrait;
 
 		public function actionIndex() {
-			$cache = $this->cache();
-			$cache->save('foo', true);
+			$this->templateManager->template('layout', $this, null, $this);
 			echo 'hello there';
 		}
 
@@ -20,5 +22,9 @@
 
 		public function actionBar() {
 			echo 'bar';
+		}
+
+		public function getAction() {
+			return StringUtils::recamel($this->request->getAction());
 		}
 	}

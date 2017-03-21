@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Converter;
 
+	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Converter\IContent;
 	use Edde\Api\Converter\IConvertable;
@@ -14,7 +15,7 @@
 	/**
 	 * Default implementation of a conversion manager.
 	 */
-	class ConverterManager extends Object implements IConverterManager {
+	class ConverterManager extends Object implements IConverterManager, ICacheable {
 		use ConfigurableTrait;
 		/**
 		 * @var IConverter[]

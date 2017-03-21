@@ -33,10 +33,10 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function snippet(string $name): IFile {
+		public function snippet(string $name, string $namespace = null, ...$parameterList): IFile {
 			$this->resourceProvider->setup();
 			$template = $this->createTemplate();
-			return $template->compile($name, $this->resourceProvider->getResource($name));
+			return $template->compile($name, $this->resourceProvider->getResource($name, $namespace, ...$parameterList));
 		}
 
 		protected function createTemplate(): ITemplate {

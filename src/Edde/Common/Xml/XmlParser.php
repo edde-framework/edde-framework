@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Xml;
 
+	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\File\FileException;
 	use Edde\Api\Iterator\IIterator;
 	use Edde\Api\Resource\IResource;
@@ -18,7 +19,7 @@
 	/**
 	 * Simple and fast event based xml parser.
 	 */
-	class XmlParser extends Object implements IXmlParser {
+	class XmlParser extends Object implements IXmlParser, ICacheable {
 		const XML_TYPE_WARP = null;
 		const XML_TYPE_OPENTAG = 1;
 		const XML_TYPE_CLOSETAG = 2;
