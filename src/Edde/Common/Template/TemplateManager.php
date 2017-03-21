@@ -8,11 +8,9 @@
 		 * @inheritdoc
 		 */
 		public function template(string $name, $context = null, string $namespace = null, ...$parameterList) {
-			if ($context) {
-				$context = is_array($context) ? $context : [null => $context];
-				$context['.current'] = $context[null];
-			}
-			/** @noinspection PhpIncludeInspection */
-			require $this->snippet($name, $namespace, ...$parameterList);
+			parent::template($namespace, $context ? (is_array($context) ? $context : [
+				null       => $context,
+				'.current' => $context,
+			]) : null, $namespace, ...$parameterList);
 		}
 	}

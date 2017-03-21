@@ -40,4 +40,12 @@
 			$this->compiler->setup();
 			return $this->compiler->compile($name, $this->resourceProvider->getResource($name, $namespace, ...$parameterList));
 		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function template(string $name, $context = null, string $namespace = null, ...$parameterList) {
+			/** @noinspection PhpIncludeInspection */
+			require $this->snippet($name, $namespace, ...$parameterList);
+		}
 	}
