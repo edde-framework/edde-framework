@@ -56,8 +56,12 @@
 			switch ($node->getName()) {
 				case 'minify-css':
 					$this->minify = false;
-					$cssNode = new Node('css', null, [
-						'href' => '<?=$cssCompiler->compile()->getRelativePath()?>',
+					$cssNode = new Node('link', null, [
+						'href' => function () {
+							return '<?=$cssCompiler->compile()->getRelativePath()?>';
+						},
+						'rel' => 'stylesheet',
+						'type' => 'text/css',
 					]);
 					echo $this->htmlGenerator->generate($cssNode);
 					echo '<?php unset($cssCompiler); ?>' . "\n";

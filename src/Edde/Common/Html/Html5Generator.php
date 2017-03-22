@@ -21,6 +21,7 @@
 				'html',
 				'head',
 				'title',
+				'link',
 				'body',
 				'div',
 				'span',
@@ -71,7 +72,7 @@
 				if ($value instanceof IAttributeList) {
 					continue;
 				}
-				$content .= ' ' . $name . '="' . htmlspecialchars($value, ENT_QUOTES) . '"';
+				$content .= ' ' . $name . '="' . (is_callable($value) ? $value() : htmlspecialchars($value, ENT_QUOTES)) . '"';
 			}
 			$content .= '>';
 			if ($node->isLeaf() === false) {

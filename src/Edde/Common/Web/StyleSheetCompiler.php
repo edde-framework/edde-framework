@@ -39,7 +39,8 @@
 			$content = [];
 			$pathList = [];
 			$resourceList = $resourceList ?: $this;
-			if (($file = $this->cache->load($cacheId = $resourceList->getResourceName())) === null) {
+			$cache = $this->cache();
+			if (($file = $cache->load($cacheId = $resourceList->getResourceName())) === null) {
 				foreach ($resourceList as $resource) {
 					if ($resource->isAvailable() === false) {
 						throw new WebException(sprintf('Cannot compile stylesheets: resource [%s] is not available (does not exists?).', (string)$resource->getUrl()));
@@ -71,7 +72,7 @@
 					}
 					$content[] = $current;
 				}
-				$this->cache->save($cacheId, $file = $this->assetStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.css', implode("\n", $content))));
+				$cache->save($cacheId, $file = $this->assetStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.css', implode("\n", $content))));
 			}
 			return $file;
 		}
