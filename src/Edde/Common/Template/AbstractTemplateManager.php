@@ -25,9 +25,9 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function compile(array $nameList): ITemplateManager {
+		public function compile(array $nameList, string $namespace = null, ...$parameterList): ITemplateManager {
 			foreach ($nameList as $name) {
-				$this->snippet($name);
+				$this->snippet($name, $namespace, ...$parameterList);
 			}
 			return $this;
 		}

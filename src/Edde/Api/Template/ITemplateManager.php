@@ -8,11 +8,13 @@
 
 	interface ITemplateManager extends IConfigurable {
 		/**
-		 * @param array $nameList
+		 * @param array       $nameList
+		 * @param string|null $namespace
+		 * @param array       $parameterList
 		 *
 		 * @return ITemplateManager
 		 */
-		public function compile(array $nameList): ITemplateManager;
+		public function compile(array $nameList, string $namespace = null, ...$parameterList): ITemplateManager;
 
 		/**
 		 * build a template from the given (already registered) snippets

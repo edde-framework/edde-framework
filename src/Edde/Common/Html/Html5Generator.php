@@ -6,6 +6,7 @@
 	use Edde\Api\Html\IHtmlGenerator;
 	use Edde\Api\Node\IAttributeList;
 	use Edde\Api\Node\INode;
+	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Object;
 
 	/**
@@ -46,7 +47,12 @@
 		 * @inheritdoc
 		 */
 		public function generate(INode $root): string {
-			throw new \Exception('not implemented yet: html5 generator generate');
+			ob_start();
+			foreach (NodeIterator::recursive($root, true) as $node) {
+				echo $this->open($node);
+				echo $this->close($node);
+			}
+			return ob_get_clean();
 		}
 
 		/**
@@ -78,6 +84,11 @@
 		 * @inheritdoc
 		 */
 		public function close(INode $node, int $level = null): string {
+			switch ($node->getName()) {
+				case 'link':
+					return '';
+					break;
+			}
 			$content = $node->isLeaf() === false ? str_repeat("\t", $level?? $node->getLevel()) : '';
 			$content .= '</' . $node->getName() . '>';
 			return $content;

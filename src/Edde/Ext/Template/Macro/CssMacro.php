@@ -3,12 +3,15 @@
 
 	namespace Edde\Ext\Template\Macro;
 
+	use Edde\Api\Html\LazyHtmlGeneratorTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\MacroException;
 	use Edde\Api\Web\IStyleSheetCompiler;
+	use Edde\Common\Node\Node;
 	use Edde\Common\Template\AbstractMacro;
 
 	class CssMacro extends AbstractMacro {
+		use LazyHtmlGeneratorTrait;
 		/**
 		 * @var bool
 		 */
@@ -53,6 +56,10 @@
 			switch ($node->getName()) {
 				case 'minify-css':
 					$this->minify = false;
+					$cssNode = new Node('css', null, [
+						'href' => '<?=$cssCompiler->compile()->getRelativePath()?>',
+					]);
+					echo $this->htmlGenerator->generate($cssNode);
 					echo '<?php unset($cssCompiler); ?>' . "\n";
 					break;
 			}
