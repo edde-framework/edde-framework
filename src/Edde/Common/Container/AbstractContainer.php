@@ -8,10 +8,12 @@
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 	use Edde\Ext\Container\CallbackFactory;
 
 	abstract class AbstractContainer extends Object implements IContainer {
+		use ConfigurableTrait;
 		/**
 		 * @var ICache
 		 */

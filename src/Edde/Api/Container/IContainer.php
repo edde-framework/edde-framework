@@ -3,12 +3,13 @@
 
 	namespace Edde\Api\Container;
 
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Config\IConfigurator;
 
 	/**
 	 * Implementation of Dependency Injection Container.
 	 */
-	interface IContainer {
+	interface IContainer extends IConfigurable {
 		/**
 		 * @param IFactory $factory
 		 * @param string   $id

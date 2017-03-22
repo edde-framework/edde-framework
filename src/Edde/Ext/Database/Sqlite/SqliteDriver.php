@@ -137,6 +137,7 @@
 				'text' => 'TEXT',
 				'datetime' => 'TIMESTAMP',
 			]);
+			$this->container->setup();
 			$this->staticQueryFactory = $this->container->create(SqliteQueryFactory::class, [$this], __METHOD__);
 		}
 

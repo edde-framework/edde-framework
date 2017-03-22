@@ -16,6 +16,7 @@
 		 * @var bool
 		 */
 		protected $minify = false;
+		protected $external = false;
 
 		/**
 		 * @inheritdoc
@@ -40,11 +41,24 @@
 					$this->minify = true;
 					echo '<?php $cssCompiler = $this->container->create(\'' . IStyleSheetCompiler::class . '\'); ?>' . "\n";
 					break;
+				case 'external-css':
+					if ($this->external) {
+						throw new MacroException(sprintf('Css external does not support recursion.'));
+					}
+					$this->external = true;
+					break;
 				case 'css':
-					if ($this->minify === false) {
+					if ($this->minify) {
+						echo '<?php $cssCompiler->addResource($this->resourceProvider->getResource(' . $this->delimite($node->getAttribute('src')) . ')); ?>' . "\n";
+					} else if ($this->external) {
+						echo $this->htmlGenerator->generate(new Node('link', null, [
+							'href' => $this->delimite($node->getAttribute('src')),
+							'rel' => 'stylesheet',
+							'type' => 'text/css',
+						]));
+					} else {
 						throw new MacroException(sprintf('Minify/external css tag is not opened.'));
 					}
-					echo '<?php $cssCompiler->addResource($this->resourceProvider->getResource(' . $this->delimite($node->getAttribute('src')) . ')); ?>' . "\n";
 					break;
 			}
 		}
@@ -56,15 +70,17 @@
 			switch ($node->getName()) {
 				case 'minify-css':
 					$this->minify = false;
-					$cssNode = new Node('link', null, [
+					echo $this->htmlGenerator->generate(new Node('link', null, [
 						'href' => function () {
 							return '<?=$cssCompiler->compile()->getRelativePath()?>';
 						},
 						'rel' => 'stylesheet',
 						'type' => 'text/css',
-					]);
-					echo $this->htmlGenerator->generate($cssNode);
+					]));
 					echo '<?php unset($cssCompiler); ?>' . "\n";
+					break;
+				case 'external':
+					$this->external = false;
 					break;
 			}
 		}
