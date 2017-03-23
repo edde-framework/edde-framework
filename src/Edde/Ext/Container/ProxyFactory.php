@@ -3,6 +3,7 @@
 
 	namespace Edde\Ext\Container;
 
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 	use Edde\Common\Container\AbstractFactory;
@@ -65,7 +66,10 @@
 		 */
 		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
 			$method = $this->method;
-			return $container->create($this->target, $parameterList, $this->name)
-				->{$method}(...$this->parameterList);
+			$instance = $container->create($this->target, $parameterList, $this->name);
+			if ($instance instanceof IConfigurable) {
+				$instance->setup();
+			}
+			return $instance->{$method}(...$this->parameterList);
 		}
 	}
