@@ -8,6 +8,15 @@
 	 */
 	interface IConfigurable {
 		/**
+		 * register configurator
+		 *
+		 * @param IConfigurator $configurator
+		 *
+		 * @return $this
+		 */
+		public function configurator(IConfigurator $configurator);
+
+		/**
 		 * register set of config handlers
 		 *
 		 * @param IConfigurator[] $configuratorList

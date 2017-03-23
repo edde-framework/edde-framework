@@ -39,6 +39,14 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function configurator(IConfigurator $configurator) {
+			$this->tConfiguratorList[] = $configurator;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function init(bool $force = false) {
 			if ($this->tInit && $force === false) {
 				return $this;

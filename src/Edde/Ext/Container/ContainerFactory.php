@@ -69,7 +69,6 @@
 	use Edde\Common\Cache\Cache;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheManager;
-	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Container\Container;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crate\Crate;
@@ -160,27 +159,17 @@
 			return $factories;
 		}
 
-		static protected function setupContainer(IContainer $container, array $factoryList, $configHandlerList): IContainer {
-			$container->registerFactoryList($factoryList);
-			foreach ($configHandlerList as $name => $configHandler) {
-				foreach (is_array($configHandler) ? $configHandler : [$configHandler] as $config) {
-					$container->registerConfigHandler($name, is_string($config) ? $container->create($config, [], __METHOD__) : $config);
-				}
-			}
-			return $container;
-		}
-
 		/**
 		 * pure way how to simple create a system container using another container
 		 *
 		 * @param array    $factoryList
-		 * @param string[] $configHandlerList
+		 * @param string[] $configuratorList
 		 *
 		 * @return IContainer
 		 * @throws ContainerException
 		 * @throws FactoryException
 		 */
-		static public function create(array $factoryList = [], array $configHandlerList = []): IContainer {
+		static public function create(array $factoryList = [], array $configuratorList = []): IContainer {
 			/**
 			 * A young man and his date were parked on a back road some distance from town.
 			 * They were about to have sex when the girl stopped.
@@ -190,33 +179,9 @@
 			 * “Why aren’t we going anywhere?” asked the girl.
 			 * “Well, I should have mentioned this before, but I’m actually a taxi driver, and the fare back to town is $25…”
 			 */
-			$factoryList = self::createFactoryList($factoryList);
-			$configHandlerList[IContainer::class] = new class($factoryList, $configHandlerList) extends AbstractConfigurator {
-				protected $factoryList;
-				protected $configHandlerList;
-
-				/**
-				 * @param $factoryList
-				 * @param $configHandlerList
-				 */
-				public function __construct($factoryList, $configHandlerList) {
-					$this->factoryList = $factoryList;
-					$this->configHandlerList = $configHandlerList;
-				}
-
-				/**
-				 * @param IContainer $instance
-				 */
-				public function config($instance) {
-					$instance->registerFactoryList($this->factoryList);
-					foreach ($this->configHandlerList as $name => $configHandler) {
-						foreach (is_array($configHandler) ? $configHandler : [$configHandler] as $config) {
-							$instance->registerConfigHandler($name, is_string($config) ? $instance->create($config, [], __METHOD__) : $config);
-						}
-					}
-				}
-			};
-			self::setupContainer($container = new Container(new Cache(new InMemoryCacheStorage())), $factoryList, $configHandlerList);
+			$container = new Container(new Cache(new InMemoryCacheStorage()));
+			$container->configurator($configuratorList[IContainer::class] = new ContainerConfigurator($factoryList = self::createFactoryList($factoryList), $configuratorList));
+			$container->setup();
 			$container = $container->create(IContainer::class);
 			$container->setup();
 			return $container;

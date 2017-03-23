@@ -31,20 +31,20 @@
 		 * register a new config handler for the given dependency
 		 *
 		 * @param string        $name
-		 * @param IConfigurator $configHandler
+		 * @param IConfigurator $configurator
 		 *
 		 * @return IContainer
 		 */
-		public function registerConfigHandler(string $name, IConfigurator $configHandler): IContainer;
+		public function registerConfigurator(string $name, IConfigurator $configurator): IContainer;
 
 		/**
 		 * register list of config handlers bound to the given factories (key is factory name, value is config handler)
 		 *
-		 * @param IConfigurator[] $configHandlerList
+		 * @param IConfigurator[] $configuratorList
 		 *
 		 * @return IContainer
 		 */
-		public function registerConfigHandlerList(array $configHandlerList): IContainer;
+		public function registerConfiguratorList(array $configuratorList): IContainer;
 
 		/**
 		 * get factory which is able to create the given dependency

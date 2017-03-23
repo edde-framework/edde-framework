@@ -64,8 +64,8 @@
 					/** @var $instance IConfigurable */
 					$configuratorList = [];
 					foreach ($dependency->getConfiguratorList() as $configurator) {
-						if (isset($this->configHandlerList[$configurator])) {
-							$configuratorList = array_merge($configuratorList, $this->configHandlerList[$configurator]);
+						if (isset($this->configuratorList[$configurator])) {
+							$configuratorList = array_merge($configuratorList, $this->configuratorList[$configurator]);
 						}
 					}
 					$instance->registerConfiguratorList($configuratorList);
