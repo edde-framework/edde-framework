@@ -4,10 +4,10 @@
 	namespace Edde\Common;
 
 	use Closure;
-	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\EddeException;
+	use Edde\Common\Cache\CacheableTrait;
 
 	/**
 	 * While watching TV with his wife, a man tosses peanuts into the air and catches them in his mouth.
@@ -21,6 +21,7 @@
 	 * The father says, "From the smell of his fingers, I'd say our son-in-law."
 	 */
 	class Object implements ILazyInject {
+		use CacheableTrait;
 		protected $aId;
 		protected $aInjectList = [];
 		protected $aLazyInjectList = [];
@@ -100,29 +101,6 @@
 				return $this;
 			}
 			throw new EddeException(sprintf('Writing to the undefined/private/protected property [%s::$%s].', static::class, $name));
-		}
-
-		public function __sleep() {
-			static $allowed = [
-				\stdClass::class,
-				\SplStack::class,
-			];
-			$reflectionClass = new \ReflectionClass($this);
-			$diff = [];
-			foreach ($reflectionClass->getProperties() as $reflectionProperty) {
-				$name = $reflectionProperty->getName();
-				if (isset($this->{$name}) === false) {
-					continue;
-				} else if (strpos($doc = is_string($doc = $reflectionProperty->getDocComment()) ? $doc : '', '@no-cache') !== false) {
-					$diff[] = $name;
-				} else if (is_object($this->{$name}) && $this->{$name} instanceof ICacheable === false && in_array($class = get_class($this->{$name}), $allowed) === false) {
-					if (strpos($doc, '@cache-optional') === false) {
-						throw new EddeException(sprintf('Trying to serialize object [%s] which is not cacheable.', $class));
-					}
-					$diff[] = $name;
-				}
-			}
-			return array_diff(array_keys(get_object_vars($this)), $diff);
 		}
 
 		public function __wakeup() {
