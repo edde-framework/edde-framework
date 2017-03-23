@@ -3,11 +3,9 @@
 
 	namespace Edde\Common\Database;
 
-	use Edde\Api\Cache\ICache;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Database\IDatabaseStorage;
-	use Edde\Api\Database\IDriver;
 	use Edde\Api\Database\LazyDriverTrait;
 	use Edde\Api\Node\INodeQuery;
 	use Edde\Api\Query\IQuery;
@@ -27,18 +25,11 @@
 	class DatabaseStorage extends AbstractStorage implements IDatabaseStorage {
 		use LazyDriverTrait;
 		/**
-		 * @var IDriver
-		 */
-		protected $driver;
-		/**
-		 * @var ICache
-		 */
-		protected $cache;
-		/**
 		 * @var INodeQuery
 		 */
 		protected $sourceNodeQuery;
 		/**
+		 * @no-cache
 		 * @var int
 		 */
 		protected $transaction = 0;
@@ -141,8 +132,8 @@
 		 */
 		public function execute(IQuery $query) {
 			try {
-				$this->driver->setup();
 				$query->setup();
+				$this->driver->setup();
 				return $this->driver->execute($query);
 			} catch (PDOException $e) {
 				throw new DriverException(sprintf('Driver [%s] execution failed: %s.', get_class($this->driver), $e->getMessage()), 0, $e);
@@ -166,6 +157,7 @@
 		 * @inheritdoc
 		 */
 		protected function handleInit() {
+			parent::handleInit();
 			$this->sourceNodeQuery = new NodeQuery('/**/source');
 			$this->transaction = 0;
 		}
