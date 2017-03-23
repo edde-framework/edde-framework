@@ -21,6 +21,7 @@
 		public function send(IResponse $response): IResponseHandler {
 			$targetList = ($targetList = $response->getTargetList()) ? $targetList : $this->httpRequest->getHeaderList()
 				->getAcceptList();
+			$this->converterManager->setup();
 			$convertable = $this->converterManager->content($response, $targetList);
 			$this->httpResponse->setContent(new Content($convertable->convert(), $convertable->getTarget()));
 			$this->httpResponse->send();

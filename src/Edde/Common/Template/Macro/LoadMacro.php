@@ -26,6 +26,6 @@
 		}
 
 		protected function macro($value) {
-			echo '<?php include $this->snippet(' . $this->delimite($value) . ', null, $context[\'.current\']); ?>';
+			echo '<?php include $this->compile(' . $this->delimite($value) . ', null, $context[\'.current\']); ?>';
 		}
 	}

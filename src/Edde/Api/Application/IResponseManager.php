@@ -14,7 +14,7 @@
 		 *
 		 * @return IResponseManager
 		 */
-		public function registerResponseHandler(IResponseHandler $responseHandler): IResponseManager;
+		public function registerResponseHandler(IResponseHandler $responseHandler = null): IResponseManager;
 
 		/**
 		 * set the current response

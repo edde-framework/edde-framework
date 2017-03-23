@@ -4,6 +4,8 @@
 	namespace Edde\Common\Router;
 
 	use Edde\Api\Application\IRequest;
+	use Edde\Api\Application\IResponseHandler;
+	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Router\IRouter;
 	use Edde\Api\Router\IRouterService;
@@ -16,6 +18,7 @@
 	 */
 	class RouterService extends Object implements IRouterService {
 		use LazyContainerTrait;
+		use LazyResponseManagerTrait;
 		use ConfigurableTrait;
 		/**
 		 * @var string[]
@@ -25,6 +28,10 @@
 		 * @var IRequest
 		 */
 		protected $defaultRequest;
+		/**
+		 * @var IResponseHandler
+		 */
+		protected $defaultResponseHandler;
 		/**
 		 * @no-cache
 		 * @var IRequest
@@ -45,8 +52,9 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setDefaultRequest(IRequest $request): IRouterService {
+		public function setDefaultRequest(IRequest $request, IResponseHandler $responseHandler = null): IRouterService {
 			$this->defaultRequest = $request;
+			$this->defaultResponseHandler = $responseHandler;
 			return $this;
 		}
 
@@ -68,6 +76,7 @@
 				}
 			}
 			if ($this->defaultRequest) {
+				$this->defaultResponseHandler ? $this->responseManager->registerResponseHandler($this->defaultResponseHandler) : null;
 				return $this->defaultRequest;
 			}
 			throw new BadRequestException('Cannot handle current application request.' . (empty($this->routerList) ? ' There are no registered routers.' : ''));

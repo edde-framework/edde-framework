@@ -4,16 +4,20 @@
 	namespace Edde\App\Index;
 
 	use Edde\Api\Application\LazyRequestTrait;
+	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Template\LazyTemplateManagerTrait;
 	use Edde\Common\Control\AbstractControl;
 	use Edde\Common\Strings\StringUtils;
+	use Edde\Ext\Template\TemplateResponse;
 
 	class IndexView extends AbstractControl {
 		use LazyTemplateManagerTrait;
+		use LazyResponseManagerTrait;
 		use LazyRequestTrait;
 
 		public function actionIndex() {
-			$this->templateManager->template('layout', $this, null, $this);
+			$this->responseManager->response(new TemplateResponse($template = $this->templateManager->template()));
+			$template->template('layout', $this, null, $this);
 		}
 
 		public function actionFoo() {
