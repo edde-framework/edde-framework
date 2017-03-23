@@ -14,7 +14,7 @@
 		 *
 		 * @return $this
 		 */
-		public function configurator(IConfigurator $configurator);
+		public function addConfigurator(IConfigurator $configurator);
 
 		/**
 		 * register set of config handlers
@@ -23,7 +23,7 @@
 		 *
 		 * @return $this
 		 */
-		public function registerConfiguratorList(array $configuratorList);
+		public function setConfiguratorList(array $configuratorList);
 
 		/**
 		 * this method should be called after all dependencies are

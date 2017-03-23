@@ -12,19 +12,30 @@
 		/**
 		 * @var IFactory[]
 		 */
-		protected $factoryList;
+		protected $factoryList = [];
 		/**
 		 * @var IConfigurator[]
 		 */
-		protected $configuratorList;
+		protected $configuratorList = [];
 
 		/**
-		 * @param array $factoryList
-		 * @param array $configuratorList
+		 * @param IFactory[] $factoryList
+		 *
+		 * @return $this
 		 */
-		public function __construct(array $factoryList, array $configuratorList) {
+		public function setFactoryList(array $factoryList) {
 			$this->factoryList = $factoryList;
+			return $this;
+		}
+
+		/**
+		 * @param string[]|IConfigurator[] $configuratorList
+		 *
+		 * @return $this
+		 */
+		public function setConfiguratorList(array $configuratorList) {
 			$this->configuratorList = $configuratorList;
+			return $this;
 		}
 
 		/**
@@ -32,10 +43,12 @@
 		 */
 		public function config($instance) {
 			$instance->registerFactoryList($this->factoryList);
+			$configuratorList = [];
 			foreach ($this->configuratorList as $name => $configHandler) {
 				foreach (is_array($configHandler) ? $configHandler : [$configHandler] as $config) {
-					$instance->registerConfigurator($name, is_string($config) ? $instance->create($config, [], __METHOD__) : $config);
+					$configuratorList[$name] = is_string($config) ? $instance->create($config, [], __METHOD__) : $config;
 				}
 			}
+			$instance->registerConfiguratorList($configuratorList);
 		}
 	}

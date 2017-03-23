@@ -68,7 +68,7 @@
 							$configuratorList = array_merge($configuratorList, $this->configuratorList[$configurator]);
 						}
 					}
-					$instance->registerConfiguratorList($configuratorList);
+					$instance->setConfiguratorList($configuratorList);
 					$instance->init();
 				}
 				$factory->push($this, $fetchId, $instance, $this->cache);

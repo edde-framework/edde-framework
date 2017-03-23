@@ -31,16 +31,16 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function registerConfiguratorList(array $configuratorList) {
-			$this->tConfiguratorList = $configuratorList;
+		public function addConfigurator(IConfigurator $configurator) {
+			$this->tConfiguratorList[] = $configurator;
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function configurator(IConfigurator $configurator) {
-			$this->tConfiguratorList[] = $configurator;
+		public function setConfiguratorList(array $configuratorList) {
+			$this->tConfiguratorList = $configuratorList;
 			return $this;
 		}
 

@@ -71,8 +71,8 @@
 		 */
 		public function registerConfiguratorList(array $configuratorList): IContainer {
 			$this->configuratorList = [];
-			foreach ($configuratorList as $name => $configHandler) {
-				$this->registerConfigurator($name, $configHandler);
+			foreach ($configuratorList as $name => $configurator) {
+				$this->registerConfigurator($name, $configurator);
 			}
 			return $this;
 		}

@@ -180,7 +180,13 @@
 			 * “Well, I should have mentioned this before, but I’m actually a taxi driver, and the fare back to town is $25…”
 			 */
 			$container = new Container(new Cache(new InMemoryCacheStorage()));
-			$container->configurator($configuratorList[IContainer::class] = new ContainerConfigurator($factoryList = self::createFactoryList($factoryList), $configuratorList));
+			/**
+			 * this trick ensures that container is properly configured when some internal dependency needs it while container is construction
+			 */
+			$containerConfigurator = $configuratorList[IContainer::class] = new ContainerConfigurator();
+			$containerConfigurator->setFactoryList($factoryList = self::createFactoryList($factoryList));
+			$containerConfigurator->setConfiguratorList($configuratorList);
+			$container->addConfigurator($containerConfigurator);
 			$container->setup();
 			$container = $container->create(IContainer::class);
 			$container->setup();
