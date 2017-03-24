@@ -1,12 +1,14 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Cache;
+
+	use Edde\Api\Config\IConfigurable;
 
 	/**
 	 * Cache storage implementation.
 	 */
-	interface ICacheStorage {
+	interface ICacheStorage extends IConfigurable {
 		/**
 		 * @param string $id
 		 * @param mixed  $save must be serializable

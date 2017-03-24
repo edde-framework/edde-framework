@@ -3,19 +3,14 @@
 
 	namespace Edde\Ext\Cache;
 
-	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Cache\LazyCacheDirectoryTrait;
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\File\IDirectory;
-	use Edde\Common\Cache\AbstractCacheStorage;
-	use Edde\Common\Config\ConfigurableTrait;
 
 	/**
 	 * Cache is stored in one file based on a storage namespace.
 	 */
-	class FlatFileCacheStorage extends AbstractCacheStorage implements IConfigurable, ICacheable {
+	class FlatFileCacheStorage extends InMemoryCacheStorage {
 		use LazyCacheDirectoryTrait;
-		use ConfigurableTrait;
 		/**
 		 * @var string
 		 */
@@ -24,10 +19,6 @@
 		 * @var IDirectory
 		 */
 		protected $directory;
-		/**
-		 * @var array
-		 */
-		protected $source = [];
 
 		/**
 		 * Two flies are sitting on a pile of dog poop. One suggests to the other: “Do you want to hear a really good joke?”
@@ -40,34 +31,26 @@
 			$this->namespace = $namespace;
 		}
 
-		public function save(string $id, $save) {
-			$this->write++;
-			$this->source[$id] = $save;
-			file_put_contents($this->directory->filename('0.cache'), serialize($this->source));
-			return $save;
-		}
-
-		public function load($id) {
-			/** @noinspection NotOptimalIfConditionsInspection */
-			if (isset($this->source[$id]) || array_key_exists($id, $this->source)) {
-				$this->hit++;
-				return $this->source[$id];
-			}
-			$this->miss++;
-			return null;
-		}
-
+		/**
+		 * @inheritdoc
+		 */
 		public function invalidate() {
 			$this->directory->purge();
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function handleInit() {
 			parent::handleInit();
 			$this->cacheDirectory->create();
 			$this->directory = $this->cacheDirectory->directory(sha1($this->namespace))
 				->create();
-			if (($this->source = @unserialize(($content = file_get_contents($this->directory->filename('0.cache'))) ? $content : '')) === false) {
-				$this->source = [];
+			if (($this->storage = @unserialize(($content = file_get_contents($file = $this->directory->filename('0.cache'))) ? $content : '')) === false) {
+				$this->storage = [];
 			}
+			register_shutdown_function(function () use ($file) {
+				file_put_contents($file, serialize($this->storage));
+			});
 		}
 	}

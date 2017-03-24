@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Http;
 
@@ -8,6 +8,7 @@
 	 */
 	trait LazyHttpRequestTrait {
 		/**
+		 * @cache-optional
 		 * @var IHttpRequest
 		 */
 		protected $httpRequest;

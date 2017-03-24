@@ -22,7 +22,7 @@
 					$diff[] = $name;
 				} else if (is_object($this->{$name}) && $this->{$name} instanceof ICacheable === false && in_array($class = get_class($this->{$name}), $allowed) === false) {
 					if (strpos($doc, '@cache-optional') === false) {
-						throw new EddeException(sprintf('Trying to serialize object [%s] which is not cacheable.', $class));
+						throw new EddeException(sprintf('Trying to serialize object [%s] in [%s::$%s] which is not cacheable.', $class, static::class, $name));
 					}
 					$diff[] = $name;
 				}

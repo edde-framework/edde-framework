@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Template;
 
-	use Edde\Api\Cache\ICacheable;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Resource\LazyResourceProviderTrait;
 	use Edde\Api\Template\ITemplate;
@@ -11,8 +11,9 @@
 	use Edde\Api\Template\TemplateException;
 	use Edde\Common\Object;
 
-	class Template extends Object implements ITemplate, ICacheable {
+	class Template extends Object implements ITemplate {
 		use LazyResourceProviderTrait;
+		use LazyContainerTrait;
 		use LazyCompilerTrait;
 		/**
 		 * @var string
@@ -26,7 +27,7 @@
 			$this->execute = [
 				$name,
 				$context ? (is_array($context) ? $context : [
-					null       => $context,
+					null => $context,
 					'.current' => $context,
 				]) : null,
 				$namespace,
@@ -62,14 +63,6 @@
 			}
 			$this->snippet($this->execute[0], $this->execute[1], $this->execute[2], ...$this->execute[3]);
 			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function __sleep() {
-			$this->execute = null;
-			return parent::__sleep();
 		}
 
 		public function __clone() {

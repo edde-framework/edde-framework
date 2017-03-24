@@ -162,7 +162,7 @@
 		}
 
 		/**
-		 * pure way how to simple create a system container using another container
+		 * pure way how to simple create a system container
 		 *
 		 * @param array    $factoryList
 		 * @param string[] $configuratorList

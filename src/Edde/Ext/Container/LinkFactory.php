@@ -24,6 +24,7 @@
 		 */
 		protected $target;
 		/**
+		 * @cache-optional
 		 * @var mixed
 		 */
 		protected $instance;
@@ -67,7 +68,7 @@
 		 */
 		public function dependency(IContainer $container, string $dependency = null): IDependency {
 			if ($this->instance) {
-				return new Dependency([], [], []);
+				return new Dependency();
 			}
 			return $container->getFactory($this->target, $this->source)
 				->dependency($container, $dependency);

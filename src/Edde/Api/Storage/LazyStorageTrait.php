@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Storage;
 
@@ -8,6 +8,7 @@
 	 */
 	trait LazyStorageTrait {
 		/**
+		 * @cache-optional
 		 * @var IStorage
 		 */
 		protected $storage;
