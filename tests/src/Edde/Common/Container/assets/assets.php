@@ -4,7 +4,6 @@
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Config\IConfigurator;
 	use Edde\Api\Container\LazyContainerTrait;
-	use Edde\Common\Cache\CacheableTrait;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
@@ -41,7 +40,6 @@
 
 	class Something extends Object implements ISomething, IConfigurable {
 		use ConfigurableTrait;
-		use CacheableTrait;
 		public $someParameter;
 		public $anotherSomething;
 		public $injectedSomething;

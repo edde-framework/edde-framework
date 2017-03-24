@@ -21,7 +21,6 @@
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Template\CompilerConfigurator;
-	use Edde\Framework;
 	use Tracy\Debugger;
 
 	require_once __DIR__ . '/lib/autoload.php';
@@ -36,7 +35,7 @@
 	};
 
 	/** @noinspection PhpIncludeInspection */
-	return ContainerFactory::cache($factoryList = array_merge(ContainerFactory::getDefaultFactoryList(), [
+	return ContainerFactory::container($factoryList = array_merge(ContainerFactory::getDefaultFactoryList(), [
 		IRootDirectory::class    => ContainerFactory::instance(RootDirectory::class, [__DIR__]),
 		/**
 		 * this application is using specific contexts to separate user experience
@@ -74,4 +73,5 @@
 		 * As other components, Template engine should be configured too; this will register default set of macros
 		 */
 		ICompiler::class         => CompilerConfigurator::class,
-	], __DIR__ . '/temp/container-' . sha1(implode('', array_keys($factoryList)) . new Framework()) . '.cache');
+	]);
+	// ], __DIR__ . '/temp/container-' . sha1(implode('', array_keys($factoryList)) . new Framework()) . '.cache');

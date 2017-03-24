@@ -7,7 +7,6 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\EddeException;
-	use Edde\Common\Cache\CacheableTrait;
 
 	/**
 	 * While watching TV with his wife, a man tosses peanuts into the air and catches them in his mouth.
@@ -21,7 +20,6 @@
 	 * The father says, "From the smell of his fingers, I'd say our son-in-law."
 	 */
 	class Object implements ILazyInject {
-		use CacheableTrait;
 		protected $aId;
 		protected $aInjectList = [];
 		protected $aLazyInjectList = [];
@@ -101,18 +99,5 @@
 				return $this;
 			}
 			throw new EddeException(sprintf('Writing to the undefined/private/protected property [%s::$%s].', static::class, $name));
-		}
-
-		public function __wakeup() {
-			foreach ($this->aInjectList as $property => $dependency) {
-				if ($dependency !== null) {
-					$this->{$property} = $dependency;
-				}
-			}
-			foreach ($this->aLazyInjectList as $property => $dependency) {
-				if ($this->{$property} === null) {
-					unset($this->{$property});
-				}
-			}
 		}
 	}
