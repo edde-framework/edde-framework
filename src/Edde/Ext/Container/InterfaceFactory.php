@@ -21,7 +21,6 @@
 		 */
 		protected $class;
 		/**
-		 * @cache-optional
 		 * @var mixed
 		 */
 		protected $instance;

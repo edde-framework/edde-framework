@@ -3,13 +3,12 @@
 
 	namespace Edde\Ext\Cache;
 
-	use Edde\Api\Cache\ICacheable;
 	use Edde\Common\Cache\AbstractCacheStorage;
 
 	/**
 	 * Simple in-memory cache (per-request).
 	 */
-	class InMemoryCacheStorage extends AbstractCacheStorage implements ICacheable {
+	class InMemoryCacheStorage extends AbstractCacheStorage {
 		protected $storage = [];
 
 		/**

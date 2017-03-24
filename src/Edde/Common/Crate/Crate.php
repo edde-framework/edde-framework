@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Crate;
 
-	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrate;
@@ -18,7 +17,7 @@
 	/**
 	 * Simple (...advanced...) crate implementation.
 	 */
-	class Crate extends Object implements ICrate, ICacheable {
+	class Crate extends Object implements ICrate {
 		/**
 		 * @var ISchema
 		 */

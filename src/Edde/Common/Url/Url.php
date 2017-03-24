@@ -3,13 +3,12 @@
 
 	namespace Edde\Common\Url;
 
-	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Url\IUrl;
 	use Edde\Api\Url\UrlException;
 	use Edde\Common\Object;
 	use Edde\Common\Strings\StringUtils;
 
-	class Url extends Object implements ICacheable, IUrl {
+	class Url extends Object implements IUrl {
 		/**
 		 * @var string
 		 */

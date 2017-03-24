@@ -4,7 +4,6 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Cache\ICache;
-	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
@@ -16,7 +15,7 @@
 	/**
 	 * Default implementation of a dependency container.
 	 */
-	class Container extends AbstractContainer implements ICacheable {
+	class Container extends AbstractContainer {
 		/**
 		 * @var \SplStack
 		 */

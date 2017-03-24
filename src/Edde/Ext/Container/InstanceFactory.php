@@ -25,7 +25,6 @@
 		 */
 		protected $parameterList;
 		/**
-		 * @cache-optional
 		 * @var mixed
 		 */
 		protected $instance;

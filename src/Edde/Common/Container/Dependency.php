@@ -3,13 +3,12 @@
 
 	namespace Edde\Common\Container;
 
-	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Reflection\IReflectionParameter;
 	use Edde\Common\Cache\CacheableTrait;
 	use Edde\Common\Object;
 
-	class Dependency extends Object implements IDependency, ICacheable {
+	class Dependency extends Object implements IDependency {
 		use CacheableTrait;
 		protected $parameterList;
 		protected $injectList;

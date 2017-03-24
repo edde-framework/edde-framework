@@ -33,7 +33,6 @@
 		 */
 		protected $defaultResponseHandler;
 		/**
-		 * @no-cache
 		 * @var IRequest
 		 */
 		protected $request;

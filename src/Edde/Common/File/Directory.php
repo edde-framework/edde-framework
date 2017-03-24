@@ -1,9 +1,8 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\File;
 
-	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\File\DirectoryException;
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IDirectory;
@@ -15,7 +14,7 @@
 	/**
 	 * Representation of directory on the filesystem.
 	 */
-	class Directory extends Object implements IDirectory, ICacheable {
+	class Directory extends Object implements IDirectory {
 		/**
 		 * @var string
 		 */

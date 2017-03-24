@@ -1,16 +1,15 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Test;
 
-	use Edde\Api\Cache\ICacheable;
 	use Edde\Common\Object;
 
-	class FooObject extends Object implements ICacheable {
+	class FooObject extends Object {
 		public $foo = 'bar';
 	}
 
-	class BarObject extends Object implements ICacheable {
+	class BarObject extends Object {
 		public $bar = 'foo';
 		/**
 		 * @var FooObject
@@ -32,7 +31,7 @@
 	class FooNotCacheable extends Object {
 	}
 
-	class CompositeObject extends Object implements ICacheable {
+	class CompositeObject extends Object {
 		/**
 		 * @var FooObject
 		 */

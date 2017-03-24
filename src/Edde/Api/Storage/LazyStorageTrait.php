@@ -8,7 +8,6 @@
 	 */
 	trait LazyStorageTrait {
 		/**
-		 * @cache-optional
 		 * @var IStorage
 		 */
 		protected $storage;

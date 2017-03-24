@@ -29,7 +29,6 @@
 		 */
 		protected $sourceNodeQuery;
 		/**
-		 * @no-cache
 		 * @var int
 		 */
 		protected $transaction = 0;

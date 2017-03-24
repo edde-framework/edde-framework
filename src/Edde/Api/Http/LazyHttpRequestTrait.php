@@ -8,7 +8,6 @@
 	 */
 	trait LazyHttpRequestTrait {
 		/**
-		 * @cache-optional
 		 * @var IHttpRequest
 		 */
 		protected $httpRequest;

@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\File;
 
-	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\File\IFile;
@@ -14,7 +13,7 @@
 	/**
 	 * File class; this is just file. Simple goold old classic file. Really.
 	 */
-	class File extends Resource implements IFile, ICacheable {
+	class File extends Resource implements IFile {
 		/**
 		 * @var int
 		 */

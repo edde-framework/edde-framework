@@ -46,11 +46,18 @@
 			$this->cacheDirectory->create();
 			$this->directory = $this->cacheDirectory->directory(sha1($this->namespace))
 				->create();
-			if (($this->storage = @unserialize(($content = file_get_contents($file = $this->directory->filename('0.cache'))) ? $content : '')) === false) {
+			if (($this->storage = @unserialize(($content = file_get_contents($this->directory->filename('0.cache'))) ? $content : '')) === false) {
 				$this->storage = [];
 			}
-			register_shutdown_function(function () use ($file) {
-				file_put_contents($file, serialize($this->storage));
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		protected function handleSetup() {
+			parent::handleSetup();
+			register_shutdown_function(function () {
+				file_put_contents($this->directory->filename('0.cache'), serialize($this->storage));
 			});
 		}
 	}

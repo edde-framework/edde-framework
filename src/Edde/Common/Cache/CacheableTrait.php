@@ -3,9 +3,6 @@
 
 	namespace Edde\Common\Cache;
 
-	use Edde\Api\Cache\ICacheable;
-	use Edde\Api\EddeException;
-
 	trait CacheableTrait {
 		public function __sleep() {
 			static $allowed = [
@@ -20,10 +17,7 @@
 					continue;
 				} else if (strpos($doc = is_string($doc = $reflectionProperty->getDocComment()) ? $doc : '', '@no-cache') !== false) {
 					$diff[] = $name;
-				} else if (is_object($this->{$name}) && $this->{$name} instanceof ICacheable === false && in_array($class = get_class($this->{$name}), $allowed) === false) {
-					if (strpos($doc, '@cache-optional') === false) {
-						throw new EddeException(sprintf('Trying to serialize object [%s] in [%s::$%s] which is not cacheable.', $class, static::class, $name));
-					}
+				} else if (is_object($this->{$name}) && in_array($class = get_class($this->{$name}), $allowed) === false) {
 					$diff[] = $name;
 				}
 			}

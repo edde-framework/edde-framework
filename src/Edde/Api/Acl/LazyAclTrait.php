@@ -5,7 +5,6 @@
 
 	trait LazyAclTrait {
 		/**
-		 * @no-cache
 		 * @var IAcl
 		 */
 		protected $acl;

@@ -24,7 +24,6 @@
 		 */
 		protected $target;
 		/**
-		 * @cache-optional
 		 * @var mixed
 		 */
 		protected $instance;

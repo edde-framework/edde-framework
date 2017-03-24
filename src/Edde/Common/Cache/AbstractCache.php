@@ -1,10 +1,9 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Cache;
 
 	use Edde\Api\Cache\ICache;
-	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Common\Object;
 
@@ -41,6 +40,7 @@
 		 * @inheritdoc
 		 */
 		public function load(string $id, $default = null) {
+			$this->cacheStorage->setup();
 			if (($value = $this->cacheStorage->load($this->cacheId($id))) === null) {
 				return is_callable($default) ? call_user_func($default) : $default;
 			}
@@ -62,9 +62,7 @@
 		 * @inheritdoc
 		 */
 		public function save(string $id, $source) {
-			if (is_object($source) && $source instanceof ICacheable === false) {
-				return $source;
-			}
+			$this->cacheStorage->setup();
 			$this->cacheStorage->save($this->cacheId($id), $source);
 			return $source;
 		}
@@ -73,6 +71,7 @@
 		 * @inheritdoc
 		 */
 		public function invalidate(): ICache {
+			$this->cacheStorage->setup();
 			$this->cacheStorage->invalidate();
 			return $this;
 		}

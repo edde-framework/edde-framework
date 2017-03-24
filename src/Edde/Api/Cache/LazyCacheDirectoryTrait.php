@@ -5,7 +5,6 @@
 
 	trait LazyCacheDirectoryTrait {
 		/**
-		 * @cache-optional
 		 * @var ICacheDirectory
 		 */
 		protected $cacheDirectory;
