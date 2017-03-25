@@ -44,7 +44,7 @@
 			}
 			list($control, $action) = $path;
 			$name = StringUtils::toCamelCase($control);
-			$parameterList = $requestUrl->getQuery();
+			$parameterList = $requestUrl->getParameterList();
 			foreach ($this->namespaceList as $namespace) {
 				$classList = [
 					sprintf('%s\\%s\\%sView', $namespace, $name, $name),
@@ -52,16 +52,16 @@
 				];
 				foreach ($classList as $class) {
 					if (class_exists($class)) {
-						$this->requestUrl->setPath('');
+						$requestUrl->setPath('');
 						$parameterList['action'] = $class . '.' . $action;
 						break 2;
 					}
 				}
 			}
-			if (isset($parameterList['action']) === false && isset($parameterList['handle']) === false) {
+			if (isset($parameterList['action']) === false) {
 				return null;
 			}
-			$requestUrl->setQuery($parameterList);
+			$requestUrl->setParameterList($parameterList);
 			return parent::createRequest();
 		}
 	}
