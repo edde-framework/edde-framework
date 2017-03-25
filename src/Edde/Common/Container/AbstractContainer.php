@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Container;
 
-	use Edde\Api\Cache\ICache;
 	use Edde\Api\Config\IConfigurator;
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
@@ -16,10 +15,6 @@
 	abstract class AbstractContainer extends Object implements IContainer {
 		use ConfigurableTrait;
 		/**
-		 * @var ICache
-		 */
-		protected $cache;
-		/**
 		 * @var IFactory[]
 		 */
 		protected $factoryList = [];
@@ -27,13 +22,6 @@
 		 * @var IConfigurator[][]
 		 */
 		protected $configuratorList = [];
-
-		/**
-		 * @param ICache $cache
-		 */
-		public function __construct(ICache $cache) {
-			$this->cache = $cache;
-		}
 
 		/**
 		 * @inheritdoc

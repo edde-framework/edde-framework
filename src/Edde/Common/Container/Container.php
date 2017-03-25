@@ -17,6 +17,10 @@
 	 */
 	class Container extends AbstractContainer {
 		/**
+		 * @var ICache
+		 */
+		protected $cache;
+		/**
 		 * @var \SplStack
 		 */
 		protected $stack;
@@ -25,7 +29,7 @@
 		 * @param ICache $cache
 		 */
 		public function __construct(ICache $cache) {
-			parent::__construct($cache);
+			$this->cache = $cache;
 			$this->stack = new \SplStack();
 		}
 
