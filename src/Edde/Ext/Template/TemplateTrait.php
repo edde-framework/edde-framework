@@ -3,7 +3,6 @@
 
 	namespace Edde\Ext\Template;
 
-	use Edde\Api\Application\LazyRequestTrait;
 	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Template\LazyTemplateManagerTrait;
 
@@ -13,7 +12,6 @@
 	trait TemplateTrait {
 		use LazyTemplateManagerTrait;
 		use LazyResponseManagerTrait;
-		use LazyRequestTrait;
 
 		/**
 		 * prepare template to be sent as a application response; template is not actually executed

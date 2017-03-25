@@ -42,6 +42,8 @@
 				'h6',
 				'section',
 				'p',
+				'input',
+				'button',
 			];
 		}
 
@@ -89,6 +91,7 @@
 			switch ($node->getName()) {
 				case 'meta':
 				case 'link':
+				case 'input':
 					return '';
 					break;
 			}
