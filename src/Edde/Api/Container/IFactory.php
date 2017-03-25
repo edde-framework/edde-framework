@@ -1,9 +1,7 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Container;
-
-	use Edde\Api\Cache\ICache;
 
 	/**
 	 * Factory is general way how to build a dependency with the final set of parameters/dependencies.
@@ -42,14 +40,10 @@
 		 *
 		 * @param IContainer $container
 		 * @param string     $id
-		 * @param ICache     $cache
 		 *
-		 * @return mixed|null if null is returned, container will execute... execute() on this factory
-		 * @internal param string $name
-		 * @internal param array $parameterList
-		 *
+		 * @return mixed|null if null is returned, container should execute... execute() on this factory
 		 */
-		public function fetch(IContainer $container, string $id, ICache $cache);
+		public function fetch(IContainer $container, string $id);
 
 		/**
 		 * @param IContainer  $container
@@ -67,11 +61,8 @@
 		 * @param IContainer $container
 		 * @param string     $id
 		 * @param mixed      $instance
-		 * @param ICache     $cache
 		 *
 		 * @return mixed
-		 * @internal param string $name
-		 * @internal param array $parameterList
 		 */
-		public function push(IContainer $container, string $id, $instance, ICache $cache);
+		public function push(IContainer $container, string $id, $instance);
 	}

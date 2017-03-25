@@ -3,7 +3,6 @@
 
 	namespace Edde\Ext\Container;
 
-	use Edde\Api\Cache\ICache;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 	use Edde\Common\Container\Dependency;
@@ -77,7 +76,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function fetch(IContainer $container, string $id, ICache $cache) {
+		public function fetch(IContainer $container, string $id) {
 			return $this->cloneable && $this->instance ? clone $this->instance : $this->instance;
 		}
 

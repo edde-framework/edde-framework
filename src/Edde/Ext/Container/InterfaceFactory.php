@@ -3,7 +3,6 @@
 
 	namespace Edde\Ext\Container;
 
-	use Edde\Api\Cache\ICache;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 	use Edde\Common\Container\Dependency;
@@ -58,8 +57,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function fetch(IContainer $container, string $id, ICache $cache) {
-			return $this->instance ?: $this->instance = $cache->load($id);
+		public function fetch(IContainer $container, string $id) {
+			return $this->instance;
 		}
 
 		/**
@@ -67,12 +66,5 @@
 		 */
 		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
 			return $this->instance ?: $this->instance = parent::execute($container, $parameterList, $dependency, $this->class);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function push(IContainer $container, string $id, $instance, ICache $cache) {
-			$cache->save($id, $instance);
 		}
 	}

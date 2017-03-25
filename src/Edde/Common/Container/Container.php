@@ -56,7 +56,7 @@
 		public function factory(IFactory $factory, array $parameterList = [], string $name = null, string $source = null) {
 			try {
 				$this->stack->push($name ?: '[anonymous]');
-				if (($instance = $factory->fetch($this, $fetchId = (get_class($factory) . count($parameterList) . $name . $source), $this->cache)) !== null) {
+				if (($instance = $factory->fetch($this, $fetchId = (get_class($factory) . count($parameterList) . $name . $source))) !== null) {
 					return $instance;
 				}
 				if (($dependency = $this->cache->load($cacheId = (__METHOD__ . '/' . $name))) === null) {
@@ -74,7 +74,7 @@
 					$instance->setConfiguratorList($configuratorList);
 					$instance->init();
 				}
-				$factory->push($this, $fetchId, $instance, $this->cache);
+				$factory->push($this, $fetchId, $instance);
 				return $instance;
 			} finally {
 				$this->stack->pop();
@@ -122,13 +122,5 @@
 				$instance->inject($reflectionParameter->getName(), $this->create($reflectionParameter->getClass(), [], $class));
 			}
 			return $instance;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function __wakeup() {
-			$this->stack = new \SplStack();
-			return parent::__wakeup();
 		}
 	}
