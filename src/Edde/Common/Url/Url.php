@@ -51,18 +51,18 @@
 				throw new UrlException(sprintf('Malformed URL [%s].', $url));
 			}
 			if (isset($parsed['query'])) {
-				parse_str($parsed['query'], $parsed['query']);
+				parse_str($parsed['query'], $parsed['parameter-list']);
 			}
 			static $copy = [
-				'scheme' => 'setScheme',
-				'user' => 'setUser',
-				'pass' => 'setPassword',
-				'host' => 'setHost',
-				'port' => 'setPort',
-				'path' => 'setPath',
-				'query' => 'setQuery',
+				'scheme'         => 'setScheme',
+				'user'           => 'setUser',
+				'pass'           => 'setPassword',
+				'host'           => 'setHost',
+				'port'           => 'setPort',
+				'path'           => 'setPath',
+				'query'          => 'setQuery',
 				'parameter-list' => 'setParameterList',
-				'fragment' => 'setFragment',
+				'fragment'       => 'setFragment',
 			];
 			foreach ($copy as $item => $func) {
 				if (isset($parsed[$item])) {
