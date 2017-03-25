@@ -60,12 +60,4 @@
 			}
 			return $content;
 		}
-
-		/**
-		 * @inheritdoc
-		 */
-		protected function handleSetup() {
-			parent::handleSetup();
-			$this->cache();
-		}
 	}
