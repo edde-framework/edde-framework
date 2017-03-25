@@ -55,6 +55,13 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function hasAttribute(string $name): bool {
+			return $this->attributeList->has($name);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function getAttribute(string $name, $default = null) {
 			return $this->attributeList->get($name, $default);
 		}

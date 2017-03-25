@@ -42,6 +42,15 @@
 		public function getAttributeList(): IAttributeList;
 
 		/**
+		 * is the given attribute name present?
+		 *
+		 * @param string $name
+		 *
+		 * @return bool
+		 */
+		public function hasAttribute(string $name): bool;
+
+		/**
 		 * return attribute
 		 *
 		 * @param string $name

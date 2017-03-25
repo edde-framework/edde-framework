@@ -7,6 +7,7 @@
 	use Edde\Api\Node\ITreeTraversal;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IMacro;
+	use Edde\Api\Template\MacroException;
 	use Edde\Common\Node\AbstractTreeTraversal;
 	use Edde\Common\Strings\StringUtils;
 
@@ -118,10 +119,17 @@
 		protected function onLeave(INode $node, \Iterator $iterator, ...$parameters) {
 		}
 
+		protected function attribute(INode $node, string $attribute) {
+			if ($node->hasAttribute($attribute)) {
+				return $this->delimite($node->getAttribute($attribute));
+			}
+			throw new MacroException(sprintf('Missing attribute <%s (%s=...)> in node [%s].', $node->getName(), $attribute, $node->getPath()));
+		}
+
 		protected function delimite($value) {
 			if (($method = StringUtils::match($value, '~^((?<context>[a-zA-Z0-9_\-]+))?:(?<method>[a-zA-Z0-9_-]+)\((?<parameters>.*?)\)$~', true, true)) !== null) {
 				return '$context[' . (isset($method['context']) ? "'" . $method['context'] . "'" : 'null') . ']->' . StringUtils::toCamelHump($method['method']) . '(' . ($method['parameters'] ?? '') . ')';
 			}
-			return $value;
+			return var_export($value, true);
 		}
 	}

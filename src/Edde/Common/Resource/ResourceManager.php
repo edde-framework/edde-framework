@@ -77,4 +77,14 @@
 		public function handle(string $url, string $mime = null, INode $root = null): INode {
 			return $this->resource($resource = new Resource(Url::create($url)), $mime, $root);
 		}
+
+		/**
+		 * @inheritdoc
+		 */
+		protected function handleSetup() {
+			parent::handleSetup();
+			foreach ($this->resourceProviderList as $resourceProvider) {
+				$resourceProvider->setup();
+			}
+		}
 	}

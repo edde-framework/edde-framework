@@ -22,10 +22,10 @@
 		 * @inheritdoc
 		 */
 		protected function onNode(INode $node, \Iterator $iterator, ...$parameters) {
-			$this->macro($node->getAttribute('src'));
+			$this->macro($this->attribute($node, 'src'));
 		}
 
 		protected function macro($value) {
-			echo '<?php include $this->compile(' . $this->delimite($value) . ', null, $context[\'.current\']); ?>';
+			echo '<?php $this->snippet(' . $this->delimite($value) . ', $context, null, $context[\'.current\']); ?>';
 		}
 	}

@@ -7,6 +7,8 @@
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Ext\Control\ControlTemplateResourceProvider;
+	use Edde\Ext\Web\JavaScriptResourceProvider;
+	use Edde\Ext\Web\StyleSheetResourceProvider;
 
 	class ResourceManagerConfigurator extends AbstractConfigurator {
 		use LazyContainerTrait;
@@ -16,5 +18,7 @@
 		 */
 		public function config($instance) {
 			$instance->registerResourceProvider($this->container->create(ControlTemplateResourceProvider::class, [], static::class));
+			$instance->registerResourceProvider($this->container->create(StyleSheetResourceProvider::class, [], static::class));
+			$instance->registerResourceProvider($this->container->create(JavaScriptResourceProvider::class, [], static::class));
 		}
 	}

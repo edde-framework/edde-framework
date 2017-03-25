@@ -49,11 +49,11 @@
 					break;
 				case 'css':
 					if ($this->minify) {
-						echo '<?php $cssCompiler->addResource($this->resourceProvider->getResource(' . $this->delimite($node->getAttribute('src')) . ')); ?>' . "\n";
+						echo '<?php $cssCompiler->addResource($this->resourceProvider->getResource(' . $this->attribute($node, 'src') . ')); ?>' . "\n";
 					} else if ($this->external) {
 						echo $this->htmlGenerator->generate(new Node('link', null, [
-							'href' => $this->delimite($node->getAttribute('src')),
-							'rel' => 'stylesheet',
+							'href' => $this->attribute($node, 'src'),
+							'rel'  => 'stylesheet',
 							'type' => 'text/css',
 						]));
 					} else {
@@ -74,7 +74,7 @@
 						'href' => function () {
 							return '<?=$cssCompiler->compile()->getRelativePath()?>';
 						},
-						'rel' => 'stylesheet',
+						'rel'  => 'stylesheet',
 						'type' => 'text/css',
 					]));
 					echo '<?php unset($cssCompiler); ?>' . "\n";

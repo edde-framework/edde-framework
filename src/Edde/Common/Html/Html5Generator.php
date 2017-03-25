@@ -20,6 +20,7 @@
 			return [
 				'html',
 				'head',
+				'meta',
 				'title',
 				'link',
 				'body',
@@ -86,6 +87,7 @@
 		 */
 		public function close(INode $node, int $level = null): string {
 			switch ($node->getName()) {
+				case 'meta':
 				case 'link':
 					return '';
 					break;
