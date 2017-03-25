@@ -18,11 +18,10 @@
 		 */
 		protected $cache;
 
-		/** @noinspection ClassMethodNameMatchesFieldNameInspection */
 		protected function cache(): ICache {
 			if ($this->cache === null) {
 				$this->cacheManager->setup();
-				$this->cache = $this->cacheManager->cache(static::class);
+				$this->cache = $this->cacheManager->createCache(static::class);
 			}
 			return $this->cache;
 		}

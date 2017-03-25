@@ -31,14 +31,23 @@
 		 */
 		protected $write = 0;
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getHitCount(): int {
 			return $this->hit;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getMissCount(): int {
 			return $this->miss;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getWriteCount(): int {
 			return $this->write;
 		}

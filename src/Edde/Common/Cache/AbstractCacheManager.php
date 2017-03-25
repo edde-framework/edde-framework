@@ -40,7 +40,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function cache(string $namespace = null, ICacheStorage $cacheStorage = null): ICache {
+		public function createCache(string $namespace = null, ICacheStorage $cacheStorage = null): ICache {
 			$cacheStorage = $cacheStorage ?: ($this->cacheStorageList[$namespace] ?? $this->cacheStorage);
 			$cacheStorage->setup();
 			return (new Cache($cacheStorage))->setNamespace($this->namespace . $namespace);

@@ -24,5 +24,5 @@
 		 *
 		 * @return ICache
 		 */
-		public function cache(string $namespace = null, ICacheStorage $cacheStorage = null): ICache;
+		public function createCache(string $namespace = null, ICacheStorage $cacheStorage = null): ICache;
 	}
