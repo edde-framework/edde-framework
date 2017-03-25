@@ -310,13 +310,6 @@
 			}
 		}
 
-		public function __sleep() {
-			if ($this->isOpen()) {
-				$this->close();
-			}
-			return parent::__sleep();
-		}
-
 		public function __toString() {
 			return $this->getPath();
 		}

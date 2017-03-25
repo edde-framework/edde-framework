@@ -101,6 +101,7 @@
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
 	use Edde\Common\Xml\XmlParser;
+	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Database\Sqlite\SqliteDsn;
@@ -313,7 +314,7 @@
 				]),
 				ICacheManager::class => CacheManager::class,
 				ICache::class => ICacheManager::class,
-				ICacheStorage::class => InMemoryCacheStorage::class,
+				ICacheStorage::class => FlatFileCacheStorage::class,
 				IRuntime::class => Runtime::class,
 				IHttpResponse::class => HttpResponse::class,
 				IApplication::class => Application::class,

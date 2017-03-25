@@ -9,12 +9,14 @@
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\LazyCompilerTrait;
 	use Edde\Api\Template\TemplateException;
+	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Object;
 
 	class Template extends Object implements ITemplate {
 		use LazyResourceProviderTrait;
 		use LazyContainerTrait;
 		use LazyCompilerTrait;
+		use CacheTrait;
 		/**
 		 * @var string
 		 */
@@ -49,8 +51,13 @@
 		 * @inheritdoc
 		 */
 		public function snippet(string $name, array $context, string $namespace = null, ...$parameterList): ITemplate {
+			$cache = $this->cache();
+			/** @var $file IFile */
+			if (($file = $cache->load($cacheId = ('template-' . $name . $namespace))) === null || $file->isAvailable() === false) {
+				$cache->save($cacheId, $file = $this->compile($name, $namespace, ...$parameterList));
+			}
 			/** @noinspection PhpIncludeInspection */
-			require $this->compile($name, $namespace, ...$parameterList);
+			require $file;
 			return $this;
 		}
 
