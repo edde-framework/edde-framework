@@ -23,7 +23,6 @@
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Crate\ICrate;
-	use Edde\Api\Crate\ICrateDirectory;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Database\IDriver;
@@ -74,7 +73,6 @@
 	use Edde\Common\Container\Container;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crate\Crate;
-	use Edde\Common\Crate\CrateDirectory;
 	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
@@ -301,12 +299,8 @@
 					AssetDirectory::class,
 				]),
 				ITemplateDirectory::class    => self::proxy(IAssetDirectory::class, 'directory', [
-					'template',
+					'templates',
 					TemplateDirectory::class,
-				]),
-				ICrateDirectory::class       => self::proxy(IAssetDirectory::class, 'directory', [
-					'crate',
-					CrateDirectory::class,
 				]),
 				ILogDirectory::class         => self::proxy(IRootDirectory::class, 'directory', [
 					'logs',

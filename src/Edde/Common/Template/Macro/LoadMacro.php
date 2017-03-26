@@ -26,6 +26,6 @@
 		}
 
 		protected function macro($value) {
-			echo '<?php $this->snippet(' . $value . ', $context, null, $context[\'.current\']); ?>';
+			echo '<?php $this->snippet(' . $value . ', $context, $namespace, $context[\'.current\']); ?>';
 		}
 	}

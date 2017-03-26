@@ -12,6 +12,7 @@
 	use Edde\Common\Template\Macro\IfMacro;
 	use Edde\Common\Template\Macro\IncludeMacro;
 	use Edde\Common\Template\Macro\LoadMacro;
+	use Edde\Common\Template\Macro\NodeMacro;
 	use Edde\Common\Template\Macro\SnippetMacro;
 	use Edde\Common\Template\Macro\SwitchMacro;
 	use Edde\Ext\Template\Macro\CssMacro;
@@ -34,6 +35,7 @@
 				SwitchMacro::class,
 				CssMacro::class,
 				JsMacro::class,
+				NodeMacro::class,
 			];
 			foreach ($macroList as $name) {
 				/** @var $macro IMacro */

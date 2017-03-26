@@ -50,6 +50,6 @@
 		 * @return string
 		 */
 		protected function getSnippetFile(INode $node, string $name = null): string {
-			return 'snippet-' . StringUtils::webalize($name ?? (string)$node->getAttribute('name')) . '.php';
+			return StringUtils::webalize($name ?? (string)$node->getAttribute('name')) . '.php';
 		}
 	}

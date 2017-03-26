@@ -23,7 +23,7 @@
 			ob_start();
 			NodeUtils::namespace($root = $this->resourceManager->resource($resource), '~^(?<namespace>[a-z]):(?<name>[a-zA-Z0-9_-]+)$~');
 			$this->traverse($root, NodeIterator::recursive($root), $this);
-			$file = $this->templateDirectory->file('snippet-' . StringUtils::recamel($name) . '.php');
+			$file = $this->templateDirectory->file(str_replace('-', '.', StringUtils::webalize($name)) . '.php');
 			$file->write(ob_get_clean());
 			$file->close();
 			return $file;

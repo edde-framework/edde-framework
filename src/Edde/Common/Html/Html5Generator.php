@@ -75,7 +75,7 @@
 				if ($value instanceof IAttributeList) {
 					continue;
 				}
-				$content .= ' ' . $name . '="' . (is_callable($value) ? $value() : htmlspecialchars($value, ENT_QUOTES)) . '"';
+				$content .= ' ' . $name . '="' . ($value instanceof \Closure ? $value() : htmlspecialchars($value, ENT_QUOTES)) . '"';
 			}
 			$content .= '>';
 			if ($node->isLeaf() === false) {

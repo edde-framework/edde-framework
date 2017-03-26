@@ -21,7 +21,7 @@
 		 */
 		public function template(string $name = null): IResponse {
 			$template = $this->templateManager->template();
-			$template->template($name ?: 'layout', $this, null, $this);
+			$template->template($name ?: 'layout', $this, static::class, $this);
 			return new TemplateResponse($template);
 		}
 	}
