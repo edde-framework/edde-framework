@@ -14,6 +14,7 @@
 		 * @param IRequestQueue $instance
 		 */
 		public function config($instance) {
+			$this->routerService->setup();
 			$instance->queue($this->routerService->createRequest());
 		}
 	}
