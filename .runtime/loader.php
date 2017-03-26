@@ -1,6 +1,10 @@
 <?php
 	/**
-	 * file responsible for requiring all dependencies
+	 * This script is responsible for container creation, thus this is kind of bootstrapper.
+	 *
+	 * There should not be any kind of "heavy" code, constants and other shits usually used in
+	 * this type of file; main purpose is container configuration and creation, it's not necessary
+	 * to do any other tasks here.
 	 */
 	declare(strict_types=1);
 
@@ -25,56 +29,76 @@
 	use Edde\Ext\Template\CompilerConfigurator;
 	use Tracy\Debugger;
 
+	/**
+	 * All required dependencies here; to prevent "folder up jumps" in path, this file
+	 * should see all other required loaders.
+	 */
 	require_once __DIR__ . '/lib/autoload.php';
 	require_once __DIR__ . '/../src/loader.php';
 	require_once __DIR__ . '/src/loader.php';
 
-	Debugger::enable(Debugger::DEVELOPMENT, __DIR__ . '/logs');
+	/**
+	 * Tracy is a bit piece of shit, but quite useful; there is only problem with not so much
+	 * transparent configuration through properties (this is the only example of acceptable
+	 * scripted thing in this file).
+	 */
+	Debugger::enable(($isLocal = file_exists($local = __DIR__ . '/loader.local.php')) ? Debugger::DEVELOPMENT : Debugger::PRODUCTION, __DIR__ . '/logs');
 	Debugger::$strictMode = true;
-	Debugger::$showBar = true;
+	Debugger::$showBar = $isLocal;
 	Debugger::$onFatalError[] = function ($e) {
 		Debugger::log($e);
 	};
 
-	/** @noinspection PhpIncludeInspection */
+	/**
+	 * Container factory is the simplest way how to create dependency container; in this particular case container is also
+	 * configured to get "default" set of services defined in Edde.
+	 *
+	 * There is also option to create only container itself without any internal dependencies (not so much recommended except
+	 * you are heavy masochist).
+	 */
 	return ContainerFactory::container($factoryList = array_merge(ContainerFactory::getDefaultFactoryList(), [
+		/**
+		 * With this piece of shit are problems all the times, but by this application knows, where is it's
+		 * (repository)root.
+		 *
+		 * All other directories should be dependent on this interface.
+		 */
 		IRootDirectory::class    => ContainerFactory::instance(RootDirectory::class, [__DIR__]),
 		/**
-		 * this application is using specific contexts to separate user experience
+		 * This application is using specific contexts to separate user experience
 		 */
 		IContext::class          => AppContext::class,
 		/**
-		 * when context is changes, one also should (not necessarily) change resource provider to get
-		 * ability to search for assets (resources) based on the current context
+		 * When context is changes, one also should (not necessarily) change resource provider to get
+		 * ability to search for assets (resources) based on the current context.
 		 */
 		IResourceProvider::class => IContext::class,
-	], is_array($local = @include __DIR__ . '/loader.local.php') ? $local : [], [
+	], is_array($local = @include $local) ? $local : [], [
 		new ClassFactory(),
 	]), [
 		/**
-		 * As we have some custom configuration for router service, we have to register proper configurator for it
+		 * As we have some custom configuration for router service, we have to register proper configurator for it.
 		 */
-		IRouterService::class   => RouterServiceConfigurator::class,
-		IRequestQueue::class    => RequestQueueConfigurator::class,
+		IRouterService::class    => RouterServiceConfigurator::class,
+		IRequestQueue::class     => RequestQueueConfigurator::class,
 		/**
 		 * Because we are using context, we also have to properly setup cache manager (by setting proper namespace from
-		 * context)
+		 * context).
 		 */
-		ICacheManager::class    => ContextCacheManagerConfigurator::class,
+		ICacheManager::class     => ContextCacheManagerConfigurator::class,
 		/**
 		 * We are using some custom resource providers, so we have to register them to resource manager and the current
-		 * point how to get resources
+		 * point how to get resources.
 		 */
-		IResourceManager::class => ResourceManagerConfigurator::class,
+		IResourceManager::class  => ResourceManagerConfigurator::class,
 		/**
 		 * To enable general content exchange, we have to setup converter manager; it basically allows to do arbitrary
-		 * data convertions for example json to array, xml file to INode, ... this component is kind of fundamental part
+		 * data conversions for example json to array, xml file to INode, ... this component is kind of fundamental part
 		 * of the framework.
 		 */
 		IConverterManager::class => ConverterManagerConfigurator::class,
 		/**
-		 * As other components, Template engine should be configured too; this will register default set of macros
+		 * As other components, Template engine should be configured too; this will register default set of macros.
 		 */
 		ICompiler::class         => CompilerConfigurator::class,
 	]);
-	// ], __DIR__ . '/temp/container-' . sha1(implode('', array_keys($factoryList)) . new Framework()) . '.cache');
