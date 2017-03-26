@@ -32,6 +32,13 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function hasResponse(): bool {
+			return $this->response !== null;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function response(IResponse $response = null): IResponseManager {
 			$this->response = $response;
 			return $this;

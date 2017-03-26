@@ -17,6 +17,13 @@
 		public function registerResponseHandler(IResponseHandler $responseHandler = null): IResponseManager;
 
 		/**
+		 * is there already some response?
+		 *
+		 * @return bool
+		 */
+		public function hasResponse(): bool;
+
+		/**
 		 * set the current response
 		 *
 		 * @param IResponse $response
