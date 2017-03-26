@@ -26,7 +26,7 @@
 				if ((($control = $this->container->create($class = $request->getControl(), [], __METHOD__)) instanceof IControl) === false) {
 					throw new ApplicationException(sprintf('Route class [%s] is not instance of [%s].', $class, IControl::class));
 				}
-				return $control->request();
+				return $control->request($request);
 			} catch (\Exception $exception) {
 				$this->logService->exception($exception, ['edde']);
 				throw $exception;
