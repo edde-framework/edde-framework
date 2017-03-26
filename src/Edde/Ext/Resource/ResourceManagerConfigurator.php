@@ -7,6 +7,7 @@
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Ext\Control\ControlTemplateResourceProvider;
+	use Edde\Ext\Web\ImageResourceProvider;
 	use Edde\Ext\Web\JavaScriptResourceProvider;
 	use Edde\Ext\Web\StyleSheetResourceProvider;
 
@@ -20,5 +21,6 @@
 			$instance->registerResourceProvider($this->container->create(ControlTemplateResourceProvider::class, [], __METHOD__));
 			$instance->registerResourceProvider($this->container->create(StyleSheetResourceProvider::class, [], __METHOD__));
 			$instance->registerResourceProvider($this->container->create(JavaScriptResourceProvider::class, [], __METHOD__));
+			$instance->registerResourceProvider($this->container->create(ImageResourceProvider::class, [], __METHOD__));
 		}
 	}

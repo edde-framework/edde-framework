@@ -3,18 +3,20 @@
 
 	namespace Edde\Common\File;
 
+	use Edde\Api\File\DirectoryException;
 	use Edde\Api\File\FileException;
 	use Edde\Api\Url\IUrl;
+	use Edde\Api\Url\UrlException;
 	use Edde\Common\Object;
 	use Edde\Common\Url\Url;
 
 	class FileUtils extends Object {
 		static protected $mimeTypeList = [
-			'xml' => 'text/xml',
+			'xml'   => 'text/xml',
 			'xhtml' => 'application/xhtml+xml',
-			'json' => 'application/json',
-			'csv' => 'text/csv',
-			'php' => 'text/x-php',
+			'json'  => 'application/json',
+			'csv'   => 'text/csv',
+			'php'   => 'text/x-php',
 		];
 
 		/**
@@ -148,7 +150,7 @@
 		static public function createDir($dir, $mode = 0777) {
 			/** @noinspection PhpUsageOfSilenceOperatorInspection */
 			if (is_dir($dir) === false && @mkdir($dir, $mode, true) === false && is_dir($dir) === false) { // intentionally @; not atomic
-				throw new FileException("Unable to create directory [$dir].");
+				throw new DirectoryException("Unable to create directory [$dir].");
 			}
 		}
 
@@ -232,6 +234,7 @@
 		 *
 		 * @return IUrl
 		 * @throws FileException
+		 * @throws UrlException
 		 */
 		static public function url(string $file) {
 			if (strpos($file, 'file:///') === false) {
