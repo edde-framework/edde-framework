@@ -5,6 +5,7 @@
 	declare(strict_types=1);
 
 	use Edde\Api\Application\IContext;
+	use Edde\Api\Application\IRequestQueue;
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\File\IRootDirectory;
@@ -20,6 +21,7 @@
 	use Edde\Ext\Cache\ContextCacheManagerConfigurator;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
+	use Edde\Ext\Router\RequestQueueConfigurator;
 	use Edde\Ext\Template\CompilerConfigurator;
 	use Tracy\Debugger;
 
@@ -52,17 +54,18 @@
 		/**
 		 * As we have some custom configuration for router service, we have to register proper configurator for it
 		 */
-		IRouterService::class    => RouterServiceConfigurator::class,
+		IRouterService::class   => RouterServiceConfigurator::class,
+		IRequestQueue::class    => RequestQueueConfigurator::class,
 		/**
 		 * Because we are using context, we also have to properly setup cache manager (by setting proper namespace from
 		 * context)
 		 */
-		ICacheManager::class     => ContextCacheManagerConfigurator::class,
+		ICacheManager::class    => ContextCacheManagerConfigurator::class,
 		/**
 		 * We are using some custom resource providers, so we have to register them to resource manager and the current
 		 * point how to get resources
 		 */
-		IResourceManager::class  => ResourceManagerConfigurator::class,
+		IResourceManager::class => ResourceManagerConfigurator::class,
 		/**
 		 * To enable general content exchange, we have to setup converter manager; it basically allows to do arbitrary
 		 * data convertions for example json to array, xml file to INode, ... this component is kind of fundamental part

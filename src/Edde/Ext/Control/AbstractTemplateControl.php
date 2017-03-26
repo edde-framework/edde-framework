@@ -13,6 +13,6 @@
 		 * @inheritdoc
 		 */
 		protected function action(string $action, array $parameterList) {
-			$this->template();
+			return $this->template();
 		}
 	}

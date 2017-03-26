@@ -3,7 +3,7 @@
 
 	namespace Edde\Ext\Template;
 
-	use Edde\Api\Application\LazyResponseManagerTrait;
+	use Edde\Api\Application\IResponse;
 	use Edde\Api\Template\LazyTemplateManagerTrait;
 
 	/**
@@ -11,15 +11,17 @@
 	 */
 	trait TemplateTrait {
 		use LazyTemplateManagerTrait;
-		use LazyResponseManagerTrait;
 
 		/**
 		 * prepare template to be sent as a application response; template is not actually executed
 		 *
 		 * @param string|null $name
+		 *
+		 * @return IResponse|TemplateResponse
 		 */
-		public function template(string $name = null) {
-			$this->responseManager->response(new TemplateResponse($template = $this->templateManager->template()));
+		public function template(string $name = null): IResponse {
+			$template = $this->templateManager->template();
 			$template->template($name ?: 'layout', $this, null, $this);
+			return new TemplateResponse($template);
 		}
 	}

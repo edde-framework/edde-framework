@@ -3,10 +3,11 @@
 
 	namespace Edde\Api\Control;
 
+	use Edde\Api\Application\IResponse;
 	use Edde\Api\Node\INode;
 
 	/**
-	 * Control is general element for transfering incoming request into the internal system service and for
+	 * Control is general element for transferring incoming request into the internal system service and for
 	 * generating response.
 	 */
 	interface IControl {
@@ -44,9 +45,9 @@
 		 * @param string $method
 		 * @param array  $parameterList
 		 *
-		 * @return mixed
+		 * @return IResponse
 		 */
-		public function handle(string $method, array $parameterList);
+		public function handle(string $method, array $parameterList): IResponse;
 
 		/**
 		 * traverse through whole control tree

@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Control;
 
+	use Edde\Api\Application\IResponse;
 	use Edde\Api\Callback\ICallback;
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Control\ControlException;
@@ -64,20 +65,8 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws ControlException
 		 */
-		public function handle(string $method, array $parameterList) {
-			return $this->execute($method, $parameterList);
-		}
-
-		/**
-		 * @param string $method
-		 * @param array  $parameterList
-		 *
-		 * @return mixed
-		 * @throws ControlException
-		 */
-		protected function execute(string $method, array $parameterList) {
+		public function handle(string $method, array $parameterList): IResponse {
 			$argumentList = array_filter($parameterList, function ($key) {
 				return is_int($key);
 			}, ARRAY_FILTER_USE_KEY);

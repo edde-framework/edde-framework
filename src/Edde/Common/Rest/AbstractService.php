@@ -18,7 +18,6 @@
 		use LazyResponseManagerTrait;
 		use LazyHttpResponseTrait;
 		use LazyRequestTrait;
-
 		protected static $methodList = [
 			'GET',
 			'POST',
@@ -37,7 +36,7 @@
 			return $url->getAbsoluteUrl();
 		}
 
-		public function execute(string $method, array $parameterList) {
+		public function handle(string $method, array $parameterList): IResponse {
 			$methodList = $this->getMethodList();
 			if (in_array($method = strtoupper($method), self::$methodList, true) === false) {
 				$this->httpResponse->header('Allowed', $allowed = implode(', ', array_keys($methodList)));
@@ -49,7 +48,7 @@
 				$this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not implemented; %s.', $method, empty($methodList) ? 'there are no available methods' : 'available methods are [' . $allowed . ']'));
 				return null;
 			}
-			return parent::execute($methodList[$method], $parameterList);
+			return parent::handle($methodList[$method], $parameterList);
 		}
 
 		public function getMethodList(): array {

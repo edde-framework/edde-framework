@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Application;
 
@@ -13,4 +13,13 @@
 		 * @return mixed
 		 */
 		public function run();
+
+		/**
+		 * execute the given application request
+		 *
+		 * @param IRequest $request
+		 *
+		 * @return IResponse
+		 */
+		public function execute(IRequest $request): IResponse;
 	}
