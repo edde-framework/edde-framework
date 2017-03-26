@@ -253,8 +253,8 @@
 		/**
 		 * special kind of factory which will thrown an exception of the given message; it's useful for say which internal dependencies are not met
 		 *
-		 * @param string      $message
-|		 * @param string|null $class
+		 * @param string $message
+		|		 * @param string|null $class
 		 *
 		 * @return object
 		 */
@@ -328,7 +328,7 @@
 				IApplication::class          => Application::class,
 				IRequestQueue::class         => RequestQueue::class,
 				IRouterService::class        => RouterService::class,
-				IRequest::class              => self::exception(sprintf('Do not use [%s] directly; to get reference to the current request, ask [%s]::getCurrentRequest().', IApplication::class)),
+				IRequest::class              => self::exception(sprintf('[%s] is not possible use directly; implement proper factory or choose different approach.', IRequest::class)),
 				IHttpRequest::class          => HttpRequest::class . '::createHttpRequest',
 				IHttpResponse::class         => HttpResponse::class . '::createHttpResponse',
 				IResponseManager::class      => ResponseManager::class,

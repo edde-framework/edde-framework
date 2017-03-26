@@ -4,16 +4,16 @@
 	namespace Edde\Ext\Router;
 
 	use Edde\Api\Application\IRequestQueue;
-	use Edde\Api\Application\LazyRequestTrait;
+	use Edde\Api\Router\LazyRouterServiceTrait;
 	use Edde\Common\Config\AbstractConfigurator;
 
 	class RequestQueueConfigurator extends AbstractConfigurator {
-		use LazyRequestTrait;
+		use LazyRouterServiceTrait;
 
 		/**
 		 * @param IRequestQueue $instance
 		 */
 		public function config($instance) {
-			$instance->queue($this->request);
+			$instance->queue($this->routerService->createRequest());
 		}
 	}

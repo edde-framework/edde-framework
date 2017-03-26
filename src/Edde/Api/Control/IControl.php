@@ -3,6 +3,7 @@
 
 	namespace Edde\Api\Control;
 
+	use Edde\Api\Application\IRequest;
 	use Edde\Api\Application\IResponse;
 	use Edde\Api\Node\INode;
 
@@ -42,12 +43,18 @@
 		/**
 		 * execute the given method in this controls
 		 *
-		 * @param string $method
-		 * @param array  $parameterList
+		 * @param IRequest $request
 		 *
 		 * @return IResponse
 		 */
-		public function handle(string $method, array $parameterList): IResponse;
+		public function request(IRequest $request): IResponse;
+
+		/**
+		 * get current action
+		 *
+		 * @return string
+		 */
+		public function getAction(): string;
 
 		/**
 		 * traverse through whole control tree

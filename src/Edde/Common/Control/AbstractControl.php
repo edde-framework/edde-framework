@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Control;
 
+	use Edde\Api\Application\IRequest;
 	use Edde\Api\Application\IResponse;
 	use Edde\Api\Callback\ICallback;
 	use Edde\Api\Config\IConfigurable;
@@ -26,6 +27,13 @@
 		 * @var INode
 		 */
 		protected $node;
+		/**
+		 * When control is called by execute, the request is saved here for future reference; this basically
+		 * means that control cannot be reused, because it will loose reference to the original request.
+		 *
+		 * @var IRequest
+		 */
+		protected $request;
 
 		/**
 		 * @return INode
@@ -66,11 +74,12 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function handle(string $method, array $parameterList): IResponse {
-			$argumentList = array_filter($parameterList, function ($key) {
+		public function request(IRequest $request): IResponse {
+			$this->request = $request;
+			$argumentList = array_filter($parameterList = $request->getParameterList(), function ($key) {
 				return is_int($key);
 			}, ARRAY_FILTER_USE_KEY);
-			if (method_exists($this, $method)) {
+			if (method_exists($this, $method = $request->getAction())) {
 				/** @var $callback ICallback */
 				$callback = new Callback([
 					$this,
@@ -92,6 +101,13 @@
 				return $callback->invoke(...$argumentList);
 			}
 			return $this->action(StringUtils::recamel($method), $argumentList);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getAction(): string {
+			return StringUtils::recamel($this->request->getAction());
 		}
 
 		/**

@@ -3,8 +3,8 @@
 
 	namespace Edde\Common\Rest;
 
+	use Edde\Api\Application\IRequest;
 	use Edde\Api\Application\IResponse;
-	use Edde\Api\Application\LazyRequestTrait;
 	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Http\IResponse as IHttpResponse;
 	use Edde\Api\Http\LazyHttpResponseTrait;
@@ -17,7 +17,6 @@
 	abstract class AbstractService extends AbstractControl implements IService {
 		use LazyResponseManagerTrait;
 		use LazyHttpResponseTrait;
-		use LazyRequestTrait;
 		protected static $methodList = [
 			'GET',
 			'POST',
@@ -36,9 +35,9 @@
 			return $url->getAbsoluteUrl();
 		}
 
-		public function handle(string $method, array $parameterList): IResponse {
+		public function request(IRequest $request): IResponse {
 			$methodList = $this->getMethodList();
-			if (in_array($method = strtoupper($method), self::$methodList, true) === false) {
+			if (in_array($method = strtoupper($method = $request->getAction()), self::$methodList, true) === false) {
 				$this->httpResponse->header('Allowed', $allowed = implode(', ', array_keys($methodList)));
 				$this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not supported; %s.', $method, empty($methodList) ? 'there are no supported methods' : 'available methods are [' . $allowed . ']'));
 				return null;
@@ -48,7 +47,7 @@
 				$this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not implemented; %s.', $method, empty($methodList) ? 'there are no available methods' : 'available methods are [' . $allowed . ']'));
 				return null;
 			}
-			return parent::handle($methodList[$method], $parameterList);
+			return parent::request($request);
 		}
 
 		public function getMethodList(): array {
