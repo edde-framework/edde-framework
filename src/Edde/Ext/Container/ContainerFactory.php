@@ -105,8 +105,13 @@
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
+	use Edde\Ext\Converter\ConverterManagerConfigurator;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Database\Sqlite\SqliteDsn;
+	use Edde\Ext\Resource\ResourceManagerConfigurator;
+	use Edde\Ext\Router\RequestQueueConfigurator;
+	use Edde\Ext\Router\RouterServiceConfigurator;
+	use Edde\Ext\Template\CompilerConfigurator;
 
 	class ContainerFactory extends Object {
 		/**
@@ -195,35 +200,35 @@
 		 * create a default container with set of services from Edde; they can be simply redefined
 		 *
 		 * @param array    $factoryList
-		 * @param string[] $configHandlerList
+		 * @param string[] $configuratorList
 		 *
 		 * @return IContainer
 		 * @throws ContainerException
 		 * @throws FactoryException
 		 */
-		static public function container(array $factoryList = [], array $configHandlerList = []): IContainer {
-			return self::create(array_merge(self::getDefaultFactoryList(), $factoryList), array_merge([], $configHandlerList));
+		static public function container(array $factoryList = [], array $configuratorList = []): IContainer {
+			return self::create(array_merge(self::getDefaultFactoryList(), $factoryList), array_filter(array_merge(self::getDefaultConfiguratorList(), $configuratorList)));
 		}
 
 		/**
 		 * create container and serialize the result into the file; if file exists, container is build from it
 		 *
 		 * @param array  $factoryList
-		 * @param array  $configHandlerList
+		 * @param array  $configuratorList
 		 * @param string $cacheId
 		 *
 		 * @return IContainer
 		 * @throws ContainerException
 		 * @throws FactoryException
 		 */
-		static public function cache(array $factoryList, array $configHandlerList, string $cacheId): IContainer {
+		static public function cache(array $factoryList, array $configuratorList, string $cacheId): IContainer {
 			if ($container = @file_get_contents($cacheId)) {
 				/** @noinspection UnserializeExploitsInspection */
 				return unserialize($container);
 			}
 			register_shutdown_function(function (IContainer $container, $cache) {
 				file_put_contents($cache, serialize($container));
-			}, $container = self::container($factoryList, $configHandlerList), $cacheId);
+			}, $container = self::container($factoryList, $configuratorList), $cacheId);
 			return $container;
 		}
 
@@ -362,6 +367,28 @@
 				IAcl::class                  => Acl::class,
 				ITranslator::class           => Translator::class,
 				IAssetStorage::class         => AssetStorage::class,
+			];
+		}
+
+		static public function getDefaultConfiguratorList(): array {
+			return [
+				IRouterService::class    => RouterServiceConfigurator::class,
+				IRequestQueue::class     => RequestQueueConfigurator::class,
+				/**
+				 * We are using some custom resource providers, so we have to register them to resource manager and the current
+				 * point how to get resources.
+				 */
+				IResourceManager::class  => ResourceManagerConfigurator::class,
+				/**
+				 * To enable general content exchange, we have to setup converter manager; it basically allows to do arbitrary
+				 * data conversions for example json to array, xml file to INode, ... this component is kind of fundamental part
+				 * of the framework.
+				 */
+				IConverterManager::class => ConverterManagerConfigurator::class,
+				/**
+				 * As other components, Template engine should be configured too; this will register default set of macros.
+				 */
+				ICompiler::class         => CompilerConfigurator::class,
 			];
 		}
 	}

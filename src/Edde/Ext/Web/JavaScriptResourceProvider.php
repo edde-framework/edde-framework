@@ -6,6 +6,7 @@
 	use Edde\Api\Asset\LazyAssetDirectoryTrait;
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\Resource\IResource;
+	use Edde\Common\File\RealPathException;
 	use Edde\Common\Resource\AbstractResourceProvider;
 	use Edde\Common\Resource\UnknownResourceException;
 
@@ -17,13 +18,16 @@
 		/**
 		 * @var IDirectory
 		 */
-		protected $styleSheetDirectory;
+		protected $javaScriptDirectory;
 
 		/**
 		 * @inheritdoc
 		 */
 		public function getResource(string $name, string $namespace = null, ...$parameters): IResource {
-			$file = $this->styleSheetDirectory->file($name = $name . ($namespace ? $namespace . '-' . $name : ''));
+			if ($this->javaScriptDirectory === null) {
+				throw new UnknownResourceException('Javascript directory has not been set up (or setup failed).');
+			}
+			$file = $this->javaScriptDirectory->file($name = $name . ($namespace ? $namespace . '-' . $name : ''));
 			if ($file->isAvailable()) {
 				return $file;
 			}
@@ -35,7 +39,11 @@
 		 */
 		protected function handleSetup() {
 			parent::handleSetup();
-			$this->styleSheetDirectory = $this->assetDirectory->directory('js');
-			$this->styleSheetDirectory->realpath();
+			try {
+				$javaScriptDirectory = $this->assetDirectory->directory('js');
+				$javaScriptDirectory->realpath();
+				$this->javaScriptDirectory = $javaScriptDirectory;
+			} catch (RealPathException $exception) {
+			}
 		}
 	}

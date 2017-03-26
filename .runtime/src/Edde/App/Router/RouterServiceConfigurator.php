@@ -9,10 +9,9 @@
 	use Edde\Common\Application\HttpResponseHandler;
 	use Edde\Common\Application\Request;
 	use Edde\Ext\Router\RestRouter;
-	use Edde\Ext\Router\RouterServiceConfigurator as ExtRouterServiceConfigHandler;
 	use Edde\Ext\Router\SimpleHttpRouter;
 
-	class RouterServiceConfigurator extends ExtRouterServiceConfigHandler {
+	class RouterServiceConfigurator extends \Edde\Ext\Router\RouterServiceConfigurator {
 		use LazyContainerTrait;
 
 		/**

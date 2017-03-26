@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\App\Resource;
+	namespace Edde\Ext\Resource;
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Resource\IResourceManager;
@@ -17,8 +17,8 @@
 		 * @param IResourceManager $instance
 		 */
 		public function config($instance) {
-			$instance->registerResourceProvider($this->container->create(ControlTemplateResourceProvider::class, [], static::class));
-			$instance->registerResourceProvider($this->container->create(StyleSheetResourceProvider::class, [], static::class));
-			$instance->registerResourceProvider($this->container->create(JavaScriptResourceProvider::class, [], static::class));
+			$instance->registerResourceProvider($this->container->create(ControlTemplateResourceProvider::class, [], __METHOD__));
+			$instance->registerResourceProvider($this->container->create(StyleSheetResourceProvider::class, [], __METHOD__));
+			$instance->registerResourceProvider($this->container->create(JavaScriptResourceProvider::class, [], __METHOD__));
 		}
 	}

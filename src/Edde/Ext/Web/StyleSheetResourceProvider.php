@@ -6,6 +6,7 @@
 	use Edde\Api\Asset\LazyAssetDirectoryTrait;
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\Resource\IResource;
+	use Edde\Common\File\RealPathException;
 	use Edde\Common\Resource\AbstractResourceProvider;
 	use Edde\Common\Resource\UnknownResourceException;
 
@@ -23,6 +24,9 @@
 		 * @inheritdoc
 		 */
 		public function getResource(string $name, string $namespace = null, ...$parameters): IResource {
+			if ($this->styleSheetDirectory === null) {
+				throw new UnknownResourceException('Stylesheet directory has not been set up (or setup failed).');
+			}
 			$file = $this->styleSheetDirectory->file($name = $name . ($namespace ? $namespace . '-' . $name : ''));
 			if ($file->isAvailable()) {
 				return $file;
@@ -35,7 +39,11 @@
 		 */
 		protected function handleSetup() {
 			parent::handleSetup();
-			$this->styleSheetDirectory = $this->assetDirectory->directory('css');
-			$this->styleSheetDirectory->realpath();
+			try {
+				$styleSheetDirectory = $this->assetDirectory->directory('css');
+				$styleSheetDirectory->realpath();
+				$this->styleSheetDirectory = $styleSheetDirectory;
+			} catch (RealPathException $exception) {
+			}
 		}
 	}
