@@ -39,6 +39,7 @@
 						throw new MacroException(sprintf('Js minify does not support recursion.'));
 					}
 					$this->minify = true;
+					echo '<?php $this->resourceProvider->setup(); ?>' . "\n";
 					echo '<?php $jsCompiler = $this->container->create(\'' . IJavaScriptCompiler::class . '\'); ?>' . "\n";
 					break;
 				case 'external-js':

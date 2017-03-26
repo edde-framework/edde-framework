@@ -39,6 +39,7 @@
 						throw new MacroException(sprintf('Css minify does not support recursion.'));
 					}
 					$this->minify = true;
+					echo '<?php $this->resourceProvider->setup(); ?>' . "\n";
 					echo '<?php $cssCompiler = $this->container->create(\'' . IStyleSheetCompiler::class . '\'); ?>' . "\n";
 					break;
 				case 'external-css':
