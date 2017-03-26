@@ -33,9 +33,19 @@
 		public function open(INode $node, int $level = null): string;
 
 		/**
-		 * generate close tag only for the given node
+		 * node content renering
 		 *
 		 * @param INode $node
+		 *
+		 * @return string
+		 */
+		public function content(INode $node): string;
+
+		/**
+		 * generate close tag only for the given node
+		 *
+		 * @param INode    $node
+		 * @param int|null $level
 		 *
 		 * @return string
 		 */

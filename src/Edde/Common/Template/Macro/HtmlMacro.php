@@ -21,15 +21,15 @@
 		 * @inheritdoc
 		 */
 		public function onEnter(INode $node, \Iterator $iterator, ...$parameters) {
-			echo sprintf("%s", $this->htmlGenerator->open($node));
+			echo $this->htmlGenerator->open($node);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function onNode(INode $node, \Iterator $iterator, ...$parameters) {
-			if (($value = trim((string)$node->getValue())) !== '') {
-				echo $value;
+			if (($content = $this->htmlGenerator->content($node)) !== '') {
+				echo $content;
 				return;
 			}
 			parent::onNode($node, $iterator, ...$parameters);
@@ -39,6 +39,6 @@
 		 * @inheritdoc
 		 */
 		public function onLeave(INode $node, \Iterator $iterator, ...$parameters) {
-			echo sprintf("%s\n", $this->htmlGenerator->close($node));
+			echo $this->htmlGenerator->close($node) . "\n";
 		}
 	}

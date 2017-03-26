@@ -6,13 +6,13 @@
 	use Edde\Api\Html\IHtmlGenerator;
 	use Edde\Api\Node\IAttributeList;
 	use Edde\Api\Node\INode;
+	use Edde\Common\Node\AbstractTreeTraversal;
 	use Edde\Common\Node\NodeIterator;
-	use Edde\Common\Object;
 
 	/**
 	 * Common html5 generator.
 	 */
-	class Html5Generator extends Object implements IHtmlGenerator {
+	class Html5Generator extends AbstractTreeTraversal implements IHtmlGenerator {
 		/**
 		 * @inheritdoc
 		 */
@@ -52,10 +52,7 @@
 		 */
 		public function generate(INode $root): string {
 			ob_start();
-			foreach (NodeIterator::recursive($root, true) as $node) {
-				echo $this->open($node);
-				echo $this->close($node);
-			}
+			$this->traverse($root, NodeIterator::recursive($root));
 			return ob_get_clean();
 		}
 
@@ -87,6 +84,13 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function content(INode $node): string {
+			return trim((string)$node->getValue());
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function close(INode $node, int $level = null): string {
 			switch ($node->getName()) {
 				case 'meta':
@@ -98,5 +102,30 @@
 			$content = $node->isLeaf() === false ? str_repeat("\t", $level?? $node->getLevel()) : '';
 			$content .= '</' . $node->getName() . '>';
 			return $content;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function enter(INode $node, \Iterator $iterator, ...$parameters) {
+			echo $this->open($node);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function node(INode $node, \Iterator $iterator, ...$parameters) {
+			if (($content = $this->content($node)) !== '') {
+				echo $content;
+				return;
+			}
+			parent::node($node, $iterator, ...$parameters);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function leave(INode $node, \Iterator $iterator, ...$parameters) {
+			echo $this->close($node);
 		}
 	}
