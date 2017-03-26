@@ -73,7 +73,15 @@
 		 * ability to search for assets (resources) based on the current context.
 		 */
 		IResourceProvider::class => IContext::class,
+		/**
+		 * This is quite magical, but local loader file should be able to override services defined by default, thus
+		 * it must be after application dependency definitions.
+		 */
 	], is_array($local = @include $local) ? $local : [], [
+		/**
+		 * This stranger here is last, because it's canHandle method is able to kill a lot of dependencies and
+		 * create not so much nice surprises. Thus, it must be last as kind of dependency fallback.
+		 */
 		new ClassFactory(),
 	]), [
 		/**
