@@ -14,7 +14,7 @@
 		 */
 		public function inline(IMacro $source, ICompiler $compiler, \Iterator $iterator, INode $node, string $name, $value = null) {
 			$source->on(self::EVENT_POST_ENTER, function () use ($value) {
-				$this->macro($value);
+				$this->macro($this->delimite($value));
 			});
 		}
 
@@ -26,6 +26,6 @@
 		}
 
 		protected function macro($value) {
-			echo '<?php $this->snippet(' . $this->delimite($value) . ', $context, null, $context[\'.current\']); ?>';
+			echo '<?php $this->snippet(' . $value . ', $context, null, $context[\'.current\']); ?>';
 		}
 	}
