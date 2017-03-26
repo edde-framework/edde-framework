@@ -75,7 +75,7 @@
 				}
 			}
 			if ($this->defaultRequest) {
-				$this->defaultResponseHandler ? $this->responseManager->registerResponseHandler($this->defaultResponseHandler) : null;
+				$this->defaultResponseHandler ? $this->responseManager->setResponseHandler($this->defaultResponseHandler) : null;
 				return $this->defaultRequest;
 			}
 			throw new BadRequestException('Cannot handle current application request.' . (empty($this->routerList) ? ' There are no registered routers.' : ''));

@@ -24,7 +24,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function registerResponseHandler(IResponseHandler $responseHandler = null): IResponseManager {
+		public function setResponseHandler(IResponseHandler $responseHandler = null): IResponseManager {
 			$this->responseHandler = $responseHandler;
 			return $this;
 		}

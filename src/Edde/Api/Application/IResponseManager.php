@@ -8,13 +8,14 @@
 	 */
 	interface IResponseManager extends IResponseHandler {
 		/**
-		 * who will take care about response when execute() is called?
+		 * who will take care about response when execute() is called? If null is provided, response manager itself will hold
+		 * basic output
 		 *
 		 * @param IResponseHandler $responseHandler
 		 *
 		 * @return IResponseManager
 		 */
-		public function registerResponseHandler(IResponseHandler $responseHandler = null): IResponseManager;
+		public function setResponseHandler(IResponseHandler $responseHandler = null): IResponseManager;
 
 		/**
 		 * is there already some response?

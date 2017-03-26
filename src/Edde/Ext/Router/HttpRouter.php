@@ -34,7 +34,7 @@
 				return null;
 			}
 			list($control, $action) = explode('.', $parameterList['action']);
-			$this->responseManager->registerResponseHandler($this->container->create(HttpResponseHandler::class));
+			$this->responseManager->setResponseHandler($this->container->create(HttpResponseHandler::class));
 			return new Request($control, 'action' . StringUtils::toCamelCase($action), $parameterList);
 		}
 	}
