@@ -68,15 +68,15 @@
 							continue;
 						}
 						try {
-							$file = (string)$this->resourceProvider->getResource($file);
+							$file = $this->resourceProvider->getResource($file);
 						} catch (UnknownResourceException $exception) {
 							try {
-								$file = FileUtils::realpath($resourcePath . '/' . $path);
+								$file = new File(FileUtils::realpath($resourcePath . '/' . $path));
 							} catch (RealPathException $exception) {
 								throw new WebException(sprintf('Stylesheet [%s] requested resource [%s] which is not available.', $source, $file), 0, $exception);
 							}
 						}
-						$assetFile = $this->assetStorage->store(new File($file));
+						$assetFile = $this->assetStorage->store($file);
 						$current = str_replace($item, ($pathList[$path] = $assetFile->getRelativePath()), $current);
 					}
 					$content[] = $current;

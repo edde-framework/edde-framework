@@ -36,7 +36,7 @@
 			switch ($name) {
 				case'switch':
 					$source->on(self::EVENT_PRE_ENTER, function () use ($value) {
-						$this->macroOpenSwitch($value);
+						$this->macroOpenSwitch($this->delimite($value));
 					});
 					$source->on(self::EVENT_POST_LEAVE, function () {
 						$this->macroCloseSwitch();
@@ -52,7 +52,7 @@
 						self::EVENT_PRE_LEAVE,
 					];
 					$source->on($events[0], function () use ($value) {
-						$this->macroOpenCase($value);
+						$this->macroOpenCase($this->delimite($value));
 					});
 					$source->on($events[1], function () {
 						$this->macroCloseCase();
@@ -67,10 +67,10 @@
 		protected function onEnter(INode $node, \Iterator $iterator, ...$parameters) {
 			switch ($node->getName()) {
 				case 'switch':
-					$this->macroOpenSwitch($node->getAttribute('src'));
+					$this->macroOpenSwitch($this->attribute($node, 'src'));
 					break;
 				case 'case':
-					$this->macroOpenCase($node->getAttribute('value'));
+					$this->macroOpenCase($this->attribute($node, 'value'));
 					break;
 			}
 		}
@@ -90,7 +90,7 @@
 		}
 
 		protected function macroOpenSwitch($value) {
-			echo '<?php $' . ($switch = 'switch_' . sha1((string)$this->switch->count())) . ' = ' . $this->delimite($value) . '; ?>';
+			echo '<?php $' . ($switch = 'switch_' . sha1((string)$this->switch->count())) . ' = ' . $value . '; ?>';
 			$this->switch->push($switch);
 		}
 
