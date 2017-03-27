@@ -5,6 +5,7 @@
 
 	use Edde\Api\Application\ApplicationException;
 	use Edde\Api\Application\IRequest;
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Converter\IContent;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Common\Object;
@@ -13,7 +14,7 @@
 	 * Application request is responsible for the exact action execution in the application, usually invoking
 	 * some control and executing method on it.
 	 */
-	class Request extends Object implements IRequest {
+	class Request extends Object implements IRequest, ILazyInject {
 		use LazyConverterManagerTrait;
 		/**
 		 * @var IContent
@@ -92,6 +93,7 @@
 				throw new ApplicationException('There is no body with current application request.');
 			}
 			if ($targetList) {
+				$this->converterManager->setup();
 				return $this->converterManager->content($this->content, $targetList)
 					->convert();
 			}

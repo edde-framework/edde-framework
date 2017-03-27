@@ -7,6 +7,7 @@
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\LazyTemplateDirectoryTrait;
+	use Edde\Api\Template\MacroException;
 	use Edde\Common\Node\SkipException;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Template\AbstractMacro;
@@ -48,8 +49,9 @@
 		 * @param string|null $name
 		 *
 		 * @return string
+		 * @throws MacroException
 		 */
 		protected function getSnippetFile(INode $node, string $name = null): string {
-			return StringUtils::webalize($name ?? (string)$node->getAttribute('name')) . '.php';
+			return StringUtils::webalize($name ?? (string)$this->attribute($node, 'name')) . '.php';
 		}
 	}

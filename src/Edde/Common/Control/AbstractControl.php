@@ -111,6 +111,13 @@
 		}
 
 		/**
+		 * @inheritdoc
+		 */
+		public function getContent(string $target = 'array') {
+			return $this->request->getContent([$target]);
+		}
+
+		/**
 		 * when handle method does not exists, this generic method will be executed
 		 *
 		 * @param string $action

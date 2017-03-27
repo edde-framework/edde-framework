@@ -57,6 +57,15 @@
 		public function getAction(): string;
 
 		/**
+		 * request content of the request converted to the target type
+		 *
+		 * @param string $target
+		 *
+		 * @return mixed
+		 */
+		public function getContent(string $target = 'array');
+
+		/**
 		 * traverse through whole control tree
 		 *
 		 * @param bool $self === true, include current control too

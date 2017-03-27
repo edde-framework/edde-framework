@@ -35,6 +35,11 @@
 			}
 			list($control, $action) = explode('.', $parameterList['action']);
 			$this->responseManager->setResponseHandler($this->container->create(HttpResponseHandler::class));
-			return new Request($control, 'action' . StringUtils::toCamelCase($action), $parameterList);
+			return $this->container->create(Request::class, [
+				$control,
+				'action' . StringUtils::toCamelCase($action),
+				$parameterList,
+				$this->httpRequest->getContent(),
+			], __METHOD__);
 		}
 	}

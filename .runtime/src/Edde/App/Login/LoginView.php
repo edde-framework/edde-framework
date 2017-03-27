@@ -6,4 +6,7 @@
 	use Edde\Ext\Control\AbstractTemplateControl;
 
 	class LoginView extends AbstractTemplateControl {
+		public function actionHandleLogin() {
+			$body = $this->getContent();
+		}
 	}

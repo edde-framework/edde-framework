@@ -19,7 +19,10 @@
 		 */
 		public function config($instance) {
 			parent::config($instance);
-			$instance->setDefaultRequest(new Request(IndexView::class, 'actionIndex'), $this->container->create(HttpResponseHandler::class, [], __METHOD__));
+			$instance->setDefaultRequest($this->container->create(Request::class, [
+				IndexView::class,
+				'actionIndex',
+			], __METHOD__), $this->container->create(HttpResponseHandler::class, [], __METHOD__));
 			$instance->registerRouter(SimpleHttpRouter::class, [['Edde\\App']]);
 			$instance->registerRouter(RestRouter::class);
 		}
