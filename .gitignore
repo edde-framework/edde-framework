@@ -5,3 +5,4 @@
 *.pid
 *.cache
 **/temp/
+/.runtime/.assets/templates/

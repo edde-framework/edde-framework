@@ -44,6 +44,7 @@
 				'p',
 				'input',
 				'button',
+				'script',
 			];
 		}
 
