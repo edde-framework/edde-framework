@@ -6,6 +6,9 @@ var MiniDiff = {
 	Utils: {
 		selector: function (selector) {
 			return document.querySelector(selector);
+		},
+		generate: function (node) {
+			// https://github.com/fczbkk/css-selector-generator
 		}
 	},
 	Commands: {
