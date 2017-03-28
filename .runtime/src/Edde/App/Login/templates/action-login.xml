@@ -1,5 +1,5 @@
 <div class="login">
 	<input name="login"/>
 	<input name="password"/>
-	<button type="button" action="handle-login">login</button>
+	<button type="button" action="handle-login" bind=".login">login</button>
 </div>

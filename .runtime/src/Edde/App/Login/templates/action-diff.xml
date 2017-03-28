@@ -2,7 +2,13 @@
 	<div class="root"/>
 	<script type="text/javascript">
 		var commandList = [
-		{'command': 'add-node', 'parameter-list': []}
+		{'command': 'add-node', 'path': '.root', 'node': 'div', 'text': 'muhahaha'},
+		{'command': 'add-class', 'class': 'foo bar'},
+		{'command': 'remove-node', 'path': '.root .foo'},
+		{'command': 'add-node', 'path': '.root', 'node': 'div', 'text': 'another muhaha'},
+		{'command': 'add-class', 'class': 'new one'},
+		{'command': 'remove-class', 'class': 'new'},
+		{'command': 'set-text', 'path': '.one', 'text': 'updated text'},
 		];
 		MiniDiff.patch(commandList, Sizzle('.root')[0]);
 	</script>
