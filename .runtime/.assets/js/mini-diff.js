@@ -3,10 +3,15 @@
  * pain.
  */
 var MiniDiff = {
+	Utils: {
+		selector: function (selector) {
+			return document.querySelector(selector);
+		}
+	},
 	Commands: {
 		'current': null,
 		'add-node': function (command) {
-			var root = command.path ? Sizzle(command.path)[0] : this.current;
+			var root = command.path ? this.Utils.selector(command.path) : this.current;
 			var node = this.current = document.createElement(command.node);
 			if (command.text) {
 				node.appendChild(document.createTextNode(command.text));
@@ -14,15 +19,15 @@ var MiniDiff = {
 			root.appendChild(node);
 		},
 		'set-text': function (command) {
-			var root = command.path ? Sizzle(command.path)[0] : this.current;
+			var root = command.path ? this.Utils.selector(command.path) : this.current;
 			root.innerText = command.text;
 		},
 		'remove-node': function (command) {
-			var root = command.path ? Sizzle(command.path)[0] : this.current;
+			var root = command.path ? this.Utils.selector(command.path) : this.current;
 			root.parentNode.removeChild(root);
 		},
 		'add-class': function (command) {
-			var root = command.path ? Sizzle(command.path)[0] : this.current;
+			var root = command.path ? this.Utils.selector(command.path) : this.current;
 			var nameList = command.class.split(' ');
 			var length = nameList.length;
 			for (var i = 0; i < length; i++) {
@@ -30,7 +35,7 @@ var MiniDiff = {
 			}
 		},
 		'remove-class': function (command) {
-			var root = command.path ? Sizzle(command.path)[0] : this.current;
+			var root = command.path ? this.Utils.selector(command.path) : this.current;
 			var nameList = command.class.split(' ');
 			var length = nameList.length;
 			for (var i = 0; i < length; i++) {
