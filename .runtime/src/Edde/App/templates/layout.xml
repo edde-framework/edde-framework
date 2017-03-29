@@ -9,6 +9,7 @@
 			<js src="edde.common.js"/>
 			<js src="edde.mini-diff.js"/>
 			<js src="edde.pickup.js"/>
+			<js src="layout.js"/>
 		</minify-js>
 		<minify-css>
 			<css src="normalize.css"/>
