@@ -6,7 +6,9 @@
 		<minify-js>
 			<js src="jquery-3.2.0.min.js"/>
 			<js src="css-selector-generator.min.js"/>
+			<js src="edde.common.js"/>
 			<js src="edde.mini-diff.js"/>
+			<js src="edde.pickup.js"/>
 		</minify-js>
 		<minify-css>
 			<css src="normalize.css"/>

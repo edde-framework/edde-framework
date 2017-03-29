@@ -11,6 +11,6 @@
 		{'command': 'set-text', 'path': '.one', 'text': 'updated text'},
 		{'command': 'add-node', 'node': 'div', 'text': 'submode'},
 		];
-		MiniDiff.patch(commandList, Sizzle('.root')[0]);
+		Edde.MiniDiff.patch(commandList, $('.root'));
 	</script>
 </node>

@@ -2,35 +2,27 @@
  * This is simple library build around simple diff protocol to apply changes to DOM tree without
  * pain.
  */
-var MiniDiff = {
-	Utils: {
-		selector: function (selector) {
-			return document.querySelector(selector);
-		},
-		generate: function (node) {
-			// https://github.com/fczbkk/css-selector-generator
-		}
-	},
+Edde.MiniDiff = {
+	current: null,
 	Commands: {
-		'current': null,
 		'add-node': function (command) {
-			var root = command.path ? this.Utils.selector(command.path) : this.current;
-			var node = this.current = document.createElement(command.node);
+			var root = command.path ? $(command.path).get(0) : Edde.MiniDiff.current;
+			var node = Edde.MiniDiff.current = document.createElement(command.node);
 			if (command.text) {
 				node.appendChild(document.createTextNode(command.text));
 			}
 			root.appendChild(node);
 		},
 		'set-text': function (command) {
-			var root = command.path ? this.Utils.selector(command.path) : this.current;
+			var root = command.path ? $(command.path).get(0) : Edde.MiniDiff.current;
 			root.innerText = command.text;
 		},
 		'remove-node': function (command) {
-			var root = command.path ? this.Utils.selector(command.path) : this.current;
+			var root = command.path ? $(command.path).get(0) : Edde.MiniDiff.current;
 			root.parentNode.removeChild(root);
 		},
 		'add-class': function (command) {
-			var root = command.path ? this.Utils.selector(command.path) : this.current;
+			var root = command.path ? $(command.path).get(0) : Edde.MiniDiff.current;
 			var nameList = command.class.split(' ');
 			var length = nameList.length;
 			for (var i = 0; i < length; i++) {
@@ -38,7 +30,7 @@ var MiniDiff = {
 			}
 		},
 		'remove-class': function (command) {
-			var root = command.path ? this.Utils.selector(command.path) : this.current;
+			var root = command.path ? $(command.path).get(0) : Edde.MiniDiff.current;
 			var nameList = command.class.split(' ');
 			var length = nameList.length;
 			for (var i = 0; i < length; i++) {
