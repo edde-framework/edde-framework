@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Container\IContainer;
