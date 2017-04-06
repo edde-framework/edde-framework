@@ -7,11 +7,12 @@
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Url\IUrl;
+	use Edde\Api\Url\UrlException;
 	use Edde\Common\Resource\Resource;
 	use Edde\Common\Strings\StringUtils;
 
 	/**
-	 * File class; this is just file. Simple goold old classic file. Really.
+	 * File class; this is just file. Simple good old classic file. Really.
 	 */
 	class File extends Resource implements IFile {
 		/**
@@ -38,6 +39,7 @@
 		 * @param string|null $base
 		 *
 		 * @throws FileException
+		 * @throws UrlException
 		 */
 		public function __construct($file, $base = null) {
 			parent::__construct($file instanceof IUrl ? $file : FileUtils::url($file), $base);
@@ -268,15 +270,36 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function lock(bool $exclusive = true): IFile {
+		public function match(string $match, bool $filename = true) {
+			return StringUtils::match($filename ? $this->getName() : $this->url->getAbsoluteUrl(), $match);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function lock(bool $exclusive = true, bool $block = true): IFile {
 			if ($this->isOpen()) {
-				throw new FileException(sprintf('File [%s] must be closed to use lock.', $this->getPath()));
+				throw new FileException(sprintf('File being lock must not be opened.'));
 			}
 			$exclusive ? $this->openForWrite() : $this->openForRead();
-			if (flock($this->getHandle(), $exclusive ? LOCK_EX : LOCK_SH) === false) {
+			if (flock($this->getHandle(), $exclusive ? (LOCK_EX | ($block ? 0 : LOCK_NB)) : LOCK_SH) === false) {
 				throw new FileException(sprintf('Cannot execute lock on file [%s].', $this->getPath()));
 			}
 			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function blockingLock(): IFile {
+			return $this->lock(true, true);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function nonBlockingLock(): IFile {
+			return $this->lock(true, false);
 		}
 
 		/**
@@ -286,13 +309,6 @@
 			fflush($handle = $this->getHandle());
 			flock($handle, LOCK_UN);
 			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function match(string $match, bool $filename = true) {
-			return StringUtils::match($filename ? $this->getName() : $this->url->getAbsoluteUrl(), $match);
 		}
 
 		/**
