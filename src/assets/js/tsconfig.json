@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"module": "amd",
+		"removeComments": true,
+		"sourceMap": true,
+		"allowUnreachableCode": false,
+		"alwaysStrict": true,
+		"newLine": "LF",
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"pretty": true,
+		"strictNullChecks": true,
+		"target": "es3",
+		"forceConsistentCasingInFileNames": true,
+		"outDir": "../../../.assets/js"
+	}
+}

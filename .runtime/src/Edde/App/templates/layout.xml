@@ -3,14 +3,15 @@
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		<title>Showcase Edde Application</title>
-		<minify-js>
-			<js src="jquery-3.2.0.min.js"/>
-			<js src="css-selector-generator.min.js"/>
-			<js src="edde.common.js"/>
-			<js src="edde.mini-diff.js"/>
-			<js src="edde.pickup.js"/>
-			<js src="layout.js"/>
-		</minify-js>
+		<external-js>
+			<js src="/.assets/js/require.js"/>
+			<script type="text/javascript">
+				require.config({
+				baseUrl: '/.assets/js'
+				});
+				require(['application']);
+			</script>
+		</external-js>
 		<minify-css>
 			<css src="normalize.css"/>
 			<css src="foundation.min.css"/>

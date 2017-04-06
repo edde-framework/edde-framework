@@ -52,10 +52,11 @@
 					if ($this->minify) {
 						echo '<?php $jsCompiler->addResource($this->resourceProvider->getResource(' . $this->attribute($node, 'src') . ')); ?>' . "\n";
 					} else if ($this->external) {
-						echo $this->htmlGenerator->generate(new Node('script', null, [
-							'src'  => $this->attribute($node, 'src'),
+						echo $this->htmlGenerator->generate(new Node('script', null, array_merge([
+							'src'  => $this->attribute($node, 'src', true),
 							'type' => 'text/javascript',
-						]));
+						], $node->getAttributeList()
+							->array())));
 					} else {
 						throw new MacroException(sprintf('Minify/external js tag is not opened.'));
 					}
