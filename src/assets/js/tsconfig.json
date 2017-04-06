@@ -12,7 +12,10 @@
 		"strictNullChecks": true,
 		"target": "es3",
 		"forceConsistentCasingInFileNames": true,
-		"rootDir": "./src",
+		"skipDefaultLibCheck": true,
+		"skipLibCheck": true,
+		"rootDir": ".",
+		"baseUrl": ".",
 		"outDir": "../../../.runtime/.assets/js/Edde"
 	}
 }
