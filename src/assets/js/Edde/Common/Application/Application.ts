@@ -1,9 +1,7 @@
-import {IApplication} from "../../Api/Application/IApplication";
-import {CheckboxControl} from "../Control/CheckboxControl";
-
-export class Application implements IApplication {
+export class Application {
 	run() {
-		let checkbox = new CheckboxControl();
-		checkbox.update();
+		// let checkbox = new CheckboxControl();
+		// checkbox.update();
+		console.log('foobar');
 	}
 }
