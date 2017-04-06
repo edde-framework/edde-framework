@@ -12,6 +12,6 @@
 		"strictNullChecks": true,
 		"target": "es3",
 		"forceConsistentCasingInFileNames": true,
-		"outDir": "../../../.assets/js"
+		"outDir": "../../../.runtime/.assets/js/Edde"
 	}
 }
