@@ -1,3 +1,3 @@
-import {Application} from "./Common/Application/Application";
+import {Application} from "./Edde.Common.Application.Application";
 
 new Application().run();
