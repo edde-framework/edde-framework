@@ -1,6 +1,7 @@
 {
 	"compilerOptions": {
 		"module": "amd",
+		"moduleResolution": "node",
 		"removeComments": true,
 		"sourceMap": true,
 		"allowUnreachableCode": false,
@@ -14,8 +15,8 @@
 		"forceConsistentCasingInFileNames": true,
 		"skipDefaultLibCheck": true,
 		"skipLibCheck": true,
-		"rootDir": ".",
-		"baseUrl": ".",
+		"rootDir": "./Edde",
+		"baseUrl": "./Edde",
 		"outDir": "../../../.runtime/.assets/js/Edde"
 	}
 }

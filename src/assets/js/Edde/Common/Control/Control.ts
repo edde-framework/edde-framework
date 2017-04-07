@@ -1,4 +1,4 @@
-import {AbstractControl} from "./Edde.Common.Control.AbstractControl";
+import {AbstractControl} from "./AbstractControl";
 
 export class Control extends AbstractControl {
 	update(): void {

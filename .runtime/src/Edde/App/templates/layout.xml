@@ -9,7 +9,7 @@
 				require.config({
 				baseUrl: '/.assets/js'
 				});
-				require(['Edde/loader']);
+				require(['Edde/index']);
 			</script>
 		</external-js>
 		<minify-css>

@@ -1,5 +1,5 @@
-import {CheckboxControl} from "../Control/Edde.Common.Control.CheckboxControl";
-import {IApplication} from "../../Api/Edde.Api";
+import {IApplication} from "../../Api/Application/IApplication";
+import {CheckboxControl} from "../Control/CheckboxControl";
 
 export class Application implements IApplication {
 	run(): void {
