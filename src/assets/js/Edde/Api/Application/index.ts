@@ -1,1 +1,0 @@
-export {IApplication} from './IApplication';

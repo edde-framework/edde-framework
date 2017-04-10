@@ -6,9 +6,7 @@
 		<external-js>
 			<js src="/.assets/js/require.js"/>
 			<script type="text/javascript">
-				require.config({
-				baseUrl: '/.assets/js'
-				});
+				require.config({ baseUrl: '/.assets/js' });
 				require(['Edde/index']);
 			</script>
 		</external-js>

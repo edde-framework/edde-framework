@@ -5,11 +5,14 @@
 
 	use Edde\Api\Template\ITemplate;
 	use Edde\Common\Converter\AbstractConverter;
+	use Edde\Common\Converter\Content;
 
 	class TemplateConverter extends AbstractConverter {
 		public function __construct() {
 			$this->register(ITemplate::class, [
 				'text/html',
+				'text/*',
+				'*/*',
 				'string',
 			]);
 		}
@@ -23,8 +26,10 @@
 			$this->unsupported($content, $target, $content instanceof ITemplate);
 			switch ($target) {
 				case 'text/html':
+				case 'text/*':
+				case '*/*':
 				case 'string':
-					$content->execute();
+					return new Content($content, 'text/html');
 			}
 		}
 	}

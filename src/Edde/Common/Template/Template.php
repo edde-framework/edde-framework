@@ -75,4 +75,13 @@
 		public function __clone() {
 			$this->execute = null;
 		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function __toString(): string {
+			ob_start();
+			$this->execute();
+			return ob_get_clean();
+		}
 	}

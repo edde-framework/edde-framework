@@ -5,6 +5,7 @@
 
 	use Edde\Api\Application\IResponse;
 	use Edde\Api\Application\IResponseHandler;
+	use Edde\Api\Converter\IContent;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Http\LazyHttpRequestTrait;
 	use Edde\Api\Http\LazyHttpResponseTrait;
@@ -23,7 +24,7 @@
 				->getAcceptList();
 			$this->converterManager->setup();
 			$convertable = $this->converterManager->content($response, $targetList);
-			$this->httpResponse->setContent(new Content($convertable->convert(), $convertable->getTarget()));
+			$this->httpResponse->setContent((($content = $convertable->convert()) instanceof IContent) ? $content : new Content($convertable->convert(), $convertable->getTarget()));
 			$this->httpResponse->send();
 			return $this;
 		}

@@ -47,4 +47,11 @@
 		 * @return ITemplate
 		 */
 		public function execute(): ITemplate;
+
+		/**
+		 * support to string conversion
+		 *
+		 * @return string
+		 */
+		public function __toString(): string;
 	}
