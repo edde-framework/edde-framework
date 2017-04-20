@@ -7,6 +7,8 @@
 	use Edde\Api\Application\IResponse;
 	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Http\IResponse as IHttpResponse;
+	use Edde\Api\Http\LazyHostUrlTrait;
+	use Edde\Api\Http\LazyHttpRequestTrait;
 	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Api\Rest\IService;
 	use Edde\Common\Control\AbstractControl;
@@ -17,6 +19,8 @@
 	abstract class AbstractService extends AbstractControl implements IService {
 		use LazyResponseManagerTrait;
 		use LazyHttpResponseTrait;
+		use LazyHostUrlTrait;
+		use LazyHttpRequestTrait;
 		protected static $methodList = [
 			'GET',
 			'POST',
@@ -29,12 +33,12 @@
 		 * @inheritdoc
 		 */
 		public function link($generate, ...$parameterList) {
-			if ($generate !== static::class) {
-				return null;
-			}
+			$requestUrl = $this->httpRequest->getRequestUrl();
 			$url = Url::create($this->hostUrl->getAbsoluteUrl());
 			$url->setPath($generate);
-			$url->setQuery(array_merge($this->requestUrl->getQuery(), $parameterList));
+			$parameterList = array_merge($requestUrl->getParameterList(), $parameterList);
+			unset($parameterList['action']);
+			$url->setParameterList($parameterList);
 			return $url->getAbsoluteUrl();
 		}
 

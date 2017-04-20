@@ -4,6 +4,7 @@
 	namespace Edde\Common\Template\Macro;
 
 	use Edde\Api\Html\LazyHtmlGeneratorTrait;
+	use Edde\Api\Node\IAttributeList;
 	use Edde\Api\Node\INode;
 	use Edde\Common\Template\AbstractMacro;
 
@@ -21,6 +22,14 @@
 		 * @inheritdoc
 		 */
 		public function onEnter(INode $node, \Iterator $iterator, ...$parameters) {
+			$attributeList = $node->getAttributeList();
+			$attributes = [];
+			foreach ($attributeList as $k => $v) {
+				$attributes[$k] = $v instanceof IAttributeList ? $v : function () use ($v) {
+					return ($delimite = $this->delimite($v, true)) === $v ? htmlspecialchars($v, ENT_QUOTES) : '<?=' . $delimite . '?>';
+				};
+			}
+			$attributeList->put($attributes);
 			echo $this->htmlGenerator->open($node);
 		}
 
