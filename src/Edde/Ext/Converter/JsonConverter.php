@@ -5,7 +5,6 @@
 
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\File\IFile;
-	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
 	use Edde\Common\Converter\AbstractConverter;
@@ -16,8 +15,6 @@
 	 * Json converter from json encoded string to "something".
 	 */
 	class JsonConverter extends AbstractConverter {
-		use LazyHttpResponseTrait;
-
 		/**
 		 * Objective: shoot yourself in the foot using a computer language.
 		 *
@@ -51,16 +48,19 @@
 		 * Assembler: You try to shoot yourself in the foot, only to discover you must first invent the gun, the bullet, the trigger, and your foot.
 		 */
 		public function __construct() {
-			$this->register('array', [
+			$this->register([
+				'json',
+				'array',
+			], [
 				'json',
 				'http+json',
 				'application/json',
 				'http+application/json',
+				'*/*',
 			]);
 			$this->register([
 				'application/json',
 				'stream+application/json',
-				'json',
 			], [
 				'array',
 				'object',
@@ -81,7 +81,6 @@
 				case 'stream+application/json':
 					$convert = file_get_contents($convert);
 				case 'application/json':
-				case 'json':
 					$this->unsupported($convert, $target, $convert instanceof IFile || is_string($convert));
 					$convert = $convert instanceof IFile ? $convert->get() : $convert;
 					switch ($target) {
@@ -94,15 +93,12 @@
 							return NodeUtils::node(new Node(), json_decode($convert));
 					}
 					break;
+				case 'json':
 				case 'array':
 					switch ($target) {
-						case 'http+json':
-						case 'http+application/json':
-							$this->httpResponse->send();
-							echo $json = json_encode($convert);
-							return $json;
 						case 'json':
 						case 'application/json':
+						case '*/*':
 							return json_encode($convert);
 					}
 					break;

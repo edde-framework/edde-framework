@@ -75,11 +75,14 @@
 		 * @inheritdoc
 		 */
 		public function request(IRequest $request): IResponse {
-			$this->request = $request;
+			return $this->execute($request->getAction(), $this->request = $request);
+		}
+
+		protected function execute(string $method, IRequest $request) {
 			$argumentList = array_filter($parameterList = $request->getParameterList(), function ($key) {
 				return is_int($key);
 			}, ARRAY_FILTER_USE_KEY);
-			if (method_exists($this, $method = $request->getAction())) {
+			if (method_exists($this, $method)) {
 				/** @var $callback ICallback */
 				$callback = new Callback([
 					$this,

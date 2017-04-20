@@ -134,7 +134,7 @@
 		 * @param string $match
 		 * @param bool   $path === true, match only path
 		 *
-		 * @return array
+		 * @return array|null
 		 */
 		public function match(string $match, bool $path = true);
 

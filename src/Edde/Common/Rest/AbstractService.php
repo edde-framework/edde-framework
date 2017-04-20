@@ -25,6 +25,9 @@
 			'DELETE',
 		];
 
+		/**
+		 * @inheritdoc
+		 */
 		public function link($generate, ...$parameterList) {
 			if ($generate !== static::class) {
 				return null;
@@ -35,9 +38,12 @@
 			return $url->getAbsoluteUrl();
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function request(IRequest $request): IResponse {
 			$methodList = $this->getMethodList();
-			if (in_array($method = strtoupper($method = $request->getAction()), self::$methodList, true) === false) {
+			if (in_array($method = strtoupper($request->getAction()), self::$methodList, true) === false) {
 				$this->httpResponse->header('Allowed', $allowed = implode(', ', array_keys($methodList)));
 				$this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not supported; %s.', $method, empty($methodList) ? 'there are no supported methods' : 'available methods are [' . $allowed . ']'));
 				return null;
@@ -47,9 +53,12 @@
 				$this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not implemented; %s.', $method, empty($methodList) ? 'there are no available methods' : 'available methods are [' . $allowed . ']'));
 				return null;
 			}
-			return parent::request($request);
+			return $this->execute($methodList[$method], $request);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getMethodList(): array {
 			$methodList = [];
 			foreach (self::$methodList as $name) {
@@ -62,7 +71,7 @@
 
 		protected function error(int $code, string $message) {
 			$this->httpResponse->header('Date', gmdate('D, d M Y H:i:s T'));
-			$this->response(new StringResponse($message, ['string']), $code);
+			$this->response(new StringResponse($message, ['text/plain']), $code);
 		}
 
 		protected function response(IResponse $response, int $code = null) {

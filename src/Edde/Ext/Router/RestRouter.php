@@ -3,7 +3,6 @@
 
 	namespace Edde\Ext\Router;
 
-	use Edde\Api\Application\IRequest;
 	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\LazyContainerTrait;
@@ -50,9 +49,12 @@
 			foreach ($this->serviceList as $service) {
 				if ($service->match($requestUrl)) {
 					$this->responseManager->setResponseHandler($this->container->create(HttpResponseHandler::class));
-					/** @var $request IRequest */
-					$request = $this->container->create(Request::class, [$this->httpRequest->getContent()]);
-					return $request->registerActionHandler(get_class($service), $this->httpRequest->getMethod(), $requestUrl->getQuery());
+					return $this->container->create(Request::class, [
+						get_class($service),
+						$this->httpRequest->getMethod(),
+						$requestUrl->getParameterList(),
+						$this->httpRequest->getContent(),
+					], __METHOD__);
 				}
 			}
 			return null;
