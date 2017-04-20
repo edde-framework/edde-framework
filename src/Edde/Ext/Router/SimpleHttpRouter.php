@@ -1,11 +1,13 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Router;
 
+	use Edde\Api\Http\LazyHttpRequestTrait;
 	use Edde\Common\Strings\StringUtils;
 
 	class SimpleHttpRouter extends HttpRouter {
+		use LazyHttpRequestTrait;
 		/**
 		 * @var string[]
 		 */
@@ -24,11 +26,15 @@
 			$this->namespaceList = $namespaceList;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function createRequest() {
 			if ($this->runtime->isConsoleMode()) {
 				return null;
 			}
-			$pathList = $this->requestUrl->getPathList();
+			$requestUrl = $this->httpRequest->getRequestUrl();
+			$pathList = $requestUrl->getPathList();
 			if (empty($pathList)) {
 				return null;
 			}
@@ -38,7 +44,7 @@
 			}
 			list($control, $action) = $path;
 			$name = StringUtils::toCamelCase($control);
-			$parameterList = $this->requestUrl->getQuery();
+			$parameterList = $requestUrl->getParameterList();
 			foreach ($this->namespaceList as $namespace) {
 				$classList = [
 					sprintf('%s\\%s\\%sView', $namespace, $name, $name),
@@ -46,16 +52,16 @@
 				];
 				foreach ($classList as $class) {
 					if (class_exists($class)) {
-						$this->requestUrl->setPath('');
+						$requestUrl->setPath('');
 						$parameterList['action'] = $class . '.' . $action;
 						break 2;
 					}
 				}
 			}
-			if (isset($parameterList['action']) === false && isset($parameterList['handle']) === false) {
+			if (isset($parameterList['action']) === false) {
 				return null;
 			}
-			$this->requestUrl->setQuery($parameterList);
+			$requestUrl->setParameterList($parameterList);
 			return parent::createRequest();
 		}
 	}

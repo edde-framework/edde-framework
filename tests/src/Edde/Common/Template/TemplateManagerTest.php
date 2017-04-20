@@ -3,17 +3,28 @@
 
 	namespace Edde\Common\Template;
 
+	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\File\IRootDirectory;
-	use Edde\Api\Template\ITemplate;
+	use Edde\Api\Html\IHtmlGenerator;
+	use Edde\Api\Template\ICompiler;
+	use Edde\Api\Template\ITemplateDirectory;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Common\File\RootDirectory;
+	use Edde\Common\Html\Html5Generator;
+	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Converter\ConverterManagerConfigurator;
+	use Edde\Ext\Template\CompilerConfigurator;
 	use PHPUnit\Framework\TestCase;
 
+	require_once __DIR__ . '/assets/assets.php';
+
+	/**
+	 * @group wipp
+	 */
 	class TemplateManagerTest extends TestCase {
 		/**
 		 * @var IContainer
@@ -31,38 +42,43 @@
 		public function testException() {
 			$this->expectException(UnknownTemplateException::class);
 			$this->expectExceptionMessage('Requested template name [foo-bar] cannot be found; there are no template providers - please register instance of [Edde\Api\Template\ITemplateProvider].');
-			$this->templateManager->template([
-				'foo-bar',
-			]);
+			$this->templateManager->template('foo-bar');
 		}
 
 		public function testException2() {
 			$this->expectException(UnknownTemplateException::class);
 			$this->expectExceptionMessage('Requested template name [foo-bar] cannot be found.');
 			$this->templateManager->registerTemplateProvider($this->container->create(DirectoryTemplateProvider::class, [$this->rootDirectory]));
-			$this->templateManager->template([
-				'foo-bar',
-			]);
+			$this->templateManager->template('foo-bar');
 		}
 
 		public function testTemplate() {
 			$this->templateManager->registerTemplateProvider($this->container->create(DirectoryTemplateProvider::class, [$this->rootDirectory]));
 			$template = $this->templateManager->template([
-				'layout',
 				'here-is-hidden-content-of-the-fucking-template',
+				'layout',
+			],);
+			$template->execute([
+				null      => $context = new \SomeTemplateContext(),
+				'doo-bar' => $context,
 			]);
-			$file = $template->compile();
 		}
 
 		protected function setUp() {
 			$this->container = ContainerFactory::container([
-				IRootDirectory::class => $this->rootDirectory = new RootDirectory(__DIR__),
-				ITemplateManager::class => TemplateManager::class,
-				ITemplate::class => Template::class,
+				IRootDirectory::class     => $this->rootDirectory = new RootDirectory(__DIR__),
+				ITemplateDirectory::class => $tempDirectory = $this->rootDirectory->directory('temp'),
+				ITemplateManager::class   => TemplateManager::class,
+				ICompiler::class          => Compiler::class,
+				ICacheStorage::class      => InMemoryCacheStorage::class,
+				IHtmlGenerator::class     => Html5Generator::class,
 				new ClassFactory(),
 			], [
 				IConverterManager::class => ConverterManagerConfigurator::class,
+				ICompiler::class         => CompilerConfigurator::class,
 			]);
+			$tempDirectory->purge();
+			$this->rootDirectory->normalize();
 			$this->templateManager = $this->container->create(ITemplateManager::class);
 		}
 	}

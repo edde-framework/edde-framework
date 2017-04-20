@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Container;
 
-	use Edde\Api\Cache\ICache;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
@@ -23,13 +22,13 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function fetch(IContainer $container, string $id, ICache $cache) {
+		public function fetch(IContainer $container, string $id) {
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function push(IContainer $container, string $id, $instance, ICache $cache) {
+		public function push(IContainer $container, string $id, $instance) {
 		}
 
 		protected function parameters(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {

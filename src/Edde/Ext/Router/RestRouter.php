@@ -49,7 +49,7 @@
 			$requestUrl = $this->httpRequest->getRequestUrl();
 			foreach ($this->serviceList as $service) {
 				if ($service->match($requestUrl)) {
-					$this->responseManager->registerResponseHandler($this->container->create(HttpResponseHandler::class));
+					$this->responseManager->setResponseHandler($this->container->create(HttpResponseHandler::class));
 					/** @var $request IRequest */
 					$request = $this->container->create(Request::class, [$this->httpRequest->getContent()]);
 					return $request->registerActionHandler(get_class($service), $this->httpRequest->getMethod(), $requestUrl->getQuery());

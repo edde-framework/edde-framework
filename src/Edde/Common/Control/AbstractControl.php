@@ -3,9 +3,10 @@
 
 	namespace Edde\Common\Control;
 
+	use Edde\Api\Application\IRequest;
+	use Edde\Api\Application\IResponse;
 	use Edde\Api\Callback\ICallback;
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Control\ControlException;
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Node\INode;
@@ -21,15 +22,21 @@
 	 * Root implementation of all controls.
 	 */
 	abstract class AbstractControl extends Object implements IConfigurable, IControl {
-		use LazyContainerTrait;
 		use ConfigurableTrait;
 		/**
 		 * @var INode
 		 */
 		protected $node;
+		/**
+		 * When control is called by execute, the request is saved here for future reference; this basically
+		 * means that control cannot be reused, because it will loose reference to the original request.
+		 *
+		 * @var IRequest
+		 */
+		protected $request;
 
 		/**
-		 * @inheritdoc
+		 * @return INode
 		 */
 		public function getNode(): INode {
 			return $this->node;
@@ -38,38 +45,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getRoot(): IControl {
-			if ($this->node->isRoot()) {
-				return $this;
-			}
-			/** @var $rootNode INode */
-			$rootNode = $this->node->getRoot();
-			return $rootNode->getMeta('control');
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getParent() {
-			$parent = $this->node->getParent();
-			return $parent ? $parent->getMeta('control') : null;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function isLeaf(): bool {
-			return $this->node->isLeaf();
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function disconnect(): IControl {
-			if ($this->node->isRoot() === false) {
-				$this->node->getParent()
-					->removeNode($this->node);
-			}
+		public function addControl(IControl $control): IControl {
+			$this->node->addNode($control->getNode(), true);
 			return $this;
 		}
 
@@ -80,37 +57,6 @@
 			foreach ($controlList as $control) {
 				$this->addControl($control);
 			}
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function addControl(IControl $control): IControl {
-			$this->node->addNode($control->getNode(), true);
-			$control->attached($this);
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function attached(IControl $control): IControl {
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function isDirty(): bool {
-			return $this->node->getMeta('dirty', false);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function dirty(bool $dirty = true): IControl {
-			$this->node->setMeta('dirty', $dirty);
 			return $this;
 		}
 
@@ -128,69 +74,12 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function invalidate(): array {
-			$invalidList = [];
-			foreach ($this as $control) {
-				if ($control->isDirty()) {
-					$invalidList[] = $control;
-				}
-			}
-			return $invalidList;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function update(): IControl {
-			foreach ($this->getControlList() as $control) {
-				$control->update();
-			}
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 * @throws ControlException
-		 */
-		public function fill($fill): IControl {
-			$reflectionClass = new \ReflectionClass($this);
-			/** @noinspection ForeachSourceInspection */
-			foreach ($fill as $k => $v) {
-				if ($reflectionClass->hasProperty($k) === false) {
-					throw new ControlException(sprintf('Unknown property [%s::$%s] to fill.', static::class, $k));
-				}
-				$reflectionProperty = $reflectionClass->getProperty($k);
-				$reflectionProperty->setAccessible(true);
-				$reflectionProperty->setValue($this, $v);
-			}
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 * @throws ControlException
-		 */
-		public function handle(string $method, array $parameterList) {
-			$result = $this->execute($method, $parameterList);
-			$this->update();
-			return $result;
-		}
-
-		/**
-		 * @param string $method
-		 * @param array  $parameterList
-		 *
-		 * @return mixed
-		 * @throws ControlException
-		 */
-		protected function execute(string $method, array $parameterList) {
-			$argumentList = array_filter($parameterList, function ($key) {
+		public function request(IRequest $request): IResponse {
+			$this->request = $request;
+			$argumentList = array_filter($parameterList = $request->getParameterList(), function ($key) {
 				return is_int($key);
 			}, ARRAY_FILTER_USE_KEY);
-			if (isset($parameterList[null])) {
-				$this->fill($parameterList[null]);
-			}
-			if (method_exists($this, $method)) {
+			if (method_exists($this, $method = $request->getAction())) {
 				/** @var $callback ICallback */
 				$callback = new Callback([
 					$this,
@@ -205,13 +94,27 @@
 						if ($parameter->isOptional()) {
 							continue;
 						}
-						throw new ControlException(sprintf('Missing action parameter [%s::%s(, ...$%s, ...)].', static::class, $method, $parameter->getName()));
+						throw new MissingActionParameterException(sprintf('Missing action parameter [%s::%s(, ...$%s, ...)].', static::class, $method, $parameter->getName()));
 					}
 					$argumentList[] = $parameterList[$parameterName];
 				}
 				return $callback->invoke(...$argumentList);
 			}
 			return $this->action(StringUtils::recamel($method), $argumentList);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getAction(): string {
+			return StringUtils::recamel($this->request->getAction());
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getContent(string $target = 'array') {
+			return $this->request->getContent([$target]);
 		}
 
 		/**
@@ -223,19 +126,15 @@
 		 * @throws ControlException
 		 */
 		protected function action(string $action, array $parameterList) {
-			throw new ControlException(sprintf('Unknown handle method [%s]; to disable this exception, override [%s::%s()] method or implement [%s::%s()].', $action, static::class, __FUNCTION__, static::class, StringUtils::toCamelHump($action)));
-		}
-
-		public function createControl(string $control, ...$parameterList): IControl {
-			return $this->container->create($control, $parameterList, static::class);
+			throw new UnknownActionException(sprintf('Unknown handle method [%s]; to disable this exception, override [%s::%s()] method or implement [%s::%s()].', $action, static::class, __FUNCTION__, static::class, StringUtils::toCamelHump($action)));
 		}
 
 		/**
 		 * @inheritdoc
 		 * @throws NodeException
 		 */
-		public function getIterator() {
-			foreach (NodeIterator::recursive($this->node, true) as $node) {
+		public function traverse(bool $self = true) {
+			foreach (NodeIterator::recursive($this->node, $self) as $node) {
 				yield $node->getMeta('control');
 			}
 		}

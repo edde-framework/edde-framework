@@ -4,7 +4,6 @@
 	namespace Edde\Common;
 
 	use Closure;
-	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\EddeException;
@@ -100,40 +99,5 @@
 				return $this;
 			}
 			throw new EddeException(sprintf('Writing to the undefined/private/protected property [%s::$%s].', static::class, $name));
-		}
-
-		public function __sleep() {
-			static $allowed = [
-				\stdClass::class,
-				\SplStack::class,
-			];
-			$reflectionClass = new \ReflectionClass($this);
-			foreach ($reflectionClass->getProperties() as $reflectionProperty) {
-				$name = $reflectionProperty->getName();
-				if (isset($this->{$name}) === false) {
-					continue;
-				} else if (strpos($doc = is_string($doc = $reflectionProperty->getDocComment()) ? $doc : '', '@no-cache') !== false) {
-					unset($this->{$name});
-				} else if (is_object($this->{$name}) && $this->{$name} instanceof ICacheable === false && in_array($class = get_class($this->{$name}), $allowed) === false) {
-					if (strpos($doc, '@cache-optional') === false) {
-						throw new EddeException(sprintf('Trying to serialize object [%s] which is not cacheable.', $class));
-					}
-					unset($this->{$name});
-				}
-			}
-			return array_keys(get_object_vars($this));
-		}
-
-		public function __wakeup() {
-			foreach ($this->aInjectList as $property => $dependency) {
-				if ($dependency !== null) {
-					$this->{$property} = $dependency;
-				}
-			}
-			foreach ($this->aLazyInjectList as $property => $dependency) {
-				if ($this->{$property} === null) {
-					unset($this->{$property});
-				}
-			}
 		}
 	}

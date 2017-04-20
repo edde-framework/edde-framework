@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Node;
 
@@ -13,27 +13,12 @@
 		 *
 		 * @return $this
 		 */
-		public function setName($name);
+		public function setName(string $name);
 
 		/**
 		 * @return string
 		 */
 		public function getName();
-
-		/**
-		 * generate materialized path from node names
-		 *
-		 * @return INode
-		 */
-		public function getParent();
-
-		/**
-		 * @param bool $attributes include attribute names (e.g. [foo][bar], ....)
-		 * @param bool $meta       include meta names (e.g. (foo)(bar)
-		 *
-		 * @return string
-		 */
-		public function getPath($attributes = false, $meta = false);
 
 		/**
 		 * @param mixed $value
@@ -50,114 +35,80 @@
 		public function getValue($default = null);
 
 		/**
-		 * @param string $name
-		 * @param mixed  $value
+		 * return list of attributes for this node
 		 *
-		 * @return $this
+		 * @return IAttributeList
 		 */
-		public function setAttribute($name, $value);
+		public function getAttributeList(): IAttributeList;
 
 		/**
+		 * is the given attribute name present?
+		 *
 		 * @param string $name
 		 *
 		 * @return bool
 		 */
-		public function hasAttribute($name);
+		public function hasAttribute(string $name): bool;
 
 		/**
-		 * @param string     $name
-		 * @param mixed|null $default
-		 *
-		 * @return mixed
-		 */
-		public function getAttribute($name, $default = null);
-
-		/**
-		 * remove the given attribute from list
+		 * return attribute
 		 *
 		 * @param string $name
+		 * @param null   $default
+		 *
+		 * @return IAttributeList|mixed
+		 */
+		public function getAttribute(string $name, $default = null);
+
+		/**
+		 * set attribute value or attribute list as a namespaced attribute
+		 *
+		 * @param string               $name
+		 * @param IAttributeList|mixed $value
 		 *
 		 * @return INode
 		 */
-		public function removeAttribute(string $name): INode;
+		public function setAttribute(string $name, $value): INode;
 
 		/**
-		 * replace current attribute list by the given one
+		 * return list of meta data
 		 *
-		 * @param array $attributeList
-		 *
-		 * @return $this
+		 * @return IAttributeList
 		 */
-		public function setAttributeList(array $attributeList);
+		public function getMetaList(): IAttributeList;
 
 		/**
-		 * add the given attribute list to the current one (overriding same keys)
+		 * get meta from node
 		 *
-		 * @param array $attributeList
-		 *
-		 * @return $this
-		 */
-		public function addAttributeList(array $attributeList);
-
-		/**
-		 * has this node attributes with a given namespace
-		 *
-		 * @param string $namespace
-		 *
-		 * @return bool
-		 */
-		public function hasAttributeList(string $namespace): bool;
-
-		/**
-		 * @param string $namespace
-		 *
-		 * @return array
-		 */
-		public function getAttributeList(string $namespace = null): array;
-
-		public function removeAttributeList(string $namespace): INode;
-
-		/**
-		 * @param array $metaList
-		 *
-		 * @return $this
-		 */
-		public function setMetaList(array $metaList);
-
-		/**
-		 * @param array $metaList
-		 *
-		 * @return $this
-		 */
-		public function addMetaList(array $metaList);
-
-		/**
 		 * @param string $name
-		 * @param mixed  $value
+		 * @param null   $default
 		 *
-		 * @return $this
+		 * @return IAttributeList|mixed
 		 */
-		public function setMeta($name, $value);
+		public function getMeta(string $name, $default = null);
 
 		/**
-		 * @param string $name
+		 * @param string               $name
+		 * @param IAttributeList|mixed $value
 		 *
-		 * @return bool
+		 * @return INode
 		 */
-		public function hasMeta($name);
+		public function setMeta(string $name, $value): INode;
 
 		/**
-		 * @param string     $name
-		 * @param mixed|null $default
+		 * generate materialized path from node names
 		 *
-		 * @return mixed
+		 * @return INode|null
 		 */
-		public function getMeta($name, $default = null);
+		public function getParent();
 
 		/**
-		 * @return array
+		 * @param bool $attributes include attribute names (e.g. [foo][bar], ....)
+		 * @param bool $meta       include meta names (e.g. (foo)(bar)
+		 *
+		 * @return string
 		 */
-		public function getMetaList();
+		public function getPath($attributes = false, $meta = false);
 
 		/**
 		 * @return INode[]

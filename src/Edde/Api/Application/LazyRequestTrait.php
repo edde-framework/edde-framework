@@ -8,7 +8,6 @@
 	 */
 	trait LazyRequestTrait {
 		/**
-		 * @no-cache
 		 * @var IRequest
 		 */
 		protected $request;

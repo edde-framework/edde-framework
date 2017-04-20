@@ -27,7 +27,6 @@
 		 */
 		protected $namespace;
 		/**
-		 * @no-cache
 		 * @var ISession[]
 		 */
 		protected $sessionList = [];

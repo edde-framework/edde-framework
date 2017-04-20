@@ -3,7 +3,6 @@
 
 	namespace Edde\Ext\Container;
 
-	use Edde\Api\Cache\ICache;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 	use Edde\Common\Container\Dependency;
@@ -57,10 +56,16 @@
 			$this->cloneable = $cloneable;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function canHandle(IContainer $container, string $dependency): bool {
 			return $this->name === $dependency;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function dependency(IContainer $container, string $dependency = null): IDependency {
 			if ($this->instance) {
 				return new Dependency([], [], []);
@@ -68,10 +73,16 @@
 			return parent::dependency($container, $this->class);
 		}
 
-		public function fetch(IContainer $container, string $id, ICache $cache) {
+		/**
+		 * @inheritdoc
+		 */
+		public function fetch(IContainer $container, string $id) {
 			return $this->cloneable && $this->instance ? clone $this->instance : $this->instance;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
 			$this->instance ?: $this->instance = parent::execute($container, $this->parameterList, $dependency, $this->class);
 			return $this->cloneable ? clone $this->instance : $this->instance;

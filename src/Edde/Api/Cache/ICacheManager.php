@@ -1,9 +1,11 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Cache;
 
-	interface ICacheManager extends ICache {
+	use Edde\Api\Config\IConfigurable;
+
+	interface ICacheManager extends ICache, IConfigurable {
 		/**
 		 * register cache storage to a namespace, so if cache will be created with same namespace, the given cache storage will be used
 		 *
@@ -22,5 +24,5 @@
 		 *
 		 * @return ICache
 		 */
-		public function cache(string $namespace = null, ICacheStorage $cacheStorage = null): ICache;
+		public function createCache(string $namespace = null, ICacheStorage $cacheStorage = null): ICache;
 	}

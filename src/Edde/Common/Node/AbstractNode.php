@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Node;
 
@@ -90,7 +90,7 @@
 		 */
 		public function addNodeList($nodeList, bool $move = false) {
 			foreach ($nodeList as $node) {
-				$this->addNode($node, $move);
+				$this->addNode($node, $move, true);
 			}
 			return $this;
 		}

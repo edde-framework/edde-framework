@@ -5,3 +5,5 @@
 *.pid
 *.cache
 **/temp/
+/.runtime/.assets/templates/
+/.runtime/.assets/js/Edde/

@@ -8,7 +8,6 @@
 	 */
 	trait LazyHttpResponseTrait {
 		/**
-		 * @no-cache
 		 * @var IHttpResponse
 		 */
 		protected $httpResponse;

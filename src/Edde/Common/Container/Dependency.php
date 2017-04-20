@@ -1,20 +1,17 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Container;
 
-	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Reflection\IReflectionParameter;
-	use Edde\Common\Cache\CacheableTrait;
 	use Edde\Common\Object;
 
-	class Dependency extends Object implements IDependency, ICacheable {
-		use CacheableTrait;
-
-		protected $parameterList = [];
-		protected $injectList = [];
-		protected $lazyInjectList = [];
+	class Dependency extends Object implements IDependency {
+		protected $parameterList;
+		protected $injectList;
+		protected $lazyInjectList;
+		protected $configuratorList;
 
 		/**
 		 * A few days after Christmas, a mother was working in the kitchen listening to her young son playing with his new electric train in the living room.
@@ -27,22 +24,40 @@
 		 * @param IReflectionParameter[] $parameterList
 		 * @param IReflectionParameter[] $injectList
 		 * @param IReflectionParameter[] $lazyList
+		 * @param string[]               $configuratorList
 		 */
-		public function __construct(array $parameterList, array $injectList, array $lazyList) {
+		public function __construct(array $parameterList = [], array $injectList = [], array $lazyList = [], array $configuratorList = []) {
 			$this->parameterList = $parameterList;
 			$this->injectList = $injectList;
 			$this->lazyInjectList = $lazyList;
+			$this->configuratorList = $configuratorList;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getParameterList(): array {
 			return $this->parameterList;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getInjectList(): array {
 			return $this->injectList;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getLazyList(): array {
 			return $this->lazyInjectList;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getConfiguratorList(): array {
+			return $this->configuratorList;
 		}
 	}

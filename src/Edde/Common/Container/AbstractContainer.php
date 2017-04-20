@@ -3,42 +3,25 @@
 
 	namespace Edde\Common\Container;
 
-	use Edde\Api\Cache\ICache;
 	use Edde\Api\Config\IConfigurator;
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 	use Edde\Ext\Container\CallbackFactory;
 
 	abstract class AbstractContainer extends Object implements IContainer {
-		/**
-		 * @var ICache
-		 */
-		protected $cache;
+		use ConfigurableTrait;
 		/**
 		 * @var IFactory[]
 		 */
 		protected $factoryList = [];
 		/**
-		 * @var \Edde\Api\Config\IConfigurator[][]
+		 * @var IConfigurator[][]
 		 */
-		protected $configHandlerList = [];
-
-		/**
-		 * @param ICache $cache
-		 */
-		public function __construct(ICache $cache) {
-			$this->cache = $cache;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getCache(): ICache {
-			return $this->cache;
-		}
+		protected $configuratorList = [];
 
 		/**
 		 * @inheritdoc
@@ -66,18 +49,18 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function registerConfigHandler(string $name, \Edde\Api\Config\IConfigurator $configHandler): IContainer {
-			$this->configHandlerList[$name][] = $configHandler;
+		public function registerConfigurator(string $name, IConfigurator $configurator): IContainer {
+			$this->configuratorList[$name][] = $configurator;
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function registerConfigHandlerList(array $configHandlerList): IContainer {
-			$this->configHandlerList = [];
-			foreach ($configHandlerList as $name => $configHandler) {
-				$this->registerConfigHandler($name, $configHandler);
+		public function registerConfiguratorList(array $configuratorList): IContainer {
+			$this->configuratorList = [];
+			foreach ($configuratorList as $name => $configurator) {
+				$this->registerConfigurator($name, $configurator);
 			}
 			return $this;
 		}

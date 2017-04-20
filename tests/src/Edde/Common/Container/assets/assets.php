@@ -1,11 +1,9 @@
 <?php
 	declare(strict_types=1);
 
-	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Config\IConfigurator;
 	use Edde\Api\Container\LazyContainerTrait;
-	use Edde\Common\Cache\CacheableTrait;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
@@ -14,7 +12,7 @@
 		public function registerSomeething(string $something);
 	}
 
-	class FirstSomethingSetup extends AbstractConfigurator implements IConfigurator, ICacheable {
+	class FirstSomethingSetup extends AbstractConfigurator implements IConfigurator {
 		/**
 		 * @param ISomething $instance
 		 */
@@ -27,7 +25,7 @@
 		}
 	}
 
-	class AnotherSomethingSetup extends AbstractConfigurator implements IConfigurator, ICacheable {
+	class AnotherSomethingSetup extends AbstractConfigurator implements IConfigurator {
 		use LazyContainerTrait;
 
 		/**
@@ -40,10 +38,8 @@
 		}
 	}
 
-	class Something extends Object implements ISomething, IConfigurable, ICacheable {
+	class Something extends Object implements ISomething, IConfigurable {
 		use ConfigurableTrait;
-		use CacheableTrait;
-
 		public $someParameter;
 		public $anotherSomething;
 		public $injectedSomething;
@@ -68,9 +64,8 @@
 		}
 	}
 
-	class AnotherSomething extends Object implements IConfigurable, ICacheable {
+	class AnotherSomething extends Object implements IConfigurable {
 		use ConfigurableTrait;
-
 		public $init = 0;
 		public $warmup = 0;
 		public $config = 0;
@@ -103,16 +98,16 @@
 		}
 	}
 
-	class InjectedSomething extends Object implements ICacheable {
+	class InjectedSomething extends Object {
 	}
 
-	class LazySomething extends Object implements ICacheable {
+	class LazySomething extends Object {
 	}
 
-	class AnotherAnotherSomething extends Object implements ICacheable {
+	class AnotherAnotherSomething extends Object {
 	}
 
-	class ThisIsCleverManager extends Object implements ICacheable {
+	class ThisIsCleverManager extends Object {
 		/**
 		 * @var AnotherSomething
 		 */

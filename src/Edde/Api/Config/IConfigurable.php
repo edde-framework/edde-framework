@@ -8,13 +8,22 @@
 	 */
 	interface IConfigurable {
 		/**
+		 * register configurator
+		 *
+		 * @param IConfigurator $configurator
+		 *
+		 * @return $this
+		 */
+		public function addConfigurator(IConfigurator $configurator);
+
+		/**
 		 * register set of config handlers
 		 *
 		 * @param IConfigurator[] $configuratorList
 		 *
 		 * @return $this
 		 */
-		public function registerConfiguratorList(array $configuratorList);
+		public function setConfiguratorList(array $configuratorList);
 
 		/**
 		 * this method should be called after all dependencies are

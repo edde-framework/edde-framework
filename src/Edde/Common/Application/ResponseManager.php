@@ -24,9 +24,16 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function registerResponseHandler(IResponseHandler $responseHandler): IResponseManager {
+		public function setResponseHandler(IResponseHandler $responseHandler = null): IResponseManager {
 			$this->responseHandler = $responseHandler;
 			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function hasResponse(): bool {
+			return $this->response !== null;
 		}
 
 		/**

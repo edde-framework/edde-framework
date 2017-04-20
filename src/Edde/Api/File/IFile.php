@@ -21,9 +21,9 @@
 		public function getPath(): string;
 
 		/**
-		 * @return string
+		 * @return string|null
 		 */
-		public function getExtension(): string;
+		public function getExtension();
 
 		/**
 		 * return directory of this file
@@ -50,10 +50,32 @@
 		 * create file handle; if the file is not availble, exceptio nshould be thrown
 		 *
 		 * @param string $mode
+		 * @param bool   $exclusive if the file is already opened, exception should be thrown
 		 *
 		 * @return IFile
 		 */
-		public function open(string $mode): IFile;
+		public function open(string $mode, bool $exclusive = false): IFile;
+
+		/**
+		 * @param bool $exclusive
+		 *
+		 * @return IFile
+		 */
+		public function openForRead(bool $exclusive = false): IFile;
+
+		/**
+		 * @param bool $exclusive
+		 *
+		 * @return IFile
+		 */
+		public function openForWrite(bool $exclusive = false): IFile;
+
+		/**
+		 * @param bool $exclusive
+		 *
+		 * @return IFile
+		 */
+		public function openForAppend(bool $exclusive = false): IFile;
 
 		/**
 		 * @return bool
@@ -73,21 +95,6 @@
 		 * @return IFile
 		 */
 		public function close(): IFile;
-
-		/**
-		 * @return IFile
-		 */
-		public function openForRead(): IFile;
-
-		/**
-		 * @return IFile
-		 */
-		public function openForWrite(): IFile;
-
-		/**
-		 * @return IFile
-		 */
-		public function openForAppend(): IFile;
 
 		/**
 		 * read bunch of data
@@ -144,22 +151,6 @@
 		public function getSize(): float;
 
 		/**
-		 * create a file and do an exclusive lock or lock an existing file; if lock cannot be acquired, exception should be thrown
-		 *
-		 * @param bool $exclusive
-		 *
-		 * @return IFile
-		 */
-		public function lock(bool $exclusive = true): IFile;
-
-		/**
-		 * unlock the file or throw an exception if file is not locked
-		 *
-		 * @return IFile
-		 */
-		public function unlock(): IFile;
-
-		/**
 		 * run regexp against file path
 		 *
 		 * @param string $match
@@ -168,4 +159,35 @@
 		 * @return mixed
 		 */
 		public function match(string $match, bool $filename = true);
+
+		/**
+		 * create a file and do an exclusive lock or lock an existing file; if lock cannot be acquired, exception should be thrown
+		 *
+		 * @param bool $exclusive
+		 * @param bool $block
+		 *
+		 * @return IFile
+		 */
+		public function lock(bool $exclusive = true, bool $block = true): IFile;
+
+		/**
+		 * blocking lock is by default exclusive
+		 *
+		 * @return IFile
+		 */
+		public function blockingLock(): IFile;
+
+		/**
+		 * non blocking lock is be default exclusive
+		 *
+		 * @return IFile
+		 */
+		public function nonBlockingLock(): IFile;
+
+		/**
+		 * unlock the file or throw an exception if file is not locked
+		 *
+		 * @return IFile
+		 */
+		public function unlock(): IFile;
 	}

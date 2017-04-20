@@ -1,22 +1,15 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Container;
 
-	use Edde\Api\Cache\ICache;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Config\IConfigurator;
 
 	/**
 	 * Implementation of Dependency Injection Container.
 	 */
-	interface IContainer {
-		/**
-		 * if container is using cache, it must be configurable; do not use this as cache solution!
-		 *
-		 * @return ICache
-		 */
-		public function getCache(): ICache;
-
+	interface IContainer extends IConfigurable {
 		/**
 		 * @param IFactory $factory
 		 * @param string   $id
@@ -38,20 +31,20 @@
 		 * register a new config handler for the given dependency
 		 *
 		 * @param string        $name
-		 * @param IConfigurator $configHandler
+		 * @param IConfigurator $configurator
 		 *
 		 * @return IContainer
 		 */
-		public function registerConfigHandler(string $name, IConfigurator $configHandler): IContainer;
+		public function registerConfigurator(string $name, IConfigurator $configurator): IContainer;
 
 		/**
 		 * register list of config handlers bound to the given factories (key is factory name, value is config handler)
 		 *
-		 * @param IConfigurator[] $configHandlerList
+		 * @param IConfigurator[] $configuratorList
 		 *
 		 * @return IContainer
 		 */
-		public function registerConfigHandlerList(array $configHandlerList): IContainer;
+		public function registerConfiguratorList(array $configuratorList): IContainer;
 
 		/**
 		 * get factory which is able to create the given dependency

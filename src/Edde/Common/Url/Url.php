@@ -3,13 +3,12 @@
 
 	namespace Edde\Common\Url;
 
-	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Url\IUrl;
+	use Edde\Api\Url\UrlException;
 	use Edde\Common\Object;
 	use Edde\Common\Strings\StringUtils;
-	use League\Uri\Parser;
 
-	class Url extends Object implements ICacheable, IUrl {
+	class Url extends Object implements IUrl {
 		/**
 		 * @var string
 		 */
@@ -44,35 +43,26 @@
 		 */
 		protected $fragment = '';
 
-		static public function create($url = null): IUrl {
-			if ($url instanceof IUrl) {
-				return $url;
-			}
-			$self = new static();
-			if ($url !== null) {
-				$self->parse((string)$url);
-			}
-			return $self;
-		}
-
 		/**
 		 * @inheritdoc
 		 */
 		public function parse(string $url) {
-			$parsed = (new Parser())($url);
+			if (($parsed = parse_url($url)) === false) {
+				throw new UrlException(sprintf('Malformed URL [%s].', $url));
+			}
 			if (isset($parsed['query'])) {
 				parse_str($parsed['query'], $parsed['parameter-list']);
 			}
 			static $copy = [
-				'scheme' => 'setScheme',
-				'user' => 'setUser',
-				'pass' => 'setPassword',
-				'host' => 'setHost',
-				'port' => 'setPort',
-				'path' => 'setPath',
-				'query' => 'setQuery',
+				'scheme'         => 'setScheme',
+				'user'           => 'setUser',
+				'pass'           => 'setPassword',
+				'host'           => 'setHost',
+				'port'           => 'setPort',
+				'path'           => 'setPath',
+				'query'          => 'setQuery',
 				'parameter-list' => 'setParameterList',
-				'fragment' => 'setFragment',
+				'fragment'       => 'setFragment',
 			];
 			foreach ($copy as $item => $func) {
 				if (isset($parsed[$item])) {
@@ -129,15 +119,8 @@
 		 * @inheritdoc
 		 */
 		public function setPath(string $path): IUrl {
-			$this->path = ltrim($path, '/');
+			$this->path = $path;
 			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function __toString() {
-			return $this->getAbsoluteUrl();
 		}
 
 		/**
@@ -161,9 +144,9 @@
 				$url .= ':' . $port;
 			}
 			$url .= '/' . ltrim($this->getPath(), '/');
-			$query = $this->getQuery();
+			$query = $this->getParameterList();
 			if (empty($query) === false) {
-				$url .= '?' . http_build_query($this->getQuery());
+				$url .= '?' . http_build_query($query);
 			}
 			if (($fragment = $this->getFragment()) !== '') {
 				$url .= '#' . $fragment;
@@ -296,5 +279,23 @@
 		 */
 		public function match(string $match, bool $path = true) {
 			return StringUtils::match($path ? $this->getPath() : $this->getAbsoluteUrl(), $match);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function __toString() {
+			return $this->getAbsoluteUrl();
+		}
+
+		static public function create($url = null): IUrl {
+			if ($url instanceof IUrl) {
+				return $url;
+			}
+			$self = new static();
+			if ($url !== null) {
+				$self->parse((string)$url);
+			}
+			return $self;
 		}
 	}

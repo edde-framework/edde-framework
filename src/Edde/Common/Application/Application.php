@@ -4,36 +4,29 @@
 	namespace Edde\Common\Application;
 
 	use Edde\Api\Application\ApplicationException;
-	use Edde\Api\Application\LazyRequestTrait;
-	use Edde\Api\Application\LazyResponseManagerTrait;
+	use Edde\Api\Application\IRequest;
+	use Edde\Api\Application\IResponse;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Control\IControl;
-	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Log\LazyLogServiceTrait;
 
 	/**
 	 * Default application implementation.
 	 */
 	class Application extends AbstractApplication {
-		use LazyRequestTrait;
 		use LazyContainerTrait;
-		use LazyConverterManagerTrait;
-		use LazyResponseManagerTrait;
 		use LazyLogServiceTrait;
 
 		/**
 		 * @inheritdoc
-		 * @throws \Exception
 		 */
-		public function run() {
+		public function execute(IRequest $request): IResponse {
 			try {
-				list($class, $method, $parameterList) = $this->request->getCurrent();
-				if ((($control = $this->container->create($class, [], __METHOD__)) instanceof IControl) === false) {
+				/** @var $control IControl */
+				if ((($control = $this->container->create($class = $request->getControl(), [], __METHOD__)) instanceof IControl) === false) {
 					throw new ApplicationException(sprintf('Route class [%s] is not instance of [%s].', $class, IControl::class));
 				}
-				$result = $control->handle($method, $parameterList);
-				$this->responseManager->execute();
-				return $result;
+				return $control->request($request);
 			} catch (\Exception $exception) {
 				$this->logService->exception($exception, ['edde']);
 				throw $exception;

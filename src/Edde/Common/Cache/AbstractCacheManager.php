@@ -26,6 +26,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function invalidate(): ICache {
 			parent::invalidate();
 			foreach ($this->cacheStorageList as $cacheStorage) {
@@ -37,7 +40,9 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function cache(string $namespace = null, ICacheStorage $cacheStorage = null): ICache {
-			return (new Cache($cacheStorage ?: ($this->cacheStorageList[$namespace] ?? $this->cacheStorage)))->setNamespace($this->namespace . $namespace);
+		public function createCache(string $namespace = null, ICacheStorage $cacheStorage = null): ICache {
+			$cacheStorage = $cacheStorage ?: ($this->cacheStorageList[$namespace] ?? $this->cacheStorage);
+			$cacheStorage->setup();
+			return (new Cache($cacheStorage))->setNamespace($this->namespace . $namespace);
 		}
 	}

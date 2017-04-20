@@ -6,13 +6,14 @@
 	use Edde\Api\Acl\IAcl;
 	use Edde\Api\Acl\IAclManager;
 	use Edde\Api\Application\IApplication;
+	use Edde\Api\Application\IContext;
 	use Edde\Api\Application\IRequest;
+	use Edde\Api\Application\IRequestQueue;
 	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Asset\IAssetDirectory;
 	use Edde\Api\Asset\IAssetStorage;
 	use Edde\Api\Asset\IStorageDirectory;
 	use Edde\Api\Cache\ICache;
-	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Cache\ICacheStorage;
@@ -22,7 +23,6 @@
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Crate\ICrate;
-	use Edde\Api\Crate\ICrateDirectory;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Crypt\ICryptEngine;
 	use Edde\Api\Database\IDriver;
@@ -30,7 +30,7 @@
 	use Edde\Api\EddeException;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\File\ITempDirectory;
-	use Edde\Api\Html\ITemplateDirectory;
+	use Edde\Api\Html\IHtmlGenerator;
 	use Edde\Api\Http\Client\IHttpClient;
 	use Edde\Api\Http\IHostUrl;
 	use Edde\Api\Http\IHttpRequest;
@@ -42,6 +42,7 @@
 	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
 	use Edde\Api\Resource\IResourceManager;
+	use Edde\Api\Resource\IResourceProvider;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Api\Schema\ISchemaManager;
@@ -49,10 +50,10 @@
 	use Edde\Api\Session\ISessionDirectory;
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Storage\IStorage;
-	use Edde\Api\TemplateEngine\ICompiler;
-	use Edde\Api\TemplateEngine\IHelperSet;
-	use Edde\Api\TemplateEngine\IMacroSet;
-	use Edde\Api\TemplateEngine\ITemplateManager;
+	use Edde\Api\Template\ICompiler;
+	use Edde\Api\Template\ITemplate;
+	use Edde\Api\Template\ITemplateDirectory;
+	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
@@ -61,6 +62,7 @@
 	use Edde\Common\Acl\Acl;
 	use Edde\Common\Acl\AclManager;
 	use Edde\Common\Application\Application;
+	use Edde\Common\Application\RequestQueue;
 	use Edde\Common\Application\ResponseManager;
 	use Edde\Common\Asset\AssetDirectory;
 	use Edde\Common\Asset\AssetStorage;
@@ -71,12 +73,11 @@
 	use Edde\Common\Container\Container;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crate\Crate;
-	use Edde\Common\Crate\CrateDirectory;
 	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
 	use Edde\Common\File\TempDirectory;
-	use Edde\Common\Html\TemplateDirectory;
+	use Edde\Common\Html\Html5Generator;
 	use Edde\Common\Http\Client\HttpClient;
 	use Edde\Common\Http\HttpRequest;
 	use Edde\Common\Http\HttpResponse;
@@ -91,8 +92,10 @@
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Session\SessionDirectory;
 	use Edde\Common\Session\SessionManager;
-	use Edde\Common\TemplateEngine\Compiler;
-	use Edde\Common\TemplateEngine\TemplateManager;
+	use Edde\Common\Template\Compiler;
+	use Edde\Common\Template\Template;
+	use Edde\Common\Template\TemplateDirectory;
+	use Edde\Common\Template\TemplateManager;
 	use Edde\Common\Translator\Translator;
 	use Edde\Common\Upgrade\AbstractUpgradeManager;
 	use Edde\Common\Web\JavaScriptCompiler;
@@ -100,9 +103,13 @@
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
+	use Edde\Ext\Converter\ConverterManagerConfigurator;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Database\Sqlite\SqliteDsn;
-	use Edde\Ext\TemplateEngine\DefaultMacroSet;
+	use Edde\Ext\Resource\ResourceManagerConfigurator;
+	use Edde\Ext\Router\RequestQueueConfigurator;
+	use Edde\Ext\Router\RouterServiceConfigurator;
+	use Edde\Ext\Template\CompilerConfigurator;
 
 	class ContainerFactory extends Object {
 		/**
@@ -144,11 +151,6 @@
 					$current = $factory;
 				} else if (is_callable($factory)) {
 					throw new FactoryException(sprintf('Closure is not supported in factory definition [%s].', $name));
-				} else if (is_object($factory)) {
-					if ($factory instanceof ICacheable === false) {
-						throw new FactoryException(sprintf('Class instances [%s] are not supported in factory definition [%s]. You can use [%s] interface to bypass this error.', get_class($factory), $name, ICacheable::class));
-					}
-					$current = new SerializableFactory($name, $factory);
 				}
 				if ($current === null) {
 					throw new FactoryException(sprintf('Unsupported factory definition [%s; %s].', is_string($name) ? $name : (is_object($name) ? get_class($name) : gettype($name)), is_string($factory) ? $factory : (is_object($factory) ? get_class($factory) : gettype($factory))));
@@ -159,15 +161,16 @@
 		}
 
 		/**
-		 * pure way how to simple create a system container using another container
+		 * pure way how to simple create a system container
 		 *
 		 * @param array    $factoryList
-		 * @param string[] $configHandlerList
-		 * @param string   $cacheId
+		 * @param string[] $configuratorList
 		 *
 		 * @return IContainer
+		 * @throws ContainerException
+		 * @throws FactoryException
 		 */
-		static public function create(array $factoryList = [], array $configHandlerList = [], string $cacheId = null): IContainer {
+		static public function create(array $factoryList = [], array $configuratorList = []): IContainer {
 			/**
 			 * A young man and his date were parked on a back road some distance from town.
 			 * They were about to have sex when the girl stopped.
@@ -177,23 +180,17 @@
 			 * “Why aren’t we going anywhere?” asked the girl.
 			 * “Well, I should have mentioned this before, but I’m actually a taxi driver, and the fare back to town is $25…”
 			 */
-			/** @var $container IContainer */
 			$container = new Container(new Cache(new InMemoryCacheStorage()));
-			$container->registerFactoryList($factoryList = self::createFactoryList($factoryList));
+			/**
+			 * this trick ensures that container is properly configured when some internal dependency needs it while container is construction
+			 */
+			$containerConfigurator = $configuratorList[IContainer::class] = new ContainerConfigurator();
+			$containerConfigurator->setFactoryList($factoryList = self::createFactoryList($factoryList));
+			$containerConfigurator->setConfiguratorList($configuratorList);
+			$container->addConfigurator($containerConfigurator);
+			$container->setup();
 			$container = $container->create(IContainer::class);
-			if ($cacheId !== null) {
-				$container->getCache()
-					->setNamespace($cacheId);
-			}
-			$container->registerFactoryList($factoryList);
-			foreach ($configHandlerList as $name => $configHandler) {
-				foreach ((array)$configHandler as $config) {
-					$container->registerConfigHandler($name, $container->create($config, [], __METHOD__));
-				}
-			}
-			foreach ($factoryList as $factory) {
-				$container->autowire($factory);
-			}
+			$container->setup();
 			return $container;
 		}
 
@@ -201,34 +198,35 @@
 		 * create a default container with set of services from Edde; they can be simply redefined
 		 *
 		 * @param array    $factoryList
-		 * @param string[] $configHandlerList
-		 * @param string   $cacheId
+		 * @param string[] $configuratorList
 		 *
 		 * @return IContainer
+		 * @throws ContainerException
+		 * @throws FactoryException
 		 */
-		static public function container(array $factoryList = [], array $configHandlerList = [], string $cacheId = null): IContainer {
-			return self::create(array_merge(self::getDefaultFactoryList(), $factoryList), array_merge([], $configHandlerList), $cacheId);
+		static public function container(array $factoryList = [], array $configuratorList = []): IContainer {
+			return self::create(array_merge(self::getDefaultFactoryList(), $factoryList), array_filter(array_merge(self::getDefaultConfiguratorList(), $configuratorList)));
 		}
 
 		/**
 		 * create container and serialize the result into the file; if file exists, container is build from it
 		 *
 		 * @param array  $factoryList
-		 * @param array  $configHandlerList
+		 * @param array  $configuratorList
 		 * @param string $cacheId
 		 *
 		 * @return IContainer
 		 * @throws ContainerException
 		 * @throws FactoryException
 		 */
-		static public function cache(array $factoryList, array $configHandlerList, string $cacheId): IContainer {
+		static public function cache(array $factoryList, array $configuratorList, string $cacheId): IContainer {
 			if ($container = @file_get_contents($cacheId)) {
 				/** @noinspection UnserializeExploitsInspection */
 				return unserialize($container);
 			}
 			register_shutdown_function(function (IContainer $container, $cache) {
 				file_put_contents($cache, serialize($container));
-			}, $container = self::container($factoryList, $configHandlerList, $cacheId), $cacheId);
+			}, $container = self::container($factoryList, $configuratorList), $cacheId);
 			return $container;
 		}
 
@@ -243,10 +241,10 @@
 		 */
 		static public function instance(string $class, array $parameterList, bool $cloneable = false) {
 			return (object)[
-				'type' => __FUNCTION__,
-				'class' => $class,
+				'type'          => __FUNCTION__,
+				'class'         => $class,
 				'parameterList' => $parameterList,
-				'cloneable' => $cloneable,
+				'cloneable'     => $cloneable,
 			];
 		}
 
@@ -254,14 +252,15 @@
 		 * special kind of factory which will thrown an exception of the given message; it's useful for say which internal dependencies are not met
 		 *
 		 * @param string $message
+		|		 * @param string|null $class
 		 *
 		 * @return object
 		 */
 		static public function exception(string $message, string $class = null) {
 			return (object)[
-				'type' => __FUNCTION__,
+				'type'    => __FUNCTION__,
 				'message' => $message,
-				'class' => $class ?: EddeException::class,
+				'class'   => $class ?: EddeException::class,
 			];
 		}
 
@@ -276,95 +275,115 @@
 		 */
 		static public function proxy(string $factory, string $method, array $parameterList) {
 			return (object)[
-				'type' => __FUNCTION__,
-				'factory' => $factory,
-				'method' => $method,
+				'type'          => __FUNCTION__,
+				'factory'       => $factory,
+				'method'        => $method,
 				'parameterList' => $parameterList,
 			];
 		}
 
 		static public function getDefaultFactoryList(): array {
 			return [
-				IContainer::class => Container::class,
-				IRootDirectory::class => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
-				ITempDirectory::class => self::proxy(IRootDirectory::class, 'directory', [
+				IContainer::class            => Container::class,
+				IRootDirectory::class        => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
+				ITempDirectory::class        => self::proxy(IRootDirectory::class, 'directory', [
 					'temp',
 					TempDirectory::class,
 				]),
-				ICacheDirectory::class => self::proxy(ITempDirectory::class, 'directory', [
+				ICacheDirectory::class       => self::proxy(ITempDirectory::class, 'directory', [
 					'cache',
 					CacheDirectory::class,
 				]),
-				IAssetDirectory::class => self::proxy(IRootDirectory::class, 'directory', [
+				IAssetDirectory::class       => self::proxy(IRootDirectory::class, 'directory', [
 					'.assets',
 					AssetDirectory::class,
 				]),
-				ITemplateDirectory::class => self::proxy(IAssetDirectory::class, 'directory', [
-					'template',
+				ITemplateDirectory::class    => self::proxy(IAssetDirectory::class, 'directory', [
+					'templates',
 					TemplateDirectory::class,
 				]),
-				ICrateDirectory::class => self::proxy(IAssetDirectory::class, 'directory', [
-					'crate',
-					CrateDirectory::class,
-				]),
-				ILogDirectory::class => self::proxy(IRootDirectory::class, 'directory', [
+				ILogDirectory::class         => self::proxy(IRootDirectory::class, 'directory', [
 					'logs',
 					LogDirectory::class,
 				]),
-				ISessionDirectory::class => self::proxy(ITempDirectory::class, 'directory', [
+				ISessionDirectory::class     => self::proxy(ITempDirectory::class, 'directory', [
 					'session',
 					SessionDirectory::class,
 				]),
-				IStorageDirectory::class => self::proxy(IAssetDirectory::class, 'directory', [
+				IStorageDirectory::class     => self::proxy(IAssetDirectory::class, 'directory', [
 					'storage',
 					StorageDirectory::class,
 				]),
-				ICacheManager::class => CacheManager::class,
-				ICache::class => ICacheManager::class,
-				ICacheStorage::class => FlatFileCacheStorage::class,
-				IRuntime::class => Runtime::class,
-				IHttpResponse::class => HttpResponse::class,
-				IApplication::class => Application::class,
-				ILogService::class => LogService::class,
-				IRouterService::class => RouterService::class,
-				IRequest::class => IRouterService::class . '::createRequest',
-				IHttpRequest::class => HttpRequest::class . '::createHttpRequest',
-				IHttpResponse::class => HttpResponse::class . '::createHttpResponse',
-				IResponseManager::class => ResponseManager::class,
-				IXmlParser::class => XmlParser::class,
-				IConverterManager::class => ConverterManager::class,
-				IResourceManager::class => ResourceManager::class,
-				IStyleSheetCompiler::class => StyleSheetCompiler::class,
-				IJavaScriptCompiler::class => JavaScriptCompiler::class,
-				ITemplateManager::class => TemplateManager::class,
-				IMacroSet::class => DefaultMacroSet::class . '::macroSet',
-				IHelperSet::class => DefaultMacroSet::class . '::helperSet',
-				IStorage::class => DatabaseStorage::class,
-				IDriver::class => SqliteDriver::class,
-				IDsn::class => self::instance(SqliteDsn::class, ['storage.sqlite']),
-				ICrate::class => self::instance(Crate::class, [], true),
-				ICrateFactory::class => CrateFactory::class,
-				ISchemaManager::class => SchemaManager::class,
-				IHttpClient::class => HttpClient::class,
-				IAclManager::class => AclManager::class,
+				ICacheManager::class         => CacheManager::class,
+				ICache::class                => ICacheManager::class,
+				ICacheStorage::class         => FlatFileCacheStorage::class,
+				IRuntime::class              => Runtime::class,
+				IHttpResponse::class         => HttpResponse::class,
+				IApplication::class          => Application::class,
+				IRequestQueue::class         => RequestQueue::class,
+				IRouterService::class        => RouterService::class,
+				IRequest::class              => self::exception(sprintf('[%s] is not possible use directly; implement proper factory or choose different approach.', IRequest::class)),
+				IHttpRequest::class          => HttpRequest::class . '::createHttpRequest',
+				IHttpResponse::class         => HttpResponse::class . '::createHttpResponse',
+				IResponseManager::class      => ResponseManager::class,
+				ILogService::class           => LogService::class,
+				IXmlParser::class            => XmlParser::class,
+				IConverterManager::class     => ConverterManager::class,
+				IResourceManager::class      => ResourceManager::class,
+				IResourceProvider::class     => IResourceManager::class,
+				IStyleSheetCompiler::class   => StyleSheetCompiler::class,
+				IJavaScriptCompiler::class   => JavaScriptCompiler::class,
+				IStorage::class              => DatabaseStorage::class,
+				IDriver::class               => SqliteDriver::class,
+				IDsn::class                  => self::instance(SqliteDsn::class, ['storage.sqlite']),
+				ICrate::class                => self::instance(Crate::class, [], true),
+				ICrateFactory::class         => CrateFactory::class,
+				ISchemaManager::class        => SchemaManager::class,
+				IHttpClient::class           => HttpClient::class,
+				IAclManager::class           => AclManager::class,
+				IHtmlGenerator::class        => Html5Generator::class,
+				ITemplateManager::class      => TemplateManager::class,
+				ITemplate::class             => self::instance(Template::class, [], true),
+				ICompiler::class             => Compiler::class,
 				/**
 				 * need to be defined
 				 */
-				IUpgradeManager::class => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
-				ICryptEngine::class => CryptEngine::class,
-				IHttpClient::class => HttpClient::class,
-				IHostUrl::class => self::exception(sprintf('Host url is not specified; you have to register [%s] interface.', IHostUrl::class)),
-				ILinkFactory::class => \Edde\Common\Link\LinkFactory::class,
-				ISessionManager::class => SessionManager::class,
-				IIdentityManager::class => IdentityManager::class,
-				IIdentity::class => IIdentityManager::class . '::createIdentity',
-				IFingerprint::class => self::exception(sprintf('You have to register or implement fingerprint interface [%s].', IFingerprint::class)),
+				IUpgradeManager::class       => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
+				ICryptEngine::class          => CryptEngine::class,
+				IHostUrl::class              => self::exception(sprintf('Host url is not specified; you have to register [%s] interface.', IHostUrl::class)),
+				ILinkFactory::class          => \Edde\Common\Link\LinkFactory::class,
+				ISessionManager::class       => SessionManager::class,
+				IIdentityManager::class      => IdentityManager::class,
+				IIdentity::class             => IIdentityManager::class . '::createIdentity',
+				IFingerprint::class          => self::exception(sprintf('You have to register or implement fingerprint interface [%s].', IFingerprint::class)),
+				IContext::class              => self::exception(sprintf('You have to register implementation of [%s] specific for you application.', IContext::class)),
 				IAuthenticatorManager::class => AuthenticatorManager::class,
-				IAclManager::class => AclManager::class,
-				IAcl::class => Acl::class,
-				ICompiler::class => Compiler::class,
-				ITranslator::class => Translator::class,
-				IAssetStorage::class => AssetStorage::class,
+				IAclManager::class           => AclManager::class,
+				IAcl::class                  => Acl::class,
+				ITranslator::class           => Translator::class,
+				IAssetStorage::class         => AssetStorage::class,
+			];
+		}
+
+		static public function getDefaultConfiguratorList(): array {
+			return [
+				IRouterService::class    => RouterServiceConfigurator::class,
+				IRequestQueue::class     => RequestQueueConfigurator::class,
+				/**
+				 * We are using some custom resource providers, so we have to register them to resource manager and the current
+				 * point how to get resources.
+				 */
+				IResourceManager::class  => ResourceManagerConfigurator::class,
+				/**
+				 * To enable general content exchange, we have to setup converter manager; it basically allows to do arbitrary
+				 * data conversions for example json to array, xml file to INode, ... this component is kind of fundamental part
+				 * of the framework.
+				 */
+				IConverterManager::class => ConverterManagerConfigurator::class,
+				/**
+				 * As other components, Template engine should be configured too; this will register default set of macros.
+				 */
+				ICompiler::class         => CompilerConfigurator::class,
 			];
 		}
 	}

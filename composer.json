@@ -28,10 +28,7 @@
 		"php": ">=7.0",
 		"paragonie/constant_time_encoding": "^2.0",
 		"defuse/php-encryption": "^2.0",
-		"phpunit/phpunit": "6.0.x-dev",
-		"theseer/phpdox": "0.9.0",
-		"roave/security-advisories": "dev-master",
-		"league/uri-parser": "^1.0"
+		"roave/security-advisories": "dev-master"
 	},
 	"require-dev": {
 		"tracy/tracy": "^2.4"

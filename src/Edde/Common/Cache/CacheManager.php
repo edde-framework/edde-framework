@@ -3,7 +3,5 @@
 
 	namespace Edde\Common\Cache;
 
-	use Edde\Api\Cache\ICacheable;
-
-	class CacheManager extends AbstractCacheManager implements ICacheable {
+	class CacheManager extends AbstractCacheManager {
 	}

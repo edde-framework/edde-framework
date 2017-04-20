@@ -10,6 +10,7 @@
 	use Edde\Api\Http\Client\IHttpHandler;
 	use Edde\Api\Http\IRequest;
 	use Edde\Api\Http\IRequestUrl;
+	use Edde\Api\Url\UrlException;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
@@ -67,14 +68,14 @@
 			curl_setopt_array($curl = curl_init($url = (string)$request->getRequestUrl()), [
 				CURLOPT_SSL_VERIFYPEER => false,
 				CURLOPT_FOLLOWLOCATION => true,
-				CURLOPT_FAILONERROR => true,
-				CURLOPT_FORBID_REUSE => true,
+				CURLOPT_FAILONERROR    => true,
+				CURLOPT_FORBID_REUSE   => true,
 				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_ENCODING => 'utf-8',
+				CURLOPT_ENCODING       => 'utf-8',
 				CURLOPT_CONNECTTIMEOUT => 5,
-				CURLOPT_TIMEOUT => 60,
-				CURLOPT_CUSTOMREQUEST => $method = $request->getMethod(),
-				CURLOPT_POST => $method === 'POST',
+				CURLOPT_TIMEOUT        => 60,
+				CURLOPT_CUSTOMREQUEST  => $method = $request->getMethod(),
+				CURLOPT_POST           => $method === 'POST',
 			]);
 			return $this->container->create(HttpHandler::class, [
 				$request,
@@ -87,14 +88,17 @@
 		 * @param string             $method
 		 *
 		 * @return IRequest
+		 * @throws UrlException
 		 */
 		protected function createRequest($url, string $method): IRequest {
-			return $this->container->create(Request::class, [
+			/** @var $request Request */
+			$request = $this->container->create(Request::class, [
 				RequestUrl::create($url),
 				new HeaderList(),
 				new CookieList(),
-			])
-				->setMethod($method);
+			]);
+			$request->setMethod($method);
+			return $request;
 		}
 
 		/**

@@ -1,17 +1,10 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\App\Index;
 
-	use Edde\Common\Html\ViewControl;
+	use Edde\Common\Strings\StringUtils;
+	use Edde\Ext\Control\AbstractTemplateControl;
 
-	class IndexView extends ViewControl {
-		public function actionFoo() {
-			$this->template();
-			$this->response();
-		}
-
-		public function actionBar() {
-			echo 'bar';
-		}
+	class IndexView extends AbstractTemplateControl {
 	}

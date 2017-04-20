@@ -31,7 +31,15 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function registerConfiguratorList(array $configuratorList) {
+		public function addConfigurator(IConfigurator $configurator) {
+			$this->tConfiguratorList[] = $configurator;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setConfiguratorList(array $configuratorList) {
 			$this->tConfiguratorList = $configuratorList;
 			return $this;
 		}

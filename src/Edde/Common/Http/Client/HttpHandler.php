@@ -68,7 +68,7 @@
 		public function basic(string $user, string $password): IHttpHandler {
 			curl_setopt_array($this->curl, [
 				CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
-				CURLOPT_USERPWD => vsprintf('%s:%s', func_get_args()),
+				CURLOPT_USERPWD  => vsprintf('%s:%s', func_get_args()),
 			]);
 			return $this;
 		}
@@ -79,7 +79,7 @@
 		public function digest(string $user, string $password): IHttpHandler {
 			curl_setopt_array($this->curl, [
 				CURLOPT_HTTPAUTH => CURLAUTH_DIGEST,
-				CURLOPT_USERPWD => vsprintf('%s:%s', func_get_args()),
+				CURLOPT_USERPWD  => vsprintf('%s:%s', func_get_args()),
 			]);
 			return $this;
 		}
@@ -185,6 +185,7 @@
 			};
 			$options[CURLOPT_HTTPHEADER] = $this->request->getHeaderList()
 				->headers();
+			$options[CURLOPT_FAILONERROR] = false;
 			curl_setopt_array($this->curl, $options);
 			if (($content = curl_exec($this->curl)) === false) {
 				$error = curl_error($this->curl);
@@ -198,6 +199,7 @@
 			}
 			$headerList->set('Content-Type', $contentType);
 			$code = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
+			$error = curl_error($this->curl);
 			curl_close($this->curl);
 			$this->curl = null;
 			/** @var $response IResponse */
@@ -210,6 +212,34 @@
 				$content,
 				isset($type) ? $type->mime : $contentType,
 			], __METHOD__));
+			if ($code >= 400) {
+				switch ($code) {
+					case 400:
+						$exception = BadRequestException::class;
+						break;
+					case 401:
+						$exception = UnauthorizedException::class;
+						break;
+					case 403:
+						$exception = ForbiddenException::class;
+						break;
+					case 404:
+						$exception = NotFoundException::class;
+						break;
+					case 405:
+						$exception = MethodNotAllowedException::class;
+						break;
+					case 500:
+						$exception = ServerErrorException::class;
+						break;
+					case 503:
+						$exception = ServiceUnavailableException::class;
+						break;
+					default:
+						$exception = ClientException::class;
+				}
+				throw new $exception(sprintf('%s: %s', (string)$this->request->getRequestUrl(), $error), $code, null, $response);
+			}
 			return $response;
 		}
 	}

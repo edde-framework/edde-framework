@@ -6,7 +6,11 @@
 	use Edde\Common\Application\Response;
 
 	class ExceptionResponse extends Response {
-		public function __construct(\Exception $content, array $targetList = null) {
-			parent::__construct($content, 'exception', $targetList);
+		/**
+		 * @param \Exception $exception
+		 * @param array|null $targetList
+		 */
+		public function __construct(\Exception $exception, array $targetList = null) {
+			parent::__construct($exception, 'exception', $targetList);
 		}
 	}

@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Node;
 
@@ -49,7 +49,9 @@
 				$rootNode->pushNode($abstractNode);
 				$abstractNode = $rootNode;
 			}
-			return new RecursiveIteratorIterator(new self($abstractNode), RecursiveIteratorIterator::SELF_FIRST);
+			$iterator = new RecursiveIteratorIterator(new self($abstractNode), RecursiveIteratorIterator::SELF_FIRST);
+			$iterator->rewind();
+			return $iterator;
 		}
 
 		/**

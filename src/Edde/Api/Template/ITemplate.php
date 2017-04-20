@@ -3,29 +3,55 @@
 
 	namespace Edde\Api\Template;
 
-	use Edde\Api\Resource\IResource;
+	use Edde\Api\File\IFile;
 
 	interface ITemplate {
 		/**
-		 * from where this template can got another templates?
+		 * set all required parameters to the template
 		 *
-		 * @param ITemplateProvider $templateProvider
-		 *
-		 * @return ITemplate
-		 */
-		public function registerTemplateProvider(ITemplateProvider $templateProvider): ITemplate;
-
-		/**
-		 * add list of resources of this template
-		 *
-		 * @param IResource $resource
+		 * @param string      $name
+		 * @param null        $context
+		 * @param string|null $namespace
+		 * @param array       ...$parameterList
 		 *
 		 * @return ITemplate
 		 */
-		public function import(string $name, IResource $resource): ITemplate;
+		public function template(string $name, $context = null, string $namespace = null, ...$parameterList): ITemplate;
 
 		/**
-		 * execute template compilation
+		 * compile template without "execution"
+		 *
+		 * @param string      $name
+		 * @param string|null $namespace
+		 * @param array       ...$parameterList
+		 *
+		 * @return IFile
 		 */
-		public function compile();
+		public function compile(string $name, string $namespace = null, ...$parameterList): IFile;
+
+		/**
+		 * execute the given template
+		 *
+		 * @param string      $name
+		 * @param array       $context
+		 * @param string|null $namespace
+		 * @param array       ...$parameterList
+		 *
+		 * @return ITemplate
+		 */
+		public function snippet(string $name, array $context, string $namespace = null, ...$parameterList): ITemplate;
+
+		/**
+		 * execute template (this result would be rendered/echoed)
+		 *
+		 * @return ITemplate
+		 */
+		public function execute(): ITemplate;
+
+		/**
+		 * support to string conversion
+		 *
+		 * @return string
+		 */
+		public function __toString(): string;
 	}

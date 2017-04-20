@@ -30,21 +30,16 @@
 			}
 			$requestUrl = $this->httpRequest->getRequestUrl();
 			$parameterList = $requestUrl->getParameterList();
-			if (isset($parameterList['action']) === false && isset($parameterList['handle']) === false) {
+			if (isset($parameterList['action']) === false) {
 				return null;
 			}
-			$request = $this->container->create(Request::class);
-			if (isset($parameterList['handle'])) {
-				list($control, $handle) = explode('.', $parameterList['handle']);
-				unset($parameterList['handle']);
-				$request->registerHandleHandler($control, 'handle' . StringUtils::toCamelCase($handle), $parameterList);
-			}
-			if (isset($parameterList['action'])) {
-				list($control, $action) = explode('.', $parameterList['action']);
-				unset($parameterList['action']);
-				$request->registerActionHandler($control, 'action' . StringUtils::toCamelCase($action), $parameterList);
-			}
-			$this->responseManager->registerResponseHandler($this->container->create(HttpResponseHandler::class));
-			return $request;
+			list($control, $action) = explode('.', $parameterList['action']);
+			$this->responseManager->setResponseHandler($this->container->create(HttpResponseHandler::class));
+			return $this->container->create(Request::class, [
+				$control,
+				'action' . StringUtils::toCamelCase($action),
+				$parameterList,
+				$this->httpRequest->getContent(),
+			], __METHOD__);
 		}
 	}

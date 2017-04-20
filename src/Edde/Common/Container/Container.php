@@ -3,8 +3,6 @@
 
 	namespace Edde\Common\Container;
 
-	use Edde\Api\Cache\ICache;
-	use Edde\Api\Cache\ICacheable;
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
@@ -16,17 +14,34 @@
 	/**
 	 * Default implementation of a dependency container.
 	 */
-	class Container extends AbstractContainer implements ICacheable {
+	class Container extends AbstractContainer {
 		/**
 		 * @var \SplStack
 		 */
 		protected $stack;
 
 		/**
-		 * @param ICache $cache
+		 * One day, Little Johnny saw his grandpa smoking his cigarettes. Little Johnny asked,
+		 * "Grandpa, can I smoke some of your cigarettes?" His grandpa replied,
+		 * "Can your penis reach your asshole?"
+		 * "No", said Little Johnny.
+		 * His grandpa replied,
+		 * "Then you're not old enough."
+		 *
+		 * The next day, Little Johnny saw his grandpa drinking beer. He asked,
+		 * "Grandpa, can I drink some of your beer?"
+		 * His grandpa replied,
+		 * "Can your penis reach your asshole?"
+		 * "No" said Little Johhny.
+		 * "Then you're not old enough." his grandpa replied.
+		 *
+		 * The next day, Little Johnny was eating cookies.
+		 * His grandpa asked, "Can I have some of your cookies?"
+		 * Little Johnny replied, "Can your penis reach your asshole?"
+		 * His grandpa replied, "It most certainly can!"
+		 * Little Johnny replied, "Then go fuck yourself.
 		 */
-		public function __construct(ICache $cache) {
-			parent::__construct($cache);
+		public function __construct() {
 			$this->stack = new \SplStack();
 		}
 
@@ -35,16 +50,12 @@
 		 * @throws FactoryException
 		 */
 		public function getFactory(string $dependency, string $source = null): IFactory {
-			if (($id = $this->cache->load($cacheId = (__METHOD__ . '/' . $dependency))) !== null) {
-				return $this->factoryList[$id]->getFactory($this);
-			}
 			foreach ($this->factoryList as $id => $factory) {
 				if ($factory->canHandle($this, $dependency)) {
-					$this->cache->save($cacheId, $id);
 					return $factory->getFactory($this);
 				}
 			}
-			throw new ContainerException(sprintf('Unknown factory for the given dependency [%s] for [%s]; dependency chain [%s].', $dependency, $source ?: 'unknown source', implode('→', array_reverse(iterator_to_array($this->stack)))));
+			throw new UnknownFactoryException(sprintf('Unknown factory [%s] for dependency [%s]; dependency chain [%s].', $dependency, $source ?: 'unknown source', implode('→', array_reverse(iterator_to_array($this->stack)))));
 		}
 
 		/**
@@ -53,19 +64,22 @@
 		public function factory(IFactory $factory, array $parameterList = [], string $name = null, string $source = null) {
 			try {
 				$this->stack->push($name ?: '[anonymous]');
-				if (($instance = $factory->fetch($this, $fetchId = (get_class($factory) . count($parameterList) . $name . $source), $this->cache)) !== null) {
+				if (($instance = $factory->fetch($this, $fetchId = (get_class($factory) . count($parameterList) . $name . $source))) !== null) {
 					return $instance;
 				}
-				if (($dependency = $this->cache->load($cacheId = (__METHOD__ . '/' . $name))) === null) {
-					$this->cache->save($cacheId, $dependency = $factory->dependency($this, $name));
-				}
-				$this->dependency($instance = $factory->execute($this, $parameterList, $dependency, $name), $dependency);
+				$this->dependency($instance = $factory->execute($this, $parameterList, $dependency = $factory->dependency($this, $name), $name), $dependency);
 				if ($instance instanceof IConfigurable) {
 					/** @var $instance IConfigurable */
-					$instance->registerConfiguratorList(isset($this->configHandlerList[$name]) ? $this->configHandlerList[$name] : []);
+					$configuratorList = [];
+					foreach ($dependency->getConfiguratorList() as $configurator) {
+						if (isset($this->configuratorList[$configurator])) {
+							$configuratorList = array_merge($configuratorList, $this->configuratorList[$configurator]);
+						}
+					}
+					$instance->setConfiguratorList($configuratorList);
 					$instance->init();
 				}
-				$factory->push($this, $fetchId, $instance, $this->cache);
+				$factory->push($this, $fetchId, $instance);
 				return $instance;
 			} finally {
 				$this->stack->pop();
@@ -79,12 +93,7 @@
 			if (is_object($instance) === false) {
 				return $instance;
 			}
-			if (($dependency = $this->cache->load($cacheId = (__METHOD__ . '/' . ($class = get_class($instance))))) === null) {
-				$classFactory = new ClassFactory();
-				$this->cache->save($cacheId, $dependency = $classFactory->dependency($this, $class));
-			}
-			$this->dependency($instance, $dependency, $force !== true);
-			return $instance;
+			return $this->dependency($instance, (new ClassFactory())->dependency($this, $class = get_class($instance)), $force !== true);
 		}
 
 		/**
@@ -93,6 +102,8 @@
 		 * @param bool        $lazy
 		 *
 		 * @return ILazyInject
+		 * @throws ContainerException
+		 * @throws FactoryException
 		 */
 		protected function dependency($instance, IDependency $dependency, bool $lazy = true) {
 			if (is_object($instance) === false) {
@@ -111,10 +122,5 @@
 				$instance->inject($reflectionParameter->getName(), $this->create($reflectionParameter->getClass(), [], $class));
 			}
 			return $instance;
-		}
-
-		public function __wakeup() {
-			$this->stack = new \SplStack();
-			return parent::__wakeup();
 		}
 	}

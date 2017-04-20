@@ -50,7 +50,7 @@
 			foreach (ReflectionUtils::getParameterList($this->callback) as $reflectionParameter) {
 				$parameterList[] = new ReflectionParameter($reflectionParameter->getName(), $reflectionParameter->isOptional(), ($class = $reflectionParameter->getClass()) ? $class->getName() : null);
 			}
-			return new Dependency($parameterList, [], []);
+			return new Dependency($parameterList);
 		}
 
 		/**

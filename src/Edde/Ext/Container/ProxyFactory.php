@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Container;
 
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 	use Edde\Common\Container\AbstractFactory;
@@ -45,18 +46,30 @@
 			$this->parameterList = $parameterList;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function canHandle(IContainer $container, string $dependency): bool {
 			return $this->name === $dependency;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function dependency(IContainer $container, string $dependency = null): IDependency {
 			return $container->getFactory($this->target, $this->name)
 				->dependency($container, $this->target);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
 			$method = $this->method;
-			return $container->create($this->target, $parameterList, $this->name)
-				->{$method}(...$this->parameterList);
+			$instance = $container->create($this->target, $parameterList, $this->name);
+			if ($instance instanceof IConfigurable) {
+				$instance->setup();
+			}
+			return $instance->{$method}(...$this->parameterList);
 		}
 	}

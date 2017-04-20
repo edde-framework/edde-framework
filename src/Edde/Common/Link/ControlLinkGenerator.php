@@ -1,14 +1,11 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Link;
 
-	use Edde\Api\Application\LazyRequestTrait;
 	use Edde\Common\Url\Url;
 
 	class ControlLinkGenerator extends AbstractLinkGenerator {
-		use LazyRequestTrait;
-
 		public function link($generate, ...$parameterList) {
 			list($generate, $parameterList) = $this->list($generate, $parameterList);
 			if (is_array($generate) === false || count($generate) !== 2) {

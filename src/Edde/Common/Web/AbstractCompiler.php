@@ -34,7 +34,6 @@
 			return $this;
 		}
 
-		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 */
@@ -46,8 +45,6 @@
 			}
 			return $pathList;
 		}
-
-		/** @noinspection PhpMissingParentCallCommonInspection */
 
 		/**
 		 * filter input content with current set of filters
@@ -62,10 +59,5 @@
 				$content = $filter->filter($content);
 			}
 			return $content;
-		}
-
-		protected function handleSetup() {
-			parent::handleSetup();
-			$this->cache();
 		}
 	}

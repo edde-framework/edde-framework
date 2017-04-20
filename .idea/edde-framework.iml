@@ -5,66 +5,30 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/tests/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/app/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/.runtime/src" isTestSource="false" />
-      <excludeFolder url="file://$MODULE_DIR$/.runtime/.apache" />
-      <excludeFolder url="file://$MODULE_DIR$/.runtime/.php" />
-      <excludeFolder url="file://$MODULE_DIR$/.runtime/.redis" />
-      <excludeFolder url="file://$MODULE_DIR$/.runtime/bin" />
-      <excludeFolder url="file://$MODULE_DIR$/.runtime/db" />
-      <excludeFolder url="file://$MODULE_DIR$/.runtime/lib" />
-      <excludeFolder url="file://$MODULE_DIR$/.runtime/lib/tracy" />
-      <excludeFolder url="file://$MODULE_DIR$/.runtime/logs" />
-      <excludeFolder url="file://$MODULE_DIR$/artwork" />
       <excludeFolder url="file://$MODULE_DIR$/lib/composer" />
       <excludeFolder url="file://$MODULE_DIR$/lib/defuse/php-encryption" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/doctrine/instantiator" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/myclabs/deep-copy" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/nikic/php-parser" />
       <excludeFolder url="file://$MODULE_DIR$/lib/paragonie/constant_time_encoding" />
       <excludeFolder url="file://$MODULE_DIR$/lib/paragonie/random_compat" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/phar-io/manifest" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/phar-io/version" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/phpdocumentor/reflection-common" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/phpdocumentor/reflection-docblock" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/phpdocumentor/type-resolver" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/phpspec/prophecy" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-code-coverage" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-file-iterator" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-text-template" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-timer" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-token-stream" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/phpunit" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/phpunit-mock-objects" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/code-unit-reverse-lookup" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/comparator" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/diff" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/environment" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/exporter" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/global-state" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/object-enumerator" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/recursion-context" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/resource-operations" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/version" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/theseer/directoryscanner" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/theseer/fdomdocument" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/theseer/fxsl" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/theseer/phpdox" />
       <excludeFolder url="file://$MODULE_DIR$/lib/tracy/tracy" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/webmozart/assert" />
-      <excludeFolder url="file://$MODULE_DIR$/release" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library name="PHARS">
         <CLASSES>
-          <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
+          <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.0.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/phar-io/manifest/tests/_fixture/test.phar/" />
         </CLASSES>
         <SOURCES>
-          <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
+          <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.0.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/phar-io/manifest/tests/_fixture/test.phar/" />
         </SOURCES>
       </library>
     </orderEntry>

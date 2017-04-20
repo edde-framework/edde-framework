@@ -10,7 +10,7 @@
 	 */
 	interface IResponse extends IContent {
 		/**
-		 * return list of target mime types for this repsonse (basically defines conversion from content to target)
+		 * return list of target mime types for this response (basically defines conversion from content to target)
 		 *
 		 * @return string[]|null
 		 */
