@@ -38,31 +38,30 @@
 		 * @var ITemplateManager
 		 */
 		protected $templateManager;
-
-		public function testException() {
-			$this->expectException(UnknownTemplateException::class);
-			$this->expectExceptionMessage('Requested template name [foo-bar] cannot be found; there are no template providers - please register instance of [Edde\Api\Template\ITemplateProvider].');
-			$this->templateManager->template('foo-bar');
-		}
-
-		public function testException2() {
-			$this->expectException(UnknownTemplateException::class);
-			$this->expectExceptionMessage('Requested template name [foo-bar] cannot be found.');
-			$this->templateManager->registerTemplateProvider($this->container->create(DirectoryTemplateProvider::class, [$this->rootDirectory]));
-			$this->templateManager->template('foo-bar');
-		}
-
-		public function testTemplate() {
-			$this->templateManager->registerTemplateProvider($this->container->create(DirectoryTemplateProvider::class, [$this->rootDirectory]));
-			$template = $this->templateManager->template([
-				'here-is-hidden-content-of-the-fucking-template',
-				'layout',
-			],);
-			$template->execute([
-				null      => $context = new \SomeTemplateContext(),
-				'doo-bar' => $context,
-			]);
-		}
+		// public function testException() {
+		// 	$this->expectException(UnknownTemplateException::class);
+		// 	$this->expectExceptionMessage('Requested template name [foo-bar] cannot be found; there are no template providers - please register instance of [Edde\Api\Template\ITemplateProvider].');
+		// 	$this->templateManager->template('foo-bar');
+		// }
+		//
+		// public function testException2() {
+		// 	$this->expectException(UnknownTemplateException::class);
+		// 	$this->expectExceptionMessage('Requested template name [foo-bar] cannot be found.');
+		// 	$this->templateManager->registerTemplateProvider($this->container->create(DirectoryTemplateProvider::class, [$this->rootDirectory]));
+		// 	$this->templateManager->template('foo-bar');
+		// }
+		//
+		// public function testTemplate() {
+		// 	$this->templateManager->registerTemplateProvider($this->container->create(DirectoryTemplateProvider::class, [$this->rootDirectory]));
+		// 	$template = $this->templateManager->template([
+		// 		'here-is-hidden-content-of-the-fucking-template',
+		// 		'layout',
+		// 	],);
+		// 	$template->execute([
+		// 		null      => $context = new \SomeTemplateContext(),
+		// 		'doo-bar' => $context,
+		// 	]);
+		// }
 
 		protected function setUp() {
 			$this->container = ContainerFactory::container([
