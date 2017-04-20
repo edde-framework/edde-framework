@@ -7,6 +7,8 @@
 	use Edde\Api\Http\IHttpResponse;
 
 	class HttpResponse extends Response implements IHttpResponse {
+		static protected $httpResponse;
+
 		/**
 		 * @inheritdoc
 		 */
@@ -27,6 +29,6 @@
 		}
 
 		static public function createHttpResponse(): IHttpResponse {
-			return new self(200, new HeaderList(), new CookieList());
+			return self::$httpResponse ?: self::$httpResponse = new self(200, new HeaderList(), new CookieList());
 		}
 	}

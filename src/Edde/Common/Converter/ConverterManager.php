@@ -59,6 +59,9 @@
 					}
 				}
 			}
+			if ($mime === reset($targetList)) {
+				return new Convertable(new PassConverter(), $content, $mime);
+			}
 			throw new ConverterException(sprintf('Cannot convert %ssource mime [%s] to any of [%s].', $unknown ? 'unknown/unsupported ' : '', $mime, implode(', ', $targetList)), 0, $exception);
 		}
 	}

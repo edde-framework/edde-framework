@@ -45,13 +45,11 @@
 			$methodList = $this->getMethodList();
 			if (in_array($method = strtoupper($request->getAction()), self::$methodList, true) === false) {
 				$this->httpResponse->header('Allowed', $allowed = implode(', ', array_keys($methodList)));
-				$this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not supported; %s.', $method, empty($methodList) ? 'there are no supported methods' : 'available methods are [' . $allowed . ']'));
-				return null;
+				return $this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not supported; %s.', $method, empty($methodList) ? 'there are no supported methods' : 'available methods are [' . $allowed . ']'));
 			}
 			if (isset($methodList[$method]) === false) {
 				$this->httpResponse->header('Allowed', $allowed = implode(', ', array_keys($methodList)));
-				$this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not implemented; %s.', $method, empty($methodList) ? 'there are no available methods' : 'available methods are [' . $allowed . ']'));
-				return null;
+				return $this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not implemented; %s.', $method, empty($methodList) ? 'there are no available methods' : 'available methods are [' . $allowed . ']'));
 			}
 			return $this->execute($methodList[$method], $request);
 		}
@@ -71,14 +69,12 @@
 
 		protected function error(int $code, string $message) {
 			$this->httpResponse->header('Date', gmdate('D, d M Y H:i:s T'));
-			$this->response(new StringResponse($message, ['text/plain']), $code);
+			return $this->response(new StringResponse($message, ['text/plain']), $code);
 		}
 
 		protected function response(IResponse $response, int $code = null) {
-			if ($code) {
-				$this->httpResponse->setCode($code);
-			}
+			$code ? $this->httpResponse->setCode($code) : null;
 			$this->responseManager->response($response);
-			return $this;
+			return $response;
 		}
 	}
