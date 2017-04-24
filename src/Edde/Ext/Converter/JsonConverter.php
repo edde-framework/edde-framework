@@ -53,7 +53,6 @@
 				'array',
 			], [
 				'json',
-				'http+json',
 				'application/json',
 				'http+application/json',
 				'*/*',

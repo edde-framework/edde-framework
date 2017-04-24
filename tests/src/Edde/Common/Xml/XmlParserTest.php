@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Xml;
 
-	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResourceManager;
@@ -12,7 +11,6 @@
 	use Edde\Common\File\RootDirectory;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
-	use Edde\Ext\Converter\XmlConverter;
 	use phpunit\framework\TestCase;
 
 	require_once(__DIR__ . '/assets/assets.php');
@@ -22,6 +20,10 @@
 		 * @var IXmlParser
 		 */
 		protected $xmlParser;
+		/**
+		 * @var IResourceManager
+		 */
+		protected $resourceManager;
 
 		public function testSimple() {
 			$this->xmlParser->file(__DIR__ . '/assets/simple.xml', $handler = new \TestXmlHandler());
@@ -49,8 +51,8 @@
 				[
 					'root',
 					[
-						'foo' => 'bar',
-						'bar' => 'foo',
+						'foo'   => 'bar',
+						'bar'   => 'foo',
 						'class' => 'Some\Strange\Characters',
 					],
 				],
@@ -63,8 +65,8 @@
 				[
 					'root',
 					[
-						'foo' => 'bar',
-						'bar' => 'foo',
+						'foo'   => 'bar',
+						'bar'   => 'foo',
 						'class' => 'Some\Strange\Characters',
 					],
 				],
@@ -123,7 +125,7 @@
 				[
 					'f',
 					[
-						'name' => 'foo',
+						'name'         => 'foo',
 						'device-class' => 'bar',
 					],
 				],
@@ -140,7 +142,7 @@
 				[
 					'foo',
 					[
-						'name' => 'foo',
+						'name'         => 'foo',
 						'device-class' => 'bar',
 					],
 				],
@@ -167,7 +169,7 @@
 				[
 					'node',
 					[
-						'attr' => 'ibute',
+						'attr'              => 'ibute',
 						'another-attribute' => 'foo',
 					],
 				],
@@ -195,7 +197,7 @@
 				[
 					'node',
 					[
-						'attr' => 'ibute',
+						'attr'              => 'ibute',
 						'another-attribute' => 'foo',
 					],
 				],
@@ -215,15 +217,8 @@
 		}
 
 		public function testParserNode() {
-			$container = ContainerFactory::container([
-				IRootDirectory::class => new RootDirectory(__DIR__),
-				new ClassFactory(),
-			]);
-			$resourceManager = $container->create(IResourceManager::class);
-			$converterManager = $container->create(IConverterManager::class);
-			$converterManager->registerConverter($container->create(XmlConverter::class));
 			/** @var $node INode */
-			$node = $resourceManager->file(__DIR__ . '/assets/a-bit-less-simple.xml');
+			$node = $this->resourceManager->file(__DIR__ . '/assets/a-bit-less-simple.xml');
 			self::assertEquals('root', $node->getName());
 			self::assertEquals(['r' => 'oot'], $node->getAttributeList()
 				->array());
@@ -241,6 +236,11 @@
 		}
 
 		protected function setUp() {
-			$this->xmlParser = new XmlParser();
+			$container = ContainerFactory::container([
+				IRootDirectory::class => ContainerFactory::instance(RootDirectory::class, [__DIR__]),
+				new ClassFactory(),
+			]);
+			$this->xmlParser = $container->create(IXmlParser::class);
+			$this->resourceManager = $container->create(IResourceManager::class);
 		}
 	}

@@ -60,7 +60,7 @@
 			self::assertFalse($object->isSetup());
 			self::assertFalse($object->ok);
 			self::assertEquals(0, $object->config);
-			$object->registerConfiguratorList([new \AnotherSomethingConfigurator()]);
+			$object->setConfiguratorList([new \AnotherSomethingConfigurator()]);
 			$object->config();
 			self::assertEquals(1, $object->config);
 			$object->config();

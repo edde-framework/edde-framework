@@ -13,6 +13,7 @@
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\Html\Html5Generator;
+	use Edde\Common\Resource\UnknownResourceException;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
@@ -22,9 +23,6 @@
 
 	require_once __DIR__ . '/assets/assets.php';
 
-	/**
-	 * @group wipp
-	 */
 	class TemplateManagerTest extends TestCase {
 		/**
 		 * @var IContainer
@@ -38,12 +36,15 @@
 		 * @var ITemplateManager
 		 */
 		protected $templateManager;
-		// public function testException() {
-		// 	$this->expectException(UnknownTemplateException::class);
-		// 	$this->expectExceptionMessage('Requested template name [foo-bar] cannot be found; there are no template providers - please register instance of [Edde\Api\Template\ITemplateProvider].');
-		// 	$this->templateManager->template('foo-bar');
-		// }
-		//
+
+		public function testException() {
+			$this->expectException(UnknownResourceException::class);
+			$this->expectExceptionMessage('Requested unknown resource [moo].');
+			$template = $this->templateManager->template();
+			$template->template('moo');
+			$template->execute();
+		}
+
 		// public function testException2() {
 		// 	$this->expectException(UnknownTemplateException::class);
 		// 	$this->expectExceptionMessage('Requested template name [foo-bar] cannot be found.');
@@ -65,8 +66,8 @@
 
 		protected function setUp() {
 			$this->container = ContainerFactory::container([
-				IRootDirectory::class     => $this->rootDirectory = new RootDirectory(__DIR__),
-				ITemplateDirectory::class => $tempDirectory = $this->rootDirectory->directory('temp'),
+				IRootDirectory::class     => ContainerFactory::instance(RootDirectory::class, [__DIR__]),
+				ITemplateDirectory::class => ContainerFactory::proxy(IRootDirectory::class, 'directory', ['temp']),
 				ITemplateManager::class   => TemplateManager::class,
 				ICompiler::class          => Compiler::class,
 				ICacheStorage::class      => InMemoryCacheStorage::class,
@@ -76,7 +77,9 @@
 				IConverterManager::class => ConverterManagerConfigurator::class,
 				ICompiler::class         => CompilerConfigurator::class,
 			]);
+			$tempDirectory = $this->container->create(ITemplateDirectory::class);
 			$tempDirectory->purge();
+			$this->rootDirectory = $this->container->create(IRootDirectory::class);
 			$this->rootDirectory->normalize();
 			$this->templateManager = $this->container->create(ITemplateManager::class);
 		}

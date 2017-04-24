@@ -39,11 +39,12 @@
 
 		protected function setUp() {
 			$this->converterManager = ContainerFactory::container([
-				IRootDirectory::class => new RootDirectory(__DIR__),
+				IRootDirectory::class => ContainerFactory::instance(RootDirectory::class, [__DIR__]),
 				new ClassFactory(),
 			], [
 				IConverterManager::class => ConverterManagerConfigurator::class,
 			])
 				->create(IConverterManager::class);
+			$this->converterManager->setup();
 		}
 	}

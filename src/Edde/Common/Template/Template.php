@@ -31,7 +31,7 @@
 				$context ? (is_array($context) ? $context : [
 					null       => $context,
 					'.current' => $context,
-				]) : null,
+				]) : [],
 				$namespace,
 				$parameterList,
 			];
