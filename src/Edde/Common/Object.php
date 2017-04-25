@@ -100,4 +100,8 @@
 			}
 			throw new EddeException(sprintf('Writing to the undefined/private/protected property [%s::$%s].', static::class, $name));
 		}
+
+		public function __clone() {
+			$this->aId = null;
+		}
 	}

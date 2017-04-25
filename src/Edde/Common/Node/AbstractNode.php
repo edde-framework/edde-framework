@@ -337,6 +337,7 @@
 		}
 
 		public function __clone() {
+			parent::__clone();
 			foreach ($this->nodeList as &$node) {
 				$node = clone $node;
 			}

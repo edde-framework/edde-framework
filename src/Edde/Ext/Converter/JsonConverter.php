@@ -51,6 +51,7 @@
 			$this->register([
 				'json',
 				'array',
+				'object',
 			], [
 				'json',
 				'application/json',
@@ -94,6 +95,7 @@
 					break;
 				case 'json':
 				case 'array':
+				case 'object':
 					switch ($target) {
 						case 'json':
 						case 'application/json':

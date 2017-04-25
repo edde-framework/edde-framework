@@ -37,4 +37,10 @@
 		public function isCanceled(): bool {
 			return $this->cancel;
 		}
+
+		public function packet(): \stdClass {
+			$packet = parent::packet();
+			$packet->event = $this->getEvent();
+			return $packet;
+		}
 	}

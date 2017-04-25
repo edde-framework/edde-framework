@@ -42,6 +42,7 @@
 	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
 	use Edde\Api\Protocol\IEventBus;
+	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\IResourceProvider;
 	use Edde\Api\Router\IRouterService;
@@ -88,6 +89,7 @@
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Object;
 	use Edde\Common\Protocol\EventBus;
+	use Edde\Common\Protocol\Packet;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\Runtime;
@@ -364,6 +366,7 @@
 				IAcl::class                  => Acl::class,
 				ITranslator::class           => Translator::class,
 				IAssetStorage::class         => AssetStorage::class,
+				IPacket::class               => self::instance(Packet::class, [], true),
 				IEventBus::class             => EventBus::class,
 			];
 		}

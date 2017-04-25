@@ -11,6 +11,10 @@
 		 * @var string
 		 */
 		protected $type;
+		/**
+		 * @var array
+		 */
+		protected $data;
 
 		/**
 		 * @param string $type
@@ -24,5 +28,32 @@
 		 */
 		public function getType(): string {
 			return $this->type;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function set(string $name, $value): IElement {
+			$this->data[$name] = $value;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function get(string $name, $default = null) {
+			return $this->data[$name] ?? $default;
+		}
+
+		/**
+		 * @return \stdClass
+		 */
+		public function packet(): \stdClass {
+			$packet = new \stdClass();
+			$packet->type = $this->type;
+			if (empty($this->data) === false) {
+				$packet->data = $this->data;
+			}
+			return $packet;
 		}
 	}

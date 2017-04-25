@@ -7,6 +7,7 @@
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Translator\Dictionary\CsvDictionaryConverter;
+	use Edde\Ext\Protocol\PacketConverter;
 	use Edde\Ext\Template\TemplateConverter;
 
 	class ConverterManagerConfigurator extends AbstractConfigurator {
@@ -23,5 +24,6 @@
 			$instance->registerConverter($this->container->create(PhpConverter::class));
 			$instance->registerConverter($this->container->create(CsvDictionaryConverter::class));
 			$instance->registerConverter($this->container->create(XmlConverter::class));
+			$instance->registerConverter($this->container->create(PacketConverter::class));
 		}
 	}

@@ -73,6 +73,7 @@
 		}
 
 		public function __clone() {
+			parent::__clone();
 			$this->execute = null;
 		}
 

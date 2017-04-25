@@ -383,6 +383,7 @@
 		}
 
 		public function __clone() {
+			parent::__clone();
 			foreach ($this->propertyList as &$property) {
 				$property = clone $property;
 			}
