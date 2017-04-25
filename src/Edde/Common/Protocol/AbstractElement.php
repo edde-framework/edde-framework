@@ -12,6 +12,14 @@
 		 */
 		protected $type;
 		/**
+		 * @var string
+		 */
+		protected $scope;
+		/**
+		 * @var string[]
+		 */
+		protected $tagList = [];
+		/**
 		 * @var array
 		 */
 		protected $data;
@@ -28,6 +36,36 @@
 		 */
 		public function getType(): string {
 			return $this->type;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setScope(string $scope = null): IElement {
+			$this->scope = $scope;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getScope() {
+			return $this->scope;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setTagList(array $tagList = null): IElement {
+			$this->tagList = $tagList ?: [];
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getTagList(): array {
+			return $this->tagList;
 		}
 
 		/**
@@ -51,6 +89,12 @@
 		public function packet(): \stdClass {
 			$packet = new \stdClass();
 			$packet->type = $this->type;
+			if (empty($this->scope) === false) {
+				$packet->sope = $this->scope;
+			}
+			if (empty($this->tagList) === false) {
+				$packet->tags = $this->tagList;
+			}
 			if (empty($this->data) === false) {
 				$packet->data = $this->data;
 			}

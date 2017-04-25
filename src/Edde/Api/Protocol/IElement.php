@@ -12,6 +12,34 @@
 		public function getType(): string;
 
 		/**
+		 * set element's scope
+		 *
+		 * @param string|null $scope
+		 *
+		 * @return IElement
+		 */
+		public function setScope(string $scope = null): IElement;
+
+		/**
+		 * @return string|null
+		 */
+		public function getScope();
+
+		/**
+		 * set tag list of the element
+		 *
+		 * @param string[]|null $tagList
+		 *
+		 * @return IElement
+		 */
+		public function setTagList(array $tagList = null): IElement;
+
+		/**
+		 * @return string[]
+		 */
+		public function getTagList(): array;
+
+		/**
 		 * set internal property of element
 		 *
 		 * @param string $name

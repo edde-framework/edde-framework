@@ -26,6 +26,15 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function inherit(IEvent $event): IEvent {
+			$this->setScope($event->getScope());
+			$this->setTagList(array_merge($this->getTagList(), $event->getTagList()));
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function cancel(bool $cancel = true): IEvent {
 			$this->cancel = $cancel;
 			return $this;
