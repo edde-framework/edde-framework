@@ -19,6 +19,13 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function getEvent(): string {
+			return static::class;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function cancel(bool $cancel = true): IEvent {
 			$this->cancel = $cancel;
 			return $this;

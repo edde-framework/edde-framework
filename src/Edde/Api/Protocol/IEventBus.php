@@ -7,14 +7,21 @@
 
 	interface IEventBus extends IConfigurable {
 		/**
-		 * trigger event bus update
-		 *
-		 * @param string|null $scope
-		 * @param array|null  $tagList
+		 * @param IListener $listener
 		 *
 		 * @return IEventBus
 		 */
-		public function update(string $scope = null, array $tagList = null): IEventBus;
+		public function register(IListener $listener): IEventBus;
+
+		/**
+		 * register listener for the given event
+		 *
+		 * @param string   $event
+		 * @param callable $callback
+		 *
+		 * @return IEventBus
+		 */
+		public function listen(string $event, callable $callback): IEventBus;
 
 		/**
 		 * return event list by the given parameters

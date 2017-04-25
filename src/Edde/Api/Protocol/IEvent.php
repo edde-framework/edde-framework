@@ -5,6 +5,13 @@
 
 	interface IEvent extends IElement {
 		/**
+		 * get event type
+		 *
+		 * @return string
+		 */
+		public function getEvent(): string;
+
+		/**
 		 * cancel the current event; listener must respect this flag
 		 *
 		 * @param bool $cancel

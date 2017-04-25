@@ -5,17 +5,33 @@
 
 	use Edde\Api\Protocol\IEvent;
 	use Edde\Api\Protocol\IEventBus;
+	use Edde\Api\Protocol\IListener;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 	use Edde\Common\Protocol\Event\GetEventListEvent;
 
 	class EventBus extends Object implements IEventBus {
 		use ConfigurableTrait;
+		/**
+		 * @var callable[]
+		 */
+		protected $callbackList = [];
 
 		/**
 		 * @inheritdoc
 		 */
-		public function update(string $scope = null, array $tagList = null): IEventBus {
+		public function register(IListener $listener): IEventBus {
+			foreach ($listener->getListenerList() as $event => $listener) {
+				$this->listen($event, $listener);
+			}
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function listen(string $event, callable $callback): IEventBus {
+			$this->callbackList[$event][] = $callback;
 			return $this;
 		}
 
@@ -36,6 +52,11 @@
 		 * @inheritdoc
 		 */
 		public function emit(IEvent $event): IEventBus {
+			if (isset($this->callbackList[$type = $event->getEvent()])) {
+				foreach ($this->callbackList[$type] as $callback) {
+					$callback($event);
+				}
+			}
 			return $this;
 		}
 
