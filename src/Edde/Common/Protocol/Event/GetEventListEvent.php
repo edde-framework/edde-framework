@@ -31,6 +31,7 @@
 		}
 
 		public function addEvent(IEvent $event): GetEventListEvent {
+			$this->eventList[] = $event;
 			return $this;
 		}
 
