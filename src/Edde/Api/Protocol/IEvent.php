@@ -4,4 +4,19 @@
 	namespace Edde\Api\Protocol;
 
 	interface IEvent extends IElement {
+		/**
+		 * cancel the current event; listener must respect this flag
+		 *
+		 * @param bool $cancel
+		 *
+		 * @return IEvent
+		 */
+		public function cancel(bool $cancel = true): IEvent;
+
+		/**
+		 * is an event canceled?
+		 *
+		 * @return bool
+		 */
+		public function isCanceled(): bool;
 	}
