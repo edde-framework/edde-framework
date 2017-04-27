@@ -14,6 +14,10 @@
 		/**
 		 * @var string
 		 */
+		protected $id;
+		/**
+		 * @var string
+		 */
 		protected $scope;
 		/**
 		 * @var string[]
@@ -29,6 +33,7 @@
 		 */
 		public function __construct(string $type) {
 			$this->type = $type;
+			$this->id = null;
 		}
 
 		/**
@@ -36,6 +41,13 @@
 		 */
 		public function getType(): string {
 			return $this->type;
+		}
+
+		/**
+		 * @return string
+		 */
+		public function getId(): string {
+			return $this->id === null ? $this->id = bin2hex(random_bytes(4)) . '-' . implode('-', str_split(bin2hex(random_bytes(8)), 4)) . '-' . bin2hex(random_bytes(6)) : $this->id;
 		}
 
 		/**

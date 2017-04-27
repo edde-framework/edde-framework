@@ -12,6 +12,13 @@
 		public function getType(): string;
 
 		/**
+		 * return the element id; format is free to use, but it should be generally unique (for example guid)
+		 *
+		 * @return string
+		 */
+		public function getId(): string;
+
+		/**
 		 * set element's scope
 		 *
 		 * @param string|null $scope
