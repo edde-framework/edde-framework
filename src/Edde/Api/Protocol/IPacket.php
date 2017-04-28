@@ -3,6 +3,8 @@
 
 	namespace Edde\Api\Protocol;
 
+	use Edde\Api\Protocol\Event\IEvent;
+
 	interface IPacket extends IElement {
 		/**
 		 * @return string

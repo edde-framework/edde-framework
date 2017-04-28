@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Protocol;
+	namespace Edde\Api\Protocol\Event;
 
 	trait LazyEventBusTrait {
 		/**

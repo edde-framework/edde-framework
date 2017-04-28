@@ -41,7 +41,7 @@
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
-	use Edde\Api\Protocol\IEventBus;
+	use Edde\Api\Protocol\Event\IEventBus;
 	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\IResourceProvider;
@@ -88,7 +88,7 @@
 	use Edde\Common\Log\LogDirectory;
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Object;
-	use Edde\Common\Protocol\EventBus;
+	use Edde\Common\Protocol\Event\EventBus;
 	use Edde\Common\Protocol\Packet;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Router\RouterService;

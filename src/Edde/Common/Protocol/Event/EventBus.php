@@ -1,14 +1,13 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Common\Protocol;
+	namespace Edde\Common\Protocol\Event;
 
-	use Edde\Api\Protocol\IEvent;
-	use Edde\Api\Protocol\IEventBus;
-	use Edde\Api\Protocol\IListener;
+	use Edde\Api\Protocol\Event\IEvent;
+	use Edde\Api\Protocol\Event\IEventBus;
+	use Edde\Api\Protocol\Event\IListener;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
-	use Edde\Common\Protocol\Event\GetEventListEvent;
 
 	class EventBus extends Object implements IEventBus {
 		use ConfigurableTrait;

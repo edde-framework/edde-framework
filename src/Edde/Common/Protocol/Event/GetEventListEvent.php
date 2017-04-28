@@ -3,8 +3,7 @@
 
 	namespace Edde\Common\Protocol\Event;
 
-	use Edde\Api\Protocol\IEvent;
-	use Edde\Common\Protocol\Event;
+	use Edde\Api\Protocol\Event\IEvent;
 
 	class GetEventListEvent extends Event {
 		/**

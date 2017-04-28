@@ -4,7 +4,6 @@
 	namespace Edde\Common\Protocol;
 
 	use Edde\Api\Protocol\IElement;
-	use Edde\Api\Protocol\IEvent;
 	use Edde\Api\Protocol\IPacket;
 
 	class Packet extends AbstractElement implements IPacket {
@@ -13,7 +12,7 @@
 		 */
 		protected $version;
 		/**
-		 * @var IEvent[]
+		 * @var \Edde\Api\Protocol\Event\IEvent[]
 		 */
 		protected $eventList = [];
 

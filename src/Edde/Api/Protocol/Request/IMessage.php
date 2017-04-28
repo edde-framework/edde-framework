@@ -1,7 +1,9 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Protocol;
+	namespace Edde\Api\Protocol\Request;
+
+	use Edde\Api\Protocol\IElement;
 
 	interface IMessage extends IElement {
 	}

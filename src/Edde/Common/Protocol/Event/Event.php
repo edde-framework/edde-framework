@@ -1,9 +1,10 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Common\Protocol;
+	namespace Edde\Common\Protocol\Event;
 
-	use Edde\Api\Protocol\IEvent;
+	use Edde\Api\Protocol\Event\IEvent;
+	use Edde\Common\Protocol\AbstractElement;
 
 	class Event extends AbstractElement implements IEvent {
 		/**
