@@ -91,6 +91,14 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function put(array $data): IElement {
+			$this->data = $data;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function get(string $name, $default = null) {
 			return $this->data[$name] ?? $default;
 		}

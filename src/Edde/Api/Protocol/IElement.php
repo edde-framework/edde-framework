@@ -57,6 +57,15 @@
 		public function set(string $name, $value): IElement;
 
 		/**
+		 * override current set of data in element
+		 *
+		 * @param array $data
+		 *
+		 * @return IElement
+		 */
+		public function put(array $data): IElement;
+
+		/**
 		 * @param string $name
 		 * @param null   $default
 		 *

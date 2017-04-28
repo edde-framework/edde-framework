@@ -4,7 +4,9 @@
 	namespace Edde\Common\Protocol\Request;
 
 	use Edde\Api\Protocol\Request\IRequest;
-	use Edde\Common\Protocol\AbstractElement;
 
-	class Request extends AbstractElement implements IRequest {
+	class Request extends Message implements IRequest {
+		public function __construct(string $request) {
+			parent::__construct($request, 'request');
+		}
 	}

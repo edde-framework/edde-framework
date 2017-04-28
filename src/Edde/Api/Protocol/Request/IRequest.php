@@ -3,7 +3,8 @@
 
 	namespace Edde\Api\Protocol\Request;
 
-	use Edde\Api\Protocol\IElement;
-
-	interface IRequest extends IElement {
+	/**
+	 * Request is special kind of Message expecting some response.
+	 */
+	interface IRequest extends IMessage {
 	}

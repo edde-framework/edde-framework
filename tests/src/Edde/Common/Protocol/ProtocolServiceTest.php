@@ -8,6 +8,7 @@
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Common\Container\LazyTrait;
 	use Edde\Common\Protocol\Event\Event;
+	use Edde\Common\Protocol\Request\Request;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use PHPUnit\Framework\TestCase;
@@ -17,7 +18,7 @@
 		use LazyEventBusTrait;
 		use LazyTrait;
 
-		public function testException() {
+		public function testEventException() {
 			$this->expectException(NoHandlerException::class);
 			$this->expectExceptionMessage('Element [event (' . Event::class . ')] has no available handler.');
 			$this->protocolService->execute(new Event('some cool event'));
@@ -51,6 +52,17 @@
 			$this->assertEquals(0, $count);
 			$this->protocolService->dequeue();
 			$this->assertEquals(2, $count, 'EventBus has not been executed!');
+		}
+
+		public function testRequestException() {
+			$this->expectException(NoHandlerException::class);
+			$this->expectExceptionMessage('Element [request (' . Request::class . ')] has no available handler.');
+			$this->protocolService->execute(new Request('wanna do something'));
+		}
+
+		public function testRequestExecute() {
+			$count = 0;
+			$this->protocolService->execute(new Request('wanna do something'));
 		}
 
 		protected function setUp() {
