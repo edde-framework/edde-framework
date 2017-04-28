@@ -8,20 +8,25 @@
 
 	class Event extends AbstractElement implements IEvent {
 		/**
+		 * @var string
+		 */
+		protected $event;
+		/**
 		 * @var bool
 		 */
 		protected $cancel;
 
-		public function __construct() {
+		public function __construct(string $event = null) {
 			parent::__construct('event');
 			$this->cancel = false;
+			$this->event = $event ?: static::class;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function getEvent(): string {
-			return static::class;
+			return $this->event;
 		}
 
 		/**

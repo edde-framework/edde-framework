@@ -6,10 +6,11 @@
 	use Edde\Api\Protocol\Event\IEvent;
 	use Edde\Api\Protocol\Event\IEventBus;
 	use Edde\Api\Protocol\Event\IListener;
+	use Edde\Api\Protocol\IElement;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Protocol\AbstractProtocolHandler;
 
-	class EventBus extends Object implements IEventBus {
+	class EventBus extends AbstractProtocolHandler implements IEventBus {
 		use ConfigurableTrait;
 		/**
 		 * @var callable[]
@@ -38,8 +39,9 @@
 		 * @inheritdoc
 		 */
 		public function getEventList(string $scope = null, array $tagList = null): array {
-			$event = (new GetEventListEvent())->setScope($scope)
-				->setTagList($tagList);
+			$event = new GetEventListEvent();
+			$event->setScope($scope);
+			$event->setTagList($tagList);
 			$this->emit($event);
 			if ($event->isCanceled()) {
 				return [];
@@ -50,10 +52,19 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function emit(IEvent $event): IEventBus {
-			if (isset($this->callbackList[$type = $event->getEvent()])) {
+		public function canHandle(IElement $element): bool {
+			return $element->getType() === 'event' && $element instanceof IEvent;
+		}
+
+		/**
+		 * @inheritdoc
+		 *
+		 * @param IEvent $element
+		 */
+		protected function element(IElement $element) {
+			if (isset($this->callbackList[$type = $element->getEvent()])) {
 				foreach ($this->callbackList[$type] as $callback) {
-					$callback($event);
+					$callback($element);
 				}
 			}
 			return $this;
@@ -62,7 +73,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function queue(IEvent $event): IEventBus {
+		public function emit(IEvent $event): IEventBus {
+			$this->element($event);
 			return $this;
 		}
 	}

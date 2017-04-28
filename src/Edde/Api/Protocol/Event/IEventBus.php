@@ -4,8 +4,9 @@
 	namespace Edde\Api\Protocol\Event;
 
 	use Edde\Api\Config\IConfigurable;
+	use Edde\Api\Protocol\IProtocolHandler;
 
-	interface IEventBus extends IConfigurable {
+	interface IEventBus extends IProtocolHandler, IConfigurable {
 		/**
 		 * @param IListener $listener
 		 *
@@ -41,13 +42,4 @@
 		 * @return IEventBus
 		 */
 		public function emit(IEvent $event): IEventBus;
-
-		/**
-		 * enqueue the given event to be processed "later"
-		 *
-		 * @param IEvent $event
-		 *
-		 * @return IEventBus
-		 */
-		public function queue(IEvent $event): IEventBus;
 	}

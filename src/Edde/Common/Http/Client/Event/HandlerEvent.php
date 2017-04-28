@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Http\Client\Event;
 
@@ -15,15 +15,16 @@
 		 */
 		protected $httpRequest;
 		/**
-		 * @var \Edde\Api\Http\Client\IHttpHandler
+		 * @var IHttpHandler
 		 */
 		protected $httpHandler;
 
 		/**
-		 * @param IHttpRequest                       $httpRequest
-		 * @param \Edde\Api\Http\Client\IHttpHandler $httpHandler
+		 * @param IHttpRequest $httpRequest
+		 * @param IHttpHandler $httpHandler
 		 */
 		public function __construct(IHttpRequest $httpRequest, IHttpHandler $httpHandler) {
+			parent::__construct();
 			$this->httpRequest = $httpRequest;
 			$this->httpHandler = $httpHandler;
 		}
@@ -36,7 +37,7 @@
 		}
 
 		/**
-		 * @return \Edde\Api\Http\Client\IHttpHandler
+		 * @return IHttpHandler
 		 */
 		public function getHttpHandler(): IHttpHandler {
 			return $this->httpHandler;

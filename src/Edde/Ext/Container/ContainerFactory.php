@@ -43,6 +43,7 @@
 	use Edde\Api\Log\ILogService;
 	use Edde\Api\Protocol\Event\IEventBus;
 	use Edde\Api\Protocol\IPacket;
+	use Edde\Api\Protocol\IProtocolService;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\IResourceProvider;
 	use Edde\Api\Router\IRouterService;
@@ -90,6 +91,7 @@
 	use Edde\Common\Object;
 	use Edde\Common\Protocol\Event\EventBus;
 	use Edde\Common\Protocol\Packet;
+	use Edde\Common\Protocol\ProtocolService;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\Runtime;
@@ -110,6 +112,7 @@
 	use Edde\Ext\Converter\ConverterManagerConfigurator;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Database\Sqlite\SqliteDsn;
+	use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 	use Edde\Ext\Resource\ResourceManagerConfigurator;
 	use Edde\Ext\Router\RequestQueueConfigurator;
 	use Edde\Ext\Router\RouterServiceConfigurator;
@@ -210,6 +213,23 @@
 		 */
 		static public function container(array $factoryList = [], array $configuratorList = []): IContainer {
 			return self::create(array_merge(self::getDefaultFactoryList(), $factoryList), array_filter(array_merge(self::getDefaultConfiguratorList(), $configuratorList)));
+		}
+
+		/**
+		 * shortcut for autowiring (for example in tests, ...)
+		 *
+		 * @param mixed $instance
+		 * @param array $factoryList
+		 * @param array $configuratorList
+		 *
+		 * @return IContainer
+		 * @throws ContainerException
+		 * @throws FactoryException
+		 */
+		static public function autowire($instance, array $factoryList = [], array $configuratorList = []): IContainer {
+			$container = self::container($factoryList, $configuratorList);
+			$container->autowire($instance);
+			return $container;
 		}
 
 		/**
@@ -349,9 +369,6 @@
 				ITemplateManager::class      => TemplateManager::class,
 				ITemplate::class             => self::instance(Template::class, [], true),
 				ICompiler::class             => Compiler::class,
-				/**
-				 * need to be defined
-				 */
 				IUpgradeManager::class       => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
 				ICryptEngine::class          => CryptEngine::class,
 				IHostUrl::class              => self::exception(sprintf('Host url is not specified; you have to register [%s] interface.', IHostUrl::class)),
@@ -366,6 +383,7 @@
 				IAcl::class                  => Acl::class,
 				ITranslator::class           => Translator::class,
 				IAssetStorage::class         => AssetStorage::class,
+				IProtocolService::class      => ProtocolService::class,
 				IPacket::class               => self::instance(Packet::class, [], true),
 				IEventBus::class             => EventBus::class,
 			];
@@ -390,6 +408,7 @@
 				 * As other components, Template engine should be configured too; this will register default set of macros.
 				 */
 				ICompiler::class         => CompilerConfigurator::class,
+				IProtocolService::class  => ProtocolServiceConfigurator::class,
 			];
 		}
 	}
