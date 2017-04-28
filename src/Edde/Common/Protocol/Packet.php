@@ -12,9 +12,9 @@
 		 */
 		protected $version;
 		/**
-		 * @var \Edde\Api\Protocol\Event\IEvent[]
+		 * @var IElement[]
 		 */
-		protected $eventList = [];
+		protected $elementList = [];
 
 		public function __construct($version = '1.0') {
 			parent::__construct('packet');
@@ -31,27 +31,20 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setElementList(array $elementList): IPacket {
-			/** @var $element IElement */
-			foreach ($elementList as $element) {
-				switch ($element->getType()) {
-					case 'event':
-						$this->eventList[] = $element;
-						break;
-				}
-			}
+		public function addElement(IElement $element): IPacket {
+			$this->elementList[$element->getType()][] = $element;
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function setEventList(array $eventList = null): IPacket {
-			if ($eventList === null) {
-				$this->eventList = [];
-				return $this;
+		public function setElementList(array $elementList): IPacket {
+			$this->elementList = [];
+			/** @var $element IElement */
+			foreach ($elementList as $element) {
+				$this->addElement($element);
 			}
-			$this->setElementList($eventList);
 			return $this;
 		}
 
@@ -61,11 +54,13 @@
 		public function packet(): \stdClass {
 			$packet = parent::packet();
 			$packet->version = $this->version;
-			$elementList = $packet->elements = new \stdClass();
-			if (empty($this->eventList) === false) {
-				$elementList->event = [];
-				foreach ($this->eventList as $event) {
-					$elementList->event[] = $event->packet();
+			if (empty($this->elementList) === false) {
+				$elementList = $packet->elements = (isset($packet->elements) ? $packet->elements : new \stdClass());
+				foreach ($this->elementList as $name => $list) {
+					/** @var $item IElement */
+					foreach ($list as $item) {
+						$elementList->{$name}[] = $item->packet();
+					}
 				}
 			}
 			return $packet;
@@ -73,6 +68,6 @@
 
 		public function __clone() {
 			parent::__clone();
-			$this->eventList = [];
+			$this->elementList = [];
 		}
 	}

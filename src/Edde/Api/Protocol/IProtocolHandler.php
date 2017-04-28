@@ -48,7 +48,21 @@
 		/**
 		 * execute current queue of elements
 		 *
+		 * @param string|null $scope
+		 * @param array|null  $tagList
+		 *
 		 * @return IProtocolHandler
 		 */
-		public function dequeue(): IProtocolHandler;
+		public function dequeue(string $scope = null, array $tagList = null): IProtocolHandler;
+
+		/**
+		 * create current packet
+		 *
+		 * @param string|null   $scope
+		 * @param string[]|null $tagList
+		 * @param IPacket       $packet
+		 *
+		 * @return IPacket
+		 */
+		public function packet(string $scope = null, array $tagList = null, IPacket $packet = null): IPacket;
 	}

@@ -33,6 +33,15 @@
 		public function getScope();
 
 		/**
+		 * is this element in the given scope?
+		 *
+		 * @param string|null $scope
+		 *
+		 * @return bool
+		 */
+		public function inScope(string $scope = null): bool;
+
+		/**
 		 * set tag list of the element
 		 *
 		 * @param string[]|null $tagList
@@ -45,6 +54,16 @@
 		 * @return string[]
 		 */
 		public function getTagList(): array;
+
+		/**
+		 * has this element the given tag list? (tag + tag + tag + ...); strict mast strictly match (a+b+c => a+b+c)
+		 *
+		 * @param array|null $tagList
+		 * @param bool       $strict
+		 *
+		 * @return bool
+		 */
+		public function inTagList(array $tagList = null, bool $strict = false): bool;
 
 		/**
 		 * set internal property of element

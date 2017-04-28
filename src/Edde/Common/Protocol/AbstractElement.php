@@ -68,6 +68,13 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function inScope(string $scope = null): bool {
+			return $this->scope === $scope;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function setTagList(array $tagList = null): IElement {
 			$this->tagList = $tagList ?: [];
 			return $this;
@@ -78,6 +85,24 @@
 		 */
 		public function getTagList(): array {
 			return $this->tagList;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function inTagList(array $tagList = null, bool $strict = false): bool {
+			if ($tagList === null && $this->tagList === null) {
+				return true;
+			} else if ($strict === false && empty($tagList) && empty($this->tagList)) {
+				return true;
+			} else if ($tagList === null && $this->tagList !== null) {
+				return false;
+			}
+			$diff = array_diff($tagList, $this->tagList);
+			if ($strict) {
+				return empty($diff) && count($this->tagList) === count($tagList);
+			}
+			return count($diff) !== count($tagList);
 		}
 
 		/**
@@ -110,7 +135,7 @@
 			$packet = new \stdClass();
 			$packet->type = $this->type;
 			if (empty($this->scope) === false) {
-				$packet->sope = $this->scope;
+				$packet->scope = $this->scope;
 			}
 			if (empty($this->tagList) === false) {
 				$packet->tags = $this->tagList;

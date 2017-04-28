@@ -4,6 +4,7 @@
 	namespace Edde\Common\Protocol;
 
 	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Protocol\IProtocolHandler;
 	use Edde\Api\Protocol\IProtocolService;
 
@@ -52,5 +53,16 @@
 				}
 			}
 			throw new NoHandlerException(sprintf('Element [%s (%s)] has no available handler.', $type, get_class($element)));
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function packet(string $scope = null, array $tagList = null, IPacket $packet = null): IPacket {
+			$packet = parent::packet($scope, $tagList, $packet);
+			foreach ($this->protocolHandlerList as $protocolHandler) {
+				$protocolHandler->packet($scope, $tagList, $packet);
+			}
+			return $packet;
 		}
 	}

@@ -3,13 +3,18 @@
 
 	namespace Edde\Api\Protocol;
 
-	use Edde\Api\Protocol\Event\IEvent;
-
 	interface IPacket extends IElement {
 		/**
 		 * @return string
 		 */
 		public function getVersion(): string;
+
+		/**
+		 * @param IElement $element
+		 *
+		 * @return IPacket
+		 */
+		public function addElement(IElement $element): IPacket;
 
 		/**
 		 * set element list which will be automagically aligned to proper properties of packet
@@ -19,13 +24,4 @@
 		 * @return IPacket
 		 */
 		public function setElementList(array $elementList): IPacket;
-
-		/**
-		 * set event list
-		 *
-		 * @param IEvent[]|null $eventList
-		 *
-		 * @return IPacket
-		 */
-		public function setEventList(array $eventList = null): IPacket;
 	}

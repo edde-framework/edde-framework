@@ -106,6 +106,102 @@
 			self::assertEquals('foo', $bar->get('data'));
 		}
 
+		public function testAligment() {
+			$event = (new Event('foobar'))->setScope('scope')
+				->setTagList([
+					'foo',
+					'bar',
+				]);
+			$event2 = (new Event('foobar'))->setScope('scope')
+				->setTagList([
+					'foo',
+					'bar',
+					'moo',
+				]);
+			self::assertTrue($event->inScope('scope'));
+			self::assertFalse($event->inScope('scopee'));
+			self::assertFalse($event->inTagList());
+			self::assertTrue($event->inTagList([
+				'foo',
+				'bar',
+			]));
+			self::assertTrue($event->inTagList([
+				'foo',
+				'bar',
+			], true));
+			self::assertTrue($event2->inTagList([
+				'foo',
+				'bar',
+			]));
+			self::assertTrue($event2->inTagList([
+				'foo',
+				'bar',
+				'muhaa',
+			]));
+			self::assertFalse($event2->inTagList([
+				'muhaa',
+				'moooo',
+			]));
+			self::assertTrue($event2->inTagList([
+				'bar',
+			]));
+			self::assertFalse($event2->inTagList([
+				'foo',
+				'bar',
+			], true));
+		}
+
+		public function testPacket() {
+			$this->protocolService->setup();
+			$this->protocolService->queue(($event = new Event('foobar'))->setScope('scope')
+				->setTagList([
+					'foo',
+					'bar',
+				]));
+			$this->protocolService->queue(($event2 = new Event('foobar'))->setScope('scope')
+				->setTagList([
+					'foo',
+					'bar',
+					'moo',
+				]));
+			$packet = $this->protocolService->packet('scope', [
+				'foo',
+				'bar',
+			]);
+			$packet = $packet->packet();
+			$expect = new \stdClass();
+			$expect->version = '1.0';
+			$expect->type = 'packet';
+			$expect->scope = 'scope';
+			$expect->tags = [
+				'foo',
+				'bar',
+			];
+			$elements = $expect->elements = new \stdClass();
+			$elements->event = [
+				(object)[
+					'type'  => 'event',
+					'scope' => 'scope',
+					'tags'  => [
+						'foo',
+						'bar',
+					],
+					'event' => 'foobar',
+				],
+				(object)[
+					'type'  => 'event',
+					'scope' => 'scope',
+					'tags'  => [
+						'foo',
+						'bar',
+						'moo',
+					],
+					'event' => 'foobar',
+				],
+			];
+			self::assertEquals($expect, $packet);
+		}
+
 		protected function setUp() {
 			ContainerFactory::autowire($this, [new ClassFactory()]);
 		}
