@@ -164,6 +164,11 @@
 					'bar',
 					'moo',
 				]));
+			$this->protocolService->queue(($request = new Request('do something cool'))->setScope('scope')
+				->setTagList([
+					'foo',
+					'bar',
+				]));
 			$this->protocolService->queue(($event3 = new Event('foobar'))->setScope('out of scope')
 				->setTagList([
 					'foo',
@@ -203,6 +208,17 @@
 						'moo',
 					],
 					'event' => 'foobar',
+				],
+			];
+			$elements->request = [
+				(object)[
+					'type'    => 'request',
+					'scope'   => 'scope',
+					'tags'    => [
+						'foo',
+						'bar',
+					],
+					'request' => 'do something cool',
 				],
 			];
 			self::assertEquals($expect, $packet);

@@ -9,4 +9,10 @@
 		public function __construct(string $request) {
 			parent::__construct($request, 'request');
 		}
+
+		public function packet(): \stdClass {
+			$packet = parent::packet();
+			$packet->request = $this->getRequest();
+			return $packet;
+		}
 	}
