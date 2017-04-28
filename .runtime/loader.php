@@ -10,19 +10,17 @@
 
 	use Edde\Api\Application\IContext;
 	use Edde\Api\Cache\ICacheManager;
-	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Resource\IResourceProvider;
 	use Edde\Api\Router\IRouterService;
-	use Edde\Api\Template\ICompiler;
 	use Edde\App\Application\AppContext;
 	use Edde\App\Router\RouterServiceConfigurator;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Ext\Cache\ContextCacheManagerConfigurator;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
-	use Edde\Ext\Converter\ConverterManagerConfigurator;
-	use Edde\Ext\Template\CompilerConfigurator;
+	use Edde\Ext\Router\RestRouter;
+	use Edde\Ext\Router\RestRouterConfigurator;
 	use Tracy\Debugger;
 
 	/**
@@ -83,10 +81,11 @@
 		/**
 		 * As we have some custom configuration for router service, we have to register proper configurator for it.
 		 */
-		IRouterService::class    => RouterServiceConfigurator::class,
+		IRouterService::class => RouterServiceConfigurator::class,
 		/**
 		 * Because we are using context, we also have to properly setup cache manager (by setting proper namespace from
 		 * context).
 		 */
-		ICacheManager::class     => ContextCacheManagerConfigurator::class,
+		ICacheManager::class  => ContextCacheManagerConfigurator::class,
+		RestRouter::class     => RestRouterConfigurator::class,
 	]);
