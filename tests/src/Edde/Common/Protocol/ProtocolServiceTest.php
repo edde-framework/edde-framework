@@ -164,6 +164,12 @@
 					'bar',
 					'moo',
 				]));
+			$this->protocolService->queue(($event3 = new Event('foobar'))->setScope('out of scope')
+				->setTagList([
+					'foo',
+					'bar',
+					'moo',
+				]));
 			$packet = $this->protocolService->packet('scope', [
 				'foo',
 				'bar',
