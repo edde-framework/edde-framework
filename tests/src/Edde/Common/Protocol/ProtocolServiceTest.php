@@ -7,6 +7,7 @@
 	use Edde\Api\Protocol\Event\LazyEventBusTrait;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Api\Protocol\Request\IResponse;
+	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
 	use Edde\Api\Protocol\Request\UnhandledRequestException;
 	use Edde\Common\Container\LazyTrait;
 	use Edde\Common\Protocol\Event\Event;
@@ -21,6 +22,7 @@
 
 	class ProtocolServiceTest extends TestCase implements ILazyInject {
 		use LazyProtocolServiceTrait;
+		use LazyRequestServiceTrait;
 		use LazyEventBusTrait;
 		use LazyTrait;
 
@@ -84,6 +86,24 @@
 			$this->protocolService->setup();
 			self::assertNotEmpty($response = $this->protocolService->execute(new Request(ExecutableService::class . '::method')));
 			self::assertInstanceOf(IResponse::class, $response);
+		}
+
+		public function testRequestQueue() {
+			$this->protocolService->setup();
+			$this->protocolService->queue(($fooRequest = new Request(ExecutableService::class . '::method'))->put(['foo' => 'bar']));
+			$this->protocolService->queue(($barRequest = new Request(ExecutableService::class . '::method'))->put(['foo' => 'foo']));
+			$this->protocolService->dequeue();
+			self::assertNotEmpty($responseList = $this->requestService->getResponseList());
+			self::assertCount(2, $responseList);
+			/** @var $foo IResponse */
+			/** @var $bar IResponse */
+			list($foo, $bar) = array_values($responseList);
+			self::assertEquals('bar', $foo->get('data'));
+			self::assertEquals('foo', $bar->get('data'));
+			$foo = $this->requestService->request($fooRequest);
+			$bar = $this->requestService->request($barRequest);
+			self::assertEquals('bar', $foo->get('data'));
+			self::assertEquals('foo', $bar->get('data'));
 		}
 
 		protected function setUp() {

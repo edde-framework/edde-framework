@@ -12,4 +12,20 @@
 		 * @return IRequestService
 		 */
 		public function registerRequestHandler(IRequestHandler $requestHandler): IRequestService;
+
+		/**
+		 * return list of current responses
+		 *
+		 * @return IResponse[]
+		 */
+		public function getResponseList(): array;
+
+		/**
+		 * get the response by the given request; if it was already executed the response would be returned
+		 *
+		 * @param IRequest $request
+		 *
+		 * @return IResponse
+		 */
+		public function request(IRequest $request): IResponse;
 	}

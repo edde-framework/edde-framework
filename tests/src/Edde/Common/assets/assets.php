@@ -66,6 +66,6 @@
 		}
 
 		public function method(IMessage $request) {
-			return new Response();
+			return (new Response())->put(['data' => $request->get('foo')]);
 		}
 	}
