@@ -1,11 +1,11 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Log;
 
-	use Edde\Api\Event\IEventBus;
 	use Edde\Api\Log\ILog;
 	use Edde\Api\Log\ILogRecord;
+	use Edde\Api\Protocol\Event\IEventBus;
 	use Edde\Common\Log\Event\LogRecordEvent;
 
 	/**
@@ -49,7 +49,7 @@
 		 * @inheritdoc
 		 */
 		public function record(ILogRecord $logRecord): ILog {
-			$this->eventBus->event(new LogRecordEvent($logRecord));
+			$this->eventBus->emit(new LogRecordEvent($logRecord));
 			return $this;
 		}
 	}

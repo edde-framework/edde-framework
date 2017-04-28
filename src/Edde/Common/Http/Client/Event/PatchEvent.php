@@ -3,5 +3,5 @@
 
 	namespace Edde\Common\Http\Client\Event;
 
-	class PAtchEvent extends HandlerEvent {
+	class PatchEvent extends HandlerEvent {
 	}

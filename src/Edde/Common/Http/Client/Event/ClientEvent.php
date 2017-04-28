@@ -1,9 +1,9 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Http\Client\Event;
 
-	use Edde\Common\Event\AbstractEvent;
+	use Edde\Common\Protocol\Event\Event;
 
-	class ClientEvent extends AbstractEvent {
+	class ClientEvent extends Event {
 	}
