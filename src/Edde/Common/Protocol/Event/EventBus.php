@@ -7,11 +7,9 @@
 	use Edde\Api\Protocol\Event\IEventBus;
 	use Edde\Api\Protocol\Event\IListener;
 	use Edde\Api\Protocol\IElement;
-	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Protocol\AbstractProtocolHandler;
 
 	class EventBus extends AbstractProtocolHandler implements IEventBus {
-		use ConfigurableTrait;
 		/**
 		 * @var callable[]
 		 */

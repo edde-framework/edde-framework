@@ -3,10 +3,12 @@
 
 	namespace Edde\Api\Protocol;
 
+	use Edde\Api\Config\IConfigurable;
+
 	/**
 	 * Handles individual type of protocol item.
 	 */
-	interface IProtocolHandler {
+	interface IProtocolHandler extends IConfigurable {
 		/**
 		 * check if the element is compatible with this handler; should throw an exception
 		 *

@@ -3,7 +3,9 @@
 
 	namespace Edde\Test;
 
+	use Edde\Api\Protocol\Request\IMessage;
 	use Edde\Common\Object;
+	use Edde\Common\Protocol\Request\Response;
 
 	class FooObject extends Object {
 		public $foo = 'bar';
@@ -56,5 +58,14 @@
 
 		public function getBar(): BarObject {
 			return $this->bar;
+		}
+	}
+
+	class ExecutableService extends Object {
+		public function noResponse() {
+		}
+
+		public function method(IMessage $request) {
+			return new Response();
 		}
 	}

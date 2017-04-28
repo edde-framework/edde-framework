@@ -44,6 +44,7 @@
 	use Edde\Api\Protocol\Event\IEventBus;
 	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Protocol\IProtocolService;
+	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\IResourceProvider;
 	use Edde\Api\Router\IRouterService;
@@ -92,6 +93,7 @@
 	use Edde\Common\Protocol\Event\EventBus;
 	use Edde\Common\Protocol\Packet;
 	use Edde\Common\Protocol\ProtocolService;
+	use Edde\Common\Protocol\Request\RequestService;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\Runtime;
@@ -113,6 +115,7 @@
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Database\Sqlite\SqliteDsn;
 	use Edde\Ext\Protocol\ProtocolServiceConfigurator;
+	use Edde\Ext\Protocol\RequestServiceConfigurator;
 	use Edde\Ext\Resource\ResourceManagerConfigurator;
 	use Edde\Ext\Router\RequestQueueConfigurator;
 	use Edde\Ext\Router\RouterServiceConfigurator;
@@ -384,6 +387,7 @@
 				ITranslator::class           => Translator::class,
 				IAssetStorage::class         => AssetStorage::class,
 				IProtocolService::class      => ProtocolService::class,
+				IRequestService::class       => RequestService::class,
 				IPacket::class               => self::instance(Packet::class, [], true),
 				IEventBus::class             => EventBus::class,
 			];
@@ -409,6 +413,7 @@
 				 */
 				ICompiler::class         => CompilerConfigurator::class,
 				IProtocolService::class  => ProtocolServiceConfigurator::class,
+				IRequestService::class   => RequestServiceConfigurator::class,
 			];
 		}
 	}

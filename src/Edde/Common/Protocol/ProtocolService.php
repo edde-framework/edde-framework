@@ -45,6 +45,7 @@
 				return $this->handle[$type]->execute($element);
 			}
 			foreach ($this->protocolHandlerList as $protocolHandler) {
+				$protocolHandler->setup();
 				if ($protocolHandler->canHandle($element)) {
 					$this->handle[$type] = $protocolHandler;
 					return $protocolHandler->execute($element);

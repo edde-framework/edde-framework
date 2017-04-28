@@ -6,12 +6,18 @@
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Protocol\Event\LazyEventBusTrait;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
+	use Edde\Api\Protocol\Request\IResponse;
+	use Edde\Api\Protocol\Request\UnhandledRequestException;
 	use Edde\Common\Container\LazyTrait;
 	use Edde\Common\Protocol\Event\Event;
+	use Edde\Common\Protocol\Request\MissingResponseException;
 	use Edde\Common\Protocol\Request\Request;
 	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
+	use Edde\Test\ExecutableService;
 	use PHPUnit\Framework\TestCase;
+
+	require_once __DIR__ . '/../assets/assets.php';
 
 	class ProtocolServiceTest extends TestCase implements ILazyInject {
 		use LazyProtocolServiceTrait;
@@ -60,9 +66,24 @@
 			$this->protocolService->execute(new Request('wanna do something'));
 		}
 
-		public function testRequestExecute() {
-			$count = 0;
+		public function testRequestExecuteException() {
+			$this->expectException(UnhandledRequestException::class);
+			$this->expectExceptionMessage('Unhandled request [wanna do something (' . Request::class . ')].');
+			$this->protocolService->setup();
 			$this->protocolService->execute(new Request('wanna do something'));
+		}
+
+		public function testRequestExecuteNoResponse() {
+			$this->expectException(MissingResponseException::class);
+			$this->expectExceptionMessage('Missing response for request [' . ExecutableService::class . '::noResponse].');
+			$this->protocolService->setup();
+			$this->protocolService->execute(new Request(ExecutableService::class . '::noResponse'));
+		}
+
+		public function testRequestExecute() {
+			$this->protocolService->setup();
+			self::assertNotEmpty($response = $this->protocolService->execute(new Request(ExecutableService::class . '::method')));
+			self::assertInstanceOf(IResponse::class, $response);
 		}
 
 		protected function setUp() {

@@ -7,4 +7,7 @@
 	use Edde\Common\Protocol\AbstractElement;
 
 	class Response extends AbstractElement implements IResponse {
+		public function __construct() {
+			parent::__construct('response');
+		}
 	}

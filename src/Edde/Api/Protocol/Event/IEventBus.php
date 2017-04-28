@@ -3,10 +3,9 @@
 
 	namespace Edde\Api\Protocol\Event;
 
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Protocol\IProtocolHandler;
 
-	interface IEventBus extends IProtocolHandler, IConfigurable {
+	interface IEventBus extends IProtocolHandler {
 		/**
 		 * @param IListener $listener
 		 *

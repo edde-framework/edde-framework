@@ -3,9 +3,7 @@
 
 	namespace Edde\Api\Protocol;
 
-	use Edde\Api\Config\IConfigurable;
-
-	interface IProtocolService extends IProtocolHandler, IConfigurable {
+	interface IProtocolService extends IProtocolHandler {
 		/**
 		 * @param IProtocolHandler $protocolHandler
 		 *
