@@ -25,30 +25,32 @@
 
 		public function testEventBusExecute() {
 			$this->protocolService->setup();
-			$event = 0;
-			$this->eventBus->listen('some cool event', function (Event $event) use (&$event) {
-				$event++;
+			$count = 0;
+			$this->eventBus->listen('some cool event', function (Event $event) use (&$count) {
+				$count++;
 			});
-			$this->eventBus->listen('some cool event', function (Event $event) use (&$event) {
-				$event++;
+			$this->eventBus->listen('some cool event', function (Event $event) use (&$count) {
+				$count++;
 			});
-			$this->protocolService->execute(new Event('some cool event'));
-			$this->assertEquals(2, $event);
+			$this->protocolService->execute($event = new Event('some cool event'));
+			$this->assertEquals(2, $count);
+			$this->assertNotEmpty($id = $event->getId());
+			$this->assertEquals($id, $event->getId());
 		}
 
 		public function testEventBusQueue() {
 			$this->protocolService->setup();
-			$event = 0;
-			$this->eventBus->listen('some cool event', function (Event $event) use (&$event) {
-				$event++;
+			$count = 0;
+			$this->eventBus->listen('some cool event', function (Event $event) use (&$count) {
+				$count++;
 			});
-			$this->eventBus->listen('some cool event', function (Event $event) use (&$event) {
-				$event++;
+			$this->eventBus->listen('some cool event', function (Event $event) use (&$count) {
+				$count++;
 			});
 			$this->protocolService->queue(new Event('some cool event'));
-			$this->assertEquals(0, $event);
+			$this->assertEquals(0, $count);
 			$this->protocolService->dequeue();
-			$this->assertEquals(2, $event, 'EventBus has not been executed!');
+			$this->assertEquals(2, $count, 'EventBus has not been executed!');
 		}
 
 		protected function setUp() {

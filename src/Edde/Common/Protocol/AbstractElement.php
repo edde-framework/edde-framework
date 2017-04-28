@@ -47,7 +47,7 @@
 		 * @return string
 		 */
 		public function getId(): string {
-			return $this->id === null ? $this->id = bin2hex(random_bytes(4)) . '-' . implode('-', str_split(bin2hex(random_bytes(8)), 4)) . '-' . bin2hex(random_bytes(6)) : $this->id;
+			return $this->id === null ? ($this->id = bin2hex(random_bytes(4)) . '-' . implode('-', str_split(bin2hex(random_bytes(8)), 4)) . '-' . bin2hex(random_bytes(6))) : $this->id;
 		}
 
 		/**
