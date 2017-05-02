@@ -14,7 +14,7 @@
 		/**
 		 * @param IRequestService $instance
 		 */
-		public function config($instance) {
+		public function configure($instance) {
 			$instance->registerRequestHandler($this->container->create(ContainerRequestHandler::class));
 		}
 	}

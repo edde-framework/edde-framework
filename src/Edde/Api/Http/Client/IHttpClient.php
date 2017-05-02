@@ -50,4 +50,22 @@
 		 * @return IHttpHandler
 		 */
 		public function delete($url): IHttpHandler;
+
+		/**
+		 * @param $url
+		 *
+		 * @return IHttpHandler
+		 */
+		public function head($url): IHttpHandler;
+
+		/**
+		 * main purpose of this method is to "touch" the given url without an anwser
+		 *
+		 * @param string|IUrl $url
+		 * @param string      $method
+		 * @param array       $headerList
+		 *
+		 * @return IHttpClient
+		 */
+		public function touch($url, $method = 'HEAD', array $headerList = []): IHttpClient;
 	}

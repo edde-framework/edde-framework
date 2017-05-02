@@ -1,12 +1,14 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Log;
+
+	use Edde\Api\Config\IConfigurable;
 
 	/**
 	 * Physical log storage (destination).
 	 */
-	interface ILog {
+	interface ILog extends IConfigurable {
 		/**
 		 * shortcut for record();
 		 *

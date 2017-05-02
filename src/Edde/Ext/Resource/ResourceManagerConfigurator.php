@@ -17,7 +17,7 @@
 		/**
 		 * @param IResourceManager $instance
 		 */
-		public function config($instance) {
+		public function configure($instance) {
 			$instance->registerResourceProvider($this->container->create(ControlTemplateResourceProvider::class, [], __METHOD__));
 			$instance->registerResourceProvider($this->container->create(StyleSheetResourceProvider::class, [], __METHOD__));
 			$instance->registerResourceProvider($this->container->create(JavaScriptResourceProvider::class, [], __METHOD__));

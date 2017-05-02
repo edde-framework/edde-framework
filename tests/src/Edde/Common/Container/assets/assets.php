@@ -16,7 +16,7 @@
 		/**
 		 * @param ISomething $instance
 		 */
-		public function config($instance) {
+		public function configure($instance) {
 			$instance->registerSomeething('foo');
 		}
 
@@ -31,7 +31,7 @@
 		/**
 		 * @param ISomething $instance
 		 */
-		public function config($instance) {
+		public function configure($instance) {
 			$instance->registerSomeething('bar');
 			$instance->registerSomeething($this->container->create(FirstSomethingSetup::class)
 				->getBoo());
@@ -93,7 +93,7 @@
 		/**
 		 * @param AnotherSomething $instance
 		 */
-		public function config($instance) {
+		public function configure($instance) {
 			$instance->ok = true;
 		}
 	}

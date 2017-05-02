@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Log;
 
@@ -57,7 +57,12 @@
 			 * second run because all filter has been applied
 			 */
 			foreach ($tagList as $tag) {
-				isset($this->logList[$tag]) ? $this->logList[$tag]->record($logRecord) : null;
+				if (isset($this->logList[$tag]) === false) {
+					continue;
+				}
+				$log = $this->logList[$tag];
+				$log->setup();
+				$log->record($logRecord);
 			}
 			return $this;
 		}

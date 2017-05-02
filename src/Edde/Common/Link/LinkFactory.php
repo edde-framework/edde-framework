@@ -30,6 +30,7 @@
 		 */
 		public function link($generate, ...$parameterList) {
 			foreach ($this->linkGeneratorList as $linkGenerator) {
+				$linkGenerator->setup();
 				if (($url = $linkGenerator->link($generate, ...$parameterList)) !== null) {
 					return $url;
 				}

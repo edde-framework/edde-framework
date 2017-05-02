@@ -1,12 +1,14 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Link;
+
+	use Edde\Api\Config\IConfigurable;
 
 	/**
 	 * Particular link generator; it is some sort of oposite side of router.
 	 */
-	interface ILinkGenerator {
+	interface ILinkGenerator extends IConfigurable {
 		/**
 		 * generate output link
 		 *

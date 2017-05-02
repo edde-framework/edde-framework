@@ -238,7 +238,7 @@
 					default:
 						$exception = ClientException::class;
 				}
-				throw new $exception(sprintf('%s: %s', (string)$this->request->getRequestUrl(), $error), $code, null, $response);
+				throw new $exception(sprintf('%s%s', (string)$this->request->getRequestUrl(), $error ? (': ' . $error) : ''), $code, null, $response);
 			}
 			return $response;
 		}

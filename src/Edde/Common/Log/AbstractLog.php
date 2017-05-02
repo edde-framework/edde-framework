@@ -1,15 +1,18 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Log;
 
 	use Edde\Api\Log\ILog;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	/**
 	 * Common stuff for loggers.
 	 */
 	abstract class AbstractLog extends Object implements ILog {
+		use ConfigurableTrait;
+
 		/**
 		 * @inheritdoc
 		 */

@@ -17,6 +17,7 @@
 	use Edde\Common\Http\Request;
 	use Edde\Common\Http\RequestUrl;
 	use Edde\Common\Object;
+	use Edde\Common\Url\Url;
 
 	/**
 	 * Simple http client implementation.
@@ -59,6 +60,26 @@
 		 */
 		public function delete($url): IHttpHandler {
 			return $this->request($this->createRequest($url, __FUNCTION__));
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function head($url): IHttpHandler {
+			return $this->request($this->createRequest($url, __FUNCTION__));
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function touch($url, $method = 'HEAD', array $headerList = []): IHttpClient {
+			$url = Url::create($url);
+			fwrite($handle = stream_socket_client('tcp://' . ($host = $url->getHost()) . ':' . $url->getPort(), $_, $_, 0, STREAM_CLIENT_ASYNC_CONNECT), implode("\r\n", array_merge([
+					'HEAD ' . $url->getPath() . ' HTTP/1.1',
+					'Host: ' . $host,
+				], $headerList)) . "\r\n\r\n");
+			fclose($handle);
+			return $this;
 		}
 
 		/**

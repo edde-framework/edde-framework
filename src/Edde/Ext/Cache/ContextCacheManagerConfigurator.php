@@ -13,7 +13,7 @@
 		/**
 		 * @param ICacheManager $instance
 		 */
-		public function config($instance) {
+		public function configure($instance) {
 			$instance->setNamespace($this->context->getGuid());
 		}
 	}

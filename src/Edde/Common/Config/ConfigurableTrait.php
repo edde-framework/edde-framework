@@ -105,7 +105,7 @@
 			$this->tConfig = true;
 			$this->warmup($force);
 			foreach ($this->tConfiguratorList as $configHandler) {
-				$configHandler->config($this);
+				$configHandler->configure($this);
 			}
 			$this->handleConfig();
 			return $this;

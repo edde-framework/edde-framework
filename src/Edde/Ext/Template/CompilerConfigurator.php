@@ -24,7 +24,7 @@
 		/**
 		 * @param ICompiler $instance
 		 */
-		public function config($instance) {
+		public function configure($instance) {
 			$macroList = [
 				SnippetMacro::class,
 				IncludeMacro::class,

@@ -16,7 +16,7 @@
 		/**
 		 * @param IConverterManager $instance
 		 */
-		public function config($instance) {
+		public function configure($instance) {
 			$instance->registerConverter($this->container->create(ExceptionConverter::class));
 			$instance->registerConverter($this->container->create(TemplateConverter::class));
 			$instance->registerConverter($this->container->create(JsonConverter::class));

@@ -5,10 +5,13 @@
 
 	use Edde\Api\Link\ILink;
 	use Edde\Api\Link\ILinkGenerator;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 	use Edde\Common\Strings\StringUtils;
 
 	abstract class AbstractLinkGenerator extends Object implements ILinkGenerator {
+		use ConfigurableTrait;
+
 		protected function match(string $control, string $action) {
 			$simpleRegexp = '[a-z0-9-]+';
 			$parameterList = null;

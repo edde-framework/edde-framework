@@ -13,7 +13,7 @@
 		/**
 		 * @param IRouterService $instance
 		 */
-		public function config($instance) {
+		public function configure($instance) {
 			$instance->registerRouter(RestRouter::class);
 			$instance->registerRouter(HttpRouter::class);
 		}

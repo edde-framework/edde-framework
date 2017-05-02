@@ -12,5 +12,5 @@
 		 *
 		 * @param mixed $instance
 		 */
-		public function config($instance);
+		public function configure($instance);
 	}

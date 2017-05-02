@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Log;
 
@@ -52,8 +52,8 @@
 			return $this;
 		}
 
-		protected function prepare() {
-			parent::prepare();
+		protected function handleInit() {
+			parent::handleInit();
 			$this->logDirectory->create();
 			$this->file = $this->logDirectory->file(date('Y-m-d-') . $this->name . '.log');
 			$this->file->openForAppend();

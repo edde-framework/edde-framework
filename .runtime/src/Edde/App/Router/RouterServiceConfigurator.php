@@ -16,8 +16,8 @@
 		/**
 		 * @param IRouterService $instance
 		 */
-		public function config($instance) {
-			parent::config($instance);
+		public function configure($instance) {
+			parent::configure($instance);
 			$instance->setDefaultRequest($this->container->create(Request::class, [
 				IndexView::class,
 				'actionIndex',

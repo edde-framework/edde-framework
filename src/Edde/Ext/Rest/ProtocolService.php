@@ -3,11 +3,16 @@
 
 	namespace Edde\Ext\Rest;
 
+	use Edde\Api\Http\Client\LazyHttpClientTrait;
+	use Edde\Api\Link\LazyLinkFactoryTrait;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\Rest\AbstractService;
 	use Edde\Ext\Application\JsonResponse;
 
 	class ProtocolService extends AbstractService {
+		use LazyHttpClientTrait;
+		use LazyLinkFactoryTrait;
+
 		/**
 		 * @inheritdoc
 		 */
@@ -16,8 +21,8 @@
 		}
 
 		public function restGet($scope = null, array $tags = null) {
-			dump($scope);
-			dump($tags);
+			$this->linkFactory->setup();
+			$this->httpClient->touch($this->linkFactory->link(ThreadService::class, null));
 			return new JsonResponse(static::class);
 		}
 	}

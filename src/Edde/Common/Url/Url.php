@@ -43,6 +43,10 @@
 		 */
 		protected $fragment = '';
 
+		public function __construct($url = null) {
+			$url ? $this->parse((string)$url) : null;
+		}
+
 		/**
 		 * @inheritdoc
 		 */

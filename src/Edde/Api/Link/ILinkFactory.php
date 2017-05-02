@@ -3,13 +3,11 @@
 
 	namespace Edde\Api\Link;
 
-	use Edde\Api\Config\IConfigurable;
-
 	/**
 	 * Abstract tool for generating links from arbitrary input (strings, other classes, ...). This is useful for
 	 * abstracting application from url's.
 	 */
-	interface ILinkFactory extends ILinkGenerator, IConfigurable {
+	interface ILinkFactory extends ILinkGenerator {
 		/**
 		 * register link a generator
 		 *

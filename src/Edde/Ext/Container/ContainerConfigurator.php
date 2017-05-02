@@ -41,7 +41,7 @@
 		/**
 		 * @param IContainer $instance
 		 */
-		public function config($instance) {
+		public function configure($instance) {
 			$instance->registerFactoryList($this->factoryList);
 			$configuratorList = [];
 			foreach ($this->configuratorList as $name => $configHandler) {

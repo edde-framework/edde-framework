@@ -120,6 +120,8 @@
 	use Edde\Ext\Converter\ConverterManagerConfigurator;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Database\Sqlite\SqliteDsn;
+	use Edde\Ext\Link\LinkFactoryConfigurator;
+	use Edde\Ext\Log\LogServiceConfigurator;
 	use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 	use Edde\Ext\Protocol\RequestServiceConfigurator;
 	use Edde\Ext\Resource\ResourceManagerConfigurator;
@@ -420,6 +422,8 @@
 				ICompiler::class         => CompilerConfigurator::class,
 				IProtocolService::class  => ProtocolServiceConfigurator::class,
 				IRequestService::class   => RequestServiceConfigurator::class,
+				ILogService::class       => LogServiceConfigurator::class,
+				ILinkFactory::class      => LinkFactoryConfigurator::class,
 			];
 		}
 	}

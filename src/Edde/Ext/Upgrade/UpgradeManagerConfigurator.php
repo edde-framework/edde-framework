@@ -13,7 +13,7 @@
 		/**
 		 * @param IUpgradeManager $instance
 		 */
-		public function config($instance) {
+		public function configure($instance) {
 			$instance->registerUpgrade($this->container->create(InitialStorageUpgrade::class));
 		}
 	}

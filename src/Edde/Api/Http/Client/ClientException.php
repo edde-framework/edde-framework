@@ -4,30 +4,30 @@
 	namespace Edde\Api\Http\Client;
 
 	use Edde\Api\EddeException;
-	use Edde\Api\Http\IHttpResponse;
+	use Edde\Api\Http\IResponse;
 	use Exception;
 
 	class ClientException extends EddeException {
 		/**
-		 * @var IHttpResponse
+		 * @var IResponse
 		 */
-		protected $httpResponse;
+		protected $response;
 
 		/**
-		 * @param string             $message
-		 * @param int                $code
-		 * @param Exception|null     $previous
-		 * @param IHttpResponse|null $httpResponse
+		 * @param string         $message
+		 * @param int            $code
+		 * @param Exception|null $previous
+		 * @param IResponse|null $response
 		 */
-		public function __construct($message = "", $code = 0, Exception $previous = null, IHttpResponse $httpResponse = null) {
+		public function __construct($message = '', $code = 0, Exception $previous = null, IResponse $response = null) {
 			parent::__construct($message, $code, $previous);
-			$this->httpResponse = $httpResponse;
+			$this->response = $response;
 		}
 
 		/**
-		 * @return IHttpResponse
+		 * @return IResponse
 		 */
-		public function getHttpResponse(): IHttpResponse {
-			return $this->httpResponse;
+		public function getResponse(): IResponse {
+			return $this->response;
 		}
 	}

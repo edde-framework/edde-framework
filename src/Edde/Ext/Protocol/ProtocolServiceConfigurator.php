@@ -15,7 +15,7 @@
 		/**
 		 * @param IProtocolService $instance
 		 */
-		public function config($instance) {
+		public function configure($instance) {
 			$instance->registerProtocolHandler($this->container->create(IEventBus::class));
 			$instance->registerProtocolHandler($this->container->create(IRequestService::class));
 		}
