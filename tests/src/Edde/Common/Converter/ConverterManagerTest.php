@@ -6,8 +6,8 @@
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\File\IRootDirectory;
+	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\File\RootDirectory;
-	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Converter\ConverterManagerConfigurator;
 	use PHPUnit\Framework\TestCase;
