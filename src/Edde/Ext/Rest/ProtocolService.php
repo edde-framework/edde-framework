@@ -5,6 +5,7 @@
 
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\Rest\AbstractService;
+	use Edde\Ext\Application\JsonResponse;
 
 	class ProtocolService extends AbstractService {
 		/**
@@ -19,5 +20,9 @@
 		 */
 		public function link($generate, ...$parameterList) {
 			return parent::link('/api/v1/protocol', ...$parameterList);
+		}
+
+		public function restPost() {
+			return new JsonResponse([]);
 		}
 	}
