@@ -35,6 +35,7 @@
 			}
 			list($control, $action) = explode('.', $parameterList['action']);
 			$this->responseManager->setResponseHandler($this->container->create(HttpResponseHandler::class));
+			unset($parameterList['action']);
 			return $this->container->create(Request::class, [
 				$control,
 				'action' . StringUtils::toCamelCase($action),

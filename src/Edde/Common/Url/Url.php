@@ -292,7 +292,13 @@
 			return $this->getAbsoluteUrl();
 		}
 
-		static public function create($url = null): IUrl {
+		/**
+		 * @param null $url
+		 *
+		 * @return IUrl|$this
+		 * @throws UrlException
+		 */
+		static public function create($url = null) {
 			if ($url instanceof IUrl) {
 				return $url;
 			}

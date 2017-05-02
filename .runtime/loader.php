@@ -11,14 +11,12 @@
 	use Edde\Api\Application\IContext;
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\File\IRootDirectory;
-	use Edde\Api\Http\IHostUrl;
 	use Edde\Api\Resource\IResourceProvider;
 	use Edde\Api\Router\IRouterService;
 	use Edde\App\Application\AppContext;
 	use Edde\App\Router\RouterServiceConfigurator;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\File\RootDirectory;
-	use Edde\Common\Http\HostUrl;
 	use Edde\Ext\Cache\ContextCacheManagerConfigurator;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Router\RestRouter;
@@ -69,7 +67,6 @@
 		 * ability to search for assets (resources) based on the current context.
 		 */
 		IResourceProvider::class => IContext::class,
-		IHostUrl::class          => ContainerFactory::instance(HostUrl::class, [sprintf('%s://%s:%s', $_SERVER['REQUEST_SCHEME'], $_SERVER['SERVER_ADDR'], $_SERVER['SERVER_PORT'])]),
 		/**
 		 * This is quite magical, but local loader file should be able to override services defined by default, thus
 		 * it must be after application dependency definitions.

@@ -30,6 +30,7 @@
 			$directoryList = [
 				$sourceDirectory->directory('templates'),
 				$sourceDirectory->directory('../templates'),
+				$sourceDirectory->directory('../../templates'),
 			];
 			foreach ($directoryList as $directory) {
 				$file = $directory->file($name . '.xml');

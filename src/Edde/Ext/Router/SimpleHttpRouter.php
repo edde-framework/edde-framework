@@ -3,28 +3,13 @@
 
 	namespace Edde\Ext\Router;
 
+	use Edde\Api\Application\LazyContextTrait;
 	use Edde\Api\Http\LazyHttpRequestTrait;
 	use Edde\Common\Strings\StringUtils;
 
 	class SimpleHttpRouter extends HttpRouter {
 		use LazyHttpRequestTrait;
-		/**
-		 * @var string[]
-		 */
-		protected $namespaceList;
-
-		/**
-		 * One day a blond walks into a doctors office with both of her ears burnt.
-		 * The doctor askes her what had happened.
-		 * She says, "well... when I was ironing my work suit the phone rang and I mistakanly picked up the iron instead of the phone."
-		 * "Well that explains one ear, but what about the other."
-		 * "The bastard called again"
-		 *
-		 * @param array $namespaceList
-		 */
-		public function __construct(array $namespaceList) {
-			$this->namespaceList = $namespaceList;
-		}
+		use LazyContextTrait;
 
 		/**
 		 * @inheritdoc
@@ -34,28 +19,23 @@
 				return null;
 			}
 			$requestUrl = $this->httpRequest->getRequestUrl();
-			$pathList = $requestUrl->getPathList();
-			if (empty($pathList)) {
+			if (empty($pathList = $requestUrl->getPathList())) {
 				return null;
 			}
-			$path = explode('.', array_shift($pathList));
-			if (count($path) !== 2) {
+			if (count($pathList) !== 2) {
 				return null;
 			}
-			list($control, $action) = $path;
-			$name = StringUtils::toCamelCase($control);
+			list($control, $action) = $pathList;
+			$partList = [];
+			foreach (explode('.', $control) as $part) {
+				$partList[] = StringUtils::toCamelCase($part);
+			}
+			$name = implode('\\', $partList);
 			$parameterList = $requestUrl->getParameterList();
-			foreach ($this->namespaceList as $namespace) {
-				$classList = [
-					sprintf('%s\\%s\\%sView', $namespace, $name, $name),
-					sprintf('%s\\%s\\%sControl', $namespace, $name, $name),
-				];
-				foreach ($classList as $class) {
-					if (class_exists($class)) {
-						$requestUrl->setPath('');
-						$parameterList['action'] = $class . '.' . $action;
-						break 2;
-					}
+			foreach ($this->context->cascade('\\') as $namespace) {
+				if (class_exists($class = sprintf('%s\\%s', $namespace, $name))) {
+					$parameterList['action'] = $class . '.' . $action;
+					break;
 				}
 			}
 			if (isset($parameterList['action']) === false) {
