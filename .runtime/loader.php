@@ -15,9 +15,9 @@
 	use Edde\Api\Router\IRouterService;
 	use Edde\App\Application\AppContext;
 	use Edde\App\Router\RouterServiceConfigurator;
+	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Ext\Cache\ContextCacheManagerConfigurator;
-	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Router\RestRouter;
 	use Edde\Ext\Router\RestRouterConfigurator;

@@ -1,10 +1,11 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Container;
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
+	use Edde\Common\Container\Factory\ClassFactory;
 
 	/**
 	 * When there is need to search for a class in namespace hierarchy.
@@ -15,6 +16,9 @@
 		 */
 		protected $nameList = [];
 
+		/**
+		 * @inheritdoc
+		 */
 		public function canHandle(IContainer $container, string $dependency): bool {
 			if ($discover = $this->discover($dependency)) {
 				return parent::canHandle($container, $discover);
@@ -22,10 +26,16 @@
 			return false;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function createDependency(IContainer $container, string $dependency = null): IDependency {
 			return parent::createDependency($container, $this->discover($dependency));
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
 			return parent::execute($container, $parameterList, $dependency, $this->discover($name));
 		}

@@ -9,7 +9,7 @@
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\ILazyInject;
-	use Edde\Ext\Container\ClassFactory;
+	use Edde\Common\Container\Factory\ClassFactory;
 
 	/**
 	 * Default implementation of a dependency container.

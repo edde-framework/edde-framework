@@ -11,11 +11,11 @@
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\ITemplateDirectory;
 	use Edde\Api\Template\ITemplateManager;
+	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\Html\Html5Generator;
 	use Edde\Common\Resource\UnknownResourceException;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
-	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Converter\ConverterManagerConfigurator;
 	use Edde\Ext\Template\CompilerConfigurator;

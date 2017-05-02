@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Ext\Container;
+	namespace Edde\Common\Container\Factory;
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
@@ -42,10 +42,10 @@
 		 * Vote: Joke has 87.26 % from
 		 *
 		 * @param string $name
-		 * @param string $message
 		 * @param string $exception
+		 * @param string $message
 		 */
-		public function __construct($name, $message, $exception) {
+		public function __construct(string $name, string $exception, string $message = null) {
 			$this->name = $name;
 			$this->message = $message;
 			$this->exception = $exception;

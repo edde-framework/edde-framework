@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Ext\Container;
+	namespace Edde\Common\Container\Factory;
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;

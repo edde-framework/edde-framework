@@ -9,11 +9,11 @@
 	use Edde\Api\Protocol\Request\IResponse;
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
 	use Edde\Api\Protocol\Request\UnhandledRequestException;
+	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\Container\LazyTrait;
 	use Edde\Common\Protocol\Event\Event;
 	use Edde\Common\Protocol\Request\MissingResponseException;
 	use Edde\Common\Protocol\Request\Request;
-	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Test\ExecutableService;
 	use PHPUnit\Framework\TestCase;

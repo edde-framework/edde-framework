@@ -10,7 +10,6 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Ext\Cache\FlatFileCacheStorage;
-	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use PHPUnit\Framework\TestCase;
 
@@ -58,7 +57,7 @@
 				ICacheDirectory::class               => ContainerFactory::instance(CacheDirectory::class, [$cacheDir]),
 				ICacheStorage::class                 => FlatFileCacheStorage::class,
 				\ThisIsProductOfCleverManager::class => \ThisIsCleverManager::class . '::createCleverProduct',
-				new ClassFactory(),
+				new Factory\ClassFactory(),
 			], $this->configList = [
 				\ISomething::class => [
 					\FirstSomethingSetup::class,

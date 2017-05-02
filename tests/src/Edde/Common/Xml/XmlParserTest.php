@@ -7,9 +7,9 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Xml\IXmlParser;
+	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\File\File;
 	use Edde\Common\File\RootDirectory;
-	use Edde\Ext\Container\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use phpunit\framework\TestCase;
 

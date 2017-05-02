@@ -75,6 +75,12 @@
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Container\Container;
+	use Edde\Common\Container\Factory\CallbackFactory;
+	use Edde\Common\Container\Factory\ExceptionFactory;
+	use Edde\Common\Container\Factory\InstanceFactory;
+	use Edde\Common\Container\Factory\InterfaceFactory;
+	use Edde\Common\Container\Factory\LinkFactory;
+	use Edde\Common\Container\Factory\ProxyFactory;
 	use Edde\Common\Converter\ConverterManager;
 	use Edde\Common\Crate\Crate;
 	use Edde\Common\Crate\CrateFactory;
@@ -138,7 +144,7 @@
 							$current = new InstanceFactory($name, $factory->class, $factory->parameterList, null, $factory->cloneable);
 							break;
 						case 'exception':
-							$current = new ExceptionFactory($name, $factory->message, $factory->class);
+							$current = new ExceptionFactory($name, $factory->class, $factory->message);
 							break;
 						case 'proxy':
 							$current = new ProxyFactory($name, $factory->factory, $factory->method, $factory->parameterList);
