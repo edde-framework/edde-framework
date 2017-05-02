@@ -24,7 +24,7 @@
 		 * @inheritdoc
 		 * @throws ContainerException
 		 */
-		public function dependency(IContainer $container, string $dependency = null): IDependency {
+		public function createDependency(IContainer $container, string $dependency = null): IDependency {
 			$injectList = [];
 			$lazyList = [];
 			$configuratorList = [];

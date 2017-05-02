@@ -45,7 +45,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function dependency(IContainer $container, string $dependency = null): IDependency {
+		public function createDependency(IContainer $container, string $dependency = null): IDependency {
 			$parameterList = [];
 			foreach (ReflectionUtils::getParameterList($this->callback) as $reflectionParameter) {
 				$parameterList[] = new ReflectionParameter($reflectionParameter->getName(), $reflectionParameter->isOptional(), ($class = $reflectionParameter->getClass()) ? $class->getName() : null);

@@ -61,7 +61,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function dependency(IContainer $container, string $dependency = null): IDependency {
+		public function createDependency(IContainer $container, string $dependency = null): IDependency {
 			$exception = $this->exception;
 			throw new $exception($this->message);
 		}

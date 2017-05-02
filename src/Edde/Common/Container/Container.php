@@ -67,7 +67,7 @@
 				if (($instance = $factory->fetch($this, $fetchId = (get_class($factory) . count($parameterList) . $name . $source))) !== null) {
 					return $instance;
 				}
-				$this->dependency($instance = $factory->execute($this, $parameterList, $dependency = $factory->dependency($this, $name), $name), $dependency);
+				$this->dependency($instance = $factory->execute($this, $parameterList, $dependency = $factory->createDependency($this, $name), $name), $dependency);
 				if ($instance instanceof IConfigurable) {
 					/** @var $instance IConfigurable */
 					$configuratorList = [];
@@ -93,7 +93,7 @@
 			if (is_object($instance) === false) {
 				return $instance;
 			}
-			return $this->dependency($instance, (new ClassFactory())->dependency($this, $class = get_class($instance)), $force !== true);
+			return $this->dependency($instance, (new ClassFactory())->createDependency($this, $class = get_class($instance)), $force !== true);
 		}
 
 		/**

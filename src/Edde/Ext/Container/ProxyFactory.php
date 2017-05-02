@@ -56,9 +56,9 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function dependency(IContainer $container, string $dependency = null): IDependency {
+		public function createDependency(IContainer $container, string $dependency = null): IDependency {
 			return $container->getFactory($this->target, $this->name)
-				->dependency($container, $this->target);
+				->createDependency($container, $this->target);
 		}
 
 		/**

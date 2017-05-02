@@ -22,8 +22,8 @@
 			return false;
 		}
 
-		public function dependency(IContainer $container, string $dependency = null): IDependency {
-			return parent::dependency($container, $this->discover($dependency));
+		public function createDependency(IContainer $container, string $dependency = null): IDependency {
+			return parent::createDependency($container, $this->discover($dependency));
 		}
 
 		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {

@@ -66,11 +66,11 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function dependency(IContainer $container, string $dependency = null): IDependency {
+		public function createDependency(IContainer $container, string $dependency = null): IDependency {
 			if ($this->instance) {
 				return new Dependency([], [], []);
 			}
-			return parent::dependency($container, $this->class);
+			return parent::createDependency($container, $this->class);
 		}
 
 		/**

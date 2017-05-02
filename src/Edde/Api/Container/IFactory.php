@@ -24,7 +24,7 @@
 		 *
 		 * @return IDependency
 		 */
-		public function dependency(IContainer $container, string $dependency = null): IDependency;
+		public function createDependency(IContainer $container, string $dependency = null): IDependency;
 
 		/**
 		 * 90% usecase is to return self, but in some rare cases factory can return another factory
