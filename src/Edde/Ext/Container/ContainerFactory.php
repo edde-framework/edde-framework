@@ -58,6 +58,8 @@
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\ITemplateDirectory;
 	use Edde\Api\Template\ITemplateManager;
+	use Edde\Api\Thread\IExecutor;
+	use Edde\Api\Thread\IThreadManager;
 	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
@@ -110,6 +112,8 @@
 	use Edde\Common\Template\Template;
 	use Edde\Common\Template\TemplateDirectory;
 	use Edde\Common\Template\TemplateManager;
+	use Edde\Common\Thread\ThreadManager;
+	use Edde\Common\Thread\WebExecutor;
 	use Edde\Common\Translator\Translator;
 	use Edde\Common\Upgrade\AbstractUpgradeManager;
 	use Edde\Common\Web\JavaScriptCompiler;
@@ -128,6 +132,7 @@
 	use Edde\Ext\Router\RequestQueueConfigurator;
 	use Edde\Ext\Router\RouterServiceConfigurator;
 	use Edde\Ext\Template\CompilerConfigurator;
+	use Edde\Ext\Thread\WebExecutorConfigurator;
 
 	class ContainerFactory extends Object {
 		/**
@@ -398,6 +403,8 @@
 				IRequestService::class       => RequestService::class,
 				IPacket::class               => self::instance(Packet::class, [], true),
 				IEventBus::class             => EventBus::class,
+				IThreadManager::class        => ThreadManager::class,
+				IExecutor::class             => WebExecutor::class,
 			];
 		}
 
@@ -424,6 +431,7 @@
 				IRequestService::class   => RequestServiceConfigurator::class,
 				ILogService::class       => LogServiceConfigurator::class,
 				ILinkFactory::class      => LinkFactoryConfigurator::class,
+				WebExecutor::class       => WebExecutorConfigurator::class,
 			];
 		}
 	}
