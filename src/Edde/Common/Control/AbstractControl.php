@@ -95,6 +95,7 @@
 					}
 					if (isset($parameterList[$parameterName = StringUtils::recamel($parameter->getName())]) === false) {
 						if ($parameter->isOptional()) {
+							$argumentList[] = null;
 							continue;
 						}
 						throw new MissingActionParameterException(sprintf('Missing action parameter [%s::%s(, ...$%s, ...)].', static::class, $method, $parameter->getName()));
