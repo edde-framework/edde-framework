@@ -42,7 +42,10 @@
 				'h6',
 				'section',
 				'p',
+				'label',
 				'input',
+				'select',
+				'option',
 				'button',
 				'script',
 			];
@@ -73,7 +76,7 @@
 				if ($value instanceof IAttributeList) {
 					continue;
 				}
-				$content .= ' ' . $name . '="' . ($value ? ($value instanceof \Closure ? $value() : htmlspecialchars($value, ENT_QUOTES)) : '') . '"';
+				$content .= ' ' . $name . '="' . ($value ? ($value instanceof \Closure ? $value() : htmlspecialchars((string)$value, ENT_QUOTES)) : '') . '"';
 			}
 			$content .= '>';
 			if ($node->isLeaf() === false) {

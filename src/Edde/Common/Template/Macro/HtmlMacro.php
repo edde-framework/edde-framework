@@ -26,7 +26,7 @@
 			$attributes = [];
 			foreach ($attributeList as $k => $v) {
 				$attributes[$k] = $v instanceof IAttributeList ? $v : function () use ($v) {
-					return ($delimite = $this->delimite($v, true)) === $v ? htmlspecialchars($v, ENT_QUOTES) : '<?=' . $delimite . '?>';
+					return ($delimite = $this->delimite($v, true)) === $v ? htmlspecialchars((string)$v, ENT_QUOTES) : '<?=' . $delimite . '?>';
 				};
 			}
 			$attributeList->put($attributes);
