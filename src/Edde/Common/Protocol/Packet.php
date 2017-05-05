@@ -32,7 +32,7 @@
 		 * @inheritdoc
 		 */
 		public function addElement(IElement $element): IPacket {
-			$this->elementList[$element->getType()][] = $element;
+			$this->elementList[] = $element;
 			return $this;
 		}
 
@@ -55,12 +55,8 @@
 			$packet = parent::packet();
 			$packet->version = $this->version;
 			if (empty($this->elementList) === false) {
-				$elementList = $packet->elements = (isset($packet->elements) ? $packet->elements : new \stdClass());
-				foreach ($this->elementList as $name => $list) {
-					/** @var $item IElement */
-					foreach ($list as $item) {
-						$elementList->{$name}[] = $item->packet();
-					}
+				foreach ($this->elementList as $element) {
+					$packet->elements[] = $element->packet();
 				}
 			}
 			return $packet;

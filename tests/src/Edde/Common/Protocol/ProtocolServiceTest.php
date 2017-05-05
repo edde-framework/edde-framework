@@ -188,8 +188,7 @@
 				'foo',
 				'bar',
 			];
-			$elements = $expect->elements = new \stdClass();
-			$elements->event = [
+			$expect->elements = [
 				(object)[
 					'type'  => 'event',
 					'scope' => 'scope',
@@ -209,8 +208,6 @@
 					],
 					'event' => 'foobar',
 				],
-			];
-			$elements->request = [
 				(object)[
 					'type'    => 'request',
 					'scope'   => 'scope',
