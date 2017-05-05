@@ -29,6 +29,7 @@
 				'application/xml',
 				'application/xhtml+xml',
 				'xml',
+				'string',
 			], INode::class);
 		}
 

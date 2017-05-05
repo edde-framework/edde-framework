@@ -15,6 +15,7 @@
 	use Edde\Common\Template\Macro\NodeMacro;
 	use Edde\Common\Template\Macro\SnippetMacro;
 	use Edde\Common\Template\Macro\SwitchMacro;
+	use Edde\Common\Template\Macro\VirtualMacro;
 	use Edde\Ext\Template\Macro\CssMacro;
 	use Edde\Ext\Template\Macro\JsMacro;
 
@@ -36,6 +37,7 @@
 				CssMacro::class,
 				JsMacro::class,
 				NodeMacro::class,
+				VirtualMacro::class,
 			];
 			foreach ($macroList as $name) {
 				/** @var $macro IMacro */

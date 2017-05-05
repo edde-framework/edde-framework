@@ -28,7 +28,7 @@
 		 * @inheritdoc
 		 */
 		public function inline(IMacro $source, ICompiler $compiler, \Iterator $iterator, INode $node, string $name, $value = null) {
-			$events = $name === 'foreach' ? [
+			$events = $name === $this->getNameList()[0] ? [
 				self::EVENT_PRE_ENTER,
 				self::EVENT_POST_LEAVE,
 			] : [

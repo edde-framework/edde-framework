@@ -4,6 +4,7 @@
 	namespace Edde\Common\Template;
 
 	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Resource\LazyResourceProviderTrait;
 	use Edde\Api\Template\ITemplate;
@@ -16,6 +17,7 @@
 		use LazyResourceProviderTrait;
 		use LazyContainerTrait;
 		use LazyCompilerTrait;
+		use LazyConverterManagerTrait;
 		use CacheTrait;
 		/**
 		 * @var string
