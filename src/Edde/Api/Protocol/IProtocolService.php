@@ -10,13 +10,4 @@
 		 * @return IProtocolService
 		 */
 		public function registerProtocolHandler(IProtocolHandler $protocolHandler): IProtocolService;
-
-		/**
-		 * execute the given Packet as a request and get a new Packet as a response
-		 *
-		 * @param IPacket $request
-		 *
-		 * @return IPacket
-		 */
-		public function request(IPacket $request): IPacket;
 	}

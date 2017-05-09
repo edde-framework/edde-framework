@@ -32,7 +32,9 @@
 		 * @inheritdoc
 		 */
 		public function canHandle(IElement $element): bool {
-			if (isset($this->handle[$type = $element->getType()])) {
+			if ($element instanceof IPacket) {
+				return true;
+			} else if (isset($this->handle[$type = $element->getType()])) {
 				return $this->handle[$type]->canHandle($element);
 			}
 			foreach ($this->protocolHandlerList as $protocolHandler) {
@@ -49,6 +51,9 @@
 		 * @inheritdoc
 		 */
 		protected function element(IElement $element) {
+			if ($element instanceof IPacket) {
+				return $this->request($element);
+			}
 			if (isset($this->handle[$type = $element->getType()])) {
 				return $this->handle[$type]->execute($element);
 			}
@@ -62,10 +67,7 @@
 			throw new NoHandlerException(sprintf('Element [%s (%s)] has no available handler.', $type, get_class($element)));
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function request(IPacket $request): IPacket {
+		protected function request(IPacket $request): IPacket {
 			/** @var $packet IPacket */
 			$packet = $this->container->create(IPacket::class);
 			/**

@@ -239,7 +239,7 @@
 			$request->setId('852');
 			$request2->setId('963');
 			self::assertEquals('packet', $packet->getType());
-			$response = $this->protocolService->request($packet);
+			$response = $this->protocolService->execute($packet);
 			self::assertNotEquals($packet->getId(), $response->getId());
 			self::assertNotEquals($packet, $response);
 			self::assertCount(2, $response->getElementList());
