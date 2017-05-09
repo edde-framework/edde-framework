@@ -9,6 +9,7 @@
 	use Edde\Api\Protocol\IError;
 	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
+	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Api\Protocol\Request\IResponse;
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
 	use Edde\Api\Protocol\Request\UnhandledRequestException;
@@ -18,6 +19,7 @@
 	use Edde\Common\Protocol\Request\Request;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Test\ExecutableService;
+	use Edde\Test\TestRequestServiceConfigurator;
 	use PHPUnit\Framework\TestCase;
 
 	require_once __DIR__ . '/../assets/assets.php';
@@ -233,13 +235,15 @@
 			$packet = $this->container->create(IPacket::class);
 			$packet->setId('321');
 			$packet->addElement($request = new Request('there is nobody to handle this'));
+			$packet->addElement($request2 = new Request('testquest'));
 			$request->setId('852');
+			$request2->setId('963');
 			self::assertEquals('packet', $packet->getType());
 			$response = $this->protocolService->request($packet);
 			self::assertNotEquals($packet->getId(), $response->getId());
 			self::assertNotEquals($packet, $response);
-			self::assertCount(1, $response->getElementList());
-			self::assertCount(2, $response->getReferenceList());
+			self::assertCount(2, $response->getElementList());
+			self::assertCount(3, $response->getReferenceList());
 			self::assertEquals($response, $response->reference($packet));
 
 			/** @var $element IError */
@@ -247,6 +251,10 @@
 			$element->setId('456');
 			self::assertSame(UnhandledRequestException::class, $element->getException());
 			self::assertSame('error', $element->getType());
+
+			/** @var $element IResponse */
+			self::assertInstanceOf(IResponse::class, $element = $response->reference($request2));
+			self::assertEquals(['a' => 'b'], $element->array());
 
 			$response->setId('123');
 			self::assertEquals((object)[
@@ -258,6 +266,11 @@
 						'type'      => 'error',
 						'id'        => '456',
 						'exception' => UnhandledRequestException::class,
+					],
+					(object)[
+						'type' => 'response',
+						'id'   => 'foobar',
+						'data' => ['a' => 'b'],
 					],
 				],
 				'references' => [
@@ -271,6 +284,11 @@
 								'id'      => '852',
 								'request' => 'there is nobody to handle this',
 							],
+							(object)[
+								'type'    => 'request',
+								'id'      => '963',
+								'request' => 'testquest',
+							],
 						],
 					],
 					(object)[
@@ -278,11 +296,18 @@
 						'id'      => '852',
 						'request' => 'there is nobody to handle this',
 					],
+					(object)[
+						'type'    => 'request',
+						'id'      => '963',
+						'request' => 'testquest',
+					],
 				],
 			], $response->packet());
 		}
 
 		protected function setUp() {
-			ContainerFactory::autowire($this);
+			ContainerFactory::autowire($this, [], [
+				IRequestService::class => TestRequestServiceConfigurator::class,
+			]);
 		}
 	}

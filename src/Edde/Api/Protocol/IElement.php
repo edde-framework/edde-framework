@@ -130,6 +130,13 @@
 		public function get(string $name, $default = null);
 
 		/**
+		 * return array of internal properties
+		 *
+		 * @return array
+		 */
+		public function array(): array;
+
+		/**
 		 * this method should return "abstract" object in packet format prepared to be converted to target
 		 * format (json, xml, ...)
 		 *

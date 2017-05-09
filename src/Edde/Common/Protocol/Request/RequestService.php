@@ -55,11 +55,8 @@
 		 */
 		protected function element(IElement $element) {
 			foreach ($this->requestHandlerList as $requestHandler) {
-				if ($requestHandler->canHandle($element)) {
-					if (($response = $requestHandler->execute($element)) instanceof IResponse) {
-						$this->responseList[$element->getId()] = $response;
-					}
-					return $response;
+				if ($requestHandler->canHandle($element) && ($response = $requestHandler->execute($element)) instanceof IResponse) {
+					return $this->responseList[$element->getId()] = $response;
 				}
 			}
 			$error = new Error($element, 100, sprintf('Unhandled request [%s (%s)].', $element->getRequest(), get_class($element)));

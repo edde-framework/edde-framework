@@ -174,6 +174,13 @@
 		}
 
 		/**
+		 * @inheritdoc
+		 */
+		public function array(): array {
+			return $this->data;
+		}
+
+		/**
 		 * @return \stdClass
 		 */
 		public function packet(): \stdClass {
