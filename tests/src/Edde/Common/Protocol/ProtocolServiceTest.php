@@ -238,7 +238,8 @@
 
 			/** @var $element IError */
 			self::assertInstanceOf(IError::class, $element = $response->reference($request));
-			self::assertSame(UnhandledRequestException::class, $element->getType());
+			self::assertSame(UnhandledRequestException::class, $element->getException());
+			self::assertSame('error', $element->getType());
 		}
 
 		protected function setUp() {
