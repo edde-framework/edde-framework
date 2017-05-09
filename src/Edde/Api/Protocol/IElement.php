@@ -12,6 +12,15 @@
 		public function getType(): string;
 
 		/**
+		 * explicitly set an id of an element
+		 *
+		 * @param string $id
+		 *
+		 * @return IElement
+		 */
+		public function setId(string $id): IElement;
+
+		/**
 		 * return the element id; format is free to use, but it should be generally unique (for example guid)
 		 *
 		 * @return string

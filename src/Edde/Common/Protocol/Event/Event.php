@@ -16,8 +16,8 @@
 		 */
 		protected $cancel;
 
-		public function __construct(string $event = null) {
-			parent::__construct('event');
+		public function __construct(string $event = null, string $id = null) {
+			parent::__construct('event', $id);
 			$this->cancel = false;
 			$this->event = $event ?: static::class;
 		}

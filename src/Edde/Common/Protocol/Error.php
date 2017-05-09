@@ -69,4 +69,12 @@
 		public function getStack(): array {
 			return [];
 		}
+
+		public function packet(): \stdClass {
+			$packet = parent::packet();
+			if ($this->exception) {
+				$packet->exception = $this->exception;
+			}
+			return $packet;
+		}
 	}

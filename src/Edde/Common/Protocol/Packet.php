@@ -114,7 +114,7 @@
 			}
 			if (empty($this->referenceList) === false) {
 				foreach ($this->referenceList as $element) {
-					$packet->referemces[] = $element->packet();
+					$packet->references[] = $element->packet();
 				}
 			}
 			return $packet;

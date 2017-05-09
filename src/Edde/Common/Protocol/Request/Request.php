@@ -6,8 +6,8 @@
 	use Edde\Api\Protocol\Request\IRequest;
 
 	class Request extends Message implements IRequest {
-		public function __construct(string $request) {
-			parent::__construct($request, 'request');
+		public function __construct(string $request, string $id = null) {
+			parent::__construct($request, 'request', $id);
 		}
 
 		public function packet(): \stdClass {

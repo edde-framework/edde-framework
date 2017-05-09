@@ -157,20 +157,20 @@
 
 		public function testPacket() {
 			$this->protocolService->setup();
-			$this->protocolService->queue(($event = new Event('foobar'))->setScope('scope')->setTagList([
+			$this->protocolService->queue(($event = new Event('foobar', '123'))->setScope('scope')->setTagList([
 				'foo',
 				'bar',
 			]));
-			$this->protocolService->queue(($event2 = new Event('foobar'))->setScope('scope')->setTagList([
+			$this->protocolService->queue(($event2 = new Event('foobar', '456'))->setScope('scope')->setTagList([
 				'foo',
 				'bar',
 				'moo',
 			]));
-			$this->protocolService->queue(($request = new Request('do something cool'))->setScope('scope')->setTagList([
+			$this->protocolService->queue(($request = new Request('do something cool', '789'))->setScope('scope')->setTagList([
 				'foo',
 				'bar',
 			]));
-			$this->protocolService->queue(($event3 = new Event('foobar'))->setScope('out of scope')->setTagList([
+			$this->protocolService->queue(($event3 = new Event('foobar', '321'))->setScope('out of scope')->setTagList([
 				'foo',
 				'bar',
 				'moo',
@@ -179,10 +179,12 @@
 				'foo',
 				'bar',
 			]);
+			$packet->setId('123456');
 			$packet = $packet->packet();
 			$expect = new \stdClass();
 			$expect->version = '1.0';
 			$expect->type = 'packet';
+			$expect->id = '123456';
 			$expect->scope = 'scope';
 			$expect->tags = [
 				'foo',
@@ -191,6 +193,7 @@
 			$expect->elements = [
 				(object)[
 					'type'  => 'event',
+					'id'    => '123',
 					'scope' => 'scope',
 					'tags'  => [
 						'foo',
@@ -200,6 +203,7 @@
 				],
 				(object)[
 					'type'  => 'event',
+					'id'    => '456',
 					'scope' => 'scope',
 					'tags'  => [
 						'foo',
@@ -210,6 +214,7 @@
 				],
 				(object)[
 					'type'    => 'request',
+					'id'      => '789',
 					'scope'   => 'scope',
 					'tags'    => [
 						'foo',
@@ -226,8 +231,9 @@
 
 			/** @var $packet IPacket */
 			$packet = $this->container->create(IPacket::class);
+			$packet->setId('321');
 			$packet->addElement($request = new Request('there is nobody to handle this'));
-
+			$request->setId('852');
 			self::assertEquals('packet', $packet->getType());
 			$response = $this->protocolService->request($packet);
 			self::assertNotEquals($packet->getId(), $response->getId());
@@ -238,8 +244,42 @@
 
 			/** @var $element IError */
 			self::assertInstanceOf(IError::class, $element = $response->reference($request));
+			$element->setId('456');
 			self::assertSame(UnhandledRequestException::class, $element->getException());
 			self::assertSame('error', $element->getType());
+
+			$response->setId('123');
+			self::assertEquals((object)[
+				'version'    => '1.0',
+				'type'       => 'packet',
+				'id'         => '123',
+				'elements'   => [
+					(object)[
+						'type'      => 'error',
+						'id'        => '456',
+						'exception' => UnhandledRequestException::class,
+					],
+				],
+				'references' => [
+					(object)[
+						'version'  => '1.0',
+						'type'     => 'packet',
+						'id'       => '321',
+						'elements' => [
+							(object)[
+								'type'    => 'request',
+								'id'      => '852',
+								'request' => 'there is nobody to handle this',
+							],
+						],
+					],
+					(object)[
+						'type'    => 'request',
+						'id'      => '852',
+						'request' => 'there is nobody to handle this',
+					],
+				],
+			], $response->packet());
 		}
 
 		protected function setUp() {

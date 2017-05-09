@@ -12,8 +12,8 @@
 		 */
 		protected $request;
 
-		public function __construct(string $request, string $type = null) {
-			parent::__construct($type ?: 'message');
+		public function __construct(string $request, string $type = null, string $id = null) {
+			parent::__construct($type ?: 'message', $id);
 			$this->request = $request;
 		}
 

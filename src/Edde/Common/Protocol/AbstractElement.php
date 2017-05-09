@@ -33,11 +33,12 @@
 		protected $data;
 
 		/**
-		 * @param string $type
+		 * @param string      $type
+		 * @param string|null $id
 		 */
-		public function __construct(string $type) {
+		public function __construct(string $type, string $id = null) {
 			$this->type = $type;
-			$this->id = null;
+			$this->id = $id;
 		}
 
 		/**
@@ -45,6 +46,14 @@
 		 */
 		public function getType(): string {
 			return $this->type;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setId(string $id): IElement {
+			$this->id = $id;
+			return $this;
 		}
 
 		/**
@@ -170,6 +179,7 @@
 		public function packet(): \stdClass {
 			$packet = new \stdClass();
 			$packet->type = $this->type;
+			$packet->id = $this->getId();
 			if (empty($this->scope) === false) {
 				$packet->scope = $this->scope;
 			}
