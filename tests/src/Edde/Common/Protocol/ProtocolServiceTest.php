@@ -4,12 +4,14 @@
 	namespace Edde\Common\Protocol;
 
 	use Edde\Api\Container\ILazyInject;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Protocol\Event\LazyEventBusTrait;
+	use Edde\Api\Protocol\IError;
+	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Api\Protocol\Request\IResponse;
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
 	use Edde\Api\Protocol\Request\UnhandledRequestException;
-	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\Container\LazyTrait;
 	use Edde\Common\Protocol\Event\Event;
 	use Edde\Common\Protocol\Request\MissingResponseException;
@@ -21,6 +23,7 @@
 	require_once __DIR__ . '/../assets/assets.php';
 
 	class ProtocolServiceTest extends TestCase implements ILazyInject {
+		use LazyContainerTrait;
 		use LazyProtocolServiceTrait;
 		use LazyRequestServiceTrait;
 		use LazyEventBusTrait;
@@ -68,11 +71,14 @@
 			$this->protocolService->execute(new Request('wanna do something'));
 		}
 
-		public function testRequestExecuteException() {
-			$this->expectException(UnhandledRequestException::class);
-			$this->expectExceptionMessage('Unhandled request [wanna do something (' . Request::class . ')].');
-			$this->protocolService->setup();
-			$this->protocolService->execute(new Request('wanna do something'));
+		public function testRequestExecuteError() {
+			$this->requestService->setup();
+			self::assertInstanceOf(IError::class, $response = $this->requestService->execute($request = new Request('wanna do something')));
+			/** @var $response IError */
+			self::assertEquals('error', $response->getType());
+			self::assertEquals(UnhandledRequestException::class, $response->getException());
+			self::assertEquals('Unhandled request [wanna do something (Edde\Common\Protocol\Request\Request)].', $response->getMessage());
+			$this->requestService->request($request);
 		}
 
 		public function testRequestExecuteNoResponse() {
@@ -107,17 +113,15 @@
 		}
 
 		public function testAligment() {
-			$event = (new Event('foobar'))->setScope('scope')
-				->setTagList([
-					'foo',
-					'bar',
-				]);
-			$event2 = (new Event('foobar'))->setScope('scope')
-				->setTagList([
-					'foo',
-					'bar',
-					'moo',
-				]);
+			$event = (new Event('foobar'))->setScope('scope')->setTagList([
+				'foo',
+				'bar',
+			]);
+			$event2 = (new Event('foobar'))->setScope('scope')->setTagList([
+				'foo',
+				'bar',
+				'moo',
+			]);
 			self::assertTrue($event->inScope('scope'));
 			self::assertFalse($event->inScope('scopee'));
 			self::assertFalse($event->inTagList());
@@ -153,28 +157,24 @@
 
 		public function testPacket() {
 			$this->protocolService->setup();
-			$this->protocolService->queue(($event = new Event('foobar'))->setScope('scope')
-				->setTagList([
-					'foo',
-					'bar',
-				]));
-			$this->protocolService->queue(($event2 = new Event('foobar'))->setScope('scope')
-				->setTagList([
-					'foo',
-					'bar',
-					'moo',
-				]));
-			$this->protocolService->queue(($request = new Request('do something cool'))->setScope('scope')
-				->setTagList([
-					'foo',
-					'bar',
-				]));
-			$this->protocolService->queue(($event3 = new Event('foobar'))->setScope('out of scope')
-				->setTagList([
-					'foo',
-					'bar',
-					'moo',
-				]));
+			$this->protocolService->queue(($event = new Event('foobar'))->setScope('scope')->setTagList([
+				'foo',
+				'bar',
+			]));
+			$this->protocolService->queue(($event2 = new Event('foobar'))->setScope('scope')->setTagList([
+				'foo',
+				'bar',
+				'moo',
+			]));
+			$this->protocolService->queue(($request = new Request('do something cool'))->setScope('scope')->setTagList([
+				'foo',
+				'bar',
+			]));
+			$this->protocolService->queue(($event3 = new Event('foobar'))->setScope('out of scope')->setTagList([
+				'foo',
+				'bar',
+				'moo',
+			]));
 			$packet = $this->protocolService->packet('scope', [
 				'foo',
 				'bar',
@@ -221,7 +221,27 @@
 			self::assertEquals($expect, $packet);
 		}
 
+		public function testServiceRequest() {
+			$this->protocolService->setup();
+
+			/** @var $packet IPacket */
+			$packet = $this->container->create(IPacket::class);
+			$packet->addElement($request = new Request('there is nobody to handle this'));
+
+			self::assertEquals('packet', $packet->getType());
+			$response = $this->protocolService->request($packet);
+			self::assertNotEquals($packet->getId(), $response->getId());
+			self::assertNotEquals($packet, $response);
+			self::assertCount(1, $response->getElementList());
+			self::assertCount(2, $response->getReferenceList());
+			self::assertEquals($response, $response->reference($packet));
+
+			/** @var $element IError */
+			self::assertInstanceOf(IError::class, $element = $response->reference($request));
+			self::assertSame(UnhandledRequestException::class, $element->getType());
+		}
+
 		protected function setUp() {
-			ContainerFactory::autowire($this, [new ClassFactory()]);
+			ContainerFactory::autowire($this);
 		}
 	}

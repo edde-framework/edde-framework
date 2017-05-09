@@ -3,12 +3,14 @@
 
 	namespace Edde\Common\Protocol;
 
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Protocol\IProtocolHandler;
 	use Edde\Api\Protocol\IProtocolService;
 
 	class ProtocolService extends AbstractProtocolHandler implements IProtocolService {
+		use LazyContainerTrait;
 		/**
 		 * @var IProtocolHandler[]
 		 */
@@ -53,6 +55,30 @@
 				}
 			}
 			throw new NoHandlerException(sprintf('Element [%s (%s)] has no available handler.', $type, get_class($element)));
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function request(IPacket $request): IPacket {
+			/** @var $packet IPacket */
+			$packet = $this->container->create(IPacket::class);
+			/**
+			 * set the Element reference (this is a bit different than "addReference()"
+			 */
+			$packet->setReference($request);
+			/**
+			 * add the request to the list of references in Packet
+			 */
+			$packet->addReference($request);
+			foreach ($request->getElementList() as $element) {
+				/** @var $response IElement */
+				if (($response = $this->execute($element)) instanceof IElement) {
+					$packet->addElement($response->setReference($element));
+					$packet->addReference($element);
+				}
+			}
+			return $packet;
 		}
 
 		/**

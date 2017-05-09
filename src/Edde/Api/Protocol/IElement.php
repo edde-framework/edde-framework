@@ -19,6 +19,34 @@
 		public function getId(): string;
 
 		/**
+		 * set optional reference to "cause" element
+		 *
+		 * @param IElement $element
+		 *
+		 * @return IElement
+		 */
+		public function setReference(IElement $element): IElement;
+
+		/**
+		 * @return bool
+		 */
+		public function hasReference(): bool;
+
+		/**
+		 * is *this* element reference of the given one?
+		 *
+		 * @param IElement $element
+		 *
+		 * @return bool
+		 */
+		public function isReferenceOf(IElement $element): bool;
+
+		/**
+		 * @return IElement
+		 */
+		public function getReference(): IElement;
+
+		/**
 		 * set element's scope
 		 *
 		 * @param string|null $scope

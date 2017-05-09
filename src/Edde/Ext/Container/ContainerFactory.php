@@ -78,6 +78,7 @@
 	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Container\Container;
 	use Edde\Common\Container\Factory\CallbackFactory;
+	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\Container\Factory\ExceptionFactory;
 	use Edde\Common\Container\Factory\InstanceFactory;
 	use Edde\Common\Container\Factory\InterfaceFactory;
@@ -244,7 +245,7 @@
 		 * @throws FactoryException
 		 */
 		static public function autowire($instance, array $factoryList = [], array $configuratorList = []): IContainer {
-			$container = self::container($factoryList, $configuratorList);
+			$container = self::container(empty($factoryList) ? [new ClassFactory()] : $factoryList, $configuratorList);
 			$container->autowire($instance);
 			return $container;
 		}
@@ -382,19 +383,19 @@
 				ISchemaManager::class        => SchemaManager::class,
 				IHttpClient::class           => HttpClient::class,
 				IAclManager::class           => AclManager::class,
-				IHtmlGenerator::class   => Html5Generator::class,
-				ITemplateManager::class => TemplateManager::class,
-				ITemplate::class        => self::instance(Template::class, [], true),
-				ICompiler::class        => Compiler::class,
-				IUpgradeManager::class  => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
-				ICryptEngine::class     => CryptEngine::class,
-				IHostUrl::class         => HostUrl::class . '::createHostUrl',
-				ILinkFactory::class     => \Edde\Common\Link\LinkFactory::class,
-				ISessionManager::class  => SessionManager::class,
-				IIdentityManager::class => IdentityManager::class,
-				IIdentity::class        => IIdentityManager::class . '::createIdentity',
-				IFingerprint::class     => self::exception(sprintf('You have to register or implement fingerprint interface [%s].', IFingerprint::class)),
-				IContext::class         => self::exception(sprintf('You have to register implementation of [%s] specific for you application.', IContext::class)),
+				IHtmlGenerator::class        => Html5Generator::class,
+				ITemplateManager::class      => TemplateManager::class,
+				ITemplate::class             => self::instance(Template::class, [], true),
+				ICompiler::class             => Compiler::class,
+				IUpgradeManager::class       => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
+				ICryptEngine::class          => CryptEngine::class,
+				IHostUrl::class              => HostUrl::class . '::createHostUrl',
+				ILinkFactory::class          => \Edde\Common\Link\LinkFactory::class,
+				ISessionManager::class       => SessionManager::class,
+				IIdentityManager::class      => IdentityManager::class,
+				IIdentity::class             => IIdentityManager::class . '::createIdentity',
+				IFingerprint::class          => self::exception(sprintf('You have to register or implement fingerprint interface [%s].', IFingerprint::class)),
+				IContext::class              => self::exception(sprintf('You have to register implementation of [%s] specific for you application.', IContext::class)),
 				IAuthenticatorManager::class => AuthenticatorManager::class,
 				IAclManager::class           => AclManager::class,
 				IAcl::class                  => Acl::class,

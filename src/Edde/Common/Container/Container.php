@@ -19,6 +19,10 @@
 		 * @var \SplStack
 		 */
 		protected $stack;
+		/**
+		 * @var IFactory[]
+		 */
+		protected $factoryMap = [];
 
 		/**
 		 * One day, Little Johnny saw his grandpa smoking his cigarettes. Little Johnny asked,
@@ -50,9 +54,12 @@
 		 * @throws FactoryException
 		 */
 		public function getFactory(string $dependency, string $source = null): IFactory {
+			if (isset($this->factoryMap[$dependency])) {
+				return $this->factoryMap[$dependency];
+			}
 			foreach ($this->factoryList as $id => $factory) {
 				if ($factory->canHandle($this, $dependency)) {
-					return $factory->getFactory($this);
+					return $this->factoryMap[$dependency] = $factory->getFactory($this);
 				}
 			}
 			throw new UnknownFactoryException(sprintf('Unknown factory [%s] for dependency [%s]; dependency chain [%s].', $dependency, $source ?: 'unknown source', implode('→', array_reverse(iterator_to_array($this->stack)))));

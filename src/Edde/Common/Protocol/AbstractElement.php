@@ -16,6 +16,10 @@
 		 */
 		protected $id;
 		/**
+		 * @var IElement
+		 */
+		protected $reference;
+		/**
 		 * @var string
 		 */
 		protected $scope;
@@ -44,10 +48,42 @@
 		}
 
 		/**
-		 * @return string
+		 * @inheritdoc
 		 */
 		public function getId(): string {
 			return $this->id === null ? ($this->id = bin2hex(random_bytes(4)) . '-' . implode('-', str_split(bin2hex(random_bytes(8)), 4)) . '-' . bin2hex(random_bytes(6))) : $this->id;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setReference(IElement $element): IElement {
+			$this->reference = $element;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function hasReference(): bool {
+			return $this->reference !== null;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function isReferenceOf(IElement $element): bool {
+			return $this->reference !== null ? $this->reference->getId() === $element->getId() : false;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getReference(): IElement {
+			if ($this->hasReference() === false) {
+				throw new ReferenceException(sprintf('Element [%s (%s)] has no reference set.', static::class, $this->getType()));
+			}
+			return $this->reference;
 		}
 
 		/**

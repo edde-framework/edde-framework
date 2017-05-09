@@ -15,6 +15,10 @@
 		 * @var IElement[]
 		 */
 		protected $elementList = [];
+		/**
+		 * @var IElement[]
+		 */
+		protected $referenceList = [];
 
 		public function __construct($version = '1.0') {
 			parent::__construct('packet');
@@ -51,12 +55,66 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function getElementList(): array {
+			return $this->elementList;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function addReference(IElement $element): IPacket {
+			$this->referenceList[] = $element;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setReferenceList(array $elementList): IPacket {
+			$this->referenceList = [];
+			foreach ($elementList as $element) {
+				$this->addReference($element);
+			}
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function reference(IElement $reference): IElement {
+			/** @var $element IElement */
+			foreach (array_merge($this->referenceList, $this->elementList) as $element) {
+				if ($element->isReferenceOf($reference)) {
+					return $element;
+				}
+			}
+			if ($this->isReferenceOf($reference)) {
+				return $this;
+			}
+			throw new ReferenceException(sprintf('The element [%s (%s)] has no reference to itself by [%s].', get_class($reference), $reference->getType(), $reference->getId()));
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getReferenceList(): array {
+			return $this->referenceList;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function packet(): \stdClass {
 			$packet = parent::packet();
 			$packet->version = $this->version;
 			if (empty($this->elementList) === false) {
 				foreach ($this->elementList as $element) {
 					$packet->elements[] = $element->packet();
+				}
+			}
+			if (empty($this->referenceList) === false) {
+				foreach ($this->referenceList as $element) {
+					$packet->referemces[] = $element->packet();
 				}
 			}
 			return $packet;

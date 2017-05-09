@@ -3,6 +3,7 @@
 
 	namespace Edde\Api\Protocol\Request;
 
+	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IProtocolHandler;
 
 	interface IRequestService extends IProtocolHandler {
@@ -25,7 +26,7 @@
 		 *
 		 * @param IRequest $request
 		 *
-		 * @return IResponse
+		 * @return IElement
 		 */
-		public function request(IRequest $request): IResponse;
+		public function request(IRequest $request): IElement;
 	}
