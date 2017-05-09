@@ -32,8 +32,8 @@
 		use LazyTrait;
 
 		public function testEventException() {
-			$this->expectException(NoHandlerException::class);
-			$this->expectExceptionMessage('Element [event (' . Event::class . ')] has no available handler.');
+			$this->expectException(UnsupportedElementException::class);
+			$this->expectExceptionMessage('Unsupported element [event (Edde\Common\Protocol\Event\Event)]');
 			$this->protocolService->execute(new Event('some cool event'));
 		}
 
@@ -68,8 +68,8 @@
 		}
 
 		public function testRequestException() {
-			$this->expectException(NoHandlerException::class);
-			$this->expectExceptionMessage('Element [request (' . Request::class . ')] has no available handler.');
+			$this->expectException(UnsupportedElementException::class);
+			$this->expectExceptionMessage('Unsupported element [request (Edde\Common\Protocol\Request\Request)] in protocol handler [Edde\Common\Protocol\ProtocolService].');
 			$this->protocolService->execute(new Request('wanna do something'));
 		}
 

@@ -32,12 +32,17 @@
 		 * @inheritdoc
 		 */
 		public function canHandle(IElement $element): bool {
-			return in_array($element->getType(), [
-				'packet',
-				'request',
-				'message',
-				'event',
-			]);
+			if (isset($this->handle[$type = $element->getType()])) {
+				return $this->handle[$type]->canHandle($element);
+			}
+			foreach ($this->protocolHandlerList as $protocolHandler) {
+				$protocolHandler->setup();
+				if ($protocolHandler->canHandle($element)) {
+					$this->handle[$type] = $protocolHandler;
+					return true;
+				}
+			}
+			return false;
 		}
 
 		/**
