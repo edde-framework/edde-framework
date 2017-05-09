@@ -11,6 +11,8 @@
 		 * @var string
 		 */
 		protected $version;
+		protected $origin;
+		protected $async;
 		/**
 		 * @var IElement[]
 		 */
@@ -20,9 +22,19 @@
 		 */
 		protected $referenceList = [];
 
-		public function __construct($version = '1.0') {
+		public function __construct() {
 			parent::__construct('packet');
+			$this->version = '1.0';
+			$this->origin = '::the-void';
+			$this->async = false;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setVersion(string $version): IPacket {
 			$this->version = $version;
+			return $this;
 		}
 
 		/**
@@ -30,6 +42,36 @@
 		 */
 		public function getVersion(): string {
 			return $this->version;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setOrigin(string $origin): IPacket {
+			$this->origin = $origin;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getOrigin(): string {
+			return $this->origin;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function async(bool $async = true): IPacket {
+			$this->async = $async;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function isAsync(): bool {
+			return $this->async;
 		}
 
 		/**

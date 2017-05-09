@@ -5,9 +5,48 @@
 
 	interface IPacket extends IElement {
 		/**
+		 * set protocol version
+		 *
+		 * @param string $version
+		 *
+		 * @return IPacket
+		 */
+		public function setVersion(string $version): IPacket;
+
+		/**
 		 * @return string
 		 */
 		public function getVersion(): string;
+
+		/**
+		 * set the origin of the packet
+		 *
+		 * @param string $origin
+		 *
+		 * @return IPacket
+		 */
+		public function setOrigin(string $origin): IPacket;
+
+		/**
+		 * @return string
+		 */
+		public function getOrigin(): string;
+
+		/**
+		 * set async flag of the packet
+		 *
+		 * @param bool $async
+		 *
+		 * @return IPacket
+		 */
+		public function async(bool $async = true): IPacket;
+
+		/**
+		 * is the packet asynchonous
+		 *
+		 * @return bool
+		 */
+		public function isAsync(): bool;
 
 		/**
 		 * @param IElement $element
