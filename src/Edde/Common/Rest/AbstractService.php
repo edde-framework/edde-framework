@@ -56,7 +56,7 @@
 				$this->httpResponse->header('Allowed', $allowed = implode(', ', array_keys($methodList)));
 				return $this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not implemented; %s.', $method, empty($methodList) ? 'there are no available methods' : 'available methods are [' . $allowed . ']'));
 			}
-			return $this->execute($methodList[$method], $request);
+			return $this->execute($methodList[$method], $this->request = $request);
 		}
 
 		/**

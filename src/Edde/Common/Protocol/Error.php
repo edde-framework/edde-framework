@@ -8,12 +8,6 @@
 
 	class Error extends AbstractElement implements IError {
 		/**
-		 * reference to the failed element
-		 *
-		 * @var IElement
-		 */
-		protected $element;
-		/**
 		 * @var int
 		 */
 		protected $code;
@@ -21,20 +15,17 @@
 		 * @var string
 		 */
 		protected $message;
+		/**
+		 * @var IElement
+		 */
+		protected $element;
 		protected $exception;
 
-		public function __construct(IElement $element, int $code, string $message) {
+		public function __construct(int $code, string $message, IElement $element = null) {
 			parent::__construct('error');
-			$this->element = $element;
 			$this->code = $code;
 			$this->message = $message;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getElement(): IElement {
-			return $this->element;
+			$this->element = $element;
 		}
 
 		/**
@@ -49,6 +40,13 @@
 		 */
 		public function getMessage(): string {
 			return $this->message;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getElement() {
+			return $this->element;
 		}
 
 		public function setException(string $exception): IError {
@@ -72,6 +70,11 @@
 
 		public function packet(): \stdClass {
 			$packet = parent::packet();
+			$packet->code = $this->code;
+			$packet->message = $this->message;
+			if ($this->element) {
+				$packet->element = $this->element->getId();
+			}
 			if ($this->exception) {
 				$packet->exception = $this->exception;
 			}

@@ -59,7 +59,7 @@
 					return $this->responseList[$element->getId()] = $response;
 				}
 			}
-			$error = new Error($element, 100, sprintf('Unhandled request [%s (%s)].', $element->getRequest(), get_class($element)));
+			$error = new Error(100, sprintf('Unhandled request [%s (%s)].', $element->getRequest(), get_class($element)), $element);
 			$error->setReference($element);
 			$error->setException(UnhandledRequestException::class);
 			return $error;

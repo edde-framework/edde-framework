@@ -16,6 +16,10 @@
 		 */
 		protected $id;
 		/**
+		 * @var bool
+		 */
+		protected $async = false;
+		/**
 		 * @var IElement
 		 */
 		protected $reference;
@@ -30,7 +34,7 @@
 		/**
 		 * @var array
 		 */
-		protected $data;
+		protected $data = [];
 
 		/**
 		 * @param string      $type
@@ -61,6 +65,21 @@
 		 */
 		public function getId(): string {
 			return $this->id === null ? ($this->id = bin2hex(random_bytes(4)) . '-' . implode('-', str_split(bin2hex(random_bytes(8)), 4)) . '-' . bin2hex(random_bytes(6))) : $this->id;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function async(bool $async = true): IElement {
+			$this->async = $async;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function isAsync(): bool {
+			return $this->async;
 		}
 
 		/**
@@ -178,6 +197,19 @@
 		 */
 		public function array(): array {
 			return $this->data;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function from(\stdClass $from): IElement {
+			$this->type = $from->type;
+			$this->id = $from->id;
+			$this->reference = $from->reference ?? null;
+			$this->scope = $from->scope ?? null;
+			$this->tagList = $from->tags ?? [];
+			$this->data = $from->properties ?? [];
+			return $this;
 		}
 
 		/**

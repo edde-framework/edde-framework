@@ -14,7 +14,9 @@
 		/**
 		 * this method could be used as a factory method for Packet
 		 *
+		 * @param \stdClass|null $source
+		 *
 		 * @return IPacket
 		 */
-		public function createPacket(): IPacket;
+		public function createPacket(\stdClass $source = null): IPacket;
 	}

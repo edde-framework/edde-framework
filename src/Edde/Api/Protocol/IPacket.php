@@ -33,22 +33,6 @@
 		public function getOrigin(): string;
 
 		/**
-		 * set async flag of the packet
-		 *
-		 * @param bool $async
-		 *
-		 * @return IPacket
-		 */
-		public function async(bool $async = true): IPacket;
-
-		/**
-		 * is the packet asynchonous
-		 *
-		 * @return bool
-		 */
-		public function isAsync(): bool;
-
-		/**
 		 * @param IElement $element
 		 *
 		 * @return IPacket

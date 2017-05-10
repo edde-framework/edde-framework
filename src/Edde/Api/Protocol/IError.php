@@ -5,13 +5,6 @@
 
 	interface IError extends IElement {
 		/**
-		 * return element which caused the error
-		 *
-		 * @return IElement
-		 */
-		public function getElement(): IElement;
-
-		/**
 		 * return code which should be unique for the error
 		 *
 		 * @return int
@@ -24,6 +17,13 @@
 		 * @return string
 		 */
 		public function getMessage(): string;
+
+		/**
+		 * return element which caused the error
+		 *
+		 * @return IElement|null
+		 */
+		public function getElement();
 
 		/**
 		 * return exception class or null

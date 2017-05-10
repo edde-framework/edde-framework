@@ -5,6 +5,7 @@
 
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Http\IHostUrl;
 	use Edde\Api\Protocol\Event\LazyEventBusTrait;
 	use Edde\Api\Protocol\IError;
 	use Edde\Api\Protocol\IPacket;
@@ -13,7 +14,9 @@
 	use Edde\Api\Protocol\Request\IResponse;
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
 	use Edde\Api\Protocol\Request\UnhandledRequestException;
+	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\Container\LazyTrait;
+	use Edde\Common\Http\HostUrl;
 	use Edde\Common\Protocol\Event\Event;
 	use Edde\Common\Protocol\Request\MissingResponseException;
 	use Edde\Common\Protocol\Request\Request;
@@ -187,7 +190,7 @@
 			$expect->version = '1.0';
 			$expect->type = 'packet';
 			$expect->id = '123456';
-			$expect->origin = '::the-void';
+			$expect->origin = 'http://localhost/the-void';
 			$expect->scope = 'scope';
 			$expect->tags = [
 				'foo',
@@ -260,11 +263,14 @@
 				'version'    => '1.0',
 				'type'       => 'packet',
 				'id'         => '123',
-				'origin'     => '::the-void',
+				'origin'     => 'http://localhost/the-void',
 				'elements'   => [
 					(object)[
 						'type'      => 'error',
 						'id'        => '456',
+						'code'      => 100,
+						'message'   => 'Unhandled request [there is nobody to handle this (Edde\Common\Protocol\Request\Request)].',
+						'element'   => '852',
 						'exception' => UnhandledRequestException::class,
 					],
 					(object)[
@@ -279,7 +285,7 @@
 						'version'  => '1.0',
 						'type'     => 'packet',
 						'id'       => '321',
-						'origin'   => '::the-void',
+						'origin'   => 'http://localhost/the-void',
 						'elements' => [
 							(object)[
 								'type'    => 'request',
@@ -327,14 +333,14 @@
 				'version'    => '1.0',
 				'type'       => 'packet',
 				'id'         => '123',
-				'origin'     => '::the-void',
+				'origin'     => 'http://localhost/the-void',
 				'reference'  => 'the-original-packet',
 				'references' => [
 					(object)[
 						'version'  => '1.0',
 						'type'     => 'packet',
 						'id'       => 'the-original-packet',
-						'origin'   => '::the-void',
+						'origin'   => 'http://localhost/the-void',
 						'elements' => [
 							(object)[
 								'type'    => 'request',
@@ -377,11 +383,14 @@
 				'version'    => '1.0',
 				'type'       => 'packet',
 				'id'         => '123',
-				'origin'     => '::the-void',
+				'origin'     => 'http://localhost/the-void',
 				'elements'   => [
 					(object)[
 						'type'      => 'error',
 						'id'        => '456',
+						'code'      => 100,
+						'message'   => 'Unhandled request [there is nobody to handle this (Edde\Common\Protocol\Request\Request)].',
+						'element'   => '741',
 						'exception' => UnhandledRequestException::class,
 					],
 					(object)[
@@ -396,7 +405,7 @@
 						'version'  => '1.0',
 						'type'     => 'packet',
 						'id'       => 'the-original-packet',
-						'origin'   => '::the-void',
+						'origin'   => 'http://localhost/the-void',
 						'elements' => [
 							(object)[
 								'type'    => 'request',
@@ -425,7 +434,10 @@
 		}
 
 		protected function setUp() {
-			ContainerFactory::autowire($this, [], [
+			ContainerFactory::autowire($this, [
+				IHostUrl::class => ContainerFactory::instance(HostUrl::class, ['http://localhost/the-void']),
+				new ClassFactory(),
+			], [
 				IRequestService::class => TestRequestServiceConfigurator::class,
 			]);
 		}

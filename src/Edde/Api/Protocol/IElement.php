@@ -28,6 +28,22 @@
 		public function getId(): string;
 
 		/**
+		 * set async flag of the element
+		 *
+		 * @param bool $async
+		 *
+		 * @return IElement
+		 */
+		public function async(bool $async = true): IElement;
+
+		/**
+		 * is the element asynchronous
+		 *
+		 * @return bool
+		 */
+		public function isAsync(): bool;
+
+		/**
 		 * set optional reference to "cause" element
 		 *
 		 * @param IElement $element
@@ -135,6 +151,13 @@
 		 * @return array
 		 */
 		public function array(): array;
+
+		/**
+		 * @param \stdClass $from
+		 *
+		 * @return IElement
+		 */
+		public function from(\stdClass $from): IElement;
 
 		/**
 		 * this method should return "abstract" object in packet format prepared to be converted to target

@@ -4,6 +4,7 @@
 	namespace Edde\Common\Protocol;
 
 	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Http\LazyHostUrlTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Protocol\IProtocolHandler;
@@ -11,6 +12,7 @@
 
 	class ProtocolService extends AbstractProtocolHandler implements IProtocolService {
 		use LazyContainerTrait;
+		use LazyHostUrlTrait;
 		/**
 		 * @var IProtocolHandler[]
 		 */
@@ -116,7 +118,10 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function createPacket(): IPacket {
-			return new Packet();
+		public function createPacket(\stdClass $source = null): IPacket {
+			$packet = new Packet();
+			$packet->setOrigin($this->hostUrl->getAbsoluteUrl());
+			$source ? $packet->from($source) : null;
+			return $packet;
 		}
 	}

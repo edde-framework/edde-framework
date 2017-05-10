@@ -12,7 +12,6 @@
 		 */
 		protected $version;
 		protected $origin;
-		protected $async;
 		/**
 		 * @var IElement[]
 		 */
@@ -26,7 +25,6 @@
 			parent::__construct('packet');
 			$this->version = '1.0';
 			$this->origin = '::the-void';
-			$this->async = false;
 		}
 
 		/**
@@ -57,21 +55,6 @@
 		 */
 		public function getOrigin(): string {
 			return $this->origin;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function async(bool $async = true): IPacket {
-			$this->async = $async;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function isAsync(): bool {
-			return $this->async;
 		}
 
 		/**
@@ -141,6 +124,18 @@
 		 */
 		public function getReferenceList(): array {
 			return $this->referenceList;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function from(\stdClass $from): IElement {
+			parent::from($from);
+			$this->version = $from->version;
+			$this->origin = $from->origin;
+			foreach ($from->elements ?? [] as $element) {
+			}
+			return $this;
 		}
 
 		/**
