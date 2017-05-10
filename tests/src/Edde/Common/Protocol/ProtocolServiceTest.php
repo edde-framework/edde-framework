@@ -273,6 +273,7 @@
 						'data' => ['a' => 'b'],
 					],
 				],
+				'reference'  => '321',
 				'references' => [
 					(object)[
 						'version'  => '1.0',
@@ -421,12 +422,6 @@
 					],
 				],
 			], $response->packet());
-		}
-
-		public function testPacketConverter() {
-			/**
-			 * (json) object to Packet converter
-			 */
 		}
 
 		protected function setUp() {
