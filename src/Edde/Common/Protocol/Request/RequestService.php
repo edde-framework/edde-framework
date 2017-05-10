@@ -55,11 +55,12 @@
 		 */
 		public function execute(IElement $element) {
 			foreach ($this->requestHandlerList as $requestHandler) {
+				/** @var $response IResponse */
 				if ($requestHandler->canHandle($element) && ($response = $requestHandler->execute($element)) instanceof IResponse) {
-					return $this->responseList[$element->getId()] = $response;
+					return $this->responseList[$element->getId()] = $response->setReference($element);
 				}
 			}
-			$error = new Error(100, sprintf('Unhandled request [%s (%s)].', $element->getRequest(), get_class($element)), $element);
+			$error = new Error(100, sprintf('Unhandled request [%s (%s)].', $element->getRequest(), get_class($element)));
 			$error->setReference($element);
 			$error->setException(UnhandledRequestException::class);
 			return $error;

@@ -19,13 +19,6 @@
 		public function getMessage(): string;
 
 		/**
-		 * return element which caused the error
-		 *
-		 * @return IElement|null
-		 */
-		public function getElement();
-
-		/**
 		 * return exception class or null
 		 *
 		 * @return string|null

@@ -219,6 +219,9 @@
 			$packet = new \stdClass();
 			$packet->type = $this->type;
 			$packet->id = $this->getId();
+			if ($this->reference) {
+				$packet->reference = $this->reference->getId();
+			}
 			if (empty($this->scope) === false) {
 				$packet->scope = $this->scope;
 			}

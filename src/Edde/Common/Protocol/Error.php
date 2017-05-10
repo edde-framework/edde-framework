@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Protocol;
 
-	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IError;
 
 	class Error extends AbstractElement implements IError {
@@ -15,17 +14,12 @@
 		 * @var string
 		 */
 		protected $message;
-		/**
-		 * @var IElement
-		 */
-		protected $element;
 		protected $exception;
 
-		public function __construct(int $code, string $message, IElement $element = null) {
+		public function __construct(int $code, string $message) {
 			parent::__construct('error');
 			$this->code = $code;
 			$this->message = $message;
-			$this->element = $element;
 		}
 
 		/**
@@ -40,13 +34,6 @@
 		 */
 		public function getMessage(): string {
 			return $this->message;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getElement() {
-			return $this->element;
 		}
 
 		public function setException(string $exception): IError {
@@ -72,9 +59,6 @@
 			$packet = parent::packet();
 			$packet->code = $this->code;
 			$packet->message = $this->message;
-			if ($this->element) {
-				$packet->element = $this->element->getId();
-			}
 			if ($this->exception) {
 				$packet->exception = $this->exception;
 			}
