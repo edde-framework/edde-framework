@@ -149,6 +149,10 @@
 		public function packet(): \stdClass {
 			$packet = parent::packet();
 			$packet->version = $this->version;
+			$packet->origin = $this->origin;
+			if ($this->reference) {
+				$packet->reference = $this->reference->getId();
+			}
 			if (empty($this->elementList) === false) {
 				foreach ($this->elementList as $element) {
 					$packet->elements[] = $element->packet();

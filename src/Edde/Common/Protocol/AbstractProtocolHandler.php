@@ -17,6 +17,12 @@
 		 * @var IElement[]
 		 */
 		protected $queueList = [];
+		/**
+		 * dequeued elements by ID
+		 *
+		 * @var IElement[]
+		 */
+		protected $elementList = [];
 
 		/**
 		 * @inheritdoc
@@ -40,9 +46,9 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(IElement $element) {
+		public function element(IElement $element) {
 			$this->check($element);
-			return $this->element($element);
+			return $this->execute($element);
 		}
 
 		/**
@@ -50,7 +56,10 @@
 		 */
 		public function dequeue(string $scope = null, array $tagList = null): IProtocolHandler {
 			foreach ($this->iterate($scope, $tagList) as $element) {
-				$this->execute($element);
+				/** @var $response IElement */
+				if (($response = $this->execute($element)) instanceof IElement) {
+					$this->elementList[$response->getId()] = $response;
+				}
 			}
 			return $this;
 		}
@@ -85,5 +94,16 @@
 			return $packet;
 		}
 
-		abstract protected function element(IElement $element);
+		/**
+		 * @inheritdoc
+		 */
+		public function reference(IElement $reference): array {
+			$elementList = [];
+			foreach ($this->elementList as $element) {
+				if ($element->isReferenceOf($reference)) {
+					$elementList[] = $element;
+				}
+			}
+			return $elementList;
+		}
 	}

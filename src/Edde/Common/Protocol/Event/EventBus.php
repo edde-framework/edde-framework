@@ -59,7 +59,7 @@
 		 *
 		 * @param IEvent $element
 		 */
-		protected function element(IElement $element) {
+		public function execute(IElement $element) {
 			if (isset($this->callbackList[$type = $element->getEvent()])) {
 				foreach ($this->callbackList[$type] as $callback) {
 					$callback($element);

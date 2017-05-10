@@ -37,7 +37,16 @@
 		public function queue(IElement $element): IProtocolHandler;
 
 		/**
-		 * executes an element if it's supported (and eventually return an answer)
+		 * this method could execute the given element; if the Element is async, it would be queued
+		 *
+		 * @param IElement $element
+		 *
+		 * @return mixed
+		 */
+		public function element(IElement $element);
+
+		/**
+		 * immediately executes an element if it's supported (and eventually return an answer)
 		 *
 		 * @param IElement $element
 		 *
@@ -65,4 +74,13 @@
 		 * @return IPacket
 		 */
 		public function packet(string $scope = null, array $tagList = null, IPacket $packet = null): IPacket;
+
+		/**
+		 * get related Elements to the given element (so returned elements are referencing the input element)
+		 *
+		 * @param IElement $reference
+		 *
+		 * @return IElement[]
+		 */
+		public function reference(IElement $reference): array;
 	}

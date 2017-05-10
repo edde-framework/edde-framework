@@ -53,7 +53,7 @@
 		 *
 		 * @param IMessage|IRequest|IError $element
 		 */
-		protected function element(IElement $element) {
+		public function execute(IElement $element) {
 			foreach ($this->requestHandlerList as $requestHandler) {
 				if ($requestHandler->canHandle($element) && ($response = $requestHandler->execute($element)) instanceof IResponse) {
 					return $this->responseList[$element->getId()] = $response;

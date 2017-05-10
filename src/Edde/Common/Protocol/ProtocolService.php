@@ -50,7 +50,22 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function element(IElement $element) {
+		public function element(IElement $element) {
+			$this->check($element);
+			if ($element instanceof IPacket && $element->isAsync()) {
+				$this->queue($element);
+				$packet = $this->createPacket();
+				$packet->setReference($element);
+				$packet->addReference($element);
+				return $packet;
+			}
+			return $this->execute($element);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function execute(IElement $element) {
 			if ($element instanceof IPacket) {
 				return $this->request($element);
 			}
@@ -68,8 +83,7 @@
 		}
 
 		protected function request(IPacket $request): IPacket {
-			/** @var $packet IPacket */
-			$packet = $this->container->create(IPacket::class);
+			$packet = $this->createPacket();
 			/**
 			 * set the Element reference (this is a bit different than "addReference()"
 			 */
@@ -97,5 +111,12 @@
 				$protocolHandler->packet($scope, $tagList, $packet);
 			}
 			return $packet;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function createPacket(): IPacket {
+			return new Packet();
 		}
 	}

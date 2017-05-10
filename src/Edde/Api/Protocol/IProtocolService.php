@@ -10,4 +10,11 @@
 		 * @return IProtocolService
 		 */
 		public function registerProtocolHandler(IProtocolHandler $protocolHandler): IProtocolService;
+
+		/**
+		 * this method could be used as a factory method for Packet
+		 *
+		 * @return IPacket
+		 */
+		public function createPacket(): IPacket;
 	}

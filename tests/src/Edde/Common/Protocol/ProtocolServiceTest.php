@@ -34,7 +34,7 @@
 		public function testEventException() {
 			$this->expectException(UnsupportedElementException::class);
 			$this->expectExceptionMessage('Unsupported element [event (Edde\Common\Protocol\Event\Event)]');
-			$this->protocolService->execute(new Event('some cool event'));
+			$this->protocolService->element(new Event('some cool event'));
 		}
 
 		public function testEventBusExecute() {
@@ -46,7 +46,7 @@
 			$this->eventBus->listen('some cool event', function (Event $event) use (&$count) {
 				$count++;
 			});
-			$this->protocolService->execute($event = new Event('some cool event'));
+			$this->protocolService->element($event = new Event('some cool event'));
 			$this->assertEquals(2, $count);
 			$this->assertNotEmpty($id = $event->getId());
 			$this->assertEquals($id, $event->getId());
@@ -70,12 +70,12 @@
 		public function testRequestException() {
 			$this->expectException(UnsupportedElementException::class);
 			$this->expectExceptionMessage('Unsupported element [request (Edde\Common\Protocol\Request\Request)] in protocol handler [Edde\Common\Protocol\ProtocolService].');
-			$this->protocolService->execute(new Request('wanna do something'));
+			$this->protocolService->element(new Request('wanna do something'));
 		}
 
 		public function testRequestExecuteError() {
 			$this->requestService->setup();
-			self::assertInstanceOf(IError::class, $response = $this->requestService->execute($request = new Request('wanna do something')));
+			self::assertInstanceOf(IError::class, $response = $this->requestService->element($request = new Request('wanna do something')));
 			/** @var $response IError */
 			self::assertEquals('error', $response->getType());
 			self::assertEquals(UnhandledRequestException::class, $response->getException());
@@ -87,12 +87,12 @@
 			$this->expectException(MissingResponseException::class);
 			$this->expectExceptionMessage('Missing response for request [' . ExecutableService::class . '::noResponse].');
 			$this->protocolService->setup();
-			$this->protocolService->execute(new Request(ExecutableService::class . '::noResponse'));
+			$this->protocolService->element(new Request(ExecutableService::class . '::noResponse'));
 		}
 
 		public function testRequestExecute() {
 			$this->protocolService->setup();
-			self::assertNotEmpty($response = $this->protocolService->execute(new Request(ExecutableService::class . '::method')));
+			self::assertNotEmpty($response = $this->protocolService->element(new Request(ExecutableService::class . '::method')));
 			self::assertInstanceOf(IResponse::class, $response);
 		}
 
@@ -187,6 +187,7 @@
 			$expect->version = '1.0';
 			$expect->type = 'packet';
 			$expect->id = '123456';
+			$expect->origin = '::the-void';
 			$expect->scope = 'scope';
 			$expect->tags = [
 				'foo',
@@ -230,16 +231,14 @@
 
 		public function testServiceRequest() {
 			$this->protocolService->setup();
-
-			/** @var $packet IPacket */
-			$packet = $this->container->create(IPacket::class);
+			$packet = $this->protocolService->createPacket();
 			$packet->setId('321');
 			$packet->addElement($request = new Request('there is nobody to handle this'));
 			$packet->addElement($request2 = new Request('testquest'));
 			$request->setId('852');
 			$request2->setId('963');
 			self::assertEquals('packet', $packet->getType());
-			$response = $this->protocolService->execute($packet);
+			$response = $this->protocolService->element($packet);
 			self::assertNotEquals($packet->getId(), $response->getId());
 			self::assertNotEquals($packet, $response);
 			self::assertCount(2, $response->getElementList());
@@ -261,6 +260,7 @@
 				'version'    => '1.0',
 				'type'       => 'packet',
 				'id'         => '123',
+				'origin'     => '::the-void',
 				'elements'   => [
 					(object)[
 						'type'      => 'error',
@@ -278,6 +278,7 @@
 						'version'  => '1.0',
 						'type'     => 'packet',
 						'id'       => '321',
+						'origin'   => '::the-void',
 						'elements' => [
 							(object)[
 								'type'    => 'request',
@@ -303,6 +304,129 @@
 					],
 				],
 			], $response->packet());
+		}
+
+		public function testAsyncPacket() {
+			$this->protocolService->setup();
+			$packet = $this->protocolService->createPacket();
+			$packet->setId('the-original-packet');
+			$packet->async();
+			$packet->addElement($request = new Request('there is nobody to handle this'));
+			$packet->addElement($request2 = new Request('testquest'));
+			$request->setId('741');
+			$request2->setId('852');
+			/** @var $response IPacket */
+			self::assertInstanceOf(IPacket::class, $response = $this->protocolService->element($packet));
+			self::assertCount(0, $response->getElementList());
+			self::assertCount(1, $response->getReferenceList());
+			self::assertEquals($response, $response->reference($packet));
+			$response->setId('123');
+
+			self::assertEquals((object)[
+				'version'    => '1.0',
+				'type'       => 'packet',
+				'id'         => '123',
+				'origin'     => '::the-void',
+				'reference'  => 'the-original-packet',
+				'references' => [
+					(object)[
+						'version'  => '1.0',
+						'type'     => 'packet',
+						'id'       => 'the-original-packet',
+						'origin'   => '::the-void',
+						'elements' => [
+							(object)[
+								'type'    => 'request',
+								'id'      => '741',
+								'request' => 'there is nobody to handle this',
+							],
+							(object)[
+								'type'    => 'request',
+								'id'      => '852',
+								'request' => 'testquest',
+							],
+						],
+					],
+				],
+			], $response->packet());
+			self::assertEmpty($this->protocolService->reference($packet));
+
+			$this->protocolService->dequeue();
+
+			self::assertCount(1, $referenceList = $this->protocolService->reference($packet));
+			list($response) = $referenceList;
+			self::assertInstanceOf(IPacket::class, $response);
+
+			self::assertCount(2, $response->getElementList());
+			self::assertCount(3, $response->getReferenceList());
+			self::assertEquals($response, $response->reference($packet));
+
+			/** @var $element IError */
+			self::assertInstanceOf(IError::class, $element = $response->reference($request));
+			$element->setId('456');
+			self::assertSame(UnhandledRequestException::class, $element->getException());
+			self::assertSame('error', $element->getType());
+
+			/** @var $element IResponse */
+			self::assertInstanceOf(IResponse::class, $element = $response->reference($request2));
+			self::assertEquals(['a' => 'b'], $element->array());
+
+			$response->setId('123');
+			self::assertEquals((object)[
+				'version'    => '1.0',
+				'type'       => 'packet',
+				'id'         => '123',
+				'origin'     => '::the-void',
+				'elements'   => [
+					(object)[
+						'type'      => 'error',
+						'id'        => '456',
+						'exception' => UnhandledRequestException::class,
+					],
+					(object)[
+						'type' => 'response',
+						'id'   => 'foobar',
+						'data' => ['a' => 'b'],
+					],
+				],
+				'reference'  => 'the-original-packet',
+				'references' => [
+					(object)[
+						'version'  => '1.0',
+						'type'     => 'packet',
+						'id'       => 'the-original-packet',
+						'origin'   => '::the-void',
+						'elements' => [
+							(object)[
+								'type'    => 'request',
+								'id'      => '741',
+								'request' => 'there is nobody to handle this',
+							],
+							(object)[
+								'type'    => 'request',
+								'id'      => '852',
+								'request' => 'testquest',
+							],
+						],
+					],
+					(object)[
+						'type'    => 'request',
+						'id'      => '741',
+						'request' => 'there is nobody to handle this',
+					],
+					(object)[
+						'type'    => 'request',
+						'id'      => '852',
+						'request' => 'testquest',
+					],
+				],
+			], $response->packet());
+		}
+
+		public function testPacketConverter() {
+			/**
+			 * (json) object to Packet converter
+			 */
 		}
 
 		protected function setUp() {

@@ -78,7 +78,7 @@
 		/**
 		 * @param IRequest|IMessage $element
 		 */
-		protected function element(IElement $element) {
+		public function execute(IElement $element) {
 			if ($element->getRequest() === 'testquest') {
 				return (new Response('foobar'))->put(['a' => 'b']);
 			}

@@ -101,7 +101,6 @@
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Object;
 	use Edde\Common\Protocol\Event\EventBus;
-	use Edde\Common\Protocol\Packet;
 	use Edde\Common\Protocol\ProtocolService;
 	use Edde\Common\Protocol\Request\RequestService;
 	use Edde\Common\Resource\ResourceManager;
@@ -403,7 +402,7 @@
 				IAssetStorage::class         => AssetStorage::class,
 				IProtocolService::class      => ProtocolService::class,
 				IRequestService::class       => RequestService::class,
-				IPacket::class               => self::instance(Packet::class, [], true),
+				IPacket::class               => IProtocolService::class . '::createPacket',
 				IEventBus::class             => EventBus::class,
 				IThreadManager::class        => ThreadManager::class,
 				IExecutor::class             => WebExecutor::class,

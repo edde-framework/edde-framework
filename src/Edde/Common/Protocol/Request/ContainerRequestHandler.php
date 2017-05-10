@@ -32,7 +32,7 @@
 		 *
 		 * @param IMessage|IRequest $element
 		 */
-		protected function element(IElement $element) {
+		public function execute(IElement $element) {
 			if (strpos($request = $element->getRequest(), '::') === false) {
 				return null;
 			}
