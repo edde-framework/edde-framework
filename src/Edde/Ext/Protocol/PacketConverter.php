@@ -33,10 +33,9 @@
 				/** @var $packet IPacket */
 				$packet = $this->container->create(IPacket::class);
 				/**
-				 * keep this talkative to let IDE know about all methods on IPacket interface
+				 * keep this a bit more talkative to let IDE know about all methods on IPacket interface
 				 */
-				$packet->from($this->converterManager->convert($content, $mime, ['object'])->convert());
-				return $packet;
+				return $packet->from($this->converterManager->convert($content, $mime, ['object'])->convert());
 			}
 			return $this->converterManager->convert($content->packet(), 'object', [$target])->convert();
 		}

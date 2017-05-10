@@ -419,7 +419,7 @@
 				IEvent::class                              => self::instance(Event::class, [], true),
 				IError::class                              => self::instance(Error::class, [], true),
 				'//protocol-service/element/packet'        => IPacket::class,
-				'//protocol-service/element/request'       => IRequest::class,
+				'//protocol-service/element/request'       => \Edde\Api\Protocol\Request\IRequest::class,
 				'//protocol-service/element/message'       => IMessage::class,
 				'//protocol-service/element/response'      => IResponse::class,
 				'//protocol-service/element/event'         => IEvent::class,

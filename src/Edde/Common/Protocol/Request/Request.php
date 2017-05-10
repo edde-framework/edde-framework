@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Protocol\Request;
 
+	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\Request\IRequest;
 	use Edde\Common\Protocol\AbstractElement;
 
@@ -30,6 +31,12 @@
 		 */
 		public function getRequest(): string {
 			return $this->request;
+		}
+
+		public function from(\stdClass $from): IElement {
+			parent::from($from);
+			$this->request = $from->request;
+			return $this;
 		}
 
 		/**
