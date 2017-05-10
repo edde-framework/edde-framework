@@ -14,12 +14,21 @@
 		 * @var string
 		 */
 		protected $message;
+		/**
+		 * @var string
+		 */
 		protected $exception;
 
-		public function __construct(int $code, string $message) {
+		public function __construct() {
 			parent::__construct('error');
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setCode(int $code): IError {
 			$this->code = $code;
-			$this->message = $message;
+			return $this;
 		}
 
 		/**
@@ -32,10 +41,21 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function setMessage(string $message): IError {
+			$this->message = $message;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function getMessage(): string {
 			return $this->message;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function setException(string $exception): IError {
 			$this->exception = $exception;
 			return $this;
@@ -63,5 +83,12 @@
 				$packet->exception = $this->exception;
 			}
 			return $packet;
+		}
+
+		public function __clone() {
+			parent::__clone();
+			$this->code = null;
+			$this->message = null;
+			$this->exception = null;
 		}
 	}

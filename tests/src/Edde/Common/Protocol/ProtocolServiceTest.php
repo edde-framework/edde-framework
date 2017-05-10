@@ -10,6 +10,7 @@
 	use Edde\Api\Protocol\IError;
 	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
+	use Edde\Api\Protocol\Request\IRequest;
 	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Api\Protocol\Request\IResponse;
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
@@ -234,10 +235,16 @@
 
 		public function testServiceRequest() {
 			$this->protocolService->setup();
-			$packet = $this->protocolService->createPacket();
+			$packet = $this->container->create(IPacket::class);
 			$packet->setId('321');
-			$packet->addElement($request = new Request('there is nobody to handle this'));
-			$packet->addElement($request2 = new Request('testquest'));
+			/** @var $request IRequest */
+			$request = $this->container->create(IRequest::class);
+			$request->setRequest('there is nobody to handle this');
+			$packet->addElement($request);
+			/** @var $request2 IRequest */
+			$request2 = $this->container->create(IRequest::class);
+			$request2->setRequest('testquest');
+			$packet->addElement($request2);
 			$request->setId('852');
 			$request2->setId('963');
 			self::assertEquals('packet', $packet->getType());
@@ -316,7 +323,7 @@
 
 		public function testAsyncPacket() {
 			$this->protocolService->setup();
-			$packet = $this->protocolService->createPacket();
+			$packet = $this->container->create(IPacket::class);
 			$packet->setId('the-original-packet');
 			$packet->async();
 			$packet->addElement($request = new Request('there is nobody to handle this'));

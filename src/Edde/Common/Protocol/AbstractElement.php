@@ -233,4 +233,14 @@
 			}
 			return $packet;
 		}
+
+		public function __clone() {
+			parent::__clone();
+			$this->id = null;
+			$this->async = false;
+			$this->reference = null;
+			$this->scope = null;
+			$this->tagList = [];
+			$this->data = [];
+		}
 	}

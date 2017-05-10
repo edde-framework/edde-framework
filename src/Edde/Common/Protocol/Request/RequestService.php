@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Protocol\Request;
 
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IError;
 	use Edde\Api\Protocol\Request\IMessage;
@@ -11,9 +12,9 @@
 	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Api\Protocol\Request\IResponse;
 	use Edde\Api\Protocol\Request\UnhandledRequestException;
-	use Edde\Common\Protocol\Error;
 
 	class RequestService extends AbstractRequestHandler implements IRequestService {
+		use LazyContainerTrait;
 		/**
 		 * @var IRequestHandler[]
 		 */
@@ -60,7 +61,10 @@
 					return $this->responseList[$element->getId()] = $response->setReference($element);
 				}
 			}
-			$error = new Error(100, sprintf('Unhandled request [%s (%s)].', $element->getRequest(), get_class($element)));
+			/** @var $error IError */
+			$error = $this->container->create(IError::class);
+			$error->setCode(100);
+			$error->setMessage(sprintf('Unhandled request [%s (%s)].', $element->getRequest(), get_class($element)));
 			$error->setReference($element);
 			$error->setException(UnhandledRequestException::class);
 			return $error;

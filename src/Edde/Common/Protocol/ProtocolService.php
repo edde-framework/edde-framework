@@ -56,7 +56,7 @@
 			$this->check($element);
 			if ($element instanceof IPacket && $element->isAsync()) {
 				$this->queue($element);
-				$packet = $this->createPacket();
+				$packet = $this->container->create(IPacket::class);
 				$packet->setReference($element);
 				$packet->addReference($element);
 				return $packet;
@@ -85,7 +85,7 @@
 		}
 
 		protected function request(IPacket $request): IPacket {
-			$packet = $this->createPacket();
+			$packet = $this->container->create(IPacket::class);
 			/**
 			 * set the Element reference (this is a bit different than "addReference()"
 			 */
@@ -112,16 +112,6 @@
 			foreach ($this->protocolHandlerList as $protocolHandler) {
 				$protocolHandler->packet($scope, $tagList, $packet);
 			}
-			return $packet;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function createPacket(\stdClass $source = null): IPacket {
-			$packet = new Packet();
-			$packet->setOrigin($this->hostUrl->getAbsoluteUrl());
-			$source ? $packet->from($source) : null;
 			return $packet;
 		}
 	}

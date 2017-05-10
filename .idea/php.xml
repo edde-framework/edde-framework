@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/lib/composer" />
+      <path value="$PROJECT_DIR$/lib/defuse/php-encryption" />
+      <path value="$PROJECT_DIR$/lib/paragonie/constant_time_encoding" />
+      <path value="$PROJECT_DIR$/lib/paragonie/random_compat" />
+      <path value="$PROJECT_DIR$/lib/tracy/tracy" />
+    </include_path>
+  </component>
   <component name="PhpInterpreters">
     <interpreters>
       <interpreter home="C:\Users\Marek Hanzal\projects\web-terminals\toshiba\vendor\edde-framework\edde-framework\.runtime\.php\php.exe" id="c480eb7f-53bc-4d60-b926-86792e0c8d97" name="PHP" debugger_id="php.debugger.XDebug" />

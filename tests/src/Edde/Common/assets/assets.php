@@ -69,7 +69,7 @@
 		public function noResponse() {
 		}
 
-		public function method(IMessage $request) {
+		public function method(IElement $request) {
 			return (new Response())->put(['data' => $request->get('foo')]);
 		}
 	}

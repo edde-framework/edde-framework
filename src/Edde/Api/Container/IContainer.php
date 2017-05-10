@@ -100,4 +100,15 @@
 		 * @return mixed
 		 */
 		public function autowire($instance, bool $force = false);
+
+		/**
+		 * execute injects on the given instance
+		 *
+		 * @param mixed       $instance
+		 * @param IDependency $dependency
+		 * @param bool        $lazy
+		 *
+		 * @return mixed
+		 */
+		public function dependency($instance, IDependency $dependency, bool $lazy = true);
 	}

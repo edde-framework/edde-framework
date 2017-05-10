@@ -4,7 +4,6 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Container\ContainerException;
 	use Edde\Api\Container\FactoryException;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
@@ -74,20 +73,7 @@
 				if (($instance = $factory->fetch($this, $fetchId = (get_class($factory) . count($parameterList) . $name . $source))) !== null) {
 					return $instance;
 				}
-				$this->dependency($instance = $factory->execute($this, $parameterList, $dependency = $factory->createDependency($this, $name), $name), $dependency);
-				if ($instance instanceof IConfigurable) {
-					/** @var $instance IConfigurable */
-					$configuratorList = [];
-					foreach ($dependency->getConfiguratorList() as $configurator) {
-						if (isset($this->configuratorList[$configurator])) {
-							$configuratorList = array_merge($configuratorList, $this->configuratorList[$configurator]);
-						}
-					}
-					$instance->setConfiguratorList($configuratorList);
-					$instance->init();
-				}
-				$factory->push($this, $fetchId, $instance);
-				return $instance;
+				return $factory->push($this, $fetchId, $this->dependency($instance = $factory->execute($this, $parameterList, $dependency = $factory->createDependency($this, $name), $name), $dependency));
 			} finally {
 				$this->stack->pop();
 			}
@@ -104,15 +90,9 @@
 		}
 
 		/**
-		 * @param mixed       $instance
-		 * @param IDependency $dependency
-		 * @param bool        $lazy
-		 *
-		 * @return ILazyInject
-		 * @throws ContainerException
-		 * @throws FactoryException
+		 * @inheritdoc
 		 */
-		protected function dependency($instance, IDependency $dependency, bool $lazy = true) {
+		public function dependency($instance, IDependency $dependency, bool $lazy = true) {
 			if (is_object($instance) === false) {
 				return $instance;
 			}
@@ -127,6 +107,17 @@
 					continue;
 				}
 				$instance->inject($reflectionParameter->getName(), $this->create($reflectionParameter->getClass(), [], $class));
+			}
+			if ($instance instanceof IConfigurable) {
+				/** @var $instance IConfigurable */
+				$configuratorList = [];
+				foreach ($dependency->getConfiguratorList() as $configurator) {
+					if (isset($this->configuratorList[$configurator])) {
+						$configuratorList = array_merge($configuratorList, $this->configuratorList[$configurator]);
+					}
+				}
+				$instance->setConfiguratorList($configuratorList);
+				$instance->init();
 			}
 			return $instance;
 		}

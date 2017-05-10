@@ -3,14 +3,14 @@
 
 	namespace Edde\Ext\Protocol;
 
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Protocol\IPacket;
-	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Common\Converter\AbstractConverter;
 
 	class PacketConverter extends AbstractConverter {
 		use LazyConverterManagerTrait;
-		use LazyProtocolServiceTrait;
+		use LazyContainerTrait;
 
 		/**
 		 * PacketConverter constructor.
@@ -30,7 +30,13 @@
 		 */
 		public function convert($content, string $mime, string $target) {
 			if ($target === IPacket::class) {
-				return $this->protocolService->createPacket($this->converterManager->convert($content, $mime, ['object'])->convert());
+				/** @var $packet IPacket */
+				$packet = $this->container->create(IPacket::class);
+				/**
+				 * keep this talkative to let IDE know about all methods on IPacket interface
+				 */
+				$packet->from($this->converterManager->convert($content, $mime, ['object'])->convert());
+				return $packet;
 			}
 			return $this->converterManager->convert($content->packet(), 'object', [$target])->convert();
 		}

@@ -12,8 +12,8 @@
 		 */
 		protected $request;
 
-		public function __construct(string $request, string $type = null, string $id = null) {
-			parent::__construct($type ?: 'message', $id);
+		public function __construct(string $request = null) {
+			parent::__construct('message');
 			$this->request = $request;
 		}
 
@@ -22,5 +22,19 @@
 		 */
 		public function getRequest(): string {
 			return $this->request;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function packet(): \stdClass {
+			$packet = parent::packet();
+			$packet->request = $this->getRequest();
+			return $packet;
+		}
+
+		public function __clone() {
+			parent::__clone();
+			$this->request = null;
 		}
 	}

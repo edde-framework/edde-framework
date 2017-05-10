@@ -7,6 +7,13 @@
 
 	interface IEvent extends IElement {
 		/**
+		 * @param string $event
+		 *
+		 * @return IEvent
+		 */
+		public function setEvent(string $event): IEvent;
+
+		/**
 		 * get event type
 		 *
 		 * @return string

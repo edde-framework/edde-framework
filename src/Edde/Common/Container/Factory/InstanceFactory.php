@@ -84,7 +84,9 @@
 		 * @inheritdoc
 		 */
 		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
-			$this->instance ?: $this->instance = parent::execute($container, $this->parameterList, $dependency, $this->class);
+			if ($this->instance === null) {
+				$this->instance = $container->dependency($this->instance = parent::execute($container, $this->parameterList, $dependency, $this->class), $dependency);
+			}
 			return $this->cloneable ? clone $this->instance : $this->instance;
 		}
 	}

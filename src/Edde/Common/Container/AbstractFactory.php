@@ -29,6 +29,7 @@
 		 * @inheritdoc
 		 */
 		public function push(IContainer $container, string $id, $instance) {
+			return $instance;
 		}
 
 		protected function parameters(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {

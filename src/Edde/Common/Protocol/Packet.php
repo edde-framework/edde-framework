@@ -3,14 +3,21 @@
 
 	namespace Edde\Common\Protocol;
 
+	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Http\LazyHostUrlTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IPacket;
 
 	class Packet extends AbstractElement implements IPacket {
+		use LazyContainerTrait;
+		use LazyHostUrlTrait;
 		/**
 		 * @var string
 		 */
 		protected $version;
+		/**
+		 * @var string
+		 */
 		protected $origin;
 		/**
 		 * @var IElement[]
@@ -24,7 +31,6 @@
 		public function __construct() {
 			parent::__construct('packet');
 			$this->version = '1.0';
-			$this->origin = '::the-void';
 		}
 
 		/**
@@ -54,7 +60,7 @@
 		 * @inheritdoc
 		 */
 		public function getOrigin(): string {
-			return $this->origin;
+			return $this->origin ?: $this->origin = $this->hostUrl->getAbsoluteUrl();
 		}
 
 		/**
@@ -134,6 +140,7 @@
 			$this->version = $from->version;
 			$this->origin = $from->origin;
 			foreach ($from->elements ?? [] as $element) {
+				$element = $this->container->create('//protocol-service/element/' . $element->type);
 			}
 			return $this;
 		}
@@ -143,8 +150,8 @@
 		 */
 		public function packet(): \stdClass {
 			$packet = parent::packet();
-			$packet->version = $this->version;
-			$packet->origin = $this->origin;
+			$packet->version = $this->getVersion();
+			$packet->origin = $this->getOrigin();
 			if ($this->reference) {
 				$packet->reference = $this->reference->getId();
 			}
@@ -163,6 +170,8 @@
 
 		public function __clone() {
 			parent::__clone();
+			$this->origin = null;
 			$this->elementList = [];
+			$this->referenceList = [];
 		}
 	}

@@ -41,10 +41,14 @@
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
+	use Edde\Api\Protocol\Event\IEvent;
 	use Edde\Api\Protocol\Event\IEventBus;
+	use Edde\Api\Protocol\IError;
 	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Protocol\IProtocolService;
+	use Edde\Api\Protocol\Request\IMessage;
 	use Edde\Api\Protocol\Request\IRequestService;
+	use Edde\Api\Protocol\Request\IResponse;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\IResourceProvider;
 	use Edde\Api\Router\IRouterService;
@@ -100,9 +104,15 @@
 	use Edde\Common\Log\LogDirectory;
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Object;
+	use Edde\Common\Protocol\Error;
+	use Edde\Common\Protocol\Event\Event;
 	use Edde\Common\Protocol\Event\EventBus;
+	use Edde\Common\Protocol\Packet;
 	use Edde\Common\Protocol\ProtocolService;
+	use Edde\Common\Protocol\Request\Message;
+	use Edde\Common\Protocol\Request\Request;
 	use Edde\Common\Protocol\Request\RequestService;
+	use Edde\Common\Protocol\Request\Response;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\Runtime;
@@ -165,7 +175,7 @@
 					if ($reflectionMethod->isStatic()) {
 						$current = new CallbackFactory($factory, $name);
 					}
-				} else if (is_string($name) && is_string($factory) && (interface_exists($name) || class_exists($name))) {
+				} else if (is_string($name) && is_string($factory) && (interface_exists($factory) || class_exists($factory))) {
 					if (class_exists($factory)) {
 						$current = new InterfaceFactory($name, $factory);
 					} else if (interface_exists($factory)) {
@@ -325,88 +335,99 @@
 
 		static public function getDefaultFactoryList(): array {
 			return [
-				IContainer::class                     => Container::class,
-				IRootDirectory::class                 => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
-				ITempDirectory::class                 => self::proxy(IRootDirectory::class, 'directory', [
+				IContainer::class                          => Container::class,
+				IRootDirectory::class                      => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
+				ITempDirectory::class                      => self::proxy(IRootDirectory::class, 'directory', [
 					'temp',
 					TempDirectory::class,
 				]),
-				ICacheDirectory::class                => self::proxy(ITempDirectory::class, 'directory', [
+				ICacheDirectory::class                     => self::proxy(ITempDirectory::class, 'directory', [
 					'cache',
 					CacheDirectory::class,
 				]),
-				IAssetDirectory::class                => self::proxy(IRootDirectory::class, 'directory', [
+				IAssetDirectory::class                     => self::proxy(IRootDirectory::class, 'directory', [
 					'.assets',
 					AssetDirectory::class,
 				]),
-				ITemplateDirectory::class             => self::proxy(IAssetDirectory::class, 'directory', [
+				ITemplateDirectory::class                  => self::proxy(IAssetDirectory::class, 'directory', [
 					'templates',
 					TemplateDirectory::class,
 				]),
-				ILogDirectory::class                  => self::proxy(IRootDirectory::class, 'directory', [
+				ILogDirectory::class                       => self::proxy(IRootDirectory::class, 'directory', [
 					'logs',
 					LogDirectory::class,
 				]),
-				ISessionDirectory::class              => self::proxy(ITempDirectory::class, 'directory', [
+				ISessionDirectory::class                   => self::proxy(ITempDirectory::class, 'directory', [
 					'session',
 					SessionDirectory::class,
 				]),
-				IStorageDirectory::class              => self::proxy(IAssetDirectory::class, 'directory', [
+				IStorageDirectory::class                   => self::proxy(IAssetDirectory::class, 'directory', [
 					'storage',
 					StorageDirectory::class,
 				]),
-				ICacheManager::class                  => CacheManager::class,
-				ICache::class                         => ICacheManager::class,
-				ICacheStorage::class                  => FlatFileCacheStorage::class,
-				IRuntime::class                       => Runtime::class,
-				IHttpResponse::class                  => HttpResponse::class,
-				IApplication::class                   => Application::class,
-				IRequestQueue::class                  => RequestQueue::class,
-				IRouterService::class                 => RouterService::class,
-				IRequest::class                       => self::exception(sprintf('[%s] is not possible use directly; implement proper factory or choose different approach.', IRequest::class)),
-				IHttpRequest::class                   => HttpRequest::class . '::createHttpRequest',
-				IHttpResponse::class                  => HttpResponse::class . '::createHttpResponse',
-				IResponseManager::class               => ResponseManager::class,
-				ILogService::class                    => LogService::class,
-				IXmlParser::class                     => XmlParser::class,
-				IConverterManager::class              => ConverterManager::class,
-				IResourceManager::class               => ResourceManager::class,
-				IResourceProvider::class              => IResourceManager::class,
-				IStyleSheetCompiler::class            => StyleSheetCompiler::class,
-				IJavaScriptCompiler::class            => JavaScriptCompiler::class,
-				IStorage::class                       => DatabaseStorage::class,
-				IDriver::class                        => SqliteDriver::class,
-				IDsn::class                           => self::instance(SqliteDsn::class, ['storage.sqlite']),
-				ICrate::class                         => self::instance(Crate::class, [], true),
-				ICrateFactory::class                  => CrateFactory::class,
-				ISchemaManager::class                 => SchemaManager::class,
-				IHttpClient::class                    => HttpClient::class,
-				IAclManager::class                    => AclManager::class,
-				IHtmlGenerator::class                 => Html5Generator::class,
-				ITemplateManager::class               => TemplateManager::class,
-				ITemplate::class                      => self::instance(Template::class, [], true),
-				ICompiler::class                      => Compiler::class,
-				IUpgradeManager::class                => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
-				ICryptEngine::class                   => CryptEngine::class,
-				IHostUrl::class                       => HostUrl::class . '::createHostUrl',
-				ILinkFactory::class                   => \Edde\Common\Link\LinkFactory::class,
-				ISessionManager::class                => SessionManager::class,
-				IIdentityManager::class               => IdentityManager::class,
-				IIdentity::class                      => IIdentityManager::class . '::createIdentity',
-				IFingerprint::class                   => self::exception(sprintf('You have to register or implement fingerprint interface [%s].', IFingerprint::class)),
-				IContext::class                       => self::exception(sprintf('You have to register implementation of [%s] specific for you application.', IContext::class)),
-				IAuthenticatorManager::class          => AuthenticatorManager::class,
-				IAclManager::class                    => AclManager::class,
-				IAcl::class                           => Acl::class,
-				ITranslator::class                    => Translator::class,
-				IAssetStorage::class                  => AssetStorage::class,
-				IProtocolService::class               => ProtocolService::class,
-				IRequestService::class                => RequestService::class,
-				IPacket::class                        => IProtocolService::class . '::createPacket',
-				IEventBus::class                      => EventBus::class,
-				IThreadManager::class                 => ThreadManager::class,
-				IExecutor::class                      => WebExecutor::class,
-				\Edde\Ext\Rest\ProtocolService::class => \Edde\Ext\Rest\ProtocolService::class,
+				ICacheManager::class                       => CacheManager::class,
+				ICache::class                              => ICacheManager::class,
+				ICacheStorage::class                       => FlatFileCacheStorage::class,
+				IRuntime::class                            => Runtime::class,
+				IHttpResponse::class                       => HttpResponse::class,
+				IApplication::class                        => Application::class,
+				IRequestQueue::class                       => RequestQueue::class,
+				IRouterService::class                      => RouterService::class,
+				IRequest::class                            => self::exception(sprintf('[%s] is not possible use directly; implement proper factory or choose different approach.', IRequest::class)),
+				IHttpRequest::class                        => HttpRequest::class . '::createHttpRequest',
+				IHttpResponse::class                       => HttpResponse::class . '::createHttpResponse',
+				IResponseManager::class                    => ResponseManager::class,
+				ILogService::class                         => LogService::class,
+				IXmlParser::class                          => XmlParser::class,
+				IConverterManager::class                   => ConverterManager::class,
+				IResourceManager::class                    => ResourceManager::class,
+				IResourceProvider::class                   => IResourceManager::class,
+				IStyleSheetCompiler::class                 => StyleSheetCompiler::class,
+				IJavaScriptCompiler::class                 => JavaScriptCompiler::class,
+				IStorage::class                            => DatabaseStorage::class,
+				IDriver::class                             => SqliteDriver::class,
+				IDsn::class                                => self::instance(SqliteDsn::class, ['storage.sqlite']),
+				ICrate::class                              => self::instance(Crate::class, [], true),
+				ICrateFactory::class                       => CrateFactory::class,
+				ISchemaManager::class                      => SchemaManager::class,
+				IHttpClient::class                         => HttpClient::class,
+				IAclManager::class                         => AclManager::class,
+				IHtmlGenerator::class                      => Html5Generator::class,
+				ITemplateManager::class                    => TemplateManager::class,
+				ITemplate::class                           => self::instance(Template::class, [], true),
+				ICompiler::class                           => Compiler::class,
+				IUpgradeManager::class                     => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
+				ICryptEngine::class                        => CryptEngine::class,
+				IHostUrl::class                            => HostUrl::class . '::createHostUrl',
+				ILinkFactory::class                        => \Edde\Common\Link\LinkFactory::class,
+				ISessionManager::class                     => SessionManager::class,
+				IIdentityManager::class                    => IdentityManager::class,
+				IIdentity::class                           => IIdentityManager::class . '::createIdentity',
+				IFingerprint::class                        => self::exception(sprintf('You have to register or implement fingerprint interface [%s].', IFingerprint::class)),
+				IContext::class                            => self::exception(sprintf('You have to register implementation of [%s] specific for you application.', IContext::class)),
+				IAuthenticatorManager::class               => AuthenticatorManager::class,
+				IAclManager::class                         => AclManager::class,
+				IAcl::class                                => Acl::class,
+				ITranslator::class                         => Translator::class,
+				IAssetStorage::class                       => AssetStorage::class,
+				IProtocolService::class                    => ProtocolService::class,
+				IRequestService::class                     => RequestService::class,
+				IPacket::class                             => self::instance(Packet::class, [], true),
+				\Edde\Api\Protocol\Request\IRequest::class => self::instance(Request::class, [], true),
+				IMessage::class                            => self::instance(Message::class, [], true),
+				IResponse::class                           => self::instance(Response::class, [], true),
+				IEvent::class                              => self::instance(Event::class, [], true),
+				IError::class                              => self::instance(Error::class, [], true),
+				'//protocol-service/element/packet'        => IPacket::class,
+				'//protocol-service/element/request'       => IRequest::class,
+				'//protocol-service/element/message'       => IMessage::class,
+				'//protocol-service/element/response'      => IResponse::class,
+				'//protocol-service/element/event'         => IEvent::class,
+				'//protocol-service/element/error'         => IError::class,
+				IEventBus::class                           => EventBus::class,
+				IThreadManager::class                      => ThreadManager::class,
+				IExecutor::class                           => WebExecutor::class,
+				\Edde\Ext\Rest\ProtocolService::class      => \Edde\Ext\Rest\ProtocolService::class,
 			];
 		}
 

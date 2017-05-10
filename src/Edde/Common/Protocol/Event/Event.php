@@ -18,8 +18,16 @@
 
 		public function __construct(string $event = null, string $id = null) {
 			parent::__construct('event', $id);
-			$this->cancel = false;
 			$this->event = $event ?: static::class;
+			$this->cancel = false;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setEvent(string $event): IEvent {
+			$this->event = $event;
+			return $this;
 		}
 
 		/**
