@@ -141,7 +141,7 @@
 			$this->origin = $from->origin;
 			foreach ($from->elements ?? [] as $source) {
 				/** @var $element IElement */
-				$element = $this->container->create('//protocol-service/element/' . $source->type);
+				$this->addElement($element = $this->container->create('//protocol-service/element/' . $source->type));
 				$element->from($source);
 			}
 			return $this;

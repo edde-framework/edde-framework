@@ -1,13 +1,15 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Common\Protocol\Request;
+	namespace Edde\Ext\Protocol\Request;
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\Request\IMessage;
 	use Edde\Api\Protocol\Request\IRequest;
 	use Edde\Api\Protocol\Request\IResponse;
+	use Edde\Common\Protocol\Request\AbstractRequestHandler;
+	use Edde\Common\Protocol\Request\MissingResponseException;
 
 	/**
 	 * Request handler connected to container.

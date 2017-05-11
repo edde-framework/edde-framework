@@ -38,6 +38,7 @@
 		}
 
 		protected function packetPacket(IPacket $packet = null) {
+			$this->protocolService->setup();
 			return new PacketResponse($this->protocolService->execute($packet));
 		}
 
