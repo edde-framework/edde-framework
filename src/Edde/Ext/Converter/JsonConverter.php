@@ -90,7 +90,7 @@
 							return json_decode($convert);
 						case 'node':
 						case INode::class:
-							return NodeUtils::node(new Node(), json_decode($convert));
+							return NodeUtils::convert(json_decode($convert), new Node());
 					}
 					break;
 				case 'json':

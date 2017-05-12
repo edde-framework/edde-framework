@@ -41,8 +41,7 @@
 							$attributeList->put((array)$value);
 							continue 2;
 						case 'meta-list':
-							$root->getMetaList()
-								->put((array)$value);
+							$root->getMetaList()->put((array)$value);
 							continue 2;
 						case 'node-list':
 							/** @noinspection ForeachSourceInspection */
@@ -85,31 +84,31 @@
 		 * convert input of stdClass to node tree
 		 *
 		 * @param \stdClass $stdClass
-		 * @param INode     $root
+		 * @param INode     $node
 		 *
 		 * @return INode
 		 * @throws NodeException
 		 */
-		static public function convert(\stdClass $stdClass, INode $root = null): INode {
-			$root = $root ?: new Node();
-			$attributeList = $root->getAttributeList();
-			/** @noinspection ForeachSourceInspection */
+		static public function convert(\stdClass $stdClass, INode $node = null): INode {
+			$node = $node ?: new Node();
+
 			foreach ($stdClass as $k => $v) {
-				if ($v instanceof \stdClass) {
-					$root->addNode($node = new Node($k));
-					self::convert($v, $node);
+				if ($k === 'name') {
+					$node->setName($v);
+					continue;
+				} else if ($v instanceof \stdClass) {
+					$node->addNode(self::convert($v, new Node($k)));
 					continue;
 				} else if (is_array($v)) {
-					$root->addNode($node = new Node($k));
-					/** @noinspection ForeachSourceInspection */
-					foreach ($v as $kk => $vv) {
-						$node->addNode(self::convert($vv, new Node($kk)));
+					$node->addNode($root = new Node($k));
+					foreach ($v as $vv) {
+						$root->addNode(self::convert($vv, new Node()));
 					}
 					continue;
 				}
-				$attributeList->set($k, $v);
+				$node->setAttribute($k, $v);
 			}
-			return $root;
+			return $node;
 		}
 
 		/**
