@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde;
 
@@ -24,7 +24,7 @@
 		 * @return string
 		 */
 		public function getVersion() {
-			return '3.0.2642.0';
+			return '3.0.1.0';
 		}
 
 		/**

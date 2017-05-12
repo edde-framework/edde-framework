@@ -29,8 +29,5 @@
 		"paragonie/constant_time_encoding": "^2.0",
 		"defuse/php-encryption": "^2.0",
 		"roave/security-advisories": "dev-master"
-	},
-	"require-dev": {
-		"tracy/tracy": "^2.4"
 	}
 }

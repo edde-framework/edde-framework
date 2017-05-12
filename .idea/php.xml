@@ -6,7 +6,6 @@
       <path value="$PROJECT_DIR$/lib/defuse/php-encryption" />
       <path value="$PROJECT_DIR$/lib/paragonie/constant_time_encoding" />
       <path value="$PROJECT_DIR$/lib/paragonie/random_compat" />
-      <path value="$PROJECT_DIR$/lib/tracy/tracy" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
