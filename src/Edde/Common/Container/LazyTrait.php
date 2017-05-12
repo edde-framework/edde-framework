@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Container;
 
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\EddeException;
 
@@ -39,7 +40,11 @@
 			if (isset($this->aLazyInjectList[$name])) {
 				/** @var $container IContainer */
 				list($container, $dependency, $parameterList) = $this->aLazyInjectList[$name];
-				return $this->$name = $container->create($dependency, $parameterList, static::class);
+				/** @var $instance IConfigurable */
+				if (($instance = $this->$name = $container->create($dependency, $parameterList, static::class)) instanceof IConfigurable) {
+					$instance->setup();
+				}
+				return $instance;
 			}
 			throw new EddeException(sprintf('Reading from the undefined/private/protected property [%s::$%s].', static::class, $name));
 		}
