@@ -35,12 +35,6 @@
 		use LazyEventBusTrait;
 		use LazyTrait;
 
-		public function testEventException() {
-			$this->expectException(UnsupportedElementException::class);
-			$this->expectExceptionMessage('Unsupported element [event (Edde\Common\Protocol\Event\Event)]');
-			$this->protocolService->element(new Event('some cool event'));
-		}
-
 		public function testEventBusExecute() {
 			$this->protocolService->setup();
 			$count = 0;
@@ -69,12 +63,6 @@
 			$this->assertEquals(0, $count);
 			$this->protocolService->dequeue();
 			$this->assertEquals(2, $count, 'EventBus has not been executed!');
-		}
-
-		public function testRequestException() {
-			$this->expectException(UnsupportedElementException::class);
-			$this->expectExceptionMessage('Unsupported element [request (Edde\Common\Protocol\Request\Request)] in protocol handler [Edde\Common\Protocol\ProtocolService].');
-			$this->protocolService->element(new Request('wanna do something'));
 		}
 
 		public function testRequestExecuteError() {

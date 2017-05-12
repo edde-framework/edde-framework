@@ -10,32 +10,22 @@
       <excludeFolder url="file://$MODULE_DIR$/lib/defuse/php-encryption" />
       <excludeFolder url="file://$MODULE_DIR$/lib/paragonie/constant_time_encoding" />
       <excludeFolder url="file://$MODULE_DIR$/lib/paragonie/random_compat" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/tracy/tracy" />
+      <excludeFolder url="file://$MODULE_DIR$/release" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library name="PHARS">
         <CLASSES>
-          <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
-          <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
-          <root url="phar://$MODULE_DIR$/release/edde-framework-3.0.2642.0-bundle.phar/" />
-          <root url="phar://$MODULE_DIR$/release/edde-framework-3.0.2642.0.phar/" />
-          <root url="phar://$MODULE_DIR$/release/edde-framework.phar/" />
-          <root url="phar://$MODULE_DIR$/release/edde-framework-bundle.phar/" />
-          <root url="phar://$MODULE_DIR$/release/edde-framework-3.0.1.0.phar/" />
-          <root url="phar://$MODULE_DIR$/release/edde-framework-3.0.1.0-bundle.phar/" />
+          <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
         </CLASSES>
         <SOURCES>
-          <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
-          <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
-          <root url="phar://$MODULE_DIR$/release/edde-framework-3.0.2642.0-bundle.phar/" />
-          <root url="phar://$MODULE_DIR$/release/edde-framework-3.0.2642.0.phar/" />
-          <root url="phar://$MODULE_DIR$/release/edde-framework.phar/" />
-          <root url="phar://$MODULE_DIR$/release/edde-framework-bundle.phar/" />
-          <root url="phar://$MODULE_DIR$/release/edde-framework-3.0.1.0.phar/" />
-          <root url="phar://$MODULE_DIR$/release/edde-framework-3.0.1.0-bundle.phar/" />
+          <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
         </SOURCES>
       </library>
     </orderEntry>
