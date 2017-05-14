@@ -36,12 +36,14 @@
           <root url="file://$MODULE_DIR$/lib/defuse/php-encryption" />
           <root url="file://$MODULE_DIR$/lib/paragonie/constant_time_encoding" />
           <root url="file://$MODULE_DIR$/lib/paragonie/random_compat" />
+          <root url="file://$MODULE_DIR$/lib/tracy/tracy" />
         </CLASSES>
         <SOURCES>
           <root url="file://$MODULE_DIR$/lib/composer" />
           <root url="file://$MODULE_DIR$/lib/defuse/php-encryption" />
           <root url="file://$MODULE_DIR$/lib/paragonie/constant_time_encoding" />
           <root url="file://$MODULE_DIR$/lib/paragonie/random_compat" />
+          <root url="file://$MODULE_DIR$/lib/tracy/tracy" />
         </SOURCES>
       </library>
     </orderEntry>

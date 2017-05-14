@@ -3,17 +3,24 @@
 
 	namespace Edde\Api\Protocol;
 
-	interface IElement {
+	use Edde\Api\Node\INode;
+
+	interface IElement extends INode {
 		/**
-		 * return simple string name of the element name
+		 * return element type (basicaly node name)
 		 *
 		 * @return string
 		 */
 		public function getType(): string;
 
 		/**
-		 * explicitly set an id of an element
+		 * @param string $type
 		 *
+		 * @return bool
+		 */
+		public function isType(string $type): bool;
+
+		/**
 		 * @param string $id
 		 *
 		 * @return IElement
@@ -28,8 +35,6 @@
 		public function getId(): string;
 
 		/**
-		 * set async flag of the element
-		 *
 		 * @param bool $async
 		 *
 		 * @return IElement
@@ -37,15 +42,11 @@
 		public function async(bool $async = true): IElement;
 
 		/**
-		 * is the element asynchronous
-		 *
 		 * @return bool
 		 */
 		public function isAsync(): bool;
 
 		/**
-		 * set optional reference to "cause" element
-		 *
 		 * @param IElement $element
 		 *
 		 * @return IElement
@@ -58,22 +59,11 @@
 		public function hasReference(): bool;
 
 		/**
-		 * is *this* element reference of the given one?
-		 *
-		 * @param IElement $element
-		 *
-		 * @return bool
+		 * @return string
 		 */
-		public function isReferenceOf(IElement $element): bool;
+		public function getReference(): string;
 
 		/**
-		 * @return IElement
-		 */
-		public function getReference(): IElement;
-
-		/**
-		 * set element's scope
-		 *
 		 * @param string|null $scope
 		 *
 		 * @return IElement
@@ -81,13 +71,6 @@
 		public function setScope(string $scope = null): IElement;
 
 		/**
-		 * @return string|null
-		 */
-		public function getScope();
-
-		/**
-		 * is this element in the given scope?
-		 *
 		 * @param string|null $scope
 		 *
 		 * @return bool
@@ -95,75 +78,80 @@
 		public function inScope(string $scope = null): bool;
 
 		/**
-		 * set tag list of the element
-		 *
-		 * @param string[]|null $tagList
+		 * @param array $tagList
 		 *
 		 * @return IElement
 		 */
-		public function setTagList(array $tagList = null): IElement;
+		public function setTagList(array $tagList): IElement;
 
 		/**
-		 * @return string[]
+		 * @return array
 		 */
 		public function getTagList(): array;
 
 		/**
-		 * has this element the given tag list? (tag + tag + tag + ...); strict mast strictly match (a+b+c => a+b+c)
+		 * has this element the given tag name?
 		 *
-		 * @param array|null $tagList
-		 * @param bool       $strict
+		 * @param string $tag
 		 *
 		 * @return bool
 		 */
-		public function inTagList(array $tagList = null, bool $strict = false): bool;
+		public function hasTag(string $tag): bool;
 
 		/**
-		 * set internal property of element
+		 * has this element all given tags?
 		 *
-		 * @param string $name
-		 * @param mixed  $value
+		 * @param array $tagList
 		 *
-		 * @return IElement
+		 * @return bool
 		 */
-		public function set(string $name, $value): IElement;
+		public function hasTagList(array $tagList): bool;
 
 		/**
-		 * override current set of data in element
+		 * replace current data by new one
 		 *
 		 * @param array $data
 		 *
 		 * @return IElement
 		 */
-		public function put(array $data): IElement;
+		public function data(array $data): IElement;
 
 		/**
-		 * @param string $name
-		 * @param null   $default
-		 *
-		 * @return mixed
-		 */
-		public function get(string $name, $default = null);
-
-		/**
-		 * return array of internal properties
-		 *
 		 * @return array
 		 */
-		public function array(): array;
+		public function getData(): array;
 
 		/**
-		 * @param \stdClass $from
+		 * add the given element under the given node name
+		 *
+		 * @param string   $name
+		 * @param IElement $element
 		 *
 		 * @return IElement
 		 */
-		public function from(\stdClass $from): IElement;
+		public function addElement(string $name, IElement $element): IElement;
 
 		/**
-		 * this method should return "abstract" object in packet format prepared to be converted to target
-		 * format (json, xml, ...)
+		 * @param string     $name
+		 * @param IElement[] $elementList
 		 *
-		 * @return \stdClass
+		 * @return IElement
 		 */
-		public function packet(): \stdClass;
+		public function setElementList(string $name, array $elementList): IElement;
+
+		/**
+		 * @param string $name
+		 *
+		 * @return IElement[]
+		 */
+		public function getElementList(string $name): array;
+
+		/**
+		 * get the element by the given ID
+		 *
+		 * @param string $id
+		 *
+		 * @return IElement
+		 */
+		public function getElement(string $id): IElement;
 	}

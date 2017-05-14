@@ -65,22 +65,23 @@
 		public function dequeue(string $scope = null, array $tagList = null): IProtocolHandler;
 
 		/**
+		 * iterate over elements by the given rules
+		 *
+		 * @param string|null $scope
+		 * @param array|null  $tagList
+		 *
+		 * @return IElement[]
+		 */
+		public function iterate(string $scope = null, array $tagList = null);
+
+		/**
 		 * create current packet
 		 *
 		 * @param string|null   $scope
 		 * @param string[]|null $tagList
-		 * @param IPacket       $packet
+		 * @param IElement|null $element
 		 *
-		 * @return IPacket
+		 * @return IElement
 		 */
-		public function packet(string $scope = null, array $tagList = null, IPacket $packet = null): IPacket;
-
-		/**
-		 * get related Elements to the given element (so returned elements are referencing the input element)
-		 *
-		 * @param IElement $reference
-		 *
-		 * @return IElement[]
-		 */
-		public function reference(IElement $reference): array;
+		public function packet(string $scope = null, array $tagList = null, IElement $element = null): IElement;
 	}

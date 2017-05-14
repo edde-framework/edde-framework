@@ -89,26 +89,83 @@
 		 * @return INode
 		 * @throws NodeException
 		 */
-		static public function convert(\stdClass $stdClass, INode $node = null): INode {
+		static public function toNode(\stdClass $stdClass, INode $node = null): INode {
 			$node = $node ?: new Node();
-
 			foreach ($stdClass as $k => $v) {
 				if ($k === 'name') {
 					$node->setName($v);
-					continue;
+				} else if ($k === 'value') {
+					$node->setValue($v);
 				} else if ($v instanceof \stdClass) {
-					$node->addNode(self::convert($v, new Node($k)));
-					continue;
+					$node->addNode(self::toNode($v, new Node($k)));
 				} else if (is_array($v)) {
 					$node->addNode($root = new Node($k));
 					foreach ($v as $vv) {
-						$root->addNode(self::convert($vv, new Node()));
+						$root->addNode(self::toNode($vv, new Node()));
 					}
-					continue;
+				} else {
+					$node->setAttribute($k, $v);
 				}
-				$node->setAttribute($k, $v);
+			}
+			/** @var $node INode */
+			if ($node->getName() === null && count((array)$stdClass) === 1) {
+				$node = $node->getNodeList()[0];
+				$node->setParent(null);
+				return $node;
 			}
 			return $node;
+		}
+
+		/**
+		 * convert the given node to stdClass; output of this method should be convertible 1:1 by self::toNode()
+		 *
+		 * @param INode $root
+		 *
+		 * @return \stdClass
+		 */
+		static public function fromNode(INode $root): \stdClass {
+			$object = new \stdClass();
+			$attributeList = $root->getAttributeList();
+			if ($attributeList->isEmpty() === false) {
+				$object = (object)array_merge((array)$object, $attributeList->array());
+			}
+			$metaList = $root->getMetaList();
+			if ($metaList->isEmpty() === false) {
+				$object->{'::meta'} = $metaList->array();
+			}
+			$nodeList = [];
+			foreach ($root->getNodeList() as $node) {
+				$nodeList[$node->getName()][] = self::fromNode($node);
+			}
+			foreach ($nodeList as $name => $list) {
+				$object->{$name} = $list;
+				if (count($list) === 1) {
+					$object->{$name} = reset($list);
+				}
+			}
+			return $root->isRoot() ? (object)[$root->getName() => $object] : $object;
+		}
+
+		/**
+		 * generate "standard" talkative version of stdClass from Node
+		 *
+		 * @param INode $root
+		 *
+		 * @return \stdClass
+		 */
+		static public function toObject(INode $root): \stdClass {
+			$object = new \stdClass();
+			$object->name = $root->getName();
+			if (($value = $root->getValue()) !== null) {
+				$object->value = $value;
+			}
+			if (empty($attributeList = $root->getAttributeList()->array()) === false) {
+				$object->{'attribute-list'} = (object)$attributeList;
+			}
+			foreach ($root->getNodeList() as $node) {
+				$object->{'node-list'}[] = self::toObject($node);
+			}
+			return $object;
 		}
 
 		/**

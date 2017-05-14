@@ -4,14 +4,12 @@
 	namespace Edde\Common\Protocol\Request;
 
 	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Node\INode;
 	use Edde\Api\Protocol\IElement;
-	use Edde\Api\Protocol\IError;
-	use Edde\Api\Protocol\Request\IMessage;
-	use Edde\Api\Protocol\Request\IRequest;
 	use Edde\Api\Protocol\Request\IRequestHandler;
 	use Edde\Api\Protocol\Request\IRequestService;
-	use Edde\Api\Protocol\Request\IResponse;
 	use Edde\Api\Protocol\Request\UnhandledRequestException;
+	use Edde\Common\Protocol\Element;
 
 	class RequestService extends AbstractRequestHandler implements IRequestService {
 		use LazyContainerTrait;
@@ -20,7 +18,7 @@
 		 */
 		protected $requestHandlerList = [];
 		/**
-		 * @var IResponse[]
+		 * @var IElement[]
 		 */
 		protected $responseList = [];
 
@@ -42,31 +40,28 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function request(IRequest $request): IElement {
-			if (isset($this->responseList[$id = $request->getId()])) {
+		public function request(IElement $element): INode {
+			if (isset($this->responseList[$id = $element->getAttribute('id')])) {
 				return $this->responseList[$id];
 			}
-			return $this->execute($request);
+			return $this->execute($element);
 		}
 
 		/**
 		 * @inheritdoc
-		 *
-		 * @param IMessage|IRequest|IError $element
 		 */
 		public function execute(IElement $element) {
 			foreach ($this->requestHandlerList as $requestHandler) {
-				/** @var $response IResponse */
-				if ($requestHandler->canHandle($element) && ($response = $requestHandler->execute($element)) instanceof IResponse) {
+				/** @var $response IElement */
+				if ($requestHandler->canHandle($element) && ($response = $requestHandler->execute($element)) instanceof IElement) {
 					return $this->responseList[$element->getId()] = $response->setReference($element);
 				}
 			}
-			/** @var $error IError */
-			$error = $this->container->create(IError::class);
-			$error->setCode(100);
-			$error->setMessage(sprintf('Unhandled request [%s (%s)].', $element->getRequest(), get_class($element)));
-			$error->setReference($element);
-			$error->setException(UnhandledRequestException::class);
-			return $error;
+			return new Element('error', null, [
+				'reference' => $element,
+				'code'      => 100,
+				'message'   => sprintf('Unhandled request [%s].', $element->getAttribute('request')),
+				'exception' => UnhandledRequestException::class,
+			]);
 		}
 	}

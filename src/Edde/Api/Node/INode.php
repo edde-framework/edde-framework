@@ -71,6 +71,13 @@
 		public function setAttribute(string $name, $value): INode;
 
 		/**
+		 * @param array $attributeList
+		 *
+		 * @return INode
+		 */
+		public function putAttribute(array $attributeList): INode;
+
+		/**
 		 * return list of meta data
 		 *
 		 * @return IAttributeList
@@ -94,6 +101,13 @@
 		 * @return INode
 		 */
 		public function setMeta(string $name, $value): INode;
+
+		/**
+		 * @param array $metaList
+		 *
+		 * @return INode
+		 */
+		public function putMeta(array $metaList): INode;
 
 		/**
 		 * generate materialized path from node names

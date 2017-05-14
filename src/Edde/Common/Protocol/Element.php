@@ -1,0 +1,221 @@
+<?php
+	declare(strict_types=1);
+
+	namespace Edde\Common\Protocol;
+
+	use Edde\Api\Node\IAbstractNode;
+	use Edde\Api\Node\INode;
+	use Edde\Api\Protocol\IElement;
+	use Edde\Common\Node\Node;
+	use Edde\Common\Node\NodeIterator;
+
+	class Element extends Node implements IElement {
+		/**
+		 * @param string      $type
+		 * @param string|null $id
+		 * @param array|null  $attributeList
+		 */
+		public function __construct(string $type, string $id = null, array $attributeList = []) {
+			parent::__construct($type, null, $attributeList);
+			$id ? $this->setAttribute('id', $id) : null;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getType(): string {
+			return $this->getName();
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function isType(string $type): bool {
+			return $this->getName() === $type;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setId(string $id): IElement {
+			$this->setAttribute('id', $id);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getId(): string {
+			if (($id = $this->getAttribute('id')) === null) {
+				$this->setAttribute('id', $id = bin2hex(random_bytes(4)) . '-' . implode('-', str_split(bin2hex(random_bytes(8)), 4)) . '-' . bin2hex(random_bytes(6)));
+			}
+			return $id;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function async(bool $async = true): IElement {
+			$this->setAttribute('async', $async);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function isAsync(): bool {
+			return (bool)$this->getAttribute('async', false);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setReference(IElement $element): IElement {
+			$this->setAttribute('reference', $element->getId());
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function hasReference(): bool {
+			return $this->getAttribute('reference') !== null;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getReference(): string {
+			if ($this->hasReference() === false) {
+				throw new ReferenceException(sprintf('Element [%s (%s)] has no reference set.', $this->getType(), static::class));
+			}
+			return (string)$this->getAttribute('reference');
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setScope(string $scope = null): IElement {
+			$this->setAttribute('scope', $scope);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function inScope(string $scope = null): bool {
+			return $this->getAttribute('scope') === $scope;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setTagList(array $tagList = null): IElement {
+			$this->setAttribute('tags', $tagList ?: []);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getTagList(): array {
+			return $this->getAttribute('tags', []);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function hasTag(string $tag): bool {
+			return in_array($tag, $this->getTagList());
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function hasTagList(array $tagList): bool {
+			foreach ($tagList as $tag) {
+				if ($this->hasTag($tag) === false) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function data(array $data): IElement {
+			$this->putMeta($data);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getData(): array {
+			return $this->metaList->array();
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function addElement(string $name, IElement $element): IElement {
+			$node = null;
+			/** @var $node INode */
+			foreach ($this->getNodeList() as $node) {
+				if ($node->getName() === $name) {
+					break;
+				}
+			}
+			if ($node === null || $node->getName() !== $name) {
+				$this->addNode($node = new Element($name));
+			}
+			$node->addNode($element);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setElementList(string $name, array $elementList): IElement {
+			foreach ($elementList as $element) {
+				$this->addElement($name, $element);
+			}
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getElementList(string $name): array {
+			/** @var $node INode */
+			foreach ($this->getNodeList() as $node) {
+				if ($node->getName() === $name) {
+					return $node->getNodeList();
+				}
+			}
+			return [];
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getElement(string $id): IElement {
+			if ($this->hasReference() && $this->getReference() === $id) {
+				return $this;
+			}
+			/** @var $element IElement */
+			foreach (NodeIterator::recursive($this) as $element) {
+				if ($element->hasReference() && $element->getReference() === $id) {
+					return $element;
+				}
+			}
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function accept(IAbstractNode $abstractNode) {
+			return $abstractNode instanceof IElement;
+		}
+	}

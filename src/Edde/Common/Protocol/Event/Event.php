@@ -4,13 +4,9 @@
 	namespace Edde\Common\Protocol\Event;
 
 	use Edde\Api\Protocol\Event\IEvent;
-	use Edde\Common\Protocol\AbstractElement;
+	use Edde\Common\Protocol\Element;
 
-	class Event extends AbstractElement implements IEvent {
-		/**
-		 * @var string
-		 */
-		protected $event;
+	class Event extends Element implements IEvent {
 		/**
 		 * @var bool
 		 */
@@ -18,32 +14,15 @@
 
 		public function __construct(string $event = null, string $id = null) {
 			parent::__construct('event', $id);
-			$this->event = $event ?: static::class;
+			$this->setAttribute('event', $event ?: static::class);
 			$this->cancel = false;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function setEvent(string $event): IEvent {
-			$this->event = $event;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function getEvent(): string {
-			return $this->event;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function inherit(IEvent $event): IEvent {
-			$this->setScope($event->getScope());
-			$this->setTagList(array_merge($this->getTagList(), $event->getTagList()));
-			return $this;
+			return (string)$this->getAttribute('event');
 		}
 
 		/**
@@ -59,11 +38,5 @@
 		 */
 		public function isCanceled(): bool {
 			return $this->cancel;
-		}
-
-		public function packet(): \stdClass {
-			$packet = parent::packet();
-			$packet->event = $this->getEvent();
-			return $packet;
 		}
 	}

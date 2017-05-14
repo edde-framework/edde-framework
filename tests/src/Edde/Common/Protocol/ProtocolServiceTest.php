@@ -5,14 +5,13 @@
 
 	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Http\IHostUrl;
+	use Edde\Api\Node\INode;
 	use Edde\Api\Protocol\Event\LazyEventBusTrait;
-	use Edde\Api\Protocol\IError;
-	use Edde\Api\Protocol\IPacket;
+	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
-	use Edde\Api\Protocol\Request\IRequest;
 	use Edde\Api\Protocol\Request\IRequestService;
-	use Edde\Api\Protocol\Request\IResponse;
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
 	use Edde\Api\Protocol\Request\UnhandledRequestException;
 	use Edde\Common\Container\Factory\ClassFactory;
@@ -33,10 +32,10 @@
 		use LazyProtocolServiceTrait;
 		use LazyRequestServiceTrait;
 		use LazyEventBusTrait;
+		use LazyConverterManagerTrait;
 		use LazyTrait;
 
 		public function testEventBusExecute() {
-			$this->protocolService->setup();
 			$count = 0;
 			$this->eventBus->listen('some cool event', function (Event $event) use (&$count) {
 				$count++;
@@ -51,7 +50,6 @@
 		}
 
 		public function testEventBusQueue() {
-			$this->protocolService->setup();
 			$count = 0;
 			$this->eventBus->listen('some cool event', function (Event $event) use (&$count) {
 				$count++;
@@ -59,54 +57,48 @@
 			$this->eventBus->listen('some cool event', function (Event $event) use (&$count) {
 				$count++;
 			});
-			$this->protocolService->queue(new Event('some cool event'));
+			$this->protocolService->queue($event = new Event('some cool event'));
 			$this->assertEquals(0, $count);
 			$this->protocolService->dequeue();
 			$this->assertEquals(2, $count, 'EventBus has not been executed!');
 		}
 
 		public function testRequestExecuteError() {
-			$this->requestService->setup();
-			self::assertInstanceOf(IError::class, $response = $this->requestService->element($request = new Request('wanna do something')));
-			/** @var $response IError */
-			self::assertEquals('error', $response->getType());
-			self::assertEquals(UnhandledRequestException::class, $response->getException());
-			self::assertEquals('Unhandled request [wanna do something (Edde\Common\Protocol\Request\Request)].', $response->getMessage());
-			$this->requestService->request($request);
+			/** @var $response INode */
+			self::assertInstanceOf(INode::class, $response = $this->requestService->element(new Request('wanna do something')));
+			self::assertEquals('error', $response->getName());
+			self::assertEquals(UnhandledRequestException::class, $response->getAttribute('exception'));
+			self::assertEquals('Unhandled request [wanna do something].', $response->getAttribute('message'));
 		}
 
 		public function testRequestExecuteNoResponse() {
 			$this->expectException(MissingResponseException::class);
 			$this->expectExceptionMessage('Missing response for request [' . ExecutableService::class . '::noResponse].');
-			$this->protocolService->setup();
 			$this->protocolService->element(new Request(ExecutableService::class . '::noResponse'));
 		}
 
 		public function testRequestExecute() {
-			$this->protocolService->setup();
-			self::assertNotEmpty($response = $this->protocolService->element(new Request(ExecutableService::class . '::method')));
-			self::assertInstanceOf(IResponse::class, $response);
+			/** @var $response IElement */
+			self::assertInstanceOf(IElement::class, $response = $this->protocolService->element(new Request(ExecutableService::class . '::method')));
+			self::assertEquals('response', $response->getType());
 		}
 
 		public function testRequestQueue() {
-			$this->protocolService->setup();
-			$this->protocolService->queue(($fooRequest = new Request(ExecutableService::class . '::method'))->put(['foo' => 'bar']));
-			$this->protocolService->queue(($barRequest = new Request(ExecutableService::class . '::method'))->put(['foo' => 'foo']));
+			$this->protocolService->queue(($fooRequest = new Request(ExecutableService::class . '::method'))->data(['foo' => 'bar']));
+			$this->protocolService->queue(($barRequest = new Request(ExecutableService::class . '::method'))->data(['foo' => 'foo']));
 			$this->protocolService->dequeue();
 			self::assertNotEmpty($responseList = $this->requestService->getResponseList());
 			self::assertCount(2, $responseList);
-			/** @var $foo IResponse */
-			/** @var $bar IResponse */
 			list($foo, $bar) = array_values($responseList);
-			self::assertEquals('bar', $foo->get('data'));
-			self::assertEquals('foo', $bar->get('data'));
+			self::assertEquals('bar', $foo->getMeta('data'));
+			self::assertEquals('foo', $bar->getMeta('data'));
 			$foo = $this->requestService->request($fooRequest);
 			$bar = $this->requestService->request($barRequest);
-			self::assertEquals('bar', $foo->get('data'));
-			self::assertEquals('foo', $bar->get('data'));
+			self::assertEquals('bar', $foo->getMeta('data'));
+			self::assertEquals('foo', $bar->getMeta('data'));
 		}
 
-		public function testAligment() {
+		public function testScopeAndTagList() {
 			$event = (new Event('foobar'))->setScope('scope')->setTagList([
 				'foo',
 				'bar',
@@ -118,53 +110,49 @@
 			]);
 			self::assertTrue($event->inScope('scope'));
 			self::assertFalse($event->inScope('scopee'));
-			self::assertFalse($event->inTagList());
-			self::assertTrue($event->inTagList([
+			self::assertTrue($event->hasTagList([]));
+			self::assertFalse($event->hasTagList(['moooo']));
+			self::assertTrue($event->hasTagList([
 				'foo',
 				'bar',
 			]));
-			self::assertTrue($event->inTagList([
-				'foo',
-				'bar',
-			], true));
-			self::assertTrue($event2->inTagList([
+			self::assertTrue($event2->hasTagList([
 				'foo',
 				'bar',
 			]));
-			self::assertTrue($event2->inTagList([
+			self::assertFalse($event2->hasTagList([
 				'foo',
 				'bar',
 				'muhaa',
 			]));
-			self::assertFalse($event2->inTagList([
+			self::assertFalse($event2->hasTagList([
 				'muhaa',
 				'moooo',
 			]));
-			self::assertTrue($event2->inTagList([
+			self::assertTrue($event2->hasTagList([
 				'bar',
 			]));
-			self::assertFalse($event2->inTagList([
+			self::assertTrue($event2->hasTagList([
 				'foo',
 				'bar',
-			], true));
+			]));
 		}
 
 		public function testPacket() {
-			$this->protocolService->setup();
-			$this->protocolService->queue(($event = new Event('foobar', '123'))->setScope('scope')->setTagList([
+			$this->protocolService->queue((new Event('foobar', '123'))->setScope('scope')->setTagList([
 				'foo',
 				'bar',
 			]));
-			$this->protocolService->queue(($event2 = new Event('foobar', '456'))->setScope('scope')->setTagList([
+			$this->protocolService->queue((new Event('foobar', '456'))->setScope('scope')->setTagList([
 				'foo',
 				'bar',
 				'moo',
 			]));
-			$this->protocolService->queue(($request = new Request('do something cool', '789'))->setScope('scope')->setTagList([
+			$this->protocolService->queue((new Request('do something cool', '789'))->setScope('scope')->setTagList([
 				'foo',
 				'bar',
 			]));
-			$this->protocolService->queue(($event3 = new Event('foobar', '321'))->setScope('out of scope')->setTagList([
+			$this->protocolService->queue((new Event('foobar', '321'))->setScope('out of scope')->setTagList([
 				'foo',
 				'bar',
 				'moo',
@@ -174,260 +162,251 @@
 				'bar',
 			]);
 			$packet->setId('123456');
-			$packet = $packet->packet();
-			$expect = new \stdClass();
-			$expect->version = '1.0';
-			$expect->type = 'packet';
-			$expect->id = '123456';
-			$expect->origin = 'http://localhost/the-void';
-			$expect->scope = 'scope';
-			$expect->tags = [
-				'foo',
-				'bar',
+			$expect = (object)[
+				'packet' => (object)[
+					'version'  => '1.1',
+					'id'       => '123456',
+					'origin'   => 'http://localhost/the-void',
+					'scope'    => 'scope',
+					'tags'     => [
+						'foo',
+						'bar',
+					],
+					'elements' => (object)[
+						'event'   => [
+							(object)[
+								'id'    => '123',
+								'scope' => 'scope',
+								'tags'  => [
+									'foo',
+									'bar',
+								],
+								'event' => 'foobar',
+							],
+							(object)[
+								'id'    => '456',
+								'scope' => 'scope',
+								'tags'  => [
+									'foo',
+									'bar',
+									'moo',
+								],
+								'event' => 'foobar',
+							],
+						],
+						'request' => (object)[
+							'id'      => '789',
+							'scope'   => 'scope',
+							'tags'    => [
+								'foo',
+								'bar',
+							],
+							'request' => 'do something cool',
+						],
+					],
+				],
 			];
-			$expect->elements = [
-				(object)[
-					'type'  => 'event',
-					'id'    => '123',
-					'scope' => 'scope',
-					'tags'  => [
-						'foo',
-						'bar',
-					],
-					'event' => 'foobar',
-				],
-				(object)[
-					'type'  => 'event',
-					'id'    => '456',
-					'scope' => 'scope',
-					'tags'  => [
-						'foo',
-						'bar',
-						'moo',
-					],
-					'event' => 'foobar',
-				],
-				(object)[
-					'type'    => 'request',
-					'id'      => '789',
-					'scope'   => 'scope',
-					'tags'    => [
-						'foo',
-						'bar',
-					],
-					'request' => 'do something cool',
-				],
-			];
-			self::assertEquals($expect, $packet);
+			self::assertEquals($expect, $this->converterManager->convert($packet, INode::class, [\stdClass::class])->convert());
 		}
 
 		public function testServiceRequest() {
-			$this->protocolService->setup();
-			$packet = $this->container->create(IPacket::class);
+			$packet = new Packet('::the-void');
 			$packet->setId('321');
-			/** @var $request IRequest */
-			$request = $this->container->create(IRequest::class);
-			$request->setRequest('there is nobody to handle this');
-			$packet->addElement($request);
-			/** @var $request2 IRequest */
-			$request2 = $this->container->create(IRequest::class);
-			$request2->setRequest('testquest');
-			$packet->addElement($request2);
+			$request = new Request('there is nobody to handle this');
+			$packet->addElement('elements', $request);
+			$request2 = new Request('testquest');
+			$packet->addElement('elements', $request2);
 			$request->setId('852');
 			$request2->setId('963');
 			self::assertEquals('packet', $packet->getType());
+			/** @var $response IElement */
 			$response = $this->protocolService->element($packet);
 			self::assertNotEquals($packet->getId(), $response->getId());
 			self::assertNotEquals($packet, $response);
-			self::assertCount(2, $response->getElementList());
-			self::assertCount(3, $response->getReferenceList());
-			self::assertEquals($response, $response->reference($packet));
+			self::assertCount(2, $response->getElementList('elements'));
+			self::assertCount(3, $response->getElementList('references'));
+			self::assertEquals($response, $response->getElement($packet->getId()));
 
-			/** @var $element IError */
-			self::assertInstanceOf(IError::class, $element = $response->reference($request));
-			$element->setId('456');
-			self::assertSame(UnhandledRequestException::class, $element->getException());
+			self::assertInstanceOf(IElement::class, $element = $response->getElement($request->getId()));
 			self::assertSame('error', $element->getType());
+			self::assertSame(UnhandledRequestException::class, $element->getAttribute('exception'));
+			$element->setId('456');
 
-			/** @var $element IResponse */
-			self::assertInstanceOf(IResponse::class, $element = $response->reference($request2));
-			self::assertEquals(['a' => 'b'], $element->array());
+			self::assertInstanceOf(IElement::class, $element = $response->getElement($request2->getId()));
+			self::assertEquals(['a' => 'b'], $element->getMetaList()->array());
 
 			$response->setId('123');
 			self::assertEquals((object)[
-				'version'    => '1.0',
-				'type'       => 'packet',
-				'id'         => '123',
-				'origin'     => 'http://localhost/the-void',
-				'elements'   => [
-					(object)[
-						'type'      => 'error',
-						'id'        => '456',
-						'code'      => 100,
-						'message'   => 'Unhandled request [there is nobody to handle this (Edde\Common\Protocol\Request\Request)].',
-						'reference' => '852',
-						'exception' => UnhandledRequestException::class,
+				'packet' => (object)[
+					'version'    => '1.1',
+					'id'         => '123',
+					'origin'     => 'http://localhost/the-void',
+					'elements'   => (object)[
+						'error'    => (object)[
+							'id'        => '456',
+							'code'      => 100,
+							'message'   => 'Unhandled request [there is nobody to handle this].',
+							'reference' => '852',
+							'exception' => UnhandledRequestException::class,
+						],
+						'response' => (object)[
+							'id'        => 'foobar',
+							'reference' => '963',
+							'::meta'    => ['a' => 'b'],
+						],
 					],
-					(object)[
-						'type'      => 'response',
-						'id'        => 'foobar',
-						'reference' => '963',
-						'data'      => ['a' => 'b'],
-					],
-				],
-				'reference'  => '321',
-				'references' => [
-					(object)[
-						'version'  => '1.0',
-						'type'     => 'packet',
-						'id'       => '321',
-						'origin'   => 'http://localhost/the-void',
-						'elements' => [
+					'reference'  => '321',
+					'references' => (object)[
+						'packet'  => (object)[
+							'version'  => '1.1',
+							'id'       => '321',
+							'origin'   => '::the-void',
+							'elements' => (object)[
+								'request' => [
+									(object)[
+										'id'      => '852',
+										'request' => 'there is nobody to handle this',
+									],
+									(object)[
+										'id'      => '963',
+										'request' => 'testquest',
+									],
+								],
+							],
+						],
+						'request' => [
 							(object)[
-								'type'    => 'request',
 								'id'      => '852',
 								'request' => 'there is nobody to handle this',
 							],
 							(object)[
-								'type'    => 'request',
 								'id'      => '963',
 								'request' => 'testquest',
 							],
 						],
 					],
-					(object)[
-						'type'    => 'request',
-						'id'      => '852',
-						'request' => 'there is nobody to handle this',
-					],
-					(object)[
-						'type'    => 'request',
-						'id'      => '963',
-						'request' => 'testquest',
-					],
 				],
-			], $response->packet());
+			], $this->converterManager->convert($response, INode::class, [\stdClass::class])->convert());
 		}
 
 		public function testAsyncPacket() {
-			$this->protocolService->setup();
-			$packet = $this->container->create(IPacket::class);
+			$packet = new Packet('::the-void');
 			$packet->setId('the-original-packet');
 			$packet->async();
-			$packet->addElement($request = new Request('there is nobody to handle this'));
-			$packet->addElement($request2 = new Request('testquest'));
+			$packet->addElement('elements', $request = new Request('there is nobody to handle this'));
+			$packet->addElement('elements', $request2 = new Request('testquest'));
 			$request->setId('741');
 			$request2->setId('852');
-			/** @var $response IPacket */
-			self::assertInstanceOf(IPacket::class, $response = $this->protocolService->element($packet));
-			self::assertCount(0, $response->getElementList());
-			self::assertCount(1, $response->getReferenceList());
-			self::assertEquals($response, $response->reference($packet));
+			/** @var $response IElement */
+			self::assertInstanceOf(IElement::class, $response = $this->protocolService->element($packet));
+			self::assertEquals('packet', $response->getType());
+			self::assertCount(0, $response->getElementList('elements'));
+			self::assertCount(1, $response->getElementList('references'));
+			self::assertEquals($response, $response->getElement($packet->getId()));
 			$response->setId('123');
 
 			self::assertEquals((object)[
-				'version'    => '1.0',
-				'type'       => 'packet',
-				'id'         => '123',
-				'origin'     => 'http://localhost/the-void',
-				'reference'  => 'the-original-packet',
-				'references' => [
-					(object)[
-						'version'  => '1.0',
-						'type'     => 'packet',
-						'id'       => 'the-original-packet',
-						'origin'   => 'http://localhost/the-void',
-						'elements' => [
-							(object)[
-								'type'    => 'request',
-								'id'      => '741',
-								'request' => 'there is nobody to handle this',
-							],
-							(object)[
-								'type'    => 'request',
-								'id'      => '852',
-								'request' => 'testquest',
+				'packet' => (object)[
+					'version' => '1.1',
+
+					'id'         => '123',
+					'origin'     => 'http://localhost/the-void',
+					'reference'  => 'the-original-packet',
+					'references' => (object)[
+						'packet' => (object)[
+							'version'  => '1.1',
+							'id'       => 'the-original-packet',
+							'origin'   => '::the-void',
+							'async'    => true,
+							'elements' => (object)[
+								'request' => [
+									(object)[
+										'id'      => '741',
+										'request' => 'there is nobody to handle this',
+									],
+									(object)[
+										'id'      => '852',
+										'request' => 'testquest',
+									],
+								],
 							],
 						],
 					],
 				],
-			], $response->packet());
-			self::assertEmpty($this->protocolService->reference($packet));
+			], $this->converterManager->convert($response, INode::class, [\stdClass::class])->convert());
+			// self::assertEmpty($this->protocolService->gEk($packet));
 
 			$this->protocolService->dequeue();
 
 			self::assertCount(1, $referenceList = $this->protocolService->reference($packet));
 			list($response) = $referenceList;
-			self::assertInstanceOf(IPacket::class, $response);
+			self::assertInstanceOf(IElement::class, $response);
+			self::assertEquals('packet', $response->getType());
 
-			self::assertCount(2, $response->getElementList());
-			self::assertCount(3, $response->getReferenceList());
+			self::assertCount(2, $response->getElementList('elements'));
+			self::assertCount(3, $response->getElementList('references'));
 			self::assertEquals($response, $response->reference($packet));
 
-			/** @var $element IError */
-			self::assertInstanceOf(IError::class, $element = $response->reference($request));
+			// self::assertInstanceOf(IError::class, $element = $response->reference($request));
 			$element->setId('456');
 			self::assertSame(UnhandledRequestException::class, $element->getException());
 			self::assertSame('error', $element->getType());
 
-			/** @var $element IResponse */
-			self::assertInstanceOf(IResponse::class, $element = $response->reference($request2));
+			// self::assertInstanceOf(IResponse::class, $element = $response->reference($request2));
 			self::assertEquals(['a' => 'b'], $element->array());
 
 			$response->setId('123');
 			self::assertEquals((object)[
-				'version'    => '1.0',
-				'type'       => 'packet',
-				'id'         => '123',
-				'origin'     => 'http://localhost/the-void',
-				'elements'   => [
-					(object)[
-						'type'      => 'error',
-						'id'        => '456',
-						'code'      => 100,
-						'message'   => 'Unhandled request [there is nobody to handle this (Edde\Common\Protocol\Request\Request)].',
-						'reference' => '741',
-						'exception' => UnhandledRequestException::class,
+				'packet' => (object)[
+					'version'    => '1.1',
+					'id'         => '123',
+					'origin'     => 'http://localhost/the-void',
+					'elements'   => (object)[
+						'error'    => (object)[
+							'id'        => '456',
+							'code'      => 100,
+							'message'   => 'Unhandled request [there is nobody to handle this].',
+							'reference' => '741',
+							'exception' => UnhandledRequestException::class,
+						],
+						'response' => (object)[
+							'id'        => 'foobar',
+							'reference' => '852',
+							'::meta'    => ['a' => 'b'],
+						],
 					],
-					(object)[
-						'type'      => 'response',
-						'id'        => 'foobar',
-						'reference' => '852',
-						'data'      => ['a' => 'b'],
-					],
-				],
-				'reference'  => 'the-original-packet',
-				'references' => [
-					(object)[
-						'version'  => '1.0',
-						'type'     => 'packet',
-						'id'       => 'the-original-packet',
-						'origin'   => 'http://localhost/the-void',
-						'elements' => [
+					'reference'  => 'the-original-packet',
+					'references' => (object)[
+						'packet'  => (object)[
+							'version'  => '1.1',
+							'id'       => 'the-original-packet',
+							'origin'   => '::the-void',
+							'elements' => (object)[
+								'request' => [
+									(object)[
+										'id'      => '741',
+										'request' => 'there is nobody to handle this',
+									],
+									(object)[
+										'id'      => '852',
+										'request' => 'testquest',
+									],
+								],
+							],
+						],
+						'request' => [
 							(object)[
-								'type'    => 'request',
 								'id'      => '741',
 								'request' => 'there is nobody to handle this',
 							],
 							(object)[
-								'type'    => 'request',
 								'id'      => '852',
 								'request' => 'testquest',
 							],
 						],
 					],
-					(object)[
-						'type'    => 'request',
-						'id'      => '741',
-						'request' => 'there is nobody to handle this',
-					],
-					(object)[
-						'type'    => 'request',
-						'id'      => '852',
-						'request' => 'testquest',
-					],
 				],
-			], $response->packet());
+			], $this->converterManager->convert($response, INode::class, [\stdClass::class])->convert());
 		}
 
 		protected function setUp() {
