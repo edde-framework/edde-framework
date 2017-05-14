@@ -86,4 +86,15 @@
 		public function packet(string $scope = null, array $tagList = null, IElement $element = null): IElement {
 			return ($element ?: (new Packet($this->hostUrl->getAbsoluteUrl()))->setScope($scope)->setTagList($tagList))->setElementList('elements', iterator_to_array($this->iterate($scope, $tagList)));
 		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getReferenceList(string $id): array {
+			$elementList = [];
+			foreach ($this->elementList as $element) {
+				$elementList = array_merge($elementList, $element->getReferenceList($id));
+			}
+			return $elementList;
+		}
 	}

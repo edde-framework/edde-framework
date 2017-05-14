@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Protocol\Event;
 
-	use Edde\Api\Node\INode;
+	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IProtocolHandler;
 
 	interface IEventBus extends IProtocolHandler {
@@ -27,9 +27,9 @@
 		/**
 		 * immediately emmit the given event
 		 *
-		 * @param INode $node
+		 * @param IElement $element
 		 *
 		 * @return IEventBus
 		 */
-		public function emit(INode $node): IEventBus;
+		public function emit(IElement $element): IEventBus;
 	}
