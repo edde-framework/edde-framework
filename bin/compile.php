@@ -20,9 +20,13 @@
 	$pharDir = $releaseDir . '/phar';
 	$bundleDir = $releaseDir . '/bundle';
 	$sourceDir = $rootDir . '/src';
+	$libDir = $rootDir . '/lib';
 
+	FileUtils::delete($pharDir);
+	FileUtils::delete($bundleDir);
 	FileUtils::copy($sourceDir, $pharDir . '/src');
 	FileUtils::copy($sourceDir, $bundleDir . '/src');
+	FileUtils::copy($libDir, $bundleDir . '/lib');
 	FileUtils::copy($rootDir . '/loader.php', $bundleDir . '/loader.php');
 
 	function make(string $file, string $source, string $stub) {
