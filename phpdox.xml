@@ -2,7 +2,7 @@
 <phpdox xmlns="http://xml.phpdox.net/config">
 	<project name="Edde Framework" source="${basedir}/src" workdir="${basedir}/temp/api/xml">
 		<collector backend="parser"/>
-		<generator output="${basedir}/api">
+		<generator output="${basedir}/doc">
 			<build engine="html" output="html"/>
 		</generator>
 	</project>

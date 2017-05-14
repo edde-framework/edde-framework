@@ -24,6 +24,7 @@ package:
     script:
         - php bin/composer.phar install
         - php -d phar.readonly=off bin/compile.php
+        - php bin/phpdox.phar
     artifacts:
         name: $PROJECT-$CI_BUILD_REF_NAME
         paths:

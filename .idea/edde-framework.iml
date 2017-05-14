@@ -11,6 +11,7 @@
       <excludeFolder url="file://$MODULE_DIR$/lib/paragonie/constant_time_encoding" />
       <excludeFolder url="file://$MODULE_DIR$/lib/paragonie/random_compat" />
       <excludeFolder url="file://$MODULE_DIR$/release" />
+      <excludeFolder url="file://$MODULE_DIR$/temp" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -20,11 +21,13 @@
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/phpdox.phar/" />
         </CLASSES>
         <SOURCES>
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/phpdox.phar/" />
         </SOURCES>
       </library>
     </orderEntry>
