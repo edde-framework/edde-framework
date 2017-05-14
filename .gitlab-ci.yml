@@ -29,8 +29,10 @@ package:
         name: $PROJECT-$CI_BUILD_REF_NAME
         paths:
             - release/
+            - lib/
             - src/
             - doc/
+            - loader.php
     only:
         - master
         - tags
