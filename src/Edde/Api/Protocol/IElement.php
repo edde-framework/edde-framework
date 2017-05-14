@@ -153,5 +153,12 @@
 		 *
 		 * @return IElement
 		 */
-		public function getElement(string $id): IElement;
+		public function getReferenceBy(string $id): IElement;
+
+		/**
+		 * @param string $id
+		 *
+		 * @return array
+		 */
+		public function getReferenceList(string $id): array;
 	}

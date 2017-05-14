@@ -3,8 +3,6 @@
 
 	namespace Edde\Common\Protocol\Event;
 
-	use Edde\Api\Node\INode;
-	use Edde\Api\Protocol\Event\IEvent;
 	use Edde\Api\Protocol\Event\IEventBus;
 	use Edde\Api\Protocol\Event\IListener;
 	use Edde\Api\Protocol\IElement;
@@ -38,7 +36,7 @@
 		 * @inheritdoc
 		 */
 		public function canHandle(IElement $element): bool {
-			return $element->getType() === 'event' || $element instanceof IEvent;
+			return $element->isType('event');
 		}
 
 		/**
@@ -56,8 +54,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function emit(INode $node): IEventBus {
-			$this->element();
+		public function emit(IElement $element): IEventBus {
+			$this->element($element);
 			return $this;
 		}
 	}
