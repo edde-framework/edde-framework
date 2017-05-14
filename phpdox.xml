@@ -6,4 +6,14 @@
 			<build engine="html" output="doc"/>
 		</generator>
 	</project>
+	<target name="phploc" unless="phploc.done">
+		<exec executable="${basedir}/phploc.phar" taskname="phploc">
+			<arg value="--count-tests"/>
+			<arg value="--log-csv"/>
+			<arg path="${basedir}/temp/phploc/phploc.csv"/>
+			<arg value="--log-xml"/>
+			<arg path="${basedir}/temp/phploc/phploc.xml"/>
+		</exec>
+		<property name="phploc.done" value="true"/>
+	</target>
 </phpdox>
