@@ -10,4 +10,16 @@
 		 * @return IProtocolService
 		 */
 		public function registerProtocolHandler(IProtocolHandler $protocolHandler): IProtocolService;
+
+		/**
+		 * @param IElement $element
+		 *
+		 * @return IProtocolHandler
+		 */
+		public function getProtocolHandler(IElement $element): IProtocolHandler;
+
+		/**
+		 * @return IProtocolHandler[]|\Iterator
+		 */
+		public function getProtocolHandleList();
 	}

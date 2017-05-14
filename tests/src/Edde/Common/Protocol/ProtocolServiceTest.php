@@ -89,6 +89,8 @@
 			$this->protocolService->dequeue();
 			self::assertNotEmpty($responseList = $this->requestService->getResponseList());
 			self::assertCount(2, $responseList);
+			/** @var $foo IElement */
+			/** @var $bar IElement */
 			list($foo, $bar) = array_values($responseList);
 			self::assertEquals('bar', $foo->getMeta('data'));
 			self::assertEquals('foo', $bar->getMeta('data'));
@@ -213,9 +215,9 @@
 			$packet = new Packet('::the-void');
 			$packet->setId('321');
 			$request = new Request('there is nobody to handle this');
-			$packet->addElement('elements', $request);
+			$packet->element($request);
 			$request2 = new Request('testquest');
-			$packet->addElement('elements', $request2);
+			$packet->element($request2);
 			$request->setId('852');
 			$request2->setId('963');
 			self::assertEquals('packet', $packet->getType());
@@ -225,14 +227,14 @@
 			self::assertNotEquals($packet, $response);
 			self::assertCount(2, $response->getElementList('elements'));
 			self::assertCount(3, $response->getElementList('references'));
-			self::assertEquals($response, $response->getElement($packet->getId()));
+			self::assertEquals($response, $response->getReferenceBy($packet->getId()));
 
-			self::assertInstanceOf(IElement::class, $element = $response->getElement($request->getId()));
+			self::assertInstanceOf(IElement::class, $element = $response->getReferenceBy($request->getId()));
 			self::assertSame('error', $element->getType());
 			self::assertSame(UnhandledRequestException::class, $element->getAttribute('exception'));
 			$element->setId('456');
 
-			self::assertInstanceOf(IElement::class, $element = $response->getElement($request2->getId()));
+			self::assertInstanceOf(IElement::class, $element = $response->getReferenceBy($request2->getId()));
 			self::assertEquals(['a' => 'b'], $element->getMetaList()->array());
 
 			$response->setId('123');
@@ -293,8 +295,8 @@
 			$packet = new Packet('::the-void');
 			$packet->setId('the-original-packet');
 			$packet->async();
-			$packet->addElement('elements', $request = new Request('there is nobody to handle this'));
-			$packet->addElement('elements', $request2 = new Request('testquest'));
+			$packet->element($request = new Request('there is nobody to handle this'));
+			$packet->element($request2 = new Request('testquest'));
 			$request->setId('741');
 			$request2->setId('852');
 			/** @var $response IElement */
@@ -302,7 +304,7 @@
 			self::assertEquals('packet', $response->getType());
 			self::assertCount(0, $response->getElementList('elements'));
 			self::assertCount(1, $response->getElementList('references'));
-			self::assertEquals($response, $response->getElement($packet->getId()));
+			self::assertEquals($response, $response->getReferenceBy($packet->getId()));
 			$response->setId('123');
 
 			self::assertEquals((object)[
@@ -334,28 +336,29 @@
 					],
 				],
 			], $this->converterManager->convert($response, INode::class, [\stdClass::class])->convert());
-			// self::assertEmpty($this->protocolService->gEk($packet));
+			self::assertEmpty($this->protocolService->getReferenceList($packet->getId()));
 
 			$this->protocolService->dequeue();
 
-			self::assertCount(1, $referenceList = $this->protocolService->reference($packet));
+			self::assertCount(1, $referenceList = $this->protocolService->getReferenceList($packet->getId()));
 			list($response) = $referenceList;
 			self::assertInstanceOf(IElement::class, $response);
 			self::assertEquals('packet', $response->getType());
 
 			self::assertCount(2, $response->getElementList('elements'));
 			self::assertCount(3, $response->getElementList('references'));
-			self::assertEquals($response, $response->reference($packet));
+			self::assertEquals($response, $response->getReferenceBy($packet->getId()));
 
-			// self::assertInstanceOf(IError::class, $element = $response->reference($request));
+			self::assertInstanceOf(IElement::class, $element = $response->getReferenceBy($request->getId()));
+			self::assertEquals('error', $element->getType());
+			self::assertEquals(UnhandledRequestException::class, $element->getAttribute('exception'));
 			$element->setId('456');
-			self::assertSame(UnhandledRequestException::class, $element->getException());
-			self::assertSame('error', $element->getType());
 
-			// self::assertInstanceOf(IResponse::class, $element = $response->reference($request2));
-			self::assertEquals(['a' => 'b'], $element->array());
-
+			self::assertInstanceOf(IElement::class, $element = $response->getReferenceBy($request2->getId()));
+			self::assertEquals('response', $element->getType());
+			self::assertEquals(['a' => 'b'], $element->getData());
 			$response->setId('123');
+
 			self::assertEquals((object)[
 				'packet' => (object)[
 					'version'    => '1.1',
@@ -381,6 +384,7 @@
 							'version'  => '1.1',
 							'id'       => 'the-original-packet',
 							'origin'   => '::the-void',
+							'async'    => true,
 							'elements' => (object)[
 								'request' => [
 									(object)[

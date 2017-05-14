@@ -19,7 +19,7 @@
 		/**
 		 * @var IProtocolHandler[]
 		 */
-		protected $handle = [];
+		protected $handleList = [];
 
 		/**
 		 * @inheritdoc
@@ -32,64 +32,48 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function canHandle(IElement $element): bool {
-			if ($element->isType('packet')) {
-				return true;
-			} else if (isset($this->handle[$type = $element->getType()])) {
-				return $this->handle[$type]->canHandle($element);
+		public function getProtocolHandler(IElement $element): IProtocolHandler {
+			if (isset($this->handleList[$type = $element->getType()])) {
+				return $this->handleList[$type];
 			}
-			foreach ($this->protocolHandlerList as $protocolHandler) {
-				$protocolHandler->setup();
+			foreach ($this->getProtocolHandleList() as $protocolHandler) {
 				if ($protocolHandler->canHandle($element)) {
-					$this->handle[$type] = $protocolHandler;
-					return true;
+					return $this->handleList[$type] = $protocolHandler;
 				}
 			}
-			return false;
+			throw new UnsupportedElementException(sprintf('There is no protocol handler for the given element [%s].', $type));
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getProtocolHandleList() {
+			foreach ($this->protocolHandlerList as $protocolHandler) {
+				$protocolHandler->setup();
+				yield $protocolHandler;
+			}
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function canHandle(IElement $element): bool {
+			return $this->getProtocolHandler($element)->canHandle($element);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function queue(IElement $element): IProtocolHandler {
-			$this->check($element);
-			if ($element->isType('packet')) {
-				return parent::queue($element);
-			}
-			if (isset($this->handle[$type = $element->getType()])) {
-				$this->handle[$type]->queue($element);
-				return $this;
-			}
-			foreach ($this->protocolHandlerList as $protocolHandler) {
-				if ($protocolHandler->canHandle($element)) {
-					$this->handle[$type] = $protocolHandler;
-					$protocolHandler->queue($element);
-					return $this;
-				}
-			}
+			$this->getProtocolHandler($element)->queue($element);
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function element(IElement $element) {
-			$this->check($element);
-			if ($element->isType('packet') && $element->isAsync()) {
-				$this->queue($element);
-				$packet = new Packet($this->hostUrl->getAbsoluteUrl());
-				$packet->setReference($element);
-				$packet->addElement('references', $element);
-				return $packet;
-			}
-			return $this->execute($element);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function dequeue(string $scope = null, array $tagList = null): IProtocolHandler {
-			foreach ($this->protocolHandlerList as $protocolHandler) {
+			foreach ($this->getProtocolHandleList() as $protocolHandler) {
 				$protocolHandler->dequeue($scope, $tagList);
 			}
 			return $this;
@@ -99,7 +83,7 @@
 		 * @inheritdoc
 		 */
 		public function iterate(string $scope = null, array $tagList = null) {
-			foreach ($this->protocolHandlerList as $protocolHandler) {
+			foreach ($this->getProtocolHandleList() as $protocolHandler) {
 				foreach ($protocolHandler->iterate($scope, $tagList) as $element) {
 					yield $element;
 				}
@@ -109,40 +93,18 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(IElement $element) {
-			if (($element->isType('packet'))) {
-				return $this->request($element);
+		public function getReferenceList(string $id): array {
+			$elementList = [];
+			foreach ($this->getProtocolHandleList() as $protocolHandler) {
+				$elementList = array_merge($elementList, $protocolHandler->getReferenceList($id));
 			}
-			if (isset($this->handle[$type = $element->getType()])) {
-				return $this->handle[$type]->execute($element);
-			}
-			foreach ($this->protocolHandlerList as $protocolHandler) {
-				$protocolHandler->setup();
-				if ($protocolHandler->canHandle($element)) {
-					$this->handle[$type] = $protocolHandler;
-					return $protocolHandler->execute($element);
-				}
-			}
-			throw new NoHandlerException(sprintf('Element [%s (%s)] has no available handler.', $type, get_class($element)));
+			return $elementList;
 		}
 
-		protected function request(IElement $element): IElement {
-			$packet = new Packet($this->hostUrl->getAbsoluteUrl());
-			/**
-			 * set the Element reference (this is a bit different than "addReference()"
-			 */
-			$packet->setReference($element);
-			/**
-			 * add the request to the list of references in Packet
-			 */
-			$packet->addElement('references', $element);
-			foreach ($element->getElementList('elements') as $node) {
-				/** @var $response IElement */
-				if (($response = $this->execute($node)) instanceof IElement) {
-					$packet->addElement('elements', $response->setReference($node));
-					$packet->addElement('references', $node);
-				}
-			}
-			return $packet;
+		/**
+		 * @inheritdoc
+		 */
+		public function execute(IElement $element) {
+			return $this->getProtocolHandler($element)->element($element);
 		}
 	}

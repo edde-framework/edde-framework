@@ -200,16 +200,28 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getElement(string $id): IElement {
+		public function getReferenceBy(string $id): IElement {
+			if (empty($elementList = $this->getReferenceList($id)) === false) {
+				return reset($elementList);
+			}
+			throw new ReferenceException(sprintf('Unknown reference id [%s] in Element [%s].', $id, $this->getType()));
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getReferenceList(string $id): array {
+			$elementList = [];
 			if ($this->hasReference() && $this->getReference() === $id) {
-				return $this;
+				$elementList[] = $this;
 			}
 			/** @var $element IElement */
 			foreach (NodeIterator::recursive($this) as $element) {
 				if ($element->hasReference() && $element->getReference() === $id) {
-					return $element;
+					$elementList[] = $element;
 				}
 			}
+			return $elementList;
 		}
 
 		/**
