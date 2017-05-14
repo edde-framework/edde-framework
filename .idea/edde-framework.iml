@@ -21,11 +21,13 @@
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/sami.phar/" />
         </CLASSES>
         <SOURCES>
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
+          <root url="phar://$MODULE_DIR$/bin/sami.phar/" />
         </SOURCES>
       </library>
     </orderEntry>
