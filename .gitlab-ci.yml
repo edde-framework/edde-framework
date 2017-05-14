@@ -3,7 +3,7 @@ variables:
 
 stages:
     - test
-    - compile
+    - package
     - composer
 #    - review
 #    - staging
@@ -19,16 +19,17 @@ test:
         untracked: true
         when: on_failure
 
-
-compile:
-    stage: compile
+package:
+    stage: package
     script:
         - php bin/composer.phar install
         - php -d phar.readonly=off bin/compile.php
     artifacts:
         name: $PROJECT-$CI_BUILD_REF_NAME
         paths:
-            - release/$PROJECT.phar
+            - release/
+            - src/
+            - doc/
     only:
         - master
         - tags

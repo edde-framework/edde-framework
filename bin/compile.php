@@ -17,10 +17,13 @@
 
 	$rootDir = realpath(__DIR__ . '/..');
 	$releaseDir = $rootDir . '/release';
-	$pharDir = $releaseDir . '/phar';
-	$bundleDir = $releaseDir . '/bundle';
+	$tempDir = $rootDir . '/temp';
+	$pharDir = $tempDir . '/phar';
+	$bundleDir = $tempDir . '/bundle';
 	$sourceDir = $rootDir . '/src';
 	$libDir = $rootDir . '/lib';
+
+	FileUtils::createDir($releaseDir);
 
 	FileUtils::delete($pharDir);
 	FileUtils::delete($bundleDir);
