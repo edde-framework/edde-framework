@@ -6,7 +6,6 @@
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Http\LazyHostUrlTrait;
 	use Edde\Api\Protocol\IElement;
-	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Protocol\IProtocolHandler;
 	use Edde\Api\Protocol\IProtocolService;
 
@@ -34,7 +33,7 @@
 		 * @inheritdoc
 		 */
 		public function canHandle(IElement $element): bool {
-			if ($element instanceof IPacket) {
+			if ($element->isType('packet')) {
 				return true;
 			} else if (isset($this->handle[$type = $element->getType()])) {
 				return $this->handle[$type]->canHandle($element);
@@ -52,13 +51,35 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function queue(IElement $element): IProtocolHandler {
+			$this->check($element);
+			if ($element->isType('packet')) {
+				return parent::queue($element);
+			}
+			if (isset($this->handle[$type = $element->getType()])) {
+				$this->handle[$type]->queue($element);
+				return $this;
+			}
+			foreach ($this->protocolHandlerList as $protocolHandler) {
+				if ($protocolHandler->canHandle($element)) {
+					$this->handle[$type] = $protocolHandler;
+					$protocolHandler->queue($element);
+					return $this;
+				}
+			}
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function element(IElement $element) {
 			$this->check($element);
-			if ($element instanceof IPacket && $element->isAsync()) {
+			if ($element->isType('packet') && $element->isAsync()) {
 				$this->queue($element);
-				$packet = $this->container->create(IPacket::class);
+				$packet = new Packet($this->hostUrl->getAbsoluteUrl());
 				$packet->setReference($element);
-				$packet->addReference($element);
+				$packet->addElement('references', $element);
 				return $packet;
 			}
 			return $this->execute($element);
@@ -67,8 +88,29 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function dequeue(string $scope = null, array $tagList = null): IProtocolHandler {
+			foreach ($this->protocolHandlerList as $protocolHandler) {
+				$protocolHandler->dequeue($scope, $tagList);
+			}
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function iterate(string $scope = null, array $tagList = null) {
+			foreach ($this->protocolHandlerList as $protocolHandler) {
+				foreach ($protocolHandler->iterate($scope, $tagList) as $element) {
+					yield $element;
+				}
+			}
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function execute(IElement $element) {
-			if ($element instanceof IPacket) {
+			if (($element->isType('packet'))) {
 				return $this->request($element);
 			}
 			if (isset($this->handle[$type = $element->getType()])) {
@@ -84,33 +126,22 @@
 			throw new NoHandlerException(sprintf('Element [%s (%s)] has no available handler.', $type, get_class($element)));
 		}
 
-		protected function request(IPacket $request): IPacket {
-			$packet = $this->container->create(IPacket::class);
+		protected function request(IElement $element): IElement {
+			$packet = new Packet($this->hostUrl->getAbsoluteUrl());
 			/**
 			 * set the Element reference (this is a bit different than "addReference()"
 			 */
-			$packet->setReference($request);
+			$packet->setReference($element);
 			/**
 			 * add the request to the list of references in Packet
 			 */
-			$packet->addReference($request);
-			foreach ($request->getElementList() as $element) {
+			$packet->addElement('references', $element);
+			foreach ($element->getElementList('elements') as $node) {
 				/** @var $response IElement */
-				if (($response = $this->execute($element)) instanceof IElement) {
-					$packet->addElement($response->setReference($element));
-					$packet->addReference($element);
+				if (($response = $this->execute($node)) instanceof IElement) {
+					$packet->addElement('elements', $response->setReference($node));
+					$packet->addElement('references', $node);
 				}
-			}
-			return $packet;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function packet(string $scope = null, array $tagList = null, IPacket $packet = null): IPacket {
-			$packet = parent::packet($scope, $tagList, $packet);
-			foreach ($this->protocolHandlerList as $protocolHandler) {
-				$protocolHandler->packet($scope, $tagList, $packet);
 			}
 			return $packet;
 		}

@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Protocol\Event;
 
+	use Edde\Api\Node\INode;
 	use Edde\Api\Protocol\Event\IEvent;
 	use Edde\Api\Protocol\Event\IEventBus;
 	use Edde\Api\Protocol\Event\IListener;
@@ -36,31 +37,15 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getEventList(string $scope = null, array $tagList = null): array {
-			$event = new GetEventListEvent();
-			$event->setScope($scope);
-			$event->setTagList($tagList);
-			$this->emit($event);
-			if ($event->isCanceled()) {
-				return [];
-			}
-			return $event->getEventList();
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function canHandle(IElement $element): bool {
-			return $element->getType() === 'event' && $element instanceof IEvent;
+			return $element->getType() === 'event' || $element instanceof IEvent;
 		}
 
 		/**
 		 * @inheritdoc
-		 *
-		 * @param IEvent $element
 		 */
 		public function execute(IElement $element) {
-			if (isset($this->callbackList[$type = $element->getEvent()])) {
+			if (isset($this->callbackList[$type = $element->getAttribute('event')])) {
 				foreach ($this->callbackList[$type] as $callback) {
 					$callback($element);
 				}
@@ -71,8 +56,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function emit(IEvent $event): IEventBus {
-			$this->element($event);
+		public function emit(INode $node): IEventBus {
+			$this->element();
 			return $this;
 		}
 	}

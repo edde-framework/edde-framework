@@ -4,8 +4,6 @@
 	namespace Edde\Test;
 
 	use Edde\Api\Protocol\IElement;
-	use Edde\Api\Protocol\Request\IMessage;
-	use Edde\Api\Protocol\Request\IRequest;
 	use Edde\Common\Object;
 	use Edde\Common\Protocol\Request\AbstractRequestHandler;
 	use Edde\Common\Protocol\Request\Response;
@@ -70,17 +68,19 @@
 		}
 
 		public function method(IElement $request) {
-			return (new Response())->put(['data' => $request->get('foo')]);
+			$response = new Response();
+			$response->putMeta(['data' => $request->getMeta('foo')]);
+			return $response;
 		}
 	}
 
 	class TestRequestHandler extends AbstractRequestHandler {
 		/**
-		 * @param IRequest|IMessage $element
+		 * @inheritdoc
 		 */
 		public function execute(IElement $element) {
-			if ($element->getRequest() === 'testquest') {
-				return (new Response('foobar'))->put(['a' => 'b']);
+			if ($element->getAttribute('request') === 'testquest') {
+				return (new Response('foobar'))->putMeta(['a' => 'b']);
 			}
 			return null;
 		}

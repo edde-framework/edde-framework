@@ -3,9 +3,7 @@
 
 	namespace Edde\Common\Protocol;
 
-	use Edde\Api\Protocol\IError;
-
-	class Error extends AbstractElement implements IError {
+	class Error extends Element {
 		/**
 		 * @var int
 		 */
@@ -19,16 +17,11 @@
 		 */
 		protected $exception;
 
-		public function __construct() {
-			parent::__construct('error');
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function setCode(int $code): IError {
-			$this->code = $code;
-			return $this;
+		public function __construct(int $code = 0, string $message = null) {
+			parent::__construct('error', null, [
+				'code'    => $code,
+				'message' => $message,
+			]);
 		}
 
 		/**
@@ -41,14 +34,6 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setMessage(string $message): IError {
-			$this->message = $message;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function getMessage(): string {
 			return $this->message;
 		}
@@ -56,7 +41,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setException(string $exception): IError {
+		public function setException(string $exception) {
 			$this->exception = $exception;
 			return $this;
 		}
@@ -73,22 +58,5 @@
 		 */
 		public function getStack(): array {
 			return [];
-		}
-
-		public function packet(): \stdClass {
-			$packet = parent::packet();
-			$packet->code = $this->code;
-			$packet->message = $this->message;
-			if ($this->exception) {
-				$packet->exception = $this->exception;
-			}
-			return $packet;
-		}
-
-		public function __clone() {
-			parent::__clone();
-			$this->code = null;
-			$this->message = null;
-			$this->exception = null;
 		}
 	}
