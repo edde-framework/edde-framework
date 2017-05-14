@@ -32,9 +32,9 @@
 		$phar->compressFiles(\Phar::GZ);
 	}
 
-	make($releaseDir . '/' . $version . '.phar', $pharDir, '<?php Phar::mapPhar("{phar-file}"); require_once("phar://{phar-file}/src/loader.php"); __HALT_COMPILER();');
-	make($releaseDir . '/' . $name . '.phar', $pharDir, '<?php Phar::mapPhar("{phar-file}"); require_once("phar://{phar-file}/src/loader.php"); __HALT_COMPILER();');
-	make($releaseDir . '/' . $version . '.bundle.phar', $sourceDir, '<?php Phar::mapPhar("{phar-file}"); require_once("phar://{phar-file}/loader.php"); __HALT_COMPILER();');
-	make($releaseDir . '/' . $name . '.bundle.phar', $sourceDir, '<?php Phar::mapPhar("{phar-file}"); require_once("phar://{phar-file}/loader.php"); __HALT_COMPILER();');
+	make($versionPhar = ($releaseDir . '/' . $version . '.phar'), $pharDir, '<?php Phar::mapPhar("{phar-file}"); require_once("phar://{phar-file}/src/loader.php"); __HALT_COMPILER();');
+	FileUtils::copy($versionPhar, $releaseDir . '/' . $name . '.phar');
+	make($versionPhar = ($releaseDir . '/' . $version . '.bundle.phar'), $bundleDir, '<?php Phar::mapPhar("{phar-file}"); require_once("phar://{phar-file}/loader.php"); __HALT_COMPILER();');
+	FileUtils::copy($versionPhar, $releaseDir . '/' . $name . '.bundle.phar');
 
 	exit(0);
