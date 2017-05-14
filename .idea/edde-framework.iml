@@ -21,15 +21,11 @@
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
-          <root url="phar://$MODULE_DIR$/bin/phpdox.phar/" />
-          <root url="phar://$MODULE_DIR$/bin/phploc.phar/" />
         </CLASSES>
         <SOURCES>
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
           <root url="phar://$MODULE_DIR$/bin/phpunit.phar/" />
-          <root url="phar://$MODULE_DIR$/bin/phpdox.phar/" />
-          <root url="phar://$MODULE_DIR$/bin/phploc.phar/" />
         </SOURCES>
       </library>
     </orderEntry>
