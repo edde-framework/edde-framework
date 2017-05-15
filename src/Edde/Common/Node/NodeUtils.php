@@ -108,7 +108,7 @@
 				}
 			}
 			/** @var $node INode */
-			if ($node->getName() === null && count((array)$stdClass) === 1) {
+			if ($node->getName() === null && $node->getNodeCount() === 1) {
 				$node = $node->getNodeList()[0];
 				$node->setParent(null);
 				return $node;
