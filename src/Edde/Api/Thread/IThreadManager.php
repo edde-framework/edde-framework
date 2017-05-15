@@ -8,28 +8,20 @@
 	/**
 	 * Thread manager is general service to work with threaded jobs.
 	 */
-	interface IThreadManager extends IConfigurable {
+	interface IThreadManager extends IThreadHandler, IConfigurable {
 		/**
-		 * execute the thread (should be safe to call arbitrary)
+		 * register a new thread handler
+		 *
+		 * @param IThreadHandler $threadHandler
+		 *
+		 * @return IThreadManager
+		 */
+		public function registerThreadHandler(IThreadHandler $threadHandler): IThreadManager;
+
+		/**
+		 * execute the thread (should be safe to be called at any time)
 		 *
 		 * @return IThreadManager
 		 */
 		public function execute(): IThreadManager;
-
-		/**
-		 * enqueue job to thread
-		 *
-		 * @param IJob $job
-		 * @param bool $autostart queue will also call execute to ensure thread is running
-		 *
-		 * @return IThreadManager
-		 */
-		public function queue(IJob $job, bool $autostart = true): IThreadManager;
-
-		/**
-		 * long running function to dequeue all current jobs; this should be called in a "thread" intended for that purpose
-		 *
-		 * @return IThreadManager
-		 */
-		public function dequeue(): IThreadManager;
 	}

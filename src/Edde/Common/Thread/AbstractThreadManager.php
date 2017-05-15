@@ -3,36 +3,42 @@
 
 	namespace Edde\Common\Thread;
 
-	use Edde\Api\Thread\IJob;
+	use Edde\Api\Thread\IThreadHandler;
 	use Edde\Api\Thread\IThreadManager;
 	use Edde\Api\Thread\LazyExecutorTtrait;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
 
-	abstract class AbstractThreadManager extends Object implements IThreadManager {
+	abstract class AbstractThreadManager extends AbstractThreadHandler implements IThreadManager {
 		use LazyExecutorTtrait;
 		use ConfigurableTrait;
+		/**
+		 * @var IThreadHandler[]
+		 */
+		protected $threadHandlerList = [];
+
+		/**
+		 * @inheritdoc
+		 */
+		public function registerThreadHandler(IThreadHandler $threadHandler): IThreadManager {
+			$this->threadHandlerList[] = $threadHandler;
+			return $this;
+		}
+
+		/**
+		 * @return IThreadHandler
+		 */
+		public function dequeue(): IThreadHandler {
+			foreach ($this->threadHandlerList as $threadHandler) {
+				$threadHandler->dequeue();
+			}
+			return $this;
+		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function execute(): IThreadManager {
-			$this->executor->setup();
 			$this->executor->execute();
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function queue(IJob $job, bool $autostart = true): IThreadManager {
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function dequeue(): IThreadManager {
 			return $this;
 		}
 	}
