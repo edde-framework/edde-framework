@@ -25,13 +25,25 @@
 		}
 
 		/**
-		 * @return IThreadHandler
+		 * @inheritdoc
 		 */
 		public function dequeue(): IThreadHandler {
 			foreach ($this->threadHandlerList as $threadHandler) {
 				$threadHandler->dequeue();
 			}
 			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function hasQueue(): bool {
+			foreach ($this->threadHandlerList as $threadHandler) {
+				if ($threadHandler->hasQueue()) {
+					return true;
+				}
+			}
+			return false;
 		}
 
 		/**

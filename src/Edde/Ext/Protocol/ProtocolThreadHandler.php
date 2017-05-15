@@ -19,4 +19,11 @@
 			$this->elementQueue->save();
 			return $this;
 		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function hasQueue(): bool {
+			return $this->elementQueue->isEmpty() === false;
+		}
 	}
