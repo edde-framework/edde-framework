@@ -16,6 +16,7 @@
 		 * @param IRequestService $instance
 		 */
 		public function configure($instance) {
+			parent::configure($instance);
 			$instance->registerRequestHandler($this->container->create(ClassRequestHandler::class));
 			$instance->registerRequestHandler($this->container->create(ContainerRequestHandler::class));
 		}

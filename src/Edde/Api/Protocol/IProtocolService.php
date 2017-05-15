@@ -22,4 +22,34 @@
 		 * @return IProtocolHandler[]|\Iterator
 		 */
 		public function getProtocolHandleList();
+
+		/**
+		 * @return IProtocolService
+		 */
+		public function dequeue(): IProtocolService;
+
+		/**
+		 * @param string     $scope
+		 * @param array|null $tagList
+		 *
+		 * @return IElement[]|\Traversable
+		 */
+		public function getQueueList(string $scope, array $tagList = null);
+
+		/**
+		 * create packet from enqueued elements
+		 *
+		 * @param string     $scope
+		 * @param array|null $tagList
+		 *
+		 * @return IElement
+		 */
+		public function createQueuePacket(string $scope, array $tagList = null): IElement;
+
+		/**
+		 * @param string $id
+		 *
+		 * @return IElement[]
+		 */
+		public function getReferenceList(string $id): array;
 	}
