@@ -15,9 +15,9 @@
 		 * @param string|null $id
 		 * @param array|null  $attributeList
 		 */
-		public function __construct(string $type, string $id = null, array $attributeList = []) {
+		public function __construct(string $type = null, string $id = null, array $attributeList = []) {
 			parent::__construct($type, null, $attributeList);
-			$id ? $this->setAttribute('id', $id) : null;
+			$this->setAttribute('id', $id ?: $this->getId());
 		}
 
 		/**
@@ -160,6 +160,17 @@
 		 * @inheritdoc
 		 */
 		public function addElement(string $name, IElement $element): IElement {
+			if (($node = $this->getElementNode($name)) === null || $node->getName() !== $name) {
+				$this->addNode($node = new Element($name));
+			}
+			$node->addNode($element);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getElementNode(string $name) {
 			$node = null;
 			/** @var $node INode */
 			foreach ($this->getNodeList() as $node) {
@@ -167,11 +178,7 @@
 					break;
 				}
 			}
-			if ($node === null || $node->getName() !== $name) {
-				$this->addNode($node = new Element($name));
-			}
-			$node->addNode($element);
-			return $this;
+			return $node;
 		}
 
 		/**

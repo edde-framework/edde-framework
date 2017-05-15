@@ -164,6 +164,7 @@
 				'bar',
 			]);
 			$packet->setId('123456');
+			$packet->getElementNode('elements')->setId('moo');
 			$expect = (object)[
 				'packet' => (object)[
 					'version'  => '1.1',
@@ -175,6 +176,7 @@
 						'bar',
 					],
 					'elements' => (object)[
+						'id'      => 'moo',
 						'event'   => [
 							(object)[
 								'id'    => '123',
@@ -220,6 +222,7 @@
 			$packet->element($request2);
 			$request->setId('852');
 			$request2->setId('963');
+			$packet->getElementNode('elements')->setId('foo');
 			self::assertEquals('packet', $packet->getType());
 			/** @var $response IElement */
 			$response = $this->protocolService->element($packet);
@@ -238,12 +241,15 @@
 			self::assertEquals(['a' => 'b'], $element->getMetaList()->array());
 
 			$response->setId('123');
+			$response->getElementNode('elements')->setId('moo');
+			$response->getElementNode('references')->setId('foomoo');
 			self::assertEquals((object)[
 				'packet' => (object)[
 					'version'    => '1.1',
 					'id'         => '123',
 					'origin'     => 'http://localhost/the-void',
 					'elements'   => (object)[
+						'id'       => 'moo',
 						'error'    => (object)[
 							'id'        => '456',
 							'code'      => 100,
@@ -259,11 +265,13 @@
 					],
 					'reference'  => '321',
 					'references' => (object)[
+						'id'      => 'foomoo',
 						'packet'  => (object)[
 							'version'  => '1.1',
 							'id'       => '321',
 							'origin'   => '::the-void',
 							'elements' => (object)[
+								'id'      => 'foo',
 								'request' => [
 									(object)[
 										'id'      => '852',

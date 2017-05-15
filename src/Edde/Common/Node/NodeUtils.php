@@ -83,25 +83,35 @@
 		/**
 		 * convert input of stdClass to node tree
 		 *
-		 * @param \stdClass $stdClass
-		 * @param INode     $node
+		 * @param \stdClass   $stdClass
+		 * @param INode       $node
+		 * @param string|null $class
 		 *
 		 * @return INode
 		 * @throws NodeException
 		 */
-		static public function toNode(\stdClass $stdClass, INode $node = null): INode {
-			$node = $node ?: new Node();
+		static public function toNode(\stdClass $stdClass, INode $node = null, string $class = null): INode {
+			$createNode = function (string $class, string $name = null): INode {
+				/** @var $node INode */
+				if (($node = new $class()) instanceof INode === false) {
+					throw new ClassMismatchException(sprintf('Class specified [%s] is not instance of [%s].', $class, INode::class));
+				}
+				$name ? $node->setName($name) : null;
+				return $node;
+			};
+			$node = $node ?: $createNode($class = $class ?: Node::class);
 			foreach ($stdClass as $k => $v) {
 				if ($k === 'name') {
 					$node->setName($v);
 				} else if ($k === 'value') {
 					$node->setValue($v);
 				} else if ($v instanceof \stdClass) {
-					$node->addNode(self::toNode($v, new Node($k)));
+					$node->addNode(self::toNode($v, $createNode($class, $k), $class));
 				} else if (is_array($v)) {
-					$node->addNode($root = new Node($k));
+					/** @var $root INode */
+					$node->addNode($root = $createNode($class, $k));
 					foreach ($v as $vv) {
-						$root->addNode(self::toNode($vv, new Node()));
+						$root->addNode(self::toNode($vv, $createNode($class), $class));
 					}
 				} else {
 					$node->setAttribute($k, $v);

@@ -5,7 +5,6 @@
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Http\LazyHostUrlTrait;
-	use Edde\Api\Node\INode;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Api\Url\IUrl;
@@ -52,7 +51,7 @@
 				return new ElementResponse($packet);
 			}
 			if (method_exists($this, $method = sprintf('packet%s', StringUtils::firstUpper($action)))) {
-				return $this->$method($packet = $packet ? $this->request->getContent([INode::class]) : null);
+				return $this->$method($packet = $packet ? $this->request->getContent([IElement::class]) : null);
 			}
 			$packet = new Packet($this->hostUrl->getAbsoluteUrl());
 			$packet->addElement('elements', $error = new Error(0, sprintf('Calling unknown action [%s]; allowed are [%s].', $action, implode(', ', $allowed))));

@@ -132,6 +132,13 @@
 		public function addElement(string $name, IElement $element): IElement;
 
 		/**
+		 * @param string $name
+		 *
+		 * @return IElement|null
+		 */
+		public function getElementNode(string $name);
+
+		/**
 		 * @param string     $name
 		 * @param IElement[] $elementList
 		 *
