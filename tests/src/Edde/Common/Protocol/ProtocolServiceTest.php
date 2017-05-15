@@ -307,6 +307,7 @@
 			$packet->element($request2 = new Request('testquest'));
 			$request->setId('741');
 			$request2->setId('852');
+			$packet->getElementNode('elements')->setId('foo');
 			/** @var $response IElement */
 			self::assertInstanceOf(IElement::class, $response = $this->protocolService->element($packet));
 			self::assertEquals('packet', $response->getType());
@@ -314,7 +315,7 @@
 			self::assertCount(1, $response->getElementList('references'));
 			self::assertEquals($response, $response->getReferenceBy($packet->getId()));
 			$response->setId('123');
-
+			$response->getElementNode('references')->setId('moo');
 			self::assertEquals((object)[
 				'packet' => (object)[
 					'version' => '1.1',
@@ -323,12 +324,14 @@
 					'origin'     => 'http://localhost/the-void',
 					'reference'  => 'the-original-packet',
 					'references' => (object)[
+						'id'     => 'moo',
 						'packet' => (object)[
 							'version'  => '1.1',
 							'id'       => 'the-original-packet',
 							'origin'   => '::the-void',
 							'async'    => true,
 							'elements' => (object)[
+								'id'      => 'foo',
 								'request' => [
 									(object)[
 										'id'      => '741',
@@ -366,13 +369,15 @@
 			self::assertEquals('response', $element->getType());
 			self::assertEquals(['a' => 'b'], $element->getData());
 			$response->setId('123');
-
+			$response->getElementNode('elements')->setId('foo');
+			$response->getElementNode('references')->setId('moo');
 			self::assertEquals((object)[
 				'packet' => (object)[
 					'version'    => '1.1',
 					'id'         => '123',
 					'origin'     => 'http://localhost/the-void',
 					'elements'   => (object)[
+						'id'       => 'foo',
 						'error'    => (object)[
 							'id'        => '456',
 							'code'      => 100,
@@ -388,12 +393,14 @@
 					],
 					'reference'  => 'the-original-packet',
 					'references' => (object)[
+						'id'      => 'moo',
 						'packet'  => (object)[
 							'version'  => '1.1',
 							'id'       => 'the-original-packet',
 							'origin'   => '::the-void',
 							'async'    => true,
 							'elements' => (object)[
+								'id'      => 'foo',
 								'request' => [
 									(object)[
 										'id'      => '741',
