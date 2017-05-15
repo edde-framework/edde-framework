@@ -10,4 +10,11 @@
 		 * @return IThreadHandler
 		 */
 		public function dequeue(): IThreadHandler;
+
+		/**
+		 * is there some waiting queue to be processed?
+		 *
+		 * @return bool
+		 */
+		public function hasQueue(): bool;
 	}

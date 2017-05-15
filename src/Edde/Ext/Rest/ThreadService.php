@@ -33,6 +33,12 @@
 		 */
 		public function restHead() {
 			$this->threadManager->dequeue();
+			/**
+			 * if there are still some tasks in queue, do thread execution againl; this thread should end and one one should be executed
+			 */
+			if ($this->threadManager->hasQueue()) {
+				$this->threadManager->execute();
+			}
 			return new JsonResponse(static::class);
 		}
 	}
