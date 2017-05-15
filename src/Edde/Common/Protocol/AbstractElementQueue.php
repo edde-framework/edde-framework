@@ -62,4 +62,13 @@
 			}
 			return $elementList;
 		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function clear(): IElementQueue {
+			$this->queueList = [];
+			$this->elementList = [];
+			return $this;
+		}
 	}

@@ -7,6 +7,7 @@
 	use Edde\Common\Object;
 	use Edde\Common\Protocol\Request\AbstractRequestHandler;
 	use Edde\Common\Protocol\Request\Response;
+	use Edde\Common\Session\AbstractFingerprint;
 	use Edde\Ext\Protocol\RequestServiceConfigurator;
 
 	class FooObject extends Object {
@@ -90,5 +91,11 @@
 		public function configure($instance) {
 			parent::configure($instance);
 			$instance->registerRequestHandler($this->container->create(TestRequestHandler::class));
+		}
+	}
+
+	class TestyFingerprint extends AbstractFingerprint {
+		public function fingerprint() {
+			return 'boo';
 		}
 	}

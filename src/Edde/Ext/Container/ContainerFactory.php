@@ -127,9 +127,9 @@
 	use Edde\Ext\Database\Sqlite\SqliteDsn;
 	use Edde\Ext\Link\LinkFactoryConfigurator;
 	use Edde\Ext\Log\LogServiceConfigurator;
+	use Edde\Ext\Protocol\CacheElementQueue;
 	use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 	use Edde\Ext\Protocol\RequestServiceConfigurator;
-	use Edde\Ext\Protocol\SessionElementQueue;
 	use Edde\Ext\Protocol\ThreadManagerConfigurator;
 	use Edde\Ext\Resource\ResourceManagerConfigurator;
 	use Edde\Ext\Router\RequestQueueConfigurator;
@@ -404,7 +404,7 @@
 				IAssetStorage::class                  => AssetStorage::class,
 				IProtocolService::class               => ProtocolService::class,
 				IRequestService::class                => RequestService::class,
-				IElementQueue::class                  => SessionElementQueue::class,
+				IElementQueue::class                  => CacheElementQueue::class,
 				IEventBus::class                      => EventBus::class,
 				IThreadManager::class                 => ThreadManager::class,
 				IExecutor::class                      => WebExecutor::class,

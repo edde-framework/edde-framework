@@ -21,7 +21,7 @@
 		 * @param string|null $scope
 		 * @param array|null  $tagList
 		 *
-		 * @return IElement[]
+		 * @return IElement[]|\Traversable
 		 */
 		public function getQueueList(string $scope = null, array $tagList = null);
 
@@ -52,4 +52,11 @@
 		 * @return IElementQueue
 		 */
 		public function load(): IElementQueue;
+
+		/**
+		 * removed currently loaded items from queue
+		 *
+		 * @return IElementQueue
+		 */
+		public function clear(): IElementQueue;
 	}

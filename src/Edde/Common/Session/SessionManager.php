@@ -21,7 +21,6 @@
 		use LazySessionDirectoryTrait;
 		use LazyFingerprintTrait;
 		use ConfigurableTrait;
-
 		/**
 		 * @var string
 		 */
@@ -70,18 +69,20 @@
 			if ($this->isSession()) {
 				return $this;
 			}
+			if (headers_sent($file, $line)) {
+				throw new SessionException(sprintf('Cannot handle session start: somebody has already sent headers from [%s at %d].', $file, $line));
+			}
 			session_save_path($this->sessionDirectory->getDirectory());
 			if (($fingerprint = $this->fingerprint->fingerprint()) !== null) {
 				session_id($fingerprint);
 			}
-			session_start();
+			if (@session_start() === false) {
+				throw new SessionStartException('Cannot start session.');
+			}
 			$headerList = $this->httpResponse->getHeaderList();
 			foreach (headers_list() as $header) {
 				list($name, $header) = explode(':', $header, 2);
 				$headerList->set(trim($name), trim($header));
-			}
-			if (headers_sent($file, $line)) {
-				throw new SessionException(sprintf('Cannot handle session start: somebody has already sent headers from [%s at %d].', $file, $line));
 			}
 			header_remove();
 			return $this;

@@ -4,17 +4,17 @@
 	namespace Edde\Ext\Protocol;
 
 	use Edde\Api\Protocol\IElementQueue;
+	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Protocol\AbstractElementQueue;
-	use Edde\Common\Session\SessionTrait;
 
-	class SessionElementQueue extends AbstractElementQueue {
-		use SessionTrait;
+	class CacheElementQueue extends AbstractElementQueue {
+		use CacheTrait;
 
 		/**
 		 * @inheritdoc
 		 */
 		public function save(): IElementQueue {
-			$this->session()->set('queue', [
+			$this->cache()->save('queue', [
 				$this->queueList,
 				$this->elementList,
 			]);
@@ -25,7 +25,7 @@
 		 * @inheritdoc
 		 */
 		public function load(): IElementQueue {
-			list($this->queueList, $this->elementList) = $this->session()->get('queue', [
+			list($this->queueList, $this->elementList) = $this->cache()->load('queue', [
 				[],
 				[],
 			]);
