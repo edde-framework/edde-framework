@@ -26,6 +26,11 @@
 			return $this;
 		}
 
+		public function elements(array $elementList): Packet {
+			$this->setElementList('elements', $elementList);
+			return $this;
+		}
+
 		/**
 		 * shortuct to add a new element to references
 		 *
