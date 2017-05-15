@@ -46,16 +46,12 @@
 
 		protected function packet(string $action, array $allowed, bool $packet = false, string $id = null) {
 			if (in_array($action, $allowed) === false) {
-				$packet = new Packet($this->hostUrl->getAbsoluteUrl());
-				$packet->addElement('elements', $error = new Error(0, sprintf('The action [%s] is not supported in the given context; try [%s] or another HTTP method.', $action, implode(', ', $allowed))));
-				return new ElementResponse($packet);
+				return new ElementResponse((new Packet($this->hostUrl->getAbsoluteUrl()))->element(new Error(0, sprintf('The action [%s] is not supported in the given context; try [%s] or another HTTP method.', $action, implode(', ', $allowed)))));
 			}
 			if (method_exists($this, $method = sprintf('packet%s', StringUtils::firstUpper($action)))) {
 				return $this->$method($packet = $packet ? $this->request->getContent([IElement::class]) : null);
 			}
-			$packet = new Packet($this->hostUrl->getAbsoluteUrl());
-			$packet->addElement('elements', $error = new Error(0, sprintf('Calling unknown action [%s]; allowed are [%s].', $action, implode(', ', $allowed))));
-			return new ElementResponse($packet);
+			return new ElementResponse((new Packet($this->hostUrl->getAbsoluteUrl()))->element(new Error(0, sprintf('Calling unknown action [%s]; allowed are [%s].', $action, implode(', ', $allowed)))));
 		}
 
 		public function restGet() {

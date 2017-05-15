@@ -3,34 +3,17 @@
 
 	namespace Edde\Common\Protocol;
 
-	use Edde\Api\Http\LazyHostUrlTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 
 	class PacketProtocolHandler extends AbstractProtocolHandler {
 		use LazyProtocolServiceTrait;
-		use LazyHostUrlTrait;
 
 		/**
 		 * @inheritdoc
 		 */
 		public function canHandle(IElement $element): bool {
 			return $element->isType('packet');
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function element(IElement $element) {
-			$this->check($element);
-			if ($element->isAsync()) {
-				$this->queue($element);
-				$packet = new Packet($this->hostUrl->getAbsoluteUrl());
-				$packet->setReference($element);
-				$packet->reference($element);
-				return $packet;
-			}
-			return $this->execute($element);
 		}
 
 		/**
@@ -54,5 +37,9 @@
 				}
 			}
 			return $packet;
+		}
+
+		protected function createAsyncElement(IElement $element) {
+			return (new Packet($this->hostUrl->getAbsoluteUrl()))->reference($element)->setReference($element);
 		}
 	}
