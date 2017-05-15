@@ -43,7 +43,10 @@
 			$this->check($element);
 			if ($element->isAsync()) {
 				$this->queue($element);
-				return $this->createAsyncElement($element)->setReference($element);
+				if (($async = $this->createAsyncElement($element)) !== null) {
+					$async->setReference($element);
+				}
+				return $async;
 			}
 			return $this->execute($element);
 		}
