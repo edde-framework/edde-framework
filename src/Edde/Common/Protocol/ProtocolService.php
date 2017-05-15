@@ -82,9 +82,9 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function iterate(string $scope = null, array $tagList = null) {
+		public function getQueueList(string $scope = null, array $tagList = null) {
 			foreach ($this->getProtocolHandleList() as $protocolHandler) {
-				foreach ($protocolHandler->iterate($scope, $tagList) as $element) {
+				foreach ($protocolHandler->getQueueList($scope, $tagList) as $element) {
 					yield $element;
 				}
 			}
