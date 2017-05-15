@@ -50,6 +50,10 @@
 		 */
 		public function element(IElement $element) {
 			$this->check($element);
+			if ($element->isAsync()) {
+				$this->queue($element);
+				return $this->createAsyncElement($element);
+			}
 			return $this->execute($element);
 		}
 
@@ -96,5 +100,14 @@
 				$elementList = array_merge($elementList, $element->getReferenceList($id));
 			}
 			return $elementList;
+		}
+
+		/**
+		 * @param IElement $element
+		 *
+		 * @return IElement|null
+		 */
+		protected function createAsyncElement(IElement $element) {
+			return null;
 		}
 	}

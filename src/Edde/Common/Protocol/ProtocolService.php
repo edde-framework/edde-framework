@@ -104,6 +104,13 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function element(IElement $element) {
+			return $this->getProtocolHandler($element)->element($element);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function execute(IElement $element) {
 			return $this->getProtocolHandler($element)->element($element);
 		}
