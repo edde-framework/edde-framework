@@ -65,14 +65,14 @@
 		public function dequeue(string $scope = null, array $tagList = null): IProtocolHandler;
 
 		/**
-		 * iterate over elements by the given rules
+		 * getQueueList over all enqueued elements by the given rules
 		 *
 		 * @param string|null $scope
 		 * @param array|null  $tagList
 		 *
 		 * @return IElement[]
 		 */
-		public function iterate(string $scope = null, array $tagList = null);
+		public function getQueueList(string $scope = null, array $tagList = null);
 
 		/**
 		 * create current packet

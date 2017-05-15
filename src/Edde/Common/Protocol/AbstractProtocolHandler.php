@@ -61,7 +61,7 @@
 		 * @inheritdoc
 		 */
 		public function dequeue(string $scope = null, array $tagList = null): IProtocolHandler {
-			foreach ($this->iterate($scope, $tagList) as $element) {
+			foreach ($this->getQueueList($scope, $tagList) as $element) {
 				/** @var $response INode */
 				if (($response = $this->execute($element)) instanceof IElement) {
 					$this->elementList[] = $response;
@@ -76,7 +76,7 @@
 		 *
 		 * @return \Generator|IElement[]
 		 */
-		public function iterate(string $scope = null, array $tagList = null) {
+		public function getQueueList(string $scope = null, array $tagList = null) {
 			foreach ($this->queueList as $element) {
 				if ($element->inScope($scope) && ($tagList ? $element->hasTagList($tagList) : true)) {
 					yield $element;
@@ -88,7 +88,7 @@
 		 * @inheritdoc
 		 */
 		public function packet(string $scope = null, array $tagList = null, IElement $element = null): IElement {
-			return ($element ?: (new Packet($this->hostUrl->getAbsoluteUrl()))->setScope($scope)->setTagList($tagList))->setElementList('elements', iterator_to_array($this->iterate($scope, $tagList)));
+			return ($element ?: (new Packet($this->hostUrl->getAbsoluteUrl()))->setScope($scope)->setTagList($tagList))->setElementList('elements', iterator_to_array($this->getQueueList($scope, $tagList)));
 		}
 
 		/**
