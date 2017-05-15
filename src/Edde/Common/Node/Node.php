@@ -77,6 +77,14 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function putAttribute(array $attributeList): INode {
+			$this->attributeList->put($attributeList);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function getMetaList(): IAttributeList {
 			return $this->metaList;
 		}
@@ -93,6 +101,14 @@
 		 */
 		public function setMeta(string $name, $value): INode {
 			$this->metaList->set($name, $value);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function putMeta(array $metaList): INode {
+			$this->metaList->put($metaList);
 			return $this;
 		}
 

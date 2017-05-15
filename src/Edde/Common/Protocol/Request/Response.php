@@ -3,10 +3,9 @@
 
 	namespace Edde\Common\Protocol\Request;
 
-	use Edde\Api\Protocol\Request\IResponse;
-	use Edde\Common\Protocol\AbstractElement;
+	use Edde\Common\Protocol\Element;
 
-	class Response extends AbstractElement implements IResponse {
+	class Response extends Element {
 		public function __construct(string $id = null) {
 			parent::__construct('response', $id);
 		}

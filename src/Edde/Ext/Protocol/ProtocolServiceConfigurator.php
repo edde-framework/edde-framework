@@ -8,6 +8,7 @@
 	use Edde\Api\Protocol\IProtocolService;
 	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Common\Config\AbstractConfigurator;
+	use Edde\Common\Protocol\PacketProtocolHandler;
 
 	class ProtocolServiceConfigurator extends AbstractConfigurator {
 		use LazyContainerTrait;
@@ -18,5 +19,6 @@
 		public function configure($instance) {
 			$instance->registerProtocolHandler($this->container->create(IEventBus::class));
 			$instance->registerProtocolHandler($this->container->create(IRequestService::class));
+			$instance->registerProtocolHandler($this->container->create(PacketProtocolHandler::class));
 		}
 	}

@@ -12,24 +12,36 @@
 		exit(1);
 	}
 
-	FileUtils::delete(__DIR__ . '/../release/temp');
+	$name = 'edde-framework';
+	$version = $name . '-' . (new Framework())->getVersion();
 
-	FileUtils::copy(__DIR__ . '/../src', __DIR__ . '/../release/temp/edde-framework/src');
-	FileUtils::copy(__DIR__ . '/../src', __DIR__ . '/../release/temp/edde-framework.bundle/src');
-	FileUtils::copy(__DIR__ . '/../lib', __DIR__ . '/../release/temp/edde-framework.bundle/lib');
-	FileUtils::copy(__DIR__ . '/../loader.php', __DIR__ . '/../release/temp/edde-framework.bundle/loader.php');
+	$rootDir = realpath(__DIR__ . '/..');
+	$releaseDir = $rootDir . '/release';
+	$tempDir = $rootDir . '/temp';
+	$pharDir = $tempDir . '/phar';
+	$bundleDir = $tempDir . '/bundle';
+	$sourceDir = $rootDir . '/src';
+	$libDir = $rootDir . '/lib';
 
-	function build(string $file, string $source, string $stub) {
-		@unlink($file);
+	FileUtils::createDir($releaseDir);
+
+	FileUtils::delete($pharDir);
+	FileUtils::delete($bundleDir);
+	FileUtils::copy($sourceDir, $pharDir . '/src');
+	FileUtils::copy($sourceDir, $bundleDir . '/src');
+	FileUtils::copy($libDir, $bundleDir . '/lib');
+	FileUtils::copy($rootDir . '/loader.php', $bundleDir . '/loader.php');
+
+	function make(string $file, string $source, string $stub) {
 		$phar = new \Phar($file, 0, $pharFile = basename($file));
 		$phar->setStub(str_replace('{phar-file}', $pharFile, $stub));
 		$phar->buildFromDirectory($source);
 		$phar->compressFiles(\Phar::GZ);
 	}
 
-	$name = json_decode(file_get_contents(__DIR__ . '/../composer.json'));
-	build($phar = (__DIR__ . '/../release/' . ($base = 'edde-framework-' . (new Framework())->getVersion()) . '.phar'), __DIR__ . '/../release/temp/edde-framework', '<?php Phar::mapPhar("{phar-file}"); require_once("phar://{phar-file}/src/loader.php"); __HALT_COMPILER();');
-	build($bundle = (__DIR__ . '/../release/' . $base . '-bundle.phar'), __DIR__ . '/../release/temp/edde-framework.bundle', '<?php Phar::mapPhar("{phar-file}"); require_once("phar://{phar-file}/loader.php"); __HALT_COMPILER();');
+	make($versionPhar = ($releaseDir . '/' . $version . '.phar'), $pharDir, '<?php Phar::mapPhar("{phar-file}"); require_once("phar://{phar-file}/src/loader.php"); __HALT_COMPILER();');
+	FileUtils::copy($versionPhar, $releaseDir . '/' . $name . '.phar');
+	make($versionPhar = ($releaseDir . '/' . $version . '.bundle.phar'), $bundleDir, '<?php Phar::mapPhar("{phar-file}"); require_once("phar://{phar-file}/loader.php"); __HALT_COMPILER();');
+	FileUtils::copy($versionPhar, $releaseDir . '/' . $name . '.bundle.phar');
 
-	FileUtils::copy($phar, __DIR__ . '/../release/edde-framework.phar');
-	FileUtils::copy($bundle, __DIR__ . '/../release/edde-framework-bundle.phar');
+	exit(0);

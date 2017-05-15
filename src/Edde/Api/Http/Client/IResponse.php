@@ -7,7 +7,7 @@
 
 	interface IResponse extends IHttpResponse {
 		/**
-		 * convert the reponse to something in the target list
+		 * convert the response to something in the target list
 		 *
 		 * @param array $targetList
 		 *

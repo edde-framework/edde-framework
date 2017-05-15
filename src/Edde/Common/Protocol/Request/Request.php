@@ -3,53 +3,18 @@
 
 	namespace Edde\Common\Protocol\Request;
 
-	use Edde\Api\Protocol\IElement;
-	use Edde\Api\Protocol\Request\IRequest;
-	use Edde\Common\Protocol\AbstractElement;
+	use Edde\Common\Protocol\Element;
 
-	class Request extends AbstractElement implements IRequest {
-		/**
-		 * @var string
-		 */
-		protected $request;
-
+	class Request extends Element {
 		public function __construct(string $request = null, string $id = null) {
 			parent::__construct('request', $id);
-			$this->request = $request;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function setRequest(string $request): IRequest {
-			$this->request = $request;
-			return $this;
+			$this->setAttribute('request', $request);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function getRequest(): string {
-			return $this->request;
-		}
-
-		public function from(\stdClass $from): IElement {
-			parent::from($from);
-			$this->request = $from->request;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function packet(): \stdClass {
-			$packet = parent::packet();
-			$packet->request = $this->getRequest();
-			return $packet;
-		}
-
-		public function __clone() {
-			parent::__clone();
-			$this->request = null;
+			return (string)$this->getAttribute('request');
 		}
 	}

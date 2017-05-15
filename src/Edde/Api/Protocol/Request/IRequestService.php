@@ -3,6 +3,7 @@
 
 	namespace Edde\Api\Protocol\Request;
 
+	use Edde\Api\Node\INode;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IProtocolHandler;
 
@@ -17,16 +18,16 @@
 		/**
 		 * return list of current responses
 		 *
-		 * @return IResponse[]
+		 * @return IElement[]
 		 */
 		public function getResponseList(): array;
 
 		/**
 		 * get the response by the given request; if it was already executed the response would be returned
 		 *
-		 * @param IRequest $request
+		 * @param IElement $element
 		 *
-		 * @return IElement
+		 * @return INode
 		 */
-		public function request(IRequest $request): IElement;
+		public function request(IElement $element): INode;
 	}

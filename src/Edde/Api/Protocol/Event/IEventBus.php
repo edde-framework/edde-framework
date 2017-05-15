@@ -3,6 +3,7 @@
 
 	namespace Edde\Api\Protocol\Event;
 
+	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IProtocolHandler;
 
 	interface IEventBus extends IProtocolHandler {
@@ -24,21 +25,11 @@
 		public function listen(string $event, callable $callback): IEventBus;
 
 		/**
-		 * return event list by the given parameters
-		 *
-		 * @param string|null $scope
-		 * @param array|null  $tagList
-		 *
-		 * @return IEvent[]
-		 */
-		public function getEventList(string $scope = null, array $tagList = null): array;
-
-		/**
 		 * immediately emmit the given event
 		 *
-		 * @param IEvent $event
+		 * @param IElement $element
 		 *
 		 * @return IEventBus
 		 */
-		public function emit(IEvent $event): IEventBus;
+		public function emit(IElement $element): IEventBus;
 	}

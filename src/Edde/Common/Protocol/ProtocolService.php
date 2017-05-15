@@ -6,7 +6,6 @@
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Http\LazyHostUrlTrait;
 	use Edde\Api\Protocol\IElement;
-	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Protocol\IProtocolHandler;
 	use Edde\Api\Protocol\IProtocolService;
 
@@ -20,7 +19,7 @@
 		/**
 		 * @var IProtocolHandler[]
 		 */
-		protected $handle = [];
+		protected $handleList = [];
 
 		/**
 		 * @inheritdoc
@@ -33,85 +32,79 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function canHandle(IElement $element): bool {
-			if ($element instanceof IPacket) {
-				return true;
-			} else if (isset($this->handle[$type = $element->getType()])) {
-				return $this->handle[$type]->canHandle($element);
+		public function getProtocolHandler(IElement $element): IProtocolHandler {
+			if (isset($this->handleList[$type = $element->getType()])) {
+				return $this->handleList[$type];
 			}
-			foreach ($this->protocolHandlerList as $protocolHandler) {
-				$protocolHandler->setup();
+			foreach ($this->getProtocolHandleList() as $protocolHandler) {
 				if ($protocolHandler->canHandle($element)) {
-					$this->handle[$type] = $protocolHandler;
-					return true;
+					return $this->handleList[$type] = $protocolHandler;
 				}
 			}
-			return false;
+			throw new UnsupportedElementException(sprintf('There is no protocol handler for the given element [%s].', $type));
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function element(IElement $element) {
-			$this->check($element);
-			if ($element instanceof IPacket && $element->isAsync()) {
-				$this->queue($element);
-				$packet = $this->container->create(IPacket::class);
-				$packet->setReference($element);
-				$packet->addReference($element);
-				return $packet;
+		public function getProtocolHandleList() {
+			foreach ($this->protocolHandlerList as $protocolHandler) {
+				$protocolHandler->setup();
+				yield $protocolHandler;
 			}
-			return $this->execute($element);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function canHandle(IElement $element): bool {
+			return $this->getProtocolHandler($element)->canHandle($element);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function queue(IElement $element): IProtocolHandler {
+			$this->getProtocolHandler($element)->queue($element);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function dequeue(string $scope = null, array $tagList = null): IProtocolHandler {
+			foreach ($this->getProtocolHandleList() as $protocolHandler) {
+				$protocolHandler->dequeue($scope, $tagList);
+			}
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function iterate(string $scope = null, array $tagList = null) {
+			foreach ($this->getProtocolHandleList() as $protocolHandler) {
+				foreach ($protocolHandler->iterate($scope, $tagList) as $element) {
+					yield $element;
+				}
+			}
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getReferenceList(string $id): array {
+			$elementList = [];
+			foreach ($this->getProtocolHandleList() as $protocolHandler) {
+				$elementList = array_merge($elementList, $protocolHandler->getReferenceList($id));
+			}
+			return $elementList;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function execute(IElement $element) {
-			if ($element instanceof IPacket) {
-				return $this->request($element);
-			}
-			if (isset($this->handle[$type = $element->getType()])) {
-				return $this->handle[$type]->execute($element);
-			}
-			foreach ($this->protocolHandlerList as $protocolHandler) {
-				$protocolHandler->setup();
-				if ($protocolHandler->canHandle($element)) {
-					$this->handle[$type] = $protocolHandler;
-					return $protocolHandler->execute($element);
-				}
-			}
-			throw new NoHandlerException(sprintf('Element [%s (%s)] has no available handler.', $type, get_class($element)));
-		}
-
-		protected function request(IPacket $request): IPacket {
-			$packet = $this->container->create(IPacket::class);
-			/**
-			 * set the Element reference (this is a bit different than "addReference()"
-			 */
-			$packet->setReference($request);
-			/**
-			 * add the request to the list of references in Packet
-			 */
-			$packet->addReference($request);
-			foreach ($request->getElementList() as $element) {
-				/** @var $response IElement */
-				if (($response = $this->execute($element)) instanceof IElement) {
-					$packet->addElement($response->setReference($element));
-					$packet->addReference($element);
-				}
-			}
-			return $packet;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function packet(string $scope = null, array $tagList = null, IPacket $packet = null): IPacket {
-			$packet = parent::packet($scope, $tagList, $packet);
-			foreach ($this->protocolHandlerList as $protocolHandler) {
-				$protocolHandler->packet($scope, $tagList, $packet);
-			}
-			return $packet;
+			return $this->getProtocolHandler($element)->element($element);
 		}
 	}

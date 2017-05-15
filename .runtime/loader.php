@@ -28,7 +28,7 @@
 	 * should see all other required loaders.
 	 */
 	require_once __DIR__ . '/lib/autoload.php';
-	require_once __DIR__ . '/../release/edde-framework-bundle.phar';
+	require_once __DIR__ . '/../release/edde-framework.bundle.phar';
 	require_once __DIR__ . '/src/loader.php';
 
 	/**

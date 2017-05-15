@@ -3,177 +3,39 @@
 
 	namespace Edde\Common\Protocol;
 
-	use Edde\Api\Container\LazyContainerTrait;
-	use Edde\Api\Http\LazyHostUrlTrait;
+	use Edde\Api\Node\NodeException;
 	use Edde\Api\Protocol\IElement;
-	use Edde\Api\Protocol\IPacket;
 
-	class Packet extends AbstractElement implements IPacket {
-		use LazyContainerTrait;
-		use LazyHostUrlTrait;
-		/**
-		 * @var string
-		 */
-		protected $version;
-		/**
-		 * @var string
-		 */
-		protected $origin;
-		/**
-		 * @var IElement[]
-		 */
-		protected $elementList = [];
-		/**
-		 * @var IElement[]
-		 */
-		protected $referenceList = [];
-
-		public function __construct() {
+	class Packet extends Element {
+		public function __construct(string $origin) {
 			parent::__construct('packet');
-			$this->version = '1.0';
+			$this->setAttribute('version', '1.1');
+			$this->setAttribute('origin', $origin);
 		}
 
 		/**
-		 * @inheritdoc
+		 * shortcut for add a new element to elements
+		 *
+		 * @param IElement $element
+		 *
+		 * @return Packet
+		 * @throws NodeException
 		 */
-		public function setVersion(string $version): IPacket {
-			$this->version = $version;
+		public function element(IElement $element): Packet {
+			$this->addElement('elements', $element);
 			return $this;
 		}
 
 		/**
-		 * @inheritdoc
+		 * shortuct to add a new element to references
+		 *
+		 * @param IElement $element
+		 *
+		 * @return Packet
+		 * @throws NodeException
 		 */
-		public function getVersion(): string {
-			return $this->version;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function setOrigin(string $origin): IPacket {
-			$this->origin = $origin;
+		public function reference(IElement $element): Packet {
+			$this->addElement('references', $element);
 			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getOrigin(): string {
-			return $this->origin ?: $this->origin = $this->hostUrl->getAbsoluteUrl();
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function addElement(IElement $element): IPacket {
-			$this->elementList[] = $element;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function setElementList(array $elementList): IPacket {
-			$this->elementList = [];
-			/** @var $element IElement */
-			foreach ($elementList as $element) {
-				$this->addElement($element);
-			}
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getElementList(): array {
-			return $this->elementList;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function addReference(IElement $element): IPacket {
-			$this->referenceList[] = $element;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function setReferenceList(array $elementList): IPacket {
-			$this->referenceList = [];
-			foreach ($elementList as $element) {
-				$this->addReference($element);
-			}
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function reference(IElement $reference): IElement {
-			/** @var $element IElement */
-			foreach (array_merge($this->referenceList, $this->elementList) as $element) {
-				if ($element->isReferenceOf($reference)) {
-					return $element;
-				}
-			}
-			if ($this->isReferenceOf($reference)) {
-				return $this;
-			}
-			throw new ReferenceException(sprintf('The element [%s (%s)] has no reference to itself by [%s].', get_class($reference), $reference->getType(), $reference->getId()));
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getReferenceList(): array {
-			return $this->referenceList;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function from(\stdClass $from): IElement {
-			parent::from($from);
-			$this->version = $from->version;
-			$this->origin = $from->origin;
-			foreach ($from->elements ?? [] as $source) {
-				/** @var $element IElement */
-				$this->addElement($element = $this->container->create('//protocol-service/element/' . $source->type));
-				$element->from($source);
-			}
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function packet(): \stdClass {
-			$packet = parent::packet();
-			$packet->version = $this->getVersion();
-			$packet->origin = $this->getOrigin();
-			if ($this->reference) {
-				$packet->reference = $this->reference->getId();
-			}
-			if (empty($this->elementList) === false) {
-				foreach ($this->elementList as $element) {
-					$packet->elements[] = $element->packet();
-				}
-			}
-			if (empty($this->referenceList) === false) {
-				foreach ($this->referenceList as $element) {
-					$packet->references[] = $element->packet();
-				}
-			}
-			return $packet;
-		}
-
-		public function __clone() {
-			parent::__clone();
-			$this->origin = null;
-			$this->elementList = [];
-			$this->referenceList = [];
 		}
 	}

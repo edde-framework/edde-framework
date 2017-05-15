@@ -3,10 +3,8 @@ variables:
 
 stages:
     - test
+    - package
     - composer
-    - review
-    - staging
-    - production
 
 test:
     stage: test
@@ -18,6 +16,25 @@ test:
         untracked: true
         when: on_failure
 
+package:
+    stage: package
+    script:
+        - php bin/composer.phar install
+        - php -d phar.readonly=off bin/compile.php
+        - php bin/sami.phar --no-ansi update sami.conf.php
+    artifacts:
+        name: $PROJECT-$CI_BUILD_REF_NAME
+        paths:
+            - release/
+            - lib/
+            - src/
+            - doc/
+            - loader.php
+    only:
+        - master
+        - tags
+        - /^\d+\.\d+$/
+
 composer:
     stage: composer
     script:
@@ -26,39 +43,3 @@ composer:
         - master
         - tags
         - /^\d+\.\d+$/
-
-review:
-    stage: review
-    script:
-        - php bin/composer.phar install
-        - php bin/phpunit.phar --coverage-text --colors=never
-    artifacts:
-        name: $PROJECT-$CI_BUILD_REF_NAME-failed
-        untracked: true
-        when: on_failure
-    environment:
-        name: review/$CI_BUILD_REF_NAME
-        url: https://$CI_ENVIRONMENT_SLUG.edde-framework.org:8080/
-    except:
-        - master
-
-staging:
-    stage: staging
-    script:
-        - echo 'staging'
-    environment:
-        name: staging
-        url: https://staging.edde-framework.org:8080/
-    only:
-        - staging
-
-production:
-    stage: production
-#    when: manual
-    script:
-        - echo 'production'
-    environment:
-        name: production
-        url: https://edde-framework.org:8080/
-    only:
-        - master

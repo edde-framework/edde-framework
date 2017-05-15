@@ -8,7 +8,6 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
 	use Edde\Common\Converter\AbstractConverter;
-	use Edde\Common\Node\Node;
 	use Edde\Common\Node\NodeUtils;
 
 	/**
@@ -52,6 +51,7 @@
 				'json',
 				'array',
 				'object',
+				\stdClass::class,
 			], [
 				'json',
 				'application/json',
@@ -64,6 +64,7 @@
 			], [
 				'array',
 				'object',
+				\stdClass::class,
 				'node',
 				INode::class,
 			]);
@@ -87,15 +88,17 @@
 						case 'array':
 							return json_decode($convert, true);
 						case 'object':
+						case \stdClass::class:
 							return json_decode($convert);
 						case 'node':
 						case INode::class:
-							return NodeUtils::convert(json_decode($convert), new Node());
+							return NodeUtils::toNode(json_decode($convert));
 					}
 					break;
 				case 'json':
 				case 'array':
 				case 'object':
+				case \stdClass::class:
 					switch ($target) {
 						case 'json':
 						case 'application/json':

@@ -4,14 +4,16 @@
 	namespace Edde\Common\Protocol;
 
 	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Http\LazyHostUrlTrait;
+	use Edde\Api\Node\INode;
 	use Edde\Api\Protocol\IElement;
-	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Protocol\IProtocolHandler;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	abstract class AbstractProtocolHandler extends Object implements IProtocolHandler {
 		use LazyContainerTrait;
+		use LazyHostUrlTrait;
 		use ConfigurableTrait;
 		/**
 		 * @var IElement[]
@@ -31,7 +33,7 @@
 			if ($this->canHandle($element)) {
 				return $this;
 			}
-			throw new UnsupportedElementException(sprintf('Unsupported element [%s (%s)] in protocol handler [%s].', $element->getType(), get_class($element), static::class));
+			throw new UnsupportedElementException(sprintf('Unsupported element [%s] in protocol handler [%s].', $element->getName(), static::class));
 		}
 
 		/**
@@ -56,9 +58,9 @@
 		 */
 		public function dequeue(string $scope = null, array $tagList = null): IProtocolHandler {
 			foreach ($this->iterate($scope, $tagList) as $element) {
-				/** @var $response IElement */
+				/** @var $response INode */
 				if (($response = $this->execute($element)) instanceof IElement) {
-					$this->elementList[$response->getId()] = $response;
+					$this->elementList[] = $response;
 				}
 			}
 			return $this;
@@ -72,7 +74,7 @@
 		 */
 		public function iterate(string $scope = null, array $tagList = null) {
 			foreach ($this->queueList as $element) {
-				if ($element->inScope($scope) && $element->inTagList($tagList)) {
+				if ($element->inScope($scope) && ($tagList ? $element->hasTagList($tagList) : true)) {
 					yield $element;
 				}
 			}
@@ -81,28 +83,17 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function packet(string $scope = null, array $tagList = null, IPacket $packet = null): IPacket {
-			/** @var IPacket $packet */
-			if ($packet === null) {
-				$packet = $this->container->create(IPacket::class);
-				$packet->setScope($scope);
-				$packet->setTagList($tagList);
-			}
-			foreach ($this->iterate($scope, $tagList) as $element) {
-				$packet->addElement($element);
-			}
-			return $packet;
+		public function packet(string $scope = null, array $tagList = null, IElement $element = null): IElement {
+			return ($element ?: (new Packet($this->hostUrl->getAbsoluteUrl()))->setScope($scope)->setTagList($tagList))->setElementList('elements', iterator_to_array($this->iterate($scope, $tagList)));
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function reference(IElement $reference): array {
+		public function getReferenceList(string $id): array {
 			$elementList = [];
 			foreach ($this->elementList as $element) {
-				if ($element->isReferenceOf($reference)) {
-					$elementList[] = $element;
-				}
+				$elementList = array_merge($elementList, $element->getReferenceList($id));
 			}
 			return $elementList;
 		}
