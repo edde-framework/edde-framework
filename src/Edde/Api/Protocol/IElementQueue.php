@@ -40,6 +40,13 @@
 		public function getReferenceList(string $id): array;
 
 		/**
+		 * is current state of element queue empty?
+		 *
+		 * @return bool
+		 */
+		public function isEmpty(): bool;
+
+		/**
 		 * force to save current queue list
 		 *
 		 * @return IElementQueue

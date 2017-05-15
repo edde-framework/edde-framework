@@ -31,7 +31,7 @@
 			$packet->reference($element);
 			foreach ($element->getElementList('elements') as $node) {
 				/** @var $response IElement */
-				if (($response = $this->protocolService->execute($node)) instanceof IElement) {
+				if (($response = $this->protocolService->element($node)) instanceof IElement) {
 					$packet->element($response->setReference($node));
 					$packet->reference($node);
 				}

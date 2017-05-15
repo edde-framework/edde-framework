@@ -25,7 +25,7 @@
 		 * @inheritdoc
 		 */
 		public function queue(IElement $element): IElementQueue {
-			$this->queueList[] = $element;
+			$this->queueList[$element->getId()] = $element;
 			return $this;
 		}
 
@@ -48,6 +48,7 @@
 				if (($response = $this->protocolService->execute($element)) instanceof IElement) {
 					$this->elementList[] = $response;
 				}
+				unset($this->queueList[$element->getId()]);
 			}
 			return $this;
 		}
@@ -61,6 +62,13 @@
 				$elementList = array_merge($elementList, $element->getReferenceList($id));
 			}
 			return $elementList;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function isEmpty(): bool {
+			return empty($this->queueList);
 		}
 
 		/**
