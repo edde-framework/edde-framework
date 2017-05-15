@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Config;
 
@@ -7,4 +7,9 @@
 	use Edde\Common\Object;
 
 	abstract class AbstractConfigurator extends Object implements IConfigurator {
+		/**
+		 * @inheritdoc
+		 */
+		public function configure($instance) {
+		}
 	}

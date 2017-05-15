@@ -128,6 +128,7 @@
 	use Edde\Ext\Log\LogServiceConfigurator;
 	use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 	use Edde\Ext\Protocol\RequestServiceConfigurator;
+	use Edde\Ext\Protocol\ThreadManagerConfigurator;
 	use Edde\Ext\Resource\ResourceManagerConfigurator;
 	use Edde\Ext\Router\RequestQueueConfigurator;
 	use Edde\Ext\Router\RouterServiceConfigurator;
@@ -426,12 +427,13 @@
 				/**
 				 * As other components, Template engine should be configured too; this will register default set of macros.
 				 */
-				ICompiler::class         => CompilerConfigurator::class,
-				IProtocolService::class  => ProtocolServiceConfigurator::class,
-				IRequestService::class   => RequestServiceConfigurator::class,
-				ILogService::class       => LogServiceConfigurator::class,
-				ILinkFactory::class      => LinkFactoryConfigurator::class,
-				WebExecutor::class       => WebExecutorConfigurator::class,
+				ICompiler::class        => CompilerConfigurator::class,
+				IProtocolService::class => ProtocolServiceConfigurator::class,
+				IRequestService::class  => RequestServiceConfigurator::class,
+				ILogService::class      => LogServiceConfigurator::class,
+				ILinkFactory::class     => LinkFactoryConfigurator::class,
+				WebExecutor::class      => WebExecutorConfigurator::class,
+				IThreadManager::class   => ThreadManagerConfigurator::class,
 			];
 		}
 	}
