@@ -42,6 +42,7 @@
 	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
 	use Edde\Api\Protocol\Event\IEventBus;
+	use Edde\Api\Protocol\IElementQueue;
 	use Edde\Api\Protocol\IProtocolService;
 	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Api\Resource\IResourceManager;
@@ -128,6 +129,7 @@
 	use Edde\Ext\Log\LogServiceConfigurator;
 	use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 	use Edde\Ext\Protocol\RequestServiceConfigurator;
+	use Edde\Ext\Protocol\SessionElementQueue;
 	use Edde\Ext\Protocol\ThreadManagerConfigurator;
 	use Edde\Ext\Resource\ResourceManagerConfigurator;
 	use Edde\Ext\Router\RequestQueueConfigurator;
@@ -402,6 +404,7 @@
 				IAssetStorage::class                  => AssetStorage::class,
 				IProtocolService::class               => ProtocolService::class,
 				IRequestService::class                => RequestService::class,
+				IElementQueue::class                  => SessionElementQueue::class,
 				IEventBus::class                      => EventBus::class,
 				IThreadManager::class                 => ThreadManager::class,
 				IExecutor::class                      => WebExecutor::class,
@@ -427,13 +430,13 @@
 				/**
 				 * As other components, Template engine should be configured too; this will register default set of macros.
 				 */
-				ICompiler::class        => CompilerConfigurator::class,
-				IProtocolService::class => ProtocolServiceConfigurator::class,
-				IRequestService::class  => RequestServiceConfigurator::class,
-				ILogService::class      => LogServiceConfigurator::class,
-				ILinkFactory::class     => LinkFactoryConfigurator::class,
-				WebExecutor::class      => WebExecutorConfigurator::class,
-				IThreadManager::class   => ThreadManagerConfigurator::class,
+				ICompiler::class         => CompilerConfigurator::class,
+				IProtocolService::class  => ProtocolServiceConfigurator::class,
+				IRequestService::class   => RequestServiceConfigurator::class,
+				ILogService::class       => LogServiceConfigurator::class,
+				ILinkFactory::class      => LinkFactoryConfigurator::class,
+				WebExecutor::class       => WebExecutorConfigurator::class,
+				IThreadManager::class    => ThreadManagerConfigurator::class,
 			];
 		}
 	}

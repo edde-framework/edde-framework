@@ -159,7 +159,7 @@
 				'bar',
 				'moo',
 			]));
-			$packet = $this->protocolService->packet('scope', [
+			$packet = $this->protocolService->createQueuePacket('scope', [
 				'foo',
 				'bar',
 			]);
@@ -302,14 +302,13 @@
 		public function testAsyncPacket() {
 			$packet = new Packet('::the-void');
 			$packet->setId('the-original-packet');
-			$packet->async();
 			$packet->element($request = new Request('there is nobody to handle this'));
 			$packet->element($request2 = new Request('testquest'));
 			$request->setId('741');
 			$request2->setId('852');
 			$packet->getElementNode('elements')->setId('foo');
 			/** @var $response IElement */
-			self::assertInstanceOf(IElement::class, $response = $this->protocolService->element($packet));
+			self::assertInstanceOf(IElement::class, $response = $this->protocolService->element($packet->async()));
 			self::assertEquals('packet', $response->getType());
 			self::assertCount(0, $response->getElementList('elements'));
 			self::assertCount(1, $response->getElementList('references'));

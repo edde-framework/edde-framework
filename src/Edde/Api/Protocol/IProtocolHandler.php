@@ -53,44 +53,4 @@
 		 * @return mixed
 		 */
 		public function execute(IElement $element);
-
-		/**
-		 * execute current queue of elements
-		 *
-		 * @param string|null $scope
-		 * @param array|null  $tagList
-		 *
-		 * @return IProtocolHandler
-		 */
-		public function dequeue(string $scope = null, array $tagList = null): IProtocolHandler;
-
-		/**
-		 * getQueueList over all enqueued elements by the given rules
-		 *
-		 * @param string|null $scope
-		 * @param array|null  $tagList
-		 *
-		 * @return IElement[]
-		 */
-		public function getQueueList(string $scope = null, array $tagList = null);
-
-		/**
-		 * create current packet
-		 *
-		 * @param string|null   $scope
-		 * @param string[]|null $tagList
-		 * @param IElement|null $element
-		 *
-		 * @return IElement
-		 */
-		public function packet(string $scope = null, array $tagList = null, IElement $element = null): IElement;
-
-		/**
-		 * return list of elements referencing the given ID
-		 *
-		 * @param string $id
-		 *
-		 * @return array
-		 */
-		public function getReferenceList(string $id): array;
 	}
