@@ -1,0 +1,62 @@
+language: php
+php:
+    - '7.0'
+
+before_script:
+    - travis_retry composer update --no-interaction --prefer-dist $dependencies
+
+sudo: false
+
+cache:
+    directories:
+        - $HOME/.composer/cache
+
+#after_success
+#after_failure
+
+
+#variables:
+#    PROJECT: edde-framework
+#
+#stages:
+#    - test
+#    - package
+#    - composer
+#
+#test:
+#    stage: test
+#    script:
+#        - php bin/composer.phar install
+#        - php bin/phpunit.phar --coverage-text --colors=never --exclude-group http
+#    artifacts:
+#        name: $PROJECT-$CI_BUILD_REF_NAME-failed
+#        untracked: true
+#        when: on_failure
+#
+#package:
+#    stage: package
+#    script:
+#        - php bin/composer.phar install
+#        - php -d phar.readonly=off bin/compile.php
+#        - php bin/sami.phar --no-ansi update sami.conf.php
+#    artifacts:
+#        name: $PROJECT-$CI_BUILD_REF_NAME
+#        paths:
+#            - release/
+#            - lib/
+#            - src/
+#            - doc/
+#            - loader.php
+#    only:
+#        - master
+#        - tags
+#        - /^\d+\.\d+$/
+#
+#composer:
+#    stage: composer
+#    script:
+#        - curl -X POST -F token=53839921cd8d3e4844a8203d3bedf9 -F ref=master https://edde-framework.org/api/v3/projects/4/trigger/builds
+#    only:
+#        - master
+#        - tags
+#        - /^\d+\.\d+$/

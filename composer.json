@@ -3,7 +3,7 @@
 	"homepage": "https://edde-framework.org",
 	"license": "Apache-2.0",
 	"type": "library",
-	"description": "Fast and full featured modern PHP framework.",
+	"description": "Epic, fast and full featured modern PHP framework.",
 	"keywords": [
 		"php",
 		"framework"
@@ -26,6 +26,7 @@
 	"minimum-stability": "dev",
 	"require": {
 		"php": ">=7.0",
+		"phpunit/phpunit": "6.*",
 		"paragonie/constant_time_encoding": "^2.0",
 		"defuse/php-encryption": "^2.0",
 		"roave/security-advisories": "dev-master"
