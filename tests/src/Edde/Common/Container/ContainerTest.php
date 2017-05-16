@@ -44,6 +44,9 @@
 			self::assertInstanceOf(\LazySomething::class, $instance->lazySomething);
 			self::assertInstanceOf(\AnotherAnotherSomething::class, $instance->anotherAnotherSomething);
 			self::assertInstanceOf(\ThisIsProductOfCleverManager::class, $this->container->create(\ThisIsProductOfCleverManager::class));
+
+			self::assertInstanceOf(\AnotherSomething::class, $instance = $this->container->create('boo'));
+			self::assertSame($instance, $this->container->create('boo'));
 		}
 
 		/**
@@ -53,6 +56,7 @@
 			$cacheDirectory = new CacheDirectory($cacheDir = __DIR__ . '/cache');
 			$cacheDirectory->purge();
 			$this->container = ContainerFactory::container($this->factoryList = [
+				'boo'                                => ContainerFactory::instance(\AnotherSomething::class, []),
 				\ISomething::class                   => \Something::class,
 				ICacheDirectory::class               => ContainerFactory::instance(CacheDirectory::class, [$cacheDir]),
 				ICacheStorage::class                 => FlatFileCacheStorage::class,
