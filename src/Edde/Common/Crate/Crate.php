@@ -11,7 +11,7 @@
 	use Edde\Api\Schema\ISchema;
 	use Edde\Common\Object;
 	use Edde\Common\Reflection\ReflectionUtils;
-	use Edde\Common\Schema\Property;
+	use Edde\Common\Schema\Property as SchemaProperty;
 	use Edde\Common\Schema\Schema;
 
 	/**
@@ -76,8 +76,7 @@
 			if ($this->identifierList === null) {
 				$this->identifierList = [];
 				foreach ($this->propertyList as $property) {
-					$schemaProperty = $property->getSchemaProperty();
-					if ($schemaProperty->isIdentifier()) {
+					if ($property->getSchemaProperty()->isIdentifier()) {
 						$this->identifierList[] = $property;
 					}
 				}
@@ -89,8 +88,7 @@
 		 * @inheritdoc
 		 */
 		public function set(string $name, $value): ICrate {
-			$this->getProperty($name)
-				->set($value);
+			$this->getProperty($name)->set($value);
 			return $this;
 		}
 
@@ -117,8 +115,7 @@
 		 * @throws CrateException
 		 */
 		public function add(string $name, $value, $key = null): ICrate {
-			$property = $this->getProperty($name)
-				->getSchemaProperty();
+			$property = $this->getProperty($name)->getSchemaProperty();
 			if ($property->isArray() === false) {
 				throw new CrateException(sprintf('Property [%s] is not array; cannot add value.', $property->getPropertyName()));
 			}
@@ -174,7 +171,7 @@
 		public function dynamic($source): ICrate {
 			$schema = new Schema(static::class);
 			foreach ($source as $k => $v) {
-				$schema->addProperty($schemaProperty = new Property($schema, (string)$k, gettype($v), false));
+				$schema->addProperty($schemaProperty = new SchemaProperty($schema, (string)$k, gettype($v), false));
 				$this->addProperty(new Property($schemaProperty, $v));
 			}
 			return $this;
@@ -185,8 +182,7 @@
 		 * @throws CrateException
 		 */
 		public function get(string $name, $default = null) {
-			return $this->getProperty($name)
-				->get($default);
+			return $this->getProperty($name)->get($default);
 		}
 
 		/**
@@ -210,9 +206,7 @@
 			}
 			$link = $this->schema->getLink($name);
 			$this->linkList[$name] = $crate;
-			$this->set($link->getSource()
-				->getName(), $crate->get($link->getTarget()
-				->getName()));
+			$this->set($link->getSource()->getName(), $crate->get($link->getTarget()->getName()));
 			return $this;
 		}
 
