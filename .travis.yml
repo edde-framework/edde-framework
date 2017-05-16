@@ -6,36 +6,9 @@ before_script:
     - travis_retry composer update --no-interaction --prefer-dist $dependencies
 
 after_success:
+    - php -d phar.readonly=off bin/compile.php
     - composer execute sami -- --no-ansi update sami.conf.php
 
 cache:
     directories:
         - $HOME/.composer/cache
-
-#package:
-#    stage: package
-#    script:
-#        - php bin/composer.phar install
-#        - php -d phar.readonly=off bin/compile.php
-#        - php bin/sami.phar --no-ansi update sami.conf.php
-#    artifacts:
-#        name: $PROJECT-$CI_BUILD_REF_NAME
-#        paths:
-#            - release/
-#            - lib/
-#            - src/
-#            - doc/
-#            - loader.php
-#    only:
-#        - master
-#        - tags
-#        - /^\d+\.\d+$/
-#
-#composer:
-#    stage: composer
-#    script:
-#        - curl -X POST -F token=53839921cd8d3e4844a8203d3bedf9 -F ref=master https://edde-framework.org/api/v3/projects/4/trigger/builds
-#    only:
-#        - master
-#        - tags
-#        - /^\d+\.\d+$/
