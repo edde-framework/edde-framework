@@ -4,7 +4,6 @@
 	namespace Edde\Api\Http\Client;
 
 	use Edde\Api\EddeException;
-	use Edde\Api\Http\IResponse;
 	use Exception;
 
 	class ClientException extends EddeException {
