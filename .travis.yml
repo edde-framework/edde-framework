@@ -5,10 +5,6 @@ php:
 before_script:
     - travis_retry composer update --no-interaction --prefer-dist $dependencies
 
-#after_success:
-#    - php -d phar.readonly=off bin/compile.php
-#    - composer exec sami -- --no-ansi update sami.conf.php
-
 cache:
     directories:
         - $HOME/.composer/cache
