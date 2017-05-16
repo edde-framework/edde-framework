@@ -3,30 +3,17 @@
 
 	namespace Edde\Common\Http\Client;
 
-	use Edde\Api\File\IRootDirectory;
-	use Edde\Api\Http\Client\IHttpClient;
-	use Edde\Common\File\RootDirectory;
-	use Edde\Ext\Container\ContainerFactory;
-	use PHPUnit\Framework\TestCase;
+	use Edde\Api\Http\Client\LazyHttpClientTrait;
+	use Edde\Ext\Test\TestCase;
 
 	/**
 	 * @group http
 	 * @group wip
 	 */
 	class HttpClientTest extends TestCase {
-		/**
-		 * @var IHttpClient
-		 */
-		protected $httpClient;
+		use LazyHttpClientTrait;
 
 		public function testGet() {
-			$this->httpClient->gete('http://127.0.0.1/v1/user');
-		}
-
-		protected function setUp() {
-			$this->httpClient = ContainerFactory::container([
-				IRootDirectory::class => new RootDirectory(__DIR__),
-			])
-				->create(IHttpClient::class, [], __METHOD__);
+			// $result = $this->httpClient->post('http://httpbin.org/post')->post(['foo' => 'bar'])->execute();
 		}
 	}
