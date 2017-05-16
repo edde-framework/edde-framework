@@ -7,7 +7,7 @@ before_script:
 
 after_success:
     - php -d phar.readonly=off bin/compile.php
-    - composer execute sami -- --no-ansi update sami.conf.php
+    - composer exec sami -- --no-ansi update sami.conf.php
 
 cache:
     directories:
