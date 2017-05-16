@@ -3,6 +3,7 @@
 
 	namespace Edde\Ext\Rest;
 
+	use Edde\Api\Thread\LazyThreadCountTrait;
 	use Edde\Api\Thread\LazyThreadManagerTrait;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\Rest\AbstractService;
@@ -10,6 +11,7 @@
 
 	class ThreadService extends AbstractService {
 		use LazyThreadManagerTrait;
+		use LazyThreadCountTrait;
 
 		/**
 		 * @inheritdoc
@@ -32,13 +34,22 @@
 		 * @return JsonResponse
 		 */
 		public function restHead() {
-			$this->threadManager->dequeue();
-			/**
-			 * if there are still some tasks in queue, do thread execution againl; this thread should end and one one should be executed
-			 */
-			if ($this->threadManager->hasQueue()) {
-				$this->threadManager->execute();
+			$success = false;
+			try {
+				if ($this->threadCount->canExecute()) {
+					$this->threadCount->increase();
+					$this->threadManager->dequeue();
+					$success = true;
+					/**
+					 * if there are still some tasks in queue, do thread execution againl; this thread should end and one one should be executed
+					 */
+					if ($this->threadManager->hasQueue()) {
+						$this->threadManager->execute();
+					}
+				}
+				return new JsonResponse($success);
+			} finally {
+				$this->threadCount->decrease();
 			}
-			return new JsonResponse(static::class);
 		}
 	}
