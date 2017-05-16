@@ -39,6 +39,7 @@
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Api\Identity\IIdentityManager;
 	use Edde\Api\Link\ILinkFactory;
+	use Edde\Api\Lock\ILockManager;
 	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
 	use Edde\Api\Protocol\Event\IEventBus;
@@ -100,6 +101,7 @@
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Identity\AuthenticatorManager;
 	use Edde\Common\Identity\IdentityManager;
+	use Edde\Common\Lock\LockManager;
 	use Edde\Common\Log\LogDirectory;
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Object;
@@ -503,6 +505,11 @@
 					'store',
 					StoreDirectory::class,
 				]),
+
+				/**
+				 * General Locking support
+				 */
+				ILockManager::class                   => LockManager::class,
 			];
 		}
 
