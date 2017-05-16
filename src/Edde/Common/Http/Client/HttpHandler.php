@@ -18,6 +18,7 @@
 	use Edde\Common\Http\HttpUtils;
 	use Edde\Common\Object;
 	use Edde\Common\Strings\StringException;
+	use Edde\Ext\Converter\ArrayContent;
 
 	/**
 	 * Http client handler; this should not be used in common; only as a result from HttpClient calls
@@ -131,6 +132,14 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function post(array $post): IHttpHandler {
+			$this->content(new ArrayContent($post), ['array']);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function contentType(string $contentType): IHttpHandler {
 			$this->request->header('Content-Type', $contentType);
 			return $this;
@@ -154,12 +163,6 @@
 					$this->header('Content-Type', $convertable->getTarget());
 				}
 			}
-//			$postList = $this->httpRequest->getPostList();
-//			$options[CURLOPT_POST] = false;
-//			if ($postList->isEmpty() === false) {
-//				$options[CURLOPT_POST] = true;
-//				$options[CURLOPT_POSTFIELDS] = $postList->array();
-//			}
 			if ($this->cookie) {
 				/** @var $cookie IFile */
 				list($cookie, $reset) = $this->cookie;
@@ -183,8 +186,7 @@
 				}
 				return $length;
 			};
-			$options[CURLOPT_HTTPHEADER] = $this->request->getHeaderList()
-				->headers();
+			$options[CURLOPT_HTTPHEADER] = $this->request->getHeaderList()->headers();
 			$options[CURLOPT_FAILONERROR] = false;
 			curl_setopt_array($this->curl, $options);
 			if (($content = curl_exec($this->curl)) === false) {
