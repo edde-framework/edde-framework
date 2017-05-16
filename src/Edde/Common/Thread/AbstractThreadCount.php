@@ -3,11 +3,13 @@
 
 	namespace Edde\Common\Thread;
 
+	use Edde\Api\Store\LazyStoreTrait;
 	use Edde\Api\Thread\IThreadCount;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	abstract class AbstractThreadCount extends Object implements IThreadCount {
+		use LazyStoreTrait;
 		use ConfigurableTrait;
 		/**
 		 * @var int
@@ -55,6 +57,7 @@
 		 * @inheritdoc
 		 */
 		public function lock(): IThreadCount {
+			$this->store->lock(static::class);
 			return $this;
 		}
 
@@ -62,6 +65,7 @@
 		 * @inheritdoc
 		 */
 		public function unlock(): IThreadCount {
+			$this->store->unlock(static::class);
 			return $this;
 		}
 	}

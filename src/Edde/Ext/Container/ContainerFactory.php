@@ -54,6 +54,8 @@
 	use Edde\Api\Session\ISessionDirectory;
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Storage\IStorage;
+	use Edde\Api\Store\IStore;
+	use Edde\Api\Store\IStoreDirectory;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\ITemplateDirectory;
@@ -110,6 +112,8 @@
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Session\SessionDirectory;
 	use Edde\Common\Session\SessionManager;
+	use Edde\Common\Store\FileStore;
+	use Edde\Common\Store\StoreDirectory;
 	use Edde\Common\Template\Compiler;
 	use Edde\Common\Template\Template;
 	use Edde\Common\Template\TemplateDirectory;
@@ -329,89 +333,176 @@
 
 		static public function getDefaultFactoryList(): array {
 			return [
-				IContainer::class                     => Container::class,
-				IRootDirectory::class                 => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
-				ITempDirectory::class                 => self::proxy(IRootDirectory::class, 'directory', [
+				IContainer::class         => Container::class,
+				IRootDirectory::class     => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
+				ITempDirectory::class     => self::proxy(IRootDirectory::class, 'directory', [
 					'temp',
 					TempDirectory::class,
 				]),
-				ICacheDirectory::class                => self::proxy(ITempDirectory::class, 'directory', [
-					'cache',
-					CacheDirectory::class,
-				]),
-				IAssetDirectory::class                => self::proxy(IRootDirectory::class, 'directory', [
+				IAssetDirectory::class    => self::proxy(IRootDirectory::class, 'directory', [
 					'.assets',
 					AssetDirectory::class,
 				]),
-				ITemplateDirectory::class             => self::proxy(IAssetDirectory::class, 'directory', [
+				ITemplateDirectory::class => self::proxy(IAssetDirectory::class, 'directory', [
 					'templates',
 					TemplateDirectory::class,
 				]),
-				ILogDirectory::class                  => self::proxy(IRootDirectory::class, 'directory', [
+				ILogDirectory::class      => self::proxy(IRootDirectory::class, 'directory', [
 					'logs',
 					LogDirectory::class,
 				]),
-				ISessionDirectory::class              => self::proxy(ITempDirectory::class, 'directory', [
-					'session',
-					SessionDirectory::class,
-				]),
-				IStorageDirectory::class              => self::proxy(IAssetDirectory::class, 'directory', [
+
+				IStorageDirectory::class => self::proxy(IAssetDirectory::class, 'directory', [
 					'storage',
 					StorageDirectory::class,
 				]),
-				ICacheManager::class                  => CacheManager::class,
-				ICache::class                         => ICacheManager::class,
-				ICacheStorage::class                  => FlatFileCacheStorage::class,
-				IRuntime::class                       => Runtime::class,
-				IHttpResponse::class                  => HttpResponse::class,
-				IApplication::class                   => Application::class,
-				IRequestQueue::class                  => RequestQueue::class,
-				IRouterService::class                 => RouterService::class,
-				IRequest::class                       => self::exception(sprintf('[%s] is not possible use directly; implement proper factory or choose different approach.', IRequest::class)),
-				IHttpRequest::class                   => HttpRequest::class . '::createHttpRequest',
-				IHttpResponse::class                  => HttpResponse::class . '::createHttpResponse',
-				IResponseManager::class               => ResponseManager::class,
-				ILogService::class                    => LogService::class,
-				IXmlParser::class                     => XmlParser::class,
+
+				/**
+				 * Happy cacheing stuff here :)
+				 */
+				ICacheManager::class     => CacheManager::class,
+				ICache::class            => ICacheManager::class,
+				ICacheStorage::class     => FlatFileCacheStorage::class,
+				ICacheDirectory::class   => self::proxy(ITempDirectory::class, 'directory', [
+					'cache',
+					CacheDirectory::class,
+				]),
+
+				IRuntime::class         => Runtime::class,
+
+				/**
+				 * Application request/response stuff
+				 */
+				IApplication::class     => Application::class,
+				IContext::class         => self::exception(sprintf('You have to register implementation of [%s] specific for you application.', IContext::class)),
+				IRequestQueue::class    => RequestQueue::class,
+				IRouterService::class   => RouterService::class,
+				IRequest::class         => self::exception(sprintf('[%s] is not possible use directly; implement proper factory or choose different approach.', IRequest::class)),
+				IHttpRequest::class     => HttpRequest::class . '::createHttpRequest',
+				IHttpResponse::class    => HttpResponse::class . '::createHttpResponse',
+				IResponseManager::class => ResponseManager::class,
+
+				IHostUrl::class                       => HostUrl::class . '::createHostUrl',
+
+				/**
+				 * Link generation
+				 */
+				ILinkFactory::class                   => \Edde\Common\Link\LinkFactory::class,
+
+				/**
+				 * Support for general content conversion (which also powers server content negotiation)
+				 */
 				IConverterManager::class              => ConverterManager::class,
+
+				/**
+				 * Resource related stuff
+				 */
 				IResourceManager::class               => ResourceManager::class,
 				IResourceProvider::class              => IResourceManager::class,
+
+				/**
+				 * Web components related stuff
+				 */
 				IStyleSheetCompiler::class            => StyleSheetCompiler::class,
 				IJavaScriptCompiler::class            => JavaScriptCompiler::class,
+
+				/**
+				 * Storage (database) related stuff
+				 */
 				IStorage::class                       => DatabaseStorage::class,
 				IDriver::class                        => SqliteDriver::class,
 				IDsn::class                           => self::instance(SqliteDsn::class, ['storage.sqlite']),
+
+				/**
+				 * General crate support
+				 */
 				ICrate::class                         => self::instance(Crate::class, [], true),
 				ICrateFactory::class                  => CrateFactory::class,
 				ISchemaManager::class                 => SchemaManager::class,
+
+				/**
+				 * Http client support
+				 */
 				IHttpClient::class                    => HttpClient::class,
-				IAclManager::class                    => AclManager::class,
+
+				/**
+				 * General log service
+				 */
+				ILogService::class                    => LogService::class,
+
+				/**
+				 * Custom simple XML parser
+				 */
+				IXmlParser::class                     => XmlParser::class,
+
+				/**
+				 * General support for html generator and template engine
+				 */
 				IHtmlGenerator::class                 => Html5Generator::class,
 				ITemplateManager::class               => TemplateManager::class,
 				ITemplate::class                      => self::instance(Template::class, [], true),
 				ICompiler::class                      => Compiler::class,
+
+				/**
+				 * It's nice when it is possible to upgrade you application...
+				 */
 				IUpgradeManager::class                => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
+
+				/**
+				 * Simple crypto layer
+				 */
 				ICryptEngine::class                   => CryptEngine::class,
-				IHostUrl::class                       => HostUrl::class . '::createHostUrl',
-				ILinkFactory::class                   => \Edde\Common\Link\LinkFactory::class,
+
+				/**
+				 * Access control, session and Identity (user session)
+				 */
+				IAclManager::class                    => AclManager::class,
 				ISessionManager::class                => SessionManager::class,
+				ISessionDirectory::class              => self::proxy(ITempDirectory::class, 'directory', [
+					'session',
+					SessionDirectory::class,
+				]),
 				IIdentityManager::class               => IdentityManager::class,
 				IIdentity::class                      => IIdentityManager::class . '::createIdentity',
 				IFingerprint::class                   => self::exception(sprintf('You have to register or implement fingerprint interface [%s].', IFingerprint::class)),
-				IContext::class                       => self::exception(sprintf('You have to register implementation of [%s] specific for you application.', IContext::class)),
 				IAuthenticatorManager::class          => AuthenticatorManager::class,
 				IAclManager::class                    => AclManager::class,
 				IAcl::class                           => Acl::class,
+
+				/**
+				 * Translation support
+				 */
 				ITranslator::class                    => Translator::class,
+
+				/**
+				 * General asset storage support
+				 */
 				IAssetStorage::class                  => AssetStorage::class,
+
+				/**
+				 * Protocol implementation support
+				 */
 				IProtocolService::class               => ProtocolService::class,
 				IRequestService::class                => RequestService::class,
 				IElementQueue::class                  => CacheElementQueue::class,
 				IEventBus::class                      => EventBus::class,
+				\Edde\Ext\Rest\ProtocolService::class => \Edde\Ext\Rest\ProtocolService::class,
+
+				/**
+				 * Thread support
+				 */
 				IThreadManager::class                 => ThreadManager::class,
 				IThreadCount::class                   => ThreadCount::class,
 				IExecutor::class                      => WebExecutor::class,
-				\Edde\Ext\Rest\ProtocolService::class => \Edde\Ext\Rest\ProtocolService::class,
+
+				/**
+				 * Store related stuff
+				 */
+				IStore::class                         => FileStore::class,
+				IStoreDirectory::class                => self::proxy(IAssetDirectory::class, 'directory', [
+					'store',
+					StoreDirectory::class,
+				]),
 			];
 		}
 
