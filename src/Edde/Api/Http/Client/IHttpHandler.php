@@ -82,6 +82,15 @@
 		public function content(IContent $content, array $targetList): IHttpHandler;
 
 		/**
+		 * this methods basically sets url encoded data to the request body
+		 *
+		 * @param array $post
+		 *
+		 * @return IHttpHandler
+		 */
+		public function post(array $post): IHttpHandler;
+
+		/**
 		 * explicitly set content type of the request
 		 *
 		 * @param string $contentType
