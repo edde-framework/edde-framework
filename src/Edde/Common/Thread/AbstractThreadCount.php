@@ -24,6 +24,13 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function canExecute(): bool {
+			return true;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function increase(): IThreadCount {
 			$this->count++;
 			return $this;
@@ -41,6 +48,20 @@
 		 * @inheritdoc
 		 */
 		public function update(): IThreadCount {
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function lock(): IThreadCount {
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function unlock(): IThreadCount {
 			return $this;
 		}
 	}

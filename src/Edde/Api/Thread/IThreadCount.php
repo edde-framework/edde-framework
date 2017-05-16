@@ -50,4 +50,18 @@
 		 * @return IThreadCount
 		 */
 		public function update(): IThreadCount;
+
+		/**
+		 * lock or wait to lock; this is useful to create a "transaction" - get number of threads and update
+		 *
+		 * @return IThreadCount
+		 */
+		public function lock(): IThreadCount;
+
+		/**
+		 * release the lock
+		 *
+		 * @return IThreadCount
+		 */
+		public function unlock(): IThreadCount;
 	}

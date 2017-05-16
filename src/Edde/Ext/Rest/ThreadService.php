@@ -36,8 +36,10 @@
 		public function restHead() {
 			$success = false;
 			try {
+				$this->threadCount->lock();
 				if ($this->threadCount->canExecute()) {
 					$this->threadCount->increase();
+					$this->threadCount->unlock();
 					$this->threadManager->dequeue();
 					$success = true;
 					/**
@@ -49,7 +51,12 @@
 				}
 				return new JsonResponse($success);
 			} finally {
-				$this->threadCount->decrease();
+				try {
+					$this->threadCount->lock();
+					$this->threadCount->decrease();
+				} finally {
+					$this->threadCount->unlock();
+				}
 			}
 		}
 	}
