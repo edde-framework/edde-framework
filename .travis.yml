@@ -5,32 +5,13 @@ php:
 before_script:
     - travis_retry composer update --no-interaction --prefer-dist $dependencies
 
+after_success:
+    - composer execute sami -- --no-ansi update sami.conf.php
+
 cache:
     directories:
         - $HOME/.composer/cache
 
-#after_success
-#after_failure
-
-
-#variables:
-#    PROJECT: edde-framework
-#
-#stages:
-#    - test
-#    - package
-#    - composer
-#
-#test:
-#    stage: test
-#    script:
-#        - php bin/composer.phar install
-#        - php bin/phpunit.phar --coverage-text --colors=never --exclude-group http
-#    artifacts:
-#        name: $PROJECT-$CI_BUILD_REF_NAME-failed
-#        untracked: true
-#        when: on_failure
-#
 #package:
 #    stage: package
 #    script:
