@@ -39,6 +39,7 @@
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Api\Identity\IIdentityManager;
 	use Edde\Api\Link\ILinkFactory;
+	use Edde\Api\Lock\ILockDirectory;
 	use Edde\Api\Lock\ILockManager;
 	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
@@ -101,7 +102,8 @@
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Identity\AuthenticatorManager;
 	use Edde\Common\Identity\IdentityManager;
-	use Edde\Common\Lock\LockManager;
+	use Edde\Common\Lock\FileLockManager;
+	use Edde\Common\Lock\LockDirectory;
 	use Edde\Common\Log\LogDirectory;
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Object;
@@ -493,15 +495,15 @@
 				/**
 				 * Thread support
 				 */
-				IThreadManager::class                 => ThreadManager::class,
-				IThreadCount::class                   => ThreadCount::class,
-				IExecutor::class                      => WebExecutor::class,
+				IThreadManager::class  => ThreadManager::class,
+				IThreadCount::class    => ThreadCount::class,
+				IExecutor::class       => WebExecutor::class,
 
 				/**
 				 * Store related stuff
 				 */
-				IStore::class                         => FileStore::class,
-				IStoreDirectory::class                => self::proxy(IAssetDirectory::class, 'directory', [
+				IStore::class          => FileStore::class,
+				IStoreDirectory::class => self::proxy(IAssetDirectory::class, 'directory', [
 					'store',
 					StoreDirectory::class,
 				]),
@@ -509,7 +511,11 @@
 				/**
 				 * General Locking support
 				 */
-				ILockManager::class                   => LockManager::class,
+				ILockManager::class    => FileLockManager::class,
+				ILockDirectory::class  => self::proxy(IAssetDirectory::class, 'directory', [
+					'.lock',
+					LockDirectory::class,
+				]),
 			];
 		}
 

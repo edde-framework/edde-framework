@@ -3,10 +3,12 @@
 
 	namespace Edde\Api\Lock;
 
+	use Edde\Api\Config\IConfigurable;
+
 	/**
 	 * Lock descriptor; could be used to actually control a lock.
 	 */
-	interface ILock {
+	interface ILock extends IConfigurable {
 		/**
 		 * get lock name/id
 		 *
@@ -20,4 +22,32 @@
 		 * @return string
 		 */
 		public function getSource(): string;
+
+		/**
+		 * creates (executes) the lock
+		 *
+		 * @return ILock
+		 */
+		public function lock(): ILock;
+
+		/**
+		 * tells if the given lock already exists (or tells internal state of a lock)
+		 *
+		 * @return bool
+		 */
+		public function isLocked(): bool;
+
+		/**
+		 * releases the lock
+		 *
+		 * @return ILock
+		 */
+		public function unlock(): ILock;
+
+		/**
+		 * kill the lock without any questions
+		 *
+		 * @return ILock
+		 */
+		public function kill(): ILock;
 	}

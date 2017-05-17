@@ -6,7 +6,7 @@
 	use Edde\Api\File\IDirectory;
 
 	/**
-	 * Source directory for all application related  resources.
+	 * Source directory for all application related resources.
 	 */
 	interface IAssetDirectory extends IDirectory {
 	}
