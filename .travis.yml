@@ -6,7 +6,7 @@ before_script:
     - travis_retry composer update --no-interaction --prefer-dist $dependencies
 
 after_success:
-    - vendor/bin/test-reporter
+    - ./lib/bin/test-reporter
 
 cache:
     directories:
