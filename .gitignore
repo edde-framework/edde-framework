@@ -3,10 +3,10 @@
 *.log
 *.sqlite
 *.pid
-*.cache
 **/temp/
 /.runtime/.assets/templates/
 /.runtime/.assets/js/Edde/
 /release
 /temp
 /doc
+/.runtime/.assets/template
