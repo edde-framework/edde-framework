@@ -33,4 +33,22 @@
 		 * @return IStore
 		 */
 		public function unlock(string $name = null): IStore;
+
+		/**
+		 * if there is need to explicitly kill a lock created by another thread
+		 *
+		 * @param string|null $name
+		 *
+		 * @return IStore
+		 */
+		public function kill(string $name = null): IStore;
+
+		/**
+		 * is the store itself or the given key locked?
+		 *
+		 * @param string|null $name
+		 *
+		 * @return bool
+		 */
+		public function isLocked(string $name = null): bool;
 	}
