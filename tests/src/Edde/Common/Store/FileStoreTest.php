@@ -82,6 +82,18 @@
 			$this->store->setExclusive('lock-this', 'value');
 		}
 
+		public function testExclusive() {
+			$this->expectException(LockedException::class);
+			$this->expectExceptionMessage('The name (id) [Edde\Common\Store\FileStore/lock-this] is already locked.');
+			$this->store->setExclusive('lock-this', 'value');
+		}
+
+		public function testExclusiveUnlock() {
+			$this->store->kill('lock-this');
+			$this->store->setExclusive('lock-this', 'another-value');
+			self::assertEquals('another-value', $this->store->get('lock-this'));
+		}
+
 		protected function setUp() {
 			ContainerFactory::autowire($this, [
 				IRootDirectory::class => ContainerFactory::instance(RootDirectory::class, [__DIR__ . '/temp']),
