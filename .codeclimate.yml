@@ -3,4 +3,4 @@ languages:
 
 exclude_paths:
     - '*'
-    - !./src
+    - !./src/**
