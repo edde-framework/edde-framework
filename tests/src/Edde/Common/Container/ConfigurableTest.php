@@ -8,10 +8,6 @@
 
 	require_once __DIR__ . '/assets/assets.php';
 
-	/**
-	 * @covers \AnotherSomething<extended>
-	 * @covers \Edde\Common\Config\ConfigurableTrait
-	 */
 	class ConfigurableTest extends TestCase {
 		/**
 		 * @var IConfigurable

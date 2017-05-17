@@ -43,7 +43,17 @@
 			return $this->lockManager->isLocked($this->getLockName($name));
 		}
 
+		/**
+		 * @inheritdoc
+		 */
+		public function setExclusive(string $name, $value): IStore {
+			$this->lock($name);
+			$this->set($name, $value);
+			$this->unlock($name);
+			return $this;
+		}
+
 		protected function getLockName(string $name = null): string {
-			return $name ?: static::class;
+			return static::class . ($name ? '/' . $name : '');
 		}
 	}

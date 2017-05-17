@@ -23,7 +23,7 @@
 			$this->lockDirectory->purge();
 			$this->storeDirectory->purge();
 			$this->expectException(LockedException::class);
-			$this->expectExceptionMessage('The name (id) [foo] is already locked.');
+			$this->expectExceptionMessage('The name (id) [Edde\Common\Store\FileStore/foo] is already locked.');
 			$this->assertInstanceOf(FileStore::class, $this->store);
 			$this->store->lock('foo');
 			$this->store->lock('foo', false);
@@ -66,6 +66,20 @@
 
 		public function testThreadedData() {
 			self::assertEquals('yapee!', $this->store->get('foo'));
+		}
+
+		public function testLockingUnlocked() {
+			self::assertFalse($this->store->isLocked('lock-this'));
+			$this->store->setExclusive('lock-this', 'value');
+			self::assertFalse($this->store->isLocked('lock-this'));
+			self::assertEquals('value', $this->store->get('lock-this'));
+		}
+
+		public function testLockingLocked() {
+			$this->expectException(LockedException::class);
+			$this->expectExceptionMessage('The name (id) [Edde\Common\Store\FileStore/lock-this] is already locked.');
+			$this->store->lock('lock-this');
+			$this->store->setExclusive('lock-this', 'value');
 		}
 
 		protected function setUp() {

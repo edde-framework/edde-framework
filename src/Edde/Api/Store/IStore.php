@@ -55,20 +55,30 @@
 		/**
 		 * store a given value
 		 *
-		 * @param string $id
+		 * @param string $name
 		 * @param mixed  $value
 		 *
 		 * @return IStore
 		 */
-		public function set(string $id, $value): IStore;
+		public function set(string $name, $value): IStore;
+
+		/**
+		 * before value is set, lock is applied, value is set and lock is released
+		 *
+		 * @param string $name
+		 * @param mixed  $value
+		 *
+		 * @return IStore
+		 */
+		public function setExclusive(string $name, $value): IStore;
 
 		/**
 		 * get a data from the store
 		 *
-		 * @param string $id
+		 * @param string $name
 		 * @param null   $default
 		 *
 		 * @return mixed
 		 */
-		public function get(string $id, $default = null);
+		public function get(string $name, $default = null);
 	}
