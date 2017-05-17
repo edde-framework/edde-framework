@@ -2,5 +2,5 @@ languages:
     PHP: true
 
 exclude_paths:
-    - ./*
+    - *
     - !./src
