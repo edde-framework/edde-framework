@@ -190,4 +190,11 @@
 		 * @return IFile
 		 */
 		public function unlock(): IFile;
+
+		/**
+		 * only creates an empty file
+		 *
+		 * @return IFile
+		 */
+		public function touch(): IFile;
 	}

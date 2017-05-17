@@ -313,6 +313,14 @@
 
 		/**
 		 * @inheritdoc
+		 */
+		public function touch(): IFile {
+			touch($this->getPath());
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
 		 * @throws FileException
 		 */
 		public function getIterator() {
