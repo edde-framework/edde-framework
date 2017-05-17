@@ -41,6 +41,7 @@
 		 *
 		 * @return string
 		 * @throws FileException
+		 * @throws UrlException
 		 */
 		static public function mime(string $file) {
 			if (is_file($file) === false) {
