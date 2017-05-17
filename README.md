@@ -1,6 +1,6 @@
 # Edde Framework
 
-| [download](/edde/edde-framework/builds/artifacts/master/download?job=package) | [![build status](https://edde-framework.org/edde/edde-framework/badges/master/build.svg)](https://edde-framework.org/edde/edde-framework/commits/master) | [![coverage report](https://edde-framework.org/edde/edde-framework/badges/master/coverage.svg)](https://edde-framework.org/edde/edde-framework/commits/master) |
-| ---- | --- | --- |
+| [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/edde-framework/edde-framework.svg)](http://isitmaintained.com/project/edde-framework/edde-framework "Average time to resolve an issue") | [![Percentage of issues still open](http://isitmaintained.com/badge/open/edde-framework/edde-framework.svg)](http://isitmaintained.com/project/edde-framework/edde-framework "Percentage of issues still open") | 
+| --- | --- |
 
 PR will be created after the first release :).
