@@ -18,10 +18,11 @@
 		 * @inheritdoc
 		 */
 		protected function onLock(): ILock {
+			$this->file = $this->getLockFile();
 			if ($this->locked()) {
 				throw new LockedException(sprintf('The name (id) [%s] is already locked.', $this->getId()));
 			}
-			$this->file = $this->getLockFile()->touch();
+			$this->file->touch();
 			return $this;
 		}
 
