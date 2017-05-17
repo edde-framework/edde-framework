@@ -3,12 +3,9 @@
 
 	namespace Edde\Common\Store;
 
-	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Lock\LazyLockDirectoryTrait;
 	use Edde\Api\Store\LazyStoreDirectoryTrait;
 	use Edde\Api\Store\LazyStoreTrait;
-	use Edde\Common\Container\Factory\ClassFactory;
-	use Edde\Common\File\RootDirectory;
 	use Edde\Common\Lock\ForeignLockException;
 	use Edde\Common\Lock\LockedException;
 	use Edde\Ext\Container\ContainerFactory;
@@ -95,9 +92,6 @@
 		}
 
 		protected function setUp() {
-			ContainerFactory::autowire($this, [
-				IRootDirectory::class => ContainerFactory::instance(RootDirectory::class, [__DIR__ . '/temp']),
-				new ClassFactory(),
-			]);
+			ContainerFactory::autowire($this);
 		}
 	}

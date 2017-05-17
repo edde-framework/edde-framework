@@ -21,14 +21,14 @@
 			if (parent::canHandle($element) === false) {
 				return false;
 			}
-			return strpos($element->getAttribute('request'), '::') !== false;
+			return strpos($element->getAttribute('request', ''), '::') !== false;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function execute(IElement $element) {
-			if (strpos($request = $element->getAttribute('request'), '::') === false) {
+			if (strpos($request = $element->getAttribute('request', ''), '::') === false) {
 				return null;
 			}
 			list($name, $method) = explode('::', $request);

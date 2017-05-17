@@ -182,7 +182,8 @@
 		}
 
 		public function testCompactModeConversion() {
-			$node = $this->converterManager->convert(self::$source, 'application/json', [INode::class])->convert();
+			// $node = $this->converterManager->convert(self::$source, 'application/json', [INode::class])->convert();
+			$node = $this->converterManager->convert(self::$miniSource, 'application/json', [INode::class])->convert();
 			$object = NodeUtils::fromNode($node);
 			self::assertEquals((object)[
 				'packet' => (object)[
