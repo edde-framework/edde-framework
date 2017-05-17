@@ -2,10 +2,6 @@ language: php
 php:
     - '7.0'
 
-addons:
-    code_climate:
-        repo_token: bbeae73f5a8f642ee0b04ae849f2aa4c406ecdb35b760427d238a7887a1729ef
-
 before_script:
     - travis_retry composer update --no-interaction --prefer-dist $dependencies
 
