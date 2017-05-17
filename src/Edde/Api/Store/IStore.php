@@ -51,4 +51,24 @@
 		 * @return bool
 		 */
 		public function isLocked(string $name = null): bool;
+
+		/**
+		 * store a given value
+		 *
+		 * @param string $id
+		 * @param mixed  $value
+		 *
+		 * @return IStore
+		 */
+		public function set(string $id, $value): IStore;
+
+		/**
+		 * get a data from the store
+		 *
+		 * @param string $id
+		 * @param null   $default
+		 *
+		 * @return mixed
+		 */
+		public function get(string $id, $default = null);
 	}

@@ -5,6 +5,7 @@
 
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Lock\LazyLockDirectoryTrait;
+	use Edde\Api\Store\LazyStoreDirectoryTrait;
 	use Edde\Api\Store\LazyStoreTrait;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\File\RootDirectory;
@@ -15,10 +16,12 @@
 
 	class FileStoreTest extends TestCase {
 		use LazyLockDirectoryTrait;
+		use LazyStoreDirectoryTrait;
 		use LazyStoreTrait;
 
 		public function testLock() {
 			$this->lockDirectory->purge();
+			$this->storeDirectory->purge();
 			$this->expectException(LockedException::class);
 			$this->expectExceptionMessage('The name (id) [foo] is already locked.');
 			$this->assertInstanceOf(FileStore::class, $this->store);
@@ -53,6 +56,16 @@
 			$this->assertTrue($this->store->isLocked());
 			$this->store->kill();
 			$this->assertFalse($this->store->isLocked());
+		}
+
+		public function testSaveData() {
+			$this->store->set('foo', 'yapee!');
+			self::assertEquals('yapee!', $this->store->get('foo'));
+			self::assertEquals('this is default', $this->store->get('moo', 'this is default'));
+		}
+
+		public function testThreadedData() {
+			self::assertEquals('yapee!', $this->store->get('foo'));
 		}
 
 		protected function setUp() {
