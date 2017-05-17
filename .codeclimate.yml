@@ -1,7 +1,5 @@
-JavaScript: false
-Ruby: false
-Python: false
-PHP: true
+languages:
+    PHP: true
 
 exclude_paths:
     - ./*
