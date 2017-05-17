@@ -1,0 +1,10 @@
+language: php
+php:
+    - '7.0'
+
+before_script:
+    - travis_retry composer update --no-interaction --prefer-dist $dependencies
+
+cache:
+    directories:
+        - $HOME/.composer/cache
