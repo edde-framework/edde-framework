@@ -63,7 +63,6 @@
 	use Edde\Api\Template\ITemplateDirectory;
 	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Thread\IExecutor;
-	use Edde\Api\Thread\IThreadCount;
 	use Edde\Api\Thread\IThreadManager;
 	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Upgrade\IUpgradeManager;
@@ -123,7 +122,6 @@
 	use Edde\Common\Template\Template;
 	use Edde\Common\Template\TemplateDirectory;
 	use Edde\Common\Template\TemplateManager;
-	use Edde\Common\Thread\ThreadCount;
 	use Edde\Common\Thread\ThreadManager;
 	use Edde\Common\Thread\WebExecutor;
 	use Edde\Common\Translator\Translator;
@@ -514,7 +512,6 @@
 				 * Thread support
 				 */
 				IThreadManager::class                 => ThreadManager::class,
-				IThreadCount::class                   => ThreadCount::class,
 				IExecutor::class                      => WebExecutor::class,
 
 				/**
