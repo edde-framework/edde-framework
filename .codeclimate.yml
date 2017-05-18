@@ -4,6 +4,8 @@ languages:
 engines:
     fixme:
         enabled: false
+    phpmd:
+        enabled: true
 
 ratings:
     paths:
