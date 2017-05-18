@@ -24,7 +24,7 @@
 		 * @inheritdoc
 		 */
 		public function block(string $name = null, int $timeout = 0): IStore {
-			$this->lockManager->block($name, $timeout = 0);
+			$this->lockManager->block($this->getLockName($name), $timeout = 0);
 			return $this;
 		}
 
