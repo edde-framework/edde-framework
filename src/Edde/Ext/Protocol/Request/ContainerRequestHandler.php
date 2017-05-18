@@ -27,7 +27,7 @@
 		 * @inheritdoc
 		 */
 		public function execute(IElement $element) {
-			list($name, $method) = explode('::', $request = $element->getAttribute('request'));
+			list($name, $method) = explode('::', $element->getAttribute('request'));
 			return $this->container->create($name, [], static::class)->{$method}($element);
 		}
 	}
