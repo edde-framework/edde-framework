@@ -14,43 +14,6 @@
 		        "packet": {
 		                "version": "1.1",
 		                "id": "some-guid-of-this-packet-even-this-text-could-be-used!",
-		                "elements": [
-		                        {
-		                                "name": "request",
-		                                "id": "aa-bb-cc",
-		                                "request": "//some.namespace/execute-this",
-		                                "foo": "bar",
-		                                "name-of-node": {
-		                                        "foo": {}
-		                                }
-		                        },
-		                        {
-		                                "name": "request",
-		                                "id": "aa-dd-cc",
-		                                "request": "//some.namespace/another-request"
-		                        },
-		                        {
-		                                "name": "event",
-		                                "id": "cc-bb-aa",
-		                                "event": "//namespace.of.event/yapee"
-		                        }
-		                ],
-		                "references": [
-		                        {
-		                                "name": "error",
-		                                "id": "error-id-1",
-		                                "code": -120,
-		                                "message": "I like errors, hehehe!",
-		                                "reference": "aa-bb-cc"
-		                        }
-		                ]
-		        }
-		}';
-		static protected $miniSource = '
-		{
-		        "packet": {
-		                "version": "1.1",
-		                "id": "some-guid-of-this-packet-even-this-text-could-be-used!",
 		                "elements": {
 		                        "request": [
 			                        {
@@ -117,71 +80,7 @@
 			$this->doTest($this->converterManager->convert(self::$source, 'application/json', [INode::class])->convert());
 		}
 
-		public function testFromNode() {
-			$node = $this->converterManager->convert(self::$source, 'application/json', [INode::class])->convert();
-			self::assertEquals((object)[
-				'name'           => 'packet',
-				'attribute-list' => (object)[
-					'version' => '1.1',
-					'id'      => 'some-guid-of-this-packet-even-this-text-could-be-used!',
-				],
-				'node-list'      => [
-					(object)[
-						'name'      => 'elements',
-						'node-list' => [
-							(object)[
-								'name'           => 'request',
-								'attribute-list' => (object)[
-									'id'      => 'aa-bb-cc',
-									'request' => '//some.namespace/execute-this',
-									'foo'     => 'bar',
-								],
-								'node-list'      => [
-									(object)[
-										'name'      => 'name-of-node',
-										'node-list' => [
-											(object)[
-												'name' => 'foo',
-											],
-										],
-									],
-								],
-							],
-							(object)[
-								'name'           => 'request',
-								'attribute-list' => (object)[
-									'id'      => 'aa-dd-cc',
-									'request' => '//some.namespace/another-request',
-								],
-							],
-							(object)[
-								'name'           => 'event',
-								'attribute-list' => (object)[
-									'id'    => 'cc-bb-aa',
-									'event' => '//namespace.of.event/yapee',
-								],
-							],
-						],
-					],
-					(object)[
-						'name'      => 'references',
-						'node-list' => [
-							(object)[
-								'name'           => 'error',
-								'attribute-list' => (object)[
-									'id'        => 'error-id-1',
-									'reference' => 'aa-bb-cc',
-									'code'      => -120,
-									'message'   => 'I like errors, hehehe!',
-								],
-							],
-						],
-					],
-				],
-			], NodeUtils::toObject($node));
-		}
-
-		public function testCompactModeConversion() {
+		public function testNodeConversion() {
 			$node = $this->converterManager->convert(self::$source, 'application/json', [INode::class])->convert();
 			$object = NodeUtils::fromNode($node);
 			self::assertEquals((object)[
@@ -224,13 +123,13 @@
 		 * node to object test
 		 */
 		public function testCompactConversionEquality() {
-			self::assertEquals(json_decode(self::$miniSource), NodeUtils::fromNode($this->converterManager->convert(self::$source, 'application/json', [INode::class])->convert()));
+			self::assertEquals(json_decode(self::$source), NodeUtils::fromNode($this->converterManager->convert(self::$source, 'application/json', [INode::class])->convert()));
 		}
 
 		/**
 		 * json to json conversions test
 		 */
 		public function testCompactConverter() {
-			self::assertEquals(json_encode(json_decode(self::$miniSource)), $this->converterManager->convert($this->converterManager->convert(self::$source, 'application/json', [INode::class])->convert(), INode::class, ['application/json'])->convert());
+			self::assertEquals(json_decode(self::$source), $this->converterManager->convert($this->converterManager->convert(self::$source, 'application/json', [INode::class])->convert(), INode::class, [\stdClass::class])->convert());
 		}
 	}
