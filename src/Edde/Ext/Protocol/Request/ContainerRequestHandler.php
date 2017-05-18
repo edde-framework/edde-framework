@@ -27,11 +27,7 @@
 		 * @inheritdoc
 		 */
 		public function execute(IElement $element) {
-			if (strpos($request = $element->getAttribute('request'), '::') === false) {
-				return null;
-			}
-			list($name, $method) = explode('::', $request);
-			$class = $this->container->create($name);
-			return $class->{$method}($element);
+			list($name, $method) = explode('::', $request = $element->getAttribute('request'));
+			return $this->container->create($name, [], static::class)->{$method}($element);
 		}
 	}

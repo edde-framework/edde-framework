@@ -4,6 +4,7 @@
 	namespace Edde\Test;
 
 	use Edde\Api\Protocol\IElement;
+	use Edde\Common\Application\AbstractContext;
 	use Edde\Common\Object;
 	use Edde\Common\Protocol\Request\AbstractRequestHandler;
 	use Edde\Common\Protocol\Request\Response;
@@ -71,6 +72,10 @@
 		public function method(IElement $request) {
 			return (new Response())->data(['got-this' => $request->getMeta('foo')]);
 		}
+
+		public function doThis(IElement $element) {
+			return $this->method($element);
+		}
 	}
 
 	class TestRequestHandler extends AbstractRequestHandler {
@@ -99,5 +104,17 @@
 	class TestyFingerprint extends AbstractFingerprint {
 		public function fingerprint() {
 			return 'boo';
+		}
+	}
+
+	class TestContext extends AbstractContext {
+		/**
+		 * @inheritdoc
+		 */
+		public function cascade(string $delimiter, string $name = null): array {
+			return [
+				'Edde' . $delimiter . $name,
+				'Edde' . $delimiter . 'Test' . ($name ? $delimiter . $name : ''),
+			];
 		}
 	}

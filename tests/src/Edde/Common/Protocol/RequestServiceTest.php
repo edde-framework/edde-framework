@@ -3,19 +3,26 @@
 
 	namespace Edde\Common\Protocol;
 
+	use Edde\Api\Application\IContext;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
 	use Edde\Api\Protocol\Request\UnhandledRequestException;
+	use Edde\Common\Container\Factory\CascadeFactory;
+	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\Protocol\Event\Event;
 	use Edde\Common\Protocol\Request\MissingResponseException;
 	use Edde\Common\Protocol\Request\Request;
+	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Test\TestCase;
 	use Edde\Test\ExecutableService;
+	use Edde\Test\TestContext;
 
 	require_once __DIR__ . '/../assets/assets.php';
 
 	class RequestServiceTest extends TestCase {
 		use LazyRequestServiceTrait;
+		use LazyContainerTrait;
 
 		public function testUnknownElement() {
 			$this->expectException(UnsupportedElementException::class);
@@ -44,5 +51,27 @@
 			$response = $this->requestService->element((new Request(sprintf('%s::method', ExecutableService::class)))->data(['foo' => 'bababar']));
 			self::assertEquals('response', $response->getType());
 			self::assertEquals('bababar', $response->getMeta('got-this'));
+		}
+
+		public function testClassHandler() {
+			/** @var $response IElement */
+			$response = $this->requestService->element((new Request('edde.test.executable-service/method'))->data(['foo' => 'barbar']));
+			self::assertEquals('response', $response->getType());
+			self::assertEquals('barbar', $response->getMeta('got-this'));
+		}
+
+		public function testContextClassHandler() {
+			/** @var $response IElement */
+			$response = $this->requestService->element((new Request('test.executable-service/do-this'))->data(['foo' => 'barbar']));
+			self::assertEquals('response', $response->getType());
+			self::assertEquals('barbar', $response->getMeta('got-this'));
+		}
+
+		protected function setUp() {
+			ContainerFactory::autowire($this, [
+				IContext::class => TestContext::class,
+				new ClassFactory(),
+				new CascadeFactory(),
+			]);
 		}
 	}

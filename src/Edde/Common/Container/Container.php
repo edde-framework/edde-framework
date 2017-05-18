@@ -22,6 +22,10 @@
 		 * @var IFactory[]
 		 */
 		protected $factoryMap = [];
+		/**
+		 * @var IDependency
+		 */
+		protected $autowireList = [];
 
 		/**
 		 * One day, Little Johnny saw his grandpa smoking his cigarettes. Little Johnny asked,
@@ -61,7 +65,7 @@
 					return $this->factoryMap[$dependency] = $factory->getFactory($this);
 				}
 			}
-			throw new UnknownFactoryException(sprintf('Unknown factory [%s] for dependency [%s]; dependency chain [%s].', $dependency, $source ?: 'unknown source', implode('→', array_reverse(iterator_to_array($this->stack)))));
+			throw new UnknownFactoryException(sprintf('Unknown factory [%s] for dependency [%s]%s.', $dependency, $source ?: 'unknown source', $this->stack->isEmpty() ? '' : '; dependency chain [' . implode('→', array_reverse(iterator_to_array($this->stack))) . ']'));
 		}
 
 		/**
@@ -86,7 +90,7 @@
 			if (is_object($instance) === false) {
 				return $instance;
 			}
-			return $this->dependency($instance, (new ClassFactory())->createDependency($this, $class = get_class($instance)), $force !== true);
+			return $this->dependency($instance, $this->autowireList[$class = get_class($instance)] ?? $this->autowireList[$class] = (new ClassFactory())->createDependency($this, $class), $force !== true);
 		}
 
 		/**
@@ -120,5 +124,15 @@
 				$instance->init();
 			}
 			return $instance;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		protected function handleSetup() {
+			parent::handleSetup();
+			foreach ($this->factoryList as $factory) {
+				$this->autowire($factory);
+			}
 		}
 	}
