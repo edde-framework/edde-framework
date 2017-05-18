@@ -29,7 +29,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function cascade(string $delimiter): array {
+		public function cascade(string $delimiter, string $name = null): array {
 			return [];
 		}
 

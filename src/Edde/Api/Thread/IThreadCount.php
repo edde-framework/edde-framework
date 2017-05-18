@@ -45,11 +45,18 @@
 		public function decrease(): IThreadCount;
 
 		/**
-		 * update thread; save/load thread count to get current number of threads
+		 * load current needed data for this thread count (explicit call to keep data fresh)
 		 *
 		 * @return IThreadCount
 		 */
-		public function update(): IThreadCount;
+		public function load(): IThreadCount;
+
+		/**
+		 * save/update thread data
+		 *
+		 * @return IThreadCount
+		 */
+		public function save(): IThreadCount;
 
 		/**
 		 * lock or wait to lock; this is useful to create a "transaction" - get number of threads and update

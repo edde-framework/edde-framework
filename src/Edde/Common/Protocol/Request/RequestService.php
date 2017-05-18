@@ -53,8 +53,11 @@
 		public function execute(IElement $element) {
 			foreach ($this->requestHandlerList as $requestHandler) {
 				/** @var $response IElement */
-				if ($requestHandler->canHandle($element) && ($response = $requestHandler->execute($element)) instanceof IElement) {
-					return $this->responseList[$element->getId()] = $response->setReference($element);
+				if ($requestHandler->canHandle($element)) {
+					if (($response = $requestHandler->execute($element)) instanceof IElement) {
+						return $this->responseList[$element->getId()] = $response->setReference($element);
+					}
+					return (new Error(100, sprintf('Internal error; request [%s] got no answer (response).', $element->getAttribute('request'))))->setException(MissingResponseException::class)->setReference($element);
 				}
 			}
 			return (new Error(100, sprintf('Unhandled request [%s].', $element->getAttribute('request'))))->setException(UnhandledRequestException::class)->setReference($element);

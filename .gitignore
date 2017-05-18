@@ -6,6 +6,7 @@
 **/temp/
 /.runtime/.assets/templates/
 /.runtime/.assets/js/Edde/
+/.runtime/.assets/store
 /release
 /temp
 /doc

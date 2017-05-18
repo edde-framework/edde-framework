@@ -4,6 +4,7 @@
 	namespace Edde\Test;
 
 	use Edde\Api\Protocol\IElement;
+	use Edde\Common\Application\AbstractContext;
 	use Edde\Common\Object;
 	use Edde\Common\Protocol\Request\AbstractRequestHandler;
 	use Edde\Common\Protocol\Request\Response;
@@ -69,9 +70,11 @@
 		}
 
 		public function method(IElement $request) {
-			$response = new Response();
-			$response->putMeta(['data' => $request->getMeta('foo')]);
-			return $response;
+			return (new Response())->data(['got-this' => $request->getMeta('foo')]);
+		}
+
+		public function doThis(IElement $element) {
+			return $this->method($element);
 		}
 	}
 
@@ -79,11 +82,15 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function canHandle(IElement $element): bool {
+			return $element->getAttribute('request') === 'testquest';
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function execute(IElement $element) {
-			if ($element->getAttribute('request') === 'testquest') {
-				return (new Response('foobar'))->putMeta(['a' => 'b']);
-			}
-			return null;
+			return (new Response('foobar'))->data(['a' => 'b']);
 		}
 	}
 
@@ -97,5 +104,17 @@
 	class TestyFingerprint extends AbstractFingerprint {
 		public function fingerprint() {
 			return 'boo';
+		}
+	}
+
+	class TestContext extends AbstractContext {
+		/**
+		 * @inheritdoc
+		 */
+		public function cascade(string $delimiter, string $name = null): array {
+			return [
+				'Edde' . $delimiter . $name,
+				'Edde' . $delimiter . 'Test' . ($name ? $delimiter . $name : ''),
+			];
 		}
 	}

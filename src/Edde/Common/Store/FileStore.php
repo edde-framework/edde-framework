@@ -20,7 +20,7 @@
 		 * @inheritdoc
 		 */
 		public function set(string $id, $value): IStore {
-			$this->getFile($id)->save($value);
+			$this->getFile($id)->save((string)$value);
 			return $this;
 		}
 
