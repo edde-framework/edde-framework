@@ -15,46 +15,46 @@
 		/**
 		 * create a new lock over the given id
 		 *
-		 * @param string $id
+		 * @param string $name
 		 *
 		 * @return ILock
 		 */
-		public function lock(string $id): ILock;
+		public function lock(string $name): ILock;
 
 		/**
 		 * unlocks the given id
 		 *
-		 * @param string $id
+		 * @param string $name
 		 *
 		 * @return ILock
 		 */
-		public function unlock(string $id): ILock;
+		public function unlock(string $name): ILock;
 
 		/**
 		 * kill a lock of the given id (use wisely!)
 		 *
-		 * @param string $id
+		 * @param string $name
 		 *
 		 * @return ILock
 		 */
-		public function kill(string $id): ILock;
+		public function kill(string $name): ILock;
 
 		/**
 		 * this method is not reliable as the time between "isLocked()" and eventual "lock()"
 		 * is not handled and another thread could in meanwhile create a lock
 		 *
-		 * @param string $id
+		 * @param string $name
 		 *
 		 * @return bool
 		 */
-		public function isLocked(string $id): bool;
+		public function isLocked(string $name): bool;
 
 		/**
 		 * only creates a lock without any further action
 		 *
-		 * @param string $id
+		 * @param string $name
 		 *
 		 * @return ILock
 		 */
-		public function createLock(string $id): ILock;
+		public function createLock(string $name): ILock;
 	}

@@ -38,7 +38,7 @@
 		}
 
 		protected function getLockFile(): IFile {
-			return $this->lockDirectory->file(sha1($this->getId()) . '.lock');
+			return $this->lockDirectory->file(sha1($this->getName()) . '.lock');
 		}
 
 		/**

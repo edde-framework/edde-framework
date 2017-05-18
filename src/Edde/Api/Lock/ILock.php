@@ -14,7 +14,7 @@
 		 *
 		 * @return string
 		 */
-		public function getId(): string;
+		public function getName(): string;
 
 		/**
 		 * creates (executes) the lock

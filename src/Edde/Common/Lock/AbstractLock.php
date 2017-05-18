@@ -12,7 +12,7 @@
 		/**
 		 * @var string
 		 */
-		protected $id;
+		protected $name;
 		/**
 		 * @var bool
 		 */
@@ -22,15 +22,15 @@
 		 */
 		protected $lock = false;
 
-		public function __construct(string $id) {
-			$this->id = $id;
+		public function __construct(string $name) {
+			$this->name = $name;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function getId(): string {
-			return $this->id;
+		public function getName(): string {
+			return $this->name;
 		}
 
 		/**
@@ -38,7 +38,7 @@
 		 */
 		public function lock(): ILock {
 			if ($this->locked()) {
-				throw new LockedException(sprintf('The name (id) [%s] is already locked.', $this->getId()));
+				throw new LockedException(sprintf('The name (id) [%s] is already locked.', $this->getName()));
 			}
 			$this->current = $this->lock = true;
 			return $this->onLock();
@@ -59,9 +59,9 @@
 		 */
 		public function unlock(): ILock {
 			if ($this->current === false) {
-				throw new ForeignLockException(sprintf('Lock [%s] cannot be unlocked because it was created by another lock (or in another thread). Use %s::kill() to kill the lock.', $this->getId(), ILock::class));
+				throw new ForeignLockException(sprintf('Lock [%s] cannot be unlocked because it was created by another lock (or in another thread). Use %s::kill() to kill the lock.', $this->getName(), ILock::class));
 			} else if ($this->lock === false) {
-				throw new UnlockedException(sprintf('Current lock [%s] has not been locked. Cannot call [%s] on an already released (or non existent) lock.', $this->getId(), __METHOD__));
+				throw new UnlockedException(sprintf('Current lock [%s] has not been locked. Cannot call [%s] on an already released (or non existent) lock.', $this->getName(), __METHOD__));
 			}
 			$this->lock = false;
 			return $this->onUnlock();
