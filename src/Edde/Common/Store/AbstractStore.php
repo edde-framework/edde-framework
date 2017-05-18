@@ -23,6 +23,14 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function block(string $name = null, int $timeout = 0): IStore {
+			$this->lockManager->block($name, $timeout = 0);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function unlock(string $name = null): IStore {
 			$this->lockManager->unlock($this->getLockName($name));
 			return $this;

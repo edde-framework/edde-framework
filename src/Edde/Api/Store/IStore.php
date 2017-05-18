@@ -26,6 +26,17 @@
 		public function lock(string $name = null, bool $block = true): IStore;
 
 		/**
+		 * puts lock on the given name; if the lock is already there, function would block for the
+		 * given timeout; if zero is provided, timeout is disabled
+		 *
+		 * @param string|null $name
+		 * @param int         $timeout
+		 *
+		 * @return IStore
+		 */
+		public function block(string $name = null, int $timeout = 0): IStore;
+
+		/**
 		 * unlock the given key or whole store
 		 *
 		 * @param string|null $name

@@ -22,6 +22,17 @@
 		public function lock(string $name): ILock;
 
 		/**
+		 * puts lock on the given name; if the lock is already there, function would block for the
+		 * given timeout; if zero is provided, timeout is disabled
+		 *
+		 * @param string|null $name
+		 * @param int         $timeout in seconds
+		 *
+		 * @return ILock
+		 */
+		public function block(string $name = null, int $timeout = 3): ILock;
+
+		/**
 		 * unlocks the given id
 		 *
 		 * @param string $name

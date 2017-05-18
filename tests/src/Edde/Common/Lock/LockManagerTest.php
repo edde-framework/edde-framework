@@ -46,6 +46,29 @@
 			$this->lockManager->lock('moo');
 		}
 
+		public function testBlockTimeout() {
+			$this->expectException(LockTimeoutException::class);
+			$this->expectExceptionMessage('Lock timeout for [bala-moo].');
+			$this->lockManager->kill('bala-moo');
+			$this->lockManager->lock('bala-moo');
+			$this->lockManager->block('bala-moo', 5);
+		}
+
+		public function testBlockTimeoutTest() {
+			$this->lockManager->kill('bala-moo');
+			$this->lockManager->lock('bala-moo');
+			$flag = false;
+			$time = microtime(true);
+			$timeout = 3;
+			try {
+				$this->lockManager->block('bala-moo', $timeout);
+			} catch (LockTimeoutException $exception) {
+				$flag = true;
+				self::assertGreaterThan($timeout, microtime(true) - $time);
+			}
+			self::assertTrue($flag, 'The LockTimeoutException has not been thrown, shit happened!');
+		}
+
 		protected function setUp() {
 			ContainerFactory::autowire($this, [
 				IRootDirectory::class => ContainerFactory::instance(RootDirectory::class, [__DIR__ . '/temp']),
