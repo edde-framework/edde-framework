@@ -12,38 +12,37 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function lock(string $id, string $source = null): ILock {
-			return $this->createLock($id, $source)->lock();
+		public function lock(string $id): ILock {
+			return $this->createLock($id)->lock();
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function unlock(string $id, string $source = null): ILock {
-			return $this->createLock($id, $source)->unlock();
+		public function unlock(string $id): ILock {
+			return $this->createLock($id)->unlock();
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function kill(string $id, string $source = null): ILock {
-			return $this->createLock($id, $source)->kill();
+		public function kill(string $id): ILock {
+			return $this->createLock($id)->kill();
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function isLocked(string $id, string $source = null): bool {
-			return $this->createLock($id, $source)->isLocked();
+		public function isLocked(string $id): bool {
+			return $this->createLock($id)->isLocked();
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function createLock(string $id, string $source = null): ILock {
+		public function createLock(string $id): ILock {
 			return $this->lockList[$id] ?? $this->lockList[$id] = $this->container->create(FileLock::class, [
 					$id,
-					$source,
 				])->setup();
 		}
 	}

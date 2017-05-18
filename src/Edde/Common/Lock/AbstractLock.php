@@ -14,10 +14,6 @@
 		 */
 		protected $id;
 		/**
-		 * @var string
-		 */
-		protected $source;
-		/**
 		 * @var bool
 		 */
 		protected $current = false;
@@ -26,9 +22,8 @@
 		 */
 		protected $lock = false;
 
-		public function __construct(string $id, string $source = null) {
+		public function __construct(string $id) {
 			$this->id = $id;
-			$this->source = $source ?: 'unknown';
 		}
 
 		/**
@@ -36,13 +31,6 @@
 		 */
 		public function getId(): string {
 			return $this->id;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getSource(): string {
-			return $this->source;
 		}
 
 		/**

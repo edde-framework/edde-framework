@@ -17,13 +17,6 @@
 		public function getId(): string;
 
 		/**
-		 * whoe made a lock
-		 *
-		 * @return string
-		 */
-		public function getSource(): string;
-
-		/**
 		 * creates (executes) the lock
 		 *
 		 * @return ILock
