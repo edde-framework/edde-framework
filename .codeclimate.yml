@@ -1,12 +1,6 @@
 languages:
     PHP: true
 
-engines:
-    fixme:
-        enabled: false
-    phpmd:
-        enabled: true
-
 ratings:
     paths:
         - './src/**'
