@@ -51,17 +51,16 @@
 				case 'css':
 					if ($this->minify) {
 						echo '<?php $cssCompiler->addResource($this->resourceProvider->getResource(' . $this->attribute($node, 'src') . ')); ?>' . "\n";
+						break;
 					} else if ($this->external) {
 						echo $this->htmlGenerator->generate(new Node('link', null, array_merge([
 							'href' => $this->attribute($node, 'src', true),
 							'rel'  => 'stylesheet',
 							'type' => 'text/css',
-						], $node->getAttributeList()
-							->array())));
-					} else {
-						throw new MacroException(sprintf('Minify/external css tag is not opened.'));
+						], $node->getAttributeList()->array())));
+						break;
 					}
-					break;
+					throw new MacroException(sprintf('Minify/external css tag is not opened.'));
 			}
 		}
 

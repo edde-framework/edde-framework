@@ -51,16 +51,15 @@
 				case 'js':
 					if ($this->minify) {
 						echo '<?php $jsCompiler->addResource($this->resourceProvider->getResource(' . $this->attribute($node, 'src') . ')); ?>' . "\n";
+						break;
 					} else if ($this->external) {
 						echo $this->htmlGenerator->generate(new Node('script', null, array_merge([
 							'src'  => $this->attribute($node, 'src', true),
 							'type' => 'text/javascript',
-						], $node->getAttributeList()
-							->array())));
-					} else {
-						throw new MacroException(sprintf('Minify/external js tag is not opened.'));
+						], $node->getAttributeList()->array())));
+						break;
 					}
-					break;
+					throw new MacroException(sprintf('Minify/external js tag is not opened.'));
 			}
 		}
 
