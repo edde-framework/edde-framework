@@ -1,6 +1,10 @@
 languages:
     PHP: true
 
+engines:
+    fixme:
+        enabled: false
+
 ratings:
     paths:
         - './src/**'
