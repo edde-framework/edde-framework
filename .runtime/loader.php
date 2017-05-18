@@ -10,13 +10,11 @@
 
 	use Edde\Api\Application\IContext;
 	use Edde\Api\Cache\ICacheManager;
-	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Resource\IResourceProvider;
 	use Edde\Api\Router\IRouterService;
 	use Edde\App\Application\AppContext;
 	use Edde\App\Router\RouterServiceConfigurator;
 	use Edde\Common\Container\Factory\ClassFactory;
-	use Edde\Common\File\RootDirectory;
 	use Edde\Ext\Cache\ContextCacheManagerConfigurator;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Router\RestRouter;
@@ -50,14 +48,14 @@
 	 * There is also option to create only container itself without any internal dependencies (not so much recommended except
 	 * you are heavy masochist).
 	 */
-	return ContainerFactory::container($factoryList = array_merge(ContainerFactory::getDefaultFactoryList(), [
+	return ContainerFactory::containerWithRoot($factoryList = array_merge([
 		/**
-		 * With this piece of shit are problems all the times, but by this application knows, where is it's
-		 * (repository)root.
+		 * With this piece of shit are problems all the times, but it is needed to let this application know where it
+		 * has a (repository) root.
 		 *
-		 * All other directories should be dependent on this interface.
+		 * All other directories should be (as by default they are) dependent on this interface.
 		 */
-		IRootDirectory::class    => ContainerFactory::instance(RootDirectory::class, [__DIR__]),
+		// IRootDirectory::class    => ContainerFactory::instance(RootDirectory::class, [__DIR__]),
 		/**
 		 * This application is using specific contexts to separate user experience
 		 */
@@ -73,7 +71,7 @@
 		 */
 	], is_array($local = @include $local) ? $local : [], [
 		/**
-		 * This stranger here is last, because it's canHandle method is able to kill a lot of dependencies and
+		 * This stranger here must be last, because it's canHandle method is able to kill a lot of dependencies and
 		 * create not so much nice surprises. Thus, it must be last as kind of dependency fallback.
 		 */
 		new ClassFactory(),
@@ -87,5 +85,9 @@
 		 * context).
 		 */
 		ICacheManager::class  => ContextCacheManagerConfigurator::class,
+		/**
+		 * There is some configuration of the RestRouter; if there would be this guy created, this configurator would
+		 * be executed.
+		 */
 		RestRouter::class     => RestRouterConfigurator::class,
 	]);

@@ -94,6 +94,7 @@
 	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
+	use Edde\Common\File\RootDirectory;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\Html5Generator;
 	use Edde\Common\Http\Client\HttpClient;
@@ -216,6 +217,7 @@
 			 * “Why aren’t we going anywhere?” asked the girl.
 			 * “Well, I should have mentioned this before, but I’m actually a taxi driver, and the fare back to town is $25…”
 			 */
+			/** @var $container IContainer */
 			$container = new Container(new Cache(new InMemoryCacheStorage()));
 			/**
 			 * this trick ensures that container is properly configured when some internal dependency needs it while container is construction
@@ -245,6 +247,22 @@
 		}
 
 		/**
+		 * this magical method tries to guess root directory based on a stack trace
+		 *
+		 * @param array $factoryList
+		 * @param array $configuratorList
+		 *
+		 * @return IContainer
+		 * @throws ContainerException
+		 * @throws FactoryException
+		 */
+		static public function containerWithRoot(array $factoryList = [], array $configuratorList = []): IContainer {
+			list(, $trace) = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+			$factoryList[IRootDirectory::class] = $factoryList[IRootDirectory::class] ?? self::instance(RootDirectory::class, [dirname($trace['file'])]);
+			return self::container($factoryList, $configuratorList);
+		}
+
+		/**
 		 * shortcut for autowiring (for example in tests, ...)
 		 *
 		 * @param mixed $instance
@@ -256,7 +274,7 @@
 		 * @throws FactoryException
 		 */
 		static public function autowire($instance, array $factoryList = [], array $configuratorList = []): IContainer {
-			$container = self::container(empty($factoryList) ? [new ClassFactory()] : $factoryList, $configuratorList);
+			$container = self::containerWithRoot(empty($factoryList) ? [new ClassFactory()] : $factoryList, $configuratorList);
 			$container->autowire($instance);
 			return $container;
 		}
@@ -495,15 +513,15 @@
 				/**
 				 * Thread support
 				 */
-				IThreadManager::class  => ThreadManager::class,
-				IThreadCount::class    => ThreadCount::class,
-				IExecutor::class       => WebExecutor::class,
+				IThreadManager::class                 => ThreadManager::class,
+				IThreadCount::class                   => ThreadCount::class,
+				IExecutor::class                      => WebExecutor::class,
 
 				/**
 				 * Store related stuff
 				 */
-				IStore::class          => FileStore::class,
-				IStoreDirectory::class => self::proxy(IAssetDirectory::class, 'directory', [
+				IStore::class                         => FileStore::class,
+				IStoreDirectory::class                => self::proxy(IAssetDirectory::class, 'directory', [
 					'store',
 					StoreDirectory::class,
 				]),
@@ -511,8 +529,8 @@
 				/**
 				 * General Locking support
 				 */
-				ILockManager::class    => FileLockManager::class,
-				ILockDirectory::class  => self::proxy(IAssetDirectory::class, 'directory', [
+				ILockManager::class                   => FileLockManager::class,
+				ILockDirectory::class                 => self::proxy(IAssetDirectory::class, 'directory', [
 					'.lock',
 					LockDirectory::class,
 				]),
