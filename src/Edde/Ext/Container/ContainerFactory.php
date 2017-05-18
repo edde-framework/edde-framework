@@ -136,7 +136,7 @@
 	use Edde\Ext\Database\Sqlite\SqliteDsn;
 	use Edde\Ext\Link\LinkFactoryConfigurator;
 	use Edde\Ext\Log\LogServiceConfigurator;
-	use Edde\Ext\Protocol\CacheElementQueue;
+	use Edde\Ext\Protocol\ElementQueue;
 	use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 	use Edde\Ext\Protocol\RequestServiceConfigurator;
 	use Edde\Ext\Protocol\ThreadManagerConfigurator;
@@ -504,7 +504,7 @@
 				 */
 				IProtocolService::class               => ProtocolService::class,
 				IRequestService::class                => RequestService::class,
-				IElementQueue::class                  => CacheElementQueue::class,
+				IElementQueue::class                  => ElementQueue::class,
 				IEventBus::class                      => EventBus::class,
 				\Edde\Ext\Rest\ProtocolService::class => \Edde\Ext\Rest\ProtocolService::class,
 

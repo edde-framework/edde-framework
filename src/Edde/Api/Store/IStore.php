@@ -92,4 +92,11 @@
 		 * @return mixed
 		 */
 		public function get(string $name, $default = null);
+
+		/**
+		 * delete whole store (basically same as a database drop)
+		 *
+		 * @return IStore
+		 */
+		public function drop(): IStore;
 	}
