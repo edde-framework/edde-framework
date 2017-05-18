@@ -25,6 +25,24 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function block(string $name = null, int $timeout = 3): ILock {
+			$time = microtime(true);
+			while (true) {
+				if ($timeout > 0 && (microtime(true) - $time) >= $timeout) {
+					throw new LockTimeoutException(sprintf('Lock timeout for [%s].', $name));
+				}
+				try {
+					return $this->lock($name);
+				} catch (LockedException $exception) {
+				}
+				usleep(150000);
+			}
+			return $this->lock($name);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function unlock(string $name): ILock {
 			return $this->createLock($name)->unlock();
 		}

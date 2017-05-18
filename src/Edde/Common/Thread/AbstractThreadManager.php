@@ -77,7 +77,7 @@
 		}
 
 		protected function updateThreadCount(int $number) {
-			$this->store->lock($lock = (static::class . '/currentThreadCount'));
+			$this->store->block($lock = (static::class . '/currentThreadCount'));
 			$this->store->set($lock, $this->store->get($lock, 0) + $number);
 			$this->store->unlock($lock);
 		}
