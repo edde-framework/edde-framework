@@ -30,9 +30,9 @@
 		 * available; also there should NOT be any heavy computations, only
 		 * lightweight simple stuff
 		 *
-		 * @param bool $force
+		 * @return
 		 */
-		public function init(bool $force = false);
+		public function init();
 
 		/**
 		 * @return bool
@@ -41,17 +41,13 @@
 
 		/**
 		 * throws an exception if configurable has not been initialized
-		 *
-		 * @return IConfigurable
 		 */
 		public function checkInit();
 
 		/**
 		 * execute object initialization; object must be serializable after this method
-		 *
-		 * @param bool $force
 		 */
-		public function warmup(bool $force = false);
+		public function warmup();
 
 		/**
 		 * @return bool
@@ -60,17 +56,13 @@
 
 		/**
 		 * check if configurable has been warmedup
-		 *
-		 * @return IConfigurable
 		 */
 		public function checkWarmup();
 
 		/**
 		 * execute object configuration (so after this method object should be fully prepared for use)
-		 *
-		 * @param bool $force
 		 */
-		public function config(bool $force = false);
+		public function config();
 
 		/**
 		 * what to say here, hmm ;)? If method config() has been called, this is true
@@ -88,10 +80,8 @@
 
 		/**
 		 * do any heavy computations; after this object is usualy not serializable
-		 *
-		 * @param bool $force
 		 */
-		public function setup(bool $force = false);
+		public function setup();
 
 		/**
 		 * has benn object set up?
