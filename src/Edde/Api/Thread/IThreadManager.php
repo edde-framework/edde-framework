@@ -24,4 +24,23 @@
 		 * @return IThreadManager
 		 */
 		public function execute(): IThreadManager;
+
+		/**
+		 * pool is basically same as an ::dequeue() but it takes care about number of threads
+		 *
+		 * @return IThreadManager
+		 */
+		public function pool(): IThreadManager;
+
+		/**
+		 * set maximum number of concurrent threads on this "node" (as an application - webserver/cli/...)
+		 *
+		 * This value should be used wisely because if there is web based executor and high number of threads, they
+		 * can eat all webserver's workers.
+		 *
+		 * @param int $maximumThreadCount
+		 *
+		 * @return IThreadManager
+		 */
+		public function setMaximumThreadCount(int $maximumThreadCount): IThreadManager;
 	}
