@@ -63,18 +63,12 @@
 			$this->assertEquals(2, $count, 'EventBus has not been executed!');
 		}
 
-		public function testRequestExecuteError() {
-			/** @var $response INode */
-			self::assertInstanceOf(INode::class, $response = $this->requestService->element(new Request('wanna do something')));
-			self::assertEquals('error', $response->getName());
-			self::assertEquals(UnhandledRequestException::class, $response->getAttribute('exception'));
-			self::assertEquals('Unhandled request [wanna do something].', $response->getAttribute('message'));
-		}
-
 		public function testRequestExecuteNoResponse() {
-			$this->expectException(MissingResponseException::class);
-			$this->expectExceptionMessage('Missing response for request [' . ExecutableService::class . '::noResponse].');
-			$this->protocolService->element(new Request(ExecutableService::class . '::noResponse'));
+			/** @var $response IElement */
+			$response = $this->protocolService->element(new Request(ExecutableService::class . '::noResponse'));
+			self::assertEquals('error', $response->getType());
+			self::assertEquals(MissingResponseException::class, $response->getAttribute('exception'));
+			self::assertEquals('Internal error; request [Edde\Test\ExecutableService::noResponse] got no answer (response).', $response->getAttribute('message'));
 		}
 
 		public function testRequestExecute() {
@@ -92,12 +86,12 @@
 			/** @var $foo IElement */
 			/** @var $bar IElement */
 			list($foo, $bar) = array_values($responseList);
-			self::assertEquals('bar', $foo->getMeta('data'));
-			self::assertEquals('foo', $bar->getMeta('data'));
+			self::assertEquals('bar', $foo->getMeta('got-this'));
+			self::assertEquals('foo', $bar->getMeta('got-this'));
 			$foo = $this->requestService->request($fooRequest);
 			$bar = $this->requestService->request($barRequest);
-			self::assertEquals('bar', $foo->getMeta('data'));
-			self::assertEquals('foo', $bar->getMeta('data'));
+			self::assertEquals('bar', $foo->getMeta('got-this'));
+			self::assertEquals('foo', $bar->getMeta('got-this'));
 		}
 
 		public function testScopeAndTagList() {

@@ -29,9 +29,10 @@
 		/**
 		 * return set of "base" namespaces where to search for the result
 		 *
-		 * @param string $delimiter
+		 * @param string      $delimiter
+		 * @param string|null $name
 		 *
 		 * @return array
 		 */
-		public function cascade(string $delimiter): array;
+		public function cascade(string $delimiter, string $name = null): array;
 	}

@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Converter;
 
@@ -8,7 +8,6 @@
 	use Edde\Api\Node\NodeException;
 	use Edde\Api\Resource\IResource;
 	use Edde\Common\Converter\AbstractConverter;
-	use Edde\Common\Node\Node;
 	use Edde\Common\Node\NodeUtils;
 
 	/**
@@ -40,14 +39,10 @@
 			$this->unsupported($convert, $target, $convert instanceof IResource);
 			switch ($target) {
 				case INode::class:
-					/** @noinspection UnnecessaryParenthesesInspection */
-					return (function (IResource $resource, string $source, string $mime) {
-						NodeUtils::node($root = new Node(), $this->convert($resource, $source, 'array'));
-						return $root;
-					})($convert, $mime, $mime);
+					return (function (IResource $resource, string $source) {
+						return NodeUtils::toNode($this->convert($resource, $source, 'array'));
+					})($convert, $mime);
 				case 'array':
-					/** @noinspection UsingInclusionReturnValueInspection */
-					/** @noinspection PhpIncludeInspection */
 					if (is_array($include = require (string)$convert->getUrl()) === false) {
 						throw new ConverterException(sprintf('Conversion to [%s] failed: php file [%s] has not returned array.', $target, (string)$convert->getUrl()));
 					}

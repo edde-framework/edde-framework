@@ -1,7 +1,5 @@
 # Edde Framework
 
-[![build status](https://edde-framework.org/edde/edde-framework/badges/master/build.svg)](https://edde-framework.org/edde/edde-framework/commits/master)
-[![coverage report](https://edde-framework.org/edde/edde-framework/badges/master/coverage.svg)](https://edde-framework.org/edde/edde-framework/commits/master)
-
+[![Build Status](https://travis-ci.org/edde-framework/edde-framework.svg?branch=master)](https://travis-ci.org/edde-framework/edde-framework) [![Test Coverage](https://codeclimate.com/github/edde-framework/edde-framework/badges/coverage.svg)](https://codeclimate.com/github/edde-framework/edde-framework/coverage) [![Issue Count](https://codeclimate.com/github/edde-framework/edde-framework/badges/issue_count.svg)](https://codeclimate.com/github/edde-framework/edde-framework) [![Total Downloads](https://poser.pugx.org/edde-framework/edde-framework/downloads)](https://packagist.org/packages/edde-framework/edde-framework) [![License](https://poser.pugx.org/edde-framework/edde-framework/license)](https://packagist.org/packages/edde-framework/edde-framework) [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/edde-framework/edde-framework.svg)](http://isitmaintained.com/project/edde-framework/edde-framework "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/edde-framework/edde-framework.svg)](http://isitmaintained.com/project/edde-framework/edde-framework "Percentage of issues still open")
 
 PR will be created after the first release :).
