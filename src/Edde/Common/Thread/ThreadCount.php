@@ -3,8 +3,6 @@
 
 	namespace Edde\Common\Thread;
 
-	use Edde\Api\Thread\IThreadCount;
-
 	class ThreadCount extends AbstractThreadCount {
 		/**
 		 * @var int
@@ -19,13 +17,7 @@
 		 * @inheritdoc
 		 */
 		public function canExecute(): bool {
+			$this->load();
 			return $this->count <= $this->max;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function update(): IThreadCount {
-			return $this;
 		}
 	}

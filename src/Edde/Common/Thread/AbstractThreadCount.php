@@ -34,7 +34,9 @@
 		 * @inheritdoc
 		 */
 		public function increase(): IThreadCount {
+			$this->load();
 			$this->count++;
+			$this->save();
 			return $this;
 		}
 
@@ -42,14 +44,25 @@
 		 * @inheritdoc
 		 */
 		public function decrease(): IThreadCount {
+			$this->load();
 			$this->count--;
+			$this->save();
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function update(): IThreadCount {
+		public function load(): IThreadCount {
+			$this->count = $this->store->get(static::class . '/count', 0);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function save(): IThreadCount {
+			$this->store->set(static::class . '/count', $this->count);
 			return $this;
 		}
 
@@ -57,7 +70,7 @@
 		 * @inheritdoc
 		 */
 		public function lock(): IThreadCount {
-			$this->store->lock(static::class);
+			$this->store->lock(static::class . '/count');
 			return $this;
 		}
 
@@ -65,7 +78,7 @@
 		 * @inheritdoc
 		 */
 		public function unlock(): IThreadCount {
-			$this->store->unlock(static::class);
+			$this->store->unlock(static::class . '/count');
 			return $this;
 		}
 	}

@@ -49,6 +49,9 @@
 		 * @inheritdoc
 		 */
 		public function lock(): ILock {
+			if ($this->locked()) {
+				throw new LockedException(sprintf('The name (id) [%s] is already locked.', $this->getId()));
+			}
 			$this->current = $this->lock = true;
 			return $this->onLock();
 		}

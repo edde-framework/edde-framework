@@ -69,9 +69,7 @@
 		}
 
 		public function method(IElement $request) {
-			$response = new Response();
-			$response->putMeta(['data' => $request->getMeta('foo')]);
-			return $response;
+			return (new Response())->data(['got-this' => $request->getMeta('foo')]);
 		}
 	}
 
@@ -79,11 +77,15 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function canHandle(IElement $element): bool {
+			return $element->getAttribute('request') === 'testquest';
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function execute(IElement $element) {
-			if ($element->getAttribute('request') === 'testquest') {
-				return (new Response('foobar'))->putMeta(['a' => 'b']);
-			}
-			return null;
+			return (new Response('foobar'))->data(['a' => 'b']);
 		}
 	}
 
