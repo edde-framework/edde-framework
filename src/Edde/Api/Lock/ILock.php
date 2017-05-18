@@ -14,14 +14,7 @@
 		 *
 		 * @return string
 		 */
-		public function getId(): string;
-
-		/**
-		 * whoe made a lock
-		 *
-		 * @return string
-		 */
-		public function getSource(): string;
+		public function getName(): string;
 
 		/**
 		 * creates (executes) the lock

@@ -17,20 +17,20 @@
 
 		public function testLocking() {
 			$this->lockDirectory->purge();
-			$lock = $this->lockManager->lock('foo', static::class);
+			$lock = $this->lockManager->lock('foo');
 			self::assertTrue($lock->isLocked());
 			self::assertTrue($this->lockManager->isLocked('foo'));
 			self::assertSame($lock, $this->lockManager->createLock('foo'));
 		}
 
 		public function testForignLock() {
-			self::assertTrue($this->lockManager->isLocked('foo', static::class));
+			self::assertTrue($this->lockManager->isLocked('foo'));
 		}
 
 		public function testUnlockWithoutLock() {
 			$this->expectException(ForeignLockException::class);
 			$this->expectExceptionMessage('Lock [foo] cannot be unlocked because it was created by another lock (or in another thread). Use Edde\Api\Lock\ILock::kill() to kill the lock.');
-			self::assertTrue($this->lockManager->isLocked('foo', static::class));
+			self::assertTrue($this->lockManager->isLocked('foo'));
 			$this->lockManager->unlock('foo');
 		}
 

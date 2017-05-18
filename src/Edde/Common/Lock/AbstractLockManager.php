@@ -14,4 +14,32 @@
 		 * @var ILock[]
 		 */
 		protected $lockList = [];
+
+		/**
+		 * @inheritdoc
+		 */
+		public function lock(string $name): ILock {
+			return $this->createLock($name)->lock();
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function unlock(string $name): ILock {
+			return $this->createLock($name)->unlock();
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function kill(string $name): ILock {
+			return $this->createLock($name)->kill();
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function isLocked(string $name): bool {
+			return $this->createLock($name)->isLocked();
+		}
 	}
