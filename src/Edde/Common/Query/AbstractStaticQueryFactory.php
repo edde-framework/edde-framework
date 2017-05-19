@@ -363,7 +363,7 @@
 
 		/**
 		 * @param INode $node
-		 * @param       $operator
+		 * @param       string $operator
 		 *
 		 * @return StaticQuery
 		 * @throws StaticQueryException
