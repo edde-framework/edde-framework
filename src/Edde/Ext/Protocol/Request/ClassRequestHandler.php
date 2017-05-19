@@ -19,10 +19,10 @@
 		 * @inheritdoc
 		 */
 		public function canHandle(IElement $element): bool {
-			if (parent::canHandle($element) === false) {
+			if (parent::canHandle($element) === false || ($match = StringUtils::match((string)$element->getAttribute('request'), self::$preg)) === null) {
 				return false;
 			}
-			return StringUtils::match((string)$element->getAttribute('request'), self::$preg) !== null;
+			return method_exists($match['class'], StringUtils::toCamelHump($match['action']));
 		}
 
 		/**
