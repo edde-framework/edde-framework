@@ -47,7 +47,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute() {
+		public function execute(IElement $element = null) {
 			if ($this->response === null) {
 				return;
 			}
@@ -61,7 +61,6 @@
 		 */
 		public function send(IElement $element): IResponseHandler {
 			throw new \Exception('not implemented yet: ' . __METHOD__);
-			$this->converterManager->setup();
 			$this->converterManager->content($element, $element->getTargetList())->convert();
 			return $this;
 		}

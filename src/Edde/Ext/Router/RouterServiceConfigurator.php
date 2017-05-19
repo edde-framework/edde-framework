@@ -16,5 +16,6 @@
 		public function configure($instance) {
 			$instance->registerRouter(RestRouter::class);
 			$instance->registerRouter(HttpRouter::class);
+			$instance->registerRouter(SimpleHttpRouter::class);
 		}
 	}

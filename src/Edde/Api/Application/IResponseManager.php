@@ -38,7 +38,9 @@
 		/**
 		 * execute response
 		 *
+		 * @param IElement|null $element
+		 *
 		 * @return mixed
 		 */
-		public function execute();
+		public function execute(IElement $element = null);
 	}
