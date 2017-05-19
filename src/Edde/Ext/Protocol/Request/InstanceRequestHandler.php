@@ -33,6 +33,8 @@
 			/**
 			 * so what about some nice and readable code ;)?
 			 */
+			$element->setMeta('::class', $request['class']);
+			$element->setMeta('::method', $request['action']);
 			return $this->container->create(str_replace([
 				' ',
 				'-',

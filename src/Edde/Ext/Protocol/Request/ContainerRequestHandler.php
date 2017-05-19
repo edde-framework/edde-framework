@@ -29,6 +29,8 @@
 		 */
 		public function execute(IElement $element) {
 			list($name, $method) = explode('::', $element->getAttribute('request'));
+			$element->setMeta('::class', $name);
+			$element->setMeta('::method', $method);
 			return $this->container->create($name, [], static::class)->{$method}($element);
 		}
 	}
