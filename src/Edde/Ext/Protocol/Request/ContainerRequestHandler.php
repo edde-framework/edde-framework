@@ -17,17 +17,12 @@
 		 * @inheritdoc
 		 */
 		public function canHandle(IElement $element): bool {
-			if (parent::canHandle($element) === false) {
+			if (parent::canHandle($element) === false || strpos($request = $element->getAttribute('request'), '::') === false) {
 				return false;
 			}
-			return strpos($element->getAttribute('request'), '::') !== false;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function execute(IElement $element) {
-			list($name, $method) = explode('::', $element->getAttribute('request'));
-			return $this->container->create($name, [], static::class)->{$method}($element);
+			list($name, $method) = explode('::', $request);
+			$element->setMeta('::class', $name);
+			$element->setMeta('::method', $method);
+			return method_exists($name, $method);
 		}
 	}

@@ -17,4 +17,11 @@
 				'message',
 			]);
 		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function execute(IElement $element) {
+			return $this->container->create((string)$element->getMeta('::class'), [], static::class)->{(string)$element->getMeta('::method')}($element);
+		}
 	}

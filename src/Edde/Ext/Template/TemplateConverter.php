@@ -5,7 +5,6 @@
 
 	use Edde\Api\Template\ITemplate;
 	use Edde\Common\Converter\AbstractConverter;
-	use Edde\Common\Converter\Content;
 
 	class TemplateConverter extends AbstractConverter {
 		public function __construct() {
@@ -29,7 +28,10 @@
 				case 'text/*':
 				case '*/*':
 				case 'string':
-					return new Content($content, 'text/html');
+					ob_start();
+					$content->execute();
+					return ob_get_clean();
 			}
+			return $this->exception($mime, $target);
 		}
 	}

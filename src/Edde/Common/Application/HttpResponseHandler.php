@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Application;
 
-	use Edde\Api\Application\IResponse;
 	use Edde\Api\Application\IResponseHandler;
 	use Edde\Api\Converter\IContent;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
@@ -19,11 +18,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function send(IResponse $response): IResponseHandler {
-			$targetList = ($targetList = $response->getTargetList()) ? $targetList : $this->httpRequest->getHeaderList()
-				->getAcceptList();
-			$this->converterManager->setup();
-			$convertable = $this->converterManager->content($response, $targetList);
+		public function send(IContent $content): IResponseHandler {
+			$convertable = $this->converterManager->content($content, $this->httpRequest->getHeaderList()->getAcceptList());
 			$this->httpResponse->setContent((($content = $convertable->convert()) instanceof IContent) ? $content : new Content($convertable->convert(), $convertable->getTarget()));
 			$this->httpResponse->send();
 			return $this;

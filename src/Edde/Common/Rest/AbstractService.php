@@ -3,18 +3,17 @@
 
 	namespace Edde\Common\Rest;
 
-	use Edde\Api\Application\IRequest;
-	use Edde\Api\Application\IResponse;
 	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Http\IResponse as IHttpResponse;
 	use Edde\Api\Http\LazyHostUrlTrait;
 	use Edde\Api\Http\LazyHttpRequestTrait;
 	use Edde\Api\Http\LazyHttpResponseTrait;
+	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Rest\IService;
 	use Edde\Common\Control\AbstractControl;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Url\Url;
-	use Edde\Ext\Application\StringResponse;
+	use Edde\Ext\Application\StringContent;
 
 	abstract class AbstractService extends AbstractControl implements IService {
 		use LazyResponseManagerTrait;
@@ -46,9 +45,9 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function request(IRequest $request): IResponse {
+		public function request(IElement $element): IElement {
 			$methodList = $this->getMethodList();
-			if (in_array($method = strtoupper($request->getAction()), self::$methodList, true) === false) {
+			if (in_array($method = strtoupper($element->getAction()), self::$methodList, true) === false) {
 				$this->httpResponse->header('Allowed', $allowed = implode(', ', array_keys($methodList)));
 				return $this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not supported; %s.', $method, empty($methodList) ? 'there are no supported methods' : 'available methods are [' . $allowed . ']'));
 			}
@@ -56,7 +55,7 @@
 				$this->httpResponse->header('Allowed', $allowed = implode(', ', array_keys($methodList)));
 				return $this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not implemented; %s.', $method, empty($methodList) ? 'there are no available methods' : 'available methods are [' . $allowed . ']'));
 			}
-			return $this->execute($methodList[$method], $this->request = $request);
+			return $this->execute($methodList[$method], $this->request = $element);
 		}
 
 		/**
@@ -74,12 +73,12 @@
 
 		protected function error(int $code, string $message) {
 			$this->httpResponse->header('Date', gmdate('D, d M Y H:i:s T'));
-			return $this->response(new StringResponse($message, ['text/plain']), $code);
+			return $this->response(new StringContent($message, ['text/plain']), $code);
 		}
 
-		protected function response(IResponse $response, int $code = null) {
+		protected function response(IElement $element, int $code = null) {
 			$code ? $this->httpResponse->setCode($code) : null;
-			$this->responseManager->response($response);
-			return $response;
+			$this->responseManager->response($element);
+			return $element;
 		}
 	}

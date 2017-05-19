@@ -14,6 +14,7 @@
 		 * @param IRouterService $instance
 		 */
 		public function configure($instance) {
+			$instance->registerRouter(SimpleHttpRouter::class);
 			$instance->registerRouter(RestRouter::class);
 			$instance->registerRouter(HttpRouter::class);
 		}

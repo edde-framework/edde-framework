@@ -3,6 +3,8 @@
 
 	namespace Edde\Api\Application;
 
+	use Edde\Api\Protocol\IElement;
+
 	/**
 	 * Single application implementation; per project should be exactly one instance (implementation) of this interface.
 	 */
@@ -17,9 +19,9 @@
 		/**
 		 * execute the given application request
 		 *
-		 * @param IRequest $request
+		 * @param IElement $element
 		 *
-		 * @return IResponse
+		 * @return IElement
 		 */
-		public function execute(IRequest $request): IResponse;
+		public function execute(IElement $element): IElement;
 	}

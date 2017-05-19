@@ -11,9 +11,9 @@
 	/**
 	 * Handles namespaced, dotted paths with slash action
 	 */
-	class ClassRequestHandler extends AbstractRequestHandler {
+	class InstanceRequestHandler extends AbstractRequestHandler {
 		use LazyContextTrait;
-		static protected $preg = '~(?<class>[.a-z0-9-]+)/(?<action>[a-z0-9-]+)~';
+		static protected $preg = '~(?<class>[\\\a-zA-Z0-9-]+)::(?<action>[a-zA-Z0-9-]+)~';
 
 		/**
 		 * @inheritdoc
@@ -22,14 +22,14 @@
 			if (parent::canHandle($element) === false || ($match = StringUtils::match((string)$element->getAttribute('request'), self::$preg)) === null) {
 				return false;
 			}
-			$element->setMeta('::class', str_replace([
+			$element->setMeta('::class', $class = str_replace([
 				' ',
 				'-',
 			], [
 				'\\',
 				'',
 			], StringUtils::capitalize(str_replace('.', ' ', $match['class']))));
-			$element->setMeta('::method', StringUtils::toCamelHump($match['action']));
-			return true;
+			$element->setMeta('::method', $method = StringUtils::toCamelHump($match['action']));
+			return method_exists($class, $method);
 		}
 	}

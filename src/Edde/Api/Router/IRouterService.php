@@ -3,9 +3,9 @@
 
 	namespace Edde\Api\Router;
 
-	use Edde\Api\Application\IRequest;
 	use Edde\Api\Application\IResponseHandler;
 	use Edde\Api\Config\IConfigurable;
+	use Edde\Api\Protocol\IElement;
 
 	/**
 	 * Implementation of application router service.
@@ -24,15 +24,15 @@
 		/**
 		 * when routers fail, execute this default request
 		 *
-		 * @param IRequest         $request
+		 * @param IElement         $element
 		 * @param IResponseHandler $responseHandler
 		 *
 		 * @return IRouterService
 		 */
-		public function setDefaultRequest(IRequest $request, IResponseHandler $responseHandler = null): IRouterService;
+		public function setDefaultRequest(IElement $element, IResponseHandler $responseHandler = null): IRouterService;
 
 		/**
-		 * @return IRequest
+		 * @return IElement
 		 */
-		public function createRequest(): IRequest;
+		public function createRequest(): IElement;
 	}

@@ -3,8 +3,6 @@
 
 	namespace Edde\Api\Control;
 
-	use Edde\Api\Application\IRequest;
-	use Edde\Api\Application\IResponse;
 	use Edde\Api\Node\INode;
 
 	/**
@@ -39,31 +37,6 @@
 		 * @return IControl[]
 		 */
 		public function getControlList(): array;
-
-		/**
-		 * execute the given method in this controls
-		 *
-		 * @param IRequest $request
-		 *
-		 * @return IResponse
-		 */
-		public function request(IRequest $request): IResponse;
-
-		/**
-		 * get current action
-		 *
-		 * @return string
-		 */
-		public function getAction(): string;
-
-		/**
-		 * request content of the request converted to the target type
-		 *
-		 * @param string $target
-		 *
-		 * @return mixed
-		 */
-		public function getContent(string $target = 'array');
 
 		/**
 		 * traverse through whole control tree

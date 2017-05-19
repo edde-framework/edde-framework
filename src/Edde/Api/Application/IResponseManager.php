@@ -3,6 +3,8 @@
 
 	namespace Edde\Api\Application;
 
+	use Edde\Api\Converter\IContent;
+
 	/**
 	 * Response manager holds current Response (to keep responses immutable).
 	 */
@@ -27,16 +29,18 @@
 		/**
 		 * set the current response
 		 *
-		 * @param IResponse $response
+		 * @param IContent $content
 		 *
 		 * @return IResponseManager
 		 */
-		public function response(IResponse $response): IResponseManager;
+		public function response(IContent $content): IResponseManager;
 
 		/**
 		 * execute response
 		 *
+		 * @param IContent|null $content
+		 *
 		 * @return mixed
 		 */
-		public function execute();
+		public function execute(IContent $content = null);
 	}
