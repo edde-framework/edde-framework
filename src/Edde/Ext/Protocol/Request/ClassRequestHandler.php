@@ -22,14 +22,14 @@
 			if (parent::canHandle($element) === false || ($match = StringUtils::match((string)$element->getAttribute('request'), self::$preg)) === null) {
 				return false;
 			}
-			$element->setMeta('::class', $class = str_replace([
+			$element->setMeta('::class', str_replace([
 				' ',
 				'-',
 			], [
 				'\\',
 				'',
 			], StringUtils::capitalize(str_replace('.', ' ', $match['class']))));
-			$element->setMeta('::method', $method = StringUtils::toCamelHump($match['action']));
+			$element->setMeta('::method', StringUtils::toCamelHump($match['action']));
 			return true;
 		}
 	}
