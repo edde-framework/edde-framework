@@ -4,6 +4,7 @@
 	namespace Edde\Common\Container\Factory;
 
 	use Edde\Api\Container\ContainerException;
+	use Edde\Api\Container\DependencyException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\ILazyInject;
@@ -48,6 +49,9 @@
 		 * @throws ContainerException
 		 */
 		public function createDependency(IContainer $container, string $dependency = null): IDependency {
+			if ($dependency === null) {
+				throw new DependencyException('The $dependency parameter has not been provided for [%s], oops!', __METHOD__);
+			}
 			if (isset(self::$dependencyCache[$dependency])) {
 				return self::$dependencyCache[$dependency];
 			}
