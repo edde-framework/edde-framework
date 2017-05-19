@@ -12,6 +12,7 @@
 	use Edde\Api\Rest\IService;
 	use Edde\Api\Runtime\LazyRuntimeTrait;
 	use Edde\Common\Application\HttpResponseHandler;
+	use Edde\Common\Protocol\Request\Request;
 	use Edde\Common\Router\AbstractRouter;
 
 	class RestRouter extends AbstractRouter implements IConfigurable, ILinkGenerator {
@@ -41,7 +42,6 @@
 		 * @inheritdoc
 		 */
 		public function createRequest() {
-			throw new \Exception('not implemented yet: ' . __METHOD__);
 			if ($this->runtime->isConsoleMode() || empty($this->serviceList)) {
 				return null;
 			}
@@ -49,12 +49,7 @@
 			foreach ($this->serviceList as $service) {
 				if ($service->match($requestUrl)) {
 					$this->responseManager->setResponseHandler($this->container->create(HttpResponseHandler::class));
-					return $this->container->create(Request::class, [
-						get_class($service),
-						$this->httpRequest->getMethod(),
-						$requestUrl->getParameterList(),
-						$this->httpRequest->getContent(),
-					], __METHOD__);
+					return (new Request(get_class($service) . '::' . $this->httpRequest->getMethod()))->data($requestUrl->getParameterList())->setValue($this->httpRequest->getContent());
 				}
 			}
 			return null;
