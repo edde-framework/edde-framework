@@ -12,7 +12,6 @@
 	use Edde\Api\Rest\IService;
 	use Edde\Api\Runtime\LazyRuntimeTrait;
 	use Edde\Common\Application\HttpResponseHandler;
-	use Edde\Common\Application\Request;
 	use Edde\Common\Router\AbstractRouter;
 
 	class RestRouter extends AbstractRouter implements IConfigurable, ILinkGenerator {
@@ -42,6 +41,7 @@
 		 * @inheritdoc
 		 */
 		public function createRequest() {
+			throw new \Exception('not implemented yet: ' . __METHOD__);
 			if ($this->runtime->isConsoleMode() || empty($this->serviceList)) {
 				return null;
 			}

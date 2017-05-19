@@ -148,4 +148,8 @@
 			$this->node = new Node();
 			$this->node->setMeta('control', $this);
 		}
+
+		public function __call($name, $arguments) {
+			return $this->action($name, $arguments);
+		}
 	}

@@ -35,6 +35,6 @@
 			list($control, $action) = explode('.', $parameterList['action']);
 			$this->responseManager->setResponseHandler($this->container->create(HttpResponseHandler::class));
 			unset($parameterList['action']);
-			return (new Request($control . '::' . $action))->data($parameterList)->setValue($this->httpRequest->getContent());
+			return (new Request($control . '/' . $action))->data($parameterList)->setValue($this->httpRequest->getContent());
 		}
 	}

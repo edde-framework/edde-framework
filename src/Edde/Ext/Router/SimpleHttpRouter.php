@@ -5,11 +5,14 @@
 
 	use Edde\Api\Application\LazyContextTrait;
 	use Edde\Api\Http\LazyHttpRequestTrait;
+	use Edde\Api\Runtime\LazyRuntimeTrait;
 	use Edde\Common\Protocol\Request\Request;
+	use Edde\Common\Router\AbstractRouter;
 	use Edde\Common\Strings\StringUtils;
 
-	class SimpleHttpRouter extends HttpRouter {
+	class SimpleHttpRouter extends AbstractRouter {
 		use LazyHttpRequestTrait;
+		use LazyRuntimeTrait;
 		use LazyContextTrait;
 
 		/**
@@ -35,7 +38,7 @@
 			$parameterList = $requestUrl->getParameterList();
 			foreach ($this->context->cascade('\\', $name) as $class) {
 				if (class_exists($class)) {
-					return (new Request($class . '::' . $action))->data($parameterList)->setValue($this->httpRequest->getContent());
+					return (new Request($class . '::action' . StringUtils::toCamelCase($action)))->data($parameterList)->setValue($this->httpRequest->getContent());
 				}
 			}
 			return null;
