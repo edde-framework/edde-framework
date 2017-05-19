@@ -1,3 +1,5 @@
 exclude_patterns:
-    - '*'
-    - '!./src'
+    - './.runtime'
+    - './bin'
+    - './lib'
+    - './tests'

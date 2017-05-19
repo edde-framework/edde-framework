@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Query;
 
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\INodeQuery;
 	use Edde\Api\Query\IQuery;
@@ -362,8 +361,8 @@
 		}
 
 		/**
-		 * @param INode $node
-		 * @param       $operator
+		 * @param INode  $node
+		 * @param string $operator
 		 *
 		 * @return StaticQuery
 		 * @throws StaticQueryException
