@@ -22,25 +22,14 @@
 			if (parent::canHandle($element) === false || ($match = StringUtils::match((string)$element->getAttribute('request'), self::$preg)) === null) {
 				return false;
 			}
-			return method_exists($match['class'], StringUtils::toCamelHump($match['action']));
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function execute(IElement $element) {
-			$request = StringUtils::match((string)$element->getAttribute('request'), self::$preg, true);
-			/**
-			 * so what about some nice and readable code ;)?
-			 */
-			$element->setMeta('::class', $request['class']);
-			$element->setMeta('::method', $request['action']);
-			return $this->container->create(str_replace([
+			$element->setMeta('::class', $class = str_replace([
 				' ',
 				'-',
 			], [
 				'\\',
 				'',
-			], StringUtils::capitalize(str_replace('.', ' ', $request['class']))), [], static::class)->{StringUtils::toCamelHump($request['action'])}($element);
+			], StringUtils::capitalize(str_replace('.', ' ', $match['class']))));
+			$element->setMeta('::method', $method = StringUtils::toCamelHump($match['action']));
+			return true;
 		}
 	}

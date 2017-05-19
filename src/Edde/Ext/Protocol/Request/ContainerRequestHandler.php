@@ -21,16 +21,8 @@
 				return false;
 			}
 			list($name, $method) = explode('::', $request);
-			return method_exists($name, $method);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function execute(IElement $element) {
-			list($name, $method) = explode('::', $element->getAttribute('request'));
 			$element->setMeta('::class', $name);
 			$element->setMeta('::method', $method);
-			return $this->container->create($name, [], static::class)->{$method}($element);
+			return method_exists($name, $method);
 		}
 	}
