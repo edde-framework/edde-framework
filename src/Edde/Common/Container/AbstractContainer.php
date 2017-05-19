@@ -27,7 +27,7 @@
 		 * @inheritdoc
 		 */
 		public function registerFactory(IFactory $factory, string $id = null): IContainer {
-			if ($id) {
+			if ($id !== null) {
 				$this->factoryList[$id] = $factory;
 				return $this;
 			}

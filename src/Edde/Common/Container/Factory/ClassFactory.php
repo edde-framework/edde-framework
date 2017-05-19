@@ -14,10 +14,33 @@
 
 	class ClassFactory extends AbstractFactory {
 		/**
+		 * @var IDependency[]
+		 */
+		static protected $dependencyCache = [];
+
+		/**
 		 * @inheritdoc
 		 */
 		public function canHandle(IContainer $container, string $dependency): bool {
 			return class_exists($dependency) && interface_exists($dependency) === false;
+		}
+
+		protected function getParameterList(\ReflectionClass $reflectionClass, \ReflectionMethod $reflectionMethod, string $method) {
+			$parameterList = [];
+			if (strlen($name = $reflectionMethod->getName()) > strlen($method) && strpos($name, $method, 0) === 0) {
+				if ($reflectionMethod->isPublic() === false) {
+					throw new ContainerException(sprintf('Method [%s::%s()] must be public.', $reflectionClass->getName(), $reflectionMethod->getName()));
+				}
+				foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
+					if ($reflectionClass->hasProperty($name = $reflectionParameter->getName()) === false) {
+						throw new ContainerException(sprintf('Class [%s] must have property [$%s] of the same name as parameter in method [%s::%s(..., %s$%s, ...)].', $reflectionClass->getName(), $name, $reflectionClass->getName(), $reflectionMethod->getName(), ($class = $reflectionParameter->getClass()) ? $class->getName() . ' ' : null, $name));
+					}
+					$reflectionProperty = $reflectionClass->getProperty($name);
+					$reflectionProperty->setAccessible(true);
+					$parameterList[] = new ReflectionParameter($reflectionProperty->getName(), false, ($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName());
+				}
+			}
+			return $parameterList;
 		}
 
 		/**
@@ -25,49 +48,27 @@
 		 * @throws ContainerException
 		 */
 		public function createDependency(IContainer $container, string $dependency = null): IDependency {
+			if (isset(self::$dependencyCache[$dependency])) {
+				return self::$dependencyCache[$dependency];
+			}
 			$injectList = [];
 			$lazyList = [];
 			$configuratorList = [];
 			foreach (ReflectionUtils::getMethodList($dependency) as $reflectionMethod) {
-				$reflectionClass = $reflectionMethod->getDeclaringClass();
-				/** @noinspection NotOptimalIfConditionsInspection */
-				if (strlen($name = $reflectionMethod->getName()) > 6 && strpos($name, 'inject', 0) === 0) {
-					if ($reflectionMethod->isPublic() === false) {
-						throw new ContainerException(sprintf('Inject method [%s::%s()] must be public.', $reflectionClass->getName(), $reflectionMethod->getName()));
-					}
-					foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
-						if ($reflectionClass->hasProperty($name = $reflectionParameter->getName()) === false) {
-							throw new ContainerException(sprintf('Class [%s] must have property [$%s] of the same name as parameter in inject method [%s::%s(..., %s$%s, ...)].', $reflectionClass->getName(), $name, $reflectionClass->getName(), $reflectionMethod->getName(), ($class = $reflectionParameter->getClass()) ? $class->getName() . ' ' : null, $name));
-						}
-						$reflectionProperty = $reflectionClass->getProperty($name);
-						$reflectionProperty->setAccessible(true);
-						$injectList[] = new ReflectionParameter($reflectionProperty->getName(), false, ($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName());
-					}
-				}
-				/** @noinspection NotOptimalIfConditionsInspection */
-				if ($reflectionClass->implementsInterface(ILazyInject::class) && strlen($name = $reflectionMethod->getName()) > 6 && strpos($name, 'lazy', 0) === 0) {
-					if ($reflectionMethod->isPublic() === false) {
-						throw new ContainerException(sprintf('Lazy method [%s::%s()] must be public.', $reflectionClass->getName(), $reflectionMethod->getName()));
-					}
-					foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
-						if ($reflectionClass->hasProperty($name = $reflectionParameter->getName()) === false) {
-							throw new ContainerException(sprintf('Class [%s] must have property [$%s] of the same name as parameter in lazy inject method [%s::%s(..., %s$%s, ...)].', $reflectionClass->getName(), $name, $reflectionClass->getName(), $reflectionMethod->getName(), ($class = $reflectionParameter->getClass()) ? $class->getName() . ' ' : null, $name));
-						}
-						$reflectionProperty = $reflectionClass->getProperty($name);
-						$reflectionProperty->setAccessible(true);
-						$lazyList[] = new ReflectionParameter($reflectionProperty->getName(), false, ($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName());
-					}
+				$injectList = array_merge($injectList, $this->getParameterList($reflectionClass = $reflectionMethod->getDeclaringClass(), $reflectionMethod, 'inject'));
+				if ($reflectionClass->implementsInterface(ILazyInject::class)) {
+					$lazyList = array_merge($lazyList, $this->getParameterList($reflectionClass, $reflectionMethod, 'lazy'));
 				}
 			}
 			$parameterList = [];
 			foreach (ReflectionUtils::getParameterList($dependency) as $reflectionParameter) {
 				$parameterList[] = new ReflectionParameter($reflectionParameter->getName(), $reflectionParameter->isOptional(), ($class = $reflectionParameter->getClass()) ? $class->getName() : null);
 			}
-			if ($dependency) {
+			if ($dependency !== null) {
 				$reflectionClass = ReflectionUtils::getReflectionClass($dependency);
 				$configuratorList = array_reverse(array_merge([$dependency], $reflectionClass->getInterfaceNames()));
 			}
-			return new Dependency($parameterList, $injectList, $lazyList, $configuratorList);
+			return self::$dependencyCache[$dependency] = new Dependency($parameterList, $injectList, $lazyList, $configuratorList);
 		}
 
 		/**
