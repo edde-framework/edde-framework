@@ -48,7 +48,7 @@
 		}
 
 		public function restPost() {
-			$response = new ElementResponse($this->protocolService->element($this->request->getContent([IElement::class])));
+			$response = new ElementResponse($this->protocolService->element($this->getContent(IElement::class)));
 			$this->elementQueue->save();
 			if ($this->elementQueue->isEmpty() === false) {
 				$this->threadManager->execute();

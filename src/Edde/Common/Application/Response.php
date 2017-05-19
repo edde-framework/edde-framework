@@ -3,10 +3,9 @@
 
 	namespace Edde\Common\Application;
 
-	use Edde\Api\Application\IResponse;
 	use Edde\Common\Converter\Content;
 
-	class Response extends Content implements IResponse {
+	class Response extends Content {
 		/**
 		 * @var string[]
 		 */

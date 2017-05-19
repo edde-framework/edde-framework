@@ -4,7 +4,6 @@
 	namespace Edde\Common\Application;
 
 	use Edde\Api\Application\IApplication;
-	use Edde\Api\Application\LazyRequestQueueTrait;
 	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Common\Object;
 
@@ -12,20 +11,12 @@
 	 * Common implementation for all applications.
 	 */
 	abstract class AbstractApplication extends Object implements IApplication {
-		use LazyRequestQueueTrait;
 		use LazyResponseManagerTrait;
 
 		/**
 		 * @inheritdoc
 		 */
 		public function run() {
-			/**
-			 * Because there is no way how to explicitly setup request queue, this enabled user to register some
-			 * configurators which are executed here, thus request queue is prepared here.
-			 *
-			 * In this part could be executed for example router (service) to get proper request to the application.
-			 */
-			$this->requestQueue->setup();
 			/**
 			 * Application cannot create it's own response because it doesn't know in which context it's
 			 * running (http/cli); that means general failure, because without request application do no response

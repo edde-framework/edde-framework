@@ -3,6 +3,8 @@
 
 	namespace Edde\Api\Application;
 
+	use Edde\Api\Protocol\IElement;
+
 	/**
 	 * Response manager holds current Response (to keep responses immutable).
 	 */
@@ -27,11 +29,11 @@
 		/**
 		 * set the current response
 		 *
-		 * @param IResponse $response
+		 * @param IElement $element
 		 *
 		 * @return IResponseManager
 		 */
-		public function response(IResponse $response): IResponseManager;
+		public function response(IElement $element): IResponseManager;
 
 		/**
 		 * execute response

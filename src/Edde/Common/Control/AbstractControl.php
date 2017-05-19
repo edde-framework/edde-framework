@@ -3,14 +3,13 @@
 
 	namespace Edde\Common\Control;
 
-	use Edde\Api\Application\IRequest;
-	use Edde\Api\Application\IResponse;
 	use Edde\Api\Callback\ICallback;
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Control\ControlException;
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
+	use Edde\Api\Protocol\IElement;
 	use Edde\Common\Callback\Callback;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\Node;
@@ -31,7 +30,7 @@
 		 * When control is called by execute, the request is saved here for future reference; this basically
 		 * means that control cannot be reused, because it will loose reference to the original request.
 		 *
-		 * @var IRequest
+		 * @var IElement
 		 */
 		protected $request;
 
@@ -74,20 +73,18 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function request(IRequest $request): IResponse {
-			return $this->execute($request->getAction(), $this->request = $request);
+		public function request(IElement $element): IElement {
+			throw new \Exception('not implemented yet: ' . __METHOD__);
+			return $this->execute($element->getAttribute('request'), $this->request = $request);
 		}
 
-		protected function execute(string $method, IRequest $request) {
-			$argumentList = array_filter($parameterList = $request->getParameterList(), function ($key) {
+		protected function execute(string $method, IElement $element) {
+			$argumentList = array_filter($parameterList = $element->getParameterList(), function ($key) {
 				return is_int($key);
 			}, ARRAY_FILTER_USE_KEY);
-			if (method_exists($this, $method)) {
+			if (method_exists($this, $method) && (new \ReflectionMethod(static::class, $method))->isPublic()) {
 				/** @var $callback ICallback */
-				$callback = new Callback([
-					$this,
-					$method,
-				]);
+				$callback = new Callback($callback);
 				$argumentCount = count($argumentList);
 				foreach ($callback->getParameterList() as $key => $parameter) {
 					if (--$argumentCount >= 0) {
@@ -118,7 +115,7 @@
 		 * @inheritdoc
 		 */
 		public function getContent(string $target = 'array') {
-			return $this->request->getContent([$target]);
+			throw new \Exception('not implemented yet: ' . __METHOD__);
 		}
 
 		/**

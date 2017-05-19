@@ -3,19 +3,14 @@
 
 	namespace Edde\Common\Application;
 
-	use Edde\Api\Application\ApplicationException;
-	use Edde\Api\Application\IRequest;
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Converter\IContent;
-	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Common\Object;
 
 	/**
 	 * Application request is responsible for the exact action execution in the application, usually invoking
 	 * some control and executing method on it.
 	 */
-	class Request extends Object implements IRequest, ILazyInject {
-		use LazyConverterManagerTrait;
+	class Request extends Object {
 		/**
 		 * @var IContent
 		 */
@@ -83,18 +78,5 @@
 		 */
 		public function getParameterList(): array {
 			return $this->parameterList;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getContent(array $targetList = null) {
-			if ($this->content === null) {
-				throw new ApplicationException('There is no body with current application request.');
-			}
-			if ($targetList) {
-				return $this->converterManager->content($this->content, $targetList)->convert();
-			}
-			return $this->content;
 		}
 	}

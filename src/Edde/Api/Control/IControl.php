@@ -3,9 +3,8 @@
 
 	namespace Edde\Api\Control;
 
-	use Edde\Api\Application\IRequest;
-	use Edde\Api\Application\IResponse;
 	use Edde\Api\Node\INode;
+	use Edde\Api\Protocol\IElement;
 
 	/**
 	 * Control is general element for transferring incoming request into the internal system service and for
@@ -43,11 +42,11 @@
 		/**
 		 * execute the given method in this controls
 		 *
-		 * @param IRequest $request
+		 * @param IElement $element
 		 *
-		 * @return IResponse
+		 * @return IElement
 		 */
-		public function request(IRequest $request): IResponse;
+		public function request(IElement $element): IElement;
 
 		/**
 		 * get current action

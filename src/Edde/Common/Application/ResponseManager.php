@@ -3,17 +3,17 @@
 
 	namespace Edde\Common\Application;
 
-	use Edde\Api\Application\IResponse;
 	use Edde\Api\Application\IResponseHandler;
 	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
+	use Edde\Api\Protocol\IElement;
 	use Edde\Common\Config\ConfigurableTrait;
 
 	class ResponseManager extends AbstractResponseHandler implements IResponseManager {
 		use LazyConverterManagerTrait;
 		use ConfigurableTrait;
 		/**
-		 * @var IResponse
+		 * @var IElement
 		 */
 		protected $response;
 		/**
@@ -39,8 +39,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function response(IResponse $response = null): IResponseManager {
-			$this->response = $response;
+		public function response(IElement $element): IResponseManager {
+			$this->response = $element;
 			return $this;
 		}
 
@@ -59,10 +59,10 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function send(IResponse $response): IResponseHandler {
+		public function send(IElement $element): IResponseHandler {
+			throw new \Exception('not implemented yet: ' . __METHOD__);
 			$this->converterManager->setup();
-			$this->converterManager->content($response, $response->getTargetList())
-				->convert();
+			$this->converterManager->content($element, $element->getTargetList())->convert();
 			return $this;
 		}
 	}

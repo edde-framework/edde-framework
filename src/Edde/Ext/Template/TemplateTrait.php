@@ -3,7 +3,7 @@
 
 	namespace Edde\Ext\Template;
 
-	use Edde\Api\Application\IResponse;
+	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Template\LazyTemplateManagerTrait;
 
 	/**
@@ -17,9 +17,9 @@
 		 *
 		 * @param string|null $name
 		 *
-		 * @return IResponse|TemplateResponse
+		 * @return IElement
 		 */
-		public function template(string $name = null): IResponse {
+		public function template(string $name = null): IElement {
 			$template = $this->templateManager->template();
 			return new TemplateResponse($template->template($name ?: 'layout', $this, static::class, $this));
 		}
