@@ -4,15 +4,15 @@
 	namespace Edde\Api\Application;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Converter\IContent;
 
 	interface IResponseHandler extends IConfigurable {
 		/**
 		 * execute the response
 		 *
-		 * @param IElement $element
+		 * @param IContent $content
 		 *
 		 * @return IResponseHandler
 		 */
-		public function send(IElement $element): IResponseHandler;
+		public function send(IContent $content): IResponseHandler;
 	}

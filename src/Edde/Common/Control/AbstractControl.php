@@ -3,19 +3,15 @@
 
 	namespace Edde\Common\Control;
 
-	use Edde\Api\Callback\ICallback;
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Control\ControlException;
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
 	use Edde\Api\Protocol\IElement;
-	use Edde\Common\Callback\Callback;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Object;
-	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Root implementation of all controls.
@@ -72,66 +68,6 @@
 
 		/**
 		 * @inheritdoc
-		 */
-		public function request(IElement $element): IElement {
-			throw new \Exception('not implemented yet: ' . __METHOD__);
-			return $this->execute($element->getAttribute('request'), $this->request = $request);
-		}
-
-		protected function execute(string $method, IElement $element) {
-			$argumentList = array_filter($parameterList = $element->getParameterList(), function ($key) {
-				return is_int($key);
-			}, ARRAY_FILTER_USE_KEY);
-			if (method_exists($this, $method) && (new \ReflectionMethod(static::class, $method))->isPublic()) {
-				/** @var $callback ICallback */
-				$callback = new Callback($callback);
-				$argumentCount = count($argumentList);
-				foreach ($callback->getParameterList() as $key => $parameter) {
-					if (--$argumentCount >= 0) {
-						continue;
-					}
-					if (isset($parameterList[$parameterName = StringUtils::recamel($parameter->getName())]) === false) {
-						if ($parameter->isOptional()) {
-							$argumentList[] = null;
-							continue;
-						}
-						throw new MissingActionParameterException(sprintf('Missing action parameter [%s::%s(, ...$%s, ...)].', static::class, $method, $parameter->getName()));
-					}
-					$argumentList[] = $parameterList[$parameterName];
-				}
-				return $callback->invoke(...$argumentList);
-			}
-			return $this->action(StringUtils::recamel($method), $argumentList);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getAction(): string {
-			return StringUtils::recamel($this->request->getAction());
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getContent(string $target = 'array') {
-			throw new \Exception('not implemented yet: ' . __METHOD__);
-		}
-
-		/**
-		 * when handle method does not exists, this generic method will be executed
-		 *
-		 * @param string $action
-		 * @param array  $parameterList
-		 *
-		 * @throws ControlException
-		 */
-		protected function action(string $action, array $parameterList) {
-			throw new UnknownActionException(sprintf('Unknown handle method [%s]; to disable this exception, override [%s::%s()] method or implement [%s::%s()].', $action, static::class, __FUNCTION__, static::class, StringUtils::toCamelHump($action)));
-		}
-
-		/**
-		 * @inheritdoc
 		 * @throws NodeException
 		 */
 		public function traverse(bool $self = true) {
@@ -147,9 +83,5 @@
 			parent::handleInit();
 			$this->node = new Node();
 			$this->node->setMeta('control', $this);
-		}
-
-		public function __call($name, $arguments) {
-			return $this->action($name, $arguments);
 		}
 	}

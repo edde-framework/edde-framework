@@ -6,7 +6,6 @@
 	use Edde\Api\Thread\LazyThreadManagerTrait;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\Rest\AbstractService;
-	use Edde\Ext\Application\JsonResponse;
 
 	class ThreadService extends AbstractService {
 		use LazyThreadManagerTrait;
@@ -28,11 +27,8 @@
 		/**
 		 * head because client should not expect "output" except of headers; in general this method should not return nothing at all because
 		 * in general is is a long running task dequeing all current jobs
-		 *
-		 * @return JsonResponse
 		 */
 		public function restHead() {
 			$this->threadManager->pool();
-			return new JsonResponse(true);
 		}
 	}

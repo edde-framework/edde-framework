@@ -5,6 +5,7 @@
 
 	use Edde\Api\Application\IResponseHandler;
 	use Edde\Api\Application\IResponseManager;
+	use Edde\Api\Converter\IContent;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Common\Config\ConfigurableTrait;
@@ -39,15 +40,15 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function response(IElement $element): IResponseManager {
-			$this->response = $element;
+		public function response(IContent $content): IResponseManager {
+			$this->response = $content;
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(IElement $element = null) {
+		public function execute(IContent $content = null) {
 			if ($this->response === null) {
 				return;
 			}
@@ -59,9 +60,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function send(IElement $element): IResponseHandler {
-			throw new \Exception('not implemented yet: ' . __METHOD__);
-			$this->converterManager->content($element, $element->getTargetList())->convert();
-			return $this;
+		public function send(IContent $content): IResponseHandler {
+			throw new UnknownResponseHandlerException('There is no response handler to catch current response.');
 		}
 	}

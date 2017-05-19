@@ -40,6 +40,6 @@
 			], [
 				'\\',
 				'',
-			], StringUtils::capitalize(str_replace('.', ' ', $request['class']))), [], static::class)->{StringUtils::toCamelHump($request['action'])}($element);
+			], StringUtils::capitalize(str_replace('.', ' ', $request['class']))), [], static::class)->{$request['action']}($element);
 		}
 	}

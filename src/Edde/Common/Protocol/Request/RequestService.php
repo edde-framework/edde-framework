@@ -54,8 +54,8 @@
 			foreach ($this->requestHandlerList as $requestHandler) {
 				/** @var $response IElement */
 				if ($requestHandler->canHandle($element)) {
-					if (($response = $requestHandler->execute($element)) instanceof IElement) {
-						return $this->responseList[$element->getId()] = $response->setReference($element);
+					if (($response = $requestHandler->execute($element)) !== null) {
+						return $this->responseList[$element->getId()] = $response instanceof IElement ? $response->setReference($element) : $response;
 					}
 					return (new Error(100, sprintf('Internal error; request [%s] got no answer (response).', $element->getAttribute('request'))))->setException(MissingResponseException::class)->setReference($element);
 				}

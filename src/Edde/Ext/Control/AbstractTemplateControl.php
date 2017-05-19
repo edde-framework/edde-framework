@@ -8,11 +8,4 @@
 
 	abstract class AbstractTemplateControl extends AbstractControl {
 		use TemplateTrait;
-
-		/**
-		 * @inheritdoc
-		 */
-		protected function action(string $action, array $parameterList) {
-			return $this->template();
-		}
 	}

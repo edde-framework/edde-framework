@@ -4,7 +4,6 @@
 	namespace Edde\Api\Control;
 
 	use Edde\Api\Node\INode;
-	use Edde\Api\Protocol\IElement;
 
 	/**
 	 * Control is general element for transferring incoming request into the internal system service and for
@@ -38,31 +37,6 @@
 		 * @return IControl[]
 		 */
 		public function getControlList(): array;
-
-		/**
-		 * execute the given method in this controls
-		 *
-		 * @param IElement $element
-		 *
-		 * @return IElement
-		 */
-		public function request(IElement $element): IElement;
-
-		/**
-		 * get current action
-		 *
-		 * @return string
-		 */
-		public function getAction(): string;
-
-		/**
-		 * request content of the request converted to the target type
-		 *
-		 * @param string $target
-		 *
-		 * @return mixed
-		 */
-		public function getContent(string $target = 'array');
 
 		/**
 		 * traverse through whole control tree

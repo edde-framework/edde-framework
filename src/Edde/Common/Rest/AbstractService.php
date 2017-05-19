@@ -13,7 +13,7 @@
 	use Edde\Common\Control\AbstractControl;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Url\Url;
-	use Edde\Ext\Application\StringResponse;
+	use Edde\Ext\Application\StringContent;
 
 	abstract class AbstractService extends AbstractControl implements IService {
 		use LazyResponseManagerTrait;
@@ -73,7 +73,7 @@
 
 		protected function error(int $code, string $message) {
 			$this->httpResponse->header('Date', gmdate('D, d M Y H:i:s T'));
-			return $this->response(new StringResponse($message, ['text/plain']), $code);
+			return $this->response(new StringContent($message, ['text/plain']), $code);
 		}
 
 		protected function response(IElement $element, int $code = null) {

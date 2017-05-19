@@ -68,12 +68,12 @@
 		}
 
 		/**
-		 * @param string $source
+		 * @param string $mime
 		 * @param string $target
 		 *
 		 * @throws ConverterException
 		 */
-		protected function exception(string $source, string $target) {
-			throw new ConverterException(sprintf('Unsupported conversion in [%s] from [%s] to [%s].', static::class, $source, $target));
+		protected function exception(string $mime, string $target) {
+			throw new ConverterException(sprintf('Unsupported conversion in [%s] from [%s] to [%s].', static::class, $mime, $target));
 		}
 	}
