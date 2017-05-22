@@ -15,11 +15,11 @@ rules:
     composer.security_issue_in_composer:
         enabled: true
     composer.unfixed_dependency_version:
-        enabled: true
+        enabled: false
     composer.warning:
         enabled: true
     doctrine.database_query_contains_string_and_variable_concatenation:
-        enabled: true
+        enabled: false
     doctrine.invalid_schema:
         enabled: true
     doctrine.use_flush_in_loop:
