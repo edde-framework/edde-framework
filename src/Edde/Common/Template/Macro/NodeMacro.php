@@ -17,11 +17,11 @@
 				self::EVENT_PRE_ENTER,
 				self::EVENT_POST_LEAVE,
 			];
-			$source->on($events[0], function () use ($value) {
-				$this->macroOpen($value);
+			$source->on($events[0], function () {
+				$this->macroOpen();
 			});
-			$source->on($events[1], function () {
-				$this->macroClose();
+			$source->on($events[1], function () use ($value) {
+				$this->macroClose($value);
 			});
 		}
 
@@ -29,24 +29,29 @@
 		 * @inheritdoc
 		 */
 		protected function onEnter(INode $node, \Iterator $iterator, ...$parameters) {
-			$this->macroOpen($node->getAttribute('target'));
+			$this->macroOpen();
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		protected function onLeave(INode $node, \Iterator $iterator, ...$parameters) {
-			$this->macroClose();
+			$this->macroClose($this->attribute($node, 'target'));
 		}
 
-		public function macroOpen($value) {
+		public function macroOpen() {
 			echo '<?php ob_start(); ?>';
 		}
 
-		public function macroClose() {
+		public function macroClose(string $value) {
+			$value = $this->delimite($value);
 			echo '<?php ';
 			?>
 			$node = $this->converterManager->convert(ob_get_clean(), 'string', [\Edde\Api\Node\INode::class])->convert();
+			<?php
+			echo '$node = ' . str_replace('()', '($node);', $value) . "\n";
+			?>
+			$this->htmlGenerator->render($node);
 			<?php
 			echo '?>';
 		}

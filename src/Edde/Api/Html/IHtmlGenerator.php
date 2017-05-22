@@ -14,6 +14,15 @@
 		public function getTagList(): array;
 
 		/**
+		 * renders (echoes) output directly
+		 *
+		 * @param INode $root
+		 *
+		 * @return IHtmlGenerator
+		 */
+		public function render(INode $root): IHtmlGenerator;
+
+		/**
 		 * try to generate a html output from the given node
 		 *
 		 * @param INode $root

@@ -54,9 +54,17 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function render(INode $root): IHtmlGenerator {
+			$this->traverse($root, NodeIterator::recursive($root));
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function generate(INode $root): string {
 			ob_start();
-			$this->traverse($root, NodeIterator::recursive($root));
+			$this->render($root);
 			return ob_get_clean();
 		}
 
