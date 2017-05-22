@@ -93,6 +93,7 @@
 			$curl = curl_init((string)$request->getRequestUrl());
 			curl_setopt_array($curl, [
 				CURLOPT_SSL_VERIFYPEER => false,
+				CURLOPT_SSL_VERIFYHOST => false,
 				CURLOPT_FOLLOWLOCATION => true,
 				CURLOPT_FAILONERROR    => true,
 				CURLOPT_FORBID_REUSE   => true,
