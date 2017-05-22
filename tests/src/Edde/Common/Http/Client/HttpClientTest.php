@@ -14,8 +14,7 @@
 			$response = $this->httpClient->get('https://httpbin.org/get')
 				->execute()
 				->convert(['array']);
-			assertTrue(true);
-			assertTrue(true);
+			$this->assertTrue(true);
 		}
 
 		protected function setUp() {
