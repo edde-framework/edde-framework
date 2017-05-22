@@ -42,13 +42,13 @@
 			return parent::link('/api/v1/protocol', ...$parameterList);
 		}
 
-		public function restGet() {
+		public function actionGet(IElement $element) {
 			$this->elementQueue->load();
 			return new ElementContent((new Packet($this->hostUrl->getAbsoluteUrl()))->elements($this->elementQueue->getReferenceList($this->id)));
 		}
 
-		public function restPost() {
-			$response = new ElementContent($this->protocolService->element($this->getContent(IElement::class)));
+		public function actionPost(IElement $element) {
+			$response = new ElementContent($this->protocolService->element($this->getContent($element, IElement::class)));
 			$this->elementQueue->save();
 			if ($this->elementQueue->isEmpty() === false) {
 				$this->threadManager->execute();

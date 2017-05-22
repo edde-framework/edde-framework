@@ -5,8 +5,11 @@
 
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Control\IControl;
+	use Edde\Api\Converter\IContent;
+	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
+	use Edde\Api\Protocol\IElement;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Node\NodeIterator;
@@ -16,6 +19,7 @@
 	 * Root implementation of all controls.
 	 */
 	abstract class AbstractControl extends Object implements IConfigurable, IControl {
+		use LazyConverterManagerTrait;
 		use ConfigurableTrait;
 		/**
 		 * @var INode
@@ -66,6 +70,13 @@
 			foreach (NodeIterator::recursive($this->node, $self) as $node) {
 				yield $node->getMeta('control');
 			}
+		}
+
+		protected function getContent(IElement $element, string $target = 'array') {
+			if (($value = $element->getValue()) instanceof IContent) {
+				$this->converterManager->content($value, [$target])->convert();
+			}
+			return null;
 		}
 
 		/**
