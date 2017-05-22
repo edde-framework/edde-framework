@@ -37,6 +37,10 @@ rules:
         enabled: true
         max_length: 500
         threshold: 5
+    php.interface_has_no_interface_suffix:
+        enabled: false
+    php.silenced_error:
+        enabled: false
     php.commented_out_code:
         enabled: true
     php.contaminant_third_party_component_license:
