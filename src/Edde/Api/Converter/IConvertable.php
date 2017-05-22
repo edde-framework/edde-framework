@@ -12,11 +12,11 @@
 		public function getContent(): IContent;
 
 		/**
-		 * return target mime type
+		 * return target mime type; if target is not specified, source should not be converted
 		 *
-		 * @return string
+		 * @return string|null
 		 */
-		public function getTarget(): string;
+		public function getTarget();
 
 		/**
 		 * try to convert an input

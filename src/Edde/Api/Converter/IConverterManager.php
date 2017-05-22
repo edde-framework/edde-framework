@@ -33,5 +33,5 @@
 		 *
 		 * @return IConvertable
 		 */
-		public function content(IContent $content, array $targetList): IConvertable;
+		public function content(IContent $content, array $targetList = null): IConvertable;
 	}

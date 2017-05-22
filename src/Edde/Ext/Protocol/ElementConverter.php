@@ -28,7 +28,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function convert($content, string $mime, string $target) {
+		public function convert($content, string $mime, string $target = null) {
 			switch ($target) {
 				case IElement::class:
 					$this->unsupported($content, $target, is_string($content));

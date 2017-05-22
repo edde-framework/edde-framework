@@ -31,18 +31,18 @@
 		 * @throws ConverterException
 		 * @throws NodeException
 		 */
-		public function convert($convert, string $mime, string $target) {
+		public function convert($content, string $mime, string $target = null) {
 			switch ($target) {
 				case INode::class:
-					$this->unsupported($convert, $target, $convert instanceof \stdClass);
-					return NodeUtils::toNode($convert);
+					$this->unsupported($content, $target, $content instanceof \stdClass);
+					return NodeUtils::toNode($content);
 				case 'object':
 				case \stdClass::class:
-					$this->unsupported($convert, $target, $convert instanceof INode);
-					return NodeUtils::fromNode($convert);
+					$this->unsupported($content, $target, $content instanceof INode);
+					return NodeUtils::fromNode($content);
 				case 'application/json':
-					$this->unsupported($convert, $target, $convert instanceof INode);
-					return $this->converterManager->convert(NodeUtils::fromNode($convert), \stdClass::class, [$target])->convert();
+					$this->unsupported($content, $target, $content instanceof INode);
+					return $this->converterManager->convert(NodeUtils::fromNode($content), \stdClass::class, [$target])->convert();
 			}
 			$this->exception($mime, $target);
 		}

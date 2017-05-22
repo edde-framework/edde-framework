@@ -39,17 +39,17 @@
 		 * @throws XmlParserException
 		 * @throws ConverterException
 		 */
-		public function convert($convert, string $mime, string $target) {
-			$this->unsupported($convert, $target, $convert instanceof IResource || is_string($convert));
+		public function convert($content, string $mime, string $target = null) {
+			$this->unsupported($content, $target, $content instanceof IResource || is_string($content));
 			try {
 				switch ($target) {
 					case INode::class:
-						$parse = is_string($convert) ? 'string' : 'parse';
-						$this->xmlParser->{$parse}($convert, $handler = new XmlNodeHandler());
+						$parse = is_string($content) ? 'string' : 'parse';
+						$this->xmlParser->{$parse}($content, $handler = new XmlNodeHandler());
 						return $handler->getNode();
 				}
 			} catch (XmlParserException $e) {
-				throw new XmlParserException(sprintf('Cannot handle resource [%s]: %s', (string)$convert->getUrl(), $e->getMessage()), 0, $e);
+				throw new XmlParserException(sprintf('Cannot handle resource [%s]: %s', (string)$content->getUrl(), $e->getMessage()), 0, $e);
 			}
 			$this->exception($mime, $target);
 		}

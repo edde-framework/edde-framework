@@ -24,7 +24,7 @@
 		 *
 		 * @return mixed
 		 */
-		public function convert($content, string $mime, string $target);
+		public function convert($content, string $mime, string $target = null);
 
 		/**
 		 * @param IContent $content
@@ -32,5 +32,5 @@
 		 *
 		 * @return mixed
 		 */
-		public function content(IContent $content, string $target);
+		public function content(IContent $content, string $target = null);
 	}

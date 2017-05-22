@@ -36,7 +36,7 @@
 		 * @param mixed      $content
 		 * @param string     $target
 		 */
-		public function __construct(IConverter $converter, IContent $content, string $target) {
+		public function __construct(IConverter $converter, IContent $content, string $target = null) {
 			$this->converter = $converter;
 			$this->content = $content;
 			$this->target = $target;
@@ -52,7 +52,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getTarget(): string {
+		public function getTarget() {
 			return $this->target;
 		}
 

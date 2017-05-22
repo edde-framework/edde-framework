@@ -33,7 +33,7 @@
 		 * @inheritdoc
 		 * @throws ConverterException
 		 */
-		public function convert($convert, string $mime, string $target) {
+		public function convert($content, string $mime, string $target = null) {
 			switch ($mime) {
 				case 'text/plain':
 				case 'string':
@@ -41,20 +41,20 @@
 					switch ($target) {
 						case 'text/plain':
 						case 'string':
-							if (is_callable($convert)) {
-								$convert = $convert();
+							if (is_callable($content)) {
+								$content = $content();
 							}
-							return $convert;
+							return $content;
 						default:
-							$this->unsupported($convert, $target);
+							$this->unsupported($content, $target);
 					}
 					break;
 				case 'post':
 					switch ($target) {
 						case 'array':
-							return $convert;
+							return $content;
 						default:
-							$this->unsupported($convert, $target);
+							$this->unsupported($content, $target);
 					}
 			}
 			$this->exception($mime, $target);

@@ -123,7 +123,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function content(IContent $content, array $targetList): IHttpHandler {
+		public function content(IContent $content, array $targetList = null): IHttpHandler {
 			$this->request->setContent($content);
 			$this->targetList = $targetList;
 			return $this;
@@ -133,7 +133,7 @@
 		 * @inheritdoc
 		 */
 		public function post(array $post): IHttpHandler {
-			$this->content(new ArrayContent($post), ['array']);
+			$this->content(new ArrayContent($post));
 			return $this;
 		}
 
@@ -159,8 +159,8 @@
 				$convertable = $this->converterManager->content($content, $this->targetList);
 				$options[CURLOPT_POSTFIELDS] = $convertable->convert();
 				$headerList = $this->request->getHeaderList();
-				if ($headerList->has('Content-Type') === false) {
-					$this->header('Content-Type', $convertable->getTarget());
+				if ($headerList->has('Content-Type') === false && ($target = $convertable->getTarget()) !== null) {
+					$this->header('Content-Type', $target);
 				}
 			}
 			if ($this->cookie) {

@@ -46,11 +46,11 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function content(IContent $content, array $targetList): IConvertable {
+		public function content(IContent $content, array $targetList = null): IConvertable {
 			$exception = null;
 			$unknown = true;
 			$mime = $content->getMime();
-			foreach ($targetList as $target) {
+			foreach ($targetList ?? [] as $target) {
 				if (isset($this->converterList[$id = ($mime . '|' . $target)])) {
 					$unknown = false;
 					try {
@@ -59,8 +59,8 @@
 					}
 				}
 			}
-			if ($mime === reset($targetList)) {
-				return new Convertable(new PassConverter(), $content, $mime);
+			if ($targetList === null || $mime === reset($targetList)) {
+				return new Convertable(new PassConverter(), $content);
 			}
 			throw new ConverterException(sprintf('Cannot convert %ssource mime [%s] to any of [%s].', $unknown ? 'unknown/unsupported ' : '', $mime, implode(', ', $targetList)), 0, $exception);
 		}
