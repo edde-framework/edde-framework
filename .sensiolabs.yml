@@ -83,7 +83,7 @@ rules:
     php.use_exit_function:
         enabled: true
     php.use_global_variable_or_function:
-        enabled: true
+        enabled: false
     php.use_php_ereg_function:
         enabled: true
     php.use_php_eval_function:
