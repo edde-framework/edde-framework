@@ -4,7 +4,6 @@ exclude_patterns:
     - './bin'
     - './lib'
     - './tests'
-
 rules:
     composer.apc_class_loader_should_be_enabled:
         enabled: true
