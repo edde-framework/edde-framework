@@ -37,7 +37,8 @@ rules:
         max_length: 500
         threshold: 5
     php.interface_has_no_interface_suffix:
-        enabled: false
+        enabled: true
+        interface_name_pattern: /^I[A-Z]/
     php.silenced_error:
         enabled: false
     php.commented_out_code:
