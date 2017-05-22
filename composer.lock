@@ -4,20 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+    "hash": "dc69d3201b505e3fb9815282fc5c6f0c",
     "content-hash": "54c888958205dab86c7e1040b55b1bc0",
     "packages": [
         {
             "name": "defuse/php-encryption",
-            "version": "2.0.3",
+            "version": "v2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/defuse/php-encryption.git",
-                "reference": "2c6fea3d9a4eaaa8cef86b2a89f3660818117b33"
+                "reference": "5176f5abb38d3ea8a6e3ac6cd3bbb54d8185a689"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/defuse/php-encryption/zipball/2c6fea3d9a4eaaa8cef86b2a89f3660818117b33",
-                "reference": "2c6fea3d9a4eaaa8cef86b2a89f3660818117b33",
+                "url": "https://api.github.com/repos/defuse/php-encryption/zipball/5176f5abb38d3ea8a6e3ac6cd3bbb54d8185a689",
+                "reference": "5176f5abb38d3ea8a6e3ac6cd3bbb54d8185a689",
                 "shasum": ""
             },
             "require": {
@@ -26,13 +27,17 @@
                 "php": ">=5.4.0"
             },
             "require-dev": {
-                "nikic/php-parser": "^2.0"
+                "nikic/php-parser": "^2.0|^3.0",
+                "phpunit/phpunit": "^4|^5"
             },
+            "bin": [
+                "bin/generate-defuse-key"
+            ],
             "type": "library",
             "autoload": {
-                "classmap": [
-                    "src"
-                ]
+                "psr-4": {
+                    "Defuse\\Crypto\\": "src"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -63,7 +68,7 @@
                 "security",
                 "symmetric key cryptography"
             ],
-            "time": "2016-10-10T15:20:26+00:00"
+            "time": "2017-05-18 21:28:48"
         },
         {
             "name": "paragonie/constant_time_encoding",
@@ -124,7 +129,7 @@
                 "hex2bin",
                 "rfc4648"
             ],
-            "time": "2016-07-11T20:32:06+00:00"
+            "time": "2016-07-11 20:32:06"
         },
         {
             "name": "paragonie/random_compat",
@@ -172,7 +177,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2017-03-13T16:27:32+00:00"
+            "time": "2017-03-13 16:27:32"
         },
         {
             "name": "roave/security-advisories",
@@ -307,7 +312,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2017-05-13T14:02:28+00:00"
+            "time": "2017-05-13 14:02:28"
         }
     ],
     "packages-dev": [
@@ -364,7 +369,7 @@
                 "uprofiler",
                 "xhprof"
             ],
-            "time": "2017-03-20T17:06:28+00:00"
+            "time": "2017-03-20 17:06:28"
         },
         {
             "name": "codeclimate/php-test-reporter",
@@ -683,7 +688,7 @@
             "keywords": [
                 "markdown"
             ],
-            "time": "2016-10-29T18:58:20+00:00"
+            "time": "2016-10-29 18:58:20"
         },
         {
             "name": "myclabs/deep-copy",
@@ -725,7 +730,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2017-04-12T18:52:22+00:00"
+            "time": "2017-04-12 18:52:22"
         },
         {
             "name": "nikic/php-parser",
@@ -841,12 +846,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/humbug/phar-updater.git",
-                "reference": "4dae3229881ca9133f7d37b0975c284b87a1d2b3"
+                "reference": "088a716b9eb61325f9d84d7038a43dc52fd2fa07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/humbug/phar-updater/zipball/4dae3229881ca9133f7d37b0975c284b87a1d2b3",
-                "reference": "4dae3229881ca9133f7d37b0975c284b87a1d2b3",
+                "url": "https://api.github.com/repos/humbug/phar-updater/zipball/088a716b9eb61325f9d84d7038a43dc52fd2fa07",
+                "reference": "088a716b9eb61325f9d84d7038a43dc52fd2fa07",
                 "shasum": ""
             },
             "require": {
@@ -885,7 +890,7 @@
                 "self-update",
                 "update"
             ],
-            "time": "2017-05-08 23:38:00"
+            "time": "2017-05-19 12:36:20"
         },
         {
             "name": "phar-io/manifest",
@@ -987,7 +992,7 @@
                 }
             ],
             "description": "Library for handling version information and constraints",
-            "time": "2017-03-05T17:38:23+00:00"
+            "time": "2017-03-05 17:38:23"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
@@ -1036,7 +1041,7 @@
                     "email": "mike.vanriel@naenius.com"
                 }
             ],
-            "time": "2015-02-03T12:10:50+00:00"
+            "time": "2015-02-03 12:10:50"
         },
         {
             "name": "phpspec/prophecy",
@@ -1251,7 +1256,7 @@
             "keywords": [
                 "template"
             ],
-            "time": "2015-06-21T13:50:34+00:00"
+            "time": "2015-06-21 13:50:34"
         },
         {
             "name": "phpunit/php-timer",
@@ -1357,12 +1362,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "fb97015213904613447a238278f927df1b4ab5af"
+                "reference": "104a9bdadf763e3b94b1af6d3928df9a5384c46a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/fb97015213904613447a238278f927df1b4ab5af",
-                "reference": "fb97015213904613447a238278f927df1b4ab5af",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/104a9bdadf763e3b94b1af6d3928df9a5384c46a",
+                "reference": "104a9bdadf763e3b94b1af6d3928df9a5384c46a",
                 "shasum": ""
             },
             "require": {
@@ -1382,7 +1387,7 @@
                 "phpunit/php-timer": "^1.0.6",
                 "phpunit/phpunit-mock-objects": "^4.0",
                 "sebastian/comparator": "^2.0",
-                "sebastian/diff": "^1.4 || ^2.0",
+                "sebastian/diff": "^1.4.3 || ^2.0",
                 "sebastian/environment": "^3.0.2",
                 "sebastian/exporter": "^3.1",
                 "sebastian/global-state": "^1.1 || ^2.0",
@@ -1433,7 +1438,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-05-19 03:58:51"
+            "time": "2017-05-22 07:47:14"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1825,12 +1830,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/diff.git",
-                "reference": "4e0c886111db532a145d32301ba3f9ee9c94df4c"
+                "reference": "852dd59ba4e11b47bbf22132314f36706a4b7fea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/4e0c886111db532a145d32301ba3f9ee9c94df4c",
-                "reference": "4e0c886111db532a145d32301ba3f9ee9c94df4c",
+                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/852dd59ba4e11b47bbf22132314f36706a4b7fea",
+                "reference": "852dd59ba4e11b47bbf22132314f36706a4b7fea",
                 "shasum": ""
             },
             "require": {
@@ -1869,7 +1874,7 @@
             "keywords": [
                 "diff"
             ],
-            "time": "2017-05-19 04:13:16"
+            "time": "2017-05-22 08:51:12"
         },
         {
             "name": "sebastian/environment",
@@ -2568,12 +2573,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "a90f2adc19a2aa8b58ebf6df6aa6615e371d9b15"
+                "reference": "a10477bbf888f386db9c3ae460b1ada68bc397f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/a90f2adc19a2aa8b58ebf6df6aa6615e371d9b15",
-                "reference": "a90f2adc19a2aa8b58ebf6df6aa6615e371d9b15",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/a10477bbf888f386db9c3ae460b1ada68bc397f4",
+                "reference": "a10477bbf888f386db9c3ae460b1ada68bc397f4",
                 "shasum": ""
             },
             "require": {
@@ -2609,7 +2614,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2017-05-17 16:21:40"
+            "time": "2017-05-21 17:11:47"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -2861,7 +2866,7 @@
                 }
             ],
             "description": "A small library for converting tokenized PHP source code into XML and potentially other formats",
-            "time": "2017-04-07T12:08:54+00:00"
+            "time": "2017-04-07 12:08:54"
         },
         {
             "name": "twig/twig",
@@ -2869,12 +2874,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "0dbc6b87dcdfd72b2069b35e56d51d23a1cd5a25"
+                "reference": "fa1a84ec0b20895fe4fa15f5d0d62547bd7a86c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/0dbc6b87dcdfd72b2069b35e56d51d23a1cd5a25",
-                "reference": "0dbc6b87dcdfd72b2069b35e56d51d23a1cd5a25",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/fa1a84ec0b20895fe4fa15f5d0d62547bd7a86c3",
+                "reference": "fa1a84ec0b20895fe4fa15f5d0d62547bd7a86c3",
                 "shasum": ""
             },
             "require": {
@@ -2924,7 +2929,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2017-05-12 13:59:34"
+            "time": "2017-05-22 06:17:55"
         }
     ],
     "aliases": [],
