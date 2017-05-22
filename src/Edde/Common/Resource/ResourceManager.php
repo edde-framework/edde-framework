@@ -58,7 +58,6 @@
 		 */
 		public function resource(IResource $resource, string $mime = null, INode $root = null): INode {
 			$mime = $mime ?: $resource->getMime();
-			$this->converterManager->setup();
 			/** @var $node INode */
 			$convertable = $this->converterManager->convert($resource, $mime, [INode::class]);
 			if (($node = $convertable->convert()) instanceof INode === false) {

@@ -52,10 +52,11 @@
 				'array',
 				'object',
 				\stdClass::class,
+				'text/plain',
 			], [
 				'json',
 				'application/json',
-				'http+application/json',
+				'application/json',
 				'*/*',
 			]);
 			$this->register([
@@ -76,34 +77,35 @@
 		 * @throws ConverterException
 		 * @throws NodeException
 		 */
-		public function convert($convert, string $mime, string $target) {
+		public function convert($content, string $mime, string $target = null) {
 			switch ($mime) {
 				/** @noinspection PhpMissingBreakStatementInspection */
 				case 'stream+application/json':
-					$convert = file_get_contents($convert);
+					$content = file_get_contents($content);
 				case 'application/json':
-					$this->unsupported($convert, $target, $convert instanceof IFile || is_string($convert));
-					$convert = $convert instanceof IFile ? $convert->get() : $convert;
+					$this->unsupported($content, $target, $content instanceof IFile || is_string($content));
+					$content = $content instanceof IFile ? $content->get() : $content;
 					switch ($target) {
 						case 'array':
-							return json_decode($convert, true);
+							return json_decode($content, true);
 						case 'object':
 						case \stdClass::class:
-							return json_decode($convert);
+							return json_decode($content);
 						case 'node':
 						case INode::class:
-							return NodeUtils::toNode(json_decode($convert));
+							return NodeUtils::toNode(json_decode($content));
 					}
 					break;
 				case 'json':
 				case 'array':
 				case 'object':
 				case \stdClass::class:
+				case 'text/plain':
 					switch ($target) {
 						case 'json':
 						case 'application/json':
 						case '*/*':
-							return json_encode($convert);
+							return json_encode($content);
 					}
 					break;
 			}

@@ -7,7 +7,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function convert($content, string $mime, string $target) {
+		public function convert($content, string $mime, string $target = null) {
 			return $content;
 		}
 	}

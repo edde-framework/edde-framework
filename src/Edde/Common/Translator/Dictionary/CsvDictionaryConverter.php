@@ -38,13 +38,13 @@
 		 * @throws ConverterException
 		 * @throws FileException
 		 */
-		public function convert($convert, string $mime, string $target) {
-			/** @var $convert IFile */
-			$this->unsupported($convert, $target, $convert instanceof IFile);
+		public function convert($content, string $mime, string $target = null) {
+			/** @var $content IFile */
+			$this->unsupported($content, $target, $content instanceof IFile);
 			switch ($target) {
 				case IDictionary::class:
 					$csvDictionary = $this->container->create(CsvDictionary::class, [], __METHOD__);
-					$csvDictionary->addFile($convert->getPath());
+					$csvDictionary->addFile($content->getPath());
 					return $csvDictionary;
 			}
 			$this->exception($mime, $target);

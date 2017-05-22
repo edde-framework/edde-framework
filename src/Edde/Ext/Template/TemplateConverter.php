@@ -21,7 +21,7 @@
 		 *
 		 * @param ITemplate $content
 		 */
-		public function convert($content, string $mime, string $target) {
+		public function convert($content, string $mime, string $target = null) {
 			$this->unsupported($content, $target, $content instanceof ITemplate);
 			switch ($target) {
 				case 'text/html':

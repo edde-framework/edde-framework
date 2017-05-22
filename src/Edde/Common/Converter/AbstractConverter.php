@@ -47,7 +47,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function content(IContent $content, string $target) {
+		public function content(IContent $content, string $target = null) {
 			return $this->convert($content->getContent(), $content->getMime(), $target);
 		}
 

@@ -46,8 +46,6 @@
 		 * @inheritdoc
 		 */
 		public function compile(string $name, string $namespace = null, ...$parameterList): IFile {
-			$this->resourceProvider->setup();
-			$this->compiler->setup();
 			return $this->compiler->compile(($namespace ? $namespace . '-' : '') . $name, $this->resourceProvider->getResource($name, $namespace, ...$parameterList));
 		}
 

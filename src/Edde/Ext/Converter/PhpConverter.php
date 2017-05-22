@@ -35,16 +35,16 @@
 		 * @throws ConverterException
 		 * @throws NodeException
 		 */
-		public function convert($convert, string $mime, string $target) {
-			$this->unsupported($convert, $target, $convert instanceof IResource);
+		public function convert($content, string $mime, string $target = null) {
+			$this->unsupported($content, $target, $content instanceof IResource);
 			switch ($target) {
 				case INode::class:
 					return (function (IResource $resource, string $source) {
 						return NodeUtils::toNode($this->convert($resource, $source, 'array'));
-					})($convert, $mime);
+					})($content, $mime);
 				case 'array':
-					if (is_array($include = require (string)$convert->getUrl()) === false) {
-						throw new ConverterException(sprintf('Conversion to [%s] failed: php file [%s] has not returned array.', $target, (string)$convert->getUrl()));
+					if (is_array($include = require (string)$content->getUrl()) === false) {
+						throw new ConverterException(sprintf('Conversion to [%s] failed: php file [%s] has not returned array.', $target, (string)$content->getUrl()));
 					}
 					return $include;
 			}

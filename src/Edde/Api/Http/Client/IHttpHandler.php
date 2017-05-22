@@ -79,7 +79,7 @@
 		 *
 		 * @return IHttpHandler
 		 */
-		public function content(IContent $content, array $targetList): IHttpHandler;
+		public function content(IContent $content, array $targetList = null): IHttpHandler;
 
 		/**
 		 * this methods basically sets url encoded data to the request body
