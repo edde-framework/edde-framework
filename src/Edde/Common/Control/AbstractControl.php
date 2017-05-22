@@ -7,7 +7,6 @@
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
-	use Edde\Api\Protocol\IElement;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Node\NodeIterator;
@@ -22,13 +21,6 @@
 		 * @var INode
 		 */
 		protected $node;
-		/**
-		 * When control is called by execute, the request is saved here for future reference; this basically
-		 * means that control cannot be reused, because it will loose reference to the original request.
-		 *
-		 * @var IElement
-		 */
-		protected $request;
 
 		/**
 		 * @return INode
