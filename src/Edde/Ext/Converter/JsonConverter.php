@@ -52,10 +52,11 @@
 				'array',
 				'object',
 				\stdClass::class,
+				'text/plain',
 			], [
 				'json',
 				'application/json',
-				'http+application/json',
+				'application/json',
 				'*/*',
 			]);
 			$this->register([
@@ -99,6 +100,7 @@
 				case 'array':
 				case 'object':
 				case \stdClass::class:
+				case 'text/plain':
 					switch ($target) {
 						case 'json':
 						case 'application/json':

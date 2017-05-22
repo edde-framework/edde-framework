@@ -4,12 +4,14 @@
 	namespace Edde\Common\Rest;
 
 	use Edde\Api\Application\LazyResponseManagerTrait;
+	use Edde\Api\Converter\IContent;
 	use Edde\Api\Http\IResponse as IHttpResponse;
 	use Edde\Api\Http\LazyHostUrlTrait;
 	use Edde\Api\Http\LazyHttpRequestTrait;
 	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Rest\IService;
+	use Edde\Api\Rest\RestException;
 	use Edde\Common\Control\AbstractControl;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Url\Url;
@@ -45,26 +47,10 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function request(IElement $element): IElement {
-			$methodList = $this->getMethodList();
-			if (in_array($method = strtoupper($element->getAction()), self::$methodList, true) === false) {
-				$this->httpResponse->header('Allowed', $allowed = implode(', ', array_keys($methodList)));
-				return $this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not supported; %s.', $method, empty($methodList) ? 'there are no supported methods' : 'available methods are [' . $allowed . ']'));
-			}
-			if (isset($methodList[$method]) === false) {
-				$this->httpResponse->header('Allowed', $allowed = implode(', ', array_keys($methodList)));
-				return $this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not implemented; %s.', $method, empty($methodList) ? 'there are no available methods' : 'available methods are [' . $allowed . ']'));
-			}
-			return $this->execute($methodList[$method], $this->request = $element);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function getMethodList(): array {
 			$methodList = [];
 			foreach (self::$methodList as $name) {
-				if (method_exists($this, $method = ('rest' . StringUtils::firstUpper(strtolower($name))))) {
+				if (method_exists($this, $method = ('action' . StringUtils::firstUpper(strtolower($name))))) {
 					$methodList[$name] = $method;
 				}
 			}
@@ -76,9 +62,29 @@
 			return $this->response(new StringContent($message, ['text/plain']), $code);
 		}
 
-		protected function response(IElement $element, int $code = null) {
+		protected function response(IContent $content, int $code = null) {
 			$code ? $this->httpResponse->setCode($code) : null;
-			$this->responseManager->response($element);
-			return $element;
+			$this->responseManager->response($content);
+			return $content;
+		}
+
+		public function __call(string $name, $parameterList) {
+			if (count($parameterList) !== 1) {
+				throw new RestException(sprintf('Calling unknown method [%s].', $name));
+			}
+			list($request) = $parameterList;
+			if ($request instanceof IElement === false) {
+				throw new RestException(sprintf('Unsupported parameter type [%s].', gettype($request)));
+			}
+			$methodList = $this->getMethodList();
+			if (in_array($name = strtoupper($name), self::$methodList, true) === false) {
+				$this->httpResponse->header('Allowed', $allowed = implode(', ', array_keys($methodList)));
+				return $this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not supported; %s.', $name, empty($methodList) ? 'there are no supported methods' : 'available methods are [' . $allowed . ']'));
+			}
+			if (isset($methodList[$name]) === false) {
+				$this->httpResponse->header('Allowed', $allowed = implode(', ', array_keys($methodList)));
+				return $this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not implemented; %s.', $name, empty($methodList) ? 'there are no available methods' : 'available methods are [' . $allowed . ']'));
+			}
+			return $this->{$methodList[$name]}($request);
 		}
 	}

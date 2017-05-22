@@ -10,6 +10,7 @@
 	use Edde\Common\Object;
 	use RecursiveDirectoryIterator;
 	use RecursiveIteratorIterator;
+	use Symfony\Component\Finder\SplFileInfo;
 
 	/**
 	 * Representation of directory on the filesystem.
@@ -33,6 +34,18 @@
 		public function getFileList() {
 			foreach (new \RecursiveDirectoryIterator($this->directory, \RecursiveDirectoryIterator::SKIP_DOTS) as $path) {
 				yield $path;
+			}
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getDirectoryList() {
+			/** @var $path SplFileInfo */
+			foreach (new \RecursiveDirectoryIterator($this->directory, \RecursiveDirectoryIterator::SKIP_DOTS) as $path) {
+				if ($path->isDir()) {
+					yield new self((string)$path);
+				}
 			}
 		}
 
@@ -74,6 +87,13 @@
 		 */
 		public function getDirectory(): string {
 			return $this->directory;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getName(): string {
+			return basename($this->directory);
 		}
 
 		/**
