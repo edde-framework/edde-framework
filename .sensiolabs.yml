@@ -210,5 +210,5 @@ rules:
         enabled: true
     xml.syntax_error:
         enabled: true
-   php.php7_reserved_words:
+    php.php7_reserved_words:
         enabled: false
