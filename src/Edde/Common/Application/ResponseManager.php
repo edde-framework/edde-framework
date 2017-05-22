@@ -7,14 +7,13 @@
 	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Converter\IContent;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
-	use Edde\Api\Protocol\IElement;
 	use Edde\Common\Config\ConfigurableTrait;
 
 	class ResponseManager extends AbstractResponseHandler implements IResponseManager {
 		use LazyConverterManagerTrait;
 		use ConfigurableTrait;
 		/**
-		 * @var IElement
+		 * @var IContent
 		 */
 		protected $response;
 		/**

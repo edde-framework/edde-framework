@@ -30,7 +30,7 @@
 		 *
 		 * @return ILock
 		 */
-		public function block(string $name = null, int $timeout = 3): ILock;
+		public function block(string $name = null, int $timeout = null): ILock;
 
 		/**
 		 * unlocks the given id

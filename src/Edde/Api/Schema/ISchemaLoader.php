@@ -5,14 +5,13 @@
 
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Node\INode;
-	use Traversable;
 
 	/**
 	 * Schema provider should provide schema definition in node.
 	 */
 	interface ISchemaLoader extends IConfigurable {
 		/**
-		 * @return INode[]|Traversable
+		 * @return INode[]|\Traversable
 		 */
 		public function load();
 	}

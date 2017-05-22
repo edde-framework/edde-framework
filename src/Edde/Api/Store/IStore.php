@@ -34,7 +34,7 @@
 		 *
 		 * @return IStore
 		 */
-		public function block(string $name = null, int $timeout = 0): IStore;
+		public function block(string $name = null, int $timeout = null): IStore;
 
 		/**
 		 * unlock the given key or whole store
