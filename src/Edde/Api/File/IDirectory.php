@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\File;
 
@@ -14,11 +14,23 @@
 		public function getDirectory(): string;
 
 		/**
+		 * return directory name
+		 *
+		 * @return string
+		 */
+		public function getName(): string;
+
+		/**
 		 * return iterator over file list in the current directory
 		 *
 		 * @return string[]
 		 */
 		public function getFileList();
+
+		/**
+		 * @return IDirectory[]
+		 */
+		public function getDirectoryList();
 
 		/**
 		 * normalize directory path
