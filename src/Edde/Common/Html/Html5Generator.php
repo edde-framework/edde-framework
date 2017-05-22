@@ -78,7 +78,7 @@
 					$content .= "<!DOCTYPE html>\n";
 					break;
 			}
-			$content .= $indentation = str_repeat("\t", $level ?? $node->getLevel());
+			$content .= str_repeat("\t", $level ?? $node->getLevel());
 			$content .= '<' . $node->getName();
 			foreach ($node->getAttributeList() as $name => $value) {
 				if ($value instanceof IAttributeList) {
