@@ -125,15 +125,6 @@
 		public function save(string $content): IFile;
 
 		/**
-		 * enable write cache; write is performed after number of calls or on file close; disabled (=== 0) by default
-		 *
-		 * @param int $count
-		 *
-		 * @return IFile
-		 */
-		public function enableWriteCache($count = 8): IFile;
-
-		/**
 		 * @return IFile
 		 */
 		public function rewind(): IFile;

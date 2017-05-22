@@ -4,11 +4,20 @@
 	namespace Edde\Ext\Router;
 
 	use Edde\Api\Application\LazyContextTrait;
+	use Edde\Api\Application\LazyResponseManagerTrait;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Http\LazyHttpRequestTrait;
+	use Edde\Api\Runtime\LazyRuntimeTrait;
+	use Edde\Common\Application\HttpResponseHandler;
+	use Edde\Common\Protocol\Request\Request;
+	use Edde\Common\Router\AbstractRouter;
 	use Edde\Common\Strings\StringUtils;
 
-	class SimpleHttpRouter extends HttpRouter {
+	class SimpleHttpRouter extends AbstractRouter {
 		use LazyHttpRequestTrait;
+		use LazyResponseManagerTrait;
+		use LazyContainerTrait;
+		use LazyRuntimeTrait;
 		use LazyContextTrait;
 
 		/**
@@ -32,16 +41,12 @@
 			}
 			$name = implode('\\', $partList);
 			$parameterList = $requestUrl->getParameterList();
-			foreach ($this->context->cascade('\\') as $namespace) {
-				if (class_exists($class = sprintf('%s\\%s', $namespace, $name))) {
-					$parameterList['action'] = $class . '.' . $action;
-					break;
+			foreach ($this->context->cascade('\\', $name) as $class) {
+				if (class_exists($class)) {
+					$this->responseManager->setResponseHandler($this->container->create(HttpResponseHandler::class));
+					return (new Request($class . '::action' . StringUtils::toCamelCase($action)))->data($parameterList)->setValue($this->httpRequest->getContent());
 				}
 			}
-			if (isset($parameterList['action']) === false) {
-				return null;
-			}
-			$requestUrl->setParameterList($parameterList);
-			return parent::createRequest();
+			return null;
 		}
 	}

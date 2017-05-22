@@ -3,10 +3,8 @@
 
 	namespace Edde\Common\Protocol;
 
-	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\Protocol\LazyElementQueueTrait;
-	use Edde\Common\Container\Factory\ClassFactory;
-	use Edde\Common\File\RootDirectory;
+	use Edde\Api\Store\LazyStoreTrait;
 	use Edde\Common\Protocol\Event\Event;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Test\TestCase;
@@ -15,8 +13,10 @@
 
 	class ElementQueueTest extends TestCase {
 		use LazyElementQueueTrait;
+		use LazyStoreTrait;
 
 		public function testElementQueue() {
+			$this->store->drop();
 			self::assertEmpty(iterator_to_array($this->elementQueue->getQueueList()));
 			$this->elementQueue->queue(new Event('some-cool-event'));
 			self::assertCount(1, iterator_to_array($this->elementQueue->getQueueList()));
@@ -31,9 +31,6 @@
 		}
 
 		protected function setUp() {
-			ContainerFactory::autowire($this, [
-				IRootDirectory::class => ContainerFactory::instance(RootDirectory::class, [__DIR__ . '/temp']),
-				new ClassFactory(),
-			]);
+			ContainerFactory::autowire($this);
 		}
 	}

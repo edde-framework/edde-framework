@@ -16,9 +16,9 @@
 		public function hasResource(string $name, string $namespace = null, ...$parameters): bool {
 			try {
 				$this->getResource($name, $namespace, ...$parameters);
-				return $hasResource = true;
+				return true;
 			} catch (UnknownResourceException $exception) {
-				return $hasResource = false;
+				return false;
 			}
 		}
 	}

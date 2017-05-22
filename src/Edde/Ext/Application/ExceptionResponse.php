@@ -3,14 +3,10 @@
 
 	namespace Edde\Ext\Application;
 
-	use Edde\Common\Application\Response;
+	use Edde\Common\Converter\Content;
 
-	class ExceptionResponse extends Response {
-		/**
-		 * @param \Exception $exception
-		 * @param array|null $targetList
-		 */
-		public function __construct(\Exception $exception, array $targetList = null) {
-			parent::__construct($exception, 'exception', $targetList);
+	class ExceptionResponse extends Content {
+		public function __construct(\Exception $exception) {
+			parent::__construct($exception, 'exception');
 		}
 	}

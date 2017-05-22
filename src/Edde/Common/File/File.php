@@ -16,12 +16,6 @@
 	 */
 	class File extends Resource implements IFile {
 		/**
-		 * @var int
-		 */
-		protected $writeCache = 0;
-		protected $writeCacheData = [];
-		protected $writeCacheIndex = 0;
-		/**
 		 * @var IDirectory
 		 */
 		protected $directory;
@@ -133,15 +127,6 @@
 
 		/**
 		 * @inheritdoc
-		 */
-		public function enableWriteCache($count = 8): IFile {
-			$this->writeCache = $count;
-			$this->writeCacheIndex = 0;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
 		 * @throws FileException
 		 */
 		public function delete(): IFile {
@@ -157,16 +142,9 @@
 		 * @throws FileException
 		 */
 		public function close(): IFile {
-			$writeCache = $this->writeCache;
-			$this->writeCacheIndex = 2;
-			$this->writeCache = 1;
-			$this->write('');
-			$this->writeCache = $writeCache;
 			fflush($handle = $this->getHandle());
 			fclose($handle);
 			$this->handle = null;
-			/** reset write cache by current value */
-			$this->enableWriteCache($writeCache);
 			return $this;
 		}
 
@@ -177,15 +155,6 @@
 		public function write($write, int $length = null): IFile {
 			if ($this->isOpen() === false) {
 				$this->openForWrite();
-			}
-			if ($this->writeCache > 0) {
-				$this->writeCacheData[] = $write;
-				if ($this->writeCacheIndex++ < $this->writeCache) {
-					return $this;
-				}
-				$write = implode('', $this->writeCacheData);
-				$this->writeCacheData = [];
-				$this->writeCacheIndex = 0;
 			}
 			if (($count = $length ? fwrite($this->getHandle(), $write, $length) : fwrite($this->getHandle(), $write)) !== ($length = strlen($write))) {
 				throw new FileException(sprintf('Failed to write into file [%s]: expected %d bytes, %d has been written.', $this->url->getPath(), $length, $count));

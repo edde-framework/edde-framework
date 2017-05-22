@@ -5,5 +5,5 @@
 
 	use Edde\Api\Application\ApplicationException;
 
-	class EmptyRequestQueueException extends ApplicationException {
+	class UnknownResponseHandlerException extends ApplicationException {
 	}

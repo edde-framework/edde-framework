@@ -86,7 +86,12 @@
 		 * @inheritdoc
 		 */
 		public function request(IRequest $request): IHttpHandler {
-			curl_setopt_array($curl = curl_init($url = (string)$request->getRequestUrl()), [
+			/**
+			 * more lines, because some shitty automated code reviewers do not see use of this variable
+			 * in return statement (sensiolabs insight)
+			 */
+			$curl = curl_init((string)$request->getRequestUrl());
+			curl_setopt_array($curl, [
 				CURLOPT_SSL_VERIFYPEER => false,
 				CURLOPT_FOLLOWLOCATION => true,
 				CURLOPT_FAILONERROR    => true,

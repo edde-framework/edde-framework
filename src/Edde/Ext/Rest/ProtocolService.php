@@ -12,7 +12,7 @@
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\Protocol\Packet;
 	use Edde\Common\Rest\AbstractService;
-	use Edde\Ext\Protocol\ElementResponse;
+	use Edde\Ext\Protocol\ElementContent;
 
 	class ProtocolService extends AbstractService {
 		use LazyProtocolServiceTrait;
@@ -44,11 +44,11 @@
 
 		public function restGet() {
 			$this->elementQueue->load();
-			return new ElementResponse((new Packet($this->hostUrl->getAbsoluteUrl()))->elements($this->elementQueue->getReferenceList($this->id)));
+			return new ElementContent((new Packet($this->hostUrl->getAbsoluteUrl()))->elements($this->elementQueue->getReferenceList($this->id)));
 		}
 
 		public function restPost() {
-			$response = new ElementResponse($this->protocolService->element($this->request->getContent([IElement::class])));
+			$response = new ElementContent($this->protocolService->element($this->getContent(IElement::class)));
 			$this->elementQueue->save();
 			if ($this->elementQueue->isEmpty() === false) {
 				$this->threadManager->execute();

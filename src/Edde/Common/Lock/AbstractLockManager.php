@@ -25,7 +25,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function block(string $name = null, int $timeout = 3): ILock {
+		public function block(string $name = null, int $timeout = null): ILock {
+			$timeout = $timeout ?: 3;
 			$time = microtime(true);
 			while (true) {
 				if ($timeout > 0 && (microtime(true) - $time) >= $timeout) {

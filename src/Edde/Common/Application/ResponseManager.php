@@ -3,9 +3,9 @@
 
 	namespace Edde\Common\Application;
 
-	use Edde\Api\Application\IResponse;
 	use Edde\Api\Application\IResponseHandler;
 	use Edde\Api\Application\IResponseManager;
+	use Edde\Api\Converter\IContent;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Common\Config\ConfigurableTrait;
 
@@ -13,7 +13,7 @@
 		use LazyConverterManagerTrait;
 		use ConfigurableTrait;
 		/**
-		 * @var IResponse
+		 * @var IContent
 		 */
 		protected $response;
 		/**
@@ -39,15 +39,15 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function response(IResponse $response = null): IResponseManager {
-			$this->response = $response;
+		public function response(IContent $content): IResponseManager {
+			$this->response = $content;
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function execute() {
+		public function execute(IContent $content = null) {
 			if ($this->response === null) {
 				return;
 			}
@@ -59,10 +59,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function send(IResponse $response): IResponseHandler {
-			$this->converterManager->setup();
-			$this->converterManager->content($response, $response->getTargetList())
-				->convert();
-			return $this;
+		public function send(IContent $content): IResponseHandler {
+			throw new UnknownResponseHandlerException('There is no response handler to catch current response.');
 		}
 	}

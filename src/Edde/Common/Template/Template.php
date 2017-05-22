@@ -6,6 +6,7 @@
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\File\IFile;
+	use Edde\Api\Html\LazyHtmlGeneratorTrait;
 	use Edde\Api\Resource\LazyResourceProviderTrait;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\LazyCompilerTrait;
@@ -18,6 +19,7 @@
 		use LazyContainerTrait;
 		use LazyCompilerTrait;
 		use LazyConverterManagerTrait;
+		use LazyHtmlGeneratorTrait;
 		use CacheTrait;
 		/**
 		 * @var string

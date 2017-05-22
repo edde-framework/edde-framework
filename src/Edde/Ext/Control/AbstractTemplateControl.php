@@ -3,16 +3,16 @@
 
 	namespace Edde\Ext\Control;
 
+	use Edde\Api\Router\LazyRouterServiceTrait;
 	use Edde\Common\Control\AbstractControl;
+	use Edde\Common\Strings\StringUtils;
 	use Edde\Ext\Template\TemplateTrait;
 
 	abstract class AbstractTemplateControl extends AbstractControl {
+		use LazyRouterServiceTrait;
 		use TemplateTrait;
 
-		/**
-		 * @inheritdoc
-		 */
-		protected function action(string $action, array $parameterList) {
-			return $this->template();
+		public function getCurrentTemplate() {
+			return StringUtils::recamel((string)$this->routerService->createRequest()->getMeta('::method'));
 		}
 	}

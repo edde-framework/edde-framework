@@ -3,10 +3,10 @@
 
 	namespace Edde\Common\Router;
 
-	use Edde\Api\Application\IRequest;
 	use Edde\Api\Application\IResponseHandler;
 	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Router\IRouter;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Router\RouterException;
@@ -25,7 +25,7 @@
 		 */
 		protected $routerList = [];
 		/**
-		 * @var IRequest
+		 * @var IElement
 		 */
 		protected $defaultRequest;
 		/**
@@ -33,7 +33,7 @@
 		 */
 		protected $defaultResponseHandler;
 		/**
-		 * @var IRequest
+		 * @var IElement
 		 */
 		protected $request;
 
@@ -51,8 +51,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setDefaultRequest(IRequest $request, IResponseHandler $responseHandler = null): IRouterService {
-			$this->defaultRequest = $request;
+		public function setDefaultRequest(IElement $element, IResponseHandler $responseHandler = null): IRouterService {
+			$this->defaultRequest = $element;
 			$this->defaultResponseHandler = $responseHandler;
 			return $this;
 		}
@@ -61,7 +61,7 @@
 		 * @inheritdoc
 		 * @throws RouterException
 		 */
-		public function createRequest(): IRequest {
+		public function createRequest(): IElement {
 			if ($this->request) {
 				return $this->request;
 			}

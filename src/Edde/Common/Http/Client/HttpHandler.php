@@ -175,7 +175,7 @@
 			/** @noinspection PhpDocSignatureInspection */
 			$options[CURLOPT_HEADERFUNCTION] = function ($curl, $header) use ($headerList, $cookieList) {
 				$length = strlen($header);
-				if (($text = trim($header)) !== '' && strpos($header, ':') !== false) {
+				if (trim($header) !== '' && strpos($header, ':') !== false) {
 					list($header, $content) = explode(':', $header, 2);
 					$headerList->set($header, $content = trim($content));
 					switch ($header) {

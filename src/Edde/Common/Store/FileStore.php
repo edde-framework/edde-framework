@@ -20,7 +20,7 @@
 		 * @inheritdoc
 		 */
 		public function set(string $id, $value): IStore {
-			$this->getFile($id)->save((string)$value);
+			$this->getFile($id)->save(serialize($value));
 			return $this;
 		}
 
@@ -32,7 +32,15 @@
 			if ($file->isAvailable() === false) {
 				return $default;
 			}
-			return $file->get();
+			return unserialize($file->get());
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function drop(): IStore {
+			$this->storeDirectory->purge();
+			return $this;
 		}
 
 		protected function getFile(string $id): IFile {

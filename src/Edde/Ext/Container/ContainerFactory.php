@@ -7,8 +7,6 @@
 	use Edde\Api\Acl\IAclManager;
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Application\IContext;
-	use Edde\Api\Application\IRequest;
-	use Edde\Api\Application\IRequestQueue;
 	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Asset\IAssetDirectory;
 	use Edde\Api\Asset\IAssetStorage;
@@ -72,7 +70,6 @@
 	use Edde\Common\Acl\Acl;
 	use Edde\Common\Acl\AclManager;
 	use Edde\Common\Application\Application;
-	use Edde\Common\Application\RequestQueue;
 	use Edde\Common\Application\ResponseManager;
 	use Edde\Common\Asset\AssetDirectory;
 	use Edde\Common\Asset\AssetStorage;
@@ -136,12 +133,11 @@
 	use Edde\Ext\Database\Sqlite\SqliteDsn;
 	use Edde\Ext\Link\LinkFactoryConfigurator;
 	use Edde\Ext\Log\LogServiceConfigurator;
-	use Edde\Ext\Protocol\CacheElementQueue;
+	use Edde\Ext\Protocol\ElementQueue;
 	use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 	use Edde\Ext\Protocol\RequestServiceConfigurator;
 	use Edde\Ext\Protocol\ThreadManagerConfigurator;
 	use Edde\Ext\Resource\ResourceManagerConfigurator;
-	use Edde\Ext\Router\RequestQueueConfigurator;
 	use Edde\Ext\Router\RouterServiceConfigurator;
 	use Edde\Ext\Template\CompilerConfigurator;
 	use Edde\Ext\Thread\WebExecutorConfigurator;
@@ -395,9 +391,7 @@
 				 */
 				IApplication::class     => Application::class,
 				IContext::class         => self::exception(sprintf('You have to register implementation of [%s] specific for you application.', IContext::class)),
-				IRequestQueue::class    => RequestQueue::class,
 				IRouterService::class   => RouterService::class,
-				IRequest::class         => self::exception(sprintf('[%s] is not possible use directly; implement proper factory or choose different approach.', IRequest::class)),
 				IHttpRequest::class     => HttpRequest::class . '::createHttpRequest',
 				IHttpResponse::class    => HttpResponse::class . '::createHttpResponse',
 				IResponseManager::class => ResponseManager::class,
@@ -504,7 +498,7 @@
 				 */
 				IProtocolService::class               => ProtocolService::class,
 				IRequestService::class                => RequestService::class,
-				IElementQueue::class                  => CacheElementQueue::class,
+				IElementQueue::class                  => ElementQueue::class,
 				IEventBus::class                      => EventBus::class,
 				\Edde\Ext\Rest\ProtocolService::class => \Edde\Ext\Rest\ProtocolService::class,
 
@@ -537,7 +531,6 @@
 		static public function getDefaultConfiguratorList(): array {
 			return [
 				IRouterService::class    => RouterServiceConfigurator::class,
-				IRequestQueue::class     => RequestQueueConfigurator::class,
 				/**
 				 * We are using some custom resource providers, so we have to register them to resource manager and the current
 				 * point how to get resources.

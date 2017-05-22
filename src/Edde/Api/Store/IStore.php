@@ -34,7 +34,7 @@
 		 *
 		 * @return IStore
 		 */
-		public function block(string $name = null, int $timeout = 0): IStore;
+		public function block(string $name = null, int $timeout = null): IStore;
 
 		/**
 		 * unlock the given key or whole store
@@ -92,4 +92,11 @@
 		 * @return mixed
 		 */
 		public function get(string $name, $default = null);
+
+		/**
+		 * delete whole store (basically same as a database drop)
+		 *
+		 * @return IStore
+		 */
+		public function drop(): IStore;
 	}
