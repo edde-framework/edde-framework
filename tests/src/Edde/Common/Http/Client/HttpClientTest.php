@@ -15,6 +15,7 @@
 				->execute()
 				->convert(['array']);
 			assertTrue(true);
+			assertTrue(true);
 		}
 
 		protected function setUp() {
