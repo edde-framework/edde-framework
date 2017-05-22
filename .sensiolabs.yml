@@ -20,9 +20,9 @@ rules:
     doctrine.database_query_contains_string_and_variable_concatenation:
         enabled: false
     doctrine.invalid_schema:
-        enabled: true
+        enabled: false
     doctrine.use_flush_in_loop:
-        enabled: true
+        enabled: false
     git.user_specific_ignored_file:
         enabled: true
     html.html_link_contains_javascript:
