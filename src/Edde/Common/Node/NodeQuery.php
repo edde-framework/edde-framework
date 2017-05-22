@@ -47,8 +47,7 @@
 		 * @return INode[]
 		 */
 		static public function node(INode $node, $query) {
-			return self::create($query)
-				->filter($node);
+			return self::create($query)->filter($node);
 		}
 
 		/**
@@ -100,9 +99,6 @@
 				if ($this->filter->fixed && $level !== $this->filter->level) {
 					continue;
 				}
-//				if ($this->filter->static && $this->filter->attributes === false && $this->filter->metas === false && $node->getPath() !== $this->query) {
-//					continue;
-//				}
 				$path = $node->getPath($this->filter->attributes, $this->filter->metas);
 				if (preg_match($this->filter->preg, $path) !== 1) {
 					continue;

@@ -23,8 +23,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function block(string $name = null, int $timeout = 0): IStore {
-			$this->lockManager->block($this->getLockName($name), $timeout = 0);
+		public function block(string $name = null, int $timeout = null): IStore {
+			$this->lockManager->block($this->getLockName($name), $timeout);
 			return $this;
 		}
 

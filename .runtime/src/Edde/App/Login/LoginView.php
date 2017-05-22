@@ -7,6 +7,5 @@
 
 	class LoginView extends AbstractTemplateControl {
 		public function actionHandleLogin() {
-			$content = $this->getContent();
 		}
 	}

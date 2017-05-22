@@ -53,7 +53,7 @@
 		 * @throws XmlParserException
 		 */
 		public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParser {
-			$this->iterate($iterator = new Iterator(new ChunkIterator([
+			$this->iterate(new Iterator(new ChunkIterator([
 				StringUtils::class,
 				'createIterator',
 			], $resource->getIterator())), $xmlHandler);

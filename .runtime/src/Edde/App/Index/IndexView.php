@@ -3,7 +3,6 @@
 
 	namespace Edde\App\Index;
 
-	use Edde\Common\Strings\StringUtils;
 	use Edde\Ext\Control\AbstractTemplateControl;
 
 	class IndexView extends AbstractTemplateControl {
