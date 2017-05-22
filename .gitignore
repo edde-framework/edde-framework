@@ -12,3 +12,4 @@
 /doc
 /.runtime/.assets/template
 /build
+/tests/**/.assets
