@@ -90,7 +90,7 @@
 			 * more lines, because some shitty automated code reviewers do not see use of this variable
 			 * in return statement (sensiolabs insight)
 			 */
-			$curl = curl_init($url = (string)$request->getRequestUrl());
+			$curl = curl_init((string)$request->getRequestUrl());
 			curl_setopt_array($curl, [
 				CURLOPT_SSL_VERIFYPEER => false,
 				CURLOPT_FOLLOWLOCATION => true,
