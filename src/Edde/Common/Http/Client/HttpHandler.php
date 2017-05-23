@@ -104,6 +104,14 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function setTargetList(array $targetList = null): IHttpHandler {
+			$this->targetList = $targetList;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function cookie($file, bool $reset = false): IHttpHandler {
 			$this->cookie = [
 				is_string($file) ? $this->tempDirectory->file($file) : $file,
@@ -134,6 +142,7 @@
 		 */
 		public function post(array $post): IHttpHandler {
 			$this->content(new ArrayContent($post));
+			$this->targetList = ['application/x-www-form-urlencoded'];
 			return $this;
 		}
 
