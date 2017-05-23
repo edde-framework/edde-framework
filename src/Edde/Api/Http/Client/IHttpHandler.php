@@ -43,6 +43,13 @@
 		public function keepConnectionAlive(): IHttpHandler;
 
 		/**
+		 * @param array $targetList
+		 *
+		 * @return IHttpHandler
+		 */
+		public function setTargetList(array $targetList = null): IHttpHandler;
+
+		/**
 		 * this should modify an original http request class (if used)
 		 *
 		 * @param string $name
