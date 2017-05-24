@@ -207,7 +207,6 @@
 			$options[CURLOPT_HTTPHEADER] = $this->request->getHeaderList()
 				->headers();
 			$options[CURLOPT_FAILONERROR] = false;
-			$options[CURLOPT_FOLLOWLOCATION] = true;
 			curl_setopt_array($this->curl, $options);
 			if (($content = curl_exec($this->curl)) === false) {
 				$error = curl_error($this->curl);
