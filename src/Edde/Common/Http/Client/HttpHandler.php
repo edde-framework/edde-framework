@@ -69,7 +69,7 @@
 		public function basic(string $user, string $password): IHttpHandler {
 			curl_setopt_array($this->curl, [
 				CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
-				CURLOPT_USERPWD  => vsprintf('%s:%s', func_get_args()),
+				CURLOPT_USERPWD => vsprintf('%s:%s', func_get_args()),
 			]);
 			return $this;
 		}
@@ -80,7 +80,7 @@
 		public function digest(string $user, string $password): IHttpHandler {
 			curl_setopt_array($this->curl, [
 				CURLOPT_HTTPAUTH => CURLAUTH_DIGEST,
-				CURLOPT_USERPWD  => vsprintf('%s:%s', func_get_args()),
+				CURLOPT_USERPWD => vsprintf('%s:%s', func_get_args()),
 			]);
 			return $this;
 		}
@@ -134,6 +134,15 @@
 		public function content(IContent $content, array $targetList = null): IHttpHandler {
 			$this->request->setContent($content);
 			$this->targetList = $targetList;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function payload(string $payload, string $mime): IHttpHandler {
+			$this->request->setContent(new Content($payload, $mime));
+			$this->contentType($mime);
 			return $this;
 		}
 
@@ -195,7 +204,8 @@
 				}
 				return $length;
 			};
-			$options[CURLOPT_HTTPHEADER] = $this->request->getHeaderList()->headers();
+			$options[CURLOPT_HTTPHEADER] = $this->request->getHeaderList()
+				->headers();
 			$options[CURLOPT_FAILONERROR] = false;
 			curl_setopt_array($this->curl, $options);
 			if (($content = curl_exec($this->curl)) === false) {
