@@ -89,6 +89,14 @@
 		public function content(IContent $content, array $targetList = null): IHttpHandler;
 
 		/**
+		 * @param string $payload
+		 * @param string $mime
+		 *
+		 * @return IHttpHandler
+		 */
+		public function payload(string $payload, string $mime): IHttpHandler;
+
+		/**
 		 * this methods basically sets url encoded data to the request body
 		 *
 		 * @param array $post
