@@ -48,7 +48,6 @@
 					$callback($element);
 				}
 			}
-			return $this;
 		}
 
 		/**

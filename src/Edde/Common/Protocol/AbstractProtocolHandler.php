@@ -49,13 +49,4 @@
 			}
 			return $this->execute($element);
 		}
-
-		/**
-		 * @param IElement $element
-		 *
-		 * @return IElement|null
-		 */
-		protected function createAsyncElement(IElement $element) {
-			return null;
-		}
 	}
