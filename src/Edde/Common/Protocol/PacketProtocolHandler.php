@@ -19,6 +19,14 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function queue(IElement $element) {
+			parent::queue($element);
+			return (new Packet($this->hostUrl->getAbsoluteUrl()))->reference($element)->setReference($element);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function execute(IElement $element) {
 			$packet = new Packet($this->hostUrl->getAbsoluteUrl());
 			/**
@@ -37,9 +45,5 @@
 				}
 			}
 			return $packet;
-		}
-
-		protected function createAsyncElement(IElement $element) {
-			return (new Packet($this->hostUrl->getAbsoluteUrl()))->reference($element)->setReference($element);
 		}
 	}
