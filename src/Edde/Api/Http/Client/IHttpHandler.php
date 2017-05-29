@@ -43,6 +43,13 @@
 		public function keepConnectionAlive(): IHttpHandler;
 
 		/**
+		 * @param array $targetList
+		 *
+		 * @return IHttpHandler
+		 */
+		public function setTargetList(array $targetList = null): IHttpHandler;
+
+		/**
 		 * this should modify an original http request class (if used)
 		 *
 		 * @param string $name
@@ -80,6 +87,14 @@
 		 * @return IHttpHandler
 		 */
 		public function content(IContent $content, array $targetList = null): IHttpHandler;
+
+		/**
+		 * @param string $payload
+		 * @param string $mime
+		 *
+		 * @return IHttpHandler
+		 */
+		public function payload(string $payload, string $mime): IHttpHandler;
 
 		/**
 		 * this methods basically sets url encoded data to the request body

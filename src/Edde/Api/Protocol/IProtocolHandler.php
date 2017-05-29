@@ -28,13 +28,12 @@
 		public function canHandle(IElement $element): bool;
 
 		/**
-		 * enqueue the given element
+		 * enqueue the given element; queue can return "answer" on queued element (use case is probably only for protocol
+		 * root packet)
 		 *
 		 * @param IElement $element
-		 *
-		 * @return IProtocolHandler
 		 */
-		public function queue(IElement $element): IProtocolHandler;
+		public function queue(IElement $element);
 
 		/**
 		 * this method could execute the given element; if the Element is async, it would be queued

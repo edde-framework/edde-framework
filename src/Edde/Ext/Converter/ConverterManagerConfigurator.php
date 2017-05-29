@@ -25,5 +25,6 @@
 			$instance->registerConverter($this->container->create(CsvDictionaryConverter::class));
 			$instance->registerConverter($this->container->create(XmlConverter::class));
 			$instance->registerConverter($this->container->create(ElementConverter::class));
+			$instance->registerConverter($this->container->create(PostConverter::class));
 		}
 	}

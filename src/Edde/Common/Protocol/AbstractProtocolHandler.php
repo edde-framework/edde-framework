@@ -30,10 +30,9 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function queue(IElement $element): IProtocolHandler {
+		public function queue(IElement $element) {
 			$this->check($element);
 			$this->elementQueue->queue($element);
-			return $this;
 		}
 
 		/**
@@ -42,21 +41,12 @@
 		public function element(IElement $element) {
 			$this->check($element);
 			if ($element->isAsync()) {
-				$this->queue($element);
-				if (($async = $this->createAsyncElement($element)) !== null) {
+				/** @var $async IElement */
+				if (($async = $this->queue($element)) instanceof IElement) {
 					$async->setReference($element);
 				}
 				return $async;
 			}
 			return $this->execute($element);
-		}
-
-		/**
-		 * @param IElement $element
-		 *
-		 * @return IElement|null
-		 */
-		protected function createAsyncElement(IElement $element) {
-			return null;
 		}
 	}
