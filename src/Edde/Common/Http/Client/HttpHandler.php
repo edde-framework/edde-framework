@@ -231,7 +231,7 @@
 			], __METHOD__);
 			$response->setContent($this->container->create(Content::class, [
 				$content,
-				isset($type) ? $type->mime : $contentType,
+				isset($type) ? $type->mime : ($contentType ?: 'text/plain'),
 			], __METHOD__));
 			if ($code >= 400) {
 				switch ($code) {
