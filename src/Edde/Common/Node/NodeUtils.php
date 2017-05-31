@@ -36,10 +36,13 @@
 			foreach ($stdClass as $k => $v) {
 				if ($k === 'name') {
 					$node->setName($v);
+					continue;
 				} else if ($k === 'value') {
 					$node->setValue($v);
+					continue;
 				} else if ($v instanceof \stdClass) {
 					$node->addNode(self::toNode($v, $createNode($class, $k), $class));
+					continue;
 				} else if (is_array($v)) {
 					foreach ($v as $vv) {
 						$node->addNode(self::toNode($vv, $createNode($class, $k), $class));
