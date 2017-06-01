@@ -171,14 +171,13 @@
 		 * @inheritdoc
 		 */
 		public function getElementNode(string $name) {
-			$node = null;
 			/** @var $node INode */
 			foreach ($this->getNodeList() as $node) {
 				if ($node->getName() === $name) {
-					break;
+					return $node;
 				}
 			}
-			return $node;
+			return null;
 		}
 
 		/**
