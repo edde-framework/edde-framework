@@ -82,10 +82,7 @@
 				$nodeList[$node->getName()][] = self::fromNode($node);
 			}
 			foreach ($nodeList as $name => $list) {
-				$object->{$name} = $list;
-				if (count($list) === 1) {
-					$object->{$name} = reset($list);
-				}
+				$object->{$name} = count($list) === 1 ? reset($list) : $list;
 			}
 			return $root->isRoot() ? (object)[$root->getName() => $object] : $object;
 		}

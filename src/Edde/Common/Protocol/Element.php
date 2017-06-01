@@ -195,13 +195,7 @@
 		 * @inheritdoc
 		 */
 		public function getElementList(string $name): array {
-			/** @var $node INode */
-			foreach ($this->getNodeList() as $node) {
-				if ($node->getName() === $name) {
-					return $node->getNodeList();
-				}
-			}
-			return [];
+			return ($node = $this->getElementNode($name)) ? $node->getNodeList() : [];
 		}
 
 		/**
