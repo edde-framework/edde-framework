@@ -51,6 +51,9 @@
 			$unknown = true;
 			$mime = $content->getMime();
 			foreach ($targetList ?? [] as $target) {
+				if ($mime === $target) {
+					return new Convertable(new PassConverter(), $content, $content->getMime());
+				}
 				if (isset($this->converterList[$id = ($mime . '|' . $target)])) {
 					$unknown = false;
 					try {
@@ -60,7 +63,7 @@
 				}
 			}
 			if ($targetList === null || $mime === reset($targetList)) {
-				return new Convertable(new PassConverter(), $content);
+				return new Convertable(new PassConverter(), $content, $content->getMime());
 			}
 			throw new ConverterException(sprintf('Cannot convert %ssource mime [%s] to any of [%s].', $unknown ? 'unknown/unsupported ' : '', $mime, implode(', ', $targetList)), 0, $exception);
 		}
