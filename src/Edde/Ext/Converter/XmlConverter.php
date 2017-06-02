@@ -9,6 +9,7 @@
 	use Edde\Api\Xml\LazyXmlParserTrait;
 	use Edde\Api\Xml\XmlParserException;
 	use Edde\Common\Converter\AbstractConverter;
+	use Edde\Common\Converter\Content;
 	use Edde\Common\Xml\XmlNodeHandler;
 
 	/**
@@ -31,6 +32,13 @@
 				'xml',
 				'string',
 			], INode::class);
+			$this->register([
+				'text/xml',
+				'application/xml',
+				'application/xhtml+xml',
+				'xml',
+				'string',
+			], '*/*');
 		}
 
 		/** @noinspection PhpInconsistentReturnPointsInspection */
@@ -47,6 +55,8 @@
 						$parse = is_string($content) ? 'string' : 'parse';
 						$this->xmlParser->{$parse}($content, $handler = new XmlNodeHandler());
 						return $handler->getNode();
+					case '*/*':
+						return new Content($content, 'application/xml');
 				}
 			} catch (XmlParserException $e) {
 				throw new XmlParserException(sprintf('Cannot handle resource [%s]: %s', (string)$content->getUrl(), $e->getMessage()), 0, $e);
