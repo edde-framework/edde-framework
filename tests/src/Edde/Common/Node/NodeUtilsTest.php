@@ -73,15 +73,15 @@
 		}
 
 		public function testSimpleConvert() {
-			$this->doTest(NodeUtils::toNode($this->converterManager->convert(self::$source, 'application/json', ['object'])->convert()));
+			$this->doTest(NodeUtils::toNode($this->converterManager->convert(self::$source, 'application/json', ['object'])->convert()->getContent()));
 		}
 
 		public function testConverterManager() {
-			$this->doTest($this->converterManager->convert(self::$source, 'application/json', [INode::class])->convert());
+			$this->doTest($this->converterManager->convert(self::$source, 'application/json', [INode::class])->convert()->getContent());
 		}
 
 		public function testNodeConversion() {
-			$node = $this->converterManager->convert(self::$source, 'application/json', [INode::class])->convert();
+			$node = $this->converterManager->convert(self::$source, 'application/json', [INode::class])->convert()->getContent();
 			$object = NodeUtils::fromNode($node);
 			self::assertEquals((object)[
 				'packet' => (object)[
@@ -123,13 +123,13 @@
 		 * node to object test
 		 */
 		public function testCompactConversionEquality() {
-			self::assertEquals(json_decode(self::$source), NodeUtils::fromNode($this->converterManager->convert(self::$source, 'application/json', [INode::class])->convert()));
+			self::assertEquals(json_decode(self::$source), NodeUtils::fromNode($this->converterManager->convert(self::$source, 'application/json', [INode::class])->convert()->getContent()));
 		}
 
 		/**
 		 * json to json conversions test
 		 */
 		public function testCompactConverter() {
-			self::assertEquals(json_decode(self::$source), $this->converterManager->convert($this->converterManager->convert(self::$source, 'application/json', [INode::class])->convert(), INode::class, [\stdClass::class])->convert());
+			self::assertEquals(json_decode(self::$source), $this->converterManager->convert($this->converterManager->convert(self::$source, 'application/json', [INode::class])->convert()->getContent(), INode::class, [\stdClass::class])->convert()->getContent());
 		}
 	}

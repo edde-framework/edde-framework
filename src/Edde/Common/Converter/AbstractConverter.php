@@ -47,7 +47,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function content(IContent $content, string $target = null) {
+		public function content(IContent $content, string $target = null): IContent {
 			return $this->convert($content->getContent(), $content->getMime(), $target);
 		}
 
@@ -71,9 +71,10 @@
 		 * @param string $mime
 		 * @param string $target
 		 *
+		 * @return IContent
 		 * @throws ConverterException
 		 */
-		protected function exception(string $mime, string $target) {
+		protected function exception(string $mime, string $target): IContent {
 			throw new ConverterException(sprintf('Unsupported conversion in [%s] from [%s] to [%s].', static::class, $mime, $target));
 		}
 	}

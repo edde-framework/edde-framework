@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Http\Client;
 
+	use Edde\Api\Converter\IContent;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Http\Client\IResponse;
 	use Edde\Common\Http\Response as HttpResponse;
@@ -13,8 +14,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function convert(array $targetList) {
-			return $this->converterManager->content($this->getContent(), $targetList)
-				->convert();
+		public function convert(array $targetList): IContent {
+			return $this->converterManager->content($this->getContent(), $targetList)->convert();
 		}
 	}

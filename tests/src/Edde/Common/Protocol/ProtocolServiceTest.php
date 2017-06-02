@@ -204,7 +204,7 @@
 					],
 				],
 			];
-			self::assertEquals($expect, $this->converterManager->convert($packet, INode::class, [\stdClass::class])->convert());
+			self::assertEquals($expect, $this->converterManager->convert($packet, INode::class, [\stdClass::class])->convert()->getContent());
 		}
 
 		public function testServiceRequest() {
@@ -290,7 +290,7 @@
 						],
 					],
 				],
-			], $this->converterManager->convert($response, INode::class, [\stdClass::class])->convert());
+			], $this->converterManager->convert($response, INode::class, [\stdClass::class])->convert()->getContent());
 		}
 
 		public function testAsyncPacket() {
@@ -339,7 +339,7 @@
 						],
 					],
 				],
-			], $this->converterManager->convert($response, INode::class, [\stdClass::class])->convert());
+			], $this->converterManager->convert($response, INode::class, [\stdClass::class])->convert()->getContent());
 			self::assertEmpty($this->protocolService->getReferenceList($packet->getId()));
 
 			$this->protocolService->dequeue();
@@ -418,7 +418,7 @@
 						],
 					],
 				],
-			], $this->converterManager->convert($response, INode::class, [\stdClass::class])->convert());
+			], $this->converterManager->convert($response, INode::class, [\stdClass::class])->convert()->getContent());
 		}
 
 		protected function setUp() {

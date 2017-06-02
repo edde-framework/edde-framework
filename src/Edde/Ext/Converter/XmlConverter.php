@@ -4,6 +4,7 @@
 	namespace Edde\Ext\Converter;
 
 	use Edde\Api\Converter\ConverterException;
+	use Edde\Api\Converter\IContent;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Xml\LazyXmlParserTrait;
@@ -41,27 +42,25 @@
 			], '*/*');
 		}
 
-		/** @noinspection PhpInconsistentReturnPointsInspection */
 		/**
 		 * @inheritdoc
 		 * @throws XmlParserException
 		 * @throws ConverterException
 		 */
-		public function convert($content, string $mime, string $target = null) {
+		public function convert($content, string $mime, string $target = null): IContent {
 			$this->unsupported($content, $target, $content instanceof IResource || is_string($content));
 			try {
 				switch ($target) {
 					case INode::class:
-						$parse = is_string($content) ? 'string' : 'parse';
-						$this->xmlParser->{$parse}($content, $handler = new XmlNodeHandler());
-						return $handler->getNode();
+						$this->xmlParser->{is_string($content) ? 'string' : 'parse'}($content, $handler = new XmlNodeHandler());
+						return new Content($handler->getNode(), INode::class);
 					case '*/*':
 						return new Content($content, 'application/xml');
 				}
 			} catch (XmlParserException $e) {
 				throw new XmlParserException(sprintf('Cannot handle resource [%s]: %s', (string)$content->getUrl(), $e->getMessage()), 0, $e);
 			}
-			$this->exception($mime, $target);
+			return $this->exception($mime, $target);
 		}
 
 		/**

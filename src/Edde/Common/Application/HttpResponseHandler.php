@@ -8,7 +8,6 @@
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Http\LazyHttpRequestTrait;
 	use Edde\Api\Http\LazyHttpResponseTrait;
-	use Edde\Common\Converter\Content;
 
 	class HttpResponseHandler extends AbstractResponseHandler {
 		use LazyHttpRequestTrait;
@@ -20,7 +19,7 @@
 		 */
 		public function send(IContent $content): IResponseHandler {
 			$convertable = $this->converterManager->content($content, $this->httpRequest->getHeaderList()->getAcceptList());
-			$this->httpResponse->setContent((($content = $convertable->convert()) instanceof IContent) ? $content : new Content($convertable->convert(), $convertable->getTarget()));
+			$this->httpResponse->setContent($convertable->convert());
 			$this->httpResponse->send();
 			return $this;
 		}

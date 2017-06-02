@@ -3,11 +3,13 @@
 
 	namespace Edde\Common\Converter;
 
+	use Edde\Api\Converter\IContent;
+
 	class PassConverter extends AbstractConverter {
 		/**
 		 * @inheritdoc
 		 */
-		public function convert($content, string $mime, string $target = null) {
+		public function convert($content, string $mime, string $target = null): IContent {
 			return $content;
 		}
 	}

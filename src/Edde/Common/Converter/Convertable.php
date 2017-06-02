@@ -18,7 +18,7 @@
 		 */
 		protected $content;
 		/**
-		 * @var mixed
+		 * @var IContent
 		 */
 		protected $result;
 		/**
@@ -59,7 +59,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function convert() {
+		public function convert(): IContent {
 			if ($this->result === null) {
 				$this->result = $this->converter->content($this->content, $this->target);
 			}

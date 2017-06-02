@@ -69,7 +69,7 @@
 		public function basic(string $user, string $password): IHttpHandler {
 			curl_setopt_array($this->curl, [
 				CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
-				CURLOPT_USERPWD => vsprintf('%s:%s', func_get_args()),
+				CURLOPT_USERPWD  => vsprintf('%s:%s', func_get_args()),
 			]);
 			return $this;
 		}
@@ -80,7 +80,7 @@
 		public function digest(string $user, string $password): IHttpHandler {
 			curl_setopt_array($this->curl, [
 				CURLOPT_HTTPAUTH => CURLAUTH_DIGEST,
-				CURLOPT_USERPWD => vsprintf('%s:%s', func_get_args()),
+				CURLOPT_USERPWD  => vsprintf('%s:%s', func_get_args()),
 			]);
 			return $this;
 		}
@@ -175,10 +175,11 @@
 			$options = [];
 			if ($content = $this->request->getContent()) {
 				$convertable = $this->converterManager->content($content, $this->targetList);
-				$options[CURLOPT_POSTFIELDS] = $convertable->convert();
+				$content = $convertable->convert();
+				$options[CURLOPT_POSTFIELDS] = $content->getContent();
 				$headerList = $this->request->getHeaderList();
-				if ($headerList->has('Content-Type') === false && ($target = $convertable->getTarget()) !== null) {
-					$this->header('Content-Type', $target);
+				if ($headerList->has('Content-Type') === false) {
+					$this->header('Content-Type', $content->getMime());
 				}
 			}
 			if ($this->cookie) {
@@ -204,8 +205,7 @@
 				}
 				return $length;
 			};
-			$options[CURLOPT_HTTPHEADER] = $this->request->getHeaderList()
-				->headers();
+			$options[CURLOPT_HTTPHEADER] = $this->request->getHeaderList()->headers();
 			$options[CURLOPT_FAILONERROR] = false;
 			curl_setopt_array($this->curl, $options);
 			if (($content = curl_exec($this->curl)) === false) {

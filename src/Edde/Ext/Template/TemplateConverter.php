@@ -3,8 +3,10 @@
 
 	namespace Edde\Ext\Template;
 
+	use Edde\Api\Converter\IContent;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Common\Converter\AbstractConverter;
+	use Edde\Common\Converter\Content;
 
 	class TemplateConverter extends AbstractConverter {
 		public function __construct() {
@@ -21,7 +23,7 @@
 		 *
 		 * @param ITemplate $content
 		 */
-		public function convert($content, string $mime, string $target = null) {
+		public function convert($content, string $mime, string $target = null): IContent {
 			$this->unsupported($content, $target, $content instanceof ITemplate);
 			switch ($target) {
 				case 'text/html':
@@ -30,7 +32,7 @@
 				case 'string':
 					ob_start();
 					$content->execute();
-					return ob_get_clean();
+					return new Content(ob_get_clean(), 'text/xml');
 			}
 			return $this->exception($mime, $target);
 		}

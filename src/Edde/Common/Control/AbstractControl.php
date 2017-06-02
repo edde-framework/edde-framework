@@ -74,7 +74,7 @@
 
 		protected function getContent(IElement $element, string $target = 'array') {
 			if (($value = $element->getValue()) instanceof IContent) {
-				$this->converterManager->content($value, [$target])->convert();
+				return $this->converterManager->content($value, [$target])->convert()->getContent();
 			}
 			return null;
 		}

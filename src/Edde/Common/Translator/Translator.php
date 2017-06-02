@@ -47,7 +47,7 @@
 			$scope = $scope ?: ($this->scopeStack->isEmpty() ? null : $this->scopeStack->top());
 			if ($this->isConfigured()) {
 				$convertable = $this->converterManager->convert($source, $source->getMime(), [IDictionary::class]);
-				$this->registerDictionary($convertable->convert(), $scope);
+				$this->registerDictionary($convertable->convert()->getContent(), $scope);
 				return $this;
 			}
 			$this->sourceList[] = [
@@ -126,7 +126,7 @@
 			foreach ($this->sourceList as list($file, $scope)) {
 				/** @var $file IFile */
 				$convertable = $this->converterManager->convert($file, $file->getMime(), [IDictionary::class]);
-				$this->registerDictionary($convertable->convert(), $scope);
+				$this->registerDictionary($convertable->convert()->getContent(), $scope);
 			}
 			if (empty($this->dictionaryList)) {
 				throw new TranslatorException('Translator needs at least one dictionary. Or The God will kill one cute devil kitten!');

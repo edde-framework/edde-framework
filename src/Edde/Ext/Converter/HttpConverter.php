@@ -4,6 +4,7 @@
 	namespace Edde\Ext\Converter;
 
 	use Edde\Api\Converter\ConverterException;
+	use Edde\Api\Converter\IContent;
 	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Common\Converter\AbstractConverter;
 
@@ -28,12 +29,11 @@
 			$this->register('post', 'array');
 		}
 
-		/** @noinspection PhpInconsistentReturnPointsInspection */
 		/**
 		 * @inheritdoc
 		 * @throws ConverterException
 		 */
-		public function convert($content, string $mime, string $target = null) {
+		public function convert($content, string $mime, string $target = null): IContent {
 			switch ($mime) {
 				case 'text/plain':
 				case 'string':
@@ -57,6 +57,6 @@
 							$this->unsupported($content, $target);
 					}
 			}
-			$this->exception($mime, $target);
+			return $this->exception($mime, $target);
 		}
 	}
