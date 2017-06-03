@@ -10,6 +10,6 @@
 		 * @inheritdoc
 		 */
 		public function convert($content, string $mime, string $target = null): IContent {
-			return $content;
+			return new Content($content, $mime);
 		}
 	}

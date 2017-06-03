@@ -218,7 +218,7 @@
 			if (is_string($contentType = $headerList->get('Content-Type', curl_getinfo($this->curl, CURLINFO_CONTENT_TYPE)))) {
 				$type = HttpUtils::contentType((string)$contentType);
 			}
-			$headerList->set('Content-Type', $contentType);
+			$contentType ? $headerList->set('Content-Type', $contentType) : ($contentType = 'text/plain');
 			$code = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
 			$error = curl_error($this->curl);
 			curl_close($this->curl);
@@ -231,7 +231,7 @@
 			], __METHOD__);
 			$response->setContent($this->container->create(Content::class, [
 				$content,
-				isset($type) ? $type->mime : ($contentType ?: 'text/plain'),
+				isset($type) ? $type->mime : $contentType,
 			], __METHOD__));
 			if ($code >= 400) {
 				switch ($code) {
