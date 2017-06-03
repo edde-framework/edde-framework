@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Protocol\Request;
 
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\Request\IRequestHandler;
 	use Edde\Common\Protocol\AbstractProtocolHandler;
@@ -22,6 +23,10 @@
 		 * @inheritdoc
 		 */
 		public function execute(IElement $element) {
-			return $this->container->create((string)$element->getMeta('::class'), [], static::class)->{(string)$element->getMeta('::method')}($element);
+			/** @var $instance IConfigurable */
+			if (($instance = $this->container->create((string)$element->getMeta('::class'), [], static::class)) instanceof IConfigurable) {
+				$instance->setup();
+			}
+			return $instance->{(string)$element->getMeta('::method')}($element);
 		}
 	}
