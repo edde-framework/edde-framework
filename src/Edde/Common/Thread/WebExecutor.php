@@ -7,7 +7,7 @@
 	use Edde\Api\Thread\IExecutor;
 	use Edde\Api\Url\IUrl;
 	use Edde\Api\Url\UrlException;
-	use Edde\Common\Url\Url;
+	use Edde\Common\Http\RequestUrl;
 
 	class WebExecutor extends AbstractExecutor {
 		use LazyHttpClientTrait;
@@ -23,7 +23,12 @@
 		 * @throws UrlException
 		 */
 		public function setUrl($url): IExecutor {
-			$this->url = Url::create($url);
+			$this->url = RequestUrl::create($url);
+			$scheme = $this->url->getScheme();
+			$this->url->setScheme('tcp');
+			if ($scheme === 'https' || $scheme === 'ssl') {
+				$this->url->setScheme('ssl');
+			}
 			return $this;
 		}
 

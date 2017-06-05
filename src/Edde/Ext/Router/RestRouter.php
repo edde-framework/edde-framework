@@ -14,6 +14,7 @@
 	use Edde\Common\Application\HttpResponseHandler;
 	use Edde\Common\Protocol\Request\Request;
 	use Edde\Common\Router\AbstractRouter;
+	use Edde\Common\Strings\StringUtils;
 
 	class RestRouter extends AbstractRouter implements IConfigurable, ILinkGenerator {
 		use LazyContainerTrait;
@@ -49,7 +50,7 @@
 			foreach ($this->serviceList as $service) {
 				if ($service->match($requestUrl)) {
 					$this->responseManager->setResponseHandler($this->container->create(HttpResponseHandler::class));
-					return (new Request(get_class($service) . '::' . $this->httpRequest->getMethod()))->data($requestUrl->getParameterList())->setValue($this->httpRequest->getContent());
+					return (new Request(get_class($service) . '::action' . StringUtils::capitalize($this->httpRequest->getMethod())))->data($requestUrl->getParameterList())->setValue($this->httpRequest->getContent());
 				}
 			}
 			return null;

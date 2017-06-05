@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Identity;
 
@@ -41,6 +41,14 @@
 		 * @return IIdentity
 		 */
 		public function setMetaList(array $metaList): IIdentity;
+
+		/**
+		 * @param string $name
+		 * @param        $value
+		 *
+		 * @return IIdentity
+		 */
+		public function setMeta(string $name, $value): IIdentity;
 
 		/**
 		 * return particular meta data from identity

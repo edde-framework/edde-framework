@@ -13,11 +13,11 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function save(): IElementQueue {
+		public function save(bool $override = false): IElementQueue {
 			$this->store->block($lock = static::class . '/element-queue');
 			$queueList = $this->queueList;
 			$elementList = $this->elementList;
-			$this->load();
+			$override === false ? $this->load() : null;
 			$this->store->set($lock, [
 				array_merge($this->queueList, $queueList),
 				array_merge($this->elementList, $elementList),

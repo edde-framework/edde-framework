@@ -5,6 +5,7 @@
 
 	use Edde\Api\Thread\LazyThreadManagerTrait;
 	use Edde\Api\Url\IUrl;
+	use Edde\Common\Protocol\Request\Response;
 	use Edde\Common\Rest\AbstractService;
 
 	class ThreadService extends AbstractService {
@@ -30,5 +31,6 @@
 		 */
 		public function actionHead() {
 			$this->threadManager->pool();
+			return new Response();
 		}
 	}

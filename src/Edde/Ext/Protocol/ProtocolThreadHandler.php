@@ -16,7 +16,7 @@
 		public function dequeue(): IThreadHandler {
 			$this->elementQueue->load();
 			$this->elementQueue->execute();
-			$this->elementQueue->save();
+			$this->elementQueue->save(true);
 			return $this;
 		}
 
@@ -24,6 +24,7 @@
 		 * @inheritdoc
 		 */
 		public function hasQueue(): bool {
+			$this->elementQueue->load();
 			return $this->elementQueue->isEmpty() === false;
 		}
 	}

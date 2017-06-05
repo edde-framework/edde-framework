@@ -39,13 +39,6 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getMeta(string $name, $default = null) {
-			return $this->metaList[$name] ?? ($default && is_callable($default) ? call_user_func($default) : $default);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function getMetaList(): array {
 			return $this->metaList;
 		}
@@ -56,6 +49,21 @@
 		public function setMetaList(array $metaList): IIdentity {
 			$this->metaList = $metaList;
 			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setMeta(string $name, $value): IIdentity {
+			$this->metaList[$name] = $value;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getMeta(string $name, $default = null) {
+			return $this->metaList[$name] ?? ($default && is_callable($default) ? call_user_func($default) : $default);
 		}
 
 		/**

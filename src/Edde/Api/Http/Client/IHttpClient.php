@@ -67,5 +67,5 @@
 		 *
 		 * @return IHttpClient
 		 */
-		public function touch($url, $method = 'HEAD', array $headerList = []): IHttpClient;
+		public function touch($url, string $method = 'HEAD', array $headerList = []): IHttpClient;
 	}
