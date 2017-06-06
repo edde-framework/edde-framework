@@ -3,21 +3,20 @@
 
 	namespace Edde\Common\Xml;
 
-	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 
 	class XmlExport extends AbstractXmlExport {
-		public function export(\Iterator $iterator, IFile $file): IFile {
-			$file->open('w+');
+		/**
+		 * @inheritdoc
+		 */
+		public function node(\Iterator $iterator) {
 			$stack = new \SplStack();
 			$level = -1;
-			/**
-			 * @var $node INode
-			 */
+			/** @var $node INode */
 			foreach ($iterator as $node) {
 				$value = null;
 				if ($node->getLevel() < $level) {
-					$file->write($stack->pop());
+					echo $stack->pop();
 				}
 				$indentation = str_repeat("\t", $node->getLevel());
 				$metaList = $node->getMetaList();
@@ -35,19 +34,17 @@
 					$content[] = '/';
 				}
 				$content[] = '>' . (($value && $node->isLeaf()) ? '' : "\n");
-				$file->write(implode('', $content));
+				echo implode('', $content);
 				if ($value && $node->isLeaf()) {
-					$file->write($value);
+					echo $value;
 				}
 				if ($isClosed === false && $value && $node->isLeaf()) {
-					$file->write($close);
+					echo $close;
 				}
 				$level = $node->getLevel();
 			}
 			while ($stack->isEmpty() === false) {
-				$file->write($stack->pop());
+				echo $stack->pop();
 			}
-			$file->close();
-			return $file;
 		}
 	}
