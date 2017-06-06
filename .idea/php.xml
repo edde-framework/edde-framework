@@ -8,11 +8,6 @@
       <path value="$PROJECT_DIR$/lib/paragonie/random_compat" />
     </include_path>
   </component>
-  <component name="PhpInterpreters">
-    <interpreters>
-      <interpreter home="C:\Users\Marek Hanzal\projects\web-terminals\toshiba\vendor\edde-framework\edde-framework\.runtime\.php\php.exe" id="c480eb7f-53bc-4d60-b926-86792e0c8d97" name="PHP" debugger_id="php.debugger.XDebug" />
-    </interpreters>
-  </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7" />
   <component name="PhpStepFilterConfiguration" skip_constructors="true">
     <option name="skippedFunctions">
@@ -23,7 +18,7 @@
   </component>
   <component name="PhpUnit">
     <phpunit_settings>
-      <PhpUnitSettings load_method="CUSTOM_LOADER" bootstrap_file_path="$PROJECT_DIR$/loader.php" configuration_file_path="$PROJECT_DIR$/phpunit.xml" custom_loader_path="$PROJECT_DIR$/lib/autoload.php" phpunit_phar_path="$PROJECT_DIR$/bin/phpunit.phar" use_bootstrap_file="true" use_configuration_file="true" />
+      <PhpUnitSettings load_method="CUSTOM_LOADER" bootstrap_file_path="C:/projects/edde-framework/edde-framework/loader.php" configuration_file_path="C:/projects/edde-framework/edde-framework/phpunit.xml" custom_loader_path="C:/projects/edde-framework/edde-framework/lib/autoload.php" phpunit_phar_path="C:/projects/edde-framework/edde-framework/bin/phpunit.phar" use_bootstrap_file="true" use_configuration_file="true" />
     </phpunit_settings>
   </component>
 </project>
