@@ -140,7 +140,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function payload(string $payload, string $mime): IHttpHandler {
+		public function payload($payload, string $mime): IHttpHandler {
 			$this->request->setContent(new Content($payload, $mime));
 			$this->contentType($mime);
 			return $this;
