@@ -5,19 +5,24 @@
 
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Converter\IContent;
+	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResource;
+	use Edde\Api\Xml\LazyXmlExportTrait;
 	use Edde\Api\Xml\LazyXmlParserTrait;
 	use Edde\Api\Xml\XmlParserException;
 	use Edde\Common\Converter\AbstractConverter;
 	use Edde\Common\Converter\Content;
+	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Xml\XmlNodeHandler;
 
 	/**
 	 * Xml string sourece to "something" converter.
 	 */
 	class XmlConverter extends AbstractConverter {
+		use LazyConverterManagerTrait;
 		use LazyXmlParserTrait;
+		use LazyXmlExportTrait;
 
 		/**
 		 * Only 3 things that are infinite
@@ -39,7 +44,14 @@
 				'application/xhtml+xml',
 				'xml',
 				'string',
-			], '*/*');
+			], [
+				'*/*',
+				'text/xml',
+			]);
+			$this->register(\stdClass::class, [
+				'text/xml',
+				'application/xml',
+			]);
 		}
 
 		/**
@@ -48,14 +60,22 @@
 		 * @throws ConverterException
 		 */
 		public function convert($content, string $mime, string $target = null): IContent {
-			$this->unsupported($content, $target, $content instanceof IResource || is_string($content));
+			$this->unsupported($content, $target, $content instanceof IResource || is_string($content) || $content instanceof \stdClass);
 			try {
-				switch ($target) {
-					case INode::class:
-						$this->xmlParser->{is_string($content) ? 'string' : 'parse'}($content, $handler = new XmlNodeHandler());
-						return new Content($handler->getNode(), INode::class);
-					case '*/*':
-						return new Content($content, 'application/xml');
+				switch ($mime) {
+					case \stdClass::class:
+						return new Content($this->xmlExport->string(NodeIterator::recursive($this->converterManager->convert($content, \stdClass::class, [INode::class])->convert()->getContent(), true)), $target);
+						break;
+					default:
+						switch ($target) {
+							case INode::class:
+								$this->xmlParser->{is_string($content) ? 'string' : 'parse'}($content, $handler = new XmlNodeHandler());
+								return new Content($handler->getNode(), INode::class);
+							case 'application/xml':
+							case 'text/xml':
+							case '*/*':
+								return new Content($content, 'application/xml');
+						}
 				}
 			} catch (XmlParserException $e) {
 				throw new XmlParserException(sprintf('Cannot handle resource [%s]: %s', (string)$content->getUrl(), $e->getMessage()), 0, $e);
