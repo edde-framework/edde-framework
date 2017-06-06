@@ -34,11 +34,11 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function link($generate, ...$parameterList) {
+		public function link($generate, array $parameterList = []) {
 			$requestUrl = $this->httpRequest->getRequestUrl();
 			$url = Url::create($this->hostUrl->getAbsoluteUrl());
 			$url->setPath($generate);
-			$parameterList = array_key_exists(0, $parameterList) && $parameterList[0] === null ? [] : array_merge($requestUrl->getParameterList(), $parameterList);
+			$parameterList = array_merge($requestUrl->getParameterList(), $parameterList);
 			unset($parameterList['action']);
 			$url->setParameterList($parameterList);
 			return $url->getAbsoluteUrl();

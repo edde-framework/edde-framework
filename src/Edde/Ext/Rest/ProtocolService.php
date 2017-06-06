@@ -38,8 +38,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function link($generate, ...$parameterList) {
-			return parent::link('/api/v1/protocol', ...$parameterList);
+		public function link($generate, array $parameterList = []) {
+			return parent::link('/api/v1/protocol', $parameterList);
 		}
 
 		public function actionGet(IElement $element) {

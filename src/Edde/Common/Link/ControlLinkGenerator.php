@@ -6,7 +6,7 @@
 	use Edde\Common\Url\Url;
 
 	class ControlLinkGenerator extends AbstractLinkGenerator {
-		public function link($generate, ...$parameterList) {
+		public function link($generate, array $parameterList = []) {
 			list($generate, $parameterList) = $this->list($generate, $parameterList);
 			if (is_array($generate) === false || count($generate) !== 2) {
 				return null;

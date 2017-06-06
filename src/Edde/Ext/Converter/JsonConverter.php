@@ -60,6 +60,7 @@
 				'application/json',
 				'application/json',
 				'*/*',
+				'text/html',
 			]);
 			$this->register([
 				'application/json',
@@ -107,6 +108,8 @@
 						case 'application/json':
 						case '*/*':
 							return new Content(json_encode($content), 'application/json');
+						case 'text/html':
+							return new Content($content, 'text/html');
 					}
 					break;
 			}

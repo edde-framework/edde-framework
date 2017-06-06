@@ -21,8 +21,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function link($generate, ...$parameterList) {
-			return parent::link('/api/v1/thread', ...$parameterList);
+		public function link($generate, array $parameterList = []) {
+			return parent::link('/api/v1/thread', $parameterList);
 		}
 
 		/**

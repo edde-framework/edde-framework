@@ -10,11 +10,11 @@
 	class UserService extends AbstractService {
 		use LazyHostUrlTrait;
 
-		public function link($generate, ...$parameterList) {
-			return parent::link('/api/v1/user', ...$parameterList);
-		}
-
 		public function match(IUrl $url): bool {
 			return $url->match('~^/api/v1/user$~') !== null;
+		}
+
+		public function link($generate, array $parameterList = []) {
+			return parent::link('/api/v1/user', $parameterList);
 		}
 	}

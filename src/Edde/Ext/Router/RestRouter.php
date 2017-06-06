@@ -59,10 +59,10 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function link($generate, ...$parameterList) {
+		public function link($generate, array $parameterList = []) {
 			if (is_string($generate) === false || isset($this->serviceList[$generate]) === false) {
 				return null;
 			}
-			return $this->serviceList[$generate]->link($generate, ...$parameterList);
+			return $this->serviceList[$generate]->link($generate, $parameterList);
 		}
 	}

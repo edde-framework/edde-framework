@@ -10,6 +10,7 @@
 	use Edde\Api\Resource\IResource;
 	use Edde\Common\Converter\AbstractConverter;
 	use Edde\Common\Converter\Content;
+	use Edde\Common\Node\Node;
 	use Edde\Common\Node\NodeUtils;
 
 	/**
@@ -41,7 +42,7 @@
 			switch ($target) {
 				case INode::class:
 					return new Content((function (IResource $resource, string $source) {
-						return NodeUtils::toNode($this->convert($resource, $source, 'array')->getContent());
+						return NodeUtils::node(new Node(), $this->convert($resource, $source, 'array')->getContent());
 					})($content, $mime), INode::class);
 				case 'array':
 					if (is_array($include = require (string)$content->getUrl()) === false) {

@@ -14,6 +14,73 @@
 	 */
 	class NodeUtils extends Object {
 		/**
+		 * @param INode                        $root
+		 * @param \Traversable|\Iterator|array $source
+		 *
+		 * @return INode
+		 * @throws NodeException
+		 */
+		static public function node(INode $root, $source): INode {
+			$callback = null;
+			if (is_array($source) === false && is_object($source) === false) {
+				throw new NodeException('Source must be array or stdClass object.');
+			}
+			/** @noinspection UnnecessaryParenthesesInspection */
+			return ($callback = function (callable $callback, INode $root, $source) {
+				$attributeList = $root->getAttributeList();
+				/** @noinspection ForeachSourceInspection */
+				foreach ($source as $key => $value) {
+					switch ($key) {
+						case 'name':
+							$root->setName($value);
+							continue 2;
+						case 'value':
+							$root->setValue($value);
+							continue 2;
+						case 'attribute-list':
+							$attributeList->put((array)$value);
+							continue 2;
+						case 'meta-list':
+							$root->getMetaList()->put((array)$value);
+							continue 2;
+						case 'node-list':
+							/** @noinspection ForeachSourceInspection */
+							foreach ($value as $item) {
+								/** @noinspection DisconnectedForeachInstructionInspection */
+								$root->addNode($node = new Node());
+								if (is_object($item) || is_array($item)) {
+									$callback($callback, $node, $item);
+									continue;
+								}
+								$node->setValue($item);
+							}
+							continue 2;
+					}
+					if (is_object($value)) {
+						$value = [
+							$value,
+						];
+					}
+					if (is_array($value)) {
+						$root->addNode($itemList = new Node($key));
+						foreach ($value as $item) {
+							/** @noinspection DisconnectedForeachInstructionInspection */
+							$itemList->addNode($node = new Node());
+							if (is_object($item) || is_array($item)) {
+								$callback($callback, $node, $item);
+								continue;
+							}
+							$node->setValue($item);
+						}
+						continue;
+					}
+					$attributeList->set($key, $value);
+				}
+				return $root;
+			})($callback, $root, $source);
+		}
+
+		/**
 		 * convert input of stdClass to node tree
 		 *
 		 * @param \stdClass   $stdClass
