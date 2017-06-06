@@ -66,6 +66,7 @@
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
+	use Edde\Api\Xml\IXmlExport;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Acl\Acl;
 	use Edde\Common\Acl\AclManager;
@@ -125,6 +126,7 @@
 	use Edde\Common\Upgrade\AbstractUpgradeManager;
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
+	use Edde\Common\Xml\XmlExport;
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
@@ -516,6 +518,11 @@
 					'store',
 					StoreDirectory::class,
 				]),
+
+				/**
+				 * xml support
+				 */
+				IXmlExport::class                     => XmlExport::class,
 
 				/**
 				 * General Locking support
