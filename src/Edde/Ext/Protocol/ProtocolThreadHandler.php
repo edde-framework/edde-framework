@@ -16,7 +16,7 @@
 		public function dequeue(): IThreadHandler {
 			$this->elementQueue->load();
 			$this->elementQueue->execute();
-			$this->elementQueue->save(true);
+			$this->elementQueue->save();
 			return $this;
 		}
 

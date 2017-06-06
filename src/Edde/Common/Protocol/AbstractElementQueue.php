@@ -45,10 +45,14 @@
 		 */
 		public function execute(): IElementQueue {
 			foreach ($this->queueList as $element) {
+				/** @var $response IElement */
 				if (($response = $this->protocolService->execute($element)) instanceof IElement) {
-					$this->elementList[] = $response;
+					$this->elementList[$response->getId()] = $response;
 				}
-				unset($this->queueList[$element->getId()]);
+				/**
+				 * null because later empty items will be filtered out
+				 */
+				$this->queueList[$element->getId()] = null;
 			}
 			return $this;
 		}

@@ -49,11 +49,9 @@
 		/**
 		 * force to save current queue list
 		 *
-		 * @param bool $override
-		 *
 		 * @return IElementQueue
 		 */
-		public function save(bool $override = false): IElementQueue;
+		public function save(): IElementQueue;
 
 		/**
 		 * restore previously save queue list
