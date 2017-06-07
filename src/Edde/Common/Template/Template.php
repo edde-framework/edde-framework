@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Template;
 
+	use Edde\Api\Asset\LazyAssetStorageTrait;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\File\IFile;
@@ -20,6 +21,7 @@
 		use LazyCompilerTrait;
 		use LazyConverterManagerTrait;
 		use LazyHtmlGeneratorTrait;
+		use LazyAssetStorageTrait;
 		use CacheTrait;
 		/**
 		 * @var string

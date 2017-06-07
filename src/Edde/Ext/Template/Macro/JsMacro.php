@@ -39,7 +39,6 @@
 						throw new MacroException(sprintf('Js minify does not support recursion.'));
 					}
 					$this->minify = true;
-					echo '<?php $this->resourceProvider->setup(); ?>' . "\n";
 					echo '<?php $jsCompiler = $this->container->create(\'' . IJavaScriptCompiler::class . '\'); ?>' . "\n";
 					break;
 				case 'external-js':
@@ -59,7 +58,14 @@
 						], $node->getAttributeList()->array())));
 						break;
 					}
-					throw new MacroException(sprintf('Minify/external js tag is not opened.'));
+					echo '<?php $resource = $this->resourceProvider->getResource(' . $this->attribute($node, 'src') . '); ?>' . "\n";
+					echo '<?php $resource = $this->assetStorage->store($resource); ?>' . "\n";
+					echo $this->htmlGenerator->generate(new Node('link', null, array_merge([
+						'src'  => function () {
+							return '<?=$resource->getRelativePath()?>';
+						},
+						'type' => 'text/javascript',
+					], $node->getAttributeList()->array())));
 			}
 		}
 

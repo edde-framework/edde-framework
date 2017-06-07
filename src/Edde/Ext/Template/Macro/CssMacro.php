@@ -39,7 +39,6 @@
 						throw new MacroException(sprintf('Css minify does not support recursion.'));
 					}
 					$this->minify = true;
-					echo '<?php $this->resourceProvider->setup(); ?>' . "\n";
 					echo '<?php $cssCompiler = $this->container->create(\'' . IStyleSheetCompiler::class . '\'); ?>' . "\n";
 					break;
 				case 'external-css':
@@ -60,7 +59,16 @@
 						], $node->getAttributeList()->array())));
 						break;
 					}
-					throw new MacroException(sprintf('Minify/external css tag is not opened.'));
+					echo '<?php $resource = $this->resourceProvider->getResource(' . $this->attribute($node, 'src') . '); ?>' . "\n";
+					echo '<?php $resource = $this->assetStorage->store($resource); ?>' . "\n";
+					echo $this->htmlGenerator->generate(new Node('link', null, array_merge([
+						'href' => function () use ($node) {
+							return '<?=$resource->getRelativePath();?>';
+						},
+						'rel'  => 'stylesheet',
+						'type' => 'text/css',
+					], $node->getAttributeList()->array())));
+					break;
 			}
 		}
 
