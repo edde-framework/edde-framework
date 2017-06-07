@@ -9,6 +9,7 @@
 	use Edde\Common\File\RealPathException;
 	use Edde\Common\Resource\AbstractResourceProvider;
 	use Edde\Common\Resource\UnknownResourceException;
+	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Standard resource provider based on IAssetDirectory.
@@ -27,7 +28,7 @@
 			if ($this->styleSheetDirectory === null) {
 				throw new UnknownResourceException('Stylesheet directory has not been set up (or setup failed).');
 			}
-			$file = $this->styleSheetDirectory->file($name = $name . ($namespace ? $namespace . '-' . $name : ''));
+			$file = $this->styleSheetDirectory->file($name = $name . ($namespace ? '-' . StringUtils::lower(str_replace('/', '.', $namespace)) . '-' . $name : ''));
 			if ($file->isAvailable()) {
 				return $file;
 			}
