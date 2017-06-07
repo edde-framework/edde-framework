@@ -27,6 +27,6 @@
 		}
 
 		protected function macro($name, $context) {
-			echo sprintf("<?php \$this->templateManager->template()->template(%s, \$this->container->create(%s))->execute(); ?>", $this->delimite($name), $this->delimite($context));
+			echo sprintf("<?php \$this->templateManager->template()->template(%s, \$this->container->create(%s, [], %s))->execute(); ?>", $name = $this->delimite($name, true), $this->delimite($context, true), '\'Template macro: \'.' . $name);
 		}
 	}
