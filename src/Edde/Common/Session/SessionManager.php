@@ -45,20 +45,8 @@
 		 * @inheritdoc
 		 */
 		public function getSession(string $name): ISession {
-			return $this->sessionList[$name] ?? $this->sessionList[$name] = new Session($this->session($name), $name);
-		}
-
-		/**
-		 * @inheritdoc
-		 * @throws SessionException
-		 */
-		public function &session(string $name): array {
 			$this->start();
-			/** @noinspection PhpVariableNamingConventionInspection */
-			$_SESSION[$this->namespace] = $_SESSION[$this->namespace] ?? [];
-			/** @noinspection PhpVariableNamingConventionInspection */
-			$_SESSION[$this->namespace][$name] = $_SESSION[$this->namespace][$name] ?? [];
-			return $_SESSION[$this->namespace][$name];
+			return $this->sessionList[$name] ?? $this->sessionList[$name] = new Session($this->namespace, $name);
 		}
 
 		/**
