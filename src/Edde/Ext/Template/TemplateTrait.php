@@ -26,7 +26,7 @@
 		 * @return IElement
 		 */
 		public function template(string $name = null, $context = null): IElement {
-			$this->responseManager->response($content = new TemplateContent($this->templateManager->template()->template($name ?: 'layout', $context = ($context ? (is_string($context) ? $this->container->create($context) : $context) : $this), get_class($context), $context)));
+			$this->responseManager->response($content = new TemplateContent($this->templateManager->template()->template($name ?: 'layout', $context = ($context ? (is_string($context) ? $this->container->create($context, [], __METHOD__) : $context) : $this), get_class($context), $context)));
 			return (new Response())->setValue($content);
 		}
 	}

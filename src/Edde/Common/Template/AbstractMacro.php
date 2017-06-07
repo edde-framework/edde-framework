@@ -120,10 +120,14 @@
 		}
 
 		protected function attribute(INode $node, string $attribute, bool $literal = false) {
-			if ($node->hasAttribute($attribute)) {
-				return $this->delimite($node->getAttribute($attribute), $literal);
+			$this->checkAttribute($node, $attribute);
+			return $this->delimite($node->getAttribute($attribute), $literal);
+		}
+
+		protected function checkAttribute(INode $node, string $attribute) {
+			if ($node->hasAttribute($attribute) === false) {
+				throw new MacroException(sprintf('Missing attribute <%s (%s=...)> in node [%s].', $node->getName(), $attribute, $node->getPath()));
 			}
-			throw new MacroException(sprintf('Missing attribute <%s (%s=...)> in node [%s].', $node->getName(), $attribute, $node->getPath()));
 		}
 
 		protected function delimite($value, bool $literal = false) {
