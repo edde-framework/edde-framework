@@ -7,7 +7,6 @@
 	use Edde\Api\Collection\IList;
 	use Edde\Api\Session\ISession;
 	use Edde\Common\Object;
-	use Traversable;
 
 	/**
 	 * Session section for simple session data manipulation.
@@ -17,6 +16,9 @@
 		 * @var string
 		 */
 		protected $namespace;
+		/**
+		 * @var string
+		 */
 		protected $name;
 
 		/**
@@ -31,42 +33,74 @@
 			$this->name = $name;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function isEmpty(): bool {
-			return empty($_SESSION[$this->namespace]);
+			return empty($_SESSION[$this->namespace][$this->name]);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function put(array $array): IList {
-			array_merge($_SESSION[$this->namespace], $array);
+			$_SESSION[$this->namespace][$this->name] = $array;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function set(string $name, $value): IList {
-			$_SESSION[$this->namespace][$name] = $value;
+			$_SESSION[$this->namespace][$this->name][$name] = $value;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function add(string $name, $value, $key = null): IList {
+			if ($key) {
+				$_SESSION[$this->namespace][$this->name][$name][$key] = $value;
+				return $this;
+			}
+			$_SESSION[$this->namespace][$this->name][$name][] = $value;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function has(string $name): bool {
-			return isset($_SESSION[$this->namespace][$name]);
+			return isset($_SESSION[$this->namespace][$this->name][$name]);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function get(string $name, $default = null) {
-			return isset($_SESSION[$this->namespace][$name]) ? $_SESSION[$this->namespace][$name] : $default;
+			return $_SESSION[$this->namespace][$this->name][$name] ?? $default;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function array(): array {
-			return $_SESSION[$this->namespace];
+			return $_SESSION[$this->namespace][$this->name];
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function remove(string $name): IList {
-			unset($_SESSION[$this->namespace][$name]);
+			unset($_SESSION[$this->namespace][$this->name][$name]);
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getIterator() {
-			return new ArrayIterator($_SESSION[$this->namespace]);
+			return new ArrayIterator($_SESSION[$this->namespace][$this->name]);
 		}
 	}
