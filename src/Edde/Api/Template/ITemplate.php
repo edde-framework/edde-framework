@@ -49,6 +49,13 @@
 		public function execute(): ITemplate;
 
 		/**
+		 * return template string
+		 *
+		 * @return string
+		 */
+		public function string(): string;
+
+		/**
 		 * support to string conversion
 		 *
 		 * @return string

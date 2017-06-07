@@ -74,6 +74,15 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
+		public function string(): string {
+			ob_start();
+			$this->execute();
+			return ob_get_clean();
+		}
+
 		public function __clone() {
 			parent::__clone();
 			$this->execute = null;
@@ -83,8 +92,6 @@
 		 * @inheritdoc
 		 */
 		public function __toString(): string {
-			ob_start();
-			$this->execute();
-			return ob_get_clean();
+			return $this->string();
 		}
 	}

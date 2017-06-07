@@ -5,7 +5,9 @@
 
 	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Template\LazyTemplateManagerTrait;
+	use Edde\Common\Protocol\Request\Response;
 
 	/**
 	 * General template support; $this is used as a context.
@@ -20,8 +22,11 @@
 		 *
 		 * @param string|null $name
 		 * @param object|null $context
+		 *
+		 * @return IElement
 		 */
-		public function template(string $name = null, $context = null) {
-			$this->responseManager->response(new TemplateContent($this->templateManager->template()->template($name ?: 'layout', $context = ($context ? (is_string($context) ? $this->container->create($context) : $context) : $this), get_class($context), $context)));
+		public function template(string $name = null, $context = null): IElement {
+			$this->responseManager->response($content = new TemplateContent($this->templateManager->template()->template($name ?: 'layout', $context = ($context ? (is_string($context) ? $this->container->create($context) : $context) : $this), get_class($context), $context)));
+			return (new Response())->setValue($content);
 		}
 	}

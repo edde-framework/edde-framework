@@ -30,9 +30,7 @@
 				case 'text/*':
 				case '*/*':
 				case 'string':
-					ob_start();
-					$content->execute();
-					return new Content(ob_get_clean(), 'text/xml');
+					return new Content($content->string(), 'text/html');
 			}
 			return $this->exception($mime, $target);
 		}
