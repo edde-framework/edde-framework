@@ -33,15 +33,6 @@
 		public function getSession(string $name): ISession;
 
 		/**
-		 * return reference to the current session root ($_SESSION superglobal)
-		 *
-		 * @param string $name
-		 *
-		 * @return array
-		 */
-		public function &session(string $name): array;
-
-		/**
 		 * clear the current session
 		 *
 		 * @return ISessionManager
