@@ -61,7 +61,7 @@
 					echo '<?php $resource = $this->resourceProvider->getResource(' . $this->attribute($node, 'src') . '); ?>' . "\n";
 					echo '<?php $resource = $this->assetStorage->store($resource); ?>' . "\n";
 					echo $this->htmlGenerator->generate(new Node('link', null, array_merge([
-						'href' => function () use ($node) {
+						'href' => function () {
 							return '<?=$resource->getRelativePath();?>';
 						},
 						'rel'  => 'stylesheet',
