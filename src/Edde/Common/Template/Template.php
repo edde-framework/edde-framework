@@ -12,6 +12,8 @@
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\LazyCompilerTrait;
 	use Edde\Api\Template\TemplateException;
+	use Edde\Api\Web\LazyJavaScriptCompilerTrait;
+	use Edde\Api\Web\LazyStyleSheetCompilerTrait;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Object;
 
@@ -22,6 +24,8 @@
 		use LazyConverterManagerTrait;
 		use LazyHtmlGeneratorTrait;
 		use LazyAssetStorageTrait;
+		use LazyStyleSheetCompilerTrait;
+		use LazyJavaScriptCompilerTrait;
 		use CacheTrait;
 		/**
 		 * @var string

@@ -6,7 +6,6 @@
 	use Edde\Api\Html\LazyHtmlGeneratorTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\MacroException;
-	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Template\AbstractMacro;
 
@@ -39,7 +38,7 @@
 						throw new MacroException(sprintf('Js minify does not support recursion.'));
 					}
 					$this->minify = true;
-					echo '<?php $jsCompiler = $this->container->create(\'' . IJavaScriptCompiler::class . '\'); ?>' . "\n";
+					echo '<?php $this->javaScriptCompiler->clear(); ?>' . "\n";
 					break;
 				case 'external-js':
 					if ($this->external) {
@@ -49,7 +48,7 @@
 					break;
 				case 'js':
 					if ($this->minify) {
-						echo '<?php $jsCompiler->addResource($this->resourceProvider->getResource(' . $this->attribute($node, 'src') . ')); ?>' . "\n";
+						echo '<?php $this->javaScriptCompiler->addResource($this->resourceProvider->getResource(' . $this->attribute($node, 'src') . ')); ?>' . "\n";
 						break;
 					} else if ($this->external) {
 						echo $this->htmlGenerator->generate(new Node('script', null, array_merge([
@@ -78,11 +77,11 @@
 					$this->minify = false;
 					echo $this->htmlGenerator->generate(new Node('script', null, [
 						'src'  => function () {
-							return '<?=$jsCompiler->compile()->getRelativePath()?>';
+							return '<?=$this->javaScriptCompiler->compile()->getRelativePath()?>';
 						},
 						'type' => 'text/javascript',
 					]));
-					echo '<?php unset($jsCompiler); ?>' . "\n";
+					echo '<?php unset($this->javaScriptCompiler); ?>' . "\n";
 					break;
 				case 'external':
 					$this->external = false;

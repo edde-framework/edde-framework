@@ -97,7 +97,7 @@
 		 * @inheritdoc
 		 */
 		public function content(INode $node): string {
-			return trim((string)$node->getValue());
+			return trim(is_callable($value = $node->getValue()) ? $value() : (string)$value);
 		}
 
 		/**

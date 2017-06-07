@@ -30,6 +30,10 @@
 				};
 			}
 			$attributeList->put($attributes);
+			if ($node->hasAttribute('::value')) {
+				$node->setValue($node->getAttribute('::value'));
+				$node->getAttributeList()->remove('::value');
+			}
 			echo $this->htmlGenerator->open($node);
 		}
 

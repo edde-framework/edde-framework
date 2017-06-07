@@ -6,7 +6,6 @@
 	use Edde\Api\Html\LazyHtmlGeneratorTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\MacroException;
-	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Template\AbstractMacro;
 
@@ -39,7 +38,7 @@
 						throw new MacroException(sprintf('Css minify does not support recursion.'));
 					}
 					$this->minify = true;
-					echo '<?php $cssCompiler = $this->container->create(\'' . IStyleSheetCompiler::class . '\'); ?>' . "\n";
+					echo '<?php $this->styleSheetCompiler->clear(); ?>' . "\n";
 					break;
 				case 'external-css':
 					if ($this->external) {
@@ -49,7 +48,7 @@
 					break;
 				case 'css':
 					if ($this->minify) {
-						echo '<?php $cssCompiler->addResource($this->resourceProvider->getResource(' . $this->attribute($node, 'src') . ')); ?>' . "\n";
+						echo '<?php $this->styleSheetCompiler->addResource($this->resourceProvider->getResource(' . $this->attribute($node, 'src') . ')); ?>' . "\n";
 						break;
 					} else if ($this->external) {
 						echo $this->htmlGenerator->generate(new Node('link', null, array_merge([
@@ -81,12 +80,11 @@
 					$this->minify = false;
 					echo $this->htmlGenerator->generate(new Node('link', null, [
 						'href' => function () {
-							return '<?=$cssCompiler->compile()->getRelativePath()?>';
+							return '<?=$this->styleSheetCompiler->compile()->getRelativePath()?>';
 						},
 						'rel'  => 'stylesheet',
 						'type' => 'text/css',
 					]));
-					echo '<?php unset($cssCompiler); ?>' . "\n";
 					break;
 				case 'external':
 					$this->external = false;
