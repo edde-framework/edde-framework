@@ -58,7 +58,8 @@
 		}
 
 		protected function macroOpen($value, $name = null) {
-			echo '<?php foreach(' . ($name ? '$context[' . var_export($name, true) . '] = ' : '') . 'new ' . ForeachMacroIterator::class . '(' . $this->delimite($value) . ') as $' . ($k = ($name . '_' . str_repeat('k', $this->foreach))) . ' => $' . ($v = ($name . '_' . str_repeat('v', $this->foreach))) . ') {?>';
+			$name = $name ?: '$';
+			echo '<?php foreach(' . ($name ? '$context[' . var_export($name, true) . '] = ' : '') . 'new ' . ForeachMacroIterator::class . '(' . $this->delimite($value) . ') as $' . (str_repeat('k', $this->foreach)) . ' => $' . (str_repeat('v', $this->foreach)) . ') {?>';
 			$this->foreach++;
 		}
 

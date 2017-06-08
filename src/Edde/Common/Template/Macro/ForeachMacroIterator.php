@@ -14,11 +14,11 @@
 			$this->iterator = $iterator;
 		}
 
-		public function getKey() {
+		public function k() {
 			return $this->key;
 		}
 
-		public function getValue() {
+		public function v() {
 			return $this->value;
 		}
 
