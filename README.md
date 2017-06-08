@@ -1,5 +1,12 @@
 # Edde Framework
 
-[![Build Status](https://travis-ci.org/edde-framework/edde-framework.svg?branch=master)](https://travis-ci.org/edde-framework/edde-framework) [![Test Coverage](https://codeclimate.com/github/edde-framework/edde-framework/badges/coverage.svg)](https://codeclimate.com/github/edde-framework/edde-framework/coverage) [![Issue Count](https://codeclimate.com/github/edde-framework/edde-framework/badges/issue_count.svg)](https://codeclimate.com/github/edde-framework/edde-framework) [![Total Downloads](https://poser.pugx.org/edde-framework/edde-framework/downloads)](https://packagist.org/packages/edde-framework/edde-framework) [![License](https://poser.pugx.org/edde-framework/edde-framework/license)](https://packagist.org/packages/edde-framework/edde-framework) [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/edde-framework/edde-framework.svg)](http://isitmaintained.com/project/edde-framework/edde-framework "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/edde-framework/edde-framework.svg)](http://isitmaintained.com/project/edde-framework/edde-framework "Percentage of issues still open")
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/d5b7c3b6-a673-4221-90e0-7148bbfaae49/big.png)](https://insight.sensiolabs.com/projects/d5b7c3b6-a673-4221-90e0-7148bbfaae49)
+
+[![Build Status](https://travis-ci.org/edde-framework/edde-framework.svg?branch=master)](https://travis-ci.org/edde-framework/edde-framework)
+[![Test Coverage](https://codeclimate.com/github/edde-framework/edde-framework/badges/coverage.svg)](https://codeclimate.com/github/edde-framework/edde-framework/coverage)
+[![Total Downloads](https://poser.pugx.org/edde-framework/edde-framework/downloads)](https://packagist.org/packages/edde-framework/edde-framework)
+[![License](https://poser.pugx.org/edde-framework/edde-framework/license)](https://packagist.org/packages/edde-framework/edde-framework)
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/edde-framework/edde-framework.svg)](http://isitmaintained.com/project/edde-framework/edde-framework "Average time to resolve an issue")
+[![Percentage of issues still open](http://isitmaintained.com/badge/open/edde-framework/edde-framework.svg)](http://isitmaintained.com/project/edde-framework/edde-framework "Percentage of issues still open")
 
 PR will be created after the first release :).
