@@ -4,6 +4,7 @@
 	namespace Edde\Ext\Template;
 
 	use Edde\Api\Application\LazyResponseManagerTrait;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Template\LazyTemplateManagerTrait;
@@ -26,7 +27,11 @@
 		 * @return IElement
 		 */
 		public function template(string $name = null, $context = null): IElement {
-			$this->responseManager->response($content = new TemplateContent($this->templateManager->template()->template($name ?: 'layout', $context = ($context ? (is_string($context) ? $this->container->create($context, [], __METHOD__) : $context) : $this), get_class($context), $context)));
+			/** @var $context IConfigurable */
+			if (($context = ($context ? (is_string($context) ? $this->container->create($context, [], __METHOD__) : $context) : $this)) instanceof IConfigurable) {
+				$context->setup();
+			}
+			$this->responseManager->response($content = new TemplateContent($this->templateManager->template()->template($name ?: 'layout', $context, get_class($context), $context)));
 			return (new Response())->setValue($content);
 		}
 	}
