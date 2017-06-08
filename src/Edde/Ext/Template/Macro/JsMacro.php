@@ -38,7 +38,7 @@
 						throw new MacroException(sprintf('Js minify does not support recursion.'));
 					}
 					$this->minify = true;
-					echo '<?php $this->javaScriptCompiler->clear(); ?>' . "\n";
+					echo '<?php $this->javaScriptCompiler->clear(); ?>';
 					break;
 				case 'external-js':
 					if ($this->external) {
@@ -48,7 +48,7 @@
 					break;
 				case 'js':
 					if ($this->minify) {
-						echo '<?php $this->javaScriptCompiler->addResource($this->resourceProvider->getResource(' . $this->attribute($node, 'src') . ')); ?>' . "\n";
+						echo '<?php $this->javaScriptCompiler->addResource($this->resourceProvider->getResource(' . $this->attribute($node, 'src') . ')); ?>';
 						break;
 					} else if ($this->external) {
 						echo $this->htmlGenerator->generate(new Node('script', null, array_merge([
@@ -57,8 +57,8 @@
 						], $node->getAttributeList()->array())));
 						break;
 					}
-					echo '<?php $resource = $this->resourceProvider->getResource(' . $this->attribute($node, 'src') . '); ?>' . "\n";
-					echo '<?php $resource = $this->assetStorage->store($resource); ?>' . "\n";
+					echo '<?php $resource = $this->resourceProvider->getResource(' . $this->attribute($node, 'src') . '); ?>';
+					echo '<?php $resource = $this->assetStorage->store($resource); ?>';
 					echo $this->htmlGenerator->generate(new Node('link', null, array_merge([
 						'src'  => function () {
 							return '<?=$resource->getRelativePath()?>';
@@ -81,7 +81,6 @@
 						},
 						'type' => 'text/javascript',
 					]));
-					echo '<?php unset($this->javaScriptCompiler); ?>' . "\n";
 					break;
 				case 'external':
 					$this->external = false;

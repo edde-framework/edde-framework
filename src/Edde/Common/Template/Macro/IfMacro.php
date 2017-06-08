@@ -53,10 +53,10 @@
 		}
 
 		protected function open($value) {
-			echo '<?php if(' . $this->delimite($value) . ') {?>' . "\n";
+			echo '<?php if(' . $this->delimite($value) . ') {?>';
 		}
 
 		protected function close() {
-			echo "<?php } ?>\n";
+			echo '<?php } ?>';
 		}
 	}

@@ -38,7 +38,7 @@
 						throw new MacroException(sprintf('Css minify does not support recursion.'));
 					}
 					$this->minify = true;
-					echo '<?php $this->styleSheetCompiler->clear(); ?>' . "\n";
+					echo '<?php $this->styleSheetCompiler->clear(); ?>';
 					break;
 				case 'external-css':
 					if ($this->external) {
@@ -48,7 +48,7 @@
 					break;
 				case 'css':
 					if ($this->minify) {
-						echo '<?php $this->styleSheetCompiler->addResource($this->resourceProvider->getResource(' . $this->attribute($node, 'src') . ')); ?>' . "\n";
+						echo '<?php $this->styleSheetCompiler->addResource($this->resourceProvider->getResource(' . $this->attribute($node, 'src') . ')); ?>';
 						break;
 					} else if ($this->external) {
 						echo $this->htmlGenerator->generate(new Node('link', null, array_merge([
@@ -58,8 +58,8 @@
 						], $node->getAttributeList()->array())));
 						break;
 					}
-					echo '<?php $resource = $this->resourceProvider->getResource(' . $this->attribute($node, 'src') . '); ?>' . "\n";
-					echo '<?php $resource = $this->assetStorage->store($resource); ?>' . "\n";
+					echo '<?php $resource = $this->resourceProvider->getResource(' . $this->attribute($node, 'src') . '); ?>';
+					echo '<?php $resource = $this->assetStorage->store($resource); ?>';
 					echo $this->htmlGenerator->generate(new Node('link', null, array_merge([
 						'href' => function () {
 							return '<?=$resource->getRelativePath();?>';
@@ -67,7 +67,6 @@
 						'rel'  => 'stylesheet',
 						'type' => 'text/css',
 					], $node->getAttributeList()->array())));
-					break;
 			}
 		}
 

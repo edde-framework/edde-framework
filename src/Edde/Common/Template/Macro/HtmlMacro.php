@@ -52,6 +52,6 @@
 		 * @inheritdoc
 		 */
 		public function onLeave(INode $node, \Iterator $iterator, ...$parameters) {
-			echo $this->htmlGenerator->close($node) . "\n";
+			echo $this->htmlGenerator->close($node);
 		}
 	}
