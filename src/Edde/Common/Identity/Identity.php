@@ -7,9 +7,11 @@
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Identity\IdentityException;
 	use Edde\Api\Identity\IIdentity;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	class Identity extends Object implements IIdentity {
+		use ConfigurableTrait;
 		/**
 		 * @var ICrate
 		 */
@@ -134,7 +136,7 @@
 		 */
 		public function getAcl(): IAcl {
 			if ($this->acl === null) {
-				throw new IdentityException(sprintf('Identity [%s] has no update set.', $this->getName()));
+				throw new IdentityException(sprintf('Identity [%s] has no acl set.', $this->getName()));
 			}
 			return $this->acl;
 		}
