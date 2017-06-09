@@ -4,12 +4,13 @@
 	namespace Edde\Api\Identity;
 
 	use Edde\Api\Acl\IAcl;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Crate\ICrate;
 
 	/**
 	 * Identity is (usualy) mutable interface holding current state of an identity (user, cron, ...) in an application.
 	 */
-	interface IIdentity {
+	interface IIdentity extends IConfigurable {
 		/**
 		 * identity can have optional additional data (for example user's row from database)
 		 *
