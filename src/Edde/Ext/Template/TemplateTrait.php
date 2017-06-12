@@ -7,6 +7,7 @@
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Log\LazyLogServiceTrait;
 	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Router\LazyRouterServiceTrait;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\ITemplateContext;
 	use Edde\Api\Template\LazyTemplateManagerTrait;
@@ -21,6 +22,7 @@
 		use LazyTemplateManagerTrait;
 		use LazyLogServiceTrait;
 		use LazyContainerTrait;
+		use LazyRouterServiceTrait;
 		/**
 		 * when template method is called, this variable holds current template reference
 		 *
@@ -49,6 +51,7 @@
 			if ($context instanceof ITemplateContext === false) {
 				throw new TemplateContextException(sprintf('Given template context [%s] does not implement interface [%s].', get_class($context), ITemplateContext::class));
 			}
+			$context->setElement($this->routerService->createRequest());
 			$this->responseManager->response($content = new TemplateContent($this->template = $this->templateManager->template()->template($name ?: 'layout', $context, get_class($context), $context)));
 			return (new Response())->setValue($content);
 		}

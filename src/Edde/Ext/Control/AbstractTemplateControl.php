@@ -3,13 +3,11 @@
 
 	namespace Edde\Ext\Control;
 
-	use Edde\Api\Router\LazyRouterServiceTrait;
 	use Edde\Common\Control\AbstractControl;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Ext\Template\TemplateTrait;
 
 	abstract class AbstractTemplateControl extends AbstractControl {
-		use LazyRouterServiceTrait;
 		use TemplateTrait;
 
 		/**
