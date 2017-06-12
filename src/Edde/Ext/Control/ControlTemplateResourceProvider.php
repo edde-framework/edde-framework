@@ -23,9 +23,6 @@
 			}
 			/** @var $control IControl */
 			list($control) = $parameters;
-			if ($control instanceof IControl === false) {
-				throw new UnknownResourceException(sprintf('Cannot get requested resource [%s]; parameter is not control parameter.', $name));
-			}
 			$file = $this->rootDirectory->directory('src/' . ($namespace ? $namespace . '/' : '') . implode('/', array_slice(explode('\\', get_class($control)), -2, 1)) . '/templates')->file($name . '.xml');
 			if ($file->isAvailable()) {
 				return $file;

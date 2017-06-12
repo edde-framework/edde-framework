@@ -8,6 +8,7 @@
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\LazyElementQueueTrait;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
+	use Edde\Api\Session\LazyFingerprintTrait;
 	use Edde\Api\Thread\LazyThreadManagerTrait;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\Protocol\Packet;
@@ -20,18 +21,15 @@
 		use LazyThreadManagerTrait;
 		use LazyContainerTrait;
 		use LazyHostUrlTrait;
-		protected $action;
-		protected $id;
+		use LazyFingerprintTrait;
 
 		/**
 		 * @inheritdoc
 		 */
 		public function match(IUrl $url): bool {
-			if (($match = $url->match('~^/api/v1/protocol(/(?<action>.+?)(/(?<id>.+?))?)?$~')) === null) {
+			if (($match = $url->match('~^/api/v1/protocol$~')) === null) {
 				return false;
 			}
-			$this->action = $match['action'] ?? null;
-			$this->id = $match['id'] ?? null;
 			return true;
 		}
 
@@ -44,7 +42,13 @@
 
 		public function actionGet(IElement $element) {
 			$this->elementQueue->load();
-			return new ElementContent((new Packet($this->hostUrl->getAbsoluteUrl()))->elements($this->elementQueue->getReferenceList($this->id)));
+			if (($reference = $element->getMeta('reference')) !== null) {
+				$response = new ElementContent((new Packet($this->hostUrl->getAbsoluteUrl()))->elements($this->elementQueue->getReferenceList((string)$reference)));
+			} else {
+				$response = new ElementContent($this->protocolService->createQueuePacket((string)$element->getMeta('scope'), ['session' => $this->fingerprint->fingerprint()]));
+			}
+			$this->response($response);
+			return $response;
 		}
 
 		public function actionPost(IElement $element) {
@@ -53,6 +57,7 @@
 			if ($this->elementQueue->isEmpty() === false) {
 				$this->threadManager->execute();
 			}
+			$this->response($response);
 			return $response;
 		}
 	}
