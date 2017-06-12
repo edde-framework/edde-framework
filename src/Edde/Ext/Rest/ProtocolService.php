@@ -27,10 +27,7 @@
 		 * @inheritdoc
 		 */
 		public function match(IUrl $url): bool {
-			if (($match = $url->match('~^/api/v1/protocol$~')) === null) {
-				return false;
-			}
-			return true;
+			return $url->match('~^/api/v1/protocol$~') !== null;
 		}
 
 		/**
