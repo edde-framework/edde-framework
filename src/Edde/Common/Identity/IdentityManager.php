@@ -30,7 +30,7 @@
 		 */
 		public function createIdentity(): IIdentity {
 			return $this->identity ?: $this->identity = $this->session()
-				->get(self::SESSION_IDENTITY, $this->container->create(Identity::class));
+				->get(self::SESSION_IDENTITY, $this->container->create(Identity::class)->setup());
 		}
 
 		/**
@@ -51,7 +51,7 @@
 			$this->createIdentity();
 			$this->identity->setAuthenticated(false);
 			if ($this->acl !== $this->identity->getAcl()) {
-				throw new IdentityException('Acl in identity differs from update in container. This can lead to a security hole like a Hell!');
+				throw new IdentityException('Acl in identity differs from acl in container. This can lead to a security hole like a Hell!');
 			}
 			$this->acl->reset();
 			if ($hard) {
