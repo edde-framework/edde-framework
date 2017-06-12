@@ -50,10 +50,16 @@
     <orderEntry type="module-library">
       <library name="PHP" type="php">
         <CLASSES>
-          <root url="jar://$APPLICATION_PLUGINS_DIR$/phpstorm-library-plugin.jar!/Phalcon/Phalcon" />
+          <root url="file://$MODULE_DIR$/lib/composer" />
+          <root url="file://$MODULE_DIR$/lib/defuse/php-encryption" />
+          <root url="file://$MODULE_DIR$/lib/paragonie/constant_time_encoding" />
+          <root url="file://$MODULE_DIR$/lib/paragonie/random_compat" />
         </CLASSES>
         <SOURCES>
-          <root url="jar://$APPLICATION_PLUGINS_DIR$/phpstorm-library-plugin.jar!/Phalcon/Phalcon" />
+          <root url="file://$MODULE_DIR$/lib/composer" />
+          <root url="file://$MODULE_DIR$/lib/defuse/php-encryption" />
+          <root url="file://$MODULE_DIR$/lib/paragonie/constant_time_encoding" />
+          <root url="file://$MODULE_DIR$/lib/paragonie/random_compat" />
         </SOURCES>
       </library>
     </orderEntry>

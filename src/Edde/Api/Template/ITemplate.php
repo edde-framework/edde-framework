@@ -9,10 +9,10 @@
 		/**
 		 * set all required parameters to the template
 		 *
-		 * @param string      $name
-		 * @param null        $context
-		 * @param string|null $namespace
-		 * @param array       ...$parameterList
+		 * @param string                 $name
+		 * @param ITemplateContext|array $context
+		 * @param string|null            $namespace
+		 * @param array                  ...$parameterList
 		 *
 		 * @return ITemplate
 		 */
@@ -32,10 +32,10 @@
 		/**
 		 * execute the given template
 		 *
-		 * @param string      $name
-		 * @param array       $context
-		 * @param string|null $namespace
-		 * @param array       ...$parameterList
+		 * @param string             $name
+		 * @param ITemplateContext[] $context
+		 * @param string|null        $namespace
+		 * @param array              ...$parameterList
 		 *
 		 * @return ITemplate
 		 */

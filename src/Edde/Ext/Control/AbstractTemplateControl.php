@@ -12,7 +12,7 @@
 		use LazyRouterServiceTrait;
 		use TemplateTrait;
 
-		public function getCurrentTemplate() {
-			return StringUtils::recamel((string)$this->routerService->createRequest()->getMeta('::method'));
+		public function getContextName() {
+			return implode('\\', array_slice(explode('\\', static::class), -2, 1)) . '\\' . str_replace('Action', '', StringUtils::toCamelCase((string)$this->routerService->createRequest()->getMeta('::method'))) . 'TemplateContext';
 		}
 	}

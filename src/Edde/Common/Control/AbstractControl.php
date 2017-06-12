@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Control;
 
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Control\IControl;
 	use Edde\Api\Converter\IContent;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
@@ -18,7 +17,7 @@
 	/**
 	 * Root implementation of all controls.
 	 */
-	abstract class AbstractControl extends Object implements IConfigurable, IControl {
+	abstract class AbstractControl extends Object implements IControl {
 		use LazyConverterManagerTrait;
 		use ConfigurableTrait;
 		/**

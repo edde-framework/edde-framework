@@ -3,14 +3,17 @@
 
 	namespace Edde\Ext\Control;
 
+	use Edde\Api\Application\LazyContextTrait;
 	use Edde\Api\Control\IControl;
-	use Edde\Api\File\IDirectory;
+	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\Resource\IResource;
-	use Edde\Common\File\Directory;
 	use Edde\Common\Resource\AbstractResourceProvider;
 	use Edde\Common\Resource\UnknownResourceException;
 
 	class ControlTemplateResourceProvider extends AbstractResourceProvider {
+		use LazyContextTrait;
+		use LazyRootDirectoryTrait;
+
 		/**
 		 * @inheritdoc
 		 */
@@ -20,23 +23,9 @@
 			}
 			/** @var $control IControl */
 			list($control) = $parameters;
-			if ($control instanceof IControl === false) {
-				throw new UnknownResourceException(sprintf('Cannot get requested resource [%s]; parameter is not control parameter.', $name));
-			}
-			$reflectionClass = new \ReflectionClass($control);
-			$sourceDirectory = new Directory(dirname($reflectionClass->getFileName()));
-			$sourceDirectory->realpath();
-			/** @var $directoryList IDirectory[] */
-			$directoryList = [
-				$sourceDirectory->directory('templates'),
-				$sourceDirectory->directory('../templates'),
-				$sourceDirectory->directory('../../templates'),
-			];
-			foreach ($directoryList as $directory) {
-				$file = $directory->file($name . '.xml');
-				if ($file->isAvailable()) {
-					return $file;
-				}
+			$file = $this->rootDirectory->directory('src/' . ($namespace ? $namespace . '/' : '') . implode('/', array_slice(explode('\\', get_class($control)), -2, 1)) . '/templates')->file($name . '.xml');
+			if ($file->isAvailable()) {
+				return $file;
 			}
 			throw new UnknownResourceException(sprintf('Cannot get requested resource [%s]; no file matches.', $name));
 		}
