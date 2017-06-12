@@ -19,7 +19,7 @@
 	/**
 	 * Helper class for IQL to string building.
 	 */
-	abstract class AbstractStaticQueryFactory extends Object implements IStaticQueryFactory{
+	abstract class AbstractStaticQueryFactory extends Object implements IStaticQueryFactory {
 		use ConfigurableTrait;
 		/**
 		 * @var array

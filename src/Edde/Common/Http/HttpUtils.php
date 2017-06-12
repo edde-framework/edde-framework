@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Http;
 
@@ -35,7 +35,7 @@
 					continue;
 				}
 				$accepts[] = [
-					'mime' => $match['mime'],
+					'mime'   => $match['mime'],
 					'weight' => $weight,
 				];
 			}
@@ -92,7 +92,7 @@
 					continue;
 				}
 				$langs[] = [
-					'lang' => $match['lang'],
+					'lang'   => $match['lang'],
 					'weight' => $weight,
 				];
 			}
@@ -121,7 +121,7 @@
 				}
 				$charsets[] = [
 					'charset' => $match['charset'],
-					'weight' => $weight,
+					'weight'  => $weight,
 				];
 			}
 			usort($charsets, function ($alpha, $beta) {
@@ -229,7 +229,7 @@
 					self::class,
 					'contentType',
 				],
-				'http' => [
+				'http'         => [
 					self::class,
 					'http',
 				],

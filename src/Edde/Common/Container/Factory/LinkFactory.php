@@ -69,15 +69,13 @@
 			if ($this->instance) {
 				return new Dependency();
 			}
-			return $container->getFactory($this->target, $this->source)
-				->createDependency($container, $dependency);
+			return $container->getFactory($this->target, $this->source)->createDependency($container, $dependency);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
-			return $this->instance ?: $this->instance = $container->getFactory($this->target, $this->source)
-				->execute($container, $parameterList, $dependency, $name);
+			return $this->instance ?: $this->instance = $container->getFactory($this->target, $this->source)->execute($container, $parameterList, $dependency, $name);
 		}
 	}

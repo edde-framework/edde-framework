@@ -314,11 +314,11 @@
 		 */
 		static private function pcre($func, $args) {
 			static $messages = [
-				PREG_INTERNAL_ERROR => 'Internal error',
+				PREG_INTERNAL_ERROR        => 'Internal error',
 				PREG_BACKTRACK_LIMIT_ERROR => 'Backtrack limit was exhausted',
 				PREG_RECURSION_LIMIT_ERROR => 'Recursion limit was exhausted',
-				PREG_BAD_UTF8_ERROR => 'Malformed UTF-8 data',
-				5 => 'Offset didn\'t correspond to the begin of a valid UTF-8 code point',
+				PREG_BAD_UTF8_ERROR        => 'Malformed UTF-8 data',
+				5                          => 'Offset didn\'t correspond to the begin of a valid UTF-8 code point',
 				// PREG_BAD_UTF8_OFFSET_ERROR
 			];
 			/** @noinspection ExceptionsAnnotatingAndHandlingInspection */
@@ -331,8 +331,7 @@
 						'preg_filter',
 						'preg_replace_callback',
 						'preg_replace',
-					], true) === false)
-			) {
+					], true) === false)) {
 				throw new StringException(($messages[$code] ?? 'Unknown error') . ' (pattern: ' . implode(' or ', (array)$args[0]) . ')', $code);
 			}
 			return $res;

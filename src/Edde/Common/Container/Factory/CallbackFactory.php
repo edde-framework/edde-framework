@@ -36,8 +36,7 @@
 		 */
 		public function canHandle(IContainer $container, string $dependency): bool {
 			if ($this->name === null) {
-				$this->name = (string)ReflectionUtils::getMethodReflection($this->callback)
-					->getReturnType();
+				$this->name = (string)ReflectionUtils::getMethodReflection($this->callback)->getReturnType();
 			}
 			return $dependency === $this->name;
 		}

@@ -19,7 +19,6 @@
 		use LazyAuthorizatorTrait;
 		use SessionTrait;
 		use ConfigurableTrait;
-
 		/**
 		 * @var IAuthenticator[]
 		 */

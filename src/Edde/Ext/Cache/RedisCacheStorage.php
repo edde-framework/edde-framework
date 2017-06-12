@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Cache;
 
@@ -12,7 +12,6 @@
 		 * @var \Redis
 		 */
 		protected $redis;
-
 		protected $server;
 
 		public function setServer(string $host, int $port): ICacheStorage {

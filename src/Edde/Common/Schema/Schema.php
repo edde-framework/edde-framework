@@ -1,12 +1,12 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Schema;
 
-	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ICollection;
 	use Edde\Api\Schema\ILink;
 	use Edde\Api\Schema\IProperty;
+	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\SchemaException;
 	use Edde\Common\Object;
 
@@ -151,8 +151,7 @@
 				throw new SchemaException(sprintf('Source property [%s] is not part of the current schema [%s].', $source->getPropertyName(), $this->getSchemaName()));
 			}
 			$this->link($link, $source, $target);
-			$target->getSchema()
-				->collection($collection, $target, $source);
+			$target->getSchema()->collection($collection, $target, $source);
 			return $this;
 		}
 

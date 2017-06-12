@@ -128,13 +128,13 @@
 		protected function handleInit() {
 			parent::handleInit();
 			$this->setTypeList([
-				null => 'TEXT',
-				'int' => 'INTEGER',
-				'bool' => 'INTEGER',
-				'float' => 'FLOAT',
-				'long' => 'INTEGER',
-				'string' => 'TEXT',
-				'text' => 'TEXT',
+				null       => 'TEXT',
+				'int'      => 'INTEGER',
+				'bool'     => 'INTEGER',
+				'float'    => 'FLOAT',
+				'long'     => 'INTEGER',
+				'string'   => 'TEXT',
+				'text'     => 'TEXT',
 				'datetime' => 'TIMESTAMP',
 			]);
 			$this->container->setup();

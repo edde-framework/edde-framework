@@ -18,8 +18,6 @@
 			if (($match = $this->match($control, $action)) === null) {
 				return null;
 			}
-			return Url::create()
-				->setQuery(array_merge($this->request->getCurrent()[2], $parameterList, $match))
-				->getAbsoluteUrl();
+			return Url::create()->setQuery(array_merge($this->request->getCurrent()[2], $parameterList, $match))->getAbsoluteUrl();
 		}
 	}

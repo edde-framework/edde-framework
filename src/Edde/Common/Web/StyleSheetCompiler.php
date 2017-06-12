@@ -52,8 +52,7 @@
 					}
 					$current = $this->filter($resource->get());
 					$urlList = StringUtils::matchAll($current, "~url\\(['\"](?<url>.*?)['\"]\\)~", true);
-					$resourcePath = $source = $resource->getUrl()
-						->getPath();
+					$resourcePath = $source = $resource->getUrl()->getPath();
 					$resourcePath = dirname($resourcePath);
 					foreach (empty($urlList) ? [] : array_unique($urlList['url']) as $item) {
 						$url = Url::create($file = str_replace([

@@ -29,10 +29,10 @@
 			foreach ($this->schema->getPropertyList() as $schemaProperty) {
 				$this->node->addNode($propertyNode = new Node($schemaProperty->getName()));
 				$propertyNode->setAttributeList([
-					'type' => $schemaProperty->getType(),
-					'required' => $schemaProperty->isRequired(),
+					'type'       => $schemaProperty->getType(),
+					'required'   => $schemaProperty->isRequired(),
 					'identifier' => $schemaProperty->isIdentifier(),
-					'unique' => $schemaProperty->isUnique(),
+					'unique'     => $schemaProperty->isUnique(),
 				]);
 			}
 		}

@@ -17,9 +17,7 @@
 		use LazyStorageTrait;
 		use LazyAclTrait;
 		use SessionTrait;
-
 		const SESSION_IDENTITY = 'identity';
-
 		/**
 		 * @var IIdentity
 		 */
@@ -29,16 +27,14 @@
 		 * @inheritdoc
 		 */
 		public function createIdentity(): IIdentity {
-			return $this->identity ?: $this->identity = $this->session()
-				->get(self::SESSION_IDENTITY, $this->container->create(Identity::class)->setup());
+			return $this->identity ?: $this->identity = $this->session()->get(self::SESSION_IDENTITY, $this->container->create(Identity::class)->setup());
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function update(): IIdentityManager {
-			$this->session()
-				->set(self::SESSION_IDENTITY, $this->createIdentity());
+			$this->session()->set(self::SESSION_IDENTITY, $this->createIdentity());
 			return $this;
 		}
 
@@ -46,8 +42,7 @@
 		 * @inheritdoc
 		 */
 		public function reset(bool $hard = true): IIdentityManager {
-			$this->session()
-				->set(self::SESSION_IDENTITY, null);
+			$this->session()->set(self::SESSION_IDENTITY, null);
 			$this->createIdentity();
 			$this->identity->setAuthenticated(false);
 			if ($this->acl !== $this->identity->getAcl()) {

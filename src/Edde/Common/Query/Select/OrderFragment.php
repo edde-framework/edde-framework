@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Query\Select;
 
@@ -33,9 +33,9 @@
 		 */
 		public function property($property, $prefix = null, $alias = null) {
 			$this->node->addNode(new Node('property', $property, [
-				'alias' => $alias,
+				'alias'  => $alias,
 				'prefix' => $prefix,
-				'order' => $this->order,
+				'order'  => $this->order,
 			]));
 			return $this;
 		}
