@@ -4,10 +4,12 @@
 	namespace Edde\Ext\Protocol;
 
 	use Edde\Api\Protocol\LazyElementQueueTrait;
+	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Api\Thread\IThreadHandler;
 	use Edde\Common\Thread\AbstractThreadHandler;
 
 	class ProtocolThreadHandler extends AbstractThreadHandler {
+		use LazyProtocolServiceTrait;
 		use LazyElementQueueTrait;
 
 		/**
@@ -15,7 +17,7 @@
 		 */
 		public function dequeue(): IThreadHandler {
 			$this->elementQueue->load();
-			$this->elementQueue->execute();
+			$this->protocolService->dequeue();
 			$this->elementQueue->save();
 			return $this;
 		}

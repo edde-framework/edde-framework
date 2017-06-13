@@ -5,12 +5,10 @@
 
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IElementQueue;
-	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	abstract class AbstractElementQueue extends Object implements IElementQueue {
-		use LazyProtocolServiceTrait;
 		use ConfigurableTrait;
 		/**
 		 * @var IElement[]
@@ -43,29 +41,20 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(): IElementQueue {
-			foreach ($this->queueList as $element) {
-				/** @var $response IElement */
-				if (($response = $this->protocolService->execute($element)) instanceof IElement) {
-					$this->elementList[$response->getId()] = $response;
-				}
-				/**
-				 * null because later empty items will be filtered out
-				 */
-				$this->queueList[$element->getId()] = null;
-			}
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function getReferenceList(string $id): array {
 			$elementList = [];
 			foreach ($this->elementList as $element) {
 				$elementList = array_merge($elementList, $element->getReferenceList($id));
 			}
 			return $elementList;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function addReference(IElement $element): IElementQueue {
+			$this->elementList[$element->getId()] = $element;
+			return $this;
 		}
 
 		/**
@@ -79,8 +68,16 @@
 		 * @inheritdoc
 		 */
 		public function clear(): IElementQueue {
-			$this->queueList = [];
+			$this->clearQueue();
 			$this->elementList = [];
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function clearQueue(): IElementQueue {
+			$this->queueList = [];
 			return $this;
 		}
 	}

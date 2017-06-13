@@ -26,18 +26,20 @@
 		public function getQueueList(string $scope = null, array $tagList = null);
 
 		/**
-		 * execute current queue list
-		 *
-		 * @return IElementQueue
-		 */
-		public function execute(): IElementQueue;
-
-		/**
 		 * @param string $id
 		 *
 		 * @return IElement[]
 		 */
 		public function getReferenceList(string $id): array;
+
+		/**
+		 * add a reference (when dequing)
+		 *
+		 * @param IElement $element
+		 *
+		 * @return IElementQueue
+		 */
+		public function addReference(IElement $element): IElementQueue;
 
 		/**
 		 * is current state of element queue empty?
@@ -61,9 +63,16 @@
 		public function load(): IElementQueue;
 
 		/**
-		 * removed currently loaded items from queue
+		 * removed currently loaded items from queue, including "answers"
 		 *
 		 * @return IElementQueue
 		 */
 		public function clear(): IElementQueue;
+
+		/**
+		 * clear only queued elements, answers will survive
+		 *
+		 * @return IElementQueue
+		 */
+		public function clearQueue(): IElementQueue;
 	}

@@ -59,7 +59,13 @@
 		 * @inheritdoc
 		 */
 		public function dequeue(): IProtocolService {
-			$this->elementQueue->execute();
+			foreach ($this->elementQueue->getQueueList() as $element) {
+				/** @var $response IElement */
+				if (($response = $this->execute($element)) instanceof IElement) {
+					$this->elementQueue->addReference($response);
+				}
+			}
+			$this->elementQueue->clearQueue();
 			return $this;
 		}
 
