@@ -42,9 +42,18 @@
 		 * @param string     $scope
 		 * @param array|null $tagList
 		 *
-		 * @return IElement
+		 * @return IPacket
 		 */
-		public function createQueuePacket(string $scope, array $tagList = null): IElement;
+		public function createQueuePacket(string $scope, array $tagList = null): IPacket;
+
+		/**
+		 * just create a new packet
+		 *
+		 * @param string|null $origin
+		 *
+		 * @return IPacket
+		 */
+		public function createPacket(string $origin = null): IPacket;
 
 		/**
 		 * @param string $id

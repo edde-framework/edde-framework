@@ -6,6 +6,7 @@
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Http\LazyHostUrlTrait;
 	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Protocol\IProtocolHandler;
 	use Edde\Api\Protocol\IProtocolService;
 
@@ -72,8 +73,17 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function createQueuePacket(string $scope, array $tagList = null): IElement {
-			return (new Packet($this->hostUrl->getAbsoluteUrl()))->setScope($scope)->setTagList($tagList)->setElementList('elements', iterator_to_array($this->getQueueList($scope, $tagList)));
+		public function createQueuePacket(string $scope, array $tagList = null): IPacket {
+			$packet = $this->createPacket();
+			$packet->setScope($scope)->setTagList($tagList)->setElementList('elements', iterator_to_array($this->getQueueList($scope, $tagList)));
+			return $packet;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function createPacket(string $origin = null): IPacket {
+			return new Packet($origin ?: $this->hostUrl->getAbsoluteUrl());
 		}
 
 		/**

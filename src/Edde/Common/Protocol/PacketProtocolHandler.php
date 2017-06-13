@@ -21,14 +21,14 @@
 		 */
 		public function queue(IElement $element) {
 			parent::queue($element);
-			return (new Packet($this->hostUrl->getAbsoluteUrl()))->reference($element)->setReference($element);
+			return $this->protocolService->createPacket()->reference($element)->setReference($element);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function execute(IElement $element) {
-			$packet = new Packet($this->hostUrl->getAbsoluteUrl());
+			$packet = $this->protocolService->createPacket();
 			/**
 			 * set the Element reference (this is a bit different than "addReference()"
 			 */

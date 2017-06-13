@@ -11,7 +11,6 @@
 	use Edde\Api\Session\LazyFingerprintTrait;
 	use Edde\Api\Thread\LazyThreadManagerTrait;
 	use Edde\Api\Url\IUrl;
-	use Edde\Common\Protocol\Packet;
 	use Edde\Common\Rest\AbstractService;
 	use Edde\Ext\Protocol\ElementContent;
 
@@ -40,7 +39,7 @@
 		public function actionGet(IElement $element) {
 			$this->elementQueue->load();
 			if (($reference = $element->getMeta('reference')) !== null) {
-				$response = new ElementContent((new Packet($this->hostUrl->getAbsoluteUrl()))->elements($this->elementQueue->getReferenceList((string)$reference)));
+				$response = new ElementContent($this->protocolService->createPacket()->elements($this->elementQueue->getReferenceList((string)$reference)));
 			} else {
 				$response = new ElementContent($this->protocolService->createQueuePacket((string)$element->getMeta('scope'), ['session' => $this->fingerprint->fingerprint()]));
 			}
