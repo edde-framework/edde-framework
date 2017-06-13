@@ -5,6 +5,7 @@
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Http\LazyHostUrlTrait;
+	use Edde\Api\Log\LazyLogServiceTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Protocol\IProtocolHandler;
@@ -13,6 +14,7 @@
 	class ProtocolService extends AbstractProtocolHandler implements IProtocolService {
 		use LazyContainerTrait;
 		use LazyHostUrlTrait;
+		use LazyLogServiceTrait;
 		/**
 		 * @var IProtocolHandler[]
 		 */
@@ -60,9 +62,13 @@
 		 */
 		public function dequeue(): IProtocolService {
 			foreach ($this->elementQueue->getQueueList() as $element) {
-				/** @var $response IElement */
-				if (($response = $this->execute($element)) instanceof IElement) {
-					$this->elementQueue->addReference($response);
+				try {
+					/** @var $response IElement */
+					if (($response = $this->execute($element)) instanceof IElement) {
+						$this->elementQueue->addReference($response);
+					}
+				} catch (\Exception $exception) {
+					$this->logService->exception($exception);
 				}
 			}
 			$this->elementQueue->clearQueue();
