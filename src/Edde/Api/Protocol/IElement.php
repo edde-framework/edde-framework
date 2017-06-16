@@ -71,6 +71,13 @@
 		public function setScope(string $scope = null): IElement;
 
 		/**
+		 * return element's scope
+		 *
+		 * @return string|null
+		 */
+		public function getScope();
+
+		/**
 		 * @param string|null $scope
 		 *
 		 * @return bool

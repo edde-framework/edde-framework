@@ -3,7 +3,6 @@
 
 	namespace Edde\Api\Protocol\Request;
 
-	use Edde\Api\Node\INode;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IProtocolHandler;
 
@@ -27,7 +26,7 @@
 		 *
 		 * @param IElement $element
 		 *
-		 * @return INode
+		 * @return IElement
 		 */
-		public function request(IElement $element): INode;
+		public function request(IElement $element): IElement;
 	}

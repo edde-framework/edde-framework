@@ -4,7 +4,6 @@
 	namespace Edde\Common\Protocol\Request;
 
 	use Edde\Api\Container\LazyContainerTrait;
-	use Edde\Api\Node\INode;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\Request\IRequestHandler;
 	use Edde\Api\Protocol\Request\IRequestService;
@@ -40,7 +39,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function request(IElement $element): INode {
+		public function request(IElement $element): IElement {
 			if (isset($this->responseList[$id = $element->getAttribute('id')])) {
 				return $this->responseList[$id];
 			}
