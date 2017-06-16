@@ -5,6 +5,7 @@
 
 	use Edde\Api\Lock\LazyLockDirectoryTrait;
 	use Edde\Api\Store\LazyStoreDirectoryTrait;
+	use Edde\Api\Store\LazyStoreManagerTrait;
 	use Edde\Api\Store\LazyStoreTrait;
 	use Edde\Common\Lock\ForeignLockException;
 	use Edde\Common\Lock\LockedException;
@@ -14,6 +15,7 @@
 	class FileStoreTest extends TestCase {
 		use LazyLockDirectoryTrait;
 		use LazyStoreDirectoryTrait;
+		use LazyStoreManagerTrait;
 		use LazyStoreTrait;
 
 		public function testLock() {
@@ -93,5 +95,6 @@
 
 		protected function setUp() {
 			ContainerFactory::autowire($this);
+			$this->storeManager->select(FileStore::class);
 		}
 	}

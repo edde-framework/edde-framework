@@ -57,7 +57,14 @@
 				throw new UnknownStoreException(sprintf('Requested store [%s] which is not known in current store manager.' . ($this->isSetup() ? ' Manager has been set up.' : 'Manager has not been set up, try to call ::setup() method.'), $name));
 			}
 			$this->current = $this->storeList[$name];
-			$this->current->setup();
 			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function handleSetup() {
+			parent::handleSetup();
+			$this->current->setup();
 		}
 	}

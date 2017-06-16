@@ -4,8 +4,10 @@
 	namespace Edde\Common\Protocol;
 
 	use Edde\Api\Protocol\LazyElementQueueTrait;
+	use Edde\Api\Store\LazyStoreManagerTrait;
 	use Edde\Api\Store\LazyStoreTrait;
 	use Edde\Common\Protocol\Event\Event;
+	use Edde\Common\Store\FileStore;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Test\TestCase;
 
@@ -13,6 +15,7 @@
 
 	class ElementQueueTest extends TestCase {
 		use LazyElementQueueTrait;
+		use LazyStoreManagerTrait;
 		use LazyStoreTrait;
 
 		public function testElementQueue() {
@@ -32,5 +35,6 @@
 
 		protected function setUp() {
 			ContainerFactory::autowire($this);
+			$this->storeManager->select(FileStore::class);
 		}
 	}
