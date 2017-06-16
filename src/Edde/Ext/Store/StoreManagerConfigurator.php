@@ -7,6 +7,7 @@
 	use Edde\Api\Store\IStoreManager;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Store\FileStore;
+	use Edde\Ext\Session\SessionStore;
 
 	class StoreManagerConfigurator extends AbstractConfigurator {
 		use LazyContainerTrait;
@@ -17,6 +18,7 @@
 		public function configure($instance) {
 			parent::configure($instance);
 			$instance->registerStore($this->container->create(FileStore::class, [], __METHOD__));
+			$instance->registerStore($this->container->create(SessionStore::class, [], __METHOD__));
 			$instance->select(FileStore::class);
 		}
 	}

@@ -100,6 +100,14 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function clear(): IList {
+			unset($_SESSION[$this->namespace][$this->name]);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function getIterator() {
 			return new ArrayIterator($_SESSION[$this->namespace][$this->name]);
 		}
