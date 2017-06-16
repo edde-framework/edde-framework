@@ -29,7 +29,7 @@
 		}
 
 		protected function macro($name, $context, $pass = null) {
-			echo sprintf('<?php $instance = $this->container->create(%s, [], %s); ?>', $this->delimite($context, true), '\'Template macro: \'.' . ($name = $this->delimite($name, true)));
+			echo sprintf('<?php $instance = $this->container->create(%s, [], %s); ?>', $this->delimite($context), '\'Template macro: \'.' . ($name = $this->delimite($name)));
 			if ($pass) {
 				echo '<?php ' . str_replace('()', '($instance, ' . $name . ')', $this->delimite($pass)) . '; ?>';
 			}

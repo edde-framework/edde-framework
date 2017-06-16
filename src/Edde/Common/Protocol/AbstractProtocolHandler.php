@@ -3,8 +3,6 @@
 
 	namespace Edde\Common\Protocol;
 
-	use Edde\Api\Container\LazyContainerTrait;
-	use Edde\Api\Http\LazyHostUrlTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IProtocolHandler;
 	use Edde\Api\Protocol\LazyElementQueueTrait;
@@ -12,9 +10,7 @@
 	use Edde\Common\Object;
 
 	abstract class AbstractProtocolHandler extends Object implements IProtocolHandler {
-		use LazyContainerTrait;
 		use LazyElementQueueTrait;
-		use LazyHostUrlTrait;
 		use ConfigurableTrait;
 
 		/**

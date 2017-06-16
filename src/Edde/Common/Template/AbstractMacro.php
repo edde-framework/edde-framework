@@ -134,6 +134,6 @@
 			if ($value && ($method = StringUtils::match($value, '~^((?<context>[a-zA-Z0-9_\$-]+))?:(?<method>[a-zA-Z0-9_-]+)\((?<parameters>.*?)\)$~', true, true)) !== null) {
 				return '$context[' . (isset($method['context']) ? "'" . $method['context'] . "'" : 'null') . ']->' . StringUtils::toCamelHump($method['method']) . '(' . ($method['parameters'] ?? '') . ')';
 			}
-			return $literal ? $value : var_export($value, true);
+			return $literal || $value[0] === '$' ? $value : var_export($value, true);
 		}
 	}
