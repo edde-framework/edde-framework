@@ -19,6 +19,6 @@
 			parent::configure($instance);
 			$instance->registerStore($this->container->create(FileStore::class, [], __METHOD__));
 			$instance->registerStore($this->container->create(SessionStore::class, [], __METHOD__));
-			$instance->select(FileStore::class);
+			$instance->select(SessionStore::class);
 		}
 	}
