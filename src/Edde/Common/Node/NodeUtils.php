@@ -144,6 +144,9 @@
 			if ($metaList->isEmpty() === false) {
 				$object->{'::meta'} = $metaList->array();
 			}
+			if ($value = $root->getValue()) {
+				$object->value = $value;
+			}
 			$nodeList = [];
 			foreach ($root->getNodeList() as $node) {
 				$nodeList[$node->getName()][] = self::fromNode($node);

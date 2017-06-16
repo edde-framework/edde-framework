@@ -103,8 +103,15 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function getScope() {
+			return $this->getAttribute('scope');
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function inScope(string $scope = null): bool {
-			return $this->getAttribute('scope') === $scope;
+			return $this->getScope() === $scope;
 		}
 
 		/**
