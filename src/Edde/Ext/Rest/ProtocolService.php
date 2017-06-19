@@ -41,7 +41,7 @@
 			if (($reference = $element->getMeta('reference')) !== null) {
 				$response = new ElementContent($this->protocolService->createPacket()->elements($this->elementQueue->getReferenceList((string)$reference)));
 			} else {
-				$response = new ElementContent($this->protocolService->createQueuePacket((string)$element->getMeta('scope'), ['session' => $this->fingerprint->fingerprint()]));
+				$response = new ElementContent($this->protocolService->createQueuePacket());
 			}
 			$this->response($response);
 			return $response;

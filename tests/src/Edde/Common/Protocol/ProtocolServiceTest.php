@@ -13,13 +13,13 @@
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
-	use Edde\Api\Protocol\Request\UnhandledRequestException;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\Container\LazyTrait;
 	use Edde\Common\Http\HostUrl;
 	use Edde\Common\Protocol\Event\Event;
 	use Edde\Common\Protocol\Request\MissingResponseException;
 	use Edde\Common\Protocol\Request\Request;
+	use Edde\Common\Protocol\Request\UnhandledRequestException;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Test\ExecutableService;
 	use Edde\Test\TestRequestServiceConfigurator;
@@ -94,69 +94,12 @@
 			self::assertEquals('foo', $bar->getMeta('got-this'));
 		}
 
-		public function testScopeAndTagList() {
-			$event = (new Event('foobar'))->setScope('scope')->setTagList([
-				'foo',
-				'bar',
-			]);
-			$event2 = (new Event('foobar'))->setScope('scope')->setTagList([
-				'foo',
-				'bar',
-				'moo',
-			]);
-			self::assertTrue($event->inScope('scope'));
-			self::assertFalse($event->inScope('scopee'));
-			self::assertTrue($event->hasTagList([]));
-			self::assertFalse($event->hasTagList(['moooo']));
-			self::assertTrue($event->hasTagList([
-				'foo',
-				'bar',
-			]));
-			self::assertTrue($event2->hasTagList([
-				'foo',
-				'bar',
-			]));
-			self::assertFalse($event2->hasTagList([
-				'foo',
-				'bar',
-				'muhaa',
-			]));
-			self::assertFalse($event2->hasTagList([
-				'muhaa',
-				'moooo',
-			]));
-			self::assertTrue($event2->hasTagList([
-				'bar',
-			]));
-			self::assertTrue($event2->hasTagList([
-				'foo',
-				'bar',
-			]));
-		}
-
 		public function testPacket() {
-			$this->protocolService->queue((new Event('foobar', '123'))->setScope('scope')->setTagList([
-				'foo',
-				'bar',
-			]));
-			$this->protocolService->queue((new Event('foobar', '456'))->setScope('scope')->setTagList([
-				'foo',
-				'bar',
-				'moo',
-			]));
-			$this->protocolService->queue((new Request('do something cool', '789'))->setScope('scope')->setTagList([
-				'foo',
-				'bar',
-			]));
-			$this->protocolService->queue((new Event('foobar', '321'))->setScope('out of scope')->setTagList([
-				'foo',
-				'bar',
-				'moo',
-			]));
-			$packet = $this->protocolService->createQueuePacket('scope', [
-				'foo',
-				'bar',
-			]);
+			$this->protocolService->queue((new Event('foobar', '123')));
+			$this->protocolService->queue((new Event('foobar', '456')));
+			$this->protocolService->queue((new Request('do something cool', '789')));
+			$this->protocolService->queue((new Event('foobar', '321')));
+			$packet = $this->protocolService->createQueuePacket();
 			$packet->setId('123456');
 			$packet->getElementNode('elements')->setId('moo');
 			$expect = (object)[
@@ -164,41 +107,24 @@
 					'version'  => '1.1',
 					'id'       => '123456',
 					'origin'   => 'http://localhost/the-void',
-					'scope'    => 'scope',
-					'tags'     => [
-						'foo',
-						'bar',
-					],
 					'elements' => (object)[
 						'id'      => 'moo',
 						'event'   => [
 							(object)[
 								'id'    => '123',
-								'scope' => 'scope',
-								'tags'  => [
-									'foo',
-									'bar',
-								],
 								'event' => 'foobar',
 							],
 							(object)[
 								'id'    => '456',
-								'scope' => 'scope',
-								'tags'  => [
-									'foo',
-									'bar',
-									'moo',
-								],
+								'event' => 'foobar',
+							],
+							(object)[
+								'id'    => '321',
 								'event' => 'foobar',
 							],
 						],
 						'request' => (object)[
 							'id'      => '789',
-							'scope'   => 'scope',
-							'tags'    => [
-								'foo',
-								'bar',
-							],
 							'request' => 'do something cool',
 						],
 					],

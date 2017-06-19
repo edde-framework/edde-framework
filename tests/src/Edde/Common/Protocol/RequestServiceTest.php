@@ -7,12 +7,12 @@
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
-	use Edde\Api\Protocol\Request\UnhandledRequestException;
 	use Edde\Common\Container\Factory\CascadeFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\Protocol\Event\Event;
 	use Edde\Common\Protocol\Request\MissingResponseException;
 	use Edde\Common\Protocol\Request\Request;
+	use Edde\Common\Protocol\Request\UnhandledRequestException;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Test\TestCase;
 	use Edde\Test\ExecutableService;

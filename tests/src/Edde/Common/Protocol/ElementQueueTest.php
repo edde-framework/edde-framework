@@ -7,7 +7,6 @@
 	use Edde\Api\Store\LazyStoreManagerTrait;
 	use Edde\Api\Store\LazyStoreTrait;
 	use Edde\Common\Protocol\Event\Event;
-	use Edde\Common\Store\FileStore;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Test\TestCase;
 
@@ -20,21 +19,20 @@
 
 		public function testElementQueue() {
 			$this->store->drop();
-			self::assertEmpty(iterator_to_array($this->elementQueue->getQueueList()));
+			self::assertEmpty(iterator_to_array($this->elementQueue));
 			$this->elementQueue->queue(new Event('some-cool-event'));
-			self::assertCount(1, iterator_to_array($this->elementQueue->getQueueList()));
+			self::assertCount(1, iterator_to_array($this->elementQueue));
 			$this->elementQueue->clear();
-			self::assertEmpty(iterator_to_array($this->elementQueue->getQueueList()));
+			self::assertEmpty(iterator_to_array($this->elementQueue));
 			$this->elementQueue->queue(new Event('some-cool-event'));
 			$this->elementQueue->save();
 			$this->elementQueue->clear();
-			self::assertEmpty(iterator_to_array($this->elementQueue->getQueueList()));
+			self::assertEmpty(iterator_to_array($this->elementQueue));
 			$this->elementQueue->load();
-			self::assertCount(1, iterator_to_array($this->elementQueue->getQueueList()));
+			self::assertCount(1, iterator_to_array($this->elementQueue));
 		}
 
 		protected function setUp() {
 			ContainerFactory::autowire($this);
-			$this->storeManager->select(FileStore::class);
 		}
 	}

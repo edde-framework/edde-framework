@@ -5,7 +5,7 @@
 
 	use Edde\Api\Config\IConfigurable;
 
-	interface IElementQueue extends IConfigurable {
+	interface IElementQueue extends IConfigurable, \IteratorAggregate {
 		/**
 		 * enqueue the given element
 		 *
@@ -16,14 +16,11 @@
 		public function queue(IElement $element): IElementQueue;
 
 		/**
-		 * getQueueList over all enqueued elements by the given rules
+		 * get current list of elements
 		 *
-		 * @param string|null $scope
-		 * @param array|null  $tagList
-		 *
-		 * @return IElement[]|\Traversable
+		 * @return IElement[]
 		 */
-		public function getQueueList(string $scope = null, array $tagList = null);
+		public function getElementList();
 
 		/**
 		 * @param string $id
