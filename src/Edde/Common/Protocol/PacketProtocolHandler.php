@@ -21,22 +21,14 @@
 		 */
 		public function queue(IElement $element) {
 			parent::queue($element);
-			return $this->protocolService->createPacket()->reference($element)->setReference($element);
+			return $this->protocolService->createPacket($element);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function execute(IElement $element) {
-			$packet = $this->protocolService->createPacket();
-			/**
-			 * set the Element reference (this is a bit different than "addReference()"
-			 */
-			$packet->setReference($element);
-			/**
-			 * add the request to the list of references in Packet
-			 */
-			$packet->reference($element);
+			$packet = $this->protocolService->createPacket($element);
 			foreach ($element->getElementList('elements') as $node) {
 				/** @var $response IElement */
 				if (($response = $this->protocolService->element($node)) instanceof IElement) {

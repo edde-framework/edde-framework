@@ -38,16 +38,10 @@
 		/**
 		 * just create a new packet
 		 *
-		 * @param string|null $origin
+		 * @param IElement|null $reference
+		 * @param string|null   $origin
 		 *
 		 * @return IPacket
 		 */
-		public function createPacket(string $origin = null): IPacket;
-
-		/**
-		 * @param string $id
-		 *
-		 * @return IElement[]
-		 */
-		public function getReferenceList(string $id): array;
+		public function createPacket(IElement $reference = null, string $origin = null): IPacket;
 	}

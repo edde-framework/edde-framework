@@ -36,13 +36,6 @@
 		 */
 		public function element(IElement $element) {
 			$this->check($element);
-			if ($element->isAsync()) {
-				/** @var $async IElement */
-				if (($async = $this->queue($element)) instanceof IElement) {
-					$async->setReference($element);
-				}
-				return $async;
-			}
-			return $this->execute($element);
+			return $element->isAsync() ? $this->queue($element) : $this->execute($element);
 		}
 	}

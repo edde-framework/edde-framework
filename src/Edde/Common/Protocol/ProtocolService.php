@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Protocol;
 
-	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Http\LazyHostUrlTrait;
 	use Edde\Api\Log\LazyLogServiceTrait;
 	use Edde\Api\Protocol\IElement;
@@ -12,7 +11,6 @@
 	use Edde\Api\Protocol\IProtocolService;
 
 	class ProtocolService extends AbstractProtocolHandler implements IProtocolService {
-		use LazyContainerTrait;
 		use LazyHostUrlTrait;
 		use LazyLogServiceTrait;
 		/**
@@ -81,21 +79,26 @@
 		public function createQueuePacket(): IPacket {
 			$packet = $this->createPacket();
 			$packet->setElementList('elements', iterator_to_array($this->elementQueue));
+			$packet->setElementList('references', $this->elementQueue->getReferenceList());
 			return $packet;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function createPacket(string $origin = null): IPacket {
-			return new Packet($origin ?: $this->hostUrl->getAbsoluteUrl());
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getReferenceList(string $id): array {
-			return $this->elementQueue->getReferenceList($id);
+		public function createPacket(IElement $reference = null, string $origin = null): IPacket {
+			$packet = new Packet($origin ?: $this->hostUrl->getAbsoluteUrl());
+			if ($reference) {
+				/**
+				 * set the Element reference (this is a bit different than "addReference()")
+				 */
+				$packet->setReference($reference);
+				/**
+				 * add the request to the list of references in Packet
+				 */
+				$packet->reference($reference);
+			}
+			return $packet;
 		}
 
 		/**

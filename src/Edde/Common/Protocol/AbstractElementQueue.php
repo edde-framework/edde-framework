@@ -37,7 +37,14 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getReferenceList(string $id): array {
+		public function getReferenceList() {
+			return $this->referenceList;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getReferenceListBy(string $id): array {
 			$elementList = [];
 			foreach ($this->referenceList as $element) {
 				$elementList = array_merge($elementList, $element->getReferenceList($id));

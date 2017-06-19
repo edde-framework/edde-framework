@@ -23,11 +23,20 @@
 		public function getElementList();
 
 		/**
+		 * return actual list of references of this queue
+		 *
+		 * @return IElement[]
+		 */
+		public function getReferenceList();
+
+		/**
+		 * return set of Elements refering to the given id
+		 *
 		 * @param string $id
 		 *
 		 * @return IElement[]
 		 */
-		public function getReferenceList(string $id): array;
+		public function getReferenceListBy(string $id): array;
 
 		/**
 		 * add a reference (when dequing)

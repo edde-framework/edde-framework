@@ -10,6 +10,7 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Protocol\Event\LazyEventBusTrait;
 	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Protocol\LazyElementQueueTrait;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
@@ -33,6 +34,7 @@
 		use LazyRequestServiceTrait;
 		use LazyEventBusTrait;
 		use LazyConverterManagerTrait;
+		use LazyElementQueueTrait;
 		use LazyTrait;
 
 		public function testEventBusExecute() {
@@ -266,11 +268,11 @@
 					],
 				],
 			], $this->converterManager->convert($response, INode::class, [\stdClass::class])->convert()->getContent());
-			self::assertEmpty($this->protocolService->getReferenceList($packet->getId()));
+			self::assertEmpty($this->elementQueue->getReferenceListBy($packet->getId()));
 
 			$this->protocolService->dequeue();
 
-			self::assertCount(1, $referenceList = $this->protocolService->getReferenceList($packet->getId()));
+			self::assertCount(1, $referenceList = $this->elementQueue->getReferenceListBy($packet->getId()));
 			list($response) = $referenceList;
 			self::assertInstanceOf(IElement::class, $response);
 			self::assertEquals('packet', $response->getType());

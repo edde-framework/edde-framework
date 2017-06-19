@@ -39,7 +39,7 @@
 		public function actionGet(IElement $element) {
 			$this->elementQueue->load();
 			if (($reference = $element->getMeta('reference')) !== null) {
-				$response = new ElementContent($this->protocolService->createPacket()->elements($this->elementQueue->getReferenceList((string)$reference)));
+				$response = new ElementContent($this->protocolService->createPacket()->elements($this->elementQueue->getReferenceListBy((string)$reference)));
 			} else {
 				$response = new ElementContent($this->protocolService->createQueuePacket());
 			}
