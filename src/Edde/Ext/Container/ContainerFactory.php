@@ -56,6 +56,7 @@
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Store\IStore;
 	use Edde\Api\Store\IStoreDirectory;
+	use Edde\Api\Store\IStoreManager;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\ITemplateDirectory;
@@ -114,8 +115,8 @@
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Session\SessionDirectory;
 	use Edde\Common\Session\SessionManager;
-	use Edde\Common\Store\FileStore;
 	use Edde\Common\Store\StoreDirectory;
+	use Edde\Common\Store\StoreManager;
 	use Edde\Common\Template\Compiler;
 	use Edde\Common\Template\Template;
 	use Edde\Common\Template\TemplateDirectory;
@@ -141,6 +142,7 @@
 	use Edde\Ext\Protocol\ThreadManagerConfigurator;
 	use Edde\Ext\Resource\ResourceManagerConfigurator;
 	use Edde\Ext\Router\RouterServiceConfigurator;
+	use Edde\Ext\Store\StoreManagerConfigurator;
 	use Edde\Ext\Template\CompilerConfigurator;
 	use Edde\Ext\Thread\WebExecutorConfigurator;
 
@@ -513,7 +515,8 @@
 				/**
 				 * Store related stuff
 				 */
-				IStore::class                         => FileStore::class,
+				IStoreManager::class                  => StoreManager::class,
+				IStore::class                         => IStoreManager::class,
 				IStoreDirectory::class                => self::proxy(IAssetDirectory::class, 'directory', [
 					'store',
 					StoreDirectory::class,
@@ -552,13 +555,14 @@
 				/**
 				 * As other components, Template engine should be configured too; this will register default set of macros.
 				 */
-				ICompiler::class         => CompilerConfigurator::class,
-				IProtocolService::class  => ProtocolServiceConfigurator::class,
-				IRequestService::class   => RequestServiceConfigurator::class,
-				ILogService::class       => LogServiceConfigurator::class,
-				ILinkFactory::class      => LinkFactoryConfigurator::class,
-				WebExecutor::class       => WebExecutorConfigurator::class,
-				IThreadManager::class    => ThreadManagerConfigurator::class,
+				ICompiler::class        => CompilerConfigurator::class,
+				IProtocolService::class => ProtocolServiceConfigurator::class,
+				IRequestService::class  => RequestServiceConfigurator::class,
+				ILogService::class      => LogServiceConfigurator::class,
+				ILinkFactory::class     => LinkFactoryConfigurator::class,
+				WebExecutor::class      => WebExecutorConfigurator::class,
+				IThreadManager::class   => ThreadManagerConfigurator::class,
+				IStoreManager::class    => StoreManagerConfigurator::class,
 			];
 		}
 	}

@@ -70,4 +70,9 @@
 		 * @return IList
 		 */
 		public function remove(string $name): IList;
+
+		/**
+		 * @return IList
+		 */
+		public function clear(): IList;
 	}

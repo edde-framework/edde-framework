@@ -9,7 +9,7 @@
 		const R400_BAD_REQUEST = 400;
 		const R400_NOT_FOUND = 404;
 		const R400_NOT_ALLOWED = 405;
-		const R400_SERVER_ERROR = 500;
+		const R500_SERVER_ERROR = 500;
 
 		/**
 		 * set the http response code

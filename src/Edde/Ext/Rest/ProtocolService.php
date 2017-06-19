@@ -4,22 +4,22 @@
 	namespace Edde\Ext\Rest;
 
 	use Edde\Api\Container\LazyContainerTrait;
-	use Edde\Api\Http\LazyHostUrlTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\LazyElementQueueTrait;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Api\Session\LazyFingerprintTrait;
+	use Edde\Api\Store\LazyStoreManagerTrait;
 	use Edde\Api\Thread\LazyThreadManagerTrait;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\Rest\AbstractService;
 	use Edde\Ext\Protocol\ElementContent;
 
 	class ProtocolService extends AbstractService {
+		use LazyStoreManagerTrait;
 		use LazyProtocolServiceTrait;
 		use LazyElementQueueTrait;
 		use LazyThreadManagerTrait;
 		use LazyContainerTrait;
-		use LazyHostUrlTrait;
 		use LazyFingerprintTrait;
 
 		/**
@@ -48,6 +48,7 @@
 		}
 
 		public function actionPost(IElement $element) {
+			$this->elementQueue->load();
 			$response = new ElementContent($this->protocolService->element($this->getContent($element, IElement::class)));
 			$this->elementQueue->save();
 			if ($this->elementQueue->isEmpty() === false) {

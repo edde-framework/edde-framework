@@ -5,6 +5,7 @@
 
 	use Edde\Api\Lock\LazyLockDirectoryTrait;
 	use Edde\Api\Store\LazyStoreDirectoryTrait;
+	use Edde\Api\Store\LazyStoreManagerTrait;
 	use Edde\Api\Store\LazyStoreTrait;
 	use Edde\Common\Lock\ForeignLockException;
 	use Edde\Common\Lock\LockedException;
@@ -14,14 +15,15 @@
 	class FileStoreTest extends TestCase {
 		use LazyLockDirectoryTrait;
 		use LazyStoreDirectoryTrait;
+		use LazyStoreManagerTrait;
 		use LazyStoreTrait;
 
 		public function testLock() {
 			$this->lockDirectory->purge();
 			$this->storeDirectory->purge();
 			$this->expectException(LockedException::class);
-			$this->expectExceptionMessage('The name (id) [Edde\Common\Store\FileStore/foo] is already locked.');
-			$this->assertInstanceOf(FileStore::class, $this->store);
+			$this->expectExceptionMessage('The name (id) [Edde\Common\Store\StoreManager/foo] is already locked.');
+			$this->assertInstanceOf(StoreManager::class, $this->store);
 			$this->store->lock('foo');
 			$this->store->lock('foo', false);
 		}
@@ -45,7 +47,7 @@
 
 		public function testUnlockKaboom() {
 			$this->expectException(ForeignLockException::class);
-			$this->expectExceptionMessage('Lock [Edde\Common\Store\FileStore] cannot be unlocked because it was created by another lock (or in another thread). Use Edde\Api\Lock\ILock::kill() to kill the lock.');
+			$this->expectExceptionMessage('Lock [Edde\Common\Store\StoreManager] cannot be unlocked because it was created by another lock (or in another thread). Use Edde\Api\Lock\ILock::kill() to kill the lock.');
 			$this->store->unlock();
 		}
 
@@ -74,14 +76,14 @@
 
 		public function testLockingLocked() {
 			$this->expectException(LockedException::class);
-			$this->expectExceptionMessage('The name (id) [Edde\Common\Store\FileStore/lock-this] is already locked.');
+			$this->expectExceptionMessage('The name (id) [Edde\Common\Store\StoreManager/lock-this] is already locked.');
 			$this->store->lock('lock-this');
 			$this->store->setExclusive('lock-this', 'value');
 		}
 
 		public function testExclusive() {
 			$this->expectException(LockedException::class);
-			$this->expectExceptionMessage('The name (id) [Edde\Common\Store\FileStore/lock-this] is already locked.');
+			$this->expectExceptionMessage('The name (id) [Edde\Common\Store\StoreManager/lock-this] is already locked.');
 			$this->store->setExclusive('lock-this', 'value');
 		}
 
@@ -93,5 +95,6 @@
 
 		protected function setUp() {
 			ContainerFactory::autowire($this);
+			$this->storeManager->select(FileStore::class);
 		}
 	}
