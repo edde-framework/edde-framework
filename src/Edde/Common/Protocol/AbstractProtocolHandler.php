@@ -3,14 +3,12 @@
 
 	namespace Edde\Common\Protocol;
 
-	use Edde\Api\Job\LazyJobQueueTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IProtocolHandler;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	abstract class AbstractProtocolHandler extends Object implements IProtocolHandler {
-		use LazyJobQueueTrait;
 		use ConfigurableTrait;
 
 		/**
@@ -21,21 +19,5 @@
 				return $this;
 			}
 			throw new UnsupportedElementException(sprintf('Unsupported element [%s] in protocol handler [%s].', $element->getName(), static::class));
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function queue(IElement $element) {
-			$this->check($element);
-			$this->jobQueue->queue($element);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function element(IElement $element) {
-			$this->check($element);
-			return $element->isAsync() ? $this->queue($element) : $this->execute($element);
 		}
 	}

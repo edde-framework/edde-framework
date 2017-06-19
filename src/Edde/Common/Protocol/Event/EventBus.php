@@ -54,7 +54,7 @@
 		 * @inheritdoc
 		 */
 		public function emit(IElement $element): IEventBus {
-			$this->element($element);
+			$this->execute($element);
 			return $this;
 		}
 	}

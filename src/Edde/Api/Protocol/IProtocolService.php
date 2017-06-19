@@ -12,30 +12,6 @@
 		public function registerProtocolHandler(IProtocolHandler $protocolHandler): IProtocolService;
 
 		/**
-		 * @param IElement $element
-		 *
-		 * @return IProtocolHandler
-		 */
-		public function getProtocolHandler(IElement $element): IProtocolHandler;
-
-		/**
-		 * @return IProtocolHandler[]|\Iterator
-		 */
-		public function getProtocolHandleList();
-
-		/**
-		 * @return IProtocolService
-		 */
-		public function dequeue(): IProtocolService;
-
-		/**
-		 * create packet from enqueued elements
-		 *
-		 * @return IPacket
-		 */
-		public function createQueuePacket(): IPacket;
-
-		/**
 		 * just create a new packet
 		 *
 		 * @param IElement|null $reference

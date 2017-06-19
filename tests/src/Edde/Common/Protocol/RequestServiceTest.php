@@ -27,12 +27,12 @@
 		public function testUnknownElement() {
 			$this->expectException(UnsupportedElementException::class);
 			$this->expectExceptionMessage('Unsupported element [event] in protocol handler [Edde\Common\Protocol\Request\RequestService].');
-			$this->requestService->element(new Event('foo'));
+			$this->requestService->execute(new Event('foo'));
 		}
 
 		public function testMissingResponse() {
 			/** @var $response IElement */
-			$response = $this->requestService->element(new Request(sprintf('%s::noResponse', ExecutableService::class)));
+			$response = $this->requestService->execute(new Request(sprintf('%s::noResponse', ExecutableService::class)));
 			self::assertEquals('error', $response->getType());
 			self::assertEquals(MissingResponseException::class, $response->getAttribute('exception'));
 			self::assertEquals('Internal error; request [Edde\Test\ExecutableService::noResponse] got no answer (response).', $response->getAttribute('message'));
@@ -40,7 +40,7 @@
 
 		public function testUnhandlerRequest() {
 			/** @var $response IElement */
-			$response = $this->requestService->element(new Request('unhandled'));
+			$response = $this->requestService->execute(new Request('unhandled'));
 			self::assertEquals('error', $response->getType());
 			self::assertEquals(UnhandledRequestException::class, $response->getAttribute('exception'));
 			self::assertEquals('Unhandled request [unhandled].', $response->getAttribute('message'));
@@ -48,21 +48,21 @@
 
 		public function testContainerHandler() {
 			/** @var $response IElement */
-			$response = $this->requestService->element((new Request(sprintf('%s::method', ExecutableService::class)))->data(['foo' => 'bababar']));
+			$response = $this->requestService->execute((new Request(sprintf('%s::method', ExecutableService::class)))->data(['foo' => 'bababar']));
 			self::assertEquals('response', $response->getType());
 			self::assertEquals('bababar', $response->getMeta('got-this'));
 		}
 
 		public function testClassHandler() {
 			/** @var $response IElement */
-			$response = $this->requestService->element((new Request('edde.test.executable-service/method'))->data(['foo' => 'barbar']));
+			$response = $this->requestService->execute((new Request('edde.test.executable-service/method'))->data(['foo' => 'barbar']));
 			self::assertEquals('response', $response->getType());
 			self::assertEquals('barbar', $response->getMeta('got-this'));
 		}
 
 		public function testContextClassHandler() {
 			/** @var $response IElement */
-			$response = $this->requestService->element((new Request('test.executable-service/do-this'))->data(['foo' => 'barbar']));
+			$response = $this->requestService->execute((new Request('test.executable-service/do-this'))->data(['foo' => 'barbar']));
 			self::assertEquals('response', $response->getType());
 			self::assertEquals('barbar', $response->getMeta('got-this'));
 		}

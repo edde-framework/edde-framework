@@ -10,7 +10,6 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Protocol\Event\LazyEventBusTrait;
 	use Edde\Api\Protocol\IElement;
-	use Edde\Api\Protocol\LazyElementQueueTrait;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
@@ -34,7 +33,6 @@
 		use LazyRequestServiceTrait;
 		use LazyEventBusTrait;
 		use LazyConverterManagerTrait;
-		use LazyElementQueueTrait;
 		use LazyTrait;
 
 		public function testEventBusExecute() {
@@ -45,7 +43,7 @@
 			$this->eventBus->listen('some cool event', function (Event $event) use (&$count) {
 				$count++;
 			});
-			$this->protocolService->element($event = new Event('some cool event'));
+			$this->protocolService->execute($event = new Event('some cool event'));
 			$this->assertEquals(2, $count);
 			$this->assertNotEmpty($id = $event->getId());
 			$this->assertEquals($id, $event->getId());
@@ -67,7 +65,7 @@
 
 		public function testRequestExecuteNoResponse() {
 			/** @var $response IElement */
-			$response = $this->protocolService->element(new Request(ExecutableService::class . '::noResponse'));
+			$response = $this->protocolService->execute(new Request(ExecutableService::class . '::noResponse'));
 			self::assertEquals('error', $response->getType());
 			self::assertEquals(MissingResponseException::class, $response->getAttribute('exception'));
 			self::assertEquals('Internal error; request [Edde\Test\ExecutableService::noResponse] got no answer (response).', $response->getAttribute('message'));
@@ -75,7 +73,7 @@
 
 		public function testRequestExecute() {
 			/** @var $response IElement */
-			self::assertInstanceOf(IElement::class, $response = $this->protocolService->element(new Request(ExecutableService::class . '::method')));
+			self::assertInstanceOf(IElement::class, $response = $this->protocolService->execute(new Request(ExecutableService::class . '::method')));
 			self::assertEquals('response', $response->getType());
 		}
 
@@ -147,7 +145,7 @@
 			$packet->getElementNode('elements')->setId('foo');
 			self::assertEquals('packet', $packet->getType());
 			/** @var $response IElement */
-			$response = $this->protocolService->element($packet);
+			$response = $this->protocolService->execute($packet);
 			self::assertNotEquals($packet->getId(), $response->getId());
 			self::assertNotEquals($packet, $response);
 			self::assertCount(2, $response->getElementList('elements'));
@@ -230,7 +228,7 @@
 			$request2->setId('852');
 			$packet->getElementNode('elements')->setId('foo');
 			/** @var $response IElement */
-			self::assertInstanceOf(IElement::class, $response = $this->protocolService->element($packet->async()));
+			self::assertInstanceOf(IElement::class, $response = $this->protocolService->execute($packet->async()));
 			self::assertEquals('packet', $response->getType());
 			self::assertCount(0, $response->getElementList('elements'));
 			self::assertCount(1, $response->getElementList('references'));
