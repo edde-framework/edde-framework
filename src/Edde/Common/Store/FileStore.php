@@ -58,6 +58,14 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
+		public function handleSetup() {
+			parent::handleSetup();
+			$this->storeDirectory->create();
+		}
+
 		protected function getFile(string $name): IFile {
 			if (isset($this->fileList[$name])) {
 				return $this->fileList[$name];
@@ -65,13 +73,5 @@
 			$list = explode('-', $this->cryptEngine->guid($name));
 			$file = array_pop($list) . '.store';
 			return $this->fileList[$name] = $this->storeDirectory->directory(implode('/', $list))->create()->file($file);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function handleSetup() {
-			parent::handleSetup();
-			$this->storeDirectory->create();
 		}
 	}

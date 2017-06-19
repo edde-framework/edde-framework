@@ -14,11 +14,7 @@
 		 * @inheritdoc
 		 */
 		public function queue(IJob $job): IJobQueue {
-			$jobList = $this->store->get(static::class);
-			$jobList[] = $job;
-			$this->store->block(static::class);
-			$this->store->set(static::class, $jobList);
-			$this->store->unlock(static::class);
+			$this->store->append(static::class, $job);
 			return $this;
 		}
 

@@ -15,6 +15,28 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function sete(string $name, $value, int $timeout = null): IStore {
+			$this->block($name, $timeout);
+			$this->set($name, $value);
+			$this->unlock($name);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function append(string $name, $value, int $timeout = null): IStore {
+			$this->block($name, $timeout);
+			$list = is_array($list = $this->get($name, [])) ? $list : [];
+			$list[] = $value;
+			$this->set($name, $list);
+			$this->unlock($name);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function lock(string $name = null, bool $block = true): IStore {
 			$this->lockManager->lock($this->getLockName($name));
 			return $this;

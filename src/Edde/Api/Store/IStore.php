@@ -74,6 +74,28 @@
 		public function set(string $name, $value): IStore;
 
 		/**
+		 * exclusive set (block -> set -> unlock)
+		 *
+		 * @param string   $name
+		 * @param mixed    $value
+		 * @param int|null $timeout
+		 *
+		 * @return IStore
+		 */
+		public function sete(string $name, $value, int $timeout = null): IStore;
+
+		/**
+		 * take the value and append it using blocking approach; flow is (block -> set -> unlock)
+		 *
+		 * @param string   $name
+		 * @param mixed    $value
+		 * @param int|null $timeout
+		 *
+		 * @return IStore
+		 */
+		public function append(string $name, $value, int $timeout = null): IStore;
+
+		/**
 		 * is the given value present in the store?
 		 *
 		 * @param string $name
