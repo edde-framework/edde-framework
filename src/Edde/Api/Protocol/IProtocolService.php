@@ -29,22 +29,11 @@
 		public function dequeue(): IProtocolService;
 
 		/**
-		 * @param string     $scope
-		 * @param array|null $tagList
-		 *
-		 * @return IElement[]|\Traversable
-		 */
-		public function getQueueList(string $scope, array $tagList = null);
-
-		/**
 		 * create packet from enqueued elements
-		 *
-		 * @param string     $scope
-		 * @param array|null $tagList
 		 *
 		 * @return IPacket
 		 */
-		public function createQueuePacket(string $scope, array $tagList = null): IPacket;
+		public function createQueuePacket(): IPacket;
 
 		/**
 		 * just create a new packet

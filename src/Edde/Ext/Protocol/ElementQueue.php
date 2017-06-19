@@ -15,12 +15,12 @@
 		 */
 		public function save(): IElementQueue {
 			$this->store->block($lock = static::class . '/element-queue');
-			$queueList = $this->queueList;
-			$elementList = $this->elementList;
+			$queueList = $this->elementList;
+			$elementList = $this->referenceList;
 			$this->load();
 			$this->store->set($lock, [
-				array_filter(array_merge($this->queueList, $queueList)),
-				array_filter(array_merge($this->elementList, $elementList)),
+				array_filter(array_merge($this->elementList, $queueList)),
+				array_filter(array_merge($this->referenceList, $elementList)),
 			]);
 			$this->store->unlock($lock);
 			return $this;
@@ -30,7 +30,7 @@
 		 * @inheritdoc
 		 */
 		public function load(): IElementQueue {
-			list($this->queueList, $this->elementList) = $this->store->get(static::class . '/element-queue', [
+			list($this->elementList, $this->referenceList) = $this->store->get(static::class . '/element-queue', [
 				[],
 				[],
 			]);

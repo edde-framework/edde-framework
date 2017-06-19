@@ -64,57 +64,6 @@
 		public function getReference(): string;
 
 		/**
-		 * @param string|null $scope
-		 *
-		 * @return IElement
-		 */
-		public function setScope(string $scope = null): IElement;
-
-		/**
-		 * return element's scope
-		 *
-		 * @return string|null
-		 */
-		public function getScope();
-
-		/**
-		 * @param string|null $scope
-		 *
-		 * @return bool
-		 */
-		public function inScope(string $scope = null): bool;
-
-		/**
-		 * @param array $tagList
-		 *
-		 * @return IElement
-		 */
-		public function setTagList(array $tagList): IElement;
-
-		/**
-		 * @return array
-		 */
-		public function getTagList(): array;
-
-		/**
-		 * has this element the given tag name?
-		 *
-		 * @param string $tag
-		 *
-		 * @return bool
-		 */
-		public function hasTag(string $tag): bool;
-
-		/**
-		 * has this element all given tags?
-		 *
-		 * @param array $tagList
-		 *
-		 * @return bool
-		 */
-		public function hasTagList(array $tagList): bool;
-
-		/**
 		 * replace current data by new one
 		 *
 		 * @param array $data

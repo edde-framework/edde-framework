@@ -13,29 +13,25 @@
 		/**
 		 * @var IElement[]
 		 */
-		protected $queueList = [];
+		protected $elementList = [];
 		/**
 		 * @var IElement[]
 		 */
-		protected $elementList = [];
+		protected $referenceList = [];
 
 		/**
 		 * @inheritdoc
 		 */
 		public function queue(IElement $element): IElementQueue {
-			$this->queueList[$element->getId()] = $element;
+			$this->elementList[$element->getId()] = $element;
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function getQueueList(string $scope = null, array $tagList = null) {
-			foreach ($this->queueList as $element) {
-				if ($element->inScope($scope) && ($tagList ? $element->hasTagList($tagList) : true)) {
-					yield $element;
-				}
-			}
+		public function getElementList() {
+			return $this->elementList;
 		}
 
 		/**
@@ -43,7 +39,7 @@
 		 */
 		public function getReferenceList(string $id): array {
 			$elementList = [];
-			foreach ($this->elementList as $element) {
+			foreach ($this->referenceList as $element) {
 				$elementList = array_merge($elementList, $element->getReferenceList($id));
 			}
 			return $elementList;
@@ -53,7 +49,7 @@
 		 * @inheritdoc
 		 */
 		public function addReference(IElement $element): IElementQueue {
-			$this->elementList[$element->getId()] = $element;
+			$this->referenceList[$element->getId()] = $element;
 			return $this;
 		}
 
@@ -61,7 +57,7 @@
 		 * @inheritdoc
 		 */
 		public function isEmpty(): bool {
-			return empty($this->queueList);
+			return empty($this->elementList);
 		}
 
 		/**
@@ -69,7 +65,7 @@
 		 */
 		public function clear(): IElementQueue {
 			$this->clearQueue();
-			$this->elementList = [];
+			$this->referenceList = [];
 			return $this;
 		}
 
@@ -77,7 +73,14 @@
 		 * @inheritdoc
 		 */
 		public function clearQueue(): IElementQueue {
-			$this->queueList = [];
+			$this->elementList = [];
 			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getIterator() {
+			return new \ArrayIterator($this->elementList);
 		}
 	}

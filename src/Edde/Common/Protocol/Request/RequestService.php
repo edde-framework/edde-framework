@@ -7,7 +7,6 @@
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\Request\IRequestHandler;
 	use Edde\Api\Protocol\Request\IRequestService;
-	use Edde\Api\Protocol\Request\UnhandledRequestException;
 	use Edde\Common\Protocol\Error;
 
 	class RequestService extends AbstractRequestHandler implements IRequestService {

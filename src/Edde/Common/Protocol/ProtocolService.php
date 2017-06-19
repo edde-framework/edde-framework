@@ -61,7 +61,7 @@
 		 * @inheritdoc
 		 */
 		public function dequeue(): IProtocolService {
-			foreach ($this->elementQueue->getQueueList() as $element) {
+			foreach ($this->elementQueue->getElementList() as $element) {
 				try {
 					/** @var $response IElement */
 					if (($response = $this->execute($element)) instanceof IElement) {
@@ -78,16 +78,9 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getQueueList(string $scope, array $tagList = null) {
-			return $this->elementQueue->getQueueList($scope, $tagList);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function createQueuePacket(string $scope, array $tagList = null): IPacket {
+		public function createQueuePacket(): IPacket {
 			$packet = $this->createPacket();
-			$packet->setScope($scope)->setTagList($tagList)->setElementList('elements', iterator_to_array($this->getQueueList($scope, $tagList)));
+			$packet->setElementList('elements', iterator_to_array($this->elementQueue));
 			return $packet;
 		}
 
