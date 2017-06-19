@@ -5,7 +5,7 @@
 
 	trait LazyElementQueueTrait {
 		/**
-		 * @var IElementQueue
+		 * @var IElementQueue|IElement[]
 		 */
 		protected $elementQueue;
 

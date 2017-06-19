@@ -59,7 +59,7 @@
 		 * @inheritdoc
 		 */
 		public function dequeue(): IProtocolService {
-			foreach ($this->elementQueue->getElementList() as $element) {
+			foreach ($this->elementQueue as $element) {
 				try {
 					/** @var $response IElement */
 					if (($response = $this->execute($element)) instanceof IElement) {
