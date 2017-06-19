@@ -22,6 +22,13 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function hasJob(): bool {
+			return $this->jobQueue->hasJob();
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function dequeue(): IJobQueue {
 			$this->execute($this->jobQueue);
 			return $this;
