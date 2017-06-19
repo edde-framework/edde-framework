@@ -76,9 +76,9 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function pickup(string $name, int $timeout = null) {
-			$item = $this->get($name);
+		public function pickup(string $name, $default = null, int $timeout = null) {
 			$this->block($name, $timeout);
+			$item = $this->get($name, $default);
 			$this->remove($name);
 			$this->unlock($name);
 			return $item;

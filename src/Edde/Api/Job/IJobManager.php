@@ -11,5 +11,5 @@
 		 *
 		 * @return IJobManager
 		 */
-		public function execute(IJobQueue $jobQueue): IJobManager;
+		public function execute(IJobQueue $jobQueue = null): IJobManager;
 	}

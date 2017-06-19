@@ -3,14 +3,14 @@
 
 	namespace Edde\Common\Protocol;
 
+	use Edde\Api\Job\LazyJobQueueTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IProtocolHandler;
-	use Edde\Api\Protocol\LazyElementQueueTrait;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	abstract class AbstractProtocolHandler extends Object implements IProtocolHandler {
-		use LazyElementQueueTrait;
+		use LazyJobQueueTrait;
 		use ConfigurableTrait;
 
 		/**
@@ -28,7 +28,7 @@
 		 */
 		public function queue(IElement $element) {
 			$this->check($element);
-			$this->elementQueue->queue($element);
+			$this->jobQueue->queue($element);
 		}
 
 		/**

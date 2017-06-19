@@ -127,11 +127,12 @@
 		 * get and remove the value from the store (block -> get -> remove -> unlock)
 		 *
 		 * @param string   $name
+		 * @param null     $default
 		 * @param int|null $timeout
 		 *
 		 * @return mixed
 		 */
-		public function pickup(string $name, int $timeout = null);
+		public function pickup(string $name, $default = null, int $timeout = null);
 
 		/**
 		 * delete whole store (basically same as a database drop)
