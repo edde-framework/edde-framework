@@ -7,12 +7,14 @@
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Http\IHostUrl;
+	use Edde\Api\Job\LazyJobManagerTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Protocol\Event\LazyEventBusTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
+	use Edde\Api\Store\LazyStoreTrait;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\Container\LazyTrait;
 	use Edde\Common\Http\HostUrl;
@@ -33,10 +35,13 @@
 		use LazyRequestServiceTrait;
 		use LazyEventBusTrait;
 		use LazyConverterManagerTrait;
+		use LazyStoreTrait;
+		use LazyJobManagerTrait;
 		use LazyTrait;
 
 		public function testEventBusExecute() {
 			$count = 0;
+			$this->store->drop();
 			$this->eventBus->listen('some cool event', function (Event $event) use (&$count) {
 				$count++;
 			});
@@ -51,15 +56,16 @@
 
 		public function testEventBusQueue() {
 			$count = 0;
+			$this->store->drop();
 			$this->eventBus->listen('some cool event', function (Event $event) use (&$count) {
 				$count++;
 			});
 			$this->eventBus->listen('some cool event', function (Event $event) use (&$count) {
 				$count++;
 			});
-			$this->protocolService->queue($event = new Event('some cool event'));
+			$this->jobManager->queue($event = new Event('some cool event'));
 			$this->assertEquals(0, $count);
-			$this->protocolService->dequeue();
+			$this->jobManager->execute();
 			$this->assertEquals(2, $count, 'EventBus has not been executed!');
 		}
 
@@ -78,9 +84,10 @@
 		}
 
 		public function testRequestQueue() {
-			$this->protocolService->queue(($fooRequest = new Request(ExecutableService::class . '::method'))->data(['foo' => 'bar']));
-			$this->protocolService->queue(($barRequest = new Request(ExecutableService::class . '::method'))->data(['foo' => 'foo']));
-			$this->protocolService->dequeue();
+			$this->store->drop();
+			$this->jobManager->queue(($fooRequest = new Request(ExecutableService::class . '::method'))->data(['foo' => 'bar']));
+			$this->jobManager->queue(($barRequest = new Request(ExecutableService::class . '::method'))->data(['foo' => 'foo']));
+			$this->jobManager->execute();
 			self::assertNotEmpty($responseList = $this->requestService->getResponseList());
 			self::assertCount(2, $responseList);
 			/** @var $foo IElement */
@@ -95,10 +102,11 @@
 		}
 
 		public function testPacket() {
-			$this->protocolService->queue((new Event('foobar', '123')));
-			$this->protocolService->queue((new Event('foobar', '456')));
-			$this->protocolService->queue((new Request('do something cool', '789')));
-			$this->protocolService->queue((new Event('foobar', '321')));
+			$this->store->drop();
+			$this->jobManager->queue((new Event('foobar', '123')));
+			$this->jobManager->queue((new Event('foobar', '456')));
+			$this->jobManager->queue((new Request('do something cool', '789')));
+			$this->jobManager->queue((new Event('foobar', '321')));
 			$packet = $this->protocolService->createQueuePacket();
 			$packet->setId('123456');
 			$packet->getElementNode('elements')->setId('moo');
