@@ -28,7 +28,7 @@
 		/**
 		 * return generator/traversable of jobs
 		 *
-		 * @return array|\Traversable|IJob[]
+		 * @return \Traversable|\Iterator|IJob[]
 		 */
 		public function dequeue();
 	}

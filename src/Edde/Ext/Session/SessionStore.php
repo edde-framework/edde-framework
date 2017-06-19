@@ -34,8 +34,23 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function has(string $name): bool {
+			return $this->session->has($name);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function get(string $name, $default = null) {
 			return $this->session->get($name, $default);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function remove(string $name): IStore {
+			$this->session->remove($name);
+			return $this;
 		}
 
 		/**
@@ -46,6 +61,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function handleSetup() {
 			parent::handleSetup();
 			$this->sessionManager->setup();

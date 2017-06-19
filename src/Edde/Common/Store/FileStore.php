@@ -19,20 +19,35 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function set(string $id, $value): IStore {
-			$this->getFile($id)->save(serialize($value));
+		public function set(string $name, $value): IStore {
+			$this->getFile($name)->save(serialize($value));
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function get(string $id, $default = null) {
-			$file = $this->getFile($id);
+		public function get(string $name, $default = null) {
+			$file = $this->getFile($name);
 			if ($file->isAvailable() === false) {
 				return $default;
 			}
 			return unserialize($file->get());
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function has(string $name): bool {
+			return $this->getFile($name)->isAvailable();
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function remove(string $name): IStore {
+			$this->getFile($name)->delete();
+			return $this;
 		}
 
 		/**
@@ -43,13 +58,13 @@
 			return $this;
 		}
 
-		protected function getFile(string $id): IFile {
-			if (isset($this->fileList[$id])) {
-				return $this->fileList[$id];
+		protected function getFile(string $name): IFile {
+			if (isset($this->fileList[$name])) {
+				return $this->fileList[$name];
 			}
-			$list = explode('-', $this->cryptEngine->guid($id));
+			$list = explode('-', $this->cryptEngine->guid($name));
 			$file = array_pop($list) . '.store';
-			return $this->fileList[$id] = $this->storeDirectory->directory(implode('/', $list))->create()->file($file);
+			return $this->fileList[$name] = $this->storeDirectory->directory(implode('/', $list))->create()->file($file);
 		}
 
 		/**

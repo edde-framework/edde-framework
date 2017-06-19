@@ -36,6 +36,8 @@
 	use Edde\Api\Identity\IAuthenticatorManager;
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Api\Identity\IIdentityManager;
+	use Edde\Api\Job\IJobManager;
+	use Edde\Api\Job\IJobQueue;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Lock\ILockDirectory;
 	use Edde\Api\Lock\ILockManager;
@@ -101,6 +103,8 @@
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Identity\AuthenticatorManager;
 	use Edde\Common\Identity\IdentityManager;
+	use Edde\Common\Job\JobManager;
+	use Edde\Common\Job\JobQueue;
 	use Edde\Common\Lock\FileLockManager;
 	use Edde\Common\Lock\LockDirectory;
 	use Edde\Common\Log\LogDirectory;
@@ -507,6 +511,12 @@
 				\Edde\Ext\Rest\ProtocolService::class => \Edde\Ext\Rest\ProtocolService::class,
 
 				/**
+				 * Job related implementation
+				 */
+				IJobManager::class                    => JobManager::class,
+				IJobQueue::class                      => JobQueue::class,
+
+				/**
 				 * Thread support
 				 */
 				IThreadManager::class                 => ThreadManager::class,
@@ -555,14 +565,14 @@
 				/**
 				 * As other components, Template engine should be configured too; this will register default set of macros.
 				 */
-				ICompiler::class        => CompilerConfigurator::class,
-				IProtocolService::class => ProtocolServiceConfigurator::class,
-				IRequestService::class  => RequestServiceConfigurator::class,
-				ILogService::class      => LogServiceConfigurator::class,
-				ILinkFactory::class     => LinkFactoryConfigurator::class,
-				WebExecutor::class      => WebExecutorConfigurator::class,
-				IThreadManager::class   => ThreadManagerConfigurator::class,
-				IStoreManager::class    => StoreManagerConfigurator::class,
+				ICompiler::class         => CompilerConfigurator::class,
+				IProtocolService::class  => ProtocolServiceConfigurator::class,
+				IRequestService::class   => RequestServiceConfigurator::class,
+				ILogService::class       => LogServiceConfigurator::class,
+				ILinkFactory::class      => LinkFactoryConfigurator::class,
+				WebExecutor::class       => WebExecutorConfigurator::class,
+				IThreadManager::class    => ThreadManagerConfigurator::class,
+				IStoreManager::class     => StoreManagerConfigurator::class,
 			];
 		}
 	}

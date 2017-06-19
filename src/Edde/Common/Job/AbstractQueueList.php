@@ -32,13 +32,6 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function dequeue() {
-
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function hasJob(): bool {
 			foreach ($this->jobQueueList as $jobQueue) {
 				if ($jobQueue->hasJob()) {

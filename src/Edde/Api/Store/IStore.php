@@ -74,14 +74,13 @@
 		public function set(string $name, $value): IStore;
 
 		/**
-		 * before value is set, lock is applied, value is set and lock is released
+		 * is the given value present in the store?
 		 *
 		 * @param string $name
-		 * @param mixed  $value
 		 *
-		 * @return IStore
+		 * @return bool
 		 */
-		public function setExclusive(string $name, $value): IStore;
+		public function has(string $name): bool;
 
 		/**
 		 * get a data from the store
@@ -92,6 +91,25 @@
 		 * @return mixed
 		 */
 		public function get(string $name, $default = null);
+
+		/**
+		 * remove the given key from store
+		 *
+		 * @param string $name
+		 *
+		 * @return IStore
+		 */
+		public function remove(string $name): IStore;
+
+		/**
+		 * get and remove the value from the store (block -> get -> remove -> unlock)
+		 *
+		 * @param string   $name
+		 * @param int|null $timeout
+		 *
+		 * @return mixed
+		 */
+		public function pickup(string $name, int $timeout = null);
 
 		/**
 		 * delete whole store (basically same as a database drop)

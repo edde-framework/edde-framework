@@ -54,11 +54,12 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setExclusive(string $name, $value): IStore {
-			$this->lock($name);
-			$this->set($name, $value);
+		public function pickup(string $name, int $timeout = null) {
+			$item = $this->get($name);
+			$this->block($name, $timeout);
+			$this->remove($name);
 			$this->unlock($name);
-			return $this;
+			return $item;
 		}
 
 		protected function getLockName(string $name = null): string {
