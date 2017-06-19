@@ -144,6 +144,7 @@
 		}
 
 		public function testServiceRequest() {
+			$this->store->drop();
 			$packet = new Packet('::the-void');
 			$packet->setId('321');
 			$request = new Request('there is nobody to handle this');
@@ -230,6 +231,7 @@
 		}
 
 		public function testAsyncPacket() {
+			$this->store->drop();
 			$packet = new Packet('::the-void');
 			$packet->setId('the-original-packet');
 			$packet->element($request = new Request('there is nobody to handle this'));
@@ -238,7 +240,7 @@
 			$request2->setId('852');
 			$packet->getElementNode('elements')->setId('foo');
 			/** @var $response IElement */
-			self::assertInstanceOf(IElement::class, $response = $this->protocolService->execute($packet->async()));
+			self::assertInstanceOf(IElement::class, $response = $this->protocolManager->execute($packet->async()));
 			self::assertEquals('packet', $response->getType());
 			self::assertCount(0, $response->getElementList('elements'));
 			self::assertCount(1, $response->getElementList('references'));
@@ -248,7 +250,6 @@
 			self::assertEquals((object)[
 				'packet' => (object)[
 					'version' => '1.1',
-
 					'id'         => '123',
 					'origin'     => 'http://localhost/the-void',
 					'reference'  => 'the-original-packet',
@@ -278,7 +279,7 @@
 			], $this->converterManager->convert($response, INode::class, [\stdClass::class])->convert()->getContent());
 			self::assertEmpty($this->elementQueue->getReferenceListBy($packet->getId()));
 
-			$this->protocolService->dequeue();
+			$this->jobManager->execute();
 
 			self::assertCount(1, $referenceList = $this->elementQueue->getReferenceListBy($packet->getId()));
 			list($response) = $referenceList;

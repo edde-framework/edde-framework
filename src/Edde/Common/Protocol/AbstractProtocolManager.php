@@ -26,4 +26,15 @@
 			}
 			return $packet;
 		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function execute(IElement $element): IElement {
+			if ($element->isAsync()) {
+				$this->jobManager->queue($element);
+				return $this->protocolService->createPacket($element);
+			}
+			return $this->protocolService->execute($element);
+		}
 	}
