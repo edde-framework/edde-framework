@@ -44,6 +44,7 @@
 	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
 	use Edde\Api\Protocol\Event\IEventBus;
+	use Edde\Api\Protocol\IProtocolManager;
 	use Edde\Api\Protocol\IProtocolService;
 	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Api\Resource\IResourceManager;
@@ -110,6 +111,7 @@
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Object;
 	use Edde\Common\Protocol\Event\EventBus;
+	use Edde\Common\Protocol\ProtocolManager;
 	use Edde\Common\Protocol\ProtocolService;
 	use Edde\Common\Protocol\Request\RequestService;
 	use Edde\Common\Resource\ResourceManager;
@@ -502,6 +504,7 @@
 				/**
 				 * Protocol implementation support
 				 */
+				IProtocolManager::class               => ProtocolManager::class,
 				IProtocolService::class               => ProtocolService::class,
 				IRequestService::class                => RequestService::class,
 				IEventBus::class                      => EventBus::class,

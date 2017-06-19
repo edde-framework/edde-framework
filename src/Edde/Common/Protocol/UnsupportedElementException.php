@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Protocol;
 
-	use Edde\Api\Protocol\ProtocolException;
+	use Edde\Api\Protocol\ProtocolHandlerException;
 
-	class UnsupportedElementException extends ProtocolException {
+	class UnsupportedElementException extends ProtocolHandlerException {
 	}

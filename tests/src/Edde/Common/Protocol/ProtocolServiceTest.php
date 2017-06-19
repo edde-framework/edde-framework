@@ -11,6 +11,7 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Protocol\Event\LazyEventBusTrait;
 	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Protocol\LazyProtocolManagerTrait;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
@@ -37,6 +38,7 @@
 		use LazyConverterManagerTrait;
 		use LazyStoreTrait;
 		use LazyJobManagerTrait;
+		use LazyProtocolManagerTrait;
 		use LazyTrait;
 
 		public function testEventBusExecute() {
@@ -107,7 +109,7 @@
 			$this->jobManager->queue((new Event('foobar', '456')));
 			$this->jobManager->queue((new Request('do something cool', '789')));
 			$this->jobManager->queue((new Event('foobar', '321')));
-			$packet = $this->protocolService->createQueuePacket();
+			$packet = $this->protocolManager->createPacket();
 			$packet->setId('123456');
 			$packet->getElementNode('elements')->setId('moo');
 			$expect = (object)[
