@@ -18,7 +18,7 @@
 		/**
 		 * get current list of elements
 		 *
-		 * @return IElement[]|\Traversable
+		 * @return IElement[]
 		 */
 		public function getElementList();
 

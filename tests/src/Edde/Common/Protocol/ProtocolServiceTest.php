@@ -107,41 +107,24 @@
 					'version'  => '1.1',
 					'id'       => '123456',
 					'origin'   => 'http://localhost/the-void',
-					'scope'    => 'scope',
-					'tags'     => [
-						'foo',
-						'bar',
-					],
 					'elements' => (object)[
 						'id'      => 'moo',
 						'event'   => [
 							(object)[
 								'id'    => '123',
-								'scope' => 'scope',
-								'tags'  => [
-									'foo',
-									'bar',
-								],
 								'event' => 'foobar',
 							],
 							(object)[
 								'id'    => '456',
-								'scope' => 'scope',
-								'tags'  => [
-									'foo',
-									'bar',
-									'moo',
-								],
+								'event' => 'foobar',
+							],
+							(object)[
+								'id'    => '321',
 								'event' => 'foobar',
 							],
 						],
 						'request' => (object)[
 							'id'      => '789',
-							'scope'   => 'scope',
-							'tags'    => [
-								'foo',
-								'bar',
-							],
 							'request' => 'do something cool',
 						],
 					],
