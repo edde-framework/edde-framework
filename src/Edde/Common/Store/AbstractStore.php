@@ -25,6 +25,13 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function iterate() {
+			throw new UnsupportedFeatureException(sprintf('Unsupported feature in store [%s].', static::class));
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function append(string $name, $value, int $timeout = null): IStore {
 			$this->block($name, $timeout);
 			$list = is_array($list = $this->get($name, [])) ? $list : [];

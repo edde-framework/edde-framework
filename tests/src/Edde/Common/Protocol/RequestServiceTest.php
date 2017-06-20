@@ -9,7 +9,6 @@
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
 	use Edde\Common\Container\Factory\CascadeFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
-	use Edde\Common\Protocol\Event\Event;
 	use Edde\Common\Protocol\Request\MissingResponseException;
 	use Edde\Common\Protocol\Request\Request;
 	use Edde\Common\Protocol\Request\UnhandledRequestException;
@@ -23,12 +22,6 @@
 	class RequestServiceTest extends TestCase {
 		use LazyRequestServiceTrait;
 		use LazyContainerTrait;
-
-		public function testUnknownElement() {
-			$this->expectException(UnsupportedElementException::class);
-			$this->expectExceptionMessage('Unsupported element [event] in protocol handler [Edde\Common\Protocol\Request\RequestService].');
-			$this->requestService->execute(new Event('foo'));
-		}
 
 		public function testMissingResponse() {
 			/** @var $response IElement */

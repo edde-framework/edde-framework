@@ -25,7 +25,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(IElement $element) {
+		public function onExecute(IElement $element) {
 			/** @var $instance IConfigurable */
 			if (($instance = $this->container->create((string)$element->getMeta('::class'), [], static::class)) instanceof IConfigurable) {
 				$instance->setup();

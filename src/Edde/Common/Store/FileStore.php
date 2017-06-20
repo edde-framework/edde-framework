@@ -20,7 +20,11 @@
 		 * @inheritdoc
 		 */
 		public function set(string $name, $value): IStore {
-			$this->getFile($name)->save(serialize($value));
+			$this->getFile($name)->save(serialize([
+				$name,
+				$value,
+				[],
+			]));
 			return $this;
 		}
 
@@ -32,7 +36,18 @@
 			if ($file->isAvailable() === false) {
 				return $default;
 			}
-			return unserialize($file->get());
+			list(, $value) = unserialize($file->get());
+			return $value;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function iterate() {
+			foreach ($this->storeDirectory as $file) {
+				list($name, $value) = unserialize($file->get());
+				yield $name => $value;
+			}
 		}
 
 		/**

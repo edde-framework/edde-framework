@@ -43,6 +43,13 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function iterate() {
+			return $this->current->iterate();
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function remove(string $name): IStore {
 			$this->current->remove($name);
 			return $this;

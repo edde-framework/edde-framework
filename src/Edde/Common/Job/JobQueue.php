@@ -5,16 +5,19 @@
 
 	use Edde\Api\Job\IJobQueue;
 	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Protocol\LazyElementStoreTrait;
 	use Edde\Api\Store\LazyStoreTrait;
 
 	class JobQueue extends AbstractJobQueue {
+		use LazyElementStoreTrait;
 		use LazyStoreTrait;
 
 		/**
 		 * @inheritdoc
 		 */
 		public function queue(IElement $element): IJobQueue {
-			$this->store->append(static::class, $element);
+			$this->elementStore->save($element);
+			$this->store->append(static::class, $element->getId());
 			return $this;
 		}
 
@@ -29,9 +32,8 @@
 		 * @inheritdoc
 		 */
 		public function dequeue() {
-			/** @var $element IElement */
-			foreach ($this->store->pickup(static::class, []) as $element) {
-				yield $element;
+			foreach ($this->store->pickup(static::class, []) as $elementId) {
+				yield $this->elementStore->load($elementId);
 			}
 		}
 	}

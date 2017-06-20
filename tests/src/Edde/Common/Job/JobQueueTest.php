@@ -7,6 +7,7 @@
 	use Edde\Api\Job\LazyJobQueueTrait;
 	use Edde\Api\Protocol\Event\LazyEventBusTrait;
 	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Protocol\LazyElementStoreTrait;
 	use Edde\Api\Store\LazyStoreTrait;
 	use Edde\Common\Protocol\Event\Event;
 	use Edde\Ext\Container\ContainerFactory;
@@ -16,12 +17,13 @@
 		use LazyJobQueueTrait;
 		use LazyJobManagerTrait;
 		use LazyEventBusTrait;
+		use LazyElementStoreTrait;
 		use LazyStoreTrait;
 
 		public function testJobQueue() {
 			$this->store->drop();
 			self::assertFalse($this->jobQueue->hasJob(), 'job queue still has jobs');
-			$this->jobQueue->queue(new Event('some-event'));
+			$this->jobQueue->queue($event = new Event('some-event'));
 			$this->jobQueue->queue(new Event('some-event'));
 			$this->jobQueue->queue(new Event('some-event2'));
 			$this->jobQueue->queue(new Event('some-event3'));
@@ -46,6 +48,7 @@
 				$eventList[$element->getAttribute('event')]++;
 			});
 			$this->jobManager->execute();
+			self::assertEquals($event, $this->elementStore->load($event->getId()));
 			self::assertFalse($this->jobManager->hasJob(), 'job queue still has jobs');
 			self::assertEquals([
 				'some-event'  => 2,

@@ -19,7 +19,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(IElement $element) {
+		public function onExecute(IElement $element) {
 			$packet = $this->protocolService->createPacket($element);
 			foreach ($element->getElementList('elements') as $node) {
 				/** @var $response IElement */

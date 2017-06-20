@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Protocol;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Http\IHostUrl;
@@ -11,26 +10,26 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Protocol\Event\LazyEventBusTrait;
 	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Protocol\LazyElementStoreTrait;
 	use Edde\Api\Protocol\LazyProtocolManagerTrait;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
 	use Edde\Api\Store\LazyStoreTrait;
 	use Edde\Common\Container\Factory\ClassFactory;
-	use Edde\Common\Container\LazyTrait;
 	use Edde\Common\Http\HostUrl;
 	use Edde\Common\Protocol\Event\Event;
 	use Edde\Common\Protocol\Request\MissingResponseException;
 	use Edde\Common\Protocol\Request\Request;
 	use Edde\Common\Protocol\Request\UnhandledRequestException;
 	use Edde\Ext\Container\ContainerFactory;
+	use Edde\Ext\Test\TestCase;
 	use Edde\Test\ExecutableService;
 	use Edde\Test\TestRequestServiceConfigurator;
-	use PHPUnit\Framework\TestCase;
 
 	require_once __DIR__ . '/../assets/assets.php';
 
-	class ProtocolServiceTest extends TestCase implements ILazyInject {
+	class ProtocolServiceTest extends TestCase {
 		use LazyContainerTrait;
 		use LazyProtocolServiceTrait;
 		use LazyRequestServiceTrait;
@@ -39,7 +38,7 @@
 		use LazyStoreTrait;
 		use LazyJobManagerTrait;
 		use LazyProtocolManagerTrait;
-		use LazyTrait;
+		use LazyElementStoreTrait;
 
 		public function testEventBusExecute() {
 			$count = 0;
@@ -249,7 +248,7 @@
 			$response->getElementNode('references')->setId('moo');
 			self::assertEquals((object)[
 				'packet' => (object)[
-					'version' => '1.1',
+					'version'    => '1.1',
 					'id'         => '123',
 					'origin'     => 'http://localhost/the-void',
 					'reference'  => 'the-original-packet',
@@ -277,11 +276,12 @@
 					],
 				],
 			], $this->converterManager->convert($response, INode::class, [\stdClass::class])->convert()->getContent());
-			self::assertEmpty($this->elementQueue->getReferenceListBy($packet->getId()));
+			self::assertTrue($this->elementStore->has($packet->getId()));
+			self::assertEmpty(iterator_to_array($this->elementStore->getReferenceListBy($packet->getId())));
 
 			$this->jobManager->execute();
 
-			self::assertCount(1, $referenceList = $this->elementQueue->getReferenceListBy($packet->getId()));
+			self::assertCount(1, $referenceList = iterator_to_array($this->elementStore->getReferenceListBy($packet->getId())));
 			list($response) = $referenceList;
 			self::assertInstanceOf(IElement::class, $response);
 			self::assertEquals('packet', $response->getType());

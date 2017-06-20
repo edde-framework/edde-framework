@@ -66,18 +66,12 @@
 			if (isset($this->handleList[$type = $element->getType()])) {
 				return $this->handleList[$type];
 			}
-			foreach ($this->getProtocolHandleList() as $protocolHandler) {
+			foreach ($this->protocolHandlerList as $protocolHandler) {
+				$protocolHandler->setup();
 				if ($protocolHandler->canHandle($element)) {
 					return $this->handleList[$type] = $protocolHandler;
 				}
 			}
 			throw new UnsupportedElementException(sprintf('There is no protocol handler for the given element [%s].', $type));
-		}
-
-		protected function getProtocolHandleList() {
-			foreach ($this->protocolHandlerList as $protocolHandler) {
-				$protocolHandler->setup();
-				yield $protocolHandler;
-			}
 		}
 	}

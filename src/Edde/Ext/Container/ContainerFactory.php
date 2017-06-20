@@ -44,6 +44,7 @@
 	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
 	use Edde\Api\Protocol\Event\IEventBus;
+	use Edde\Api\Protocol\IElementStore;
 	use Edde\Api\Protocol\IProtocolManager;
 	use Edde\Api\Protocol\IProtocolService;
 	use Edde\Api\Protocol\Request\IRequestService;
@@ -110,6 +111,7 @@
 	use Edde\Common\Log\LogDirectory;
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Object;
+	use Edde\Common\Protocol\ElementStore;
 	use Edde\Common\Protocol\Event\EventBus;
 	use Edde\Common\Protocol\ProtocolManager;
 	use Edde\Common\Protocol\ProtocolService;
@@ -509,6 +511,7 @@
 				IRequestService::class                => RequestService::class,
 				IEventBus::class                      => EventBus::class,
 				\Edde\Ext\Rest\ProtocolService::class => \Edde\Ext\Rest\ProtocolService::class,
+				IElementStore::class                  => ElementStore::class,
 
 				/**
 				 * Job related implementation

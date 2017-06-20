@@ -115,6 +115,13 @@
 		public function get(string $name, $default = null);
 
 		/**
+		 * go through whole store and get all key -> value; this method should not work in common with arrays
+		 *
+		 * @return \Traversable
+		 */
+		public function iterate();
+
+		/**
 		 * remove the given key from store
 		 *
 		 * @param string $name

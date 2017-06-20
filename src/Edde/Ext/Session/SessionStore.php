@@ -27,8 +27,21 @@
 		 * @inheritdoc
 		 */
 		public function set(string $name, $value): IStore {
-			$this->session->set($name, $value);
+			$this->session->set($name, [
+				$name,
+				$value,
+				[],
+			]);
 			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function iterate() {
+			foreach ($this->session as list($name, $value)) {
+				yield $name => $value;
+			}
 		}
 
 		/**
@@ -42,7 +55,11 @@
 		 * @inheritdoc
 		 */
 		public function get(string $name, $default = null) {
-			return $this->session->get($name, $default);
+			if (($value = $this->session->get($name)) === null) {
+				return $default;
+			}
+			list(, $value) = $value;
+			return $value;
 		}
 
 		/**
