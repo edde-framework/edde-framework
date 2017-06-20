@@ -8,14 +8,12 @@
 	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Protocol\IProtocolManager;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
-	use Edde\Api\Thread\LazyThreadManagerTrait;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	abstract class AbstractProtocolManager extends Object implements IProtocolManager {
 		use LazyProtocolServiceTrait;
 		use LazyJobManagerTrait;
-		use LazyThreadManagerTrait;
 		use ConfigurableTrait;
 
 		/**
@@ -35,7 +33,6 @@
 		public function execute(IElement $element): IElement {
 			if ($element->isAsync()) {
 				$this->jobManager->queue($element);
-				$this->threadManager->execute();
 				return $this->protocolService->createPacket($element);
 			}
 			return $this->protocolService->execute($element);
