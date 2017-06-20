@@ -19,19 +19,11 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function queue(IElement $element) {
-			parent::queue($element);
-			return $this->protocolService->createPacket($element);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function execute(IElement $element) {
+		public function onExecute(IElement $element) {
 			$packet = $this->protocolService->createPacket($element);
 			foreach ($element->getElementList('elements') as $node) {
 				/** @var $response IElement */
-				if (($response = $this->protocolService->element($node)) instanceof IElement) {
+				if (($response = $this->protocolService->execute($node)) instanceof IElement) {
 					$packet->element($response->setReference($node));
 					$packet->reference($node);
 				}

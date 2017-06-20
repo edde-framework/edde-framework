@@ -29,8 +29,30 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function has(string $name): bool {
+			return $this->current->has($name);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function get(string $name, $default = null) {
 			return $this->current->get($name, $default);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function iterate() {
+			return $this->current->iterate();
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function remove(string $name): IStore {
+			$this->current->remove($name);
+			return $this;
 		}
 
 		/**

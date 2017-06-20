@@ -74,14 +74,35 @@
 		public function set(string $name, $value): IStore;
 
 		/**
-		 * before value is set, lock is applied, value is set and lock is released
+		 * exclusive set (block -> set -> unlock)
 		 *
-		 * @param string $name
-		 * @param mixed  $value
+		 * @param string   $name
+		 * @param mixed    $value
+		 * @param int|null $timeout
 		 *
 		 * @return IStore
 		 */
-		public function setExclusive(string $name, $value): IStore;
+		public function sete(string $name, $value, int $timeout = null): IStore;
+
+		/**
+		 * take the value and append it using blocking approach; flow is (block -> set -> unlock)
+		 *
+		 * @param string   $name
+		 * @param mixed    $value
+		 * @param int|null $timeout
+		 *
+		 * @return IStore
+		 */
+		public function append(string $name, $value, int $timeout = null): IStore;
+
+		/**
+		 * is the given value present in the store?
+		 *
+		 * @param string $name
+		 *
+		 * @return bool
+		 */
+		public function has(string $name): bool;
 
 		/**
 		 * get a data from the store
@@ -92,6 +113,33 @@
 		 * @return mixed
 		 */
 		public function get(string $name, $default = null);
+
+		/**
+		 * go through whole store and get all key -> value; this method should not work in common with arrays
+		 *
+		 * @return \Traversable
+		 */
+		public function iterate();
+
+		/**
+		 * remove the given key from store
+		 *
+		 * @param string $name
+		 *
+		 * @return IStore
+		 */
+		public function remove(string $name): IStore;
+
+		/**
+		 * get and remove the value from the store (block -> get -> remove -> unlock)
+		 *
+		 * @param string   $name
+		 * @param null     $default
+		 * @param int|null $timeout
+		 *
+		 * @return mixed
+		 */
+		public function pickup(string $name, $default = null, int $timeout = null);
 
 		/**
 		 * delete whole store (basically same as a database drop)

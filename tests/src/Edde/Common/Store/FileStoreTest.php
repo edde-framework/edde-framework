@@ -67,32 +67,6 @@
 			self::assertEquals('yapee!', $this->store->get('foo'));
 		}
 
-		public function testLockingUnlocked() {
-			self::assertFalse($this->store->isLocked('lock-this'));
-			$this->store->setExclusive('lock-this', 'value');
-			self::assertFalse($this->store->isLocked('lock-this'));
-			self::assertEquals('value', $this->store->get('lock-this'));
-		}
-
-		public function testLockingLocked() {
-			$this->expectException(LockedException::class);
-			$this->expectExceptionMessage('The name (id) [Edde\Common\Store\StoreManager/lock-this] is already locked.');
-			$this->store->lock('lock-this');
-			$this->store->setExclusive('lock-this', 'value');
-		}
-
-		public function testExclusive() {
-			$this->expectException(LockedException::class);
-			$this->expectExceptionMessage('The name (id) [Edde\Common\Store\StoreManager/lock-this] is already locked.');
-			$this->store->setExclusive('lock-this', 'value');
-		}
-
-		public function testExclusiveUnlock() {
-			$this->store->kill('lock-this');
-			$this->store->setExclusive('lock-this', 'another-value');
-			self::assertEquals('another-value', $this->store->get('lock-this'));
-		}
-
 		protected function setUp() {
 			ContainerFactory::autowire($this);
 			$this->storeManager->select(FileStore::class);

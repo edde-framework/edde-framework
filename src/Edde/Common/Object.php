@@ -22,7 +22,7 @@
 		protected $aId;
 
 		/**
-		 * return object hash (unique id); object has is NOT based on internal state; ist's only
+		 * return object hash (unique id); object has is NOT based on internal state
 		 *
 		 * @return string
 		 */
@@ -31,9 +31,6 @@
 				$this->aId = hash('sha512', spl_object_hash($this));
 			}
 			return $this->aId;
-		}
-
-		protected function prepare() {
 		}
 
 		protected function handleInit() {

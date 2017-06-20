@@ -3,49 +3,53 @@
 
 	namespace Edde\Common\Protocol;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Http\IHostUrl;
+	use Edde\Api\Job\LazyJobManagerTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Protocol\Event\LazyEventBusTrait;
 	use Edde\Api\Protocol\IElement;
-	use Edde\Api\Protocol\LazyElementQueueTrait;
+	use Edde\Api\Protocol\LazyElementStoreTrait;
+	use Edde\Api\Protocol\LazyProtocolManagerTrait;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
+	use Edde\Api\Store\LazyStoreTrait;
 	use Edde\Common\Container\Factory\ClassFactory;
-	use Edde\Common\Container\LazyTrait;
 	use Edde\Common\Http\HostUrl;
 	use Edde\Common\Protocol\Event\Event;
 	use Edde\Common\Protocol\Request\MissingResponseException;
 	use Edde\Common\Protocol\Request\Request;
 	use Edde\Common\Protocol\Request\UnhandledRequestException;
 	use Edde\Ext\Container\ContainerFactory;
+	use Edde\Ext\Test\TestCase;
 	use Edde\Test\ExecutableService;
 	use Edde\Test\TestRequestServiceConfigurator;
-	use PHPUnit\Framework\TestCase;
 
 	require_once __DIR__ . '/../assets/assets.php';
 
-	class ProtocolServiceTest extends TestCase implements ILazyInject {
+	class ProtocolServiceTest extends TestCase {
 		use LazyContainerTrait;
 		use LazyProtocolServiceTrait;
 		use LazyRequestServiceTrait;
 		use LazyEventBusTrait;
 		use LazyConverterManagerTrait;
-		use LazyElementQueueTrait;
-		use LazyTrait;
+		use LazyStoreTrait;
+		use LazyJobManagerTrait;
+		use LazyProtocolManagerTrait;
+		use LazyElementStoreTrait;
 
 		public function testEventBusExecute() {
 			$count = 0;
+			$this->store->drop();
 			$this->eventBus->listen('some cool event', function (Event $event) use (&$count) {
 				$count++;
 			});
 			$this->eventBus->listen('some cool event', function (Event $event) use (&$count) {
 				$count++;
 			});
-			$this->protocolService->element($event = new Event('some cool event'));
+			$this->protocolService->execute($event = new Event('some cool event'));
 			$this->assertEquals(2, $count);
 			$this->assertNotEmpty($id = $event->getId());
 			$this->assertEquals($id, $event->getId());
@@ -53,21 +57,22 @@
 
 		public function testEventBusQueue() {
 			$count = 0;
+			$this->store->drop();
 			$this->eventBus->listen('some cool event', function (Event $event) use (&$count) {
 				$count++;
 			});
 			$this->eventBus->listen('some cool event', function (Event $event) use (&$count) {
 				$count++;
 			});
-			$this->protocolService->queue($event = new Event('some cool event'));
+			$this->jobManager->queue($event = new Event('some cool event'));
 			$this->assertEquals(0, $count);
-			$this->protocolService->dequeue();
+			$this->jobManager->execute();
 			$this->assertEquals(2, $count, 'EventBus has not been executed!');
 		}
 
 		public function testRequestExecuteNoResponse() {
 			/** @var $response IElement */
-			$response = $this->protocolService->element(new Request(ExecutableService::class . '::noResponse'));
+			$response = $this->protocolService->execute(new Request(ExecutableService::class . '::noResponse'));
 			self::assertEquals('error', $response->getType());
 			self::assertEquals(MissingResponseException::class, $response->getAttribute('exception'));
 			self::assertEquals('Internal error; request [Edde\Test\ExecutableService::noResponse] got no answer (response).', $response->getAttribute('message'));
@@ -75,14 +80,15 @@
 
 		public function testRequestExecute() {
 			/** @var $response IElement */
-			self::assertInstanceOf(IElement::class, $response = $this->protocolService->element(new Request(ExecutableService::class . '::method')));
+			self::assertInstanceOf(IElement::class, $response = $this->protocolService->execute(new Request(ExecutableService::class . '::method')));
 			self::assertEquals('response', $response->getType());
 		}
 
 		public function testRequestQueue() {
-			$this->protocolService->queue(($fooRequest = new Request(ExecutableService::class . '::method'))->data(['foo' => 'bar']));
-			$this->protocolService->queue(($barRequest = new Request(ExecutableService::class . '::method'))->data(['foo' => 'foo']));
-			$this->protocolService->dequeue();
+			$this->store->drop();
+			$this->jobManager->queue(($fooRequest = new Request(ExecutableService::class . '::method'))->data(['foo' => 'bar']));
+			$this->jobManager->queue(($barRequest = new Request(ExecutableService::class . '::method'))->data(['foo' => 'foo']));
+			$this->jobManager->execute();
 			self::assertNotEmpty($responseList = $this->requestService->getResponseList());
 			self::assertCount(2, $responseList);
 			/** @var $foo IElement */
@@ -97,11 +103,12 @@
 		}
 
 		public function testPacket() {
-			$this->protocolService->queue((new Event('foobar', '123')));
-			$this->protocolService->queue((new Event('foobar', '456')));
-			$this->protocolService->queue((new Request('do something cool', '789')));
-			$this->protocolService->queue((new Event('foobar', '321')));
-			$packet = $this->protocolService->createQueuePacket();
+			$this->store->drop();
+			$this->jobManager->queue((new Event('foobar', '123')));
+			$this->jobManager->queue((new Event('foobar', '456')));
+			$this->jobManager->queue((new Request('do something cool', '789')));
+			$this->jobManager->queue((new Event('foobar', '321')));
+			$packet = $this->protocolManager->createPacket();
 			$packet->setId('123456');
 			$packet->getElementNode('elements')->setId('moo');
 			$expect = (object)[
@@ -136,6 +143,7 @@
 		}
 
 		public function testServiceRequest() {
+			$this->store->drop();
 			$packet = new Packet('::the-void');
 			$packet->setId('321');
 			$request = new Request('there is nobody to handle this');
@@ -147,7 +155,7 @@
 			$packet->getElementNode('elements')->setId('foo');
 			self::assertEquals('packet', $packet->getType());
 			/** @var $response IElement */
-			$response = $this->protocolService->element($packet);
+			$response = $this->protocolService->execute($packet);
 			self::assertNotEquals($packet->getId(), $response->getId());
 			self::assertNotEquals($packet, $response);
 			self::assertCount(2, $response->getElementList('elements'));
@@ -222,6 +230,7 @@
 		}
 
 		public function testAsyncPacket() {
+			$this->store->drop();
 			$packet = new Packet('::the-void');
 			$packet->setId('the-original-packet');
 			$packet->element($request = new Request('there is nobody to handle this'));
@@ -230,7 +239,7 @@
 			$request2->setId('852');
 			$packet->getElementNode('elements')->setId('foo');
 			/** @var $response IElement */
-			self::assertInstanceOf(IElement::class, $response = $this->protocolService->element($packet->async()));
+			self::assertInstanceOf(IElement::class, $response = $this->protocolManager->execute($packet->async()));
 			self::assertEquals('packet', $response->getType());
 			self::assertCount(0, $response->getElementList('elements'));
 			self::assertCount(1, $response->getElementList('references'));
@@ -239,8 +248,7 @@
 			$response->getElementNode('references')->setId('moo');
 			self::assertEquals((object)[
 				'packet' => (object)[
-					'version' => '1.1',
-
+					'version'    => '1.1',
 					'id'         => '123',
 					'origin'     => 'http://localhost/the-void',
 					'reference'  => 'the-original-packet',
@@ -268,11 +276,12 @@
 					],
 				],
 			], $this->converterManager->convert($response, INode::class, [\stdClass::class])->convert()->getContent());
-			self::assertEmpty($this->elementQueue->getReferenceListBy($packet->getId()));
+			self::assertTrue($this->elementStore->has($packet->getId()));
+			self::assertEmpty(iterator_to_array($this->elementStore->getReferenceListBy($packet->getId())));
 
-			$this->protocolService->dequeue();
+			$this->jobManager->execute();
 
-			self::assertCount(1, $referenceList = $this->elementQueue->getReferenceListBy($packet->getId()));
+			self::assertCount(1, $referenceList = iterator_to_array($this->elementStore->getReferenceListBy($packet->getId())));
 			list($response) = $referenceList;
 			self::assertInstanceOf(IElement::class, $response);
 			self::assertEquals('packet', $response->getType());

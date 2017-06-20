@@ -42,7 +42,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(IElement $element) {
+		public function onExecute(IElement $element) {
 			if (isset($this->callbackList[$type = $element->getAttribute('event')])) {
 				foreach ($this->callbackList[$type] as $callback) {
 					$callback($element);
@@ -54,7 +54,7 @@
 		 * @inheritdoc
 		 */
 		public function emit(IElement $element): IEventBus {
-			$this->element($element);
+			$this->execute($element);
 			return $this;
 		}
 	}

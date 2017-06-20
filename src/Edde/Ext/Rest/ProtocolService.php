@@ -5,7 +5,6 @@
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Protocol\IElement;
-	use Edde\Api\Protocol\LazyElementQueueTrait;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Api\Session\LazyFingerprintTrait;
 	use Edde\Api\Store\LazyStoreManagerTrait;
@@ -17,7 +16,6 @@
 	class ProtocolService extends AbstractService {
 		use LazyStoreManagerTrait;
 		use LazyProtocolServiceTrait;
-		use LazyElementQueueTrait;
 		use LazyThreadManagerTrait;
 		use LazyContainerTrait;
 		use LazyFingerprintTrait;
@@ -36,24 +34,9 @@
 			return parent::link('/api/v1/protocol', $parameterList);
 		}
 
-		public function actionGet(IElement $element) {
-			$this->elementQueue->load();
-			if (($reference = $element->getMeta('reference')) !== null) {
-				$response = new ElementContent($this->protocolService->createPacket()->elements($this->elementQueue->getReferenceListBy((string)$reference)));
-			} else {
-				$response = new ElementContent($this->protocolService->createQueuePacket());
-			}
-			$this->response($response);
-			return $response;
-		}
-
 		public function actionPost(IElement $element) {
-			$this->elementQueue->load();
-			$response = new ElementContent($this->protocolService->element($this->getContent($element, IElement::class)));
-			$this->elementQueue->save();
-			if ($this->elementQueue->isEmpty() === false) {
-				$this->threadManager->execute();
-			}
+			$response = new ElementContent($this->protocolService->execute($this->getContent($element, IElement::class)));
+			$this->threadManager->execute();
 			$this->response($response);
 			return $response;
 		}

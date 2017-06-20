@@ -48,7 +48,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(IElement $element) {
+		public function onExecute(IElement $element) {
 			foreach ($this->requestHandlerList as $requestHandler) {
 				/** @var $response IElement */
 				if ($requestHandler->canHandle($element)) {

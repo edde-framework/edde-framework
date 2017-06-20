@@ -5,12 +5,12 @@
 
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IProtocolHandler;
-	use Edde\Api\Protocol\LazyElementQueueTrait;
+	use Edde\Api\Protocol\LazyElementStoreTrait;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	abstract class AbstractProtocolHandler extends Object implements IProtocolHandler {
-		use LazyElementQueueTrait;
+		use LazyElementStoreTrait;
 		use ConfigurableTrait;
 
 		/**
@@ -26,16 +26,18 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function queue(IElement $element) {
-			$this->check($element);
-			$this->elementQueue->queue($element);
+		public function execute(IElement $element) {
+			try {
+				return $response = $this->onExecute($element);
+			} finally {
+				$this->elementStore->save($element);
+				/** @var $response IElement */
+				if ($response instanceof IElement) {
+					$this->elementStore->save($response);
+				}
+			}
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function element(IElement $element) {
-			$this->check($element);
-			return $element->isAsync() ? $this->queue($element) : $this->execute($element);
+		protected function onExecute(IElement $element) {
 		}
 	}

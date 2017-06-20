@@ -36,13 +36,16 @@
 	use Edde\Api\Identity\IAuthenticatorManager;
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Api\Identity\IIdentityManager;
+	use Edde\Api\Job\IJobManager;
+	use Edde\Api\Job\IJobQueue;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Lock\ILockDirectory;
 	use Edde\Api\Lock\ILockManager;
 	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
 	use Edde\Api\Protocol\Event\IEventBus;
-	use Edde\Api\Protocol\IElementQueue;
+	use Edde\Api\Protocol\IElementStore;
+	use Edde\Api\Protocol\IProtocolManager;
 	use Edde\Api\Protocol\IProtocolService;
 	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Api\Resource\IResourceManager;
@@ -101,12 +104,16 @@
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Identity\AuthenticatorManager;
 	use Edde\Common\Identity\IdentityManager;
+	use Edde\Common\Job\JobManager;
+	use Edde\Common\Job\JobQueue;
 	use Edde\Common\Lock\FileLockManager;
 	use Edde\Common\Lock\LockDirectory;
 	use Edde\Common\Log\LogDirectory;
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Object;
+	use Edde\Common\Protocol\ElementStore;
 	use Edde\Common\Protocol\Event\EventBus;
+	use Edde\Common\Protocol\ProtocolManager;
 	use Edde\Common\Protocol\ProtocolService;
 	use Edde\Common\Protocol\Request\RequestService;
 	use Edde\Common\Resource\ResourceManager;
@@ -134,12 +141,11 @@
 	use Edde\Ext\Converter\ConverterManagerConfigurator;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Database\Sqlite\SqliteDsn;
+	use Edde\Ext\Job\ThreadManagerConfigurator;
 	use Edde\Ext\Link\LinkFactoryConfigurator;
 	use Edde\Ext\Log\LogServiceConfigurator;
-	use Edde\Ext\Protocol\ElementQueue;
 	use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 	use Edde\Ext\Protocol\RequestServiceConfigurator;
-	use Edde\Ext\Protocol\ThreadManagerConfigurator;
 	use Edde\Ext\Resource\ResourceManagerConfigurator;
 	use Edde\Ext\Router\RouterServiceConfigurator;
 	use Edde\Ext\Store\StoreManagerConfigurator;
@@ -500,11 +506,18 @@
 				/**
 				 * Protocol implementation support
 				 */
+				IProtocolManager::class               => ProtocolManager::class,
 				IProtocolService::class               => ProtocolService::class,
 				IRequestService::class                => RequestService::class,
-				IElementQueue::class                  => ElementQueue::class,
 				IEventBus::class                      => EventBus::class,
 				\Edde\Ext\Rest\ProtocolService::class => \Edde\Ext\Rest\ProtocolService::class,
+				IElementStore::class                  => ElementStore::class,
+
+				/**
+				 * Job related implementation
+				 */
+				IJobManager::class                    => JobManager::class,
+				IJobQueue::class                      => JobQueue::class,
 
 				/**
 				 * Thread support
@@ -555,14 +568,14 @@
 				/**
 				 * As other components, Template engine should be configured too; this will register default set of macros.
 				 */
-				ICompiler::class        => CompilerConfigurator::class,
-				IProtocolService::class => ProtocolServiceConfigurator::class,
-				IRequestService::class  => RequestServiceConfigurator::class,
-				ILogService::class      => LogServiceConfigurator::class,
-				ILinkFactory::class     => LinkFactoryConfigurator::class,
-				WebExecutor::class      => WebExecutorConfigurator::class,
-				IThreadManager::class   => ThreadManagerConfigurator::class,
-				IStoreManager::class    => StoreManagerConfigurator::class,
+				ICompiler::class         => CompilerConfigurator::class,
+				IProtocolService::class  => ProtocolServiceConfigurator::class,
+				IRequestService::class   => RequestServiceConfigurator::class,
+				ILogService::class       => LogServiceConfigurator::class,
+				ILinkFactory::class      => LinkFactoryConfigurator::class,
+				WebExecutor::class       => WebExecutorConfigurator::class,
+				IThreadManager::class    => ThreadManagerConfigurator::class,
+				IStoreManager::class     => StoreManagerConfigurator::class,
 			];
 		}
 	}

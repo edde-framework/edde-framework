@@ -33,59 +33,6 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getProtocolHandler(IElement $element): IProtocolHandler {
-			if (isset($this->handleList[$type = $element->getType()])) {
-				return $this->handleList[$type];
-			}
-			foreach ($this->getProtocolHandleList() as $protocolHandler) {
-				if ($protocolHandler->canHandle($element)) {
-					return $this->handleList[$type] = $protocolHandler;
-				}
-			}
-			throw new UnsupportedElementException(sprintf('There is no protocol handler for the given element [%s].', $type));
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getProtocolHandleList() {
-			foreach ($this->protocolHandlerList as $protocolHandler) {
-				$protocolHandler->setup();
-				yield $protocolHandler;
-			}
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function dequeue(): IProtocolService {
-			foreach ($this->elementQueue->getElementList() as $element) {
-				try {
-					/** @var $response IElement */
-					if (($response = $this->execute($element)) instanceof IElement) {
-						$this->elementQueue->addReference($response);
-					}
-				} catch (\Exception $exception) {
-					$this->logService->exception($exception);
-				}
-			}
-			$this->elementQueue->clearQueue();
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function createQueuePacket(): IPacket {
-			$packet = $this->createPacket();
-			$packet->setElementList('elements', iterator_to_array($this->elementQueue));
-			$packet->setElementList('references', $this->elementQueue->getReferenceList());
-			return $packet;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function createPacket(IElement $reference = null, string $origin = null): IPacket {
 			$packet = new Packet($origin ?: $this->hostUrl->getAbsoluteUrl());
 			if ($reference) {
@@ -111,14 +58,20 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function element(IElement $element) {
-			return $this->getProtocolHandler($element)->element($element);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function execute(IElement $element) {
 			return $this->getProtocolHandler($element)->execute($element);
+		}
+
+		protected function getProtocolHandler(IElement $element): IProtocolHandler {
+			if (isset($this->handleList[$type = $element->getType()])) {
+				return $this->handleList[$type];
+			}
+			foreach ($this->protocolHandlerList as $protocolHandler) {
+				$protocolHandler->setup();
+				if ($protocolHandler->canHandle($element)) {
+					return $this->handleList[$type] = $protocolHandler;
+				}
+			}
+			throw new UnsupportedElementException(sprintf('There is no protocol handler for the given element [%s].', $type));
 		}
 	}

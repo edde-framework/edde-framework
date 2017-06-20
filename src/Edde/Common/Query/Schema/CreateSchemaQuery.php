@@ -28,7 +28,7 @@
 			$this->node = new Node('create-schema-query', $this->schema->getMeta('storable', false) ?: $this->schema->getSchemaName());
 			foreach ($this->schema->getPropertyList() as $schemaProperty) {
 				$this->node->addNode($propertyNode = new Node($schemaProperty->getName()));
-				$propertyNode->setAttributeList([
+				$propertyNode->putAttribute([
 					'type'       => $schemaProperty->getType(),
 					'required'   => $schemaProperty->isRequired(),
 					'identifier' => $schemaProperty->isIdentifier(),
