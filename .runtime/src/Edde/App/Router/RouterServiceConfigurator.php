@@ -5,10 +5,6 @@
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Router\IRouterService;
-	use Edde\App\Index\IndexView;
-	use Edde\Common\Application\HttpResponseHandler;
-	use Edde\Common\Application\Request;
-	use Edde\Ext\Router\SimpleHttpRouter;
 
 	class RouterServiceConfigurator extends \Edde\Ext\Router\RouterServiceConfigurator {
 		use LazyContainerTrait;
@@ -18,10 +14,5 @@
 		 */
 		public function configure($instance) {
 			parent::configure($instance);
-			$instance->setDefaultRequest($this->container->create(Request::class, [
-				IndexView::class,
-				'actionIndex',
-			], __METHOD__), $this->container->create(HttpResponseHandler::class, [], __METHOD__));
-			$instance->registerRouter(SimpleHttpRouter::class, [['Edde\\App']]);
 		}
 	}

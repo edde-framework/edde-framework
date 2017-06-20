@@ -65,7 +65,7 @@
   </component>
   <component name="PhpUnit">
     <phpunit_settings>
-      <PhpUnitSettings load_method="CUSTOM_LOADER" bootstrap_file_path="C:/projects/edde-framework/edde-framework/loader.php" configuration_file_path="C:/projects/edde-framework/edde-framework/phpunit.xml" custom_loader_path="C:/projects/edde-framework/edde-framework/lib/autoload.php" phpunit_phar_path="C:/projects/edde-framework/edde-framework/bin/phpunit.phar" use_bootstrap_file="true" use_configuration_file="true" />
+      <PhpUnitSettings load_method="CUSTOM_LOADER" bootstrap_file_path="C:/Users/Marek Hanzal/projects/edde-framework/edde-framework/loader.php" configuration_file_path="C:/Users/Marek Hanzal/projects/edde-framework/edde-framework/phpunit.xml" custom_loader_path="C:/Users/Marek Hanzal/projects/edde-framework/edde-framework/lib/autoload.php" phpunit_phar_path="C:/projects/edde-framework/edde-framework/bin/phpunit.phar" use_bootstrap_file="true" use_configuration_file="true" />
     </phpunit_settings>
   </component>
 </project>

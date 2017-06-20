@@ -3,41 +3,37 @@
 
 	namespace Edde\Ext\Rest;
 
-	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Protocol\IElement;
-	use Edde\Api\Protocol\LazyProtocolServiceTrait;
-	use Edde\Api\Session\LazyFingerprintTrait;
-	use Edde\Api\Store\LazyStoreManagerTrait;
-	use Edde\Api\Thread\LazyThreadManagerTrait;
+	use Edde\Api\Protocol\LazyProtocolManagerTrait;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\Rest\AbstractService;
 	use Edde\Ext\Protocol\ElementContent;
 
 	class ProtocolService extends AbstractService {
-		use LazyStoreManagerTrait;
-		use LazyProtocolServiceTrait;
-		use LazyThreadManagerTrait;
-		use LazyContainerTrait;
-		use LazyFingerprintTrait;
+		use LazyProtocolManagerTrait;
 
 		/**
 		 * @inheritdoc
 		 */
 		public function match(IUrl $url): bool {
-			return $url->match('~^/api/v1/protocol$~') !== null;
+			return $url->match('~^/api/protocol$~') !== null;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function link($generate, array $parameterList = []) {
-			return parent::link('/api/v1/protocol', $parameterList);
+			return parent::link('/api/protocol', $parameterList);
 		}
 
+		/**
+		 * post packet which will be executed
+		 *
+		 * @param IElement $element
+		 *
+		 * @return ElementContent
+		 */
 		public function actionPost(IElement $element) {
-			$response = new ElementContent($this->protocolService->execute($this->getContent($element, IElement::class)));
-			$this->threadManager->execute();
-			$this->response($response);
-			return $response;
+			return $this->response($response = new ElementContent($this->protocolManager->execute($this->getContent($element, IElement::class))));
 		}
 	}

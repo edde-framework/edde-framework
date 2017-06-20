@@ -32,7 +32,7 @@
 			} finally {
 				$this->elementStore->save($element);
 				/** @var $response IElement */
-				if ($response instanceof IElement) {
+				if (isset($response) && $response instanceof IElement) {
 					$this->elementStore->save($response);
 				}
 			}
