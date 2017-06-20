@@ -18,7 +18,7 @@
 		 * @throws UrlException
 		 */
 		public function configure($instance) {
-			$this->linkFactory->setup();
+			parent::configure($instance);
 			$instance->setUrl($this->linkFactory->link(ThreadService::class));
 		}
 	}

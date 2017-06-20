@@ -56,7 +56,9 @@
 		 * @inheritdoc
 		 */
 		public function execute(): IThreadManager {
-			$this->executor->execute();
+			if ($this->hasQueue()) {
+				$this->executor->execute();
+			}
 			return $this;
 		}
 

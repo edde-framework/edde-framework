@@ -231,6 +231,7 @@
 
 		public function testAsyncPacket() {
 			$this->store->drop();
+			/** @var $packet IElement */
 			$packet = new Packet('::the-void');
 			$packet->setId('the-original-packet');
 			$packet->element($request = new Request('there is nobody to handle this'));
