@@ -269,7 +269,7 @@
 							'version'  => '1.1',
 							'id'       => 'the-original-packet',
 							'origin'   => '::the-void',
-							'async'    => true,
+							'async'    => false,
 							'elements' => (object)[
 								'id'      => 'foo',
 								'request' => [
@@ -339,7 +339,7 @@
 							'version'  => '1.1',
 							'id'       => 'the-original-packet',
 							'origin'   => '::the-void',
-							'async'    => true,
+							'async'    => false,
 							'elements' => (object)[
 								'id'      => 'foo',
 								'request' => [

@@ -30,4 +30,11 @@
 			}
 			return $packet;
 		}
+
+		/**
+		 * @inheritdoc
+		 */
+		protected function onQueue(IElement $element) {
+			return $this->protocolService->createPacket()->reference($element)->setReference($element);
+		}
 	}
