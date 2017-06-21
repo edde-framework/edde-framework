@@ -282,7 +282,7 @@
 		 * @inheritdoc
 		 */
 		public function match(string $match, bool $path = true) {
-			return StringUtils::match($path ? $this->getPath() : $this->getAbsoluteUrl(), $match);
+			return StringUtils::match($path ? $this->getPath(false) : $this->getAbsoluteUrl(), $match);
 		}
 
 		/**
