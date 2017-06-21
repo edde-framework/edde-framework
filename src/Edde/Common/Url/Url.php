@@ -244,6 +244,14 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function addParameterList(array $parameterList): IUrl {
+			$this->parameterList = array_merge($this->parameterList, $parameterList);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function getParameterList(): array {
 			return $this->parameterList;
 		}

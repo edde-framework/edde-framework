@@ -98,6 +98,13 @@
 		public function setParameterList(array $parameterList): IUrl;
 
 		/**
+		 * @param array $parameterList
+		 *
+		 * @return IUrl
+		 */
+		public function addParameterList(array $parameterList): IUrl;
+
+		/**
 		 * update the given parameter
 		 *
 		 * @param string $name

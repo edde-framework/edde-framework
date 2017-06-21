@@ -97,12 +97,32 @@
 		 */
 		public function close(): ISessionManager {
 			if ($this->isSession() === false) {
-				throw new SessionException('Session is not running; there is nothing to close.');
+				throw new InactiveSessionException('Session is not running; there is nothing to close.');
 			}
 			session_write_close();
 			session_unset();
 			session_destroy();
 			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getName(): string {
+			if ($this->isSession() === false) {
+				throw new InactiveSessionException('Session is not running; session name cannot be retrieved.');
+			}
+			return session_name();
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getSessionId(): string {
+			if ($this->isSession() === false) {
+				throw new InactiveSessionException('Session is not running; cannot get session id.');
+			}
+			return session_id();
 		}
 
 		protected function handleSetup() {

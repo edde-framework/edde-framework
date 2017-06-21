@@ -45,4 +45,18 @@
 		 * @return ISessionManager
 		 */
 		public function close(): ISessionManager;
+
+		/**
+		 * return session name; commonly PHPSESSID
+		 *
+		 * @return string
+		 */
+		public function getName(): string;
+
+		/**
+		 * return current session ID
+		 *
+		 * @return string
+		 */
+		public function getSessionId(): string;
 	}

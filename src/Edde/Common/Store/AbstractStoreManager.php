@@ -84,6 +84,7 @@
 			}
 			$this->stack->push($this->current);
 			$this->current = $this->storeList[$name];
+			$this->current->setup();
 			return $this;
 		}
 
