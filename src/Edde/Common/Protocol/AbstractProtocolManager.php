@@ -34,6 +34,7 @@
 		public function createPacket(IElement $reference = null): IPacket {
 			$packet = $this->protocolService->createPacket($reference);
 			$packet->elements($this->elementList);
+			$this->elementList = [];
 			return $packet;
 		}
 
