@@ -19,22 +19,22 @@
 		/**
 		 * save given value into the cache
 		 *
-		 * @param string $id
-		 * @param mixed  $save must be serializable (neonable, jsonable, serializable, ...)
+		 * @param string $name
+		 * @param mixed  $save must be serializable
 		 *
 		 * @return mixed
 		 */
-		public function save(string $id, $save);
+		public function save(string $name, $save);
 
 		/**
 		 * load value be the id - if the value doesn't exists, default is returned
 		 *
-		 * @param string     $id
+		 * @param string     $name
 		 * @param mixed|null $default
 		 *
 		 * @return mixed
 		 */
-		public function load(string $id, $default = null);
+		public function load(string $name, $default = null);
 
 		/**
 		 * manual invalidation of whole cache

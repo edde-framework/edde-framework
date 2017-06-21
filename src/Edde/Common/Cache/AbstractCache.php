@@ -39,31 +39,20 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function load(string $id, $default = null) {
+		public function load(string $name, $default = null) {
 			$this->cacheStorage->setup();
-			if (($value = $this->cacheStorage->load($this->cacheId($id))) === null) {
+			if (($value = $this->cacheStorage->load($this->cacheId($name))) === null) {
 				return is_callable($default) ? call_user_func($default) : $default;
 			}
 			return $value;
 		}
 
 		/**
-		 * generate cacheid
-		 *
-		 * @param string $id
-		 *
-		 * @return string
-		 */
-		protected function cacheId(string $id): string {
-			return sha1($this->namespace . '/' . $id);
-		}
-
-		/**
 		 * @inheritdoc
 		 */
-		public function save(string $id, $source) {
+		public function save(string $name, $source) {
 			$this->cacheStorage->setup();
-			$this->cacheStorage->save($this->cacheId($id), $source);
+			$this->cacheStorage->save($this->cacheId($name), $source);
 			return $source;
 		}
 
@@ -74,5 +63,16 @@
 			$this->cacheStorage->setup();
 			$this->cacheStorage->invalidate();
 			return $this;
+		}
+
+		/**
+		 * generate cache id
+		 *
+		 * @param string $name
+		 *
+		 * @return string
+		 */
+		protected function cacheId(string $name): string {
+			return sha1($this->namespace . '/' . $name);
 		}
 	}
