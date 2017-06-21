@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Store;
 
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Lock\LazyLockDirectoryTrait;
 	use Edde\Api\Store\LazyStoreDirectoryTrait;
 	use Edde\Api\Store\LazyStoreManagerTrait;
@@ -11,11 +12,15 @@
 	use Edde\Common\Lock\LockedException;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Test\TestCase;
+	use Edde\Test\DummyStore;
+
+	require_once __DIR__ . '/../assets/assets.php';
 
 	class FileStoreTest extends TestCase {
 		use LazyLockDirectoryTrait;
 		use LazyStoreDirectoryTrait;
 		use LazyStoreManagerTrait;
+		use LazyContainerTrait;
 		use LazyStoreTrait;
 
 		public function testLock() {
@@ -67,8 +72,17 @@
 			self::assertEquals('yapee!', $this->store->get('foo'));
 		}
 
+		public function testRestore() {
+			self::assertInstanceOf(FileStore::class, $this->storeManager->store());
+			$this->storeManager->select(DummyStore::class);
+			self::assertInstanceOf(DummyStore::class, $this->storeManager->store());
+			$this->storeManager->restore();
+			self::assertInstanceOf(FileStore::class, $this->storeManager->store());
+		}
+
 		protected function setUp() {
 			ContainerFactory::autowire($this);
 			$this->storeManager->select(FileStore::class);
+			$this->storeManager->registerStore($this->container->create(DummyStore::class));
 		}
 	}

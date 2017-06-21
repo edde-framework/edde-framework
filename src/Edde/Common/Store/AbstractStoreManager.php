@@ -17,6 +17,10 @@
 		 * @var IStore
 		 */
 		protected $current;
+		/**
+		 * @var \SplStack
+		 */
+		protected $stack;
 
 		/**
 		 * @inheritdoc
@@ -78,8 +82,32 @@
 			if (isset($this->storeList[$name]) === false) {
 				throw new UnknownStoreException(sprintf('Requested store [%s] which is not known in current store manager.' . ($this->isSetup() ? ' Manager has been set up.' : 'Manager has not been set up, try to call ::setup() method.'), $name));
 			}
+			$this->stack->push($this->current);
 			$this->current = $this->storeList[$name];
 			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function restore(): IStoreManager {
+			$this->current = $this->stack->pop();
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function store(): IStore {
+			return $this->current;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		protected function handleInit() {
+			parent::handleInit();
+			$this->stack = new \SplStack();
 		}
 
 		/**

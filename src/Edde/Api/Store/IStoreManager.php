@@ -22,4 +22,18 @@
 		 * @return IStoreManager
 		 */
 		public function select(string $name): IStoreManager;
+
+		/**
+		 * when a Store is selected, it's pushed on stack; this method will restore previous store
+		 *
+		 * @return IStoreManager
+		 */
+		public function restore(): IStoreManager;
+
+		/**
+		 * return current store
+		 *
+		 * @return IStore
+		 */
+		public function store(): IStore;
 	}
