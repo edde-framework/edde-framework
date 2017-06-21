@@ -4,6 +4,7 @@
 	namespace Edde\Common\Protocol;
 
 	use Edde\Api\Job\LazyJobManagerTrait;
+	use Edde\Api\Log\LazyLogServiceTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IProtocolHandler;
 	use Edde\Api\Protocol\LazyElementStoreTrait;
@@ -13,6 +14,7 @@
 	abstract class AbstractProtocolHandler extends Object implements IProtocolHandler {
 		use LazyElementStoreTrait;
 		use LazyJobManagerTrait;
+		use LazyLogServiceTrait;
 		use ConfigurableTrait;
 
 		/**
@@ -29,19 +31,11 @@
 		 * @inheritdoc
 		 */
 		public function execute(IElement $element) {
-			try {
-				if ($element->isAsync()) {
-					$this->jobManager->queue($element->async(false));
-					return $this->onQueue($element);
-				}
-				return $response = $this->onExecute($element);
-			} finally {
-				$this->elementStore->save($element);
-				/** @var $response IElement */
-				if (isset($response) && $response instanceof IElement) {
-					$this->elementStore->save($response);
-				}
+			if ($element->isAsync()) {
+				$this->jobManager->queue($element->async(false));
+				return $this->onQueue($element);
 			}
+			return $this->onExecute($element);
 		}
 
 		protected function onExecute(IElement $element) {

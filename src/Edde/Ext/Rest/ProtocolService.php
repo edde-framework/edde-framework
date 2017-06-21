@@ -5,14 +5,17 @@
 
 	use Edde\Api\Converter\IContent;
 	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Protocol\LazyElementStoreTrait;
 	use Edde\Api\Protocol\LazyProtocolManagerTrait;
 	use Edde\Api\Thread\LazyThreadManagerTrait;
 	use Edde\Api\Url\IUrl;
+	use Edde\Common\Protocol\Error;
 	use Edde\Common\Rest\AbstractService;
 	use Edde\Ext\Protocol\ElementContent;
 
 	class ProtocolService extends AbstractService {
 		use LazyProtocolManagerTrait;
+		use LazyElementStoreTrait;
 		use LazyThreadManagerTrait;
 
 		/**
@@ -37,7 +40,18 @@
 		 * @return IContent
 		 */
 		public function actionGet(IElement $element) {
-			return $this->response(new ElementContent($this->protocolManager->createPacket()));
+			$this->response($response = new ElementContent($packet = $this->protocolManager->createPacket()));
+			if (($elementId = $element->getMeta('element'))) {
+				$reference = new Error(-101, sprintf('Requested element [%s] was not found.', $elementId));
+				if ($this->elementStore->has($elementId)) {
+					$reference = $this->elementStore->load($elementId);
+				}
+				$packet->reference($reference);
+			} else if (($referenceId = $element->getMeta('reference'))) {
+				$packet->references(iterator_to_array($this->elementStore->getReferenceListBy($referenceId)));
+			}
+			$this->elementStore->save($packet);
+			return $response;
 		}
 
 		/**

@@ -17,6 +17,7 @@
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
 	use Edde\Api\Store\LazyStoreTrait;
 	use Edde\Common\Container\Factory\ClassFactory;
+	use Edde\Common\Container\UnknownFactoryException;
 	use Edde\Common\Http\HostUrl;
 	use Edde\Common\Protocol\Event\Event;
 	use Edde\Common\Protocol\Request\MissingResponseException;
@@ -367,6 +368,34 @@
 					],
 				],
 			], $this->converterManager->convert($response, INode::class, [\stdClass::class])->convert()->getContent());
+		}
+
+		public function testKaboom() {
+			$this->store->drop();
+			$response = $this->protocolService->execute($request = new Request('dfdfsfsdfd/foo'));
+			self::assertEquals('error', $response->getType());
+			self::assertEquals(-102, $response->getAttribute('code'));
+			self::assertEquals('Unknown factory [Dfdfsfsdfd] for dependency [Edde\Ext\Protocol\Request\ClassRequestHandler].', $response->getAttribute('message'));
+			self::assertEquals(UnknownFactoryException::class, $response->getAttribute('exception'));
+			self::assertEquals($request->getId(), $response->getReference());
+			self::assertEquals($response, $this->elementStore->load($response->getId()));
+			self::assertEquals($request, $this->elementStore->load($request->getId()));
+		}
+
+		public function testAsyncKaboom() {
+			$this->store->drop();
+			$this->protocolService->execute($request = (new Request('dfdfsfsdfd/foo'))->async());
+			self::assertTrue($this->jobManager->hasJob(), 'Async Element has not been added as a job!');
+			self::assertEquals($request, $this->elementStore->load($request->getId()));
+			self::assertEmpty(iterator_to_array($this->elementStore->getReferenceListBy($request->getId())));
+			$this->jobManager->execute();
+			/** @var $response IElement */
+			list($response) = iterator_to_array($this->elementStore->getReferenceListBy($request->getId()));
+			self::assertEquals('error', $response->getType());
+			self::assertEquals(-102, $response->getAttribute('code'));
+			self::assertEquals('Unknown factory [Dfdfsfsdfd] for dependency [Edde\Ext\Protocol\Request\ClassRequestHandler].', $response->getAttribute('message'));
+			self::assertEquals(UnknownFactoryException::class, $response->getAttribute('exception'));
+			self::assertEquals($request->getId(), $response->getReference());
 		}
 
 		protected function setUp() {

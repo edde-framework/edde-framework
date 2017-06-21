@@ -59,7 +59,20 @@
 		 * @inheritdoc
 		 */
 		public function execute(IElement $element) {
-			return $this->getProtocolHandler($element)->execute($element);
+			try {
+				return $response = $this->getProtocolHandler($element)->execute($element);
+			} catch (\Exception $exception) {
+				$response = new Error(-102, $exception->getMessage());
+				$response->setException(get_class($exception));
+				$response->setReference($element);
+				$this->logService->exception($exception);
+				return $response;
+			} finally {
+				$this->elementStore->save($element);
+				if (isset($response) && $response instanceof IElement) {
+					$this->elementStore->save($response);
+				}
+			}
 		}
 
 		protected function getProtocolHandler(IElement $element): IProtocolHandler {

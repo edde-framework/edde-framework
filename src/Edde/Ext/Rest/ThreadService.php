@@ -15,14 +15,14 @@
 		 * @inheritdoc
 		 */
 		public function match(IUrl $url): bool {
-			return $url->match('~^/api/v1/thread~') !== null;
+			return $url->match('~^/api/thread~') !== null;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function link($generate, array $parameterList = []) {
-			return parent::link('/api/v1/thread', $parameterList);
+			return parent::link('/api/thread', $parameterList);
 		}
 
 		/**

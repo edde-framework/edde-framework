@@ -56,7 +56,7 @@
 		 * @param string $name
 		 * @param null   $default
 		 *
-		 * @return IAttributeList|mixed
+		 * @return IAttributeList|string|mixed
 		 */
 		public function getAttribute(string $name, $default = null);
 
@@ -90,7 +90,7 @@
 		 * @param string $name
 		 * @param null   $default
 		 *
-		 * @return IAttributeList|mixed
+		 * @return IAttributeList|string|mixed
 		 */
 		public function getMeta(string $name, $default = null);
 

@@ -28,4 +28,11 @@
 		 * @return IPacket
 		 */
 		public function reference(IElement $element): IPacket;
+
+		/**
+		 * @param array $elementList
+		 *
+		 * @return IPacket
+		 */
+		public function references(array $elementList): IPacket;
 	}

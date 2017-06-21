@@ -36,4 +36,12 @@
 			$this->addElement('references', $element);
 			return $this;
 		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function references(array $elementList): IPacket {
+			$this->setElementList('references', $elementList);
+			return $this;
+		}
 	}

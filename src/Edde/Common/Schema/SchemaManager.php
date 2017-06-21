@@ -63,7 +63,7 @@
 		 * @inheritdoc
 		 */
 		public function createSchema(INode $node): ISchema {
-			$schema = new Schema($node->getName(), (string)$node->getAttribute('namespace'));
+			$schema = new Schema($node->getName(), $node->getAttribute('namespace'));
 			$schema->setMetaList($node->getMetaList()->array());
 			$magic = $schema->getMeta('magic', true);
 			foreach ($this->propertyListNodeQuery->filter($node) as $propertyNode) {
@@ -84,7 +84,6 @@
 					$type = null;
 					$property->addGetterFilter($this->container->create($filterNode->getValue(), [], __METHOD__));
 				}
-				/** @noinspection DisconnectedForeachInstructionInspection */
 				/**
 				 * magical things can be turned off
 				 */

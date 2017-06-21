@@ -8,16 +8,7 @@
 	/**
 	 * Thread manager is general service to work with threaded jobs.
 	 */
-	interface IThreadManager extends IThreadHandler, IConfigurable {
-		/**
-		 * register a new thread handler
-		 *
-		 * @param IThreadHandler $threadHandler
-		 *
-		 * @return IThreadManager
-		 */
-		public function registerThreadHandler(IThreadHandler $threadHandler): IThreadManager;
-
+	interface IThreadManager extends IConfigurable {
 		/**
 		 * execute the thread (should be safe to be called at any time)
 		 *
