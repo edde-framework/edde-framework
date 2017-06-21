@@ -52,6 +52,10 @@
 				'text/xml',
 				'application/xml',
 			]);
+			$this->register(INode::class, [
+				'text/xml',
+				'application/xml',
+			]);
 		}
 
 		/**
@@ -60,11 +64,14 @@
 		 * @throws ConverterException
 		 */
 		public function convert($content, string $mime, string $target = null): IContent {
-			$this->unsupported($content, $target, $content instanceof IResource || is_string($content) || $content instanceof \stdClass);
+			$this->unsupported($content, $target, $content instanceof IResource || is_string($content) || $content instanceof \stdClass || $content instanceof INode);
 			try {
 				switch ($mime) {
 					case \stdClass::class:
 						return new Content($this->xmlExport->string(NodeIterator::recursive($this->converterManager->convert($content, \stdClass::class, [INode::class])->convert()->getContent(), true)), $target);
+						break;
+					case INode::class:
+						return new Content($this->xmlExport->string(NodeIterator::recursive($content, true)), $target);
 						break;
 					default:
 						switch ($target) {

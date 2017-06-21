@@ -10,6 +10,7 @@
 	use Edde\Api\Session\LazySessionDirectoryTrait;
 	use Edde\Api\Session\SessionException;
 	use Edde\Common\Config\ConfigurableTrait;
+	use Edde\Common\Http\HttpUtils;
 	use Edde\Common\Object;
 
 	/**
@@ -68,10 +69,7 @@
 				throw new SessionStartException('Cannot start session.');
 			}
 			$headerList = $this->httpResponse->getHeaderList();
-			foreach (headers_list() as $header) {
-				list($name, $header) = explode(':', $header, 2);
-				$headerList->set(trim($name), trim($header));
-			}
+			$headerList->put(HttpUtils::headerList(implode("\r\n", headers_list()), false));
 			header_remove();
 			return $this;
 		}
@@ -102,6 +100,8 @@
 				throw new SessionException('Session is not running; there is nothing to close.');
 			}
 			session_write_close();
+			session_unset();
+			session_destroy();
 			return $this;
 		}
 

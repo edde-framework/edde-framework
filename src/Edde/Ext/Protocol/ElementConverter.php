@@ -19,6 +19,7 @@
 			$this->register(IElement::class, [
 				'stream+application/json',
 				'application/json',
+				'*/*',
 			]);
 			$this->register([
 				'stream+application/json',
@@ -38,6 +39,8 @@
 				case 'application/json':
 					$this->unsupported($content, $target, $content instanceof INode);
 					return $this->converterManager->convert($content, INode::class, [$target])->convert();
+				case '*/*':
+					return new Content($this->converterManager->convert($content, INode::class, ['text/xml'])->convert()->getContent(), 'text/xml');
 			}
 			return $this->exception($mime, $target);
 		}

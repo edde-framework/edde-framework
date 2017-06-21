@@ -211,7 +211,7 @@
 			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
 			$headers = explode("\r\n", $headers);
 			$headerList = [];
-			if (stripos($headers[0], 'http') !== false) {
+			if (stripos($headers[0], 'http') === 0) {
 				$headerList['http'] = array_shift($headers);
 			}
 			foreach ($headers as $header) {
