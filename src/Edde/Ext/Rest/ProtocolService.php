@@ -45,10 +45,10 @@
 		 *
 		 * @param IElement $element
 		 *
-		 * @return ElementContent
+		 * @return IContent
 		 */
 		public function actionPost(IElement $element) {
-			$response = $this->response(new ElementContent($this->protocolManager->execute($this->getContent($element, IElement::class))));
+			$this->response($response = new ElementContent($this->protocolManager->execute($this->getContent($element, IElement::class))));
 			$this->threadManager->execute();
 			return $response;
 		}
