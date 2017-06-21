@@ -74,7 +74,7 @@
 		 */
 		public function touch($url, string $method = 'HEAD', array $headerList = []): IHttpClient {
 			$url = Url::create($url);
-			fwrite($handle = stream_socket_client($url->getScheme() . '://' . ($host = $url->getHost()) . ':' . $url->getPort(), $_, $_, 0, STREAM_CLIENT_ASYNC_CONNECT, stream_context_create([
+			fwrite($handle = stream_socket_client($url->getAbsoluteUrl(), $_, $_, 0, STREAM_CLIENT_ASYNC_CONNECT, stream_context_create([
 				'ssl' => [
 					'verify_peer'       => false,
 					'allow_self_signed' => true,
@@ -82,7 +82,7 @@
 				],
 			])), implode("\r\n", array_merge([
 					'HEAD ' . $url->getPath() . ' HTTP/1.1',
-					'Host: ' . $host,
+					'Host: ' . $url->getHost(),
 				], $headerList)) . "\r\n\r\n");
 			fclose($handle);
 			return $this;
