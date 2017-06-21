@@ -15,15 +15,26 @@
 		use LazyProtocolServiceTrait;
 		use LazyJobManagerTrait;
 		use ConfigurableTrait;
+		/**
+		 * @var IElement[]
+		 */
+		protected $elementList = [];
+
+		/**
+		 * @inheritdoc
+		 */
+		public function queue(IElement $element): IProtocolManager {
+			$this->elementList[$element->getId()] = $element;
+			return $this;
+		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function createPacket(IElement $reference = null): IPacket {
 			$packet = $this->protocolService->createPacket($reference);
-			foreach ($this->jobManager->dequeue() as $element) {
-				$packet->element($element);
-			}
+			$packet->elements($this->elementList);
+			$this->elementList = [];
 			return $packet;
 		}
 

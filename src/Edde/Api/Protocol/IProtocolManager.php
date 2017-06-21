@@ -7,6 +7,17 @@
 
 	interface IProtocolManager extends IConfigurable {
 		/**
+		 * queue element to be included in packet created by self::createPacket();
+		 * this method  is useful to collect elements around the world and then send
+		 * them to somewhere (e.g. client)
+		 *
+		 * @param IElement $element
+		 *
+		 * @return IProtocolManager
+		 */
+		public function queue(IElement $element): IProtocolManager;
+
+		/**
 		 * create packet with payload of all available elements and references
 		 *
 		 * @param IElement|null $reference
