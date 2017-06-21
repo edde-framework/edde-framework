@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Protocol;
 
-	use Edde\Api\Job\LazyJobManagerTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Protocol\IProtocolManager;
@@ -13,7 +12,6 @@
 
 	abstract class AbstractProtocolManager extends Object implements IProtocolManager {
 		use LazyProtocolServiceTrait;
-		use LazyJobManagerTrait;
 		use ConfigurableTrait;
 		/**
 		 * @var IElement[]
@@ -42,10 +40,6 @@
 		 * @inheritdoc
 		 */
 		public function execute(IElement $element): IElement {
-			if ($element->isAsync()) {
-				$this->jobManager->queue($element);
-				return $this->protocolService->createPacket($element);
-			}
 			return $this->protocolService->execute($element);
 		}
 	}
