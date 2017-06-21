@@ -17,7 +17,6 @@
 		 * @inheritdoc
 		 */
 		public function save(IElement $element): IElementStore {
-			$element->setAttribute('stamp', $element->getAttribute('stamp', microtime(true)));
 			$this->store->set($element->getId(), $element);
 			return $this;
 		}
