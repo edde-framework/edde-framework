@@ -41,6 +41,13 @@
 		public function load(string $guid): IElement;
 
 		/**
+		 * @param string $guid
+		 *
+		 * @return IElementStore
+		 */
+		public function remove(string $guid): IElementStore;
+
+		/**
 		 * get list of elements referencing the given guid
 		 *
 		 * @return \Traversable|IElement[]

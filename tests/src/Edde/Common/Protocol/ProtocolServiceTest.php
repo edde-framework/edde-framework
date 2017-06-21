@@ -252,6 +252,11 @@
 			$packet->getElementNode('elements')->setId('foo');
 			/** @var $response IElement */
 			self::assertInstanceOf(IElement::class, $response = $this->protocolManager->execute($packet->async()));
+			self::assertTrue($this->elementStore->has($response->getId()), 'Response Element is not in Element store');
+			self::assertTrue($this->store->has($response->getId()), 'Response Element is not in Store');
+			$this->elementStore->remove($response->getId());
+			self::assertFalse($this->elementStore->has($response->getId()), 'Response Element is still in Element store');
+			self::assertFalse($this->store->has($response->getId()), 'Response Element is still in Store');
 			self::assertEquals('packet', $response->getType());
 			self::assertCount(0, $response->getElementList('elements'));
 			self::assertCount(1, $response->getElementList('references'));
@@ -289,7 +294,7 @@
 				],
 			], $this->converterManager->convert($response, INode::class, [\stdClass::class])->convert()->getContent());
 			self::assertTrue($this->elementStore->has($packet->getId()));
-			self::assertEmpty(iterator_to_array($this->elementStore->getReferenceListBy($packet->getId())));
+			self::assertCount(0, iterator_to_array($this->elementStore->getReferenceListBy($packet->getId())));
 
 			$this->jobManager->execute();
 

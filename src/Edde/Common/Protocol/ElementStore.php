@@ -41,6 +41,14 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function remove(string $guid): IElementStore {
+			$this->store->remove($guid);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function getReferenceListBy(string $referenceId) {
 			foreach ($this->store->iterate() as $element) {
 				if ($element instanceof IElement && $element->hasReference() && $element->getReference() === $referenceId) {
