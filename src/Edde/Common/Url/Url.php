@@ -115,8 +115,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getPath() {
-			return $this->path;
+		public function getPath(bool $query = true) {
+			return $this->path . ($query && $this->query ? '?' . $this->query : '');
 		}
 
 		/**
