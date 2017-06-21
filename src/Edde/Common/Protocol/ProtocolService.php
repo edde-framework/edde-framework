@@ -63,7 +63,6 @@
 				return $response = $this->getProtocolHandler($element)->execute($element);
 			} catch (\Exception $exception) {
 				$response = new Error(-102, $exception->getMessage());
-				// $response->setAttribute('stamp', microtime(true));
 				$response->setException(get_class($exception));
 				$response->setReference($element);
 				$this->logService->exception($exception);
