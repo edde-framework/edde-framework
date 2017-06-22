@@ -28,7 +28,7 @@
 				$content = [];
 				$content[] = $indentation . '<' . $node->getName();
 				foreach ($node->getAttributeList() as $name => $list) {
-					$content[] = ' ' . $name . '="' . htmlspecialchars($list, ENT_XML1 | ENT_COMPAT, 'UTF-8') . '"';
+					$content[] = ' ' . $name . '="' . htmlspecialchars((string)$list, ENT_XML1 | ENT_COMPAT, 'UTF-8') . '"';
 				}
 				if ($isClosed) {
 					$content[] = '/';
