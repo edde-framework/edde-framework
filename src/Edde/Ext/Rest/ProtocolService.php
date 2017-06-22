@@ -3,7 +3,6 @@
 
 	namespace Edde\Ext\Rest;
 
-	use Edde\Api\Converter\IContent;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\LazyElementStoreTrait;
 	use Edde\Api\Protocol\LazyProtocolManagerTrait;
@@ -40,13 +39,11 @@
 		 * simple request to get current packet
 		 *
 		 * @param IElement $element
-		 *
-		 * @return IContent
 		 */
 		public function actionGet(IElement $element) {
 			$this->element($element);
 			try {
-				$this->response($response = new ElementContent($packet = $this->protocolManager->createPacket()));
+				$this->response(new ElementContent($packet = $this->protocolManager->createPacket()));
 				if (($elementId = $element->getMeta('element'))) {
 					$reference = new Error(-101, sprintf('Requested element [%s] was not found.', $elementId));
 					if ($this->elementStore->has($elementId)) {
@@ -57,7 +54,6 @@
 					$packet->references(iterator_to_array($this->elementStore->getReferenceListBy($referenceId)));
 				}
 				$this->elementStore->save($packet);
-				return $response;
 			} finally {
 				$this->storeManager->restore();
 			}
@@ -67,8 +63,6 @@
 		 * post packet which will be executed
 		 *
 		 * @param IElement $element
-		 *
-		 * @return IContent
 		 */
 		public function actionPost(IElement $element) {
 			/**
@@ -79,12 +73,11 @@
 				/**
 				 * execute incoming packet and return result content
 				 */
-				$this->response($response = new ElementContent($this->protocolManager->execute($this->getContent($element, IElement::class))));
+				$this->response(new ElementContent($this->protocolManager->execute($this->getContent($element, IElement::class))));
 				/**
 				 * execute thread if it is needed (are there some jobs?)
 				 */
 				$this->threadManager->execute(['store' => $this->storeManager->getCurrentName()]);
-				return $response;
 			} finally {
 				/**
 				 * this is necessary to do to be safe and do not change global context

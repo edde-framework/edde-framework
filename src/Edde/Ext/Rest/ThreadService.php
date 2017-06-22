@@ -42,7 +42,6 @@
 					$this->storeManager->select($store);
 				}
 				$this->threadManager->pool();
-				return new Response();
 			} finally {
 				if ($store) {
 					$this->storeManager->restore();
