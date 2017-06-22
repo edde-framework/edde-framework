@@ -35,5 +35,12 @@
 		 *
 		 * @return IStore
 		 */
-		public function store(): IStore;
+		public function getCurrentStore(): IStore;
+
+		/**
+		 * get the current store name
+		 *
+		 * @return string
+		 */
+		public function getCurrentName(): string;
 	}

@@ -7,9 +7,7 @@
 		/**
 		 * dequeue current IJobQueue (used from a dependency)
 		 *
-		 * @param IJobQueue $jobQueue
-		 *
 		 * @return IJobManager
 		 */
-		public function execute(IJobQueue $jobQueue = null): IJobManager;
+		public function execute(): IJobManager;
 	}

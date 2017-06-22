@@ -3,12 +3,15 @@
 
 	namespace Edde\Ext\Rest;
 
+	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Store\LazyStoreManagerTrait;
 	use Edde\Api\Thread\LazyThreadManagerTrait;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\Protocol\Request\Response;
 	use Edde\Common\Rest\AbstractService;
 
 	class ThreadService extends AbstractService {
+		use LazyStoreManagerTrait;
 		use LazyThreadManagerTrait;
 
 		/**
@@ -28,9 +31,22 @@
 		/**
 		 * head because client should not expect "output" except of headers; in general this method should not return nothing at all because
 		 * in general is is a long running task dequeing all current jobs
+		 *
+		 * @param IElement $element
+		 *
+		 * @return Response
 		 */
-		public function actionHead() {
-			$this->threadManager->pool();
-			return new Response();
+		public function actionHead(IElement $element) {
+			try {
+				if (($store = $element->getMeta('store')) !== null) {
+					$this->storeManager->select($store);
+				}
+				$this->threadManager->pool();
+				return new Response();
+			} finally {
+				if ($store) {
+					$this->storeManager->restore();
+				}
+			}
 		}
 	}

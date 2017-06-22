@@ -73,11 +73,11 @@
 		}
 
 		public function testRestore() {
-			self::assertInstanceOf(FileStore::class, $this->storeManager->store());
+			self::assertInstanceOf(FileStore::class, $this->storeManager->getCurrentStore());
 			$this->storeManager->select(DummyStore::class);
-			self::assertInstanceOf(DummyStore::class, $this->storeManager->store());
+			self::assertInstanceOf(DummyStore::class, $this->storeManager->getCurrentStore());
 			$this->storeManager->restore();
-			self::assertInstanceOf(FileStore::class, $this->storeManager->store());
+			self::assertInstanceOf(FileStore::class, $this->storeManager->getCurrentStore());
 		}
 
 		protected function setUp() {

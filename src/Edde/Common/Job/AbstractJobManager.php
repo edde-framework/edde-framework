@@ -38,8 +38,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(IJobQueue $jobQueue = null): IJobManager {
-			$jobQueue = $jobQueue ?: $this->jobQueue;
+		public function execute(): IJobManager {
+			$jobQueue = $this->jobQueue;
 			foreach ($jobQueue->dequeue() as $element) {
 				$this->protocolService->execute($element);
 			}

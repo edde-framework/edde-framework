@@ -116,7 +116,7 @@
 		 * @inheritdoc
 		 */
 		public function getPath(bool $query = true) {
-			return $this->path . ($query && $this->query ? '?' . $this->query : '');
+			return $this->path . ($query && empty($this->parameterList) === false ? '?' . http_build_query($this->parameterList) : '');
 		}
 
 		/**

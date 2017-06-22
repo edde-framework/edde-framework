@@ -12,9 +12,11 @@
 		/**
 		 * execute the thread (should be safe to be called at any time)
 		 *
+		 * @param array|null $parameterList
+		 *
 		 * @return IThreadManager
 		 */
-		public function execute(): IThreadManager;
+		public function execute(array $parameterList = null): IThreadManager;
 
 		/**
 		 * pool is basically same as an ::dequeue() but it takes care about number of threads

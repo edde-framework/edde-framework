@@ -83,7 +83,7 @@
 				/**
 				 * execute thread if it is needed (are there some jobs?)
 				 */
-				$this->threadManager->execute();
+				$this->threadManager->execute(['store' => $this->storeManager->getCurrentName()]);
 				return $response;
 			} finally {
 				/**

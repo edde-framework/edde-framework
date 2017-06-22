@@ -35,8 +35,13 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(): IExecutor {
-			$this->httpClient->touch($this->url);
+		public function execute(array $parameterList = null): IExecutor {
+			$url = $this->url;
+			if ($parameterList) {
+				$url = clone $url;
+				$url->addParameterList($parameterList);
+			}
+			$this->httpClient->touch($url);
 			return $this;
 		}
 	}

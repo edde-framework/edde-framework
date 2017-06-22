@@ -23,9 +23,9 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(): IThreadManager {
+		public function execute(array $parameterList = null): IThreadManager {
 			if ($this->jobManager->hasJob()) {
-				$this->executor->execute();
+				$this->executor->execute($parameterList);
 			}
 			return $this;
 		}
