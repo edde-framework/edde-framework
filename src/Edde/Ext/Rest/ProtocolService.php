@@ -3,6 +3,7 @@
 
 	namespace Edde\Ext\Rest;
 
+	use Edde\Api\Protocol\Event\LazyEventBusTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\LazyElementStoreTrait;
 	use Edde\Api\Protocol\LazyProtocolManagerTrait;
@@ -20,6 +21,8 @@
 		use LazyElementStoreTrait;
 		use LazyStoreManagerTrait;
 		use LazyThreadManagerTrait;
+
+		use LazyEventBusTrait;
 
 		/**
 		 * @inheritdoc
@@ -73,7 +76,7 @@
 				/**
 				 * execute incoming packet and return result content
 				 */
-				$this->response(new ElementContent($this->protocolManager->execute($this->getContent($element, IElement::class))));
+				$this->response(new ElementContent($element = $this->protocolManager->execute($this->getContent($element, IElement::class))));
 				/**
 				 * execute thread if it is needed (are there some jobs?)
 				 */

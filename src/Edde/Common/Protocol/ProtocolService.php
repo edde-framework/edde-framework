@@ -35,16 +35,7 @@
 		 */
 		public function createPacket(IElement $reference = null, string $origin = null): IPacket {
 			$packet = new Packet($origin ?: $this->hostUrl->getAbsoluteUrl());
-			if ($reference) {
-				/**
-				 * set the Element reference (this is a bit different than "addReference()")
-				 */
-				$packet->setReference($reference);
-				/**
-				 * add the request to the list of references in Packet
-				 */
-				$packet->reference($reference);
-			}
+			$reference ? $packet->setReference($reference) : null;
 			return $packet;
 		}
 
@@ -68,9 +59,11 @@
 				$this->logService->exception($exception);
 				return $response;
 			} finally {
-				$this->elementStore->save($element);
-				if (isset($response) && $response instanceof IElement) {
-					$this->elementStore->save($response);
+				if ($element->getMeta('store', false)) {
+					$this->elementStore->save($element);
+					if (isset($response) && $response instanceof IElement) {
+						$this->elementStore->save($response);
+					}
 				}
 			}
 		}

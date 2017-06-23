@@ -169,8 +169,8 @@
 			$response = $this->protocolService->execute($packet);
 			self::assertNotEquals($packet->getId(), $response->getId());
 			self::assertNotEquals($packet, $response);
-			self::assertCount(2, $response->getElementList('elements'));
-			self::assertCount(3, $response->getElementList('references'));
+			self::assertCount(0, $response->getElementList('elements'));
+			self::assertCount(4, $response->getElementList('references'));
 			self::assertEquals($response, $response->getReferenceBy($packet->getId()));
 
 			self::assertInstanceOf(IElement::class, $element = $response->getReferenceBy($request->getId()));
@@ -182,50 +182,16 @@
 			self::assertEquals(['a' => 'b'], $element->getMetaList()->array());
 
 			$response->setId('123');
-			$response->getElementNode('elements')->setId('moo');
 			$response->getElementNode('references')->setId('foomoo');
 			self::assertEquals((object)[
 				'packet' => (object)[
 					'version'    => '1.1',
 					'id'         => '123',
 					'origin'     => 'http://localhost/the-void',
-					'elements'   => (object)[
-						'id'       => 'moo',
-						'error'    => (object)[
-							'id'        => '456',
-							'code'      => 100,
-							'message'   => 'Unhandled request [there is nobody to handle this].',
-							'reference' => '852',
-							'exception' => UnhandledRequestException::class,
-						],
-						'response' => (object)[
-							'id'        => 'foobar',
-							'reference' => '963',
-							'::meta'    => ['a' => 'b'],
-						],
-					],
 					'reference'  => '321',
 					'references' => (object)[
-						'id'      => 'foomoo',
-						'packet'  => (object)[
-							'version'  => '1.1',
-							'id'       => '321',
-							'origin'   => '::the-void',
-							'elements' => (object)[
-								'id'      => 'foo',
-								'request' => [
-									(object)[
-										'id'      => '852',
-										'request' => 'there is nobody to handle this',
-									],
-									(object)[
-										'id'      => '963',
-										'request' => 'testquest',
-									],
-								],
-							],
-						],
-						'request' => [
+						'id'       => 'foomoo',
+						'request'  => [
 							(object)[
 								'id'      => '852',
 								'request' => 'there is nobody to handle this',
@@ -233,6 +199,20 @@
 							(object)[
 								'id'      => '963',
 								'request' => 'testquest',
+							],
+						],
+						'error'    => (object)[
+							'code'      => 100,
+							'message'   => 'Unhandled request [there is nobody to handle this].',
+							'id'        => '456',
+							'exception' => UnhandledRequestException::class,
+							'reference' => '852',
+						],
+						'response' => (object)[
+							'id'        => 'foobar',
+							'reference' => '963',
+							'::meta'    => [
+								'a' => 'b',
 							],
 						],
 					],
@@ -252,8 +232,8 @@
 			$packet->getElementNode('elements')->setId('foo');
 			/** @var $response IElement */
 			self::assertInstanceOf(IElement::class, $response = $this->protocolManager->execute($packet->async()));
-			self::assertTrue($this->elementStore->has($response->getId()), 'Response Element is not in Element store');
-			self::assertTrue($this->store->has($response->getId()), 'Response Element is not in Store');
+			self::assertTrue($this->elementStore->has($packet->getId()), 'Packet is not in Element store');
+			self::assertTrue($this->store->has($packet->getId()), 'Packet is not in Store');
 			$this->elementStore->remove($response->getId());
 			self::assertFalse($this->elementStore->has($response->getId()), 'Response Element is still in Element store');
 			self::assertFalse($this->store->has($response->getId()), 'Response Element is still in Store');
@@ -289,6 +269,9 @@
 									],
 								],
 							],
+							'::meta'   => [
+								'store' => true,
+							],
 						],
 					],
 				],
@@ -303,8 +286,8 @@
 			self::assertInstanceOf(IElement::class, $response);
 			self::assertEquals('packet', $response->getType());
 
-			self::assertCount(2, $response->getElementList('elements'));
-			self::assertCount(3, $response->getElementList('references'));
+			self::assertCount(0, $response->getElementList('elements'));
+			self::assertCount(4, $response->getElementList('references'));
 			self::assertEquals($response, $response->getReferenceBy($packet->getId()));
 
 			self::assertInstanceOf(IElement::class, $element = $response->getReferenceBy($request->getId()));
@@ -316,51 +299,16 @@
 			self::assertEquals('response', $element->getType());
 			self::assertEquals(['a' => 'b'], $element->getData());
 			$response->setId('123');
-			$response->getElementNode('elements')->setId('foo');
 			$response->getElementNode('references')->setId('moo');
 			self::assertEquals((object)[
 				'packet' => (object)[
 					'version'    => '1.1',
 					'id'         => '123',
 					'origin'     => 'http://localhost/the-void',
-					'elements'   => (object)[
-						'id'       => 'foo',
-						'error'    => (object)[
-							'id'        => '456',
-							'code'      => 100,
-							'message'   => 'Unhandled request [there is nobody to handle this].',
-							'reference' => '741',
-							'exception' => UnhandledRequestException::class,
-						],
-						'response' => (object)[
-							'id'        => 'foobar',
-							'reference' => '852',
-							'::meta'    => ['a' => 'b'],
-						],
-					],
 					'reference'  => 'the-original-packet',
 					'references' => (object)[
-						'id'      => 'moo',
-						'packet'  => (object)[
-							'version'  => '1.1',
-							'id'       => 'the-original-packet',
-							'origin'   => '::the-void',
-							'async'    => false,
-							'elements' => (object)[
-								'id'      => 'foo',
-								'request' => [
-									(object)[
-										'id'      => '741',
-										'request' => 'there is nobody to handle this',
-									],
-									(object)[
-										'id'      => '852',
-										'request' => 'testquest',
-									],
-								],
-							],
-						],
-						'request' => [
+						'id'       => 'moo',
+						'request'  => [
 							(object)[
 								'id'      => '741',
 								'request' => 'there is nobody to handle this',
@@ -369,6 +317,18 @@
 								'id'      => '852',
 								'request' => 'testquest',
 							],
+						],
+						'error'    => (object)[
+							'code'      => 100,
+							'message'   => 'Unhandled request [there is nobody to handle this].',
+							'id'        => '456',
+							'exception' => UnhandledRequestException::class,
+							'reference' => '741',
+						],
+						'response' => (object)[
+							'id'        => 'foobar',
+							'reference' => '852',
+							'::meta'    => ['a' => 'b'],
 						],
 					],
 				],
@@ -383,8 +343,6 @@
 			self::assertEquals('Unknown factory [Dfdfsfsdfd] for dependency [Edde\Ext\Protocol\Request\ClassRequestHandler].', $response->getAttribute('message'));
 			self::assertEquals(UnknownFactoryException::class, $response->getAttribute('exception'));
 			self::assertEquals($request->getId(), $response->getReference());
-			self::assertEquals($response, $this->elementStore->load($response->getId()));
-			self::assertEquals($request, $this->elementStore->load($request->getId()));
 		}
 
 		public function testAsyncKaboom() {

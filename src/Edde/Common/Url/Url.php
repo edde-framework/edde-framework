@@ -147,7 +147,7 @@
 			if ($host !== '' && ($port = $this->getPort()) !== null) {
 				$url .= ':' . $port;
 			}
-			$url .= '/' . ltrim($this->getPath(), '/');
+			$url .= '/' . ltrim($this->getPath(false), '/');
 			$query = $this->getParameterList();
 			if (empty($query) === false) {
 				$url .= '?' . http_build_query($query);
