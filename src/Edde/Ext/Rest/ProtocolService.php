@@ -3,7 +3,6 @@
 
 	namespace Edde\Ext\Rest;
 
-	use Edde\Api\Protocol\Event\LazyEventBusTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\LazyElementStoreTrait;
 	use Edde\Api\Protocol\LazyProtocolManagerTrait;
@@ -21,8 +20,6 @@
 		use LazyElementStoreTrait;
 		use LazyStoreManagerTrait;
 		use LazyThreadManagerTrait;
-
-		use LazyEventBusTrait;
 
 		/**
 		 * @inheritdoc
