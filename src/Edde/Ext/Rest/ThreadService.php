@@ -7,7 +7,6 @@
 	use Edde\Api\Store\LazyStoreManagerTrait;
 	use Edde\Api\Thread\LazyThreadManagerTrait;
 	use Edde\Api\Url\IUrl;
-	use Edde\Common\Protocol\Request\Response;
 	use Edde\Common\Rest\AbstractService;
 
 	class ThreadService extends AbstractService {
@@ -33,8 +32,6 @@
 		 * in general is is a long running task dequeing all current jobs
 		 *
 		 * @param IElement $element
-		 *
-		 * @return Response
 		 */
 		public function actionHead(IElement $element) {
 			try {
