@@ -52,10 +52,13 @@
 			foreach ($this->requestHandlerList as $requestHandler) {
 				/** @var $response IElement */
 				if ($requestHandler->canHandle($element)) {
-					if (($response = $requestHandler->execute($element)) !== null) {
-						return $this->responseList[$element->getId()] = $response instanceof IElement ? $response->setReference($element) : $response;
+					if (($response = $requestHandler->execute($element)) !== null && $response instanceof IElement) {
+						return $this->responseList[$element->getId()] = $response->setReference($element);
 					}
-					return (new Error(100, sprintf('Internal error; request [%s] got no answer (response).', $element->getAttribute('request'))))->setException(MissingResponseException::class)->setReference($element);
+					if ($element->isType('request')) {
+						return (new Error(100, sprintf('Internal error; request [%s] got no answer (response).', $element->getAttribute('request'))))->setException(MissingResponseException::class)->setReference($element);
+					}
+					return null;
 				}
 			}
 			return (new Error(100, sprintf('Unhandled request [%s].', $element->getAttribute('request'))))->setException(UnhandledRequestException::class)->setReference($element);
