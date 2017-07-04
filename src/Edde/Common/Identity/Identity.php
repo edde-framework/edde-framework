@@ -147,4 +147,15 @@
 		public function can(string $resource, \DateTime $dateTime = null): bool {
 			return $this->acl ? $this->acl->can($resource, $dateTime) : $this->isAuthenticated();
 		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function reset(): IIdentity {
+			$this->identity = null;
+			$this->name = 'unknown';
+			$this->metaList = [];
+			$this->authenticated = false;
+			return $this;
+		}
 	}

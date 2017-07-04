@@ -481,33 +481,33 @@
 				/**
 				 * Access control, session and Identity (user session)
 				 */
-				IAclManager::class           => AclManager::class,
-				ISessionManager::class       => SessionManager::class,
-				ISessionDirectory::class     => self::proxy(ITempDirectory::class, 'directory', [
+				IAclManager::class                    => AclManager::class,
+				ISessionManager::class                => SessionManager::class,
+				ISessionDirectory::class              => self::proxy(ITempDirectory::class, 'directory', [
 					'session',
 					SessionDirectory::class,
 				]),
-				IIdentityManager::class      => IdentityManager::class,
-				IIdentity::class             => IIdentityManager::class . '::createIdentity',
-				IFingerprint::class          => SessionFingerprint::class,
-				IAuthenticatorManager::class => AuthenticatorManager::class,
-				IAclManager::class           => AclManager::class,
-				IAcl::class                  => Acl::class,
+				IIdentityManager::class               => IdentityManager::class,
+				IIdentity::class                      => IIdentityManager::class,
+				IFingerprint::class                   => SessionFingerprint::class,
+				IAuthenticatorManager::class          => AuthenticatorManager::class,
+				IAclManager::class                    => AclManager::class,
+				IAcl::class                           => Acl::class,
 
 				/**
 				 * Translation support
 				 */
-				ITranslator::class           => Translator::class,
+				ITranslator::class                    => Translator::class,
 
 				/**
 				 * General asset storage support
 				 */
-				IAssetStorage::class         => AssetStorage::class,
+				IAssetStorage::class                  => AssetStorage::class,
 
 				/**
 				 * Protocol implementation support
 				 */
-				IProtocolManager::class      => ProtocolManager::class,
+				IProtocolManager::class               => ProtocolManager::class,
 				IProtocolService::class               => ProtocolService::class,
 				IRequestService::class                => RequestService::class,
 				IEventBus::class                      => EventBus::class,

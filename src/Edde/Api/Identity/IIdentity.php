@@ -125,4 +125,6 @@
 		 * @return bool
 		 */
 		public function can(string $resource, \DateTime $dateTime = null): bool;
+
+		public function reset(): IIdentity;
 	}

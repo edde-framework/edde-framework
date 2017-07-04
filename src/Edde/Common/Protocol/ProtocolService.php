@@ -52,7 +52,7 @@
 		public function execute(IElement $element) {
 			try {
 				return $response = $this->getProtocolHandler($element)->execute($element);
-			} catch (\Exception $exception) {
+			} catch (\Throwable $exception) {
 				$response = new Error(-102, $exception->getMessage());
 				$response->setException(get_class($exception));
 				$response->setReference($element);
