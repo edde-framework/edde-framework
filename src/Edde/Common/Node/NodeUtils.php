@@ -101,10 +101,10 @@
 			};
 			$node = $node ?: $createNode($class = $class ?: Node::class);
 			foreach ($stdClass as $k => $v) {
-				if ($k === 'name') {
+				if ($k === '::name') {
 					$node->setName($v);
 					continue;
-				} else if ($k === 'value') {
+				} else if ($k === '::value') {
 					$node->setValue($v);
 					continue;
 				} else if ($k === '::meta') {
@@ -140,6 +140,9 @@
 		static public function fromNode(INode $root): \stdClass {
 			$object = new \stdClass();
 			$attributeList = $root->getAttributeList();
+			if (($value = $root->getValue()) !== null) {
+				$object->{'::value'} = $value;
+			}
 			if ($attributeList->isEmpty() === false) {
 				$object = (object)array_merge((array)$object, $attributeList->array());
 			}
