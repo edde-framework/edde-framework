@@ -23,7 +23,7 @@
 		 * @inheritdoc
 		 */
 		public function createIdentity(): IIdentity {
-			return $this->identity ?: $this->identity = $this->session()->get(IIdentity::class, $this->container->create(Identity::class)->setup());
+			return $this->identity ?: $this->identity = $this->session->get(IIdentity::class, $this->container->create(Identity::class)->setup());
 		}
 
 		/**
