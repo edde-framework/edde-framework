@@ -32,6 +32,7 @@
 		 */
 		public function execute(IElement $element) {
 			if ($element->isAsync()) {
+				$element->setMeta('store', true);
 				$this->jobManager->queue($element->async(false));
 				return $this->onQueue($element);
 			}
