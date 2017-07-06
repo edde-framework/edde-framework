@@ -55,7 +55,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function exception(\Exception $exception, array $tagList = null): ILog {
+		public function exception(\Throwable $exception, array $tagList = null): ILog {
 			$tagList[] = __FUNCTION__;
 			return $this->log($exception, $tagList);
 		}

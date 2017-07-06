@@ -90,7 +90,7 @@
 		 * @param string $name
 		 * @param null   $default
 		 *
-		 * @return IAttributeList|string|mixed
+		 * @return IAttributeList|string|int|mixed
 		 */
 		public function getMeta(string $name, $default = null);
 

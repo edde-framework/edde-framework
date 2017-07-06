@@ -69,10 +69,10 @@
 		/**
 		 * log an exception
 		 *
-		 * @param \Exception $exception
+		 * @param \Throwable $exception
 		 * @param array|null $tagList
 		 *
 		 * @return ILog
 		 */
-		public function exception(\Exception $exception, array $tagList = null): ILog;
+		public function exception(\Throwable $exception, array $tagList = null): ILog;
 	}
