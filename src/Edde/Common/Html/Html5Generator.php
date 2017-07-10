@@ -48,6 +48,7 @@
 				'option',
 				'button',
 				'script',
+				'a',
 			];
 		}
 
