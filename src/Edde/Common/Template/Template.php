@@ -3,6 +3,7 @@
 
 	namespace Edde\Common\Template;
 
+	use Edde\Api\Asset\LazyAssetStorageTrait;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\File\IFile;
@@ -10,7 +11,10 @@
 	use Edde\Api\Resource\LazyResourceProviderTrait;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\LazyCompilerTrait;
+	use Edde\Api\Template\LazyTemplateManagerTrait;
 	use Edde\Api\Template\TemplateException;
+	use Edde\Api\Web\LazyJavaScriptCompilerTrait;
+	use Edde\Api\Web\LazyStyleSheetCompilerTrait;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Object;
 
@@ -20,6 +24,10 @@
 		use LazyCompilerTrait;
 		use LazyConverterManagerTrait;
 		use LazyHtmlGeneratorTrait;
+		use LazyAssetStorageTrait;
+		use LazyStyleSheetCompilerTrait;
+		use LazyJavaScriptCompilerTrait;
+		use LazyTemplateManagerTrait;
 		use CacheTrait;
 		/**
 		 * @var string
@@ -74,6 +82,15 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
+		public function string(): string {
+			ob_start();
+			$this->execute();
+			return ob_get_clean();
+		}
+
 		public function __clone() {
 			parent::__clone();
 			$this->execute = null;
@@ -83,8 +100,6 @@
 		 * @inheritdoc
 		 */
 		public function __toString(): string {
-			ob_start();
-			$this->execute();
-			return ob_get_clean();
+			return $this->string();
 		}
 	}

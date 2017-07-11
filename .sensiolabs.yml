@@ -5,6 +5,8 @@ exclude_patterns:
     - './lib'
     - './tests'
 rules:
+    missing_e_o_l:
+        enabled: false
     composer.apc_class_loader_should_be_enabled:
         enabled: true
     composer.dependencies_not_installable:

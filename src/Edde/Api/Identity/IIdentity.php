@@ -1,15 +1,16 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Identity;
 
 	use Edde\Api\Acl\IAcl;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Crate\ICrate;
 
 	/**
 	 * Identity is (usualy) mutable interface holding current state of an identity (user, cron, ...) in an application.
 	 */
-	interface IIdentity {
+	interface IIdentity extends IConfigurable {
 		/**
 		 * identity can have optional additional data (for example user's row from database)
 		 *
@@ -41,6 +42,14 @@
 		 * @return IIdentity
 		 */
 		public function setMetaList(array $metaList): IIdentity;
+
+		/**
+		 * @param string $name
+		 * @param        $value
+		 *
+		 * @return IIdentity
+		 */
+		public function setMeta(string $name, $value): IIdentity;
 
 		/**
 		 * return particular meta data from identity
@@ -116,4 +125,6 @@
 		 * @return bool
 		 */
 		public function can(string $resource, \DateTime $dateTime = null): bool;
+
+		public function reset(): IIdentity;
 	}

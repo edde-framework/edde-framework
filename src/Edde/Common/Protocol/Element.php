@@ -95,55 +95,6 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setScope(string $scope = null): IElement {
-			$this->setAttribute('scope', $scope);
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function inScope(string $scope = null): bool {
-			return $this->getAttribute('scope') === $scope;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function setTagList(array $tagList = null): IElement {
-			$this->setAttribute('tags', $tagList ?: []);
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getTagList(): array {
-			return $this->getAttribute('tags', []);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function hasTag(string $tag): bool {
-			return in_array($tag, $this->getTagList());
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function hasTagList(array $tagList): bool {
-			foreach ($tagList as $tag) {
-				if ($this->hasTag($tag) === false) {
-					return false;
-				}
-			}
-			return true;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function data(array $data): IElement {
 			$this->putMeta($data);
 			return $this;
@@ -171,14 +122,13 @@
 		 * @inheritdoc
 		 */
 		public function getElementNode(string $name) {
-			$node = null;
 			/** @var $node INode */
 			foreach ($this->getNodeList() as $node) {
 				if ($node->getName() === $name) {
-					break;
+					return $node;
 				}
 			}
-			return $node;
+			return null;
 		}
 
 		/**
@@ -195,13 +145,7 @@
 		 * @inheritdoc
 		 */
 		public function getElementList(string $name): array {
-			/** @var $node INode */
-			foreach ($this->getNodeList() as $node) {
-				if ($node->getName() === $name) {
-					return $node->getNodeList();
-				}
-			}
-			return [];
+			return ($node = $this->getElementNode($name)) ? $node->getNodeList() : [];
 		}
 
 		/**

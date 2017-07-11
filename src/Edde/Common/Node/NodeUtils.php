@@ -14,6 +14,73 @@
 	 */
 	class NodeUtils extends Object {
 		/**
+		 * @param INode                        $root
+		 * @param \Traversable|\Iterator|array $source
+		 *
+		 * @return INode
+		 * @throws NodeException
+		 */
+		static public function node(INode $root, $source): INode {
+			$callback = null;
+			if (is_array($source) === false && is_object($source) === false) {
+				throw new NodeException('Source must be array or stdClass object.');
+			}
+			/** @noinspection UnnecessaryParenthesesInspection */
+			return ($callback = function (callable $callback, INode $root, $source) {
+				$attributeList = $root->getAttributeList();
+				/** @noinspection ForeachSourceInspection */
+				foreach ($source as $key => $value) {
+					switch ($key) {
+						case 'name':
+							$root->setName($value);
+							continue 2;
+						case 'value':
+							$root->setValue($value);
+							continue 2;
+						case 'attribute-list':
+							$attributeList->put((array)$value);
+							continue 2;
+						case 'meta-list':
+							$root->getMetaList()->put((array)$value);
+							continue 2;
+						case 'node-list':
+							/** @noinspection ForeachSourceInspection */
+							foreach ($value as $item) {
+								/** @noinspection DisconnectedForeachInstructionInspection */
+								$root->addNode($node = new Node());
+								if (is_object($item) || is_array($item)) {
+									$callback($callback, $node, $item);
+									continue;
+								}
+								$node->setValue($item);
+							}
+							continue 2;
+					}
+					if (is_object($value)) {
+						$value = [
+							$value,
+						];
+					}
+					if (is_array($value)) {
+						$root->addNode($itemList = new Node($key));
+						foreach ($value as $item) {
+							/** @noinspection DisconnectedForeachInstructionInspection */
+							$itemList->addNode($node = new Node());
+							if (is_object($item) || is_array($item)) {
+								$callback($callback, $node, $item);
+								continue;
+							}
+							$node->setValue($item);
+						}
+						continue;
+					}
+					$attributeList->set($key, $value);
+				}
+				return $root;
+			})($callback, $root, $source);
+		}
+
+		/**
 		 * convert input of stdClass to node tree
 		 *
 		 * @param \stdClass   $stdClass
@@ -34,12 +101,18 @@
 			};
 			$node = $node ?: $createNode($class = $class ?: Node::class);
 			foreach ($stdClass as $k => $v) {
-				if ($k === 'name') {
+				if ($k === '::name') {
 					$node->setName($v);
-				} else if ($k === 'value') {
+					continue;
+				} else if ($k === '::value') {
 					$node->setValue($v);
+					continue;
+				} else if ($k === '::meta') {
+					$node->putMeta((array)$v);
+					continue;
 				} else if ($v instanceof \stdClass) {
 					$node->addNode(self::toNode($v, $createNode($class, $k), $class));
+					continue;
 				} else if (is_array($v)) {
 					foreach ($v as $vv) {
 						$node->addNode(self::toNode($vv, $createNode($class, $k), $class));
@@ -67,6 +140,9 @@
 		static public function fromNode(INode $root): \stdClass {
 			$object = new \stdClass();
 			$attributeList = $root->getAttributeList();
+			if (($value = $root->getValue()) !== null) {
+				$object->{'::value'} = $value;
+			}
 			if ($attributeList->isEmpty() === false) {
 				$object = (object)array_merge((array)$object, $attributeList->array());
 			}
@@ -74,15 +150,15 @@
 			if ($metaList->isEmpty() === false) {
 				$object->{'::meta'} = $metaList->array();
 			}
+			if ($value = $root->getValue()) {
+				$object->value = $value;
+			}
 			$nodeList = [];
 			foreach ($root->getNodeList() as $node) {
 				$nodeList[$node->getName()][] = self::fromNode($node);
 			}
 			foreach ($nodeList as $name => $list) {
-				$object->{$name} = $list;
-				if (count($list) === 1) {
-					$object->{$name} = reset($list);
-				}
+				$object->{$name} = count($list) === 1 ? reset($list) : $list;
 			}
 			return $root->isRoot() ? (object)[$root->getName() => $object] : $object;
 		}

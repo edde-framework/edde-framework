@@ -8,7 +8,7 @@
 
 	interface IRouter extends IConfigurable {
 		/**
-		 * create request must creat IElement as it is a general way how to send "something" to the application; so in this
+		 * create request must create IElement as it is a general way how to send "something" to the application; so in this
 		 * case "request" means "general request to an application, even it could be an event"
 		 *
 		 * @return IElement|null

@@ -28,10 +28,10 @@
 		 * @inheritdoc
 		 * @throws LinkException
 		 */
-		public function link($generate, ...$parameterList) {
+		public function link($generate, array $parameterList = []) {
 			foreach ($this->linkGeneratorList as $linkGenerator) {
 				$linkGenerator->setup();
-				if (($url = $linkGenerator->link($generate, ...$parameterList)) !== null) {
+				if (($url = $linkGenerator->link($generate, $parameterList)) !== null) {
 					return $url;
 				}
 			}

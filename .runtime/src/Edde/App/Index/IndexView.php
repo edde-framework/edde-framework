@@ -6,4 +6,7 @@
 	use Edde\Ext\Control\AbstractTemplateControl;
 
 	class IndexView extends AbstractTemplateControl {
+		public function actionIndex() {
+			return $this->template();
+		}
 	}

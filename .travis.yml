@@ -7,7 +7,3 @@ before_script:
 
 after_success:
     - ./lib/bin/test-reporter
-
-cache:
-    directories:
-        - $HOME/.composer/cache

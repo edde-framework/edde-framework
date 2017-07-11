@@ -12,7 +12,9 @@
 	 */
 	interface IExecutor extends IConfigurable {
 		/**
+		 * @param array|null $parameterList
+		 *
 		 * @return IExecutor
 		 */
-		public function execute(): IExecutor;
+		public function execute(array $parameterList = null): IExecutor;
 	}

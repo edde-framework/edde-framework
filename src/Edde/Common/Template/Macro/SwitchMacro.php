@@ -99,10 +99,10 @@
 		}
 
 		protected function macroOpenCase($value) {
-			echo '<?php if($' . $this->switch->top() . ' === ' . $value . ') {?>' . "\n";
+			echo '<?php if($' . $this->switch->top() . ' === ' . $value . ') {?>';
 		}
 
 		protected function macroCloseCase() {
-			echo "<?php } ?>\n";
+			echo '<?php } ?>';
 		}
 	}

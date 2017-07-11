@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Cache;
 
@@ -36,8 +36,8 @@
 			$this->memcache->flush();
 		}
 
-		protected function prepare() {
-			parent::prepare();
+		protected function handleSetup() {
+			parent::handleSetup();
 			$this->memcache = new \Memcache();
 			foreach ($this->serverList as $item) {
 				$this->memcache->addServer($item[0], $item[1]);

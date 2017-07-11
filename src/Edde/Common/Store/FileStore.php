@@ -19,20 +19,50 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function set(string $id, $value): IStore {
-			$this->getFile($id)->save(serialize($value));
+		public function set(string $name, $value): IStore {
+			$this->getFile($name)->save(serialize([
+				$name,
+				$value,
+				[],
+			]));
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function get(string $id, $default = null) {
-			$file = $this->getFile($id);
+		public function get(string $name, $default = null) {
+			$file = $this->getFile($name);
 			if ($file->isAvailable() === false) {
 				return $default;
 			}
-			return unserialize($file->get());
+			list(, $value) = unserialize($file->get());
+			return $value;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function iterate() {
+			foreach ($this->storeDirectory as $file) {
+				list($name, $value) = unserialize($file->get());
+				yield $name => $value;
+			}
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function has(string $name): bool {
+			return $this->getFile($name)->isAvailable();
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function remove(string $name): IStore {
+			$this->getFile($name)->delete();
+			return $this;
 		}
 
 		/**
@@ -43,20 +73,20 @@
 			return $this;
 		}
 
-		protected function getFile(string $id): IFile {
-			if (isset($this->fileList[$id])) {
-				return $this->fileList[$id];
-			}
-			$list = explode('-', $this->cryptEngine->guid($id));
-			$file = array_pop($list) . '.store';
-			return $this->fileList[$id] = $this->storeDirectory->directory(implode('/', $list))->create()->file($file);
-		}
-
 		/**
 		 * @inheritdoc
 		 */
 		public function handleSetup() {
 			parent::handleSetup();
 			$this->storeDirectory->create();
+		}
+
+		protected function getFile(string $name): IFile {
+			if (isset($this->fileList[$name])) {
+				return $this->fileList[$name];
+			}
+			$list = explode('-', $this->cryptEngine->guid($name));
+			$file = array_pop($list) . '.store';
+			return $this->fileList[$name] = $this->storeDirectory->directory(implode('/', $list))->create()->file($file);
 		}
 	}

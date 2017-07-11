@@ -21,7 +21,7 @@
 		/**
 		 * try to convert an input
 		 *
-		 * @return mixed
+		 * @return IContent
 		 */
-		public function convert();
+		public function convert(): IContent;
 	}

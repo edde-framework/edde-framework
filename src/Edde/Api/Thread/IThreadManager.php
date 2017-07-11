@@ -8,22 +8,15 @@
 	/**
 	 * Thread manager is general service to work with threaded jobs.
 	 */
-	interface IThreadManager extends IThreadHandler, IConfigurable {
-		/**
-		 * register a new thread handler
-		 *
-		 * @param IThreadHandler $threadHandler
-		 *
-		 * @return IThreadManager
-		 */
-		public function registerThreadHandler(IThreadHandler $threadHandler): IThreadManager;
-
+	interface IThreadManager extends IConfigurable {
 		/**
 		 * execute the thread (should be safe to be called at any time)
 		 *
+		 * @param array|null $parameterList
+		 *
 		 * @return IThreadManager
 		 */
-		public function execute(): IThreadManager;
+		public function execute(array $parameterList = null): IThreadManager;
 
 		/**
 		 * pool is basically same as an ::dequeue() but it takes care about number of threads

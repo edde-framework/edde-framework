@@ -37,8 +37,7 @@
 		public function load() {
 			foreach ($this->directory as $file) {
 				if ($file->match($this->mask)) {
-					yield $this->converterManager->convert($file, $file->getMime(), [INode::class])
-						->convert();
+					yield $this->converterManager->convert($file, $file->getMime(), [INode::class])->convert()->getContent();
 				}
 			}
 		}

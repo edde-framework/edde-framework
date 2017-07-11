@@ -140,6 +140,15 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function payload($payload, string $mime): IHttpHandler {
+			$this->request->setContent(new Content($payload, $mime));
+			$this->contentType($mime);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function post(array $post): IHttpHandler {
 			$this->content(new ArrayContent($post));
 			$this->targetList = ['application/x-www-form-urlencoded'];
@@ -166,10 +175,11 @@
 			$options = [];
 			if ($content = $this->request->getContent()) {
 				$convertable = $this->converterManager->content($content, $this->targetList);
-				$options[CURLOPT_POSTFIELDS] = $convertable->convert();
+				$content = $convertable->convert();
+				$options[CURLOPT_POSTFIELDS] = $content->getContent();
 				$headerList = $this->request->getHeaderList();
-				if ($headerList->has('Content-Type') === false && ($target = $convertable->getTarget()) !== null) {
-					$this->header('Content-Type', $target);
+				if ($headerList->has('Content-Type') === false) {
+					$this->header('Content-Type', $content->getMime());
 				}
 			}
 			if ($this->cookie) {
@@ -208,7 +218,7 @@
 			if (is_string($contentType = $headerList->get('Content-Type', curl_getinfo($this->curl, CURLINFO_CONTENT_TYPE)))) {
 				$type = HttpUtils::contentType((string)$contentType);
 			}
-			$headerList->set('Content-Type', $contentType);
+			$contentType ? $headerList->set('Content-Type', $contentType) : ($contentType = 'text/plain');
 			$code = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
 			$error = curl_error($this->curl);
 			curl_close($this->curl);

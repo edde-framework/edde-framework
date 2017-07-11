@@ -60,8 +60,7 @@
 		public function addCrate(ICrate $crate): ICollection {
 			$schema = $crate->getSchema();
 			if ($schema->getSchemaName() !== $this->schema) {
-				throw new CrateException(sprintf('Cannot add crate with different schema [%s] to the collection [%s].', $crate->getSchema()
-					->getSchemaName(), $this->schema));
+				throw new CrateException(sprintf('Cannot add crate with different schema [%s] to the collection [%s].', $crate->getSchema()->getSchemaName(), $this->schema));
 			}
 			$this->crateList[] = $crate;
 			return $this;

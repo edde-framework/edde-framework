@@ -37,7 +37,6 @@
 		 * @inheritdoc
 		 */
 		public function getResource(string $name, string $namespace = null, ...$parameters): IResource {
-			$this->resourceManager->setup();
 			foreach (array_merge($this->cascade('/'), [null]) as $cascade) {
 				if ($this->resourceManager->hasResource($name, $cascade, ...$parameters)) {
 					return $this->resourceManager->getResource($name, $cascade, ...$parameters);

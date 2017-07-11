@@ -31,14 +31,14 @@
 		protected function setTypeList(array $typeList) {
 			static $list = [
 				/** special cases */
-				null => null,
+				null       => null,
 				/** standard set of "scalar" types */
-				'int' => null,
-				'bool' => null,
-				'float' => null,
-				'long' => null,
-				'string' => null,
-				'text' => null,
+				'int'      => null,
+				'bool'     => null,
+				'float'    => null,
+				'long'     => null,
+				'string'   => null,
+				'text'     => null,
 				'datetime' => null,
 			];;
 			$unknown = array_diff($typeKeys = array_keys($typeList), $listKeys = array_keys($list));

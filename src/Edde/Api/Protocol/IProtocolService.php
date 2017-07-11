@@ -12,44 +12,12 @@
 		public function registerProtocolHandler(IProtocolHandler $protocolHandler): IProtocolService;
 
 		/**
-		 * @param IElement $element
+		 * just create a new packet
 		 *
-		 * @return IProtocolHandler
-		 */
-		public function getProtocolHandler(IElement $element): IProtocolHandler;
-
-		/**
-		 * @return IProtocolHandler[]|\Iterator
-		 */
-		public function getProtocolHandleList();
-
-		/**
-		 * @return IProtocolService
-		 */
-		public function dequeue(): IProtocolService;
-
-		/**
-		 * @param string     $scope
-		 * @param array|null $tagList
+		 * @param IElement|null $reference
+		 * @param string|null   $origin
 		 *
-		 * @return IElement[]|\Traversable
+		 * @return IPacket
 		 */
-		public function getQueueList(string $scope, array $tagList = null);
-
-		/**
-		 * create packet from enqueued elements
-		 *
-		 * @param string     $scope
-		 * @param array|null $tagList
-		 *
-		 * @return IElement
-		 */
-		public function createQueuePacket(string $scope, array $tagList = null): IElement;
-
-		/**
-		 * @param string $id
-		 *
-		 * @return IElement[]
-		 */
-		public function getReferenceList(string $id): array;
+		public function createPacket(IElement $reference = null, string $origin = null): IPacket;
 	}

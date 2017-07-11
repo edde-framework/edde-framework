@@ -60,7 +60,7 @@
 			$mime = $mime ?: $resource->getMime();
 			/** @var $node INode */
 			$convertable = $this->converterManager->convert($resource, $mime, [INode::class]);
-			if (($node = $convertable->convert()) instanceof INode === false) {
+			if (($node = $convertable->convert()->getContent()) instanceof INode === false) {
 				throw new ResourceConversionException(sprintf('Conversion has failed: converter for [%s] did not returned an instance of [%s].', $mime, INode::class));
 			}
 			if ($root) {

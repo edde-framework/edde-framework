@@ -36,13 +36,16 @@
 	use Edde\Api\Identity\IAuthenticatorManager;
 	use Edde\Api\Identity\IIdentity;
 	use Edde\Api\Identity\IIdentityManager;
+	use Edde\Api\Job\IJobManager;
+	use Edde\Api\Job\IJobQueue;
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Lock\ILockDirectory;
 	use Edde\Api\Lock\ILockManager;
 	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
 	use Edde\Api\Protocol\Event\IEventBus;
-	use Edde\Api\Protocol\IElementQueue;
+	use Edde\Api\Protocol\IElementStore;
+	use Edde\Api\Protocol\IProtocolManager;
 	use Edde\Api\Protocol\IProtocolService;
 	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Api\Resource\IResourceManager;
@@ -56,6 +59,7 @@
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Store\IStore;
 	use Edde\Api\Store\IStoreDirectory;
+	use Edde\Api\Store\IStoreManager;
 	use Edde\Api\Template\ICompiler;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\ITemplateDirectory;
@@ -66,6 +70,7 @@
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Api\Web\IStyleSheetCompiler;
+	use Edde\Api\Xml\IXmlExport;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Acl\Acl;
 	use Edde\Common\Acl\AclManager;
@@ -99,12 +104,16 @@
 	use Edde\Common\Http\HttpResponse;
 	use Edde\Common\Identity\AuthenticatorManager;
 	use Edde\Common\Identity\IdentityManager;
+	use Edde\Common\Job\JobManager;
+	use Edde\Common\Job\JobQueue;
 	use Edde\Common\Lock\FileLockManager;
 	use Edde\Common\Lock\LockDirectory;
 	use Edde\Common\Log\LogDirectory;
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Object;
+	use Edde\Common\Protocol\ElementStore;
 	use Edde\Common\Protocol\Event\EventBus;
+	use Edde\Common\Protocol\ProtocolManager;
 	use Edde\Common\Protocol\ProtocolService;
 	use Edde\Common\Protocol\Request\RequestService;
 	use Edde\Common\Resource\ResourceManager;
@@ -112,9 +121,10 @@
 	use Edde\Common\Runtime\Runtime;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Session\SessionDirectory;
+	use Edde\Common\Session\SessionFingerprint;
 	use Edde\Common\Session\SessionManager;
-	use Edde\Common\Store\FileStore;
 	use Edde\Common\Store\StoreDirectory;
+	use Edde\Common\Store\StoreManager;
 	use Edde\Common\Template\Compiler;
 	use Edde\Common\Template\Template;
 	use Edde\Common\Template\TemplateDirectory;
@@ -125,20 +135,21 @@
 	use Edde\Common\Upgrade\AbstractUpgradeManager;
 	use Edde\Common\Web\JavaScriptCompiler;
 	use Edde\Common\Web\StyleSheetCompiler;
+	use Edde\Common\Xml\XmlExport;
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Converter\ConverterManagerConfigurator;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Database\Sqlite\SqliteDsn;
+	use Edde\Ext\Job\ThreadManagerConfigurator;
 	use Edde\Ext\Link\LinkFactoryConfigurator;
 	use Edde\Ext\Log\LogServiceConfigurator;
-	use Edde\Ext\Protocol\ElementQueue;
 	use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 	use Edde\Ext\Protocol\RequestServiceConfigurator;
-	use Edde\Ext\Protocol\ThreadManagerConfigurator;
 	use Edde\Ext\Resource\ResourceManagerConfigurator;
 	use Edde\Ext\Router\RouterServiceConfigurator;
+	use Edde\Ext\Store\StoreManagerConfigurator;
 	use Edde\Ext\Template\CompilerConfigurator;
 	use Edde\Ext\Thread\WebExecutorConfigurator;
 
@@ -477,8 +488,8 @@
 					SessionDirectory::class,
 				]),
 				IIdentityManager::class               => IdentityManager::class,
-				IIdentity::class                      => IIdentityManager::class . '::createIdentity',
-				IFingerprint::class                   => self::exception(sprintf('You have to register or implement fingerprint interface [%s].', IFingerprint::class)),
+				IIdentity::class                      => IIdentityManager::class,
+				IFingerprint::class                   => SessionFingerprint::class,
 				IAuthenticatorManager::class          => AuthenticatorManager::class,
 				IAclManager::class                    => AclManager::class,
 				IAcl::class                           => Acl::class,
@@ -496,11 +507,18 @@
 				/**
 				 * Protocol implementation support
 				 */
+				IProtocolManager::class               => ProtocolManager::class,
 				IProtocolService::class               => ProtocolService::class,
 				IRequestService::class                => RequestService::class,
-				IElementQueue::class                  => ElementQueue::class,
 				IEventBus::class                      => EventBus::class,
 				\Edde\Ext\Rest\ProtocolService::class => \Edde\Ext\Rest\ProtocolService::class,
+				IElementStore::class                  => ElementStore::class,
+
+				/**
+				 * Job related implementation
+				 */
+				IJobManager::class                    => JobManager::class,
+				IJobQueue::class                      => JobQueue::class,
 
 				/**
 				 * Thread support
@@ -511,11 +529,17 @@
 				/**
 				 * Store related stuff
 				 */
-				IStore::class                         => FileStore::class,
+				IStoreManager::class                  => StoreManager::class,
+				IStore::class                         => IStoreManager::class,
 				IStoreDirectory::class                => self::proxy(IAssetDirectory::class, 'directory', [
 					'store',
 					StoreDirectory::class,
 				]),
+
+				/**
+				 * xml support
+				 */
+				IXmlExport::class                     => XmlExport::class,
 
 				/**
 				 * General Locking support
@@ -552,6 +576,7 @@
 				ILinkFactory::class      => LinkFactoryConfigurator::class,
 				WebExecutor::class       => WebExecutorConfigurator::class,
 				IThreadManager::class    => ThreadManagerConfigurator::class,
+				IStoreManager::class     => StoreManagerConfigurator::class,
 			];
 		}
 	}

@@ -4,9 +4,11 @@
 	namespace Edde\Common\Protocol;
 
 	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Protocol\LazyProtocolManagerTrait;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 
 	class PacketProtocolHandler extends AbstractProtocolHandler {
+		use LazyProtocolManagerTrait;
 		use LazyProtocolServiceTrait;
 
 		/**
@@ -19,27 +21,39 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(IElement $element) {
-			$packet = new Packet($this->hostUrl->getAbsoluteUrl());
+		public function onExecute(IElement $element) {
+			$referenceList = [];
 			/**
-			 * set the Element reference (this is a bit different than "addReference()"
+			 * execute all elements in packet
 			 */
-			$packet->setReference($element);
-			/**
-			 * add the request to the list of references in Packet
-			 */
-			$packet->reference($element);
 			foreach ($element->getElementList('elements') as $node) {
 				/** @var $response IElement */
-				if (($response = $this->protocolService->element($node)) instanceof IElement) {
-					$packet->element($response->setReference($node));
-					$packet->reference($node);
+				if (($response = $this->protocolService->execute($node)) instanceof IElement) {
+					/**
+					 * all elements must be added as a reference or the receiver side could
+					 * accidentally execute elements not to be executed (for example it can die, because
+					 * it could not understand Error element)
+					 *
+					 * so first reference is to current response of the execution, second reference is
+					 * to the original element
+					 */
+					$referenceList[] = ($response->setReference($node));
+					$referenceList[] = $node;
 				}
 			}
+			$packet = $this->protocolManager->createPacket($element);
+			$packet->references($referenceList);
 			return $packet;
 		}
 
-		protected function createAsyncElement(IElement $element) {
-			return (new Packet($this->hostUrl->getAbsoluteUrl()))->reference($element)->setReference($element);
+		/**
+		 * @inheritdoc
+		 */
+		protected function onQueue(IElement $element) {
+			/**
+			 * packet handler is working in a bit different way - output must be packet to hold response to the
+			 * origin node
+			 */
+			return $this->protocolService->createPacket($element)->reference($element);
 		}
 	}

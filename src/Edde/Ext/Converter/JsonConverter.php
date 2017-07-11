@@ -4,10 +4,12 @@
 	namespace Edde\Ext\Converter;
 
 	use Edde\Api\Converter\ConverterException;
+	use Edde\Api\Converter\IContent;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
 	use Edde\Common\Converter\AbstractConverter;
+	use Edde\Common\Converter\Content;
 	use Edde\Common\Node\NodeUtils;
 
 	/**
@@ -58,6 +60,7 @@
 				'application/json',
 				'application/json',
 				'*/*',
+				'text/html',
 			]);
 			$this->register([
 				'application/json',
@@ -71,13 +74,12 @@
 			]);
 		}
 
-		/** @noinspection PhpInconsistentReturnPointsInspection */
 		/**
 		 * @inheritdoc
 		 * @throws ConverterException
 		 * @throws NodeException
 		 */
-		public function convert($content, string $mime, string $target = null) {
+		public function convert($content, string $mime, string $target = null): IContent {
 			switch ($mime) {
 				/** @noinspection PhpMissingBreakStatementInspection */
 				case 'stream+application/json':
@@ -87,13 +89,13 @@
 					$content = $content instanceof IFile ? $content->get() : $content;
 					switch ($target) {
 						case 'array':
-							return json_decode($content, true);
+							return new Content(json_decode($content, true), 'array');
 						case 'object':
 						case \stdClass::class:
-							return json_decode($content);
+							return new Content(json_decode($content), \stdClass::class);
 						case 'node':
 						case INode::class:
-							return NodeUtils::toNode(json_decode($content));
+							return new Content(NodeUtils::toNode(json_decode($content)), INode::class);
 					}
 					break;
 				case 'json':
@@ -105,10 +107,12 @@
 						case 'json':
 						case 'application/json':
 						case '*/*':
-							return json_encode($content);
+							return new Content(json_encode($content), 'application/json');
+						case 'text/html':
+							return new Content($content, 'text/html');
 					}
 					break;
 			}
-			$this->exception($mime, $target);
+			return $this->exception($mime, $target);
 		}
 	}

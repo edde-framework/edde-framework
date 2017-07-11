@@ -100,6 +100,14 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function clear(): IList {
+			$this->list = [];
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function getIterator() {
 			return new ArrayIterator($this->list);
 		}

@@ -44,8 +44,7 @@
 		protected function handleInit() {
 			parent::handleInit();
 			$this->cacheDirectory->create();
-			$this->directory = $this->cacheDirectory->directory(sha1($this->namespace))
-				->create();
+			$this->directory = $this->cacheDirectory->directory(sha1($this->namespace))->create();
 			if (($this->storage = @unserialize(($content = file_get_contents($this->directory->filename('0.cache'))) ? $content : '')) === false) {
 				$this->storage = [];
 			}

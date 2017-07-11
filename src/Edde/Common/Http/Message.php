@@ -50,8 +50,7 @@
 		 * @inheritdoc
 		 */
 		public function getContentType(string $default = ''): string {
-			return $this->headerList->getContentType()
-				->getMime($default);
+			return $this->headerList->getContentType()->getMime($default);
 		}
 
 		/**

@@ -3,13 +3,14 @@
 
 	namespace Edde\Api\Control;
 
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Node\INode;
 
 	/**
 	 * Control is general element for transferring incoming request into the internal system service and for
 	 * generating response.
 	 */
-	interface IControl {
+	interface IControl extends IConfigurable {
 		/**
 		 * @return INode
 		 */

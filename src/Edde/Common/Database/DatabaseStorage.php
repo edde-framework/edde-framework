@@ -91,16 +91,10 @@
 			$identifierList = [];
 			foreach ($crate->getIdentifierList() as $property) {
 				$schemaProperty = $property->getSchemaProperty();
-				$selectQuery->select()
-					->count($schemaProperty->getName(), null)
-					->where()
-					->eq()
-					->property($schemaProperty->getName())
-					->parameter($value = $property->get());
+				$selectQuery->select()->count($schemaProperty->getName(), null)->where()->eq()->property($schemaProperty->getName())->parameter($value = $property->get());
 				$identifierList[$schemaProperty->getName()] = $value;
 			}
-			$selectQuery->from()
-				->source($schema->getSchemaName());
+			$selectQuery->from()->source($schema->getSchemaName());
 			/** @noinspection ForeachSourceInspection */
 			/** @noinspection LoopWhichDoesNotLoopInspection */
 			foreach ($this->execute($selectQuery) as $count) {
@@ -116,9 +110,7 @@
 			if ($count) {
 				$where = $query->where();
 				foreach ($identifierList as $name => $value) {
-					$where->eq()
-						->property($name)
-						->parameter($value);
+					$where->eq()->property($name)->parameter($value);
 				}
 			}
 			$this->execute($query);

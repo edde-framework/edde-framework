@@ -34,11 +34,11 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function link($generate, ...$parameterList) {
+		public function link($generate, array $parameterList = []) {
 			$requestUrl = $this->httpRequest->getRequestUrl();
 			$url = Url::create($this->hostUrl->getAbsoluteUrl());
 			$url->setPath($generate);
-			$parameterList = array_key_exists(0, $parameterList) && $parameterList[0] === null ? [] : array_merge($requestUrl->getParameterList(), $parameterList);
+			$parameterList = array_merge($requestUrl->getParameterList(), $parameterList);
 			unset($parameterList['action']);
 			$url->setParameterList($parameterList);
 			return $url->getAbsoluteUrl();
@@ -79,11 +79,11 @@
 			$methodList = $this->getMethodList();
 			if (in_array($name = strtoupper($name), self::$methodList, true) === false) {
 				$this->httpResponse->header('Allowed', $allowed = implode(', ', array_keys($methodList)));
-				return $this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not supported; %s.', $name, empty($methodList) ? 'there are no supported methods' : 'available methods are [' . $allowed . ']'));
+				return $this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not supported; %s.', str_replace('ACTION', '', $name), empty($methodList) ? 'there are no supported methods' : 'available methods are [' . $allowed . ']'));
 			}
 			if (isset($methodList[$name]) === false) {
 				$this->httpResponse->header('Allowed', $allowed = implode(', ', array_keys($methodList)));
-				return $this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not implemented; %s.', $name, empty($methodList) ? 'there are no available methods' : 'available methods are [' . $allowed . ']'));
+				return $this->error(IHttpResponse::R400_NOT_ALLOWED, sprintf('The requested method [%s] is not implemented; %s.', str_replace('ACTION', '', $name), empty($methodList) ? 'there are no available methods' : 'available methods are [' . $allowed . ']'));
 			}
 			return $this->{$methodList[$name]}($request);
 		}

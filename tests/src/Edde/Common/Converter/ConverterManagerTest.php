@@ -4,27 +4,24 @@
 	namespace Edde\Common\Converter;
 
 	use Edde\Api\Converter\ConverterException;
-	use Edde\Api\Converter\IConverterManager;
+	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Ext\Container\ContainerFactory;
-	use Edde\Ext\Converter\ConverterManagerConfigurator;
-	use PHPUnit\Framework\TestCase;
+	use Edde\Ext\Test\TestCase;
 
 	class ConverterManagerTest extends TestCase {
-		/**
-		 * @var IConverterManager
-		 */
-		protected $converterManager;
+		use LazyConverterManagerTrait;
 
 		public function testTargetArray() {
-			self::assertEquals(json_encode($source = ['foo']), $this->converterManager->convert($source, 'array', [
+			$content = $this->converterManager->convert($source = ['foo'], 'array', [
 				'string',
 				'text/plain',
 				'json',
-			])
-				->convert());
+			])->convert();
+			self::assertEquals(json_encode($source), $content->getContent());
+			self::assertEquals('application/json', $content->getMime());
 		}
 
 		public function testKaboom() {
@@ -33,18 +30,13 @@
 			self::assertEquals(json_encode($source = ['foo']), $this->converterManager->convert($source, 'array', [
 				'string',
 				'text/plain',
-			])
-				->convert());
+			])->convert());
 		}
 
 		protected function setUp() {
-			$this->converterManager = ContainerFactory::container([
+			ContainerFactory::autowire($this, [
 				IRootDirectory::class => ContainerFactory::instance(RootDirectory::class, [__DIR__]),
 				new ClassFactory(),
-			], [
-				IConverterManager::class => ConverterManagerConfigurator::class,
-			])
-				->create(IConverterManager::class);
-			$this->converterManager->setup();
+			]);
 		}
 	}

@@ -4,10 +4,12 @@
 	namespace Edde\Ext\Converter;
 
 	use Edde\Api\Converter\ConverterException;
+	use Edde\Api\Converter\IContent;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
 	use Edde\Common\Converter\AbstractConverter;
+	use Edde\Common\Converter\Content;
 	use Edde\Common\Node\NodeUtils;
 
 	class NodeConverter extends AbstractConverter {
@@ -25,25 +27,24 @@
 			]);
 		}
 
-		/** @noinspection PhpInconsistentReturnPointsInspection */
 		/**
 		 * @inheritdoc
 		 * @throws ConverterException
 		 * @throws NodeException
 		 */
-		public function convert($content, string $mime, string $target = null) {
+		public function convert($content, string $mime, string $target = null): IContent {
 			switch ($target) {
 				case INode::class:
 					$this->unsupported($content, $target, $content instanceof \stdClass);
-					return NodeUtils::toNode($content);
+					return new Content(NodeUtils::toNode($content), INode::class);
 				case 'object':
 				case \stdClass::class:
 					$this->unsupported($content, $target, $content instanceof INode);
-					return NodeUtils::fromNode($content);
+					return new Content(NodeUtils::fromNode($content), \stdClass::class);
 				case 'application/json':
 					$this->unsupported($content, $target, $content instanceof INode);
 					return $this->converterManager->convert(NodeUtils::fromNode($content), \stdClass::class, [$target])->convert();
 			}
-			$this->exception($mime, $target);
+			return $this->exception($mime, $target);
 		}
 	}

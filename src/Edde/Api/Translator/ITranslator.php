@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Translator;
 
@@ -58,11 +58,11 @@
 		/**
 		 * try to translate a string
 		 *
-		 * @param string      $id
+		 * @param string      $name
 		 * @param string      $scope override current scope
 		 * @param string|null $language
 		 *
 		 * @return string
 		 */
-		public function translate(string $id, string $scope = null, string $language = null): string;
+		public function translate(string $name, string $scope = null, string $language = null): string;
 	}

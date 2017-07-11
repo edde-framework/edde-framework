@@ -15,6 +15,35 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function sete(string $name, $value, int $timeout = null): IStore {
+			$this->block($name, $timeout);
+			$this->set($name, $value);
+			$this->unlock($name);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function iterate() {
+			throw new UnsupportedFeatureException(sprintf('Unsupported feature in store [%s].', static::class));
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function append(string $name, $value, int $timeout = null): IStore {
+			$this->block($name, $timeout);
+			$list = is_array($list = $this->get($name, [])) ? $list : [];
+			$list[] = $value;
+			$this->set($name, $list);
+			$this->unlock($name);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function lock(string $name = null, bool $block = true): IStore {
 			$this->lockManager->lock($this->getLockName($name));
 			return $this;
@@ -54,11 +83,12 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setExclusive(string $name, $value): IStore {
-			$this->lock($name);
-			$this->set($name, $value);
+		public function pickup(string $name, $default = null, int $timeout = null) {
+			$this->block($name, $timeout);
+			$item = $this->get($name, $default);
+			$this->remove($name);
 			$this->unlock($name);
-			return $this;
+			return $item;
 		}
 
 		protected function getLockName(string $name = null): string {

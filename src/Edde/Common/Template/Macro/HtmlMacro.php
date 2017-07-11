@@ -30,6 +30,10 @@
 				};
 			}
 			$attributeList->put($attributes);
+			if ($node->hasAttribute('::value')) {
+				$node->setValue($node->getAttribute('::value'));
+				$node->getAttributeList()->remove('::value');
+			}
 			echo $this->htmlGenerator->open($node);
 		}
 
@@ -48,6 +52,6 @@
 		 * @inheritdoc
 		 */
 		public function onLeave(INode $node, \Iterator $iterator, ...$parameters) {
-			echo $this->htmlGenerator->close($node) . "\n";
+			echo $this->htmlGenerator->close($node);
 		}
 	}

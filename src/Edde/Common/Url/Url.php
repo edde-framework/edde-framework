@@ -115,8 +115,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getPath() {
-			return $this->path;
+		public function getPath(bool $query = true) {
+			return $this->path . ($query && empty($this->parameterList) === false ? '?' . http_build_query($this->parameterList) : '');
 		}
 
 		/**
@@ -147,7 +147,7 @@
 			if ($host !== '' && ($port = $this->getPort()) !== null) {
 				$url .= ':' . $port;
 			}
-			$url .= '/' . ltrim($this->getPath(), '/');
+			$url .= '/' . ltrim($this->getPath(false), '/');
 			$query = $this->getParameterList();
 			if (empty($query) === false) {
 				$url .= '?' . http_build_query($query);
@@ -244,6 +244,14 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function addParameterList(array $parameterList): IUrl {
+			$this->parameterList = array_merge($this->parameterList, $parameterList);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function getParameterList(): array {
 			return $this->parameterList;
 		}
@@ -282,7 +290,7 @@
 		 * @inheritdoc
 		 */
 		public function match(string $match, bool $path = true) {
-			return StringUtils::match($path ? $this->getPath() : $this->getAbsoluteUrl(), $match);
+			return StringUtils::match($path ? $this->getPath(false) : $this->getAbsoluteUrl(), $match);
 		}
 
 		/**

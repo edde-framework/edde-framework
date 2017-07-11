@@ -6,7 +6,6 @@
 	use Edde\Api\Html\LazyHtmlGeneratorTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\MacroException;
-	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Template\AbstractMacro;
 
@@ -39,8 +38,7 @@
 						throw new MacroException(sprintf('Css minify does not support recursion.'));
 					}
 					$this->minify = true;
-					echo '<?php $this->resourceProvider->setup(); ?>' . "\n";
-					echo '<?php $cssCompiler = $this->container->create(\'' . IStyleSheetCompiler::class . '\'); ?>' . "\n";
+					echo '<?php $this->styleSheetCompiler->clear(); ?>';
 					break;
 				case 'external-css':
 					if ($this->external) {
@@ -50,7 +48,7 @@
 					break;
 				case 'css':
 					if ($this->minify) {
-						echo '<?php $cssCompiler->addResource($this->resourceProvider->getResource(' . $this->attribute($node, 'src') . ')); ?>' . "\n";
+						echo '<?php $this->styleSheetCompiler->addResource($this->resourceProvider->getResource(' . $this->attribute($node, 'src') . ')); ?>';
 						break;
 					} else if ($this->external) {
 						echo $this->htmlGenerator->generate(new Node('link', null, array_merge([
@@ -60,7 +58,15 @@
 						], $node->getAttributeList()->array())));
 						break;
 					}
-					throw new MacroException(sprintf('Minify/external css tag is not opened.'));
+					echo '<?php $resource = $this->resourceProvider->getResource(' . $this->attribute($node, 'src') . '); ?>';
+					echo '<?php $resource = $this->assetStorage->store($resource); ?>';
+					echo $this->htmlGenerator->generate(new Node('link', null, array_merge([
+						'href' => function () {
+							return '<?=$resource->getRelativePath();?>';
+						},
+						'rel'  => 'stylesheet',
+						'type' => 'text/css',
+					], $node->getAttributeList()->array())));
 			}
 		}
 
@@ -73,12 +79,11 @@
 					$this->minify = false;
 					echo $this->htmlGenerator->generate(new Node('link', null, [
 						'href' => function () {
-							return '<?=$cssCompiler->compile()->getRelativePath()?>';
+							return '<?=$this->styleSheetCompiler->compile()->getRelativePath()?>';
 						},
 						'rel'  => 'stylesheet',
 						'type' => 'text/css',
 					]));
-					echo '<?php unset($cssCompiler); ?>' . "\n";
 					break;
 				case 'external':
 					$this->external = false;

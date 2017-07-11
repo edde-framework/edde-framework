@@ -47,7 +47,7 @@
 			$scope = $scope ?: ($this->scopeStack->isEmpty() ? null : $this->scopeStack->top());
 			if ($this->isConfigured()) {
 				$convertable = $this->converterManager->convert($source, $source->getMime(), [IDictionary::class]);
-				$this->registerDictionary($convertable->convert(), $scope);
+				$this->registerDictionary($convertable->convert()->getContent(), $scope);
 				return $this;
 			}
 			$this->sourceList[] = [
@@ -93,12 +93,12 @@
 		 * @inheritdoc
 		 * @throws TranslatorException
 		 */
-		public function translate(string $id, string $scope = null, string $language = null): string {
+		public function translate(string $name, string $scope = null, string $language = null): string {
 			if (($language = $language ?: $this->language) === null) {
 				throw new TranslatorException('Cannot use translator without set language.');
 			}
 			$cache = $this->cache();
-			if (($string = $cache->load($cacheId = ($id . $language . ($scope = $scope ?: $this->scopeStack->top())))) !== null) {
+			if (($string = $cache->load($cacheId = ($name . $language . ($scope = $scope ?: $this->scopeStack->top())))) !== null) {
 				return $string;
 			}
 			if (isset($this->dictionaryList[$scope]) === false) {
@@ -106,18 +106,24 @@
 			}
 			foreach ($this->dictionaryList[$scope] as $dictionary) {
 				$dictionary->setup();
-				if (($string = $dictionary->translate($id, $language)) !== null) {
+				if (($string = $dictionary->translate($name, $language)) !== null) {
 					return $cache->save($cacheId, $string);
 				}
 			}
-			throw new TranslatorException(sprintf('Cannot translate [%s]; the given id is not available in no dictionary.', $id));
+			throw new TranslatorException(sprintf('Cannot translate [%s]; the given id is not available in no dictionary.', $name));
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function handleInit() {
 			parent::handleInit();
 			$this->scopeStack = new \SplStack();
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		protected function handleSetup() {
 			parent::handleSetup();
 			if ($this->scopeStack->isEmpty()) {
@@ -126,7 +132,7 @@
 			foreach ($this->sourceList as list($file, $scope)) {
 				/** @var $file IFile */
 				$convertable = $this->converterManager->convert($file, $file->getMime(), [IDictionary::class]);
-				$this->registerDictionary($convertable->convert(), $scope);
+				$this->registerDictionary($convertable->convert()->getContent(), $scope);
 			}
 			if (empty($this->dictionaryList)) {
 				throw new TranslatorException('Translator needs at least one dictionary. Or The God will kill one cute devil kitten!');

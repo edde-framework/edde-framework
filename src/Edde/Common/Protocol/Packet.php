@@ -3,10 +3,10 @@
 
 	namespace Edde\Common\Protocol;
 
-	use Edde\Api\Node\NodeException;
 	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Protocol\IPacket;
 
-	class Packet extends Element {
+	class Packet extends Element implements IPacket {
 		public function __construct(string $origin) {
 			parent::__construct('packet');
 			$this->setAttribute('version', '1.1');
@@ -14,33 +14,34 @@
 		}
 
 		/**
-		 * shortcut for add a new element to elements
-		 *
-		 * @param IElement $element
-		 *
-		 * @return Packet
-		 * @throws NodeException
+		 * @inheritdoc
 		 */
-		public function element(IElement $element): Packet {
+		public function element(IElement $element): IPacket {
 			$this->addElement('elements', $element);
 			return $this;
 		}
 
-		public function elements(array $elementList): Packet {
+		/**
+		 * @inheritdoc
+		 */
+		public function elements(array $elementList): IPacket {
 			$this->setElementList('elements', $elementList);
 			return $this;
 		}
 
 		/**
-		 * shortuct to add a new element to references
-		 *
-		 * @param IElement $element
-		 *
-		 * @return Packet
-		 * @throws NodeException
+		 * @inheritdoc
 		 */
-		public function reference(IElement $element): Packet {
+		public function reference(IElement $element): IPacket {
 			$this->addElement('references', $element);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function references(array $elementList): IPacket {
+			$this->setElementList('references', $elementList);
 			return $this;
 		}
 	}

@@ -60,6 +60,6 @@
 		 * @inheritdoc
 		 */
 		public function send(IContent $content): IResponseHandler {
-			throw new UnknownResponseHandlerException('There is no response handler to catch current response.');
+			throw new UnknownResponseHandlerException('There is no response handler to process current response.');
 		}
 	}

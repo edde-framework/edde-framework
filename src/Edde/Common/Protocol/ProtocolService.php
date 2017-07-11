@@ -3,15 +3,16 @@
 
 	namespace Edde\Common\Protocol;
 
-	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Http\LazyHostUrlTrait;
+	use Edde\Api\Log\LazyLogServiceTrait;
 	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Protocol\IProtocolHandler;
 	use Edde\Api\Protocol\IProtocolService;
 
 	class ProtocolService extends AbstractProtocolHandler implements IProtocolService {
-		use LazyContainerTrait;
 		use LazyHostUrlTrait;
+		use LazyLogServiceTrait;
 		/**
 		 * @var IProtocolHandler[]
 		 */
@@ -32,55 +33,10 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getProtocolHandler(IElement $element): IProtocolHandler {
-			if (isset($this->handleList[$type = $element->getType()])) {
-				return $this->handleList[$type];
-			}
-			foreach ($this->getProtocolHandleList() as $protocolHandler) {
-				if ($protocolHandler->canHandle($element)) {
-					return $this->handleList[$type] = $protocolHandler;
-				}
-			}
-			throw new UnsupportedElementException(sprintf('There is no protocol handler for the given element [%s].', $type));
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getProtocolHandleList() {
-			foreach ($this->protocolHandlerList as $protocolHandler) {
-				$protocolHandler->setup();
-				yield $protocolHandler;
-			}
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function dequeue(): IProtocolService {
-			$this->elementQueue->execute();
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getQueueList(string $scope, array $tagList = null) {
-			return $this->elementQueue->getQueueList($scope, $tagList);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function createQueuePacket(string $scope, array $tagList = null): IElement {
-			return (new Packet($this->hostUrl->getAbsoluteUrl()))->setScope($scope)->setTagList($tagList)->setElementList('elements', iterator_to_array($this->getQueueList($scope, $tagList)));
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getReferenceList(string $id): array {
-			return $this->elementQueue->getReferenceList($id);
+		public function createPacket(IElement $reference = null, string $origin = null): IPacket {
+			$packet = new Packet($origin ?: $this->hostUrl->getAbsoluteUrl());
+			$reference ? $packet->setReference($reference) : null;
+			return $packet;
 		}
 
 		/**
@@ -93,14 +49,35 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function element(IElement $element) {
-			return $this->getProtocolHandler($element)->element($element);
+		public function execute(IElement $element) {
+			try {
+				return $response = $this->getProtocolHandler($element)->execute($element);
+			} catch (\Throwable $exception) {
+				$response = new Error(-102, $exception->getMessage());
+				$response->setException(get_class($exception));
+				$response->setReference($element);
+				$this->logService->exception($exception);
+				return $response;
+			} finally {
+				if ($element->getMeta('store', false)) {
+					$this->elementStore->save($element);
+					if (isset($response) && $response instanceof IElement) {
+						$this->elementStore->save($response);
+					}
+				}
+			}
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function execute(IElement $element) {
-			return $this->getProtocolHandler($element)->execute($element);
+		protected function getProtocolHandler(IElement $element): IProtocolHandler {
+			if (isset($this->handleList[$type = $element->getType()])) {
+				return $this->handleList[$type];
+			}
+			foreach ($this->protocolHandlerList as $protocolHandler) {
+				$protocolHandler->setup();
+				if ($protocolHandler->canHandle($element)) {
+					return $this->handleList[$type] = $protocolHandler;
+				}
+			}
+			throw new UnsupportedElementException(sprintf('There is no protocol handler for the given element [%s].', $type));
 		}
 	}

@@ -14,6 +14,7 @@
 	use Edde\Api\Router\IRouterService;
 	use Edde\App\Application\AppContext;
 	use Edde\App\Router\RouterServiceConfigurator;
+	use Edde\Common\Container\Factory\CascadeFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Ext\Cache\ContextCacheManagerConfigurator;
 	use Edde\Ext\Container\ContainerFactory;
@@ -75,6 +76,11 @@
 		 * create not so much nice surprises. Thus, it must be last as kind of dependency fallback.
 		 */
 		new ClassFactory(),
+		/**
+		 * This one is one of the most magical: this factory uses IContext::cascade() to search for class; this is quite
+		 * epic feature, but also less transparent, useful to seamlessly switch context.
+		 */
+		new CascadeFactory(),
 	]), [
 		/**
 		 * As we have some custom configuration for router service, we have to register proper configurator for it.

@@ -10,6 +10,7 @@
 	use Edde\Api\Session\LazySessionDirectoryTrait;
 	use Edde\Api\Session\SessionException;
 	use Edde\Common\Config\ConfigurableTrait;
+	use Edde\Common\Http\HttpUtils;
 	use Edde\Common\Object;
 
 	/**
@@ -45,20 +46,8 @@
 		 * @inheritdoc
 		 */
 		public function getSession(string $name): ISession {
-			return $this->sessionList[$name] ?? $this->sessionList[$name] = new Session($this->session($name), $name);
-		}
-
-		/**
-		 * @inheritdoc
-		 * @throws SessionException
-		 */
-		public function &session(string $name): array {
 			$this->start();
-			/** @noinspection PhpVariableNamingConventionInspection */
-			$_SESSION[$this->namespace] = $_SESSION[$this->namespace] ?? [];
-			/** @noinspection PhpVariableNamingConventionInspection */
-			$_SESSION[$this->namespace][$name] = $_SESSION[$this->namespace][$name] ?? [];
-			return $_SESSION[$this->namespace][$name];
+			return $this->sessionList[$name] ?? $this->sessionList[$name] = new Session($this->namespace, $name);
 		}
 
 		/**
@@ -80,10 +69,7 @@
 				throw new SessionStartException('Cannot start session.');
 			}
 			$headerList = $this->httpResponse->getHeaderList();
-			foreach (headers_list() as $header) {
-				list($name, $header) = explode(':', $header, 2);
-				$headerList->set(trim($name), trim($header));
-			}
+			$headerList->put(HttpUtils::headerList(implode("\r\n", headers_list()), false));
 			header_remove();
 			return $this;
 		}
@@ -111,10 +97,32 @@
 		 */
 		public function close(): ISessionManager {
 			if ($this->isSession() === false) {
-				throw new SessionException('Session is not running; there is nothing to close.');
+				throw new InactiveSessionException('Session is not running; there is nothing to close.');
 			}
 			session_write_close();
+			session_unset();
+			session_destroy();
 			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getName(): string {
+			if ($this->isSession() === false) {
+				throw new InactiveSessionException('Session is not running; session name cannot be retrieved.');
+			}
+			return session_name();
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getSessionId(): string {
+			if ($this->isSession() === false) {
+				throw new InactiveSessionException('Session is not running; cannot get session id.');
+			}
+			return session_id();
 		}
 
 		protected function handleSetup() {

@@ -74,9 +74,7 @@
 			foreach ($source as $property => $value) {
 				if ($schema->hasCollection($property = (string)$property)) {
 					$schemaCollection = $schema->getCollection($property);
-					$targetSchema = $schemaCollection->getTarget()
-						->getSchema()
-						->getSchemaName();
+					$targetSchema = $schemaCollection->getTarget()->getSchema()->getSchemaName();
 					$crate->collection($property, $collection = $this->collection($targetSchema));
 					/** @var $value array */
 					foreach ($value as $collectionValue) {
@@ -87,10 +85,7 @@
 					}
 					unset($source[$property]);
 				} else if (is_array($value) && $schema->hasLink($property)) {
-					$targetSchema = $schema->getLink($property)
-						->getTarget()
-						->getSchema()
-						->getSchemaName();
+					$targetSchema = $schema->getLink($property)->getTarget()->getSchema()->getSchemaName();
 					$crate->link($property, $this->crate($targetSchema, $value));
 					unset($source[$property]);
 				}

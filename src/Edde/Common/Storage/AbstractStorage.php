@@ -43,32 +43,16 @@
 			$relationSchema = $this->schemaManager->getSchema($relation);
 			$sourceLink = $relationSchema->getLink($source);
 			$targetLink = $relationSchema->getLink($target);
-			$targetSchema = $targetLink->getTarget()
-				->getSchema();
+			$targetSchema = $targetLink->getTarget()->getSchema();
 			$targetSchemaName = $targetSchema->getSchemaName();
 			$selectQuery = new SelectQuery();
 			$selectQuery->init();
 			$relationAlias = sha1(random_bytes(64));
 			$targetAlias = sha1(random_bytes(64));
 			foreach ($targetSchema->getPropertyList() as $schemaProperty) {
-				$selectQuery->select()
-					->property($schemaProperty->getName(), $targetAlias);
+				$selectQuery->select()->property($schemaProperty->getName(), $targetAlias);
 			}
-			$selectQuery->from()
-				->source($relationSchema->getSchemaName(), $relationAlias)
-				->source($targetSchemaName, $targetAlias)
-				->where()
-				->eq()
-				->property($sourceLink->getSource()
-					->getName(), $relationAlias)
-				->parameter($crate->get($sourceLink->getTarget()
-					->getName()))
-				->and()
-				->eq()
-				->property($targetLink->getSource()
-					->getName(), $relationAlias)
-				->property($targetLink->getTarget()
-					->getName(), $targetAlias);
+			$selectQuery->from()->source($relationSchema->getSchemaName(), $relationAlias)->source($targetSchemaName, $targetAlias)->where()->eq()->property($sourceLink->getSource()->getName(), $relationAlias)->parameter($crate->get($sourceLink->getTarget()->getName()))->and()->eq()->property($targetLink->getSource()->getName(), $relationAlias)->property($targetLink->getTarget()->getName(), $targetAlias);
 			return $this->collection($targetSchemaName, $selectQuery, $crateTo ?: $targetSchemaName);
 		}
 
@@ -79,10 +63,7 @@
 			if ($query === null) {
 				$query = new SelectQuery();
 				$query->init();
-				$query->select()
-					->all()
-					->from()
-					->source($schema);
+				$query->select()->all()->from()->source($schema);
 			}
 			return new Collection($schema, $this, $this->crateFactory, $query, $crate);
 		}
@@ -92,23 +73,11 @@
 		 * @throws EmptyResultException
 		 */
 		public function getLink(ICrate $crate, string $name): ICrate {
-			$link = $crate->getSchema()
-				->getLink($name);
+			$link = $crate->getSchema()->getLink($name);
 			$selectQuery = new SelectQuery();
 			$selectQuery->init();
-			$targetSchemaName = $link->getTarget()
-				->getSchema()
-				->getSchemaName();
-			$selectQuery->select()
-				->all()
-				->from()
-				->source($targetSchemaName)
-				->where()
-				->eq()
-				->property($link->getTarget()
-					->getName())
-				->parameter($crate->get($link->getSource()
-					->getName()));
+			$targetSchemaName = $link->getTarget()->getSchema()->getSchemaName();
+			$selectQuery->select()->all()->from()->source($targetSchemaName)->where()->eq()->property($link->getTarget()->getName())->parameter($crate->get($link->getSource()->getName()));
 			$crate->link($link->getName(), $link = $this->load($targetSchemaName, $selectQuery, $this->crateFactory->hasCrate($targetSchemaName) ? $targetSchemaName : Crate::class));
 			return $link;
 		}

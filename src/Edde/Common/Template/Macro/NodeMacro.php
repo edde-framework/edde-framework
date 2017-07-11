@@ -21,7 +21,7 @@
 				$this->macroOpen();
 			});
 			$source->on($events[1], function () use ($value) {
-				$this->macroClose($value);
+				$this->macroClose((string)$value);
 			});
 		}
 
@@ -44,12 +44,11 @@
 		}
 
 		public function macroClose(string $value) {
-			$value = $this->delimite($value);
 			echo '<?php ';
 			?>
-			$node = $this->converterManager->convert(ob_get_clean(), 'string', [\Edde\Api\Node\INode::class])->convert();
+			$node = $this->converterManager->convert(ob_get_clean(), 'string', [\Edde\Api\Node\INode::class])->convert()->getContent();
 			<?php
-			echo '$node = ' . str_replace('()', '($node);', $value) . "\n";
+			echo '$node = ' . str_replace('()', '($node);', $this->delimite($value, true)) . "\n";
 			?>
 			$this->htmlGenerator->render($node);
 			<?php

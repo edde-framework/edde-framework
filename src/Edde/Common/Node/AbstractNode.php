@@ -242,8 +242,7 @@
 			if ($this->isRoot()) {
 				throw new NodeException(sprintf('Cannot check last flag of root node.'));
 			}
-			$nodeList = $this->getParent()
-				->getNodeList();
+			$nodeList = $this->getParent()->getNodeList();
 			return end($nodeList) === $this;
 		}
 

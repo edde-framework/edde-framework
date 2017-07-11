@@ -18,7 +18,6 @@
 	class SchemaManager extends Object implements ISchemaManager {
 		use LazyContainerTrait;
 		use ConfigurableTrait;
-
 		/**
 		 * @var ISchemaLoader[]
 		 */
@@ -65,12 +64,12 @@
 		 */
 		public function createSchema(INode $node): ISchema {
 			$schema = new Schema($node->getName(), $node->getAttribute('namespace'));
-			$schema->setMetaList($node->getMetaList());
+			$schema->setMetaList($node->getMetaList()->array());
 			$magic = $schema->getMeta('magic', true);
 			foreach ($this->propertyListNodeQuery->filter($node) as $propertyNode) {
 				$schema->addProperty($property = new Property($schema, $propertyNode->getName(), str_replace('[]', '', $type = $propertyNode->getAttribute('type', 'string')), filter_var($propertyNode->getAttribute('required', true), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('unique'), FILTER_VALIDATE_BOOLEAN), filter_var($propertyNode->getAttribute('identifier'), FILTER_VALIDATE_BOOLEAN), strpos($type, '[]') !== false));
 				if (($generator = $propertyNode->getAttribute('generator')) !== null) {
-					$property->setGenerator($this->container->create($generator, [], __METHOD__));
+					$property->setGenerator($this->container->create((string)$generator, [], __METHOD__));
 				}
 				$type = $property->getType();
 				foreach ($this->propertyFilterNodeQuery->filter($propertyNode) as $filterNode) {
@@ -85,7 +84,6 @@
 					$type = null;
 					$property->addGetterFilter($this->container->create($filterNode->getValue(), [], __METHOD__));
 				}
-				/** @noinspection DisconnectedForeachInstructionInspection */
 				/**
 				 * magical things can be turned off
 				 */
@@ -162,14 +160,14 @@
 						throw new SchemaManagerException(sprintf('Cannot use collection to an unknown schema [%s].', $schemaName));
 					}
 					$targetSchema = $this->schemaList[$schemaName];
-					$sourceSchema->collection($collectionNode->getName(), $sourceSchema->getProperty($collectionNode->getValue()), $targetSchema->getProperty($collectionNode->getAttribute('property')));
+					$sourceSchema->collection($collectionNode->getName(), $sourceSchema->getProperty($collectionNode->getValue()), $targetSchema->getProperty((string)$collectionNode->getAttribute('property')));
 				}
 				foreach ($this->linkNodeQuery->filter($node) as $linkNode) {
 					if (isset($this->schemaList[$schemaName = $linkNode->getAttribute('schema')]) === false) {
 						throw new SchemaManagerException(sprintf('Cannot use link to an unknown schema [%s].', $schemaName));
 					}
 					$targetSchema = $this->schemaList[$schemaName];
-					$sourceSchema->link($linkNode->getName(), $sourceSchema->getProperty($linkNode->getValue($linkNode->getName())), $targetSchema->getProperty($linkNode->getAttribute('property')));
+					$sourceSchema->link($linkNode->getName(), $sourceSchema->getProperty($linkNode->getValue($linkNode->getName())), $targetSchema->getProperty((string)$linkNode->getAttribute('property')));
 				}
 			}
 		}

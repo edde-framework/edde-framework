@@ -12,8 +12,9 @@
 	use Edde\Api\Rest\IService;
 	use Edde\Api\Runtime\LazyRuntimeTrait;
 	use Edde\Common\Application\HttpResponseHandler;
-	use Edde\Common\Protocol\Request\Request;
+	use Edde\Common\Protocol\Request\Message;
 	use Edde\Common\Router\AbstractRouter;
+	use Edde\Common\Strings\StringUtils;
 
 	class RestRouter extends AbstractRouter implements IConfigurable, ILinkGenerator {
 		use LazyContainerTrait;
@@ -49,7 +50,7 @@
 			foreach ($this->serviceList as $service) {
 				if ($service->match($requestUrl)) {
 					$this->responseManager->setResponseHandler($this->container->create(HttpResponseHandler::class));
-					return (new Request(get_class($service) . '::' . $this->httpRequest->getMethod()))->data($requestUrl->getParameterList())->setValue($this->httpRequest->getContent());
+					return (new Message(get_class($service) . '::action' . StringUtils::capitalize($this->httpRequest->getMethod())))->data($requestUrl->getParameterList())->setValue($this->httpRequest->getContent());
 				}
 			}
 			return null;
@@ -58,10 +59,10 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function link($generate, ...$parameterList) {
+		public function link($generate, array $parameterList = []) {
 			if (is_string($generate) === false || isset($this->serviceList[$generate]) === false) {
 				return null;
 			}
-			return $this->serviceList[$generate]->link($generate, ...$parameterList);
+			return $this->serviceList[$generate]->link($generate, $parameterList);
 		}
 	}

@@ -39,9 +39,11 @@
 		public function setPath(string $path): IUrl;
 
 		/**
+		 * @param bool $query
+		 *
 		 * @return string
 		 */
-		public function getPath();
+		public function getPath(bool $query = true);
 
 		/**
 		 * @return string[]
@@ -72,6 +74,8 @@
 		/**
 		 * set query part of an url
 		 *
+		 * @param string $query
+		 *
 		 * @return IUrl
 		 */
 		public function setQuery(string $query): IUrl;
@@ -92,6 +96,13 @@
 		 * @return IUrl
 		 */
 		public function setParameterList(array $parameterList): IUrl;
+
+		/**
+		 * @param array $parameterList
+		 *
+		 * @return IUrl
+		 */
+		public function addParameterList(array $parameterList): IUrl;
 
 		/**
 		 * update the given parameter

@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Http\Client;
 
@@ -10,11 +10,22 @@
 	class HttpClientTest extends TestCase {
 		use LazyHttpClientTrait;
 
-		public function testFoo() {
-			$response = $this->httpClient->get('https://httpbin.org/get')
-				->execute()
-				->convert(['array']);
-			$this->assertTrue(true);
+		public function testSimpleGet() {
+			$content = $this->httpClient->get('https://httpbin.org/get')->header('Accept', 'application/json')->execute()->convert([\stdClass::class]);
+			self::assertEquals(\stdClass::class, $content->getMime());
+			$content = $content->getContent();
+			$content->origin = '';
+			self::assertEquals((object)[
+				'args'    => (object)[],
+				'headers' => (object)[
+					'Accept'          => 'application/json',
+					'Accept-Encoding' => 'utf-8',
+					'Connection'      => 'close',
+					'Host'            => 'httpbin.org',
+				],
+				'origin'  => '',
+				'url'     => 'https://httpbin.org/get',
+			], $content);
 		}
 
 		protected function setUp() {

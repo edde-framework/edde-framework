@@ -3,20 +3,18 @@
 
 	namespace Edde\Common\Thread;
 
+	use Edde\Api\Job\LazyJobManagerTrait;
 	use Edde\Api\Store\LazyStoreTrait;
-	use Edde\Api\Thread\IThreadHandler;
 	use Edde\Api\Thread\IThreadManager;
 	use Edde\Api\Thread\LazyExecutorTtrait;
 	use Edde\Common\Config\ConfigurableTrait;
+	use Edde\Common\Object;
 
-	abstract class AbstractThreadManager extends AbstractThreadHandler implements IThreadManager {
+	abstract class AbstractThreadManager extends Object implements IThreadManager {
 		use LazyExecutorTtrait;
 		use LazyStoreTrait;
+		use LazyJobManagerTrait;
 		use ConfigurableTrait;
-		/**
-		 * @var IThreadHandler[]
-		 */
-		protected $threadHandlerList = [];
 		/**
 		 * @var int
 		 */
@@ -25,38 +23,10 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function registerThreadHandler(IThreadHandler $threadHandler): IThreadManager {
-			$this->threadHandlerList[] = $threadHandler;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function dequeue(): IThreadHandler {
-			foreach ($this->threadHandlerList as $threadHandler) {
-				$threadHandler->dequeue();
+		public function execute(array $parameterList = null): IThreadManager {
+			if ($this->jobManager->hasJob()) {
+				$this->executor->execute($parameterList);
 			}
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function hasQueue(): bool {
-			foreach ($this->threadHandlerList as $threadHandler) {
-				if ($threadHandler->hasQueue()) {
-					return true;
-				}
-			}
-			return false;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function execute(): IThreadManager {
-			$this->executor->execute();
 			return $this;
 		}
 
@@ -64,22 +34,16 @@
 		 * @inheritdoc
 		 */
 		public function pool(): IThreadManager {
-			if ($this->hasQueue() === false) {
+			if ($this->jobManager->hasJob() === false) {
 				return $this;
 			}
 			$this->updateThreadCount(1);
 			try {
-				$this->dequeue();
+				$this->jobManager->execute();
 				return $this;
 			} finally {
 				$this->updateThreadCount(-1);
 			}
-		}
-
-		protected function updateThreadCount(int $number) {
-			$this->store->block($lock = (static::class . '/currentThreadCount'));
-			$this->store->set($lock, $this->store->get($lock, 0) + $number);
-			$this->store->unlock($lock);
 		}
 
 		/**
@@ -88,5 +52,11 @@
 		public function setMaximumThreadCount(int $maximumThreadCount): IThreadManager {
 			$this->maximumThreadCount = $maximumThreadCount;
 			return $this;
+		}
+
+		protected function updateThreadCount(int $number) {
+			$this->store->block($lock = (static::class . '/currentThreadCount'));
+			$this->store->set($lock, $this->store->get($lock, 0) + $number);
+			$this->store->unlock($lock);
 		}
 	}

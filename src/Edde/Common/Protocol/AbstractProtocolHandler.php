@@ -3,18 +3,18 @@
 
 	namespace Edde\Common\Protocol;
 
-	use Edde\Api\Container\LazyContainerTrait;
-	use Edde\Api\Http\LazyHostUrlTrait;
+	use Edde\Api\Job\LazyJobManagerTrait;
+	use Edde\Api\Log\LazyLogServiceTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IProtocolHandler;
-	use Edde\Api\Protocol\LazyElementQueueTrait;
+	use Edde\Api\Protocol\LazyElementStoreTrait;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	abstract class AbstractProtocolHandler extends Object implements IProtocolHandler {
-		use LazyContainerTrait;
-		use LazyElementQueueTrait;
-		use LazyHostUrlTrait;
+		use LazyElementStoreTrait;
+		use LazyJobManagerTrait;
+		use LazyLogServiceTrait;
 		use ConfigurableTrait;
 
 		/**
@@ -30,33 +30,18 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function queue(IElement $element): IProtocolHandler {
-			$this->check($element);
-			$this->elementQueue->queue($element);
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function element(IElement $element) {
-			$this->check($element);
+		public function execute(IElement $element) {
 			if ($element->isAsync()) {
-				$this->queue($element);
-				if (($async = $this->createAsyncElement($element)) !== null) {
-					$async->setReference($element);
-				}
-				return $async;
+				$element->setMeta('store', true);
+				$this->jobManager->queue($element->async(false));
+				return $this->onQueue($element);
 			}
-			return $this->execute($element);
+			return $this->onExecute($element);
 		}
 
-		/**
-		 * @param IElement $element
-		 *
-		 * @return IElement|null
-		 */
-		protected function createAsyncElement(IElement $element) {
-			return null;
+		protected function onExecute(IElement $element) {
+		}
+
+		protected function onQueue(IElement $element) {
 		}
 	}

@@ -35,8 +35,8 @@
 				self::EVENT_POST_ENTER,
 				self::EVENT_PRE_LEAVE,
 			];
-			$source->on($events[0], function () use ($value) {
-				$this->macroOpen($value);
+			$source->on($events[0], function () use ($value, $node) {
+				$this->macroOpen($value, $node->hasAttribute('foreach') ? $node->getAttribute('foreach')->get('name') : null);
 			});
 			$source->on($events[1], function () {
 				$this->macroClose();
@@ -47,7 +47,7 @@
 		 * @inheritdoc
 		 */
 		protected function onEnter(INode $node, \Iterator $iterator, ...$parameters) {
-			$this->macroOpen($node->getAttribute('src'));
+			$this->macroOpen($node->getAttribute('src'), $node->getAttribute('name'));
 		}
 
 		/**
@@ -57,13 +57,14 @@
 			$this->macroClose();
 		}
 
-		protected function macroOpen($value) {
-			echo '<?php foreach(' . $this->delimite($value) . ' as $' . str_repeat('k', $this->foreach) . ' => $' . str_repeat('v', $this->foreach) . ') {?>' . "\n";
+		protected function macroOpen($value, $name = null) {
+			$name = $name ?: '$';
+			echo '<?php foreach(' . ($name ? '$context[' . var_export($name, true) . '] = ' : '') . 'new ' . ForeachMacroIterator::class . '(' . $this->delimite($value) . ') as $' . (str_repeat('k', $this->foreach)) . ' => $' . (str_repeat('v', $this->foreach)) . ') {?>';
 			$this->foreach++;
 		}
 
 		protected function macroClose() {
-			echo "<?php } ?>\n";
+			echo '<?php } ?>';
 			$this->foreach--;
 		}
 	}

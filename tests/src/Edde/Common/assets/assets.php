@@ -4,11 +4,13 @@
 	namespace Edde\Test;
 
 	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Store\IStore;
 	use Edde\Common\Application\AbstractContext;
 	use Edde\Common\Object;
 	use Edde\Common\Protocol\Request\AbstractRequestHandler;
 	use Edde\Common\Protocol\Request\Response;
 	use Edde\Common\Session\AbstractFingerprint;
+	use Edde\Common\Store\AbstractStore;
 	use Edde\Ext\Protocol\RequestServiceConfigurator;
 
 	class FooObject extends Object {
@@ -116,5 +118,27 @@
 				'Edde' . $delimiter . $name,
 				'Edde' . $delimiter . 'Test' . ($name ? $delimiter . $name : ''),
 			];
+		}
+	}
+
+	class DummyStore extends AbstractStore {
+		public function set(string $name, $value): IStore {
+			return $this;
+		}
+
+		public function has(string $name): bool {
+			return false;
+		}
+
+		public function get(string $name, $default = null) {
+			return $default;
+		}
+
+		public function remove(string $name): IStore {
+			return $this;
+		}
+
+		public function drop(): IStore {
+			return $this;
 		}
 	}

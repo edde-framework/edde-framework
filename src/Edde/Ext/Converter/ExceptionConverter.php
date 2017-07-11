@@ -3,6 +3,7 @@
 
 	namespace Edde\Ext\Converter;
 
+	use Edde\Api\Converter\IContent;
 	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Common\Converter\AbstractConverter;
 
@@ -17,7 +18,7 @@
 			]);
 		}
 
-		public function convert($content, string $mime, string $target = null) {
+		public function convert($content, string $mime, string $target = null): IContent {
 			$this->unsupported($content, $target, $content instanceof \Exception);
 			switch ($target) {
 				case 'http':
@@ -31,5 +32,6 @@
 					 */
 					throw $content;
 			}
+			return $this->exception($mime, $target);
 		}
 	}

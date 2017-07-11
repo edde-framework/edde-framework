@@ -8,7 +8,7 @@
 	use Edde\Api\Http\LazyHttpRequestTrait;
 	use Edde\Api\Runtime\LazyRuntimeTrait;
 	use Edde\Common\Application\HttpResponseHandler;
-	use Edde\Common\Protocol\Request\Request;
+	use Edde\Common\Protocol\Request\Message;
 	use Edde\Common\Router\AbstractRouter;
 
 	/**
@@ -35,6 +35,6 @@
 			list($control, $action) = explode('.', $parameterList['action']);
 			$this->responseManager->setResponseHandler($this->container->create(HttpResponseHandler::class));
 			unset($parameterList['action']);
-			return (new Request($control . '/' . $action))->data($parameterList)->setValue($this->httpRequest->getContent());
+			return (new Message($control . '/' . $action))->data($parameterList)->setValue($this->httpRequest->getContent());
 		}
 	}

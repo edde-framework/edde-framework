@@ -13,9 +13,9 @@
 		 * generate output link
 		 *
 		 * @param mixed $generate
-		 * @param array ...$parameterList
+		 * @param array $parameterList
 		 *
-		 * @return string|null if null is returned, next generator will be used
+		 * @return null|string if null is returned, next generator will be used
 		 */
-		public function link($generate, ...$parameterList);
+		public function link($generate, array $parameterList = []);
 	}

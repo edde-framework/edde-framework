@@ -6,7 +6,6 @@
 	use Edde\Api\Html\LazyHtmlGeneratorTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Template\MacroException;
-	use Edde\Api\Web\IJavaScriptCompiler;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Template\AbstractMacro;
 
@@ -39,8 +38,7 @@
 						throw new MacroException(sprintf('Js minify does not support recursion.'));
 					}
 					$this->minify = true;
-					echo '<?php $this->resourceProvider->setup(); ?>' . "\n";
-					echo '<?php $jsCompiler = $this->container->create(\'' . IJavaScriptCompiler::class . '\'); ?>' . "\n";
+					echo '<?php $this->javaScriptCompiler->clear(); ?>';
 					break;
 				case 'external-js':
 					if ($this->external) {
@@ -50,7 +48,7 @@
 					break;
 				case 'js':
 					if ($this->minify) {
-						echo '<?php $jsCompiler->addResource($this->resourceProvider->getResource(' . $this->attribute($node, 'src') . ')); ?>' . "\n";
+						echo '<?php $this->javaScriptCompiler->addResource($this->resourceProvider->getResource(' . $this->attribute($node, 'src') . ')); ?>';
 						break;
 					} else if ($this->external) {
 						echo $this->htmlGenerator->generate(new Node('script', null, array_merge([
@@ -59,7 +57,14 @@
 						], $node->getAttributeList()->array())));
 						break;
 					}
-					throw new MacroException(sprintf('Minify/external js tag is not opened.'));
+					echo '<?php $resource = $this->resourceProvider->getResource(' . $this->attribute($node, 'src') . '); ?>';
+					echo '<?php $resource = $this->assetStorage->store($resource); ?>';
+					echo $this->htmlGenerator->generate(new Node('link', null, array_merge([
+						'src'  => function () {
+							return '<?=$resource->getRelativePath()?>';
+						},
+						'type' => 'text/javascript',
+					], $node->getAttributeList()->array())));
 			}
 		}
 
@@ -72,11 +77,10 @@
 					$this->minify = false;
 					echo $this->htmlGenerator->generate(new Node('script', null, [
 						'src'  => function () {
-							return '<?=$jsCompiler->compile()->getRelativePath()?>';
+							return '<?=$this->javaScriptCompiler->compile()->getRelativePath()?>';
 						},
 						'type' => 'text/javascript',
 					]));
-					echo '<?php unset($jsCompiler); ?>' . "\n";
 					break;
 				case 'external':
 					$this->external = false;

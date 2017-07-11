@@ -93,9 +93,9 @@
 			}
 			$headers = [];
 			$mysticList = [
-				'CONTENT_TYPE' => 'Content-Type',
+				'CONTENT_TYPE'   => 'Content-Type',
 				'CONTENT_LENGTH' => 'Content-Length',
-				'CONTENT_MD5' => 'Content-Md5',
+				'CONTENT_MD5'    => 'Content-Md5',
 			];
 			/** @noinspection ForeachSourceInspection */
 			foreach ($_SERVER as $key => $value) {

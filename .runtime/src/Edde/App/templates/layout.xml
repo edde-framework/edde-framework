@@ -3,18 +3,13 @@
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		<title>Showcase Edde Application</title>
-		<external-js>
-			<js src="/.assets/js/require.js"/>
-			<script type="text/javascript">
-				require.config({ baseUrl: '/.assets/js' });
-				require(['Edde/index']);
-			</script>
-		</external-js>
 		<minify-css>
 			<css src="normalize.css"/>
 			<css src="foundation.min.css"/>
 			<css src="layout.css"/>
 		</minify-css>
+		<minify-js>
+		</minify-js>
 	</head>
-	<body t:load=":get-action()"/>
+	<body t:load=":get-current-method()"/>
 </html>
