@@ -6,13 +6,11 @@
 	use Edde\Api\Application\LazyResponseManagerTrait;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Log\LazyLogServiceTrait;
-	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Router\LazyRouterServiceTrait;
 	use Edde\Api\Template\ITemplate;
 	use Edde\Api\Template\ITemplateContext;
 	use Edde\Api\Template\LazyTemplateManagerTrait;
 	use Edde\Api\Template\TemplateContextException;
-	use Edde\Common\Protocol\Request\Response;
 
 	/**
 	 * General template support; $this is used as a context.
@@ -36,10 +34,9 @@
 		 * @param ITemplateContext|string|null $context
 		 * @param string|null                  $name
 		 *
-		 * @return IElement
 		 * @throws TemplateContextException
 		 */
-		public function template($context = null, string $name = null): IElement {
+		public function template($context = null, string $name = null) {
 			/** @var $context ITemplateContext */
 			if ($context === 'this') {
 				$context = $this;
@@ -51,9 +48,7 @@
 			if ($context instanceof ITemplateContext === false) {
 				throw new TemplateContextException(sprintf('Given template context [%s] does not implement interface [%s].', get_class($context), ITemplateContext::class));
 			}
-			$context->setElement($this->routerService->createRequest());
-			$this->responseManager->response($content = new TemplateContent($this->template = $this->templateManager->template()->template($name ?: 'layout', $context, get_class($context), $context)));
-			return (new Response())->setValue($content);
+			$this->responseManager->response(new TemplateContent($this->template = $this->templateManager->template()->template($name ?: 'layout', $context->setElement($this->routerService->createRequest()), get_class($context), $context)));
 		}
 
 		public function getContextName() {
