@@ -18,13 +18,4 @@
 		public function getContextName() {
 			return implode('\\', array_slice(explode('\\', static::class), -2, 1)) . '\\' . str_replace('Action', '', StringUtils::toCamelCase((string)$this->routerService->createRequest()->getMeta('::method'))) . 'TemplateContext';
 		}
-
-		/**
-		 * return the name of the client class for this control if needed
-		 *
-		 * @return string
-		 */
-		public function getClientClass() {
-			return strtolower(implode('/', array_slice(explode('\\', static::class), 0, -1))) . ':' . StringUtils::extract(static::class);
-		}
 	}
