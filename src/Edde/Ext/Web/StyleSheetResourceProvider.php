@@ -5,6 +5,7 @@
 
 	use Edde\Api\Asset\LazyAssetDirectoryTrait;
 	use Edde\Api\File\IDirectory;
+	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\Resource\IResource;
 	use Edde\Common\File\RealPathException;
 	use Edde\Common\Resource\AbstractResourceProvider;
@@ -15,6 +16,7 @@
 	 * Standard resource provider based on IAssetDirectory.
 	 */
 	class StyleSheetResourceProvider extends AbstractResourceProvider {
+		use LazyRootDirectoryTrait;
 		use LazyAssetDirectoryTrait;
 		/**
 		 * @var IDirectory
