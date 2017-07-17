@@ -48,7 +48,7 @@
 					break;
 				case 'css':
 					if ($this->minify) {
-						echo '<?php $this->styleSheetCompiler->addResource($this->resourceProvider->getResource(' . $this->attribute($node, 'src') . ')); ?>';
+						echo '<?php $this->styleSheetCompiler->addResource($this->resourceProvider->getResource(' . $this->attribute($node, 'src') . ', $namespace, $context[null])); ?>';
 						break;
 					} else if ($this->external) {
 						echo $this->htmlGenerator->generate(new Node('link', null, array_merge([

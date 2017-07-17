@@ -57,7 +57,7 @@
 						], $node->getAttributeList()->array())));
 						break;
 					}
-					echo '<?php $resource = $this->resourceProvider->getResource(' . $this->attribute($node, 'src') . '); ?>';
+					echo '<?php $resource = $this->resourceProvider->getResource(' . $this->attribute($node, 'src') . ', $namespace, $context[null]); ?>';
 					echo '<?php $resource = $this->assetStorage->store($resource); ?>';
 					echo $this->htmlGenerator->generate(new Node('link', null, array_merge([
 						'src'  => function () {

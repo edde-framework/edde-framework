@@ -28,6 +28,13 @@
 			if ($this->styleSheetDirectory === null) {
 				throw new UnknownResourceException('Stylesheet directory has not been set up (or setup failed).');
 			}
+			list($control) = empty($parameters) ? [false] : $parameters;
+			if (is_object($control)) {
+				$file = $this->rootDirectory->directory('src/' . ($namespace ? $namespace . '/' : '') . implode('/', array_slice(explode('\\', get_class($control)), -2, 1)) . '/assets/css')->file($name);
+				if ($file->isAvailable()) {
+					return $file;
+				}
+			}
 			$file = $this->styleSheetDirectory->file($name = $name . ($namespace ? '-' . StringUtils::lower(str_replace('/', '.', $namespace)) . '-' . $name : ''));
 			if ($file->isAvailable()) {
 				return $file;
