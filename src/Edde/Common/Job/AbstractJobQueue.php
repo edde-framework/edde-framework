@@ -9,4 +9,14 @@
 
 	abstract class AbstractJobQueue extends Object implements IJobQueue {
 		use ConfigurableTrait;
+
+		/**
+		 * @inheritdoc
+		 */
+		public function queueList($elementList): IJobQueue {
+			foreach ($elementList as $element) {
+				$this->queue($element);
+			}
+			return $this;
+		}
 	}

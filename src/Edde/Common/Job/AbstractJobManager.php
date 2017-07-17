@@ -24,6 +24,14 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function queueList($elementList): IJobQueue {
+			$this->jobQueue->queueList($elementList);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function hasJob(): bool {
 			return $this->jobQueue->hasJob();
 		}

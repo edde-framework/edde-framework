@@ -22,6 +22,13 @@
 		public function queue(IElement $element): IJobQueue;
 
 		/**
+		 * @param IElement[] $elementList
+		 *
+		 * @return IJobQueue
+		 */
+		public function queueList($elementList): IJobQueue;
+
+		/**
 		 * are there some pending jobs?
 		 *
 		 * @return bool

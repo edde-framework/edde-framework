@@ -105,20 +105,23 @@
 
 		public function testPacket() {
 			$this->store->drop();
-			$this->jobManager->queue((new Event('foobar', '123')));
-			$this->jobManager->queue((new Event('foobar', '456')));
-			$this->jobManager->queue((new Request('do something cool', '789')));
-			$this->jobManager->queue((new Event('foobar', '321')));
-			$packet = $this->protocolManager->createPacket();
-			self::assertEmpty($packet->getElementNode('elements'));
+			$this->jobManager->queueList([
+				new Event('foobar', [], '123'),
+				new Event('foobar', [], '456'),
+				new Request('do something cool', [], '789'),
+				new Event('foobar', [], '321'),
+			]);
+			self::assertEmpty($this->protocolManager->createPacket()->getElementNode('elements'));
 		}
 
 		public function testPacketQueue() {
 			$this->store->drop();
-			$this->protocolManager->queue((new Event('foobar', '123')));
-			$this->protocolManager->queue((new Event('foobar', '456')));
-			$this->protocolManager->queue((new Request('do something cool', '789')));
-			$this->protocolManager->queue((new Event('foobar', '321')));
+			$this->protocolManager->queueList([
+				new Event('foobar', [], '123'),
+				new Event('foobar', [], '456'),
+				new Request('do something cool', [], '789'),
+				new Event('foobar', [], '321'),
+			]);
 			$packet = $this->protocolManager->createPacket();
 			$packet->setId('123456');
 			$packet->getElementNode('elements')->setId('moo');

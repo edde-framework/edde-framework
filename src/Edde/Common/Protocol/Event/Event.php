@@ -7,15 +7,10 @@
 	use Edde\Common\Protocol\Element;
 
 	class Event extends Element implements IEvent {
-		/**
-		 * @var bool
-		 */
-		protected $cancel;
-
-		public function __construct(string $event = null, string $id = null) {
+		public function __construct(string $event = null, array $data = [], string $id = null) {
 			parent::__construct('event', $id);
 			$this->setAttribute('event', $event ?: static::class);
-			$this->cancel = false;
+			empty($data) === false ? $this->data($data) : null;
 		}
 
 		/**
@@ -23,20 +18,5 @@
 		 */
 		public function getEvent(): string {
 			return (string)$this->getAttribute('event');
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function cancel(bool $cancel = true): IEvent {
-			$this->cancel = $cancel;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function isCanceled(): bool {
-			return $this->cancel;
 		}
 	}
