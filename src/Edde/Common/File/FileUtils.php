@@ -123,7 +123,7 @@
 						}
 					} else if (is_dir($path)) {
 						foreach (new \FilesystemIterator($path) as $item) {
-							static::delete($item->getRealPath());
+							($realpath = $item->getRealPath()) ? static::delete($realpath) : null;
 						}
 						/** @noinspection PhpUsageOfSilenceOperatorInspection */
 						if (@rmdir($path) === false) {
