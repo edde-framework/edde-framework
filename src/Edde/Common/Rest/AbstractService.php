@@ -59,13 +59,12 @@
 
 		protected function error(int $code, string $message) {
 			$this->httpResponse->header('Date', gmdate('D, d M Y H:i:s T'));
-			return $this->response(new StringContent($message, ['text/plain']), $code);
+			return $this->response(new StringContent($message), $code);
 		}
 
 		protected function response(IContent $content, int $code = null) {
 			$code ? $this->httpResponse->setCode($code) : null;
 			$this->responseManager->response($content);
-			return $content;
 		}
 
 		public function __call(string $name, $parameterList) {
