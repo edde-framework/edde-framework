@@ -35,4 +35,18 @@
 		 * @return IElement
 		 */
 		public function createRequest(): IElement;
+
+		/**
+		 * get current class being executed
+		 *
+		 * @return string
+		 */
+		public function getCurrentClass(): string;
+
+		/**
+		 * return current method name being executed
+		 *
+		 * @return string
+		 */
+		public function getCurrentMethod(): string;
 	}

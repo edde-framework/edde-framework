@@ -12,6 +12,7 @@
 	use Edde\Api\Router\RouterException;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
+	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Default implementation of a router service.
@@ -76,8 +77,22 @@
 			}
 			if ($this->defaultRequest) {
 				$this->defaultResponseHandler ? $this->responseManager->setResponseHandler($this->defaultResponseHandler) : null;
-				return $this->defaultRequest;
+				return $this->request = $this->defaultRequest;
 			}
 			throw new BadRequestException('Cannot handle current application request.' . (empty($this->routerList) ? ' There are no registered routers.' : ''));
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getCurrentClass(): string {
+			return $this->request->getMeta('::class');
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getCurrentMethod(): string {
+			return StringUtils::recamel($this->request->getMeta('::method'));
 		}
 	}

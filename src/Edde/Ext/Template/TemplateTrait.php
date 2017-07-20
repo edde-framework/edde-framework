@@ -37,18 +37,20 @@
 		 * @throws TemplateContextException
 		 */
 		public function template($context = null, string $name = null) {
-			/** @var $context ITemplateContext */
-			if ($context === 'this') {
+			try {
+				/** @var $context ITemplateContext */
+				if ($context === 'this') {
+					$context = $this;
+				} else if (is_string($context)) {
+					$context = $this->container->create($context, [], __METHOD__);
+				} else if ($context === null) {
+					$context = ($context = $this->getContextName()) !== null ? $this->container->create((string)$context, [], __METHOD__) : $this;
+				}
+			} catch (\Exception $exception) {
+				$this->logService->exception($exception);
 				$context = $this;
-			} else if (is_string($context)) {
-				$context = $this->container->create($context, [], __METHOD__);
-			} else if ($context === null) {
-				$context = ($context = $this->getContextName()) !== null ? $this->container->create((string)$context, [], __METHOD__) : $this;
 			}
-			if ($context instanceof ITemplateContext === false) {
-				throw new TemplateContextException(sprintf('Given template context [%s] does not implement interface [%s].', get_class($context), ITemplateContext::class));
-			}
-			$this->responseManager->response(new TemplateContent($this->template = $this->templateManager->template()->template($name ?: 'layout', $context->setElement($this->routerService->createRequest()), get_class($context), $context)));
+			$this->responseManager->response(new TemplateContent($this->template = $this->templateManager->template()->template($name ?: 'layout', $context, get_class($context), $context)));
 		}
 
 		public function getContextName() {
