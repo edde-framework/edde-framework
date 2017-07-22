@@ -24,6 +24,7 @@
 				'object',
 				\stdClass::class,
 				'application/json',
+				'text/json',
 			]);
 		}
 
@@ -42,6 +43,7 @@
 					$this->unsupported($content, $target, $content instanceof INode);
 					return new Content(NodeUtils::fromNode($content), \stdClass::class);
 				case 'application/json':
+				case 'text/json':
 					$this->unsupported($content, $target, $content instanceof INode);
 					return $this->converterManager->convert(NodeUtils::fromNode($content), \stdClass::class, [$target])->convert();
 			}

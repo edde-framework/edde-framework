@@ -18,6 +18,13 @@
 		public function queue(IElement $element): IProtocolManager;
 
 		/**
+		 * @param IElement[] $elementList
+		 *
+		 * @return IProtocolManager
+		 */
+		public function queueList($elementList): IProtocolManager;
+
+		/**
 		 * create packet with payload of all available elements and references
 		 *
 		 * @param IElement|null $reference

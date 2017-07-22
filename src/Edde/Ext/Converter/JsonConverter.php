@@ -58,12 +58,13 @@
 			], [
 				'json',
 				'application/json',
-				'application/json',
+				'text/json',
 				'*/*',
 				'text/html',
 			]);
 			$this->register([
 				'application/json',
+				'text/json',
 				'stream+application/json',
 			], [
 				'array',
@@ -85,6 +86,7 @@
 				case 'stream+application/json':
 					$content = file_get_contents($content);
 				case 'application/json':
+				case 'text/json':
 					$this->unsupported($content, $target, $content instanceof IFile || is_string($content));
 					$content = $content instanceof IFile ? $content->get() : $content;
 					switch ($target) {
@@ -106,6 +108,7 @@
 					switch ($target) {
 						case 'json':
 						case 'application/json':
+						case 'text/json':
 						case '*/*':
 							return new Content(json_encode($content), 'application/json');
 						case 'text/html':

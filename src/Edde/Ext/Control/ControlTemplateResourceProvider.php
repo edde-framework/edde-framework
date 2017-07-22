@@ -3,7 +3,6 @@
 
 	namespace Edde\Ext\Control;
 
-	use Edde\Api\Application\LazyContextTrait;
 	use Edde\Api\Control\IControl;
 	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\Resource\IResource;
@@ -11,7 +10,6 @@
 	use Edde\Common\Resource\UnknownResourceException;
 
 	class ControlTemplateResourceProvider extends AbstractResourceProvider {
-		use LazyContextTrait;
 		use LazyRootDirectoryTrait;
 
 		/**

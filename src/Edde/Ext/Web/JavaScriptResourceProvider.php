@@ -5,6 +5,7 @@
 
 	use Edde\Api\Asset\LazyAssetDirectoryTrait;
 	use Edde\Api\File\IDirectory;
+	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\Resource\IResource;
 	use Edde\Common\File\RealPathException;
 	use Edde\Common\Resource\AbstractResourceProvider;
@@ -16,6 +17,7 @@
 	 */
 	class JavaScriptResourceProvider extends AbstractResourceProvider {
 		use LazyAssetDirectoryTrait;
+		use LazyRootDirectoryTrait;
 		/**
 		 * @var IDirectory
 		 */
@@ -27,6 +29,13 @@
 		public function getResource(string $name, string $namespace = null, ...$parameters): IResource {
 			if ($this->javaScriptDirectory === null) {
 				throw new UnknownResourceException('Javascript directory has not been set up (or setup failed).');
+			}
+			list($control) = empty($parameters) ? [false] : $parameters;
+			if (is_object($control)) {
+				$file = $this->rootDirectory->directory('src/' . ($namespace ? $namespace . '/' : '') . implode('/', array_slice(explode('\\', get_class($control)), -2, 1)) . '/assets/js')->file($name);
+				if ($file->isAvailable()) {
+					return $file;
+				}
 			}
 			$file = $this->javaScriptDirectory->file($name = $name . ($namespace ? '-' . StringUtils::lower(str_replace('/', '.', $namespace)) . '-' . $name : ''));
 			if ($file->isAvailable()) {

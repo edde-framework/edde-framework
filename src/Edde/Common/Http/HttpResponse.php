@@ -23,7 +23,10 @@
 			}
 			if ($this->content) {
 				$this->headerList->has('Content-Type') ? null : header('Content-Type: ' . $this->content->getMime());
+				ob_start();
 				echo $this->content->getContent();
+				header('Content-Length: ' . ob_get_length());
+				ob_end_flush();
 			}
 			return $this;
 		}

@@ -29,6 +29,16 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function queueList($elementList): IProtocolManager {
+			foreach ($elementList as $element) {
+				$this->queue($element);
+			}
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function createPacket(IElement $reference = null): IPacket {
 			$packet = $this->protocolService->createPacket($reference);
 			$packet->elements($this->elementList);

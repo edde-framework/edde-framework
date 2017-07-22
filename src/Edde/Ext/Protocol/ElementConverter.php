@@ -19,11 +19,14 @@
 			$this->register(IElement::class, [
 				'stream+application/json',
 				'application/json',
+				'text/json',
+				'text/xml',
 				'*/*',
 			]);
 			$this->register([
 				'stream+application/json',
 				'application/json',
+				'text/json',
 			], IElement::class);
 		}
 
@@ -35,12 +38,16 @@
 				case IElement::class:
 					$this->unsupported($content, $target, is_string($content));
 					return new Content(NodeUtils::toNode($this->converterManager->convert($content, $mime, [\stdClass::class])->convert()->getContent(), null, Element::class), IElement::class);
+				/** @noinspection PhpMissingBreakStatementInspection */
+				case 'text/json':
+					$target = 'text/plain';
 				case 'stream+application/json':
 				case 'application/json':
 					$this->unsupported($content, $target, $content instanceof INode);
-					return $this->converterManager->convert($content, INode::class, [$target])->convert();
+					return new Content($this->converterManager->convert($content, INode::class, ['application/json'])->convert()->getContent(), $target);
+				case 'text/xml':
 				case '*/*':
-					return new Content($this->converterManager->convert($content, INode::class, ['text/xml'])->convert()->getContent(), 'text/xml');
+					return $this->converterManager->convert($content, INode::class, ['text/xml'])->convert();
 			}
 			return $this->exception($mime, $target);
 		}
