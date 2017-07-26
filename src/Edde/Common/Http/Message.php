@@ -104,6 +104,7 @@
 				foreach (array_slice(explode('--' . $contentType->get('boundary'), $this->message), 1, -1) as $boundary) {
 					list($headers, $message) = explode("\r\n\r\n", $boundary);
 					$message = new self($message, $headers);
+					$message->setup();
 					if ($contentId = $message->getContentId()) {
 						$this->messageList[$contentId] = $message;
 					}

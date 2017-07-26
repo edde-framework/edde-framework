@@ -190,7 +190,7 @@
 		 * @throws FileException
 		 */
 		public function rename(string $rename): IFile {
-			FileUtils::rename($this->url->getPath(), $rename);
+			FileUtils::rename($this->url->getPath(), $this->url->getBasePath() . '/' . $rename);
 			return $this;
 		}
 
