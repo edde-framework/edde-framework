@@ -27,6 +27,7 @@
 				'stream+application/json',
 				'application/json',
 				'text/json',
+				'post',
 			], IElement::class);
 		}
 
@@ -36,17 +37,24 @@
 		public function convert($content, string $mime, string $target = null): IContent {
 			switch ($target) {
 				case IElement::class:
-					$this->unsupported($content, $target, is_string($content));
-					return new Content(NodeUtils::toNode($this->converterManager->convert($content, $mime, [\stdClass::class])->convert()->getContent(), null, Element::class), IElement::class);
+					switch ($mime) {
+						case 'post':
+							$this->unsupported($content, $target, is_array($content));
+							return new Content($this->converterManager->convert(json_encode($content), 'application/json', [IElement::class])->convert()->getContent(), IElement::class);
+						default:
+							$this->unsupported($content, $target, is_string($content));
+							return new Content(NodeUtils::toNode($this->converterManager->convert($content, $mime, [\stdClass::class])->convert()->getContent(), null, Element::class), IElement::class);
+					}
+
 				/** @noinspection PhpMissingBreakStatementInspection */
 				case 'text/json':
 					$target = 'text/plain';
 				case 'stream+application/json':
 				case 'application/json':
+				case '*/*':
 					$this->unsupported($content, $target, $content instanceof INode);
 					return new Content($this->converterManager->convert($content, INode::class, ['application/json'])->convert()->getContent(), $target);
 				case 'text/xml':
-				case '*/*':
 					return $this->converterManager->convert($content, INode::class, ['text/xml'])->convert();
 			}
 			return $this->exception($mime, $target);
