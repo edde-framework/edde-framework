@@ -1,14 +1,12 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Api\Log;
-
-	use Edde\Api\Config\IConfigurable;
 
 	/**
 	 * Physical log storage (destination).
 	 */
-	interface ILog extends IConfigurable {
+	interface ILog {
 		/**
 		 * shortcut for record();
 		 *
@@ -30,7 +28,7 @@
 		 * adds informative tag
 		 *
 		 * @param string $log
-		 * @param array  $tagList
+		 * @param array $tagList
 		 *
 		 * @return ILog
 		 */
@@ -40,7 +38,7 @@
 		 * adds warning tag
 		 *
 		 * @param string $log
-		 * @param array  $tagList
+		 * @param array $tagList
 		 *
 		 * @return ILog
 		 */
@@ -50,7 +48,7 @@
 		 * adds error tag
 		 *
 		 * @param string $log
-		 * @param array  $tagList
+		 * @param array $tagList
 		 *
 		 * @return ILog
 		 */
@@ -60,7 +58,7 @@
 		 * adds critical tag
 		 *
 		 * @param string $log
-		 * @param array  $tagList
+		 * @param array $tagList
 		 *
 		 * @return ILog
 		 */
@@ -69,10 +67,10 @@
 		/**
 		 * log an exception
 		 *
-		 * @param \Throwable $exception
+		 * @param \Exception $exception
 		 * @param array|null $tagList
 		 *
 		 * @return ILog
 		 */
-		public function exception(\Throwable $exception, array $tagList = null): ILog;
+		public function exception(\Exception $exception, array $tagList = null): ILog;
 	}

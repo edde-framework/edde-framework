@@ -1,11 +1,11 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Api\Identity;
 
-	use Edde\Api\Config\IConfigurable;
+	use Edde\Api\Deffered\IDeffered;
 
-	interface IAuthenticatorManager extends IConfigurable {
+	interface IAuthenticatorManager extends IDeffered {
 		/**
 		 * @param IAuthenticator $authenticator
 		 *
@@ -16,74 +16,74 @@
 		/**
 		 * optionaly define authentication flow (support for chained login methods - credentials + sms, ...)
 		 *
-		 * @param string   $initial
+		 * @param string $initial
 		 * @param string[] ...$authenticatorList
 		 *
 		 * @return IAuthenticatorManager
 		 */
-		public function registerStep(string $initial, string ...$authenticatorList): IAuthenticatorManager;
+		public function registerFlow(string $initial, string ...$authenticatorList): IAuthenticatorManager;
 
 		/**
 		 * register flow list; array key is name of flow, value is array of flows; can be ampty array
 		 *
-		 * @param array $stepList
+		 * @param array $flowList
 		 *
 		 * @return IAuthenticatorManager
 		 */
-		public function registerStepList(array $stepList): IAuthenticatorManager;
+		public function registerFlowList(array $flowList): IAuthenticatorManager;
 
 		/**
 		 * execute an authentication flow; if the flow fails, $flow will be used as initial authenticator
 		 *
-		 * @param string $step
-		 * @param array  ...$credentials
+		 * @param string $flow
+		 * @param array ...$credentials
 		 *
 		 * @return IAuthenticatorManager
 		 */
-		public function step(string $step, ...$credentials): IAuthenticatorManager;
+		public function flow(string $flow, ...$credentials): IAuthenticatorManager;
 
 		/**
-		 * handy method to check if there are remaining steps (so isDone() === true if all auth. is done)
+		 * handy method to check if there is opened flow
 		 *
 		 * @return bool
 		 */
-		public function isDone(): bool;
+		public function hasFlow(): bool;
 
 		/**
-		 * return upcoming list of steps or empty array when there is no more steps
+		 * return upcoming flow or ampty array when there is no more flow
 		 *
 		 * @return string[]
 		 */
-		public function getStepList(): array;
+		public function getFlow(): array;
 
 		/**
-		 * return name of a current authenticator or exception when there is no active step
+		 * return name of a current authenticator or null when there is no flow
 		 *
 		 * @return string
 		 */
-		public function getCurrentStep(): string;
+		public function getCurrentFlow();
 
 		/**
-		 * authenticator manager should keep current step state even when exception; this should restart the selected step
+		 * authenticator manager should keep current flow state even when exception; this should restart the selected flow
 		 *
 		 * @return IAuthenticatorManager
 		 */
 		public function reset(): IAuthenticatorManager;
 
 		/**
-		 * similar to self::reset() but isDone() will return true and self::getCurrentStep() will return initial authenticator
+		 * similar to self::reset() but hasFlow() will return true and self::getCurrentFlow() will return initial authenticator
 		 *
-		 * @param string $step
+		 * @param string $flow
 		 *
 		 * @return IAuthenticatorManager
 		 */
-		public function select(string $step): IAuthenticatorManager;
+		public function select(string $flow): IAuthenticatorManager;
 
 		/**
 		 * try to use named authenticator for authenticate the given identity
 		 *
 		 * @param string $name
-		 * @param array  ...$credentials
+		 * @param array ...$credentials
 		 *
 		 * @return IAuthenticatorManager
 		 */

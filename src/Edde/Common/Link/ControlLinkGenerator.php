@@ -1,12 +1,17 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Link;
 
+	use Edde\Api\Application\LazyRequestTrait;
+	use Edde\Api\Http\LazyRequestUrlTrait;
 	use Edde\Common\Url\Url;
 
 	class ControlLinkGenerator extends AbstractLinkGenerator {
-		public function link($generate, array $parameterList = []) {
+		use LazyRequestTrait;
+		use LazyRequestUrlTrait;
+
+		public function link($generate, ...$parameterList) {
 			list($generate, $parameterList) = $this->list($generate, $parameterList);
 			if (is_array($generate) === false || count($generate) !== 2) {
 				return null;
@@ -18,6 +23,8 @@
 			if (($match = $this->match($control, $action)) === null) {
 				return null;
 			}
-			return Url::create()->setQuery(array_merge($this->request->getCurrent()[2], $parameterList, $match))->getAbsoluteUrl();
+			return Url::create()
+				->setQuery(array_merge($this->request->getCurrent()[2], $parameterList, $match))
+				->getAbsoluteUrl();
 		}
 	}

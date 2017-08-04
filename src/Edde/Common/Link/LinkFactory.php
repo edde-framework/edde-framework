@@ -6,11 +6,11 @@
 	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Api\Link\LinkException;
-	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Api\Log\LazyLogServiceTrait;
+	use Edde\Common\Deffered\AbstractDeffered;
 
-	class LinkFactory extends Object implements ILinkFactory {
-		use ConfigurableTrait;
+	class LinkFactory extends AbstractDeffered implements ILinkFactory {
+		use LazyLogServiceTrait;
 		/**
 		 * @var ILinkGenerator[]
 		 */
@@ -28,13 +28,20 @@
 		 * @inheritdoc
 		 * @throws LinkException
 		 */
-		public function link($generate, array $parameterList = []) {
+		public function link($generate, ...$parameterList) {
+			$this->use();
+			$exception = null;
 			foreach ($this->linkGeneratorList as $linkGenerator) {
-				$linkGenerator->setup();
-				if (($url = $linkGenerator->link($generate, $parameterList)) !== null) {
-					return $url;
+				try {
+					if (($url = $linkGenerator->link($generate, ...$parameterList)) !== null) {
+						return $url;
+					}
+				} catch (\Exception $exception) {
+					$this->logService->exception($exception, [
+						'edde',
+					]);
 				}
 			}
-			throw new LinkException(sprintf('Cannot generate link from the given input%s.', (is_string($generate) ? ' [' . $generate . ']' : '')));
+			throw new LinkException(sprintf('Cannot generate link from the given input%s.', (is_string($generate) ? ' [' . $generate . ']' : '')), 0, $exception);
 		}
 	}

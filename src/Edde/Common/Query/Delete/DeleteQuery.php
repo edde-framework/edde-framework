@@ -1,15 +1,12 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Query\Delete;
 
-	use Edde\Api\Config\IConfigurable;
-	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractQuery;
 
-	class DeleteQuery extends AbstractQuery implements IConfigurable {
-		use ConfigurableTrait;
+	class DeleteQuery extends AbstractQuery {
 		/**
 		 * @var string
 		 */
@@ -22,8 +19,7 @@
 			$this->source = $source;
 		}
 
-		protected function handleInit() {
-			parent::handleInit();
+		protected function prepare() {
 			$this->node = new Node('delete-query', $this->source);
 		}
 	}

@@ -27,6 +27,13 @@
 		public function getRelativePath(string $base = null);
 
 		/**
+		 * @param string $base
+		 *
+		 * @return IResource
+		 */
+		public function setBase(string $base): IResource;
+
+		/**
 		 * return base path if set
 		 *
 		 * @return string|null

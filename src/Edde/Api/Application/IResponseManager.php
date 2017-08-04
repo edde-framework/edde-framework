@@ -1,46 +1,43 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Api\Application;
 
-	use Edde\Api\Converter\IContent;
+	use Edde\Api\Deffered\IDeffered;
 
 	/**
 	 * Response manager holds current Response (to keep responses immutable).
 	 */
-	interface IResponseManager extends IResponseHandler {
-		/**
-		 * who will take care about response when execute() is called? If null is provided, response manager itself will hold
-		 * basic output
-		 *
-		 * @param IResponseHandler $responseHandler
-		 *
-		 * @return IResponseManager
-		 */
-		public function setResponseHandler(IResponseHandler $responseHandler = null): IResponseManager;
-
-		/**
-		 * is there already some response?
-		 *
-		 * @return bool
-		 */
-		public function hasResponse(): bool;
-
+	interface IResponseManager extends IDeffered {
 		/**
 		 * set the current response
 		 *
-		 * @param IContent $content
+		 * @param IResponse $response
 		 *
 		 * @return IResponseManager
 		 */
-		public function response(IContent $content): IResponseManager;
+		public function response(IResponse $response): IResponseManager;
+
+		/**
+		 * if a response is not set, internal default should be applied or empty response should be returned
+		 *
+		 * @param string $mime
+		 *
+		 * @return IResponseManager
+		 */
+		public function setMime(string $mime): IResponseManager;
+
+		/**
+		 * return target mime type of request (it can be echoing, json_encoding, ...)
+		 *
+		 * @return string
+		 */
+		public function getMime(): string;
 
 		/**
 		 * execute response
 		 *
-		 * @param IContent|null $content
-		 *
 		 * @return mixed
 		 */
-		public function execute(IContent $content = null);
+		public function execute();
 	}

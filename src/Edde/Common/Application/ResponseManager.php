@@ -1,65 +1,45 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Application;
 
-	use Edde\Api\Application\IResponseHandler;
+	use Edde\Api\Application\IResponse;
 	use Edde\Api\Application\IResponseManager;
-	use Edde\Api\Converter\IContent;
+	use Edde\Api\Application\LazyRequestTrait;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
-	use Edde\Common\Config\ConfigurableTrait;
+	use Edde\Common\Deffered\AbstractDeffered;
 
-	class ResponseManager extends AbstractResponseHandler implements IResponseManager {
+	class ResponseManager extends AbstractDeffered implements IResponseManager {
 		use LazyConverterManagerTrait;
-		use ConfigurableTrait;
+		use LazyRequestTrait;
 		/**
-		 * @var IContent
+		 * @var IResponse
 		 */
 		protected $response;
 		/**
-		 * @var IResponseHandler
+		 * @var string
 		 */
-		protected $responseHandler;
+		protected $mime;
 
-		/**
-		 * @inheritdoc
-		 */
-		public function setResponseHandler(IResponseHandler $responseHandler = null): IResponseManager {
-			$this->responseHandler = $responseHandler;
+		public function response(IResponse $response): IResponseManager {
+			$this->response = $response;
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function hasResponse(): bool {
-			return $this->response !== null;
+		public function getMime(): string {
+			return $this->mime;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function response(IContent $content): IResponseManager {
-			$this->response = $content;
+		public function setMime(string $mime): IResponseManager {
+			$this->mime = $mime;
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function execute(IContent $content = null) {
+		public function execute() {
 			if ($this->response === null) {
 				return;
 			}
-			$this->responseHandler = $this->responseHandler ?: $this;
-			$this->responseHandler->setup();
-			$this->responseHandler->send($this->response);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function send(IContent $content): IResponseHandler {
-			throw new UnknownResponseHandlerException('There is no response handler to process current response.');
+			$this->use();
+			$this->converterManager->convert($this->response->getResponse(), $this->response->getType(), $this->mime);
 		}
 	}

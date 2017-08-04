@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Api\Cache;
 
@@ -17,24 +17,35 @@
 		public function setNamespace(string $namespace): ICache;
 
 		/**
-		 * save given value into the cache
+		 * cache method result
 		 *
 		 * @param string $name
-		 * @param mixed  $save must be serializable
+		 * @param callable $callback
+		 * @param array ...$parameterList
 		 *
 		 * @return mixed
 		 */
-		public function save(string $name, $save);
+		public function callback(string $name, callable $callback, ...$parameterList);
+
+		/**
+		 * save given value into the cache
+		 *
+		 * @param string $id
+		 * @param mixed $save must be serializable (neonable, jsonable, serializable, ...)
+		 *
+		 * @return mixed
+		 */
+		public function save(string $id, $save);
 
 		/**
 		 * load value be the id - if the value doesn't exists, default is returned
 		 *
-		 * @param string     $name
+		 * @param string $id
 		 * @param mixed|null $default
 		 *
 		 * @return mixed
 		 */
-		public function load(string $name, $default = null);
+		public function load(string $id, $default = null);
 
 		/**
 		 * manual invalidation of whole cache

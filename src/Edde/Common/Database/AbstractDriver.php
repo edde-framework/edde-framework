@@ -1,20 +1,16 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Database;
 
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Database\IDriver;
-	use Edde\Api\Database\LazyDsnTrait;
-	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Deffered\AbstractDeffered;
 
 	/**
 	 * Common stuff for database driver implementation.
 	 */
-	abstract class AbstractDriver extends Object implements IDriver {
-		use LazyDsnTrait;
-		use ConfigurableTrait;
+	abstract class AbstractDriver extends AbstractDeffered implements IDriver {
 		/**
 		 * @var string[]
 		 */
@@ -31,14 +27,14 @@
 		protected function setTypeList(array $typeList) {
 			static $list = [
 				/** special cases */
-				null       => null,
+				null => null,
 				/** standard set of "scalar" types */
-				'int'      => null,
-				'bool'     => null,
-				'float'    => null,
-				'long'     => null,
-				'string'   => null,
-				'text'     => null,
+				'int' => null,
+				'bool' => null,
+				'float' => null,
+				'long' => null,
+				'string' => null,
+				'text' => null,
 				'datetime' => null,
 			];;
 			$unknown = array_diff($typeKeys = array_keys($typeList), $listKeys = array_keys($list));

@@ -1,16 +1,17 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Link;
 
+	use Edde\Api\Application\LazyRequestTrait;
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Link\ILink;
 	use Edde\Api\Link\ILinkGenerator;
-	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\AbstractObject;
 	use Edde\Common\Strings\StringUtils;
 
-	abstract class AbstractLinkGenerator extends Object implements ILinkGenerator {
-		use ConfigurableTrait;
+	abstract class AbstractLinkGenerator extends AbstractObject implements ILinkGenerator, ILazyInject {
+		use LazyRequestTrait;
 
 		protected function match(string $control, string $action) {
 			$simpleRegexp = '[a-z0-9-]+';

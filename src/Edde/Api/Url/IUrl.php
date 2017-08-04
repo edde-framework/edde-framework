@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Api\Url;
 
@@ -39,11 +39,9 @@
 		public function setPath(string $path): IUrl;
 
 		/**
-		 * @param bool $query
-		 *
 		 * @return string
 		 */
-		public function getPath(bool $query = true);
+		public function getPath();
 
 		/**
 		 * @return string[]
@@ -74,53 +72,24 @@
 		/**
 		 * set query part of an url
 		 *
-		 * @param string $query
+		 * @param array $query
 		 *
 		 * @return IUrl
 		 */
-		public function setQuery(string $query): IUrl;
-
-		/**
-		 * @return string
-		 */
-		public function getQuery();
+		public function setQuery(array $query): IUrl;
 
 		/**
 		 * @return array
 		 */
-		public function getParameterList(): array;
+		public function getQuery();
 
 		/**
-		 * @param array $parameterList
-		 *
-		 * @return IUrl
-		 */
-		public function setParameterList(array $parameterList): IUrl;
-
-		/**
-		 * @param array $parameterList
-		 *
-		 * @return IUrl
-		 */
-		public function addParameterList(array $parameterList): IUrl;
-
-		/**
-		 * update the given parameter
-		 *
 		 * @param string $name
-		 * @param        $value
-		 *
-		 * @return IUrl
-		 */
-		public function setParameter(string $name, $value): IUrl;
-
-		/**
-		 * @param string      $name
 		 * @param string|null $default
 		 *
 		 * @return string
 		 */
-		public function getParameter(string $name, $default = null);
+		public function getParameter($name, $default = null);
 
 		/**
 		 * @return string
@@ -137,17 +106,7 @@
 		 *
 		 * @return $this
 		 */
-		public function parse(string $url);
-
-		/**
-		 * run regular expression against absolute url
-		 *
-		 * @param string $match
-		 * @param bool   $path === true, match only path
-		 *
-		 * @return array|null
-		 */
-		public function match(string $match, bool $path = true);
+		public function build($url);
 
 		public function __toString();
 	}

@@ -1,15 +1,16 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Converter\IContent;
+	use Edde\Api\Http\IBody;
+	use Edde\Api\Http\ICookie;
 	use Edde\Api\Http\ICookieList;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IHttp;
-	use Edde\Common\Object;
+	use Edde\Common\AbstractObject;
 
-	abstract class AbstractHttp extends Object implements IHttp {
+	abstract class AbstractHttp extends AbstractObject implements IHttp {
 		/**
 		 * @var IHeaderList
 		 */
@@ -19,9 +20,9 @@
 		 */
 		protected $cookieList;
 		/**
-		 * @var IContent
+		 * @var IBody
 		 */
-		protected $content;
+		protected $body;
 
 		/**
 		 * @param IHeaderList $headerList
@@ -32,40 +33,43 @@
 			$this->cookieList = $cookieList;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
 		public function getHeaderList(): IHeaderList {
 			return $this->headerList;
 		}
 
+		public function setHeaderList(IHeaderList $headerList) {
+			$this->headerList = $headerList;
+			return $this;
+		}
+
 		/**
-		 * @inheritdoc
+		 * @return ICookieList|ICookie[]
 		 */
 		public function getCookieList(): ICookieList {
 			return $this->cookieList;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function header(string $header, string $value): IHttp {
+		public function setCookieList(ICookieList $cookieList) {
+			$this->cookieList = $cookieList;
+			return $this;
+		}
+
+		public function header(string $header, string $value) {
 			$this->headerList->set($header, $value);
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function setContent(IContent $content = null): IHttp {
-			$this->content = $content;
+		public function setContentType(string $contentType) {
+			$this->headerList->set('Content-Type', $contentType);
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function getContent() {
-			return $this->content;
+		public function getBody() {
+			return $this->body;
+		}
+
+		public function setBody(IBody $body = null) {
+			$this->body = $body;
+			return $this;
 		}
 	}

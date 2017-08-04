@@ -1,18 +1,15 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Log;
 
 	use Edde\Api\Log\ILog;
-	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\AbstractObject;
 
 	/**
 	 * Common stuff for loggers.
 	 */
-	abstract class AbstractLog extends Object implements ILog {
-		use ConfigurableTrait;
-
+	abstract class AbstractLog extends AbstractObject implements ILog {
 		/**
 		 * @inheritdoc
 		 */
@@ -55,7 +52,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function exception(\Throwable $exception, array $tagList = null): ILog {
+		public function exception(\Exception $exception, array $tagList = null): ILog {
 			$tagList[] = __FUNCTION__;
 			return $this->log($exception, $tagList);
 		}

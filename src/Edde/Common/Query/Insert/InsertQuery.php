@@ -1,19 +1,16 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Query\Insert;
 
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractQuery;
 
 	/**
 	 * IQL implementation of an insert query.
 	 */
-	class InsertQuery extends AbstractQuery implements IConfigurable {
-		use ConfigurableTrait;
+	class InsertQuery extends AbstractQuery {
 		/**
 		 * @var ISchema
 		 */
@@ -25,7 +22,7 @@
 
 		/**
 		 * @param ISchema $schema
-		 * @param array   $insert
+		 * @param array $insert
 		 */
 		public function __construct(ISchema $schema, array $insert) {
 			$this->schema = $schema;
@@ -35,8 +32,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		protected function handleInit() {
-			parent::handleInit();
+		protected function prepare() {
 			$this->node = new Node('insert-query', $this->schema->getSchemaName());
 			foreach ($this->insert as $name => $value) {
 				$this->node->addNode(new Node($name, $value));

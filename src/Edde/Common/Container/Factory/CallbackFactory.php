@@ -1,61 +1,51 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Container\Factory;
 
+	use Edde\Api\Callback\IParameter;
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IDependency;
-	use Edde\Api\Reflection\ReflectionException;
-	use Edde\Common\Container\AbstractFactory;
-	use Edde\Common\Container\Dependency;
-	use Edde\Common\Reflection\ReflectionParameter;
-	use Edde\Common\Reflection\ReflectionUtils;
+	use Edde\Common\Callback\CallbackUtils;
 
+	/**
+	 * Callback cache will use callable as cache method.
+	 */
 	class CallbackFactory extends AbstractFactory {
 		/**
 		 * @var callable
 		 */
 		protected $callback;
 		/**
-		 * @var string
+		 * @var IParameter[]
 		 */
-		protected $name;
+		protected $parameterList;
 
 		/**
-		 * @param string   $name
+		 * The boy is smoking and leaving smoke rings into the air. The girl gets irritated with the smoke and says to her lover: "Can't you see the warning written on the cigarettes packet, smoking is injurious to health!" The boy replies back: "Darling, I am a programmer. We don't worry about warnings, we only worry about errors."
+		 *
+		 * @param string $name
 		 * @param callable $callback
+		 * @param bool $singleton
 		 */
-		public function __construct(callable $callback, string $name = null) {
+		public function __construct(string $name, callable $callback, bool $singleton = true) {
+			parent::__construct($name, $singleton);
 			$this->callback = $callback;
-			$this->name = $name;
 		}
 
 		/**
 		 * @inheritdoc
-		 * @throws ReflectionException
 		 */
-		public function canHandle(IContainer $container, string $dependency): bool {
-			if ($this->name === null) {
-				$this->name = (string)ReflectionUtils::getMethodReflection($this->callback)->getReturnType();
+		public function getParameterList(string $name = null): array {
+			if ($this->parameterList === null) {
+				$this->parameterList = CallbackUtils::getParameterList($this->callback);
 			}
-			return $dependency === $this->name;
+			return $this->parameterList;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function createDependency(IContainer $container, string $dependency = null): IDependency {
-			$parameterList = [];
-			foreach (ReflectionUtils::getParameterList($this->callback) as $reflectionParameter) {
-				$parameterList[] = new ReflectionParameter($reflectionParameter->getName(), $reflectionParameter->isOptional(), ($class = $reflectionParameter->getClass()) ? $class->getName() : null);
-			}
-			return new Dependency($parameterList);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
-			return call_user_func_array($this->callback, $this->parameters($container, $parameterList, $dependency));
+		public function factory(string $name, array $parameterList, IContainer $container) {
+			return call_user_func_array($this->callback, $parameterList);
 		}
 	}

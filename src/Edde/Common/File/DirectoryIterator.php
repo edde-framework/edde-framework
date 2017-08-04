@@ -1,13 +1,13 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\File;
 
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\File\IDirectoryIterator;
-	use Edde\Common\Object;
+	use Edde\Common\Deffered\AbstractDeffered;
 
-	class DirectoryIterator extends Object implements IDirectoryIterator {
+	class DirectoryIterator extends AbstractDeffered implements IDirectoryIterator {
 		/**
 		 * @var IDirectory[]
 		 */
@@ -19,6 +19,7 @@
 		}
 
 		public function getIterator() {
+			$this->use();
 			foreach ($this->directoryList as $directory) {
 				foreach ($directory as $file) {
 					yield $file;

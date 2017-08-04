@@ -1,14 +1,14 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Storage;
 
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Storage\IBoundQuery;
 	use Edde\Api\Storage\IStorage;
-	use Edde\Common\Object;
+	use Edde\Common\AbstractObject;
 
-	class BoundQuery extends Object implements IBoundQuery {
+	class BoundQuery extends AbstractObject implements IBoundQuery {
 		/**
 		 * @var IQuery
 		 */

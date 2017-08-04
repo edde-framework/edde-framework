@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Crate;
 
@@ -9,15 +9,15 @@
 	use Edde\Api\Crate\IProperty;
 	use Edde\Api\Crypt\CryptException;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Common\Object;
-	use Edde\Common\Reflection\ReflectionUtils;
-	use Edde\Common\Schema\Property as SchemaProperty;
+	use Edde\Common\AbstractObject;
+	use Edde\Common\Callback\CallbackUtils;
 	use Edde\Common\Schema\Schema;
+	use Edde\Common\Schema\SchemaProperty;
 
 	/**
 	 * Simple (...advanced...) crate implementation.
 	 */
-	class Crate extends Object implements ICrate {
+	class Crate extends AbstractObject implements ICrate {
 		/**
 		 * @var ISchema
 		 */
@@ -76,7 +76,8 @@
 			if ($this->identifierList === null) {
 				$this->identifierList = [];
 				foreach ($this->propertyList as $property) {
-					if ($property->getSchemaProperty()->isIdentifier()) {
+					$schemaProperty = $property->getSchemaProperty();
+					if ($schemaProperty->isIdentifier()) {
 						$this->identifierList[] = $property;
 					}
 				}
@@ -88,7 +89,8 @@
 		 * @inheritdoc
 		 */
 		public function set(string $name, $value): ICrate {
-			$this->getProperty($name)->set($value);
+			$this->getProperty($name)
+				->set($value);
 			return $this;
 		}
 
@@ -115,7 +117,8 @@
 		 * @throws CrateException
 		 */
 		public function add(string $name, $value, $key = null): ICrate {
-			$property = $this->getProperty($name)->getSchemaProperty();
+			$property = $this->getProperty($name)
+				->getSchemaProperty();
 			if ($property->isArray() === false) {
 				throw new CrateException(sprintf('Property [%s] is not array; cannot add value.', $property->getPropertyName()));
 			}
@@ -182,7 +185,8 @@
 		 * @throws CrateException
 		 */
 		public function get(string $name, $default = null) {
-			return $this->getProperty($name)->get($default);
+			return $this->getProperty($name)
+				->get($default);
 		}
 
 		/**
@@ -206,7 +210,9 @@
 			}
 			$link = $this->schema->getLink($name);
 			$this->linkList[$name] = $crate;
-			$this->set($link->getSource()->getName(), $crate->get($link->getTarget()->getName()));
+			$this->set($link->getSource()
+				->getName(), $crate->get($link->getTarget()
+				->getName()));
 			return $this;
 		}
 
@@ -218,7 +224,7 @@
 			if ($this->schema->hasLink($name) === false) {
 				throw new CrateException(sprintf('Crate [%s] has no link [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
 			}
-			$callback = ReflectionUtils::getMethodReflection($crate);
+			$callback = CallbackUtils::getReflection($crate);
 			if (($returnType = $callback->getReturnType()) === null || (string)$returnType !== ICrate::class) {
 				throw new CrateException(sprintf('Proxied callable must have [%s] return typehint in crate [%s].', ICrate::class, static::class));
 			}
@@ -377,7 +383,6 @@
 		}
 
 		public function __clone() {
-			parent::__clone();
 			foreach ($this->propertyList as &$property) {
 				$property = clone $property;
 			}

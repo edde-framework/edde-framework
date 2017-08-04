@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Api\Resource;
 
@@ -45,14 +45,7 @@
 		/**
 		 * @return bool
 		 */
-		public function isEmpty(): bool;
-
-		/**
-		 * clear resource list
-		 *
-		 * @return IResourceList
-		 */
-		public function clear(): IResourceList;
+		public function isEmpty();
 
 		/**
 		 * @return IResource[]

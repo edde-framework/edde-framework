@@ -1,12 +1,12 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Iterator;
 
 	use Edde\Api\Iterator\IIterator;
-	use Edde\Common\Object;
+	use Edde\Common\AbstractObject;
 
-	class Iterator extends Object implements IIterator {
+	class Iterator extends AbstractObject implements IIterator {
 		/**
 		 * @var \Iterator
 		 */

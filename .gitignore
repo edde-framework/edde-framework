@@ -1,15 +1,5 @@
-**/lib/
+/vendor/
+/doc/
 /.idea/workspace.xml
 *.log
 *.sqlite
-*.pid
-**/temp/
-/.runtime/.assets/templates/
-/.runtime/.assets/js/Edde/
-/.runtime/.assets/store
-/release
-/temp
-/doc
-/.runtime/.assets/template
-/build
-/tests/**/.assets

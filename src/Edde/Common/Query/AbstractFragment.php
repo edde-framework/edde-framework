@@ -1,12 +1,12 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Query;
 
 	use Edde\Api\Node\INode;
-	use Edde\Common\Object;
+	use Edde\Common\AbstractObject;
 
-	abstract class AbstractFragment extends Object {
+	abstract class AbstractFragment extends AbstractObject {
 		/**
 		 * @var INode
 		 */

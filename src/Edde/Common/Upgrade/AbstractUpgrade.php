@@ -1,12 +1,12 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Upgrade;
 
 	use Edde\Api\Upgrade\IUpgrade;
-	use Edde\Common\Object;
+	use Edde\Common\Deffered\AbstractDeffered;
 
-	abstract class AbstractUpgrade extends Object implements IUpgrade {
+	abstract class AbstractUpgrade extends AbstractDeffered implements IUpgrade {
 		/**
 		 * @var string
 		 */
@@ -24,6 +24,7 @@
 		}
 
 		public function upgrade() {
+			$this->use();
 			$this->onUpgrade();
 		}
 

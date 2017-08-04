@@ -1,17 +1,16 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Api\Router;
 
-	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Application\IRequest;
+	use Edde\Api\Deffered\IDeffered;
 
-	interface IRouter extends IConfigurable {
+	interface IRouter extends IDeffered {
 		/**
-		 * create request must create IElement as it is a general way how to send "something" to the application; so in this
-		 * case "request" means "general request to an application, even it could be an event"
+		 * can this router handle current request (can be arbitrary, e.g. cli run)
 		 *
-		 * @return IElement|null
+		 * @return IRequest|null
 		 */
 		public function createRequest();
 	}

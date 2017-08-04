@@ -1,9 +1,9 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Api\Node;
 
-	use Edde\Api\EddeException;
+	use Exception;
 
-	class NodeException extends EddeException {
+	class NodeException extends Exception {
 	}

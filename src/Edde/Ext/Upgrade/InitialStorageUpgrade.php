@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Ext\Upgrade;
 
@@ -18,12 +18,11 @@
 		/**
 		 * @param string $version
 		 */
-		public function __construct($version = 'edde') {
+		public function __construct($version = 'edde-0.5') {
 			parent::__construct($version);
 		}
 
 		protected function onUpgrade() {
-			$this->schemaManager->setup();
 			foreach ($this->schemaManager->getSchemaList() as $schema) {
 				if ($schema->getMeta('storable', false)) {
 					$this->storage->execute(new CreateSchemaQuery($schema));

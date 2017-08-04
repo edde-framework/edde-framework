@@ -1,13 +1,12 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Callback;
 
 	use Edde\Api\Callback\ICallback;
-	use Edde\Common\Object;
-	use Edde\Common\Reflection\ReflectionUtils;
+	use Edde\Common\AbstractObject;
 
-	class Callback extends Object implements ICallback {
+	class Callback extends AbstractObject implements ICallback {
 		/**
 		 * @var callable
 		 */
@@ -40,7 +39,7 @@
 		 */
 		public function getParameterList(): array {
 			if ($this->parameterList === null) {
-				$this->parameterList = ReflectionUtils::getParameterList($this->callback);
+				$this->parameterList = CallbackUtils::getParameterList($this->callback);
 			}
 			return $this->parameterList;
 		}

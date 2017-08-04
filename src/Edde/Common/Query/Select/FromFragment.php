@@ -1,16 +1,15 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Query\Select;
 
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Node\INode;
-	use Edde\Common\Config\ConfigurableTrait;
+	use Edde\Common\Deffered\DefferedTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractFragment;
 
-	class FromFragment extends AbstractFragment implements IConfigurable {
-		use ConfigurableTrait;
+	class FromFragment extends AbstractFragment {
+		use DefferedTrait;
 		/**
 		 * @var SelectQuery
 		 */
@@ -33,7 +32,7 @@
 		}
 
 		/**
-		 * @param string      $source
+		 * @param string $source
 		 * @param string|null $alias
 		 *
 		 * @return FromFragment
@@ -63,8 +62,7 @@
 			return $this->selectQuery->order();
 		}
 
-		protected function handleInit() {
-			parent::handleInit();
+		protected function prepare() {
 			$this->joinFragment = new JoinFragment($this->node);
 		}
 	}

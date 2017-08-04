@@ -1,22 +1,23 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Api\Container;
 
-	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Config\IConfigurator;
+	use Edde\Api\Deffered\IDeffered;
 
 	/**
-	 * Implementation of Dependency Injection Container.
+	 * Implementation of Dependency Inject Container.
 	 */
-	interface IContainer extends IConfigurable {
+	interface IContainer extends IDeffered {
 		/**
+		 * shorthand for cache registration
+		 *
+		 * @param string $name
 		 * @param IFactory $factory
-		 * @param string   $id
 		 *
 		 * @return IContainer
 		 */
-		public function registerFactory(IFactory $factory, string $id = null): IContainer;
+		public function registerFactory(string $name, IFactory $factory): IContainer;
 
 		/**
 		 * shorthand for cache registration
@@ -28,87 +29,51 @@
 		public function registerFactoryList(array $factoryList): IContainer;
 
 		/**
-		 * register a new config handler for the given dependency
+		 * check if the given name is available (known) in a container
 		 *
-		 * @param string        $name
-		 * @param IConfigurator $configurator
+		 * @param string $name
 		 *
-		 * @return IContainer
+		 * @return bool
 		 */
-		public function registerConfigurator(string $name, IConfigurator $configurator): IContainer;
-
-		/**
-		 * register list of config handlers bound to the given factories (key is factory name, value is config handler)
-		 *
-		 * @param IConfigurator[] $configuratorList
-		 *
-		 * @return IContainer
-		 */
-		public function registerConfiguratorList(array $configuratorList): IContainer;
-
-		/**
-		 * get factory which is able to create the given dependency
-		 *
-		 * @param mixed  $dependency
-		 *
-		 * @param string $source
-		 *
-		 * @return IFactory
-		 */
-		public function getFactory(string $dependency, string $source = null): IFactory;
+		public function has(string $name);
 
 		/**
 		 * create the dependency by it's identifier (name)
 		 *
 		 * @param string $name
-		 * @param array  $parameterList
-		 * @param string $source who has requested this dependency
+		 * @param array ...$parameterList
 		 *
 		 * @return mixed
 		 */
-		public function create(string $name, array $parameterList = [], string $source = null);
+		public function create(string $name, ...$parameterList);
 
 		/**
 		 * execute given callback with autowired dependencies
 		 *
 		 * @param callable $callable
-		 * @param array    $parameterList
-		 * @param string   $source
+		 * @param array $parameterList
 		 *
 		 * @return mixed
 		 */
-		public function call(callable $callable, array $parameterList = [], string $source = null);
+		public function call(callable $callable, ...$parameterList);
 
 		/**
-		 * general method for dependency creation (so call and create should call this one)
+		 * low-level method for factory execution (other container methods should be using this)
 		 *
-		 * @param IFactory    $factory
-		 * @param array       $parameterList
-		 * @param string|null $name
-		 * @param string      $source
+		 * @param IFactory $factory
+		 * @param string $name optional dependency name (name given from outside)
+		 * @param array $parameterList
 		 *
-		 * @return mixed
+		 * @return mixed return created instance of the given factory (result of factory execution)
 		 */
-		public function factory(IFactory $factory, array $parameterList = [], string $name = null, string $source = null);
+		public function factory(IFactory $factory, string $name = null, array $parameterList = []);
 
 		/**
-		 * try to autowire dependencies to $instance
+		 * provides all aditional dependencies for the given instance
 		 *
 		 * @param mixed $instance
-		 * @param bool  $force if true, dependencies will be autowired regardless of lazy injects
 		 *
-		 * @return mixed
+		 * @return mixed return input instance (input is same as output)
 		 */
-		public function autowire($instance, bool $force = false);
-
-		/**
-		 * execute injects on the given instance
-		 *
-		 * @param mixed       $instance
-		 * @param IDependency $dependency
-		 * @param bool        $lazy
-		 *
-		 * @return mixed
-		 */
-		public function dependency($instance, IDependency $dependency, bool $lazy = true);
+		public function inject($instance);
 	}

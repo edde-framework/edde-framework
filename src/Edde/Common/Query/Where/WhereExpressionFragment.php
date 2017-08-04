@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Query\Where;
 
@@ -8,6 +8,7 @@
 
 	class WhereExpressionFragment extends AbstractFragment {
 		protected $relation = 'and';
+
 		/** @noinspection PhpMethodNamingConventionInspection */
 		/**
 		 * @return WhereFragment

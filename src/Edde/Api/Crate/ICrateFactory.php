@@ -1,24 +1,33 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Api\Crate;
 
-	use Edde\Api\Config\IConfigurable;
+	use Edde\Api\Deffered\IDeffered;
 
 	/**
 	 * This mechanism is inteded to use as conversion from an input data to crates.
 	 */
-	interface ICrateFactory extends IConfigurable {
+	interface ICrateFactory extends IDeffered {
+		/**
+		 * is possible to create crate with the given name
+		 *
+		 * @param string $crate
+		 *
+		 * @return bool
+		 */
+		public function hasCrate(string $crate): bool;
+
 		/**
 		 * create crate with a given class (should be through container) and with the given schema
 		 *
-		 * @param string $schema
-		 * @param array  $load
 		 * @param string $crate
+		 * @param string $schema
+		 * @param array $load
 		 *
 		 * @return ICrate
 		 */
-		public function crate(string $schema, array $load = null, string $crate = null): ICrate;
+		public function crate(string $crate, string $schema = null, array $load = null): ICrate;
 
 		/**
 		 * create crate collection

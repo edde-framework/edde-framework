@@ -1,12 +1,12 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Link;
 
 	use Edde\Api\Link\ILink;
-	use Edde\Common\Object;
+	use Edde\Common\AbstractObject;
 
-	class Link extends Object implements ILink {
+	class Link extends AbstractObject implements ILink {
 		/**
 		 * @var mixed
 		 */

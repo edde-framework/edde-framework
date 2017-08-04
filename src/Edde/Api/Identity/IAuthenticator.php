@@ -1,12 +1,14 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Api\Identity;
 
+	use Edde\Api\Deffered\IDeffered;
+
 	/**
-	 * This implementation is responsible for an identity authentification.
+	 * This implementation is resposnible for an identity authentification.
 	 */
-	interface IAuthenticator {
+	interface IAuthenticator extends IDeffered {
 		/**
 		 * name of auth method
 		 *
@@ -18,7 +20,7 @@
 		 * authenticate a given identity or throw an exception
 		 *
 		 * @param IIdentity $identity if not specified, global one is used
-		 * @param array     ...$credentials
+		 * @param array ...$credentials
 		 *
 		 * @return IAuthenticator
 		 */

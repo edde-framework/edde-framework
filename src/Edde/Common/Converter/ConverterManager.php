@@ -4,18 +4,14 @@
 	namespace Edde\Common\Converter;
 
 	use Edde\Api\Converter\ConverterException;
-	use Edde\Api\Converter\IContent;
-	use Edde\Api\Converter\IConvertable;
 	use Edde\Api\Converter\IConverter;
 	use Edde\Api\Converter\IConverterManager;
-	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Deffered\AbstractDeffered;
 
 	/**
-	 * Default implementation of a conversion manager.
+	 * Default implementation of a convertion manager.
 	 */
-	class ConverterManager extends Object implements IConverterManager {
-		use ConfigurableTrait;
+	class ConverterManager extends AbstractDeffered implements IConverterManager {
 		/**
 		 * @var IConverter[]
 		 */
@@ -39,32 +35,17 @@
 		 * @inheritdoc
 		 * @throws ConverterException
 		 */
-		public function convert($content, string $mime, array $targetList): IConvertable {
-			return $this->content(new Content($content, $mime), $targetList);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function content(IContent $content, array $targetList = null): IConvertable {
-			$exception = null;
-			$unknown = true;
-			$mime = $content->getMime();
-			foreach ($targetList ?? [] as $target) {
-				if ($mime === $target) {
-					return new Convertable(new PassConverter(), $content, $content->getMime());
-				}
-				if (isset($this->converterList[$id = ($mime . '|' . $target)])) {
-					$unknown = false;
-					try {
-						return new Convertable($this->converterList[$id], $content, $target);
-					} catch (\Exception $exception) {
-					}
-				}
+		public function convert($convert, string $source = null, string $target = null) {
+			if (empty($source) || empty($target)) {
+				return $convert;
 			}
-			if ($targetList === null || $mime === reset($targetList)) {
-				return new Convertable(new PassConverter(), $content, $content->getMime());
+			if ($source === $target) {
+				return $convert;
 			}
-			throw new ConverterException(sprintf('Cannot convert %ssource mime [%s] to any of [%s].', $unknown ? 'unknown/unsupported ' : '', $mime, implode(', ', $targetList)), 0, $exception);
+			$this->use();
+			if (isset($this->converterList[$mime = ($source . '|' . $target)]) === false) {
+				throw new ConverterException(sprintf('Cannot convert unknown source mime [%s] to [%s].', $source, $target));
+			}
+			return $this->converterList[$mime]->convert($convert, $source, $target, $mime);
 		}
 	}

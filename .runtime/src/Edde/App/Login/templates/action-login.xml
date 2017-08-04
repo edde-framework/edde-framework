@@ -1,5 +1,0 @@
-<div class="login">
-	<input name="login"/>
-	<input name="password"/>
-	<button class="click ajax" type="button" action="handle-login" bind=".login">login</button>
-</div>

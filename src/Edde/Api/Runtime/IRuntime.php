@@ -1,11 +1,15 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Api\Runtime;
 
-	interface IRuntime {
+	use Edde\Api\Deffered\IDeffered;
+
+	interface IRuntime extends IDeffered {
+		public function run(callable $callback);
+
 		/***
 		 * @return bool
 		 */
-		public function isConsoleMode(): bool;
+		public function isConsoleMode();
 	}

@@ -1,47 +1,54 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Api\Template;
 
 	use Edde\Api\Node\INode;
-	use Edde\Api\Node\ITreeTraversal;
 
-	interface IMacro extends ITreeTraversal {
+	/**
+	 * HtmlMacro is operating over whole Node.
+	 */
+	interface IMacro {
 		/**
-		 * register to the template all supported "names" related to this macro
+		 * @return string
+		 */
+		public function getName(): string;
+
+		/**
+		 * @return bool
+		 */
+		public function hasHelperSet(): bool;
+
+		/**
+		 * @return IHelperSet
+		 */
+		public function getHelperSet(): IHelperSet;
+
+		/**
+		 * pre-compile preparation of node tree; may return the same or a new macro which will be used as a new root
 		 *
+		 * @param INode $macro
 		 * @param ICompiler $compiler
 		 *
-		 * @return IMacro
+		 * @return INode|null
 		 */
-		public function register(ICompiler $compiler): IMacro;
+		public function inline(INode $macro, ICompiler $compiler);
 
 		/**
-		 * return list of names to register
+		 * executed in compile time
 		 *
-		 * @return string[]
+		 * @param INode $macro
+		 * @param ICompiler $compiler
+		 *
+		 * @return mixed
 		 */
-		public function getNameList(): array;
+		public function compile(INode $macro, ICompiler $compiler);
 
 		/**
-		 * when there is inline node detected over the macro
+		 * executed in runtime phase
 		 *
-		 * @param IMacro     $source
-		 * @param ICompiler  $compiler
-		 * @param \Iterator  $iterator
-		 * @param INode      $node
-		 * @param string     $name
-		 * @param mixed|null $value
+		 * @param INode $macro
+		 * @param ICompiler $compiler
 		 */
-		public function inline(IMacro $source, ICompiler $compiler, \Iterator $iterator, INode $node, string $name, $value = null);
-
-		/**
-		 * register macro event around enter/node/leave
-		 *
-		 * @param mixed    $event
-		 * @param callable $callback
-		 *
-		 * @return IMacro
-		 */
-		public function on($event, callable $callback): IMacro;
+		public function macro(INode $macro, ICompiler $compiler);
 	}

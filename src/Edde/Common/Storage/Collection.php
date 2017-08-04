@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Storage;
 
@@ -7,16 +7,16 @@
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Storage\ICollection;
 	use Edde\Api\Storage\IStorage;
-	use Edde\Common\Object;
+	use Edde\Common\AbstractObject;
 
 	/**
 	 * Default implementation of collection.
 	 */
-	class Collection extends Object implements ICollection {
+	class Collection extends AbstractObject implements ICollection {
 		/**
 		 * @var string
 		 */
-		protected $schema;
+		protected $crate;
 		/**
 		 * @var IStorage
 		 */
@@ -32,21 +32,21 @@
 		/**
 		 * @var string
 		 */
-		protected $crate;
+		protected $schema;
 
 		/**
-		 * @param string        $schema
-		 * @param IStorage      $storage
+		 * @param string $crate
+		 * @param IStorage $storage
 		 * @param ICrateFactory $crateFactory
-		 * @param IQuery        $query
-		 * @param string        $crate
+		 * @param IQuery $query
+		 * @param string $schema
 		 */
-		public function __construct(string $schema, IStorage $storage, ICrateFactory $crateFactory, IQuery $query, string $crate = null) {
-			$this->schema = $schema;
+		public function __construct(string $crate, IStorage $storage, ICrateFactory $crateFactory, IQuery $query, string $schema = null) {
+			$this->crate = $crate;
 			$this->storage = $storage;
 			$this->crateFactory = $crateFactory;
 			$this->query = $query;
-			$this->crate = $crate;
+			$this->schema = $schema;
 		}
 
 		/**
@@ -62,7 +62,7 @@
 		public function getIterator() {
 			/** @noinspection ForeachSourceInspection */
 			foreach ($this->storage->execute($this->query) as $item) {
-				$crate = $this->crateFactory->crate($this->schema, (array)$item, $this->crate);
+				$crate = $this->crateFactory->crate($this->crate, $this->schema, (array)$item);
 				$schema = $crate->getSchema();
 				foreach ($schema->getLinkList() as $schemaLink) {
 					$crate->proxy($schemaLink->getName(), [

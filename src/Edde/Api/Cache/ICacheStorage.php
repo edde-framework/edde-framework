@@ -1,17 +1,17 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Api\Cache;
 
-	use Edde\Api\Config\IConfigurable;
+	use Edde\Api\Deffered\IDeffered;
 
 	/**
 	 * Cache storage implementation.
 	 */
-	interface ICacheStorage extends IConfigurable {
+	interface ICacheStorage extends IDeffered {
 		/**
 		 * @param string $id
-		 * @param mixed  $save must be serializable
+		 * @param mixed $save must be serializable
 		 *
 		 * @return mixed returns input $save
 		 */

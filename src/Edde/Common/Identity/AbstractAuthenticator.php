@@ -1,15 +1,15 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Identity;
 
 	use Edde\Api\Identity\IAuthenticator;
-	use Edde\Common\Object;
+	use Edde\Common\Deffered\AbstractDeffered;
 
 	/**
 	 * Abstract implementation for all authenticators.
 	 */
-	abstract class AbstractAuthenticator extends Object implements IAuthenticator {
+	abstract class AbstractAuthenticator extends AbstractDeffered implements IAuthenticator {
 		/**
 		 * @var string
 		 */

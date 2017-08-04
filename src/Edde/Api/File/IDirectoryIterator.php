@@ -1,9 +1,11 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Api\File;
 
-	interface IDirectoryIterator extends \IteratorAggregate {
+	use Edde\Api\Deffered\IDeffered;
+
+	interface IDirectoryIterator extends \IteratorAggregate, IDeffered {
 		/**
 		 * add directory to iterator; only before use
 		 *

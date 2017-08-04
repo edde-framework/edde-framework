@@ -1,24 +1,24 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Converter;
 
+	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Converter\ConverterException;
-	use Edde\Api\Converter\IContent;
 	use Edde\Api\Converter\IConverter;
-	use Edde\Common\Object;
+	use Edde\Common\AbstractObject;
 
 	/**
 	 * Common stuff for converter implementation.
 	 */
-	abstract class AbstractConverter extends Object implements IConverter {
+	abstract class AbstractConverter extends AbstractObject implements IConverter, ILazyInject {
 		/**
 		 * @var string[]
 		 */
 		protected $mimeList;
 
 		/**
-		 * @param array|string      $source
+		 * @param array|string $source
 		 * @param array|string|null $target
 		 *
 		 * @return $this
@@ -45,17 +45,10 @@
 		}
 
 		/**
-		 * @inheritdoc
-		 */
-		public function content(IContent $content, string $target = null): IContent {
-			return $this->convert($content->getContent(), $content->getMime(), $target);
-		}
-
-		/**
 		 * helper method to throw an exception if input is not supported
 		 *
-		 * @param mixed     $convert
-		 * @param string    $target
+		 * @param mixed $convert
+		 * @param string $target
 		 * @param bool|null $check
 		 *
 		 * @throws ConverterException
@@ -68,13 +61,12 @@
 		}
 
 		/**
-		 * @param string $mime
+		 * @param string $source
 		 * @param string $target
 		 *
-		 * @return IContent
 		 * @throws ConverterException
 		 */
-		protected function exception(string $mime, string $target): IContent {
-			throw new ConverterException(sprintf('Unsupported conversion in [%s] from [%s] to [%s].', static::class, $mime, $target));
+		protected function exception(string $source, string $target) {
+			throw new ConverterException(sprintf('Unsuported conversion in [%s] from [%s] to [%s].', static::class, $source, $target));
 		}
 	}

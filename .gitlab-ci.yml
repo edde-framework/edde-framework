@@ -1,0 +1,24 @@
+variables:
+    PROJECT: edde-framework
+
+stages:
+    - test
+    - deploy
+
+test:
+    stage: test
+    script:
+        - php bin/phpunit.phar --coverage-text --colors=never
+    artifacts:
+        name: $PROJECT-$CI_BUILD_REF_NAME-failed
+        untracked: true
+        when: on_failure
+
+deploy:
+    stage: deploy
+    script:
+        - curl -X POST -F token=53839921cd8d3e4844a8203d3bedf9 -F ref=master https://edde-framework.org/api/v3/projects/4/trigger/builds
+    only:
+        - master
+        - tags
+        - /^\d+\.\d+$/

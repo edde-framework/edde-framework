@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Crate;
 
@@ -9,9 +9,9 @@
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Common\Object;
+	use Edde\Common\AbstractObject;
 
-	class Collection extends Object implements ICollection {
+	class Collection extends AbstractObject implements ICollection {
 		/**
 		 * @var ICrateFactory
 		 */
@@ -20,9 +20,6 @@
 		 * @var ISchema
 		 */
 		protected $schema;
-		/**
-		 * @var string
-		 */
 		protected $crate;
 		/**
 		 * @var ICrate[]
@@ -31,8 +28,8 @@
 
 		/**
 		 * @param ICrateFactory $crateFactory
-		 * @param string        $schema
-		 * @param string        $crate
+		 * @param string $schema
+		 * @param string $crate
 		 */
 		public function __construct(ICrateFactory $crateFactory, string $schema, string $crate = null) {
 			$this->crateFactory = $crateFactory;
@@ -40,35 +37,24 @@
 			$this->crate = $crate;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
 		public function getSchema(): ISchema {
 			return $this->schema;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
 		public function createCrate(array $push = null): ICrate {
-			return $this->crateFactory->crate($this->schema, $push, $this->crate ?: $this->schema);
+			return $this->crateFactory->crate($this->crate ?: $this->schema, $this->schema, $push);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
 		public function addCrate(ICrate $crate): ICollection {
 			$schema = $crate->getSchema();
 			if ($schema->getSchemaName() !== $this->schema) {
-				throw new CrateException(sprintf('Cannot add crate with different schema [%s] to the collection [%s].', $crate->getSchema()->getSchemaName(), $this->schema));
+				throw new CrateException(sprintf('Cannot add crate with different schema [%s] to the collection [%s].', $crate->getSchema()
+					->getSchemaName(), $this->schema));
 			}
 			$this->crateList[] = $crate;
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
 		public function getIterator() {
 			return new ArrayIterator($this->crateList);
 		}

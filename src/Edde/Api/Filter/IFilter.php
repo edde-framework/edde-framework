@@ -1,11 +1,9 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Api\Filter;
 
-	use Edde\Api\Config\IConfigurable;
-
-	interface IFilter extends IConfigurable {
+	interface IFilter {
 		/**
 		 * filter input to value to a output value; if filtering (conversion) cannot be done, exception should be thrown
 		 *

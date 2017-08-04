@@ -1,13 +1,23 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Ext\Database\Sqlite;
 
-	use Edde\Api\Database\LazyDriverTrait;
+	use Edde\Api\Database\IDriver;
 	use Edde\Common\Query\AbstractStaticQueryFactory;
 
 	class SqliteQueryFactory extends AbstractStaticQueryFactory {
-		use LazyDriverTrait;
+		/**
+		 * @var IDriver
+		 */
+		protected $driver;
+
+		/**
+		 * @param IDriver $driver
+		 */
+		public function __construct(IDriver $driver) {
+			$this->driver = $driver;
+		}
 
 		/**
 		 * @inheritdoc

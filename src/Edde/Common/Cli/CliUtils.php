@@ -1,14 +1,14 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Common\Cli;
 
-	use Edde\Common\Object;
+	use Edde\Common\AbstractObject;
 
 	/**
 	 * Usefull set of command line utilities.
 	 */
-	class CliUtils extends Object {
+	class CliUtils extends AbstractObject {
 		/**
 		 * credit for this method goes here:
 		 * https://github.com/pwfisher/CommandLine.php/blob/master/CommandLine.php

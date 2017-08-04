@@ -1,16 +1,15 @@
 <?php
-	declare(strict_types=1);
+	declare(strict_types = 1);
 
 	namespace Edde\Api\Query;
 
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Node\INode;
 
 	/**
 	 * General cache for IStaticQuery creation; instance of this cache is usually storage's proprietary
 	 * property - every storage can have it's own IStaticQueryFactory.
 	 */
-	interface IStaticQueryFactory extends IConfigurable {
+	interface IStaticQueryFactory {
 		/**
 		 * @param IQuery $query
 		 *
