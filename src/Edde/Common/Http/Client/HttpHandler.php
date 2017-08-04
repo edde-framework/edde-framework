@@ -96,6 +96,16 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function headers(array $headers): IHttpHandler {
+			foreach ($headers as $k => $v) {
+				$this->header($k, $v);
+			}
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function keepConnectionAlive(): IHttpHandler {
 			$this->header('Connection', 'keep-alive');
 			return $this;
