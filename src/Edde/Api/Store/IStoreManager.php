@@ -43,4 +43,24 @@
 		 * @return string
 		 */
 		public function getCurrentName(): string;
+
+		/**
+		 * save value to the given store (select -> restore)
+		 *
+		 * @param string $name
+		 * @param        $value
+		 * @param string $store
+		 *
+		 * @return IStoreManager
+		 */
+		public function save(string $name, $value, string $store): IStoreManager;
+
+		/**
+		 * @param string $name
+		 * @param string $store
+		 * @param null   $default
+		 *
+		 * @return mixed
+		 */
+		public function load(string $name, string $store, $default = null);
 	}

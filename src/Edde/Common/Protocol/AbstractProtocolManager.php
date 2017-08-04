@@ -7,22 +7,31 @@
 	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Protocol\IProtocolManager;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
+	use Edde\Api\Store\LazyStoreManagerTrait;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
+	use Edde\Ext\Session\SessionStore;
 
 	abstract class AbstractProtocolManager extends Object implements IProtocolManager {
 		use LazyProtocolServiceTrait;
+		use LazyStoreManagerTrait;
 		use ConfigurableTrait;
-		/**
-		 * @var IElement[]
-		 */
-		protected $elementList = [];
+		const ELEMENT_LIST_ID = 'protocol-manager/element-list';
 
 		/**
 		 * @inheritdoc
 		 */
 		public function queue(IElement $element): IProtocolManager {
-			$this->elementList[$element->getId()] = $element;
+			$this->storeManager->select(SessionStore::class);
+			try {
+				$this->storeManager->block(self::ELEMENT_LIST_ID);
+				$elementList = $this->storeManager->get(self::ELEMENT_LIST_ID, []);
+				$elementList[$element->getId()] = $element;
+				$this->storeManager->set(self::ELEMENT_LIST_ID, $elementList);
+			} finally {
+				$this->storeManager->restore();
+				$this->storeManager->unlock(self::ELEMENT_LIST_ID);
+			}
 			return $this;
 		}
 
@@ -40,10 +49,17 @@
 		 * @inheritdoc
 		 */
 		public function createPacket(IElement $reference = null): IPacket {
-			$packet = $this->protocolService->createPacket($reference);
-			$packet->elements($this->elementList);
-			$this->elementList = [];
-			return $packet;
+			$this->storeManager->select(SessionStore::class);
+			try {
+				$this->storeManager->block(self::ELEMENT_LIST_ID);
+				$packet = $this->protocolService->createPacket($reference);
+				$packet->elements($e = $this->storeManager->get(self::ELEMENT_LIST_ID, []));
+				$this->storeManager->remove(self::ELEMENT_LIST_ID);
+				return $packet;
+			} finally {
+				$this->storeManager->restore();
+				$this->storeManager->unlock(self::ELEMENT_LIST_ID);
+			}
 		}
 
 		/**
