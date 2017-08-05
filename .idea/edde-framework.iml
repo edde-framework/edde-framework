@@ -27,5 +27,15 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library name="PHP" type="php">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/lib/composer" />
+        </CLASSES>
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/lib/composer" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>
