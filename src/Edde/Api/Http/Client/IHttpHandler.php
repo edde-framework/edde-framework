@@ -60,6 +60,13 @@
 		public function header(string $name, string $value): IHttpHandler;
 
 		/**
+		 * @param array $headers
+		 *
+		 * @return IHttpHandler
+		 */
+		public function headers(array $headers): IHttpHandler;
+
+		/**
 		 * if stirng is provided, temp dir will be used
 		 *
 		 * @param IFile|string $file

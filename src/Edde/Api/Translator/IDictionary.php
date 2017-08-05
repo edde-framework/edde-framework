@@ -18,4 +18,11 @@
 		 * @return null|string
 		 */
 		public function translate(string $id, string $language);
+
+		/**
+		 * return arra/generator with current set of available words
+		 *
+		 * @return \Traversable
+		 */
+		public function getWordList();
 	}

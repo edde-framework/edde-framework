@@ -41,7 +41,7 @@
 					$referenceList[] = $node;
 				}
 			}
-			$packet = $this->protocolManager->createPacket($element);
+			$packet = $this->protocolManager->createPacket($element->getMeta('::store'), $element);
 			$packet->references($referenceList);
 			return $packet;
 		}

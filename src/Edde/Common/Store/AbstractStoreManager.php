@@ -121,6 +121,31 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function save(string $name, $value, string $store): IStoreManager {
+			$this->select($store);
+			try {
+				$this->current->set($name, $value);
+				return $this;
+			} finally {
+				$this->restore();
+			}
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function load(string $name, string $store, $default = null) {
+			$this->select($store);
+			try {
+				return $this->current->get($name, $default);
+			} finally {
+				$this->restore();
+			}
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		protected function handleInit() {
 			parent::handleInit();
 			$this->stack = new \SplStack();

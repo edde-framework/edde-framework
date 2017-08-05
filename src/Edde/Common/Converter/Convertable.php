@@ -18,13 +18,13 @@
 		 */
 		protected $content;
 		/**
-		 * @var IContent
-		 */
-		protected $result;
-		/**
 		 * @var string
 		 */
 		protected $target;
+		/**
+		 * @var IContent
+		 */
+		protected $result;
 
 		/**
 		 * A biologist, a chemist and a statistician are out hunting.

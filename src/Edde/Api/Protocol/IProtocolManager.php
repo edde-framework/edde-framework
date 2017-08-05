@@ -11,27 +11,30 @@
 		 * this method  is useful to collect elements around the world and then send
 		 * them to somewhere (e.g. client)
 		 *
-		 * @param IElement $element
+		 * @param IElement    $element
+		 * @param string|null $store
 		 *
 		 * @return IProtocolManager
 		 */
-		public function queue(IElement $element): IProtocolManager;
+		public function queue(IElement $element, string $store = null): IProtocolManager;
 
 		/**
-		 * @param IElement[] $elementList
+		 * @param IElement[]  $elementList
+		 * @param string|null $store
 		 *
 		 * @return IProtocolManager
 		 */
-		public function queueList($elementList): IProtocolManager;
+		public function queueList(array $elementList, string $store = null): IProtocolManager;
 
 		/**
 		 * create packet with payload of all available elements and references
 		 *
+		 * @param string|null   $store
 		 * @param IElement|null $reference
 		 *
 		 * @return IPacket
 		 */
-		public function createPacket(IElement $reference = null): IPacket;
+		public function createPacket(string $store = null, IElement $reference = null): IPacket;
 
 		/**
 		 * execute the given element; if the element is async, it's moved to job queue
