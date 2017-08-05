@@ -13,7 +13,7 @@
 	abstract class AbstractDictionary extends Object implements IDictionary {
 		use ConfigurableTrait;
 		/**
-		 * @var string[]
+		 * @var string[][]
 		 */
 		protected $translationList = [];
 
@@ -25,5 +25,12 @@
 				return null;
 			}
 			return $this->translationList[$language][$id];
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getWordList() {
+			return $this->translationList;
 		}
 	}

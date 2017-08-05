@@ -20,10 +20,6 @@
 		 * @var IFile[]
 		 */
 		protected $fileList = [];
-		/**
-		 * @var string[]
-		 */
-		protected $dictionary;
 
 		/**
 		 * register a file to csv dictionary as a source
