@@ -21,8 +21,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function queue(IElement $element): IProtocolManager {
-			$this->storeManager->select(SessionStore::class);
+		public function queue(IElement $element, string $store = null): IProtocolManager {
+			$this->storeManager->select($store ?: SessionStore::class);
 			try {
 				$this->storeManager->block(self::ELEMENT_LIST_ID);
 				$elementList = $this->storeManager->get(self::ELEMENT_LIST_ID, []);
@@ -38,9 +38,9 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function queueList($elementList): IProtocolManager {
+		public function queueList(array $elementList, string $store = null): IProtocolManager {
 			foreach ($elementList as $element) {
-				$this->queue($element);
+				$this->queue($element, $store);
 			}
 			return $this;
 		}
@@ -48,8 +48,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function createPacket(IElement $reference = null): IPacket {
-			$this->storeManager->select(SessionStore::class);
+		public function createPacket(string $store = null, IElement $reference = null): IPacket {
+			$this->storeManager->select($store ?: SessionStore::class);
 			try {
 				$this->storeManager->block(self::ELEMENT_LIST_ID);
 				$packet = $this->protocolService->createPacket($reference);

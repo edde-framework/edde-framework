@@ -15,6 +15,7 @@
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
+	use Edde\Api\Store\LazyStoreManagerTrait;
 	use Edde\Api\Store\LazyStoreTrait;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\Container\UnknownFactoryException;
@@ -23,6 +24,7 @@
 	use Edde\Common\Protocol\Request\MissingResponseException;
 	use Edde\Common\Protocol\Request\Request;
 	use Edde\Common\Protocol\Request\UnhandledRequestException;
+	use Edde\Common\Store\FileStore;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Test\TestCase;
 	use Edde\Test\ExecutableService;
@@ -37,6 +39,7 @@
 		use LazyEventBusTrait;
 		use LazyConverterManagerTrait;
 		use LazyStoreTrait;
+		use LazyStoreManagerTrait;
 		use LazyJobManagerTrait;
 		use LazyProtocolManagerTrait;
 		use LazyElementStoreTrait;
@@ -111,7 +114,7 @@
 				new Request('do something cool', [], '789'),
 				new Event('foobar', [], '321'),
 			]);
-			self::assertEmpty($this->protocolManager->createPacket()->getElementNode('elements'));
+			self::assertEmpty($this->protocolManager->createPacket(FileStore::class)->getElementNode('elements'));
 		}
 
 		public function testPacketQueue() {
@@ -121,8 +124,8 @@
 				new Event('foobar', [], '456'),
 				new Request('do something cool', [], '789'),
 				new Event('foobar', [], '321'),
-			]);
-			$packet = $this->protocolManager->createPacket();
+			], FileStore::class);
+			$packet = $this->protocolManager->createPacket(FileStore::class);
 			$packet->setId('123456');
 			$packet->getElementNode('elements')->setId('moo');
 			$expect = (object)[
@@ -159,6 +162,7 @@
 		public function testServiceRequest() {
 			$this->store->drop();
 			$packet = new Packet('::the-void');
+			$packet->setMeta('::store', FileStore::class);
 			$packet->setId('321');
 			$request = new Request('there is nobody to handle this');
 			$packet->element($request);
@@ -225,8 +229,10 @@
 
 		public function testAsyncPacket() {
 			$this->store->drop();
+			$this->storeManager->select(FileStore::class);
 			/** @var $packet IElement */
 			$packet = new Packet('::the-void');
+			$packet->setMeta('::store', FileStore::class);
 			$packet->setId('the-original-packet');
 			$packet->element($request = new Request('there is nobody to handle this'));
 			$packet->element($request2 = new Request('testquest'));
@@ -273,7 +279,8 @@
 								],
 							],
 							'::meta'   => [
-								'store' => true,
+								'store'   => true,
+								'::store' => FileStore::class,
 							],
 						],
 					],
