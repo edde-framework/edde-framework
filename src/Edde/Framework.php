@@ -33,7 +33,7 @@
 		 * @return string
 		 */
 		public function getCodename() {
-			return 'The Unepic Epicness';
+			return 'The Pooping Unicorn';
 		}
 
 		public function __toString() {
