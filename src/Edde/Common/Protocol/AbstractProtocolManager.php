@@ -53,7 +53,7 @@
 			try {
 				$this->storeManager->block(self::ELEMENT_LIST_ID);
 				$packet = $this->protocolService->createPacket($reference);
-				$packet->elements($e = $this->storeManager->get(self::ELEMENT_LIST_ID, []));
+				$packet->elements($this->storeManager->get(self::ELEMENT_LIST_ID, []));
 				$this->storeManager->remove(self::ELEMENT_LIST_ID);
 				return $packet;
 			} finally {
