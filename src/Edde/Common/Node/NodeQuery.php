@@ -70,6 +70,7 @@
 		 */
 		static public function last(INode $node, $query, $default = null) {
 			$n = null;
+			/** @noinspection PhpStatementHasEmptyBodyInspection */
 			foreach (self::node($node, $query) as $n) {
 				;
 			}

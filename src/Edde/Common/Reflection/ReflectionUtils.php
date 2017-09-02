@@ -15,7 +15,7 @@
 	 */
 	class ReflectionUtils extends Object {
 		/**
-		 * @var \ReflectionProperty[]|ReflectionClass[]|ReflectionMethod[]
+		 * @var \ReflectionProperty[]|ReflectionClass[]|ReflectionMethod[][]
 		 */
 		static protected $cache;
 

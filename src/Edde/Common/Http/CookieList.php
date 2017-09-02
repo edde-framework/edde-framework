@@ -30,8 +30,6 @@
 		 * @inheritdoc
 		 * @throws HttpException
 		 */
-
-		/** @noinspection PhpMissingParentCallCommonInspection */
 		public function set(string $name, $value): IList {
 			throw new HttpException(sprintf('Cannot directly set value [%s] to the cookie list; use [%s::addCookie()] instead.', $name, static::class));
 		}

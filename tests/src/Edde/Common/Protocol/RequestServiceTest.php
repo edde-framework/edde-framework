@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Protocol;
 
-	use Edde\Api\Application\IContext;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
@@ -15,7 +14,6 @@
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Test\TestCase;
 	use Edde\Test\ExecutableService;
-	use Edde\Test\TestContext;
 
 	require_once __DIR__ . '/../assets/assets.php';
 
@@ -62,7 +60,6 @@
 
 		protected function setUp() {
 			ContainerFactory::autowire($this, [
-				IContext::class => TestContext::class,
 				new ClassFactory(),
 				new CascadeFactory(),
 			]);

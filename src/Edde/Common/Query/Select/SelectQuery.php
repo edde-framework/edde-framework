@@ -89,6 +89,6 @@
 			$this->selectPropertyFragment = new SelectFragment($selectListNode, $this);
 			$this->fromPropertyFragment = new FromFragment($fromListNode, $this);
 			$this->whereExpressionFragment = new WhereExpressionFragment($whereNode);
-			$this->orderFragment = new OrderFragment($orderNode, $this);
+			$this->orderFragment = new OrderFragment($orderNode);
 		}
 	}

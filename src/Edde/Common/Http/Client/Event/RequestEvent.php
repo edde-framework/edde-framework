@@ -18,6 +18,7 @@
 		 * @param IHttpRequest $httpRequest
 		 */
 		public function __construct(IHttpRequest $httpRequest) {
+			parent::__construct();
 			$this->httpRequest = $httpRequest;
 		}
 

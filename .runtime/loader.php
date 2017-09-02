@@ -8,18 +8,11 @@
 	 */
 	declare(strict_types=1);
 
-	use Edde\Api\Application\IContext;
 	use Edde\Api\Cache\ICacheManager;
-	use Edde\Api\Resource\IResourceProvider;
-	use Edde\Api\Router\IRouterService;
-	use Edde\App\Application\AppContext;
-	use Edde\App\Router\RouterServiceConfigurator;
 	use Edde\Common\Container\Factory\CascadeFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Ext\Cache\ContextCacheManagerConfigurator;
 	use Edde\Ext\Container\ContainerFactory;
-	use Edde\Ext\Router\RestRouter;
-	use Edde\Ext\Router\RestRouterConfigurator;
 	use Tracy\Debugger;
 
 	/**
@@ -49,27 +42,10 @@
 	 * There is also option to create only container itself without any internal dependencies (not so much recommended except
 	 * you are heavy masochist).
 	 */
-	return ContainerFactory::containerWithRoot($factoryList = array_merge([
-		/**
-		 * With this piece of shit are problems all the times, but it is needed to let this application know where it
-		 * has a (repository) root.
-		 *
-		 * All other directories should be (as by default they are) dependent on this interface.
-		 */
-		// IRootDirectory::class    => ContainerFactory::instance(RootDirectory::class, [__DIR__]),
-		/**
-		 * This application is using specific contexts to separate user experience
-		 */
-		IContext::class          => AppContext::class,
-		/**
-		 * When context is changes, one also should (not necessarily) change resource provider to get
-		 * ability to search for assets (resources) based on the current context.
-		 */
-		IResourceProvider::class => IContext::class,
-		/**
-		 * This is quite magical, but local loader file should be able to override services defined by default, thus
-		 * it must be after application dependency definitions.
-		 */
+	return ContainerFactory::containerWithRoot($factoryList = array_merge([/**
+	 * This is quite magical, but local loader file should be able to override services defined by default, thus
+	 * it must be after application dependency definitions.
+	 */
 	], is_array($local = @include $local) ? $local : [], [
 		/**
 		 * This stranger here must be last, because it's canHandle method is able to kill a lot of dependencies and
@@ -83,17 +59,8 @@
 		new CascadeFactory(),
 	]), [
 		/**
-		 * As we have some custom configuration for router service, we have to register proper configurator for it.
-		 */
-		IRouterService::class => RouterServiceConfigurator::class,
-		/**
 		 * Because we are using context, we also have to properly setup cache manager (by setting proper namespace from
 		 * context).
 		 */
-		ICacheManager::class  => ContextCacheManagerConfigurator::class,
-		/**
-		 * There is some configuration of the RestRouter; if there would be this guy created, this configurator would
-		 * be executed.
-		 */
-		RestRouter::class     => RestRouterConfigurator::class,
+		ICacheManager::class => ContextCacheManagerConfigurator::class,
 	]);

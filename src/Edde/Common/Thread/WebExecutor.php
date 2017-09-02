@@ -8,6 +8,7 @@
 	use Edde\Api\Url\IUrl;
 	use Edde\Api\Url\UrlException;
 	use Edde\Common\Http\RequestUrl;
+	use Edde\Common\Url\Url;
 
 	class WebExecutor extends AbstractExecutor {
 		use LazyHttpClientTrait;
@@ -38,7 +39,7 @@
 		public function execute(array $parameterList = null): IExecutor {
 			$url = $this->url;
 			if ($parameterList) {
-				$url = clone $url;
+				$url = Url::create($url);
 				$url->addParameterList($parameterList);
 			}
 			$this->httpClient->touch($url);

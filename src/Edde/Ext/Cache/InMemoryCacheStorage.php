@@ -23,7 +23,6 @@
 		 * @inheritdoc
 		 */
 		public function load($id) {
-			/** @noinspection NotOptimalIfConditionsInspection */
 			if (isset($this->storage[$id]) || array_key_exists($id, $this->storage)) {
 				$this->hit++;
 				return $this->storage[$id];
@@ -38,13 +37,5 @@
 		public function invalidate() {
 			$this->storage = [];
 			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function __sleep() {
-			$this->storage = [];
-			return parent::__sleep();
 		}
 	}

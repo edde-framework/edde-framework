@@ -21,6 +21,7 @@
 		 * "It makes no difference anyway."
 		 *
 		 * @param string $dsn
+		 * @param array  $optionList
 		 */
 		public function __construct(string $dsn, array $optionList = []) {
 			$this->dsn = $dsn;

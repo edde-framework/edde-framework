@@ -10,7 +10,7 @@
 	use Edde\Common\Object;
 	use RecursiveDirectoryIterator;
 	use RecursiveIteratorIterator;
-	use Symfony\Component\Finder\SplFileInfo;
+	use SplFileInfo;
 
 	/**
 	 * Representation of directory on the filesystem.

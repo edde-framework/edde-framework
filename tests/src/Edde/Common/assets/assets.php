@@ -109,18 +109,6 @@
 		}
 	}
 
-	class TestContext extends AbstractContext {
-		/**
-		 * @inheritdoc
-		 */
-		public function cascade(string $delimiter, string $name = null): array {
-			return [
-				'Edde' . $delimiter . $name,
-				'Edde' . $delimiter . 'Test' . ($name ? $delimiter . $name : ''),
-			];
-		}
-	}
-
 	class DummyStore extends AbstractStore {
 		public function set(string $name, $value): IStore {
 			return $this;

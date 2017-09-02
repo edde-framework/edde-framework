@@ -3,9 +3,6 @@
 
 	namespace Edde\Ext\Container;
 
-	use Edde\Api\Application\IApplication;
-	use Edde\Api\Application\IContext;
-	use Edde\Api\Application\IResponseManager;
 	use Edde\Api\Asset\IAssetDirectory;
 	use Edde\Api\Asset\IAssetStorage;
 	use Edde\Api\Asset\IStorageDirectory;
@@ -29,14 +26,8 @@
 	use Edde\Api\Html\IHtmlGenerator;
 	use Edde\Api\Http\Client\IHttpClient;
 	use Edde\Api\Http\IHostUrl;
-	use Edde\Api\Http\IHttpRequest;
-	use Edde\Api\Http\IHttpResponse;
-	use Edde\Api\Identity\IAuthenticatorManager;
-	use Edde\Api\Identity\IIdentity;
-	use Edde\Api\Identity\IIdentityManager;
 	use Edde\Api\Job\IJobManager;
 	use Edde\Api\Job\IJobQueue;
-	use Edde\Api\Link\ILinkFactory;
 	use Edde\Api\Lock\ILockDirectory;
 	use Edde\Api\Lock\ILockManager;
 	use Edde\Api\Log\ILogDirectory;
@@ -48,7 +39,6 @@
 	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\IResourceProvider;
-	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Session\IFingerprint;
@@ -58,24 +48,15 @@
 	use Edde\Api\Store\IStore;
 	use Edde\Api\Store\IStoreDirectory;
 	use Edde\Api\Store\IStoreManager;
-	use Edde\Api\Template\ICompiler;
-	use Edde\Api\Template\ITemplate;
-	use Edde\Api\Template\ITemplateDirectory;
-	use Edde\Api\Template\ITemplateManager;
 	use Edde\Api\Thread\IExecutor;
 	use Edde\Api\Thread\IThreadManager;
 	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Upgrade\IUpgradeManager;
-	use Edde\Api\Web\IJavaScriptCompiler;
-	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Xml\IXmlExport;
 	use Edde\Api\Xml\IXmlParser;
-	use Edde\Common\Application\Application;
-	use Edde\Common\Application\ResponseManager;
 	use Edde\Common\Asset\AssetDirectory;
 	use Edde\Common\Asset\AssetStorage;
 	use Edde\Common\Asset\StorageDirectory;
-	use Edde\Common\Cache\Cache;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Container\Container;
@@ -96,10 +77,6 @@
 	use Edde\Common\Html\Html5Generator;
 	use Edde\Common\Http\Client\HttpClient;
 	use Edde\Common\Http\HostUrl;
-	use Edde\Common\Http\HttpRequest;
-	use Edde\Common\Http\HttpResponse;
-	use Edde\Common\Identity\AuthenticatorManager;
-	use Edde\Common\Identity\IdentityManager;
 	use Edde\Common\Job\JobManager;
 	use Edde\Common\Job\JobQueue;
 	use Edde\Common\Lock\FileLockManager;
@@ -113,7 +90,6 @@
 	use Edde\Common\Protocol\ProtocolService;
 	use Edde\Common\Protocol\Request\RequestService;
 	use Edde\Common\Resource\ResourceManager;
-	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\Runtime;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Session\SessionDirectory;
@@ -121,33 +97,21 @@
 	use Edde\Common\Session\SessionManager;
 	use Edde\Common\Store\StoreDirectory;
 	use Edde\Common\Store\StoreManager;
-	use Edde\Common\Template\Compiler;
-	use Edde\Common\Template\Template;
-	use Edde\Common\Template\TemplateDirectory;
-	use Edde\Common\Template\TemplateManager;
 	use Edde\Common\Thread\ThreadManager;
 	use Edde\Common\Thread\WebExecutor;
 	use Edde\Common\Translator\Translator;
 	use Edde\Common\Upgrade\AbstractUpgradeManager;
-	use Edde\Common\Web\JavaScriptCompiler;
-	use Edde\Common\Web\StyleSheetCompiler;
 	use Edde\Common\Xml\XmlExport;
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Ext\Cache\FlatFileCacheStorage;
-	use Edde\Ext\Cache\InMemoryCacheStorage;
 	use Edde\Ext\Converter\ConverterManagerConfigurator;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Database\Sqlite\SqliteDsn;
 	use Edde\Ext\Job\ThreadManagerConfigurator;
-	use Edde\Ext\Link\LinkFactoryConfigurator;
 	use Edde\Ext\Log\LogServiceConfigurator;
 	use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 	use Edde\Ext\Protocol\RequestServiceConfigurator;
-	use Edde\Ext\Resource\ResourceManagerConfigurator;
-	use Edde\Ext\Router\RouterServiceConfigurator;
 	use Edde\Ext\Store\StoreManagerConfigurator;
-	use Edde\Ext\Template\CompilerConfigurator;
-	use Edde\Ext\Thread\WebExecutorConfigurator;
 
 	class ContainerFactory extends Object {
 		/**
@@ -219,7 +183,7 @@
 			 * “Well, I should have mentioned this before, but I’m actually a taxi driver, and the fare back to town is $25…”
 			 */
 			/** @var $container IContainer */
-			$container = new Container(new Cache(new InMemoryCacheStorage()));
+			$container = new Container();
 			/**
 			 * this trick ensures that container is properly configured when some internal dependency needs it while container is construction
 			 */
@@ -323,8 +287,8 @@
 		/**
 		 * special kind of factory which will thrown an exception of the given message; it's useful for say which internal dependencies are not met
 		 *
-		 * @param string $message
-		|		 * @param string|null $class
+		 * @param string      $message
+		 * @param string|null $class
 		 *
 		 * @return object
 		 */
@@ -366,10 +330,6 @@
 					'.assets',
 					AssetDirectory::class,
 				]),
-				ITemplateDirectory::class => self::proxy(IAssetDirectory::class, 'directory', [
-					'templates',
-					TemplateDirectory::class,
-				]),
 				ILogDirectory::class => self::proxy(IRootDirectory::class, 'directory', [
 					'logs',
 					LogDirectory::class,
@@ -381,7 +341,7 @@
 				]),
 
 				/**
-				 * Happy cacheing stuff here :)
+				 * Happy caching stuff here :)
 				 */
 				ICacheManager::class => CacheManager::class,
 				ICache::class => ICacheManager::class,
@@ -393,22 +353,7 @@
 
 				IRuntime::class => Runtime::class,
 
-				/**
-				 * Application request/response stuff
-				 */
-				IApplication::class => Application::class,
-				IContext::class => self::exception(sprintf('You have to register implementation of [%s] specific for you application.', IContext::class)),
-				IRouterService::class => RouterService::class,
-				IHttpRequest::class => HttpRequest::class . '::createHttpRequest',
-				IHttpResponse::class => HttpResponse::class . '::createHttpResponse',
-				IResponseManager::class => ResponseManager::class,
-
 				IHostUrl::class => HostUrl::class . '::createHostUrl',
-
-				/**
-				 * Link generation
-				 */
-				ILinkFactory::class => \Edde\Common\Link\LinkFactory::class,
 
 				/**
 				 * Support for general content conversion (which also powers server content negotiation)
@@ -420,12 +365,6 @@
 				 */
 				IResourceManager::class => ResourceManager::class,
 				IResourceProvider::class => IResourceManager::class,
-
-				/**
-				 * Web components related stuff
-				 */
-				IStyleSheetCompiler::class => StyleSheetCompiler::class,
-				IJavaScriptCompiler::class => JavaScriptCompiler::class,
 
 				/**
 				 * Storage (database) related stuff
@@ -460,9 +399,6 @@
 				 * General support for html generator and template engine
 				 */
 				IHtmlGenerator::class => Html5Generator::class,
-				ITemplateManager::class => TemplateManager::class,
-				ITemplate::class => self::instance(Template::class, [], true),
-				ICompiler::class => Compiler::class,
 
 				/**
 				 * It's nice when it is possible to upgrade you application...
@@ -482,10 +418,7 @@
 					'session',
 					SessionDirectory::class,
 				]),
-				IIdentityManager::class => IdentityManager::class,
-				IIdentity::class => IIdentityManager::class,
 				IFingerprint::class => SessionFingerprint::class,
-				IAuthenticatorManager::class => AuthenticatorManager::class,
 
 				/**
 				 * Translation support
@@ -504,7 +437,6 @@
 				IProtocolService::class => ProtocolService::class,
 				IRequestService::class => RequestService::class,
 				IEventBus::class => EventBus::class,
-				\Edde\Ext\Rest\ProtocolService::class => \Edde\Ext\Rest\ProtocolService::class,
 				IElementStore::class => ElementStore::class,
 
 				/**
@@ -547,27 +479,15 @@
 
 		static public function getDefaultConfiguratorList(): array {
 			return [
-				IRouterService::class => RouterServiceConfigurator::class,
-				/**
-				 * We are using some custom resource providers, so we have to register them to resource manager and the current
-				 * point how to get resources.
-				 */
-				IResourceManager::class => ResourceManagerConfigurator::class,
 				/**
 				 * To enable general content exchange, we have to setup converter manager; it basically allows to do arbitrary
 				 * data conversions for example json to array, xml file to INode, ... this component is kind of fundamental part
 				 * of the framework.
 				 */
 				IConverterManager::class => ConverterManagerConfigurator::class,
-				/**
-				 * As other components, Template engine should be configured too; this will register default set of macros.
-				 */
-				ICompiler::class => CompilerConfigurator::class,
 				IProtocolService::class => ProtocolServiceConfigurator::class,
 				IRequestService::class => RequestServiceConfigurator::class,
 				ILogService::class => LogServiceConfigurator::class,
-				ILinkFactory::class => LinkFactoryConfigurator::class,
-				WebExecutor::class => WebExecutorConfigurator::class,
 				IThreadManager::class => ThreadManagerConfigurator::class,
 				IStoreManager::class => StoreManagerConfigurator::class,
 			];

@@ -3,16 +3,11 @@
 
 	namespace Edde\Ext\Protocol\Request;
 
-	use Edde\Api\Application\LazyContextTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Common\Protocol\Request\AbstractRequestHandler;
 	use Edde\Common\Strings\StringUtils;
 
-	/**
-	 * Handles namespaced, dotted paths with slash action
-	 */
 	class ClassRequestHandler extends AbstractRequestHandler {
-		use LazyContextTrait;
 		static protected $preg = '~(?<class>[.a-z0-9-]+)/(?<action>[a-z0-9-]+)~';
 
 		/**
