@@ -3,14 +3,13 @@
 
 	namespace Edde\Api\Rest;
 
-	use Edde\Api\Control\IControl;
 	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Api\Url\IUrl;
 
 	/**
 	 * Rest service handler.
 	 */
-	interface IService extends IControl, ILinkGenerator {
+	interface IService extends ILinkGenerator {
 		/**
 		 * return true, if this REST service can handle the given URL
 		 *

@@ -3,7 +3,6 @@
 
 	namespace Edde\Ext\Control;
 
-	use Edde\Api\Control\IControl;
 	use Edde\Api\File\LazyRootDirectoryTrait;
 	use Edde\Api\Resource\IResource;
 	use Edde\Common\Resource\AbstractResourceProvider;
@@ -19,9 +18,9 @@
 			if (count($parameters) !== 1) {
 				throw new UnknownResourceException(sprintf('Cannot get requested resource [%s]; missing control instance parameter.', $name));
 			}
-			/** @var $control IControl */
 			list($control) = $parameters;
-			$file = $this->rootDirectory->directory('src/' . ($namespace ? $namespace . '/' : '') . implode('/', array_slice(explode('\\', get_class($control)), -2, 1)) . '/templates')->file($name . '.xml');
+			$file = $this->rootDirectory->directory('src/' . ($namespace ? $namespace . '/' : '') . implode('/', array_slice(explode('\\', get_class($control)), -2, 1)) . '/templates')
+				->file($name . '.xml');
 			if ($file->isAvailable()) {
 				return $file;
 			}

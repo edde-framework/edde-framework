@@ -4,7 +4,6 @@
 	namespace Edde\Ext\Protocol\Request;
 
 	use Edde\Api\Application\LazyContextTrait;
-	use Edde\Api\Control\IControl;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Common\Protocol\Request\AbstractRequestHandler;
 	use Edde\Common\Strings\StringUtils;
@@ -31,6 +30,6 @@
 				'',
 			], StringUtils::capitalize(str_replace('.', ' ', $match['class']))));
 			$element->setMeta('::method', $match['action']);
-			return class_exists($class) && (new \ReflectionClass($class))->implementsInterface(IControl::class);
+			return class_exists($class);
 		}
 	}
