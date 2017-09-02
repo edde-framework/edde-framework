@@ -3,11 +3,11 @@
 
 	namespace Edde\Ext\Control;
 
-	use Edde\Common\Control\AbstractControl;
+	use Edde\Common\Object;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Ext\Template\TemplateTrait;
 
-	abstract class AbstractTemplateControl extends AbstractControl {
+	abstract class AbstractTemplateControl extends Object {
 		use TemplateTrait;
 
 		/**
@@ -16,6 +16,7 @@
 		 * @return string
 		 */
 		public function getContextName() {
-			return implode('\\', array_slice(explode('\\', static::class), -2, 1)) . '\\' . str_replace('Action', '', StringUtils::toCamelCase((string)$this->routerService->createRequest()->getMeta('::method'))) . 'TemplateContext';
+			return implode('\\', array_slice(explode('\\', static::class), -2, 1)) . '\\' . str_replace('Action', '', StringUtils::toCamelCase((string)$this->routerService->createRequest()
+					->getMeta('::method'))) . 'TemplateContext';
 		}
 	}

@@ -12,12 +12,12 @@
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Rest\IService;
 	use Edde\Api\Rest\RestException;
-	use Edde\Common\Control\AbstractControl;
+	use Edde\Common\Object;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Url\Url;
 	use Edde\Ext\Application\StringContent;
 
-	abstract class AbstractService extends AbstractControl implements IService {
+	abstract class AbstractService extends Object implements IService {
 		use LazyResponseManagerTrait;
 		use LazyHttpResponseTrait;
 		use LazyHostUrlTrait;
