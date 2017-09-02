@@ -24,7 +24,7 @@
 		 * @return string
 		 */
 		public function getVersion() {
-			return '3.1.0.0';
+			return '4.0.0.0';
 		}
 
 		/**
@@ -33,7 +33,7 @@
 		 * @return string
 		 */
 		public function getCodename() {
-			return 'The Pooping Unicorn';
+			return 'The Experimental Rush';
 		}
 
 		public function __toString() {
