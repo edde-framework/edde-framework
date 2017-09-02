@@ -13,7 +13,7 @@
 		static protected $httpRequest;
 
 		static public function createHttpRequest(): IHttpRequest {
-			self::$httpRequest ?: self::$httpRequest = new HttpRequest(RequestUrl::createRequestUrl(), HeaderList::createHeaderList(), CookieList::createCookieList());
+			self::$httpRequest ?: self::$httpRequest = new HttpRequest(RequestUrl::factory(), HeaderList::createHeaderList(), CookieList::createCookieList());
 			$input = fopen('php://input', 'r');
 			if (empty($_POST) === false) {
 				$content = new Content($_POST, 'post');

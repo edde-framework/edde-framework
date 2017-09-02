@@ -5,5 +5,8 @@
 
 	use Edde\Api\EddeException;
 
+	/**
+	 * Root exception for Job package.
+	 */
 	class JobException extends EddeException {
 	}

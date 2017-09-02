@@ -3,5 +3,8 @@
 
 	namespace Edde\Api\Job;
 
+	/**
+	 * Exception related o job queue.
+	 */
 	class JobQueueException extends JobException {
 	}

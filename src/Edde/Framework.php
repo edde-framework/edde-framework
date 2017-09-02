@@ -36,6 +36,11 @@
 			return 'The Experimental Rush';
 		}
 
+		/**
+		 * return full framework version
+		 *
+		 * @return string
+		 */
 		public function __toString() {
 			return $this->getVersionString();
 		}
