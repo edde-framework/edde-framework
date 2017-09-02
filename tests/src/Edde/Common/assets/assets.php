@@ -5,7 +5,6 @@
 
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Store\IStore;
-	use Edde\Common\Application\AbstractContext;
 	use Edde\Common\Object;
 	use Edde\Common\Protocol\Request\AbstractRequestHandler;
 	use Edde\Common\Protocol\Request\Response;
