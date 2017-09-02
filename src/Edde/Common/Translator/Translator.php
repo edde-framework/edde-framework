@@ -13,7 +13,7 @@
 	use Edde\Common\Object;
 
 	/**
-	 * General class for translations support.
+	 * General class for translation support.
 	 *
 	 * ---
 	 * When my wife starts to sing I always go out and do some garden work so our neighbors can see there's no domestic violence going on.
@@ -31,10 +31,6 @@
 		 */
 		protected $dictionaryList = [];
 		/**
-		 * @var string
-		 */
-		protected $language;
-		/**
 		 * @var \SplStack
 		 */
 		protected $scopeStack;
@@ -47,7 +43,8 @@
 			$scope = $scope ?: ($this->scopeStack->isEmpty() ? null : $this->scopeStack->top());
 			if ($this->isConfigured()) {
 				$convertable = $this->converterManager->convert($source, $source->getMime(), [IDictionary::class]);
-				$this->registerDictionary($convertable->convert()->getContent(), $scope);
+				$this->registerDictionary($convertable->convert()
+					->getContent(), $scope);
 				return $this;
 			}
 			$this->sourceList[] = [
@@ -62,14 +59,6 @@
 		 */
 		public function registerDictionary(IDictionary $dictionary, string $scope = null): ITranslator {
 			$this->dictionaryList[$scope][] = $dictionary;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function setLanguage(string $language): ITranslator {
-			$this->language = $language;
 			return $this;
 		}
 
@@ -132,7 +121,8 @@
 			foreach ($this->sourceList as list($file, $scope)) {
 				/** @var $file IFile */
 				$convertable = $this->converterManager->convert($file, $file->getMime(), [IDictionary::class]);
-				$this->registerDictionary($convertable->convert()->getContent(), $scope);
+				$this->registerDictionary($convertable->convert()
+					->getContent(), $scope);
 			}
 			if (empty($this->dictionaryList)) {
 				throw new TranslatorException('Translator needs at least one dictionary. Or The God will kill one cute devil kitten!');

@@ -56,42 +56,9 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function isInitialized(): bool {
-			return $this->tInit;
-		}
-
 		public function checkInit() {
 			if ($this->tInit === false) {
 				throw new ConfigException(sprintf('Class [%s] has not been initialized!', static::class));
-			}
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function warmup() {
-			if ($this->tWarmup) {
-				return $this;
-			}
-			$this->tWarmup = true;
-			$this->init();
-			$this->handleWarmup();
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function isWarmedup(): bool {
-			return $this->tWarmup;
-		}
-
-		public function checkWarmup() {
-			if ($this->tWarmup === false) {
-				throw new ConfigException(sprintf('Class [%s] has not been warmed up!', static::class));
 			}
 		}
 
@@ -103,19 +70,12 @@
 				return $this;
 			}
 			$this->tConfig = true;
-			$this->warmup();
+			$this->init();
 			foreach ($this->tConfiguratorList as $configHandler) {
 				$configHandler->configure($this);
 			}
 			$this->handleConfig();
 			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function isConfigured(): bool {
-			return $this->tConfig;
 		}
 
 		public function checkConfig() {

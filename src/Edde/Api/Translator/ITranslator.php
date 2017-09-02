@@ -31,15 +31,6 @@
 		public function registerDictionary(IDictionary $dictionary, string $scope = null): ITranslator;
 
 		/**
-		 * language can be set in a runtime
-		 *
-		 * @param string $language
-		 *
-		 * @return ITranslator
-		 */
-		public function setLanguage(string $language): ITranslator;
-
-		/**
 		 * ability to "push" a scope on stack (later can be popped)
 		 *
 		 * @param string|null $scope
