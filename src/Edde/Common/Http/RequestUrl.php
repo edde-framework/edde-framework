@@ -3,16 +3,16 @@
 
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Http\IRequestUrl;
+	use Edde\Api\Url\IUrl;
 	use Edde\Common\Url\Url;
 
-	class RequestUrl extends Url implements IRequestUrl {
+	class RequestUrl extends Url {
 		/**
-		 * @var IRequestUrl
+		 * @var IUrl
 		 */
-		static protected $requestUrl;
+		static protected $url;
 
-		static public function createRequestUrl(): IRequestUrl {
-			return self::$requestUrl ?: self::$requestUrl = self::create((isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+		static public function factory(): IUrl {
+			return self::$url ?: self::$url = self::create((isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
 		}
 	}
