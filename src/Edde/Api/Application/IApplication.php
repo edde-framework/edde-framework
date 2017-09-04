@@ -4,5 +4,5 @@
 	namespace Edde\Api\Application;
 
 	interface IApplication {
-		public function run(): void;
+		public function run(): int;
 	}
