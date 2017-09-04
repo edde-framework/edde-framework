@@ -3,9 +3,6 @@
 
 	namespace Edde\Ext\Container;
 
-	use Edde\Api\Asset\IAssetDirectory;
-	use Edde\Api\Asset\IAssetStorage;
-	use Edde\Api\Asset\IStorageDirectory;
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheManager;
@@ -28,7 +25,6 @@
 	use Edde\Api\Http\IHostUrl;
 	use Edde\Api\Job\IJobManager;
 	use Edde\Api\Job\IJobQueue;
-	use Edde\Api\Lock\ILockDirectory;
 	use Edde\Api\Lock\ILockManager;
 	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
@@ -46,7 +42,6 @@
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Store\IStore;
-	use Edde\Api\Store\IStoreDirectory;
 	use Edde\Api\Store\IStoreManager;
 	use Edde\Api\Thread\IExecutor;
 	use Edde\Api\Thread\IThreadManager;
@@ -54,9 +49,6 @@
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Xml\IXmlExport;
 	use Edde\Api\Xml\IXmlParser;
-	use Edde\Common\Asset\AssetDirectory;
-	use Edde\Common\Asset\AssetStorage;
-	use Edde\Common\Asset\StorageDirectory;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Container\Container;
@@ -80,7 +72,6 @@
 	use Edde\Common\Job\JobManager;
 	use Edde\Common\Job\JobQueue;
 	use Edde\Common\Lock\FileLockManager;
-	use Edde\Common\Lock\LockDirectory;
 	use Edde\Common\Log\LogDirectory;
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Object;
@@ -95,7 +86,6 @@
 	use Edde\Common\Session\SessionDirectory;
 	use Edde\Common\Session\SessionFingerprint;
 	use Edde\Common\Session\SessionManager;
-	use Edde\Common\Store\StoreDirectory;
 	use Edde\Common\Store\StoreManager;
 	use Edde\Common\Thread\ThreadManager;
 	use Edde\Common\Thread\WebExecutor;
@@ -324,27 +314,18 @@
 					'temp',
 					TempDirectory::class,
 				]),
-				IAssetDirectory::class => self::proxy(IRootDirectory::class, 'directory', [
-					'.assets',
-					AssetDirectory::class,
-				]),
 				ILogDirectory::class   => self::proxy(IRootDirectory::class, 'directory', [
 					'logs',
 					LogDirectory::class,
 				]),
 
-				IStorageDirectory::class => self::proxy(IAssetDirectory::class, 'directory', [
-					'storage',
-					StorageDirectory::class,
-				]),
-
 				/**
 				 * Happy caching stuff here :)
 				 */
-				ICacheManager::class     => CacheManager::class,
-				ICache::class            => ICacheManager::class,
-				ICacheStorage::class     => FlatFileCacheStorage::class,
-				ICacheDirectory::class   => self::proxy(ITempDirectory::class, 'directory', [
+				ICacheManager::class   => CacheManager::class,
+				ICache::class          => ICacheManager::class,
+				ICacheStorage::class   => FlatFileCacheStorage::class,
+				ICacheDirectory::class => self::proxy(ITempDirectory::class, 'directory', [
 					'cache',
 					CacheDirectory::class,
 				]),
@@ -424,11 +405,6 @@
 				ITranslator::class       => Translator::class,
 
 				/**
-				 * General asset storage support
-				 */
-				IAssetStorage::class     => AssetStorage::class,
-
-				/**
 				 * Protocol implementation support
 				 */
 				IProtocolManager::class  => ProtocolManager::class,
@@ -454,10 +430,10 @@
 				 */
 				IStoreManager::class     => StoreManager::class,
 				IStore::class            => IStoreManager::class,
-				IStoreDirectory::class   => self::proxy(IAssetDirectory::class, 'directory', [
-					'store',
-					StoreDirectory::class,
-				]),
+				// IStoreDirectory::class   => self::proxy(IAssetDirectory::class, 'directory', [
+				// 	'store',
+				// 	StoreDirectory::class,
+				// ]),
 
 				/**
 				 * xml support
@@ -468,10 +444,10 @@
 				 * General Locking support
 				 */
 				ILockManager::class      => FileLockManager::class,
-				ILockDirectory::class    => self::proxy(IAssetDirectory::class, 'directory', [
-					'.lock',
-					LockDirectory::class,
-				]),
+				// ILockDirectory::class    => self::proxy(IAssetDirectory::class, 'directory', [
+				// 	'.lock',
+				// 	LockDirectory::class,
+				// ]),
 			];
 		}
 
