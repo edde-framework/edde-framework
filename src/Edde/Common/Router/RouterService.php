@@ -3,16 +3,21 @@
 
 	namespace Edde\Common\Router;
 
-	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Router\IRequest;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Common\Object\Object;
 
 	class RouterService extends Object implements IRouterService {
 		/**
-		 * @var IElement
+		 * @var IRequest
 		 */
-		protected $element;
+		protected $request;
 
-		public function createElement(): IElement {
+		public function createRequest(): IRequest {
+			if ($this->request) {
+				return $this->request;
+			}
+			throw new \Exception('not implemented yet: create request');
+			return $this->request = $request;
 		}
 	}

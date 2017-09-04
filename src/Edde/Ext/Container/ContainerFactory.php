@@ -36,6 +36,8 @@
 	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\IResourceProvider;
+	use Edde\Api\Router\IRequest;
+	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Session\IFingerprint;
@@ -82,6 +84,7 @@
 	use Edde\Common\Protocol\ProtocolService;
 	use Edde\Common\Protocol\Request\RequestService;
 	use Edde\Common\Resource\ResourceManager;
+	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\Runtime;
 	use Edde\Common\Schema\SchemaManager;
 	use Edde\Common\Session\SessionDirectory;
@@ -405,27 +408,27 @@
 				 */
 				IProtocolManager::class  => ProtocolManager::class,
 				IProtocolService::class  => ProtocolService::class,
-				IRequestService::class   => RequestService::class,
-				IEventBus::class         => EventBus::class,
-				IElementStore::class     => ElementStore::class,
+				IRequestService::class => RequestService::class,
+				IEventBus::class       => EventBus::class,
+				IElementStore::class   => ElementStore::class,
 
 				/**
 				 * Job related implementation
 				 */
-				IJobManager::class       => JobManager::class,
-				IJobQueue::class         => JobQueue::class,
+				IJobManager::class     => JobManager::class,
+				IJobQueue::class       => JobQueue::class,
 
 				/**
 				 * Thread support
 				 */
-				IThreadManager::class    => ThreadManager::class,
-				IExecutor::class         => WebExecutor::class,
+				IThreadManager::class  => ThreadManager::class,
+				IExecutor::class       => WebExecutor::class,
 
 				/**
 				 * Store related stuff
 				 */
-				IStoreManager::class     => StoreManager::class,
-				IStore::class       => IStoreManager::class,
+				IStoreManager::class   => StoreManager::class,
+				IStore::class          => IStoreManager::class,
 				// IStoreDirectory::class   => self::proxy(IAssetDirectory::class, 'directory', [
 				// 	'store',
 				// 	StoreDirectory::class,
@@ -434,19 +437,21 @@
 				/**
 				 * xml support
 				 */
-				IXmlExport::class   => XmlExport::class,
+				IXmlExport::class      => XmlExport::class,
 
 				/**
 				 * General Locking support
 				 */
-				ILockManager::class => FileLockManager::class,
+				ILockManager::class    => FileLockManager::class,
 				// ILockDirectory::class    => self::proxy(IAssetDirectory::class, 'directory', [
 				// 	'.lock',
 				// 	LockDirectory::class,
 				// ]),
 
-				IApplication::class    => Application::class,
-				'run'                  => IApplication::class . '::run',
+				IRouterService::class => RouterService::class,
+				IRequest::class       => IRouterService::class . '::createRequest',
+				IApplication::class   => Application::class,
+				'run'                 => IApplication::class . '::run',
 			];
 		}
 

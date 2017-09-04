@@ -4,7 +4,6 @@
 	namespace Edde\Api\Router;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Protocol\IElement;
 
 	/**
 	 * This service is responsible for user to application request translation; because
@@ -16,7 +15,7 @@
 		 * create an (request) element; a type of element could be arbitrary valid
 		 * type of protocol element
 		 *
-		 * @return IElement
+		 * @return IRequest
 		 */
-		public function createElement(): IElement;
+		public function createRequest(): IRequest;
 	}
