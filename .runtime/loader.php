@@ -8,10 +8,7 @@
 	 */
 	declare(strict_types=1);
 
-	use Edde\Api\Cache\ICacheManager;
-	use Edde\Common\Container\Factory\CascadeFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
-	use Edde\Ext\Cache\ContextCacheManagerConfigurator;
 	use Edde\Ext\Container\ContainerFactory;
 	use Tracy\Debugger;
 
@@ -42,25 +39,10 @@
 	 * There is also option to create only container itself without any internal dependencies (not so much recommended except
 	 * you are heavy masochist).
 	 */
-	return ContainerFactory::containerWithRoot($factoryList = array_merge([/**
-	 * This is quite magical, but local loader file should be able to override services defined by default, thus
-	 * it must be after application dependency definitions.
-	 */
-	], is_array($local = @include $local) ? $local : [], [
+	return ContainerFactory::containerWithRoot($factoryList = array_merge([], is_array($local = @include $local) ? $local : [], [
 		/**
 		 * This stranger here must be last, because it's canHandle method is able to kill a lot of dependencies and
 		 * create not so much nice surprises. Thus, it must be last as kind of dependency fallback.
 		 */
 		new ClassFactory(),
-		/**
-		 * This one is one of the most magical: this factory uses IContext::cascade() to search for class; this is quite
-		 * epic feature, but also less transparent, useful to seamlessly switch context.
-		 */
-		new CascadeFactory(),
-	]), [
-		/**
-		 * Because we are using context, we also have to properly setup cache manager (by setting proper namespace from
-		 * context).
-		 */
-		ICacheManager::class => ContextCacheManagerConfigurator::class,
-	]);
+	]), []);

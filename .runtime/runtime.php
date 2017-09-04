@@ -5,5 +5,4 @@
 
 	/** @var $container IContainer */
 	$container = require __DIR__ . '/loader.php';
-	$container->call(function () {
-	}, [], basename(__FILE__));
+	$container->create('run', [], basename(__FILE__));

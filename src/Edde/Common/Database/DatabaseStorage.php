@@ -6,13 +6,11 @@
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Database\LazyDriverTrait;
-	use Edde\Api\Node\INodeQuery;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Storage\StorageException;
 	use Edde\Api\Storage\TransactionException;
-	use Edde\Common\Node\NodeQuery;
 	use Edde\Common\Query\Insert\InsertQuery;
 	use Edde\Common\Query\Select\SelectQuery;
 	use Edde\Common\Query\Update\UpdateQuery;
@@ -24,10 +22,6 @@
 	 */
 	class DatabaseStorage extends AbstractStorage {
 		use LazyDriverTrait;
-		/**
-		 * @var INodeQuery
-		 */
-		protected $sourceNodeQuery;
 		/**
 		 * @var int
 		 */
@@ -149,7 +143,6 @@
 		 */
 		protected function handleInit() {
 			parent::handleInit();
-			$this->sourceNodeQuery = new NodeQuery('/**/source');
 			$this->transaction = 0;
 		}
 	}
