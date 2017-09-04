@@ -4,7 +4,8 @@
 	namespace Edde\Common;
 
 	use Edde\Api\Container\IAutowire;
-	use Edde\Api\EddeException;
+	use Edde\Common\Object\Exception\PropertyReadException;
+	use Edde\Common\Object\Exception\PropertyWriteException;
 	use Edde\Test\BarObject;
 	use Edde\Test\FooBarObject;
 	use Edde\Test\FooObject;
@@ -31,22 +32,22 @@
 		}
 
 		public function testWriteException() {
-			$this->expectException(EddeException::class);
-			$this->expectExceptionMessage('Writing to the undefined/private/protected property [Edde\Test\FooObject::$thisWillThrowAnException].');
+			$this->expectException(PropertyWriteException::class);
+			$this->expectExceptionMessage('Writing to the undefined/private/protected property [Edde\Test\FooObject::$undefined].');
 			/** @noinspection PhpUndefinedFieldInspection */
-			$this->fooObject->thisWillThrowAnException = 'really!';
+			$this->fooObject->undefined = true;
 		}
 
 		public function testReadException() {
-			$this->expectException(EddeException::class);
-			$this->expectExceptionMessage('Reading from the undefined/private/protected property [Edde\Test\FooObject::$yesThisWillThrowAnException].');
+			$this->expectException(PropertyReadException::class);
+			$this->expectExceptionMessage('Reading from the undefined/private/protected property [Edde\Test\FooObject::$undefined].');
 			/** @noinspection PhpUndefinedFieldInspection */
-			$willYouThrowAnException = $this->fooObject->yesThisWillThrowAnException;
+			$this->fooObject->undefined;
 		}
 
 		public function testIsset() {
 			/** @noinspection PhpUndefinedFieldInspection */
-			self::assertFalse(isset($this->fooObject->yesThisWillThrowAnException));
+			self::assertFalse(isset($this->fooObject->undefined));
 			self::assertTrue(isset($this->fooObject->foo));
 		}
 
