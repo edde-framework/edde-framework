@@ -8,7 +8,6 @@
 	use Edde\Api\Container\IAutowire;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
-	use Edde\Common\Container\AbstractFactory;
 	use Edde\Common\Container\Dependency;
 	use Edde\Common\Reflection\ReflectionParameter;
 	use Edde\Common\Reflection\ReflectionUtils;

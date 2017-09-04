@@ -6,7 +6,6 @@
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
-	use Edde\Common\Container\AbstractFactory;
 
 	class ProxyFactory extends AbstractFactory {
 		/**

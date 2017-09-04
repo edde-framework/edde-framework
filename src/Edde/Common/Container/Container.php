@@ -8,6 +8,7 @@
 	use Edde\Api\Container\IAutowire;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
+	use Edde\Common\Container\Exception\UnknownFactoryException;
 	use Edde\Common\Container\Factory\ClassFactory;
 
 	/**

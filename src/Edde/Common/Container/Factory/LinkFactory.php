@@ -6,7 +6,6 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
-	use Edde\Common\Container\AbstractFactory;
 	use Edde\Common\Container\Dependency;
 
 	/**
