@@ -11,7 +11,7 @@
 	/**
 	 * Translate the given factory into another one.
 	 *
-	 * For example ICache can be bound to ICacheManager becase it implements ICache too.
+	 * For example ICache can be bound to ICacheManager because it implements ICache too.
 	 */
 	class LinkFactory extends AbstractFactory {
 		/**

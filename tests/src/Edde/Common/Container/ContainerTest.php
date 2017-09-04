@@ -5,8 +5,13 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\EddeException;
 	use Edde\Common\Container\Exception\UnknownFactoryException;
 	use Edde\Common\Container\Factory\CallbackFactory;
+	use Edde\Common\Container\Factory\ExceptionFactory;
+	use Edde\Common\Container\Factory\InstanceFactory;
+	use Edde\Common\Container\Factory\LinkFactory;
+	use Edde\Common\Container\Factory\ProxyFactory;
 	use Edde\Ext\Test\TestCase;
 	use Edde\Test\AutowireDependencyObject;
 	use Edde\Test\BarObject;
@@ -74,6 +79,51 @@
 			self::assertSame('3.14', $this->container->create('string'));
 		}
 
+		public function testInstanceFactory() {
+			self::assertInstanceOf(FooObject::class, $fooObject = $this->container->create('instance'));
+			self::assertSame($fooObject, $this->container->create('instance'));
+		}
+
+		public function testInstanceCloneFactory() {
+			self::assertInstanceOf(FooObject::class, $fooObject = $this->container->create('instance-clone'));
+			self::assertNotSame($fooObject, $this->container->create('instance-clone'));
+		}
+
+		public function testInstancedFactory() {
+			self::assertInstanceOf(FooObject::class, $fooObject = $this->container->create('instanced'));
+			self::assertSame($fooObject, $this->container->create('instanced'));
+			/**
+			 * manual test is necessary because container is optimized for redundant create dependency calls
+			 */
+			$dependency = $this->container->getFactory('instanced')->createDependency($this->container);
+			self::assertEmpty($dependency->getLazyList());
+			self::assertEmpty($dependency->getParameterList());
+			self::assertEmpty($dependency->getConfiguratorList());
+			self::assertEmpty($dependency->getInjectList());
+		}
+
+		public function testInterfaceDependencyFactory() {
+			$dependency = $this->container->getFactory(IContainer::class)->createDependency($this->container);
+			self::assertEmpty($dependency->getLazyList());
+			self::assertEmpty($dependency->getParameterList());
+			self::assertEmpty($dependency->getConfiguratorList());
+			self::assertEmpty($dependency->getInjectList());
+		}
+
+		public function testProxyFactory() {
+			self::assertSame('moo', $this->container->create('moo'));
+		}
+
+		public function testLinkFactory() {
+			self::assertSame('moo', $this->container->create('get-moo'));
+		}
+
+		public function testExceptionFactory() {
+			$this->expectException(EddeException::class);
+			$this->expectExceptionMessage('kaboom');
+			$this->container->create('boom');
+		}
+
 		protected function setUp() {
 			parent::setUp();
 			$this->container->registerFactory(new CallbackFactory(function () {
@@ -88,5 +138,11 @@
 			$this->container->registerFactory(new CallbackFactory(function (IContainer $container) {
 				return 'pi=' . $container->create('string');
 			}, 'scalar-dependency'));
+			$this->container->registerFactory(new InstanceFactory('instance', FooObject::class));
+			$this->container->registerFactory(new InstanceFactory('instanced', FooObject::class, [], new FooObject()));
+			$this->container->registerFactory(new InstanceFactory('instance-clone', FooObject::class, [], null, true));
+			$this->container->registerFactory(new ProxyFactory('moo', FooObject::class, 'getMoo', []));
+			$this->container->registerFactory(new LinkFactory('get-moo', 'moo'));
+			$this->container->registerFactory(new ExceptionFactory('boom', EddeException::class, 'kaboom'));
 		}
 	}

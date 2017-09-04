@@ -60,6 +60,14 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function fetch(IContainer $container, string $id) {
+			$exception = $this->exception;
+			throw new $exception($this->message);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function createDependency(IContainer $container, string $dependency = null): IDependency {
 			$exception = $this->exception;
 			throw new $exception($this->message);

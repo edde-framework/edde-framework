@@ -7,6 +7,9 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 
+	/**
+	 * Proxy factory is bound to method of some other object.
+	 */
 	class ProxyFactory extends AbstractFactory {
 		/**
 		 * @var string
@@ -63,11 +66,10 @@
 		 * @inheritdoc
 		 */
 		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
-			$method = $this->method;
-			$instance = $container->create($this->target, $parameterList, $this->name);
-			if ($instance instanceof IConfigurable) {
+			/** @var $instance IConfigurable */
+			if (($instance = $container->create($this->target, $parameterList, $this->name)) instanceof IConfigurable) {
 				$instance->setup();
 			}
-			return $instance->{$method}(...$this->parameterList);
+			return $instance->{$this->method}(...$this->parameterList);
 		}
 	}

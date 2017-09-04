@@ -7,6 +7,10 @@
 
 	class FooObject extends Object {
 		public $foo = 'foo';
+
+		public function getMoo() {
+			return 'moo';
+		}
 	}
 
 	class BarObject extends Object {
