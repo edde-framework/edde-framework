@@ -3,6 +3,7 @@
 
 	namespace Edde\Ext\Container;
 
+	use Edde\Api\Application\IApplication;
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheManager;
@@ -45,10 +46,10 @@
 	use Edde\Api\Store\IStoreManager;
 	use Edde\Api\Thread\IExecutor;
 	use Edde\Api\Thread\IThreadManager;
-	use Edde\Api\Translator\ITranslator;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Xml\IXmlExport;
 	use Edde\Api\Xml\IXmlParser;
+	use Edde\Common\Application\Application;
 	use Edde\Common\Cache\CacheDirectory;
 	use Edde\Common\Cache\CacheManager;
 	use Edde\Common\Container\Container;
@@ -89,7 +90,6 @@
 	use Edde\Common\Store\StoreManager;
 	use Edde\Common\Thread\ThreadManager;
 	use Edde\Common\Thread\WebExecutor;
-	use Edde\Common\Translator\Translator;
 	use Edde\Common\Upgrade\AbstractUpgradeManager;
 	use Edde\Common\Xml\XmlExport;
 	use Edde\Common\Xml\XmlParser;
@@ -401,11 +401,6 @@
 				IFingerprint::class      => SessionFingerprint::class,
 
 				/**
-				 * Translation support
-				 */
-				ITranslator::class       => Translator::class,
-
-				/**
 				 * Protocol implementation support
 				 */
 				IProtocolManager::class  => ProtocolManager::class,
@@ -430,7 +425,7 @@
 				 * Store related stuff
 				 */
 				IStoreManager::class     => StoreManager::class,
-				IStore::class            => IStoreManager::class,
+				IStore::class       => IStoreManager::class,
 				// IStoreDirectory::class   => self::proxy(IAssetDirectory::class, 'directory', [
 				// 	'store',
 				// 	StoreDirectory::class,
@@ -439,16 +434,19 @@
 				/**
 				 * xml support
 				 */
-				IXmlExport::class        => XmlExport::class,
+				IXmlExport::class   => XmlExport::class,
 
 				/**
 				 * General Locking support
 				 */
-				ILockManager::class      => FileLockManager::class,
+				ILockManager::class => FileLockManager::class,
 				// ILockDirectory::class    => self::proxy(IAssetDirectory::class, 'directory', [
 				// 	'.lock',
 				// 	LockDirectory::class,
 				// ]),
+
+				IApplication::class    => Application::class,
+				'run'                  => IApplication::class . '::run',
 			];
 		}
 

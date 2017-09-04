@@ -41,7 +41,7 @@
 	 */
 	return ContainerFactory::containerWithRoot($factoryList = array_merge([], is_array($local = @include $local) ? $local : [], [
 		/**
-		 * This stranger here must be last, because it's canHandle method is able to kill a lot of dependencies and
+		 * This stranger here must (should be) be last, because it's canHandle method is able to kill a lot of dependencies and
 		 * create not so much nice surprises. Thus, it must be last as kind of dependency fallback.
 		 */
 		new ClassFactory(),
