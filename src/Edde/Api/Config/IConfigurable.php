@@ -35,31 +35,7 @@
 		public function init();
 
 		/**
-		 * throws an exception if configurable has not been initialized
-		 */
-		public function checkInit();
-
-		/**
-		 * execute object configuration (so after this method object should be fully prepared for use)
-		 */
-		public function config();
-
-		/**
-		 * check if configurable has been configured
-		 *
-		 * @return IConfigurable
-		 */
-		public function checkConfig();
-
-		/**
 		 * do any heavy computations; after this object is usualy not serializable
 		 */
 		public function setup();
-
-		/**
-		 * check if configurable has been setup
-		 *
-		 * @return IConfigurable
-		 */
-		public function checkSetup();
 	}
