@@ -8,8 +8,8 @@
 	use Edde\Api\Store\LazyStoreDirectoryTrait;
 	use Edde\Api\Store\LazyStoreManagerTrait;
 	use Edde\Api\Store\LazyStoreTrait;
+	use Edde\Common\Lock\Exception\ForeignLockException;
 	use Edde\Common\Lock\Exception\LockedException;
-	use Edde\Common\Lock\ForeignLockException;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Test\TestCase;
 	use Edde\Test\DummyStore;

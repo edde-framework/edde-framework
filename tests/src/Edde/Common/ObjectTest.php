@@ -40,12 +40,12 @@
 		public function testReadException() {
 			$this->expectException(EddeException::class);
 			$this->expectExceptionMessage('Reading from the undefined/private/protected property [Edde\Test\FooObject::$yesThisWillThrowAnException].');
-			/** @noinspection PhpUnusedLocalVariableInspection */
 			/** @noinspection PhpUndefinedFieldInspection */
 			$willYouThrowAnException = $this->fooObject->yesThisWillThrowAnException;
 		}
 
 		public function testIsset() {
+			/** @noinspection PhpUndefinedFieldInspection */
 			self::assertFalse(isset($this->fooObject->yesThisWillThrowAnException));
 			self::assertTrue(isset($this->fooObject->foo));
 		}

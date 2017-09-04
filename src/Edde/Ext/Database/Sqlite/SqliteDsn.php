@@ -3,7 +3,6 @@
 
 	namespace Edde\Ext\Database\Sqlite;
 
-	use Edde\Api\Asset\LazyAssetDirectoryTrait;
 	use Edde\Common\Database\AbstractDsn;
 
 	/**
@@ -15,8 +14,6 @@
 	 * "No," said Little Johnny, "the one with the wedding ring on her finger, but I like the way you're thinking."
 	 */
 	class SqliteDsn extends AbstractDsn {
-		use LazyAssetDirectoryTrait;
-
 		public function __construct(string $filename, array $optionList = []) {
 			parent::__construct($filename, $optionList);
 		}
@@ -25,6 +22,6 @@
 		 * @inheritdoc
 		 */
 		public function getDsn(): string {
-			return 'sqlite:' . $this->assetDirectory->filename($this->dsn);
+			return $this->dsn ?: $this->dsn = 'sqlite:' . $this->assetDirectory->filename($this->dsn);
 		}
 	}

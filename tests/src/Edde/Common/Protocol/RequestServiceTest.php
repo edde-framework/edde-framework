@@ -6,7 +6,6 @@
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\Request\LazyRequestServiceTrait;
-	use Edde\Common\Container\Factory\CascadeFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\Protocol\Request\MissingResponseException;
 	use Edde\Common\Protocol\Request\Request;
@@ -61,7 +60,6 @@
 		protected function setUp() {
 			ContainerFactory::autowire($this, [
 				new ClassFactory(),
-				new CascadeFactory(),
 			]);
 		}
 	}

@@ -8,7 +8,9 @@
 	use Edde\Api\Lock\LazyLockManagerTrait;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\File\RootDirectory;
+	use Edde\Common\Lock\Exception\ForeignLockException;
 	use Edde\Common\Lock\Exception\LockedException;
+	use Edde\Common\Lock\Exception\LockTimeoutException;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Test\TestCase;
 
