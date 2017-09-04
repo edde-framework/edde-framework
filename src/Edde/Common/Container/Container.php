@@ -77,7 +77,7 @@
 			 * factories for all classes; that means container must find factory for the given
 			 * dependency name
 			 */
-			foreach ($this->factoryList as $id => $factory) {
+			foreach ($this->factoryList as $factory) {
 				if ($factory->canHandle($this, $dependency)) {
 					return $this->factoryMap[$dependency] = $factory->getFactory($this);
 				}
@@ -158,18 +158,17 @@
 			}
 			/**
 			 * support for dedicated configuration of a dependency
+			 *
+			 * @var $instance IConfigurable
 			 */
 			if ($instance instanceof IConfigurable) {
-				/** @var $instance IConfigurable */
 				$configuratorList = [];
 				/**
 				 * dependency could have more names for configurators (for example Foo class could implements
 				 * IFoo; analysis could return both names for configurator)
 				 */
 				foreach ($dependency->getConfiguratorList() as $configurator) {
-					if (isset($this->configuratorList[$configurator])) {
-						$configuratorList = array_merge($configuratorList, $this->configuratorList[$configurator]);
-					}
+					$configuratorList = array_merge($configuratorList, $this->configuratorList[$configurator] ?? []);
 				}
 				$instance->setConfiguratorList($configuratorList);
 				/**

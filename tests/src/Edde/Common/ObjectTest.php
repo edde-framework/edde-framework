@@ -3,6 +3,7 @@
 
 	namespace Edde\Common;
 
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\IAutowire;
 	use Edde\Common\Object\Exception\PropertyReadException;
 	use Edde\Common\Object\Exception\PropertyWriteException;
@@ -27,8 +28,9 @@
 		 */
 		protected $fooBarObject;
 
-		public function testInstanceOfAutowire() {
+		public function testInstanceOf() {
 			self::assertInstanceOf(IAutowire::class, $this->fooObject);
+			self::assertInstanceOf(IConfigurable::class, $this->fooObject);
 		}
 
 		public function testWriteException() {
