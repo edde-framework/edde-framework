@@ -5,13 +5,13 @@
 
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Database\DriverException;
-	use Edde\Api\Database\IDatabaseStorage;
 	use Edde\Api\Database\LazyDriverTrait;
 	use Edde\Api\Node\INodeQuery;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Storage\StorageException;
+	use Edde\Api\Storage\TransactionException;
 	use Edde\Common\Node\NodeQuery;
 	use Edde\Common\Query\Insert\InsertQuery;
 	use Edde\Common\Query\Select\SelectQuery;
@@ -22,7 +22,7 @@
 	/**
 	 * Database (persistant) storage implementation.
 	 */
-	class DatabaseStorage extends AbstractStorage implements IDatabaseStorage {
+	class DatabaseStorage extends AbstractStorage {
 		use LazyDriverTrait;
 		/**
 		 * @var INodeQuery
@@ -42,7 +42,7 @@
 				if ($exclusive === false) {
 					return $this;
 				}
-				throw new StorageException('Cannot start exclusive transaction, there is already running another one.');
+				throw new TransactionException('Cannot start exclusive transaction, there is already running another one.');
 			}
 			$this->driver->setup();
 			$this->driver->start();
