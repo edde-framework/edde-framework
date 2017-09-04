@@ -19,33 +19,13 @@
 	 */
 	class Object implements ILazyInject {
 		use LazyTrait;
-		protected $aId;
-
-		/**
-		 * return object hash (unique id); object has is NOT based on internal state
-		 *
-		 * @return string
-		 */
-		public function hash(): string {
-			if ($this->aId === null) {
-				$this->aId = hash('sha512', spl_object_hash($this));
-			}
-			return $this->aId;
-		}
 
 		protected function handleInit() {
-		}
-
-		protected function handleWarmup() {
-		}
-
-		protected function handleConfig() {
 		}
 
 		protected function handleSetup() {
 		}
 
 		public function __clone() {
-			$this->aId = null;
 		}
 	}

@@ -24,8 +24,7 @@
 				$parameterList,
 			];
 			call_user_func(\Closure::bind(function (string $property) {
-				/** @noinspection PhpVariableVariableInspection */
-				unset($this->$property);
+				unset($this->{$property});
 			}, $this, static::class), $property);
 			return $this;
 		}
@@ -41,8 +40,7 @@
 				/** @var $container IContainer */
 				list($container, $dependency, $parameterList) = $this->aLazyInjectList[$name];
 				/** @var $instance IConfigurable */
-				/** @noinspection PhpVariableVariableInspection */
-				if (($instance = $this->$name = $container->create($dependency, $parameterList, static::class)) instanceof IConfigurable) {
+				if (($instance = $this->{$name} = $container->create($dependency, $parameterList, static::class)) instanceof IConfigurable) {
 					$instance->setup();
 				}
 				return $instance;

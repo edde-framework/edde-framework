@@ -50,10 +50,6 @@
 			self::assertTrue(isset($this->fooObject->foo));
 		}
 
-		public function testObjectHash() {
-			self::assertSame($this->fooObject->hash(), $this->fooObject->hash());
-		}
-
 		/**
 		 * @codeCoverageIgnore
 		 */

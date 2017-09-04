@@ -33,8 +33,7 @@
 		 */
 		public function configure($instance) {
 			$instance->registerSomeething('bar');
-			$instance->registerSomeething($this->container->create(FirstSomethingSetup::class)
-				->getBoo());
+			$instance->registerSomeething($this->container->create(FirstSomethingSetup::class)->getBoo());
 		}
 	}
 
@@ -74,14 +73,6 @@
 
 		protected function handleInit() {
 			$this->init++;
-		}
-
-		protected function handleWarmup() {
-			$this->warmup++;
-		}
-
-		protected function handleConfig() {
-			$this->config++;
 		}
 
 		protected function handleSetup() {
