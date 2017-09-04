@@ -22,12 +22,6 @@
 		use ConfigurableTrait;
 		use AutowireTrait;
 
-		protected function handleInit() {
-		}
-
-		protected function handleSetup() {
-		}
-
 		public function __clone() {
 		}
 	}

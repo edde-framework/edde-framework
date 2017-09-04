@@ -97,8 +97,8 @@
 			if (is_object($instance) === false) {
 				return $instance;
 			}
-			$class = get_class($instance);
 			if ($instance instanceof IAutowire) {
+				$class = get_class($instance);
 				/** @var $instance IAutowire */
 				foreach ($dependency->getInjectList() as $reflectionParameter) {
 					$instance->autowire($reflectionParameter->getName(), $this->create($reflectionParameter->getClass(), [], $class));

@@ -226,7 +226,7 @@
 		 * @throws ContainerException
 		 * @throws FactoryException
 		 */
-		static public function autowire($instance, array $factoryList = [], array $configuratorList = []): IContainer {
+		static public function inject($instance, array $factoryList = [], array $configuratorList = []): IContainer {
 			$container = self::containerWithRoot(empty($factoryList) ? [new ClassFactory()] : $factoryList, $configuratorList);
 			$container->inject($instance);
 			return $container;

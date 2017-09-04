@@ -11,6 +11,6 @@
 		use AutowireTrait;
 
 		protected function setUp() {
-			ContainerFactory::autowire($this);
+			ContainerFactory::inject($this);
 		}
 	}
