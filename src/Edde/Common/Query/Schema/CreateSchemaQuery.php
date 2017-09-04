@@ -3,14 +3,11 @@
 
 	namespace Edde\Common\Query\Schema;
 
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractQuery;
 
-	class CreateSchemaQuery extends AbstractQuery implements IConfigurable {
-		use ConfigurableTrait;
+	class CreateSchemaQuery extends AbstractQuery {
 		/**
 		 * @var ISchema
 		 */

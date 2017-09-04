@@ -3,16 +3,13 @@
 
 	namespace Edde\Common\Query\Select;
 
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Query\QueryException;
-	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractQuery;
 	use Edde\Common\Query\Where\WhereExpressionFragment;
 
-	class SelectQuery extends AbstractQuery implements IConfigurable {
-		use ConfigurableTrait;
+	class SelectQuery extends AbstractQuery {
 		/**
 		 * @var INode
 		 */

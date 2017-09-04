@@ -3,13 +3,11 @@
 
 	namespace Edde\Ext\Database\Sqlite;
 
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Query\IStaticQueryFactory;
-	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Database\AbstractDriver;
 	use Edde\Common\Storage\UniqueException;
 	use Edde\Common\Storage\UnknownSourceException;
@@ -18,9 +16,8 @@
 	/**
 	 * Sqlite database support.
 	 */
-	class SqliteDriver extends AbstractDriver implements IConfigurable {
+	class SqliteDriver extends AbstractDriver {
 		use LazyContainerTrait;
-		use ConfigurableTrait;
 		/**
 		 * @var PDO
 		 */

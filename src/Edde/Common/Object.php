@@ -3,7 +3,9 @@
 
 	namespace Edde\Common;
 
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\ILazyInject;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Container\LazyTrait;
 
 	/**
@@ -17,7 +19,8 @@
 	 * After the daughter takes her date to the kitchen for something to eat, the mother turns to the father and says, "Isn't he smart? I wonder what he plans to be."
 	 * The father says, "From the smell of his fingers, I'd say our son-in-law."
 	 */
-	class Object implements ILazyInject {
+	class Object implements IConfigurable, ILazyInject {
+		use ConfigurableTrait;
 		use LazyTrait;
 
 		protected function handleInit() {

@@ -1,18 +1,15 @@
 <?php
 	declare(strict_types=1);
 
-	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Config\IConfigurator;
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Common\Config\AbstractConfigurator;
-	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object;
 
 	interface ISomething {
 		public function registerSomeething(string $something);
 	}
 
-	class FirstSomethingSetup extends AbstractConfigurator implements IConfigurator {
+	class FirstSomethingSetup extends AbstractConfigurator {
 		/**
 		 * @param ISomething $instance
 		 */
@@ -25,7 +22,7 @@
 		}
 	}
 
-	class AnotherSomethingSetup extends AbstractConfigurator implements IConfigurator {
+	class AnotherSomethingSetup extends AbstractConfigurator {
 		use LazyContainerTrait;
 
 		/**
@@ -37,8 +34,7 @@
 		}
 	}
 
-	class Something extends Object implements ISomething, IConfigurable {
-		use ConfigurableTrait;
+	class Something extends Object implements ISomething {
 		public $someParameter;
 		public $anotherSomething;
 		public $injectedSomething;
@@ -63,8 +59,7 @@
 		}
 	}
 
-	class AnotherSomething extends Object implements IConfigurable {
-		use ConfigurableTrait;
+	class AnotherSomething extends Object {
 		public $init = 0;
 		public $warmup = 0;
 		public $config = 0;
