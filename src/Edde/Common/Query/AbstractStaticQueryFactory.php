@@ -11,7 +11,7 @@
 	use Edde\Api\Query\StaticQueryException;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\NodeQuery;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use Edde\Common\Strings\StringUtils;
 	use ReflectionClass;
 	use ReflectionMethod;

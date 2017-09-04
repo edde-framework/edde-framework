@@ -4,7 +4,7 @@
 	namespace Edde\Common\Protocol\Event;
 
 	use Edde\Api\Protocol\Event\IListener;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	abstract class AbstractListener extends Object implements IListener {
 	}

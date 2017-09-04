@@ -5,7 +5,7 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use Edde\Common\Strings\StringException;
 	use Edde\Common\Strings\StringUtils;
 

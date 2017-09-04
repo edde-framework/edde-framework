@@ -3,10 +3,10 @@
 
 	namespace Edde\Common;
 
-	use Edde\Api\Container\ILazyInject;
+	use Edde\Api\Container\IAutowire;
 	use Edde\Api\EddeException;
 	use Edde\Test\BarObject;
-	use Edde\Test\CompositeObject;
+	use Edde\Test\FooBarObject;
 	use Edde\Test\FooObject;
 	use PHPUnit\Framework\TestCase;
 
@@ -22,12 +22,12 @@
 		 */
 		protected $barObject;
 		/**
-		 * @var CompositeObject
+		 * @var FooBarObject
 		 */
-		protected $composite;
+		protected $fooBarObject;
 
-		public function testInstanceOfLazyInject() {
-			self::assertInstanceOf(ILazyInject::class, $this->fooObject);
+		public function testInstanceOfAutowire() {
+			self::assertInstanceOf(IAutowire::class, $this->fooObject);
 		}
 
 		public function testWriteException() {
@@ -54,6 +54,6 @@
 		 * @codeCoverageIgnore
 		 */
 		protected function setUp() {
-			$this->composite = new CompositeObject($this->fooObject = new FooObject(), $this->barObject = new BarObject($this->fooObject));
+			$this->fooBarObject = new FooBarObject($this->fooObject = new FooObject(), $this->barObject = new BarObject($this->fooObject));
 		}
 	}

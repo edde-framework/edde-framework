@@ -9,7 +9,7 @@
 	use Edde\Api\Crate\IProperty;
 	use Edde\Api\Crypt\CryptException;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Schema\Property as SchemaProperty;
 	use Edde\Common\Schema\Schema;

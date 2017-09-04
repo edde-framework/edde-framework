@@ -1,12 +1,11 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Common;
+	namespace Edde\Common\Object;
 
-	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Container\ILazyInject;
+	use Edde\Api\Object\IObject;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Container\LazyTrait;
+	use Edde\Common\Container\AutowireTrait;
 
 	/**
 	 * While watching TV with his wife, a man tosses peanuts into the air and catches them in his mouth.
@@ -19,9 +18,9 @@
 	 * After the daughter takes her date to the kitchen for something to eat, the mother turns to the father and says, "Isn't he smart? I wonder what he plans to be."
 	 * The father says, "From the smell of his fingers, I'd say our son-in-law."
 	 */
-	class Object implements IConfigurable, ILazyInject {
+	class Object implements IObject {
 		use ConfigurableTrait;
-		use LazyTrait;
+		use AutowireTrait;
 
 		protected function handleInit() {
 		}

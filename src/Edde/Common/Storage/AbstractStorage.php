@@ -15,7 +15,7 @@
 	use Edde\Api\Storage\IStorage;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Crate\Crate;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use Edde\Common\Query\Select\SelectQuery;
 
 	/**

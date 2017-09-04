@@ -6,7 +6,7 @@
 	use ArrayIterator;
 	use Edde\Api\Collection\IList;
 	use Edde\Api\Session\ISession;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Session section for simple session data manipulation.

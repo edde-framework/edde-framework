@@ -5,7 +5,7 @@
 
 	use Edde\Api\Url\IUrl;
 	use Edde\Api\Url\UrlException;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use Edde\Common\Strings\StringUtils;
 
 	class Url extends Object implements IUrl {

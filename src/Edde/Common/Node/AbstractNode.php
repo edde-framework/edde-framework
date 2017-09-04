@@ -5,7 +5,7 @@
 
 	use Edde\Api\Node\IAbstractNode;
 	use Edde\Api\Node\NodeException;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Pure node tree implementation; this class holds all common methods for node manipulation.

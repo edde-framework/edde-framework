@@ -12,7 +12,7 @@
 	use Edde\Common\File\File;
 	use Edde\Common\Iterator\ChunkIterator;
 	use Edde\Common\Iterator\Iterator;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use Edde\Common\Strings\StringUtils;
 
 	/**

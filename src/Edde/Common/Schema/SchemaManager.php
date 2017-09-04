@@ -13,7 +13,7 @@
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Filter\BoolFilter;
 	use Edde\Common\Node\NodeQuery;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	class SchemaManager extends Object implements ISchemaManager {
 		use LazyContainerTrait;

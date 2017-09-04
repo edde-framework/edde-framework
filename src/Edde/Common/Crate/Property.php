@@ -6,7 +6,7 @@
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\IProperty;
 	use Edde\Api\Schema\IProperty as ISchemaProperty;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Crate property implementation.

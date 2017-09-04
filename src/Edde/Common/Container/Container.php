@@ -5,9 +5,9 @@
 
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\FactoryException;
+	use Edde\Api\Container\IAutowire;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Common\Container\Factory\ClassFactory;
 
 	/**
@@ -73,7 +73,7 @@
 		 */
 		public function factory(IFactory $factory, array $parameterList = [], string $name = null, string $source = null) {
 			try {
-				$this->stack->push($name ?: '[anonymous]');
+				$this->stack->push($name ?: '[no name]');
 				if (($instance = $factory->fetch($this, $fetchId = (get_class($factory) . count($parameterList) . $name . $source))) !== null) {
 					return $instance;
 				}
@@ -86,11 +86,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function autowire($instance, bool $force = false) {
-			if (is_object($instance) === false) {
-				return $instance;
-			}
-			return $this->dependency($instance, $this->autowireList[$class = get_class($instance)] ?? $this->autowireList[$class] = (new ClassFactory())->createDependency($this, $class), $force !== true);
+		public function inject($instance, bool $force = false) {
+			return is_object($instance) ? $this->dependency($instance, $this->autowireList[$class = get_class($instance)] ?? $this->autowireList[$class] = (new ClassFactory())->createDependency($this, $class), $force !== true) : $instance;
 		}
 
 		/**
@@ -101,16 +98,18 @@
 				return $instance;
 			}
 			$class = get_class($instance);
-			/** @var $instance ILazyInject */
-			foreach ($dependency->getInjectList() as $reflectionParameter) {
-				$instance->inject($reflectionParameter->getName(), $this->create($reflectionParameter->getClass(), [], $class));
-			}
-			foreach ($dependency->getLazyList() as $reflectionParameter) {
-				if ($lazy) {
-					$instance->lazy($reflectionParameter->getName(), $this, $reflectionParameter->getClass());
-					continue;
+			if ($instance instanceof IAutowire) {
+				/** @var $instance IAutowire */
+				foreach ($dependency->getInjectList() as $reflectionParameter) {
+					$instance->autowire($reflectionParameter->getName(), $this->create($reflectionParameter->getClass(), [], $class));
 				}
-				$instance->inject($reflectionParameter->getName(), $this->create($reflectionParameter->getClass(), [], $class));
+				foreach ($dependency->getLazyList() as $reflectionParameter) {
+					if ($lazy) {
+						$instance->lazy($reflectionParameter->getName(), $this, $reflectionParameter->getClass());
+						continue;
+					}
+					$instance->autowire($reflectionParameter->getName(), $this->create($reflectionParameter->getClass(), [], $class));
+				}
 			}
 			if ($instance instanceof IConfigurable) {
 				/** @var $instance IConfigurable */
@@ -132,7 +131,7 @@
 		protected function handleSetup() {
 			parent::handleSetup();
 			foreach ($this->factoryList as $factory) {
-				$this->autowire($factory);
+				$this->inject($factory);
 			}
 		}
 	}

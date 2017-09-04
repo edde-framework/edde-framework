@@ -8,7 +8,7 @@
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Lock\Exception\LockedException;
 	use Edde\Common\Lock\Exception\LockTimeoutException;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	abstract class AbstractLockManager extends Object implements ILockManager {
 		use ConfigurableTrait;

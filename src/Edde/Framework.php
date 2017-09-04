@@ -3,7 +3,7 @@
 
 	namespace Edde;
 
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Information about framework hidden in this class.

@@ -11,7 +11,7 @@
 	use Edde\Api\Session\SessionException;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Http\HttpUtils;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Session manager is... session managing tool ;). It's responsible for whole session lifetime and section

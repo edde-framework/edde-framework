@@ -12,7 +12,7 @@
 	use Edde\Api\Upgrade\IUpgradeStorable;
 	use Edde\Api\Upgrade\UpgradeException;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use Edde\Common\Query\Schema\CreateSchemaQuery;
 
 	/**

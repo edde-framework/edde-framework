@@ -9,7 +9,7 @@
 	use Edde\Api\Protocol\IProtocolHandler;
 	use Edde\Api\Protocol\LazyElementStoreTrait;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	abstract class AbstractProtocolHandler extends Object implements IProtocolHandler {
 		use LazyElementStoreTrait;

@@ -17,7 +17,7 @@
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\Request;
 	use Edde\Common\Http\RequestUrl;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use Edde\Common\Url\Url;
 
 	/**

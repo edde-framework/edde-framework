@@ -8,7 +8,7 @@
 	use Edde\Api\Thread\IThreadManager;
 	use Edde\Api\Thread\LazyExecutorTtrait;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	abstract class AbstractThreadManager extends Object implements IThreadManager {
 		use LazyExecutorTtrait;

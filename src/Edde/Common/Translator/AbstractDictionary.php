@@ -5,7 +5,7 @@
 
 	use Edde\Api\Translator\IDictionary;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Common dictionary implementation.

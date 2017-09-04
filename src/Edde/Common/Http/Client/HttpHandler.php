@@ -16,7 +16,7 @@
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpUtils;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use Edde\Common\Strings\StringException;
 	use Edde\Ext\Converter\ArrayContent;
 

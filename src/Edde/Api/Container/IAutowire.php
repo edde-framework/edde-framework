@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Container;
 
-	interface ILazyInject {
+	interface IAutowire {
 		/**
 		 * inject the given dependency to the property
 		 *
@@ -12,7 +12,7 @@
 		 *
 		 * @return $this
 		 */
-		public function inject(string $property, $dependency);
+		public function autowire(string $property, $dependency);
 
 		/**
 		 * register the given container dependency on the given property

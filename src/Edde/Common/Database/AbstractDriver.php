@@ -7,7 +7,7 @@
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\Database\LazyDsnTrait;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Common stuff for database driver implementation.

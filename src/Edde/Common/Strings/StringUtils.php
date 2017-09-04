@@ -4,7 +4,7 @@
 	namespace Edde\Common\Strings;
 
 	use Edde\Common\Callback\CallbackUtils;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * StringsUtils are set of independent methods for UTF-8 string manipulation.

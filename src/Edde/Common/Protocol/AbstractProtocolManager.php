@@ -9,7 +9,7 @@
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Api\Store\LazyStoreManagerTrait;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use Edde\Ext\Session\SessionStore;
 
 	abstract class AbstractProtocolManager extends Object implements IProtocolManager {

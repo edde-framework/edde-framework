@@ -10,7 +10,7 @@
 	use Edde\Api\Translator\TranslatorException;
 	use Edde\Common\Cache\CacheTrait;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * General class for translation support.

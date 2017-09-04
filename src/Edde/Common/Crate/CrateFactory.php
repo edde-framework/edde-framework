@@ -11,7 +11,7 @@
 	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Api\Schema\SchemaException;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Factory for... creating crates.

@@ -4,7 +4,7 @@
 	namespace Edde\Common\Database;
 
 	use Edde\Api\Database\IDsn;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	abstract class AbstractDsn extends Object implements IDsn {
 		/**

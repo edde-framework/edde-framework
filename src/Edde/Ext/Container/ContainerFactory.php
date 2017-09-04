@@ -74,7 +74,7 @@
 	use Edde\Common\Lock\FileLockManager;
 	use Edde\Common\Log\LogDirectory;
 	use Edde\Common\Log\LogService;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use Edde\Common\Protocol\ElementStore;
 	use Edde\Common\Protocol\Event\EventBus;
 	use Edde\Common\Protocol\ProtocolManager;
@@ -228,7 +228,7 @@
 		 */
 		static public function autowire($instance, array $factoryList = [], array $configuratorList = []): IContainer {
 			$container = self::containerWithRoot(empty($factoryList) ? [new ClassFactory()] : $factoryList, $configuratorList);
-			$container->autowire($instance);
+			$container->inject($instance);
 			return $container;
 		}
 

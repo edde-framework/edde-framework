@@ -4,7 +4,7 @@
 	namespace Edde\Common\Http;
 
 	use Edde\Api\Http\ICookie;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	class Cookie extends Object implements ICookie {
 		/**

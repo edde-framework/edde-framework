@@ -7,7 +7,7 @@
 	use Edde\Api\Protocol\IElementStore;
 	use Edde\Api\Store\LazyStoreTrait;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	class ElementStore extends Object implements IElementStore {
 		use LazyStoreTrait;

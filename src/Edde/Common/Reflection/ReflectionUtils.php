@@ -5,7 +5,7 @@
 
 	use Closure;
 	use Edde\Api\Reflection\ReflectionException;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use ReflectionClass;
 	use ReflectionFunction;
 	use ReflectionMethod;

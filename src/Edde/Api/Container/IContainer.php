@@ -99,7 +99,7 @@
 		 *
 		 * @return mixed
 		 */
-		public function autowire($instance, bool $force = false);
+		public function inject($instance, bool $force = false);
 
 		/**
 		 * execute injects on the given instance

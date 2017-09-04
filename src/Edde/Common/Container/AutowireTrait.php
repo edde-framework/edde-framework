@@ -5,20 +5,21 @@
 
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\EddeException;
+	use Edde\Common\Object\Exception\PropertyReadException;
+	use Edde\Common\Object\Exception\PropertyWriteException;
 
-	trait LazyTrait {
-		protected $aInjectList = [];
-		protected $aLazyInjectList = [];
+	trait AutowireTrait {
+		protected $tAutowireList = [];
+		protected $tLazyList = [];
 
-		public function inject(string $property, $dependency) {
-			$this->aInjectList[$property] = $dependency;
+		public function autowire(string $property, $dependency) {
+			$this->tAutowireList[$property] = $dependency;
 			$this->{$property} = $dependency;
 			return $this;
 		}
 
 		public function lazy(string $property, IContainer $container, string $dependency, array $parameterList = []) {
-			$this->aLazyInjectList[$property] = [
+			$this->tLazyList[$property] = [
 				$container,
 				$dependency,
 				$parameterList,
@@ -33,19 +34,19 @@
 		 * @param string $name
 		 *
 		 * @return mixed
-		 * @throws EddeException
+		 * @throws PropertyReadException
 		 */
 		public function __get(string $name) {
-			if (isset($this->aLazyInjectList[$name])) {
+			if (isset($this->tLazyList[$name])) {
 				/** @var $container IContainer */
-				list($container, $dependency, $parameterList) = $this->aLazyInjectList[$name];
+				list($container, $dependency, $parameterList) = $this->tLazyList[$name];
 				/** @var $instance IConfigurable */
 				if (($instance = $this->{$name} = $container->create($dependency, $parameterList, static::class)) instanceof IConfigurable) {
 					$instance->setup();
 				}
 				return $instance;
 			}
-			throw new EddeException(sprintf('Reading from the undefined/private/protected property [%s::$%s].', static::class, $name));
+			throw new PropertyReadException(sprintf('Reading from the undefined/private/protected property [%s::$%s].', static::class, $name));
 		}
 
 		/**
@@ -53,14 +54,13 @@
 		 * @param mixed  $value
 		 *
 		 * @return $this
-		 * @throws EddeException
+		 * @throws PropertyWriteException
 		 */
 		public function __set(string $name, $value) {
-			if (isset($this->aLazyInjectList[$name])) {
-				/** @noinspection PhpVariableVariableInspection */
-				$this->$name = $value;
+			if (isset($this->tLazyList[$name])) {
+				$this->{$name} = $value;
 				return $this;
 			}
-			throw new EddeException(sprintf('Writing to the undefined/private/protected property [%s::$%s].', static::class, $name));
+			throw new PropertyWriteException(sprintf('Writing to the undefined/private/protected property [%s::$%s].', static::class, $name));
 		}
 	}

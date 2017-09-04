@@ -5,7 +5,7 @@
 
 	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Common stuff for cache storage implementation.

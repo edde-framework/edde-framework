@@ -8,7 +8,7 @@
 	use Edde\Common\Lock\Exception\ForeignLockException;
 	use Edde\Common\Lock\Exception\LockedException;
 	use Edde\Common\Lock\Exception\UnlockedException;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	abstract class AbstractLock extends Object implements ILock {
 		use ConfigurableTrait;

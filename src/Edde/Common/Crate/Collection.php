@@ -9,7 +9,7 @@
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	class Collection extends Object implements ICollection {
 		/**
