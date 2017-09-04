@@ -181,6 +181,7 @@
 			$container->addConfigurator($containerConfigurator);
 			$container->setup();
 			$container = $container->create(IContainer::class);
+			$container->addConfigurator($containerConfigurator);
 			$container->setup();
 			return $container;
 		}
@@ -332,7 +333,7 @@
 
 				IRuntime::class => Runtime::class,
 
-				IHostUrl::class          => HostUrl::class . '::createHostUrl',
+				IHostUrl::class          => HostUrl::class . '::factory',
 
 				/**
 				 * Support for general content conversion (which also powers server content negotiation)

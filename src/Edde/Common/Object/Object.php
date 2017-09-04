@@ -21,7 +21,4 @@
 	class Object implements IObject {
 		use ConfigurableTrait;
 		use AutowireTrait;
-
-		public function __clone() {
-		}
 	}

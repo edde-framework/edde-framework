@@ -55,6 +55,10 @@
 				return $this;
 			}
 			$this->tSetup = true;
+			$this->init();
+			foreach ($this->tConfiguratorList as $configHandler) {
+				$configHandler->configure($this);
+			}
 			$this->handleSetup();
 			return $this;
 		}

@@ -9,6 +9,8 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 	use Edde\Common\Container\Dependency;
+	use Edde\Common\Container\Factory\Exception\MethodVisibilityException;
+	use Edde\Common\Container\Factory\Exception\PropertyVisibilityException;
 	use Edde\Common\Reflection\ReflectionParameter;
 	use Edde\Common\Reflection\ReflectionUtils;
 
@@ -70,11 +72,11 @@
 			$parameterList = [];
 			if (strlen($name = $reflectionMethod->getName()) > strlen($method) && strpos($name, $method, 0) === 0) {
 				if ($reflectionMethod->isPublic() === false) {
-					throw new ContainerException(sprintf('Method [%s::%s()] must be public.', $reflectionClass->getName(), $reflectionMethod->getName()));
+					throw new MethodVisibilityException(sprintf('Method [%s::%s()] must be public.', $reflectionClass->getName(), $reflectionMethod->getName()));
 				}
 				foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
 					if ($reflectionClass->hasProperty($name = $reflectionParameter->getName()) === false) {
-						throw new ContainerException(sprintf('Class [%s] must have property [$%s] of the same name as parameter in method [%s::%s(..., %s$%s, ...)].', $reflectionClass->getName(), $name, $reflectionClass->getName(), $reflectionMethod->getName(), ($class = $reflectionParameter->getClass()) ? $class->getName() . ' ' : null, $name));
+						throw new PropertyVisibilityException(sprintf('Class [%s] must have property [$%s] of the same name as parameter in method [%s::%s(..., %s$%s, ...)].', $reflectionClass->getName(), $name, $reflectionClass->getName(), $reflectionMethod->getName(), ($class = $reflectionParameter->getClass()) ? $class->getName() . ' ' : null, $name));
 					}
 					$reflectionProperty = $reflectionClass->getProperty($name);
 					$reflectionProperty->setAccessible(true);
