@@ -36,6 +36,10 @@
 				/**
 				 * nothing special - protocol service is connected to service responsible for
 				 * providing a request
+				 *
+				 * a protocol service should only execute the application logic, do whatever is
+				 * needed but without any output; output (aka response) should be handled after
+				 * execution is done
 				 */
 				$this->protocolService->execute($this->request->getElement());
 				return $this->code ?: 0;

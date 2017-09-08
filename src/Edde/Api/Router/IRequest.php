@@ -7,7 +7,7 @@
 
 	/**
 	 * Marker interface for an request element of an application. There should be only
-	 * one request element per time from an user interaction. This interface is not inteded
+	 * one request element per time from an user interaction. This interface is not intended
 	 * to be used for jobs or more requests per time to an application pipeline as everything
 	 * should go through The Protocol (including this packet).
 	 */
@@ -18,9 +18,4 @@
 		 * @return IElement
 		 */
 		public function getElement(): IElement;
-
-		/**
-		 * @return string[]
-		 */
-		public function getTargetList(): array;
 	}

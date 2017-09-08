@@ -12,14 +12,9 @@
 		 * @var IElement
 		 */
 		protected $element;
-		/**
-		 * @var string[]
-		 */
-		protected $targetList = [];
 
-		public function __construct(IElement $element, array $targetList) {
+		public function __construct(IElement $element) {
 			$this->element = $element;
-			$this->targetList = $targetList;
 		}
 
 		/**
@@ -27,12 +22,5 @@
 		 */
 		public function getElement(): IElement {
 			return $this->element;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getTargetList(): array {
-			return $this->targetList;
 		}
 	}
