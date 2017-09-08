@@ -36,7 +36,6 @@
 	use Edde\Api\Protocol\Request\IRequestService;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\IResourceProvider;
-	use Edde\Api\Router\IRequest;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Api\Schema\ISchemaManager;
@@ -450,7 +449,6 @@
 				// ]),
 
 				IRouterService::class => RouterService::class,
-				IRequest::class => IRouterService::class . '::createRequest',
 				IApplication::class => Application::class,
 				'run' => IApplication::class . '::run',
 			];

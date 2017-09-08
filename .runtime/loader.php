@@ -8,6 +8,8 @@
 	 */
 	declare(strict_types=1);
 
+	use Edde\Api\Router\IRouterService;
+	use Edde\App\Router\RouterServiceConfigurator;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use Tracy\Debugger;
@@ -45,4 +47,6 @@
 		 * create not so much nice surprises. Thus, it must be last as kind of dependency fallback.
 		 */
 		new ClassFactory(),
-	]), []);
+	]), [
+		IRouterService::class => RouterServiceConfigurator::class,
+	]);

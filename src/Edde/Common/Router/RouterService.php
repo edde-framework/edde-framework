@@ -83,10 +83,8 @@
 				}
 			}
 			if ($request === null && $this->defaultRouter) {
-				if ($this->defaultRouter) {
-					$this->defaultRouter->setup();
-					$this->defaultRouter->canHandle() && ($request = $this->defaultRouter->createRequest());
-				}
+				$this->defaultRouter->setup();
+				$this->defaultRouter->canHandle() && ($request = $this->defaultRouter->createRequest());
 			}
 			if ($request === null) {
 				throw new BadRequestException('Cannot handle current request.');

@@ -7,7 +7,7 @@
 	use Edde\Api\Router\IRequest;
 	use Edde\Api\Router\IRouter;
 
-	class RouterProxy extends AbstractRouter {
+	class ProxyRouter extends AbstractRouter {
 		use LazyContainerTrait;
 		/**
 		 * @var string

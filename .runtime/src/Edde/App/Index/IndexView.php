@@ -3,10 +3,10 @@
 
 	namespace Edde\App\Index;
 
-	use Edde\Ext\Control\AbstractTemplateControl;
+	use Edde\Common\Object\Object;
 
-	class IndexView extends AbstractTemplateControl {
+	class IndexView extends Object {
 		public function actionIndex() {
-			return $this->template();
+			echo 'hello!';
 		}
 	}

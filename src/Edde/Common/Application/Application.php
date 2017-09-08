@@ -6,12 +6,12 @@
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Log\LazyLogServiceTrait;
 	use Edde\Api\Protocol\LazyProtocolServiceTrait;
-	use Edde\Api\Router\LazyRequestTrait;
+	use Edde\Api\Router\LazyRouterServiceTrait;
 	use Edde\Common\Object\Object;
 
 	class Application extends Object implements IApplication {
 		use LazyProtocolServiceTrait;
-		use LazyRequestTrait;
+		use LazyRouterServiceTrait;
 		use LazyLogServiceTrait;
 		/**
 		 * return code from an application
@@ -41,7 +41,8 @@
 				 * needed but without any output; output (aka response) should be handled after
 				 * execution is done
 				 */
-				$this->protocolService->execute($this->request->getElement());
+				$request = $this->routerService->createRequest();
+				$this->protocolService->execute($request->getElement());
 				return $this->code ?: 0;
 			} catch (\Throwable $exception) {
 				$this->logService->exception($exception, ['edde']);
