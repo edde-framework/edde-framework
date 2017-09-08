@@ -89,12 +89,14 @@
 						break;
 					}
 				}
-				foreach ($this->routerProxyList as $routerProxy) {
-					$routerProxy->setup();
-					$this->registerRouter($router = $routerProxy->proxy());
-					if ($router->canHandle()) {
-						$request = $router->createRequest();
-						break;
+				if ($request === null) {
+					foreach ($this->routerProxyList as $routerProxy) {
+						$routerProxy->setup();
+						$this->registerRouter($router = $routerProxy->proxy());
+						if ($router->canHandle()) {
+							$request = $router->createRequest();
+							break;
+						}
 					}
 				}
 			} catch (\Throwable $exception) {
