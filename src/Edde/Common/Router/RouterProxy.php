@@ -4,30 +4,45 @@
 	namespace Edde\Common\Router;
 
 	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Router\IRequest;
 	use Edde\Api\Router\IRouter;
-	use Edde\Api\Router\IRouterProxy;
-	use Edde\Common\Object\Object;
 
-	class RouterProxy extends Object implements IRouterProxy {
+	class RouterProxy extends AbstractRouter {
 		use LazyContainerTrait;
 		/**
 		 * @var string
 		 */
-		protected $router;
+		protected $proxy;
 		protected $parameterList = [];
+		/**
+		 * @var IRouter
+		 */
+		protected $router;
 
-		public function __construct(string $router, array $parameterList) {
-			$this->router = $router;
+		public function __construct(string $proxy, array $parameterList = []) {
+			$this->proxy = $proxy;
 			$this->parameterList = $parameterList;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function proxy(): IRouter {
-			/** @var $router IRouter */
-			$router = $this->container->create($this->router, $this->parameterList, __METHOD__);
-			$router->setup();
-			return $router;
+		public function canHandle(): bool {
+			return $this->router->canHandle();
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function createRequest(): IRequest {
+			return $this->router->createRequest();
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setup() {
+			$this->router = $this->container->create($this->proxy, $this->parameterList, __METHOD__);
+			$this->router->setup();
 		}
 	}

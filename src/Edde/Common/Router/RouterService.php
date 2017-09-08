@@ -7,28 +7,22 @@
 	use Edde\Api\Router\Exception\BadRequestException;
 	use Edde\Api\Router\IRequest;
 	use Edde\Api\Router\IRouter;
-	use Edde\Api\Router\IRouterProxy;
 	use Edde\Api\Router\IRouterService;
-	use Edde\Common\Object\Object;
 
-	class RouterService extends Object implements IRouterService {
+	class RouterService extends AbstractRouter implements IRouterService {
 		use LazyLogServiceTrait;
 		/**
 		 * @var IRouter[]
 		 */
 		protected $routerList = [];
 		/**
-		 * @var IRouterProxy[]
+		 * @var IRouter
 		 */
-		protected $routerProxyList = [];
+		protected $defaultRouter;
 		/**
-		 * @var IRouterProxy
+		 * @var IRouter
 		 */
-		protected $defaultRouterProxy;
-		/**
-		 * @var IRouterProxy
-		 */
-		protected $errorRouterProxy;
+		protected $errorRouter;
 		/**
 		 * @var IRequest
 		 */
@@ -45,24 +39,16 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function registerRouterProxy(IRouterProxy $routerProxy): IRouterService {
-			$this->routerProxyList[] = $routerProxy;
+		public function registerDefaultRouter(IRouter $router): IRouterService {
+			$this->defaultRouter = $router;
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function registerDefaultRouterProxy(IRouterProxy $routerProxy): IRouterService {
-			$this->defaultRouterProxy = $routerProxy;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function registerErrorRouterProxy(IRouterProxy $routerProxy): IRouterService {
-			$this->errorRouterProxy = $routerProxy;
+		public function registerErrorRouter(IRouter $router): IRouterService {
+			$this->errorRouter = $router;
 			return $this;
 		}
 
@@ -89,27 +75,18 @@
 						break;
 					}
 				}
-				if ($request === null) {
-					foreach ($this->routerProxyList as $routerProxy) {
-						$routerProxy->setup();
-						$this->registerRouter($router = $routerProxy->proxy());
-						if ($router->canHandle()) {
-							$request = $router->createRequest();
-							break;
-						}
-					}
-				}
 			} catch (\Throwable $exception) {
 				$this->logService->exception($exception);
-				/**
-				 * error proxy must be set, create router and see if it can handle current request (it should)
-				 */
-				if ($this->errorRouterProxy && ($errorRouter = $this->errorRouterProxy->proxy()) && $errorRouter->canHandle()) {
-					$request = $errorRouter->createRequest();
+				if ($this->errorRouter) {
+					$this->errorRouter->setup();
+					$this->errorRouter->canHandle() && ($request = $this->errorRouter->createRequest());
 				}
 			}
-			if ($request === null && $this->defaultRouterProxy && ($defaultRouter = $this->defaultRouterProxy->proxy()) && $defaultRouter->canHandle()) {
-				$request = $defaultRouter->createRequest();
+			if ($request === null && $this->defaultRouter) {
+				if ($this->defaultRouter) {
+					$this->defaultRouter->setup();
+					$this->defaultRouter->canHandle() && ($request = $this->defaultRouter->createRequest());
+				}
 			}
 			if ($request === null) {
 				throw new BadRequestException('Cannot handle current request.');

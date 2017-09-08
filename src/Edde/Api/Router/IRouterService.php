@@ -19,29 +19,20 @@
 		public function registerRouter(IRouter $router): IRouterService;
 
 		/**
-		 * register a router proxy (to deffer router creation only when it's needed)
-		 *
-		 * @param IRouterProxy $routerProxy
-		 *
-		 * @return IRouterService
-		 */
-		public function registerRouterProxy(IRouterProxy $routerProxy): IRouterService;
-
-		/**
 		 * when no other router catches a request, this one should be executed
 		 *
-		 * @param IRouterProxy $routerProxy
+		 * @param IRouter $router
 		 *
 		 * @return IRouterService
 		 */
-		public function registerDefaultRouterProxy(IRouterProxy $routerProxy): IRouterService;
+		public function registerDefaultRouter(IRouter $router): IRouterService;
 
 		/**
 		 * when there is an exception, this router should be executed
 		 *
-		 * @param IRouterProxy $routerProxy
+		 * @param IRouter $router
 		 *
 		 * @return IRouterService
 		 */
-		public function registerErrorRouterProxy(IRouterProxy $routerProxy): IRouterService;
+		public function registerErrorRouter(IRouter $router): IRouterService;
 	}

@@ -104,6 +104,7 @@
 	use Edde\Ext\Log\LogServiceConfigurator;
 	use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 	use Edde\Ext\Protocol\RequestServiceConfigurator;
+	use Edde\Ext\Router\RouterServiceConfigurator;
 	use Edde\Ext\Store\StoreManagerConfigurator;
 
 	class ContainerFactory extends Object {
@@ -269,10 +270,10 @@
 		 */
 		static public function instance(string $class, array $parameterList, bool $cloneable = false) {
 			return (object)[
-				'type'          => __FUNCTION__,
-				'class'         => $class,
+				'type' => __FUNCTION__,
+				'class' => $class,
 				'parameterList' => $parameterList,
-				'cloneable'     => $cloneable,
+				'cloneable' => $cloneable,
 			];
 		}
 
@@ -286,9 +287,9 @@
 		 */
 		static public function exception(string $message, string $class = null) {
 			return (object)[
-				'type'    => __FUNCTION__,
+				'type' => __FUNCTION__,
 				'message' => $message,
-				'class'   => $class ?: EddeException::class,
+				'class' => $class ?: EddeException::class,
 			];
 		}
 
@@ -303,22 +304,22 @@
 		 */
 		static public function proxy(string $factory, string $method, array $parameterList) {
 			return (object)[
-				'type'          => __FUNCTION__,
-				'factory'       => $factory,
-				'method'        => $method,
+				'type' => __FUNCTION__,
+				'factory' => $factory,
+				'method' => $method,
 				'parameterList' => $parameterList,
 			];
 		}
 
 		static public function getDefaultFactoryList(): array {
 			return [
-				IContainer::class      => Container::class,
-				IRootDirectory::class  => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
-				ITempDirectory::class  => self::proxy(IRootDirectory::class, 'directory', [
+				IContainer::class => Container::class,
+				IRootDirectory::class => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
+				ITempDirectory::class => self::proxy(IRootDirectory::class, 'directory', [
 					'temp',
 					TempDirectory::class,
 				]),
-				ILogDirectory::class   => self::proxy(IRootDirectory::class, 'directory', [
+				ILogDirectory::class => self::proxy(IRootDirectory::class, 'directory', [
 					'logs',
 					LogDirectory::class,
 				]),
@@ -326,9 +327,9 @@
 				/**
 				 * Happy caching stuff here :)
 				 */
-				ICacheManager::class   => CacheManager::class,
-				ICache::class          => ICacheManager::class,
-				ICacheStorage::class   => FlatFileCacheStorage::class,
+				ICacheManager::class => CacheManager::class,
+				ICache::class => ICacheManager::class,
+				ICacheStorage::class => FlatFileCacheStorage::class,
 				ICacheDirectory::class => self::proxy(ITempDirectory::class, 'directory', [
 					'cache',
 					CacheDirectory::class,
@@ -336,7 +337,7 @@
 
 				IRuntime::class => Runtime::class,
 
-				IHostUrl::class          => HostUrl::class . '::factory',
+				IHostUrl::class => HostUrl::class . '::factory',
 
 				/**
 				 * Support for general content conversion (which also powers server content negotiation)
@@ -346,89 +347,89 @@
 				/**
 				 * Resource related stuff
 				 */
-				IResourceManager::class  => ResourceManager::class,
+				IResourceManager::class => ResourceManager::class,
 				IResourceProvider::class => IResourceManager::class,
 
 				/**
 				 * Storage (database) related stuff
 				 */
-				IStorage::class          => DatabaseStorage::class,
-				IDriver::class           => SqliteDriver::class,
-				IDsn::class              => self::instance(SqliteDsn::class, ['storage.sqlite']),
+				IStorage::class => DatabaseStorage::class,
+				IDriver::class => SqliteDriver::class,
+				IDsn::class => self::instance(SqliteDsn::class, ['storage.sqlite']),
 
 				/**
 				 * General crate support
 				 */
-				ICrate::class            => self::instance(Crate::class, [], true),
-				ICrateFactory::class     => CrateFactory::class,
-				ISchemaManager::class    => SchemaManager::class,
+				ICrate::class => self::instance(Crate::class, [], true),
+				ICrateFactory::class => CrateFactory::class,
+				ISchemaManager::class => SchemaManager::class,
 
 				/**
 				 * Http client support
 				 */
-				IHttpClient::class       => HttpClient::class,
+				IHttpClient::class => HttpClient::class,
 
 				/**
 				 * General log service
 				 */
-				ILogService::class       => LogService::class,
+				ILogService::class => LogService::class,
 
 				/**
 				 * Custom simple XML parser
 				 */
-				IXmlParser::class        => XmlParser::class,
+				IXmlParser::class => XmlParser::class,
 
 				/**
 				 * General support for html generator and template engine
 				 */
-				IHtmlGenerator::class    => Html5Generator::class,
+				IHtmlGenerator::class => Html5Generator::class,
 
 				/**
 				 * It's nice when it is possible to upgrade you application...
 				 */
-				IUpgradeManager::class   => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
+				IUpgradeManager::class => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
 
 				/**
 				 * Simple crypto layer
 				 */
-				ICryptEngine::class      => CryptEngine::class,
+				ICryptEngine::class => CryptEngine::class,
 
 				/**
 				 * Access control, session and Identity (user session)
 				 */
-				ISessionManager::class   => SessionManager::class,
+				ISessionManager::class => SessionManager::class,
 				ISessionDirectory::class => self::proxy(ITempDirectory::class, 'directory', [
 					'session',
 					SessionDirectory::class,
 				]),
-				IFingerprint::class      => SessionFingerprint::class,
+				IFingerprint::class => SessionFingerprint::class,
 
 				/**
 				 * Protocol implementation support
 				 */
-				IProtocolManager::class  => ProtocolManager::class,
-				IProtocolService::class  => ProtocolService::class,
+				IProtocolManager::class => ProtocolManager::class,
+				IProtocolService::class => ProtocolService::class,
 				IRequestService::class => RequestService::class,
-				IEventBus::class       => EventBus::class,
-				IElementStore::class   => ElementStore::class,
+				IEventBus::class => EventBus::class,
+				IElementStore::class => ElementStore::class,
 
 				/**
 				 * Job related implementation
 				 */
-				IJobManager::class     => JobManager::class,
-				IJobQueue::class       => JobQueue::class,
+				IJobManager::class => JobManager::class,
+				IJobQueue::class => JobQueue::class,
 
 				/**
 				 * Thread support
 				 */
-				IThreadManager::class  => ThreadManager::class,
-				IExecutor::class       => WebExecutor::class,
+				IThreadManager::class => ThreadManager::class,
+				IExecutor::class => WebExecutor::class,
 
 				/**
 				 * Store related stuff
 				 */
-				IStoreManager::class   => StoreManager::class,
-				IStore::class          => IStoreManager::class,
+				IStoreManager::class => StoreManager::class,
+				IStore::class => IStoreManager::class,
 				// IStoreDirectory::class   => self::proxy(IAssetDirectory::class, 'directory', [
 				// 	'store',
 				// 	StoreDirectory::class,
@@ -437,37 +438,41 @@
 				/**
 				 * xml support
 				 */
-				IXmlExport::class      => XmlExport::class,
+				IXmlExport::class => XmlExport::class,
 
 				/**
 				 * General Locking support
 				 */
-				ILockManager::class    => FileLockManager::class,
+				ILockManager::class => FileLockManager::class,
 				// ILockDirectory::class    => self::proxy(IAssetDirectory::class, 'directory', [
 				// 	'.lock',
 				// 	LockDirectory::class,
 				// ]),
 
 				IRouterService::class => RouterService::class,
-				IRequest::class       => IRouterService::class . '::createRequest',
-				IApplication::class   => Application::class,
-				'run'                 => IApplication::class . '::run',
+				IRequest::class => IRouterService::class . '::createRequest',
+				IApplication::class => Application::class,
+				'run' => IApplication::class . '::run',
 			];
 		}
 
 		static public function getDefaultConfiguratorList(): array {
 			return [
 				/**
+				 * router configuration
+				 */
+				IRouterService::class => RouterServiceConfigurator::class,
+				/**
 				 * To enable general content exchange, we have to setup converter manager; it basically allows to do arbitrary
 				 * data conversions for example json to array, xml file to INode, ... this component is kind of fundamental part
 				 * of the framework.
 				 */
 				IConverterManager::class => ConverterManagerConfigurator::class,
-				IProtocolService::class  => ProtocolServiceConfigurator::class,
-				IRequestService::class   => RequestServiceConfigurator::class,
-				ILogService::class       => LogServiceConfigurator::class,
-				IThreadManager::class    => ThreadManagerConfigurator::class,
-				IStoreManager::class     => StoreManagerConfigurator::class,
+				IProtocolService::class => ProtocolServiceConfigurator::class,
+				IRequestService::class => RequestServiceConfigurator::class,
+				ILogService::class => LogServiceConfigurator::class,
+				IThreadManager::class => ThreadManagerConfigurator::class,
+				IStoreManager::class => StoreManagerConfigurator::class,
 			];
 		}
 	}
