@@ -24,6 +24,7 @@
 	use Edde\Api\Html\IHtmlGenerator;
 	use Edde\Api\Http\Client\IHttpClient;
 	use Edde\Api\Http\IHostUrl;
+	use Edde\Api\Http\IHttpService;
 	use Edde\Api\Job\IJobManager;
 	use Edde\Api\Job\IJobQueue;
 	use Edde\Api\Lock\ILockManager;
@@ -71,6 +72,7 @@
 	use Edde\Common\Html\Html5Generator;
 	use Edde\Common\Http\Client\HttpClient;
 	use Edde\Common\Http\HostUrl;
+	use Edde\Common\Http\HttpService;
 	use Edde\Common\Job\JobManager;
 	use Edde\Common\Job\JobQueue;
 	use Edde\Common\Lock\FileLockManager;
@@ -454,6 +456,7 @@
 				// ]),
 
 				IRouterService::class => RouterService::class,
+				IHttpService::class => HttpService::class,
 				IApplication::class => Application::class,
 				'run' => IApplication::class . '::run',
 			];

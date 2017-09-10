@@ -39,7 +39,7 @@
 		 * @inheritdoc
 		 */
 		public function request(IElement $element): IElement {
-			if (isset($this->responseList[$id = $element->getAttribute('id')])) {
+			if (isset($this->responseList[$id = $element->getId()])) {
 				return $this->responseList[$id];
 			}
 			return $this->execute($element);
@@ -56,11 +56,13 @@
 						return $this->responseList[$element->getId()] = $response->setReference($element);
 					}
 					if ($element->isType('request')) {
-						return (new Error(100, sprintf('Internal error; request [%s] got no answer (response).', $element->getAttribute('request'))))->setException(MissingResponseException::class)->setReference($element);
+						return (new Error(100, sprintf('Internal error; request [%s] got no answer (response).', $element->getAttribute('request'))))->setException(MissingResponseException::class)
+							->setReference($element);
 					}
 					return null;
 				}
 			}
-			return (new Error(100, sprintf('Unhandled request [%s].', $element->getAttribute('request'))))->setException(UnhandledRequestException::class)->setReference($element);
+			return (new Error(100, sprintf('Unhandled request [%s].', $element->getAttribute('request'))))->setException(UnhandledRequestException::class)
+				->setReference($element);
 		}
 	}

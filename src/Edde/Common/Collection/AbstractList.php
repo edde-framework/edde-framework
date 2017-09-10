@@ -44,6 +44,14 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function append(array $array): IList {
+			$this->list = array_merge($this->list, $array);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function set(string $name, $value): IList {
 			$this->list[$name] = $value;
 			return $this;

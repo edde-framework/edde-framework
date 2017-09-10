@@ -1,14 +1,15 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Ext\Router;
+	namespace Edde\Common\Router;
 
+	use Edde\Api\Http\LazyHttpServiceTrait;
 	use Edde\Api\Router\IRequest;
 	use Edde\Api\Runtime\LazyRuntimeTrait;
-	use Edde\Common\Router\AbstractRouter;
 
 	class HttpRouter extends AbstractRouter {
 		use LazyRuntimeTrait;
+		use LazyHttpServiceTrait;
 
 		/**
 		 * @inheritdoc

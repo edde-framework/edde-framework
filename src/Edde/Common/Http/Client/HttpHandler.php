@@ -13,6 +13,13 @@
 	use Edde\Api\Http\Client\IResponse;
 	use Edde\Api\Http\IRequest;
 	use Edde\Common\Converter\Content;
+	use Edde\Common\Http\Client\Exception\BadRequestException;
+	use Edde\Common\Http\Client\Exception\ForbiddenException;
+	use Edde\Common\Http\Client\Exception\MethodNotAllowedException;
+	use Edde\Common\Http\Client\Exception\NotFoundException;
+	use Edde\Common\Http\Client\Exception\ServerErrorException;
+	use Edde\Common\Http\Client\Exception\ServiceUnavailableException;
+	use Edde\Common\Http\Client\Exception\UnauthorizedException;
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpUtils;

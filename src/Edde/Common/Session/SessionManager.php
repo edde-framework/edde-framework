@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Session;
 
-	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Api\Session\ISession;
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Session\LazyFingerprintTrait;
@@ -18,7 +17,6 @@
 	 * assignment (and collision preventing).
 	 */
 	class SessionManager extends Object implements ISessionManager {
-		use LazyHttpResponseTrait;
 		use LazySessionDirectoryTrait;
 		use LazyFingerprintTrait;
 		use ConfigurableTrait;
