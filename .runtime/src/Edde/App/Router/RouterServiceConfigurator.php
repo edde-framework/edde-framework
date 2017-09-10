@@ -16,6 +16,6 @@
 		 */
 		public function configure($instance) {
 			parent::configure($instance);
-			$instance->registerDefaultRouter($this->container->create(StaticRouter::class, [new Message('index.index-view/index')], __METHOD__));
+			$instance->registerDefaultRouter($this->container->create(StaticRouter::class, [new Message('index.index-view/action-index')], __METHOD__));
 		}
 	}

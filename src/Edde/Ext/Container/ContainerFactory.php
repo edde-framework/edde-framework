@@ -214,8 +214,13 @@
 		 * @throws FactoryException
 		 */
 		static public function containerWithRoot(array $factoryList = [], array $configuratorList = []): IContainer {
-			list(, $trace) = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-			$factoryList[IRootDirectory::class] = $factoryList[IRootDirectory::class] ?? self::instance(RootDirectory::class, [dirname($trace['file'])]);
+			/**
+			 * micro optimization to do not call backtrace every request
+			 */
+			if (isset($factoryList[IRootDirectory::class]) === false) {
+				list(, $trace) = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+				$factoryList[IRootDirectory::class] = self::instance(RootDirectory::class, [dirname($trace['file'])]);
+			}
 			return self::container($factoryList, $configuratorList);
 		}
 
@@ -386,7 +391,7 @@
 				/**
 				 * It's nice when it is possible to upgrade you application...
 				 */
-				IUpgradeManager::class => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionaly default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
+				IUpgradeManager::class => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionally default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
 
 				/**
 				 * Simple crypto layer

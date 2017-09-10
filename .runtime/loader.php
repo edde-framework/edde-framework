@@ -8,8 +8,12 @@
 	 */
 	declare(strict_types=1);
 
+	use Edde\Api\Application\IContext;
+	use Edde\Api\Resource\IResourceProvider;
 	use Edde\Api\Router\IRouterService;
+	use Edde\App\Application\Context;
 	use Edde\App\Router\RouterServiceConfigurator;
+	use Edde\Common\Container\Factory\CascadeFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use Tracy\Debugger;
@@ -41,7 +45,17 @@
 	 * There is also option to create only container itself without any internal dependencies (not so much recommended except
 	 * you are heavy masochist).
 	 */
-	return ContainerFactory::containerWithRoot($factoryList = array_merge([], is_array($local = @include $local) ? $local : [], [
+	$container = ContainerFactory::containerWithRoot($factoryList = array_merge([
+		/**
+		 * This application is using specific contexts to separate user experience
+		 */
+		IContext::class => Context::class,
+		/**
+		 * When context is changes, one also should (not necessarily) change resource provider to get
+		 * ability to search for assets (resources) based on the current context.
+		 */
+		IResourceProvider::class => IContext::class,
+	], is_array($local = @include $local) ? $local : [], [
 		/**
 		 * This stranger here must (should be) be last, because it's canHandle method is able to kill a lot of dependencies and
 		 * create not so much nice surprises. Thus, it must be last as kind of dependency fallback.
@@ -50,3 +64,12 @@
 	]), [
 		IRouterService::class => RouterServiceConfigurator::class,
 	]);
+	/**
+	 * This one is one of the most magical: this factory uses IContext::cascade() to search for class; this is quite
+	 * epic feature, but also less transparent, useful to seamlessly switch context.
+	 *
+	 * Analyze every factory for dependencies is quite expensive task, so this feature has been removed. Becuase of that it's
+	 * necessary to register cascade factory by container as it has some dependencies.
+	 */
+	$container->registerFactory($container->create(CascadeFactory::class, [], __FILE__));
+	return $container;

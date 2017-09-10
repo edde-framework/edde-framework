@@ -1,11 +1,10 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Ext\Container;
+	namespace Edde\Common\Container\Factory;
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
-	use Edde\Common\Container\Factory\ClassFactory;
 
 	/**
 	 * When there is need to search for a class in namespace hierarchy.
@@ -20,7 +19,7 @@
 		 * @inheritdoc
 		 */
 		public function canHandle(IContainer $container, string $dependency): bool {
-			if ($discover = $this->discover($dependency)) {
+			if ($discover = $this->search($dependency)) {
 				return parent::canHandle($container, $discover);
 			}
 			return false;
@@ -30,22 +29,22 @@
 		 * @inheritdoc
 		 */
 		public function createDependency(IContainer $container, string $dependency = null): IDependency {
-			return parent::createDependency($container, $this->discover($dependency));
+			return parent::createDependency($container, $this->search($dependency));
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
-			return parent::execute($container, $parameterList, $dependency, $this->discover($name));
+			return parent::execute($container, $parameterList, $dependency, $this->search($name));
 		}
 
-		protected function discover(string $name) {
+		protected function search(string $name) {
 			if (isset($this->nameList[$name]) || array_key_exists($name, $this->nameList)) {
 				return $this->nameList[$name];
 			}
 			/** @noinspection ForeachSourceInspection */
-			foreach ($this->discovery($name) as $source) {
+			foreach ($this->discover($name) as $source) {
 				if (class_exists($source)) {
 					return $this->nameList[$name] = $source;
 				}
@@ -58,7 +57,7 @@
 		 *
 		 * @param string $name
 		 *
-		 * @return string[]|false
+		 * @return string[]
 		 */
-		abstract protected function discovery(string $name): array;
+		abstract protected function discover(string $name): array;
 	}
