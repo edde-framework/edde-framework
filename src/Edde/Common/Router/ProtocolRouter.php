@@ -21,8 +21,7 @@
 			$request = $this->httpService->createRequest();
 			$requestUrl = $request->getRequestUrl();
 			$message = new Message($requestUrl->getPath(false));
-			$message->getAttributeList()
-				->append($requestUrl->getParameterList());
+			$message->appendAttributeList($requestUrl->getParameterList());
 			return $this->runtime->isConsoleMode() === false && $this->protocolService->canHandle($message);
 		}
 

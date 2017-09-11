@@ -96,7 +96,7 @@
 		 * @inheritdoc
 		 */
 		public function data(array $data): IElement {
-			$this->putMeta($data);
+			$this->putMetaList($data);
 			return $this;
 		}
 
