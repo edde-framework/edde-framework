@@ -4,10 +4,9 @@
 	namespace Edde\Ext\Protocol\Request;
 
 	use Edde\Api\Protocol\IElement;
-	use Edde\Common\Protocol\Request\AbstractRequestHandler;
 	use Edde\Common\Strings\StringUtils;
 
-	class ClassRequestHandler extends AbstractRequestHandler {
+	class ClassRequestHandler extends \Edde\Common\Request\AbstractRequestHandler {
 		static protected $preg = '~(?<class>[.a-z0-9-]+)/(?<action>[a-z0-9-]+)~';
 
 		/**

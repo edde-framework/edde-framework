@@ -7,7 +7,7 @@
 
 	/**
 	 * This implementation could track all incoming and processed Elements and to be a general
-	 * store for them. That means this should be kind of persistant storage, but it should NOT
+	 * store for them. That means this should be kind of persistent storage, but it should NOT
 	 * directly use store manager select method.
 	 */
 	interface IElementStore extends IConfigurable {

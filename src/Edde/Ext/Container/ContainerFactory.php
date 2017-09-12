@@ -19,6 +19,7 @@
 	use Edde\Api\Database\IDriver;
 	use Edde\Api\Database\IDsn;
 	use Edde\Api\EddeException;
+	use Edde\Api\Event\IEventBus;
 	use Edde\Api\File\IRootDirectory;
 	use Edde\Api\File\ITempDirectory;
 	use Edde\Api\Html\IHtmlGenerator;
@@ -30,11 +31,10 @@
 	use Edde\Api\Lock\ILockManager;
 	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
-	use Edde\Api\Protocol\Event\IEventBus;
 	use Edde\Api\Protocol\IElementStore;
 	use Edde\Api\Protocol\IProtocolManager;
 	use Edde\Api\Protocol\IProtocolService;
-	use Edde\Api\Protocol\Request\IRequestService;
+	use Edde\Api\Request\IRequestService;
 	use Edde\Api\Resource\IResourceManager;
 	use Edde\Api\Resource\IResourceProvider;
 	use Edde\Api\Router\IRouterService;
@@ -67,6 +67,7 @@
 	use Edde\Common\Crate\CrateFactory;
 	use Edde\Common\Crypt\CryptEngine;
 	use Edde\Common\Database\DatabaseStorage;
+	use Edde\Common\Event\EventBus;
 	use Edde\Common\File\RootDirectory;
 	use Edde\Common\File\TempDirectory;
 	use Edde\Common\Html\Html5Generator;
@@ -80,10 +81,9 @@
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Object\Object;
 	use Edde\Common\Protocol\ElementStore;
-	use Edde\Common\Protocol\Event\EventBus;
 	use Edde\Common\Protocol\ProtocolManager;
 	use Edde\Common\Protocol\ProtocolService;
-	use Edde\Common\Protocol\Request\RequestService;
+	use Edde\Common\Request\RequestService;
 	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\Runtime;

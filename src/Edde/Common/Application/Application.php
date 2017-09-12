@@ -5,12 +5,11 @@
 
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Log\LazyLogServiceTrait;
-	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Api\Router\LazyRouterServiceTrait;
 	use Edde\Common\Object\Object;
 
 	class Application extends Object implements IApplication {
-		use LazyProtocolServiceTrait;
+		use Edde\Api\Protocol\Inject\LazyProtocolServiceTrait;
 		use LazyRouterServiceTrait;
 		use LazyLogServiceTrait;
 		/**

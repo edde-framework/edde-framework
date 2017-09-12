@@ -4,10 +4,9 @@
 	namespace Edde\Ext\Protocol\Request;
 
 	use Edde\Api\Protocol\IElement;
-	use Edde\Common\Protocol\Request\AbstractRequestHandler;
 	use Edde\Common\Strings\StringUtils;
 
-	class InstanceRequestHandler extends AbstractRequestHandler {
+	class InstanceRequestHandler extends \Edde\Common\Request\AbstractRequestHandler {
 		const PREG = '~(?<class>[\\\a-zA-Z0-9-]+)::(?<action>[a-zA-Z0-9-]+)~';
 
 		/**

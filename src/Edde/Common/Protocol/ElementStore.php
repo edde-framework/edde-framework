@@ -6,12 +6,11 @@
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IElementStore;
 	use Edde\Api\Store\LazyStoreTrait;
-	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object\Object;
+	use Edde\Common\Protocol\Exception\UnknownElementException;
 
 	class ElementStore extends Object implements IElementStore {
 		use LazyStoreTrait;
-		use ConfigurableTrait;
 
 		/**
 		 * @inheritdoc

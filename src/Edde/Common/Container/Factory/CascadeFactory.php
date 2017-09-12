@@ -3,10 +3,8 @@
 
 	namespace Edde\Common\Container\Factory;
 
-	use Edde\Api\Application\LazyContextTrait;
-
 	class CascadeFactory extends AbstractDiscoveryFactory {
-		use LazyContextTrait;
+		use Edde\Api\Application\Inject\LazyContextTrait;
 
 		/**
 		 * @inheritdoc

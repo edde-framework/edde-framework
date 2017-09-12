@@ -4,13 +4,12 @@
 	namespace Edde\Ext\Protocol\Request;
 
 	use Edde\Api\Protocol\IElement;
-	use Edde\Common\Protocol\Request\AbstractRequestHandler;
 	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Handles namespaced, dotted paths with slash action
 	 */
-	class ControlRequestHandler extends AbstractRequestHandler {
+	class ControlRequestHandler extends \Edde\Common\Request\AbstractRequestHandler {
 		const PREG = '~(?<class>[\\\a-zA-Z0-9-]+)::(?<action>[a-zA-Z0-9-]+)~';
 
 		/**

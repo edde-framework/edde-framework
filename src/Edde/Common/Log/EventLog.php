@@ -6,7 +6,6 @@
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Log\ILog;
 	use Edde\Api\Log\ILogRecord;
-	use Edde\Api\Protocol\Event\LazyEventBusTrait;
 	use Edde\Common\Log\Event\LogRecordEvent;
 
 	/**
@@ -35,7 +34,7 @@
 	 */
 	class EventLog extends AbstractLog {
 		use LazyContainerTrait;
-		use LazyEventBusTrait;
+		use Edde\Api\Event\LazyEventBusTrait;
 
 		/**
 		 * @inheritdoc

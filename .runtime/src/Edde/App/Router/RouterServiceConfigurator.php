@@ -5,7 +5,7 @@
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Router\IRouterService;
-	use Edde\Common\Protocol\Request\Message;
+	use Edde\Common\Request\Message;
 	use Edde\Common\Router\StaticRouter;
 	use Edde\Ext\Router\RouterServiceConfigurator as EddeRouterServiceConfigurator;
 

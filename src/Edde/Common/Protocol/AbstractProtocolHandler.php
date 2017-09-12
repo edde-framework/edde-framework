@@ -7,12 +7,12 @@
 	use Edde\Api\Log\LazyLogServiceTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IProtocolHandler;
-	use Edde\Api\Protocol\LazyElementStoreTrait;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object\Object;
+	use Edde\Common\Protocol\Exception\UnsupportedElementException;
 
 	abstract class AbstractProtocolHandler extends Object implements IProtocolHandler {
-		use LazyElementStoreTrait;
+		use \Edde\Api\Protocol\Inject\LazyElementStoreTrait;
 		use LazyJobManagerTrait;
 		use LazyLogServiceTrait;
 		use ConfigurableTrait;

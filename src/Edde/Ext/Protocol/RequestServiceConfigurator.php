@@ -4,7 +4,7 @@
 	namespace Edde\Ext\Protocol;
 
 	use Edde\Api\Container\LazyContainerTrait;
-	use Edde\Api\Protocol\Request\IRequestService;
+	use Edde\Api\Request\IRequestService;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Ext\Protocol\Request\ClassRequestHandler;
 	use Edde\Ext\Protocol\Request\ContainerRequestHandler;

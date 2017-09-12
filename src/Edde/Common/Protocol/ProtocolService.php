@@ -6,9 +6,9 @@
 	use Edde\Api\Http\LazyHostUrlTrait;
 	use Edde\Api\Log\LazyLogServiceTrait;
 	use Edde\Api\Protocol\IElement;
-	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Protocol\IProtocolHandler;
 	use Edde\Api\Protocol\IProtocolService;
+	use Edde\Common\Protocol\Exception\UnsupportedElementException;
 
 	class ProtocolService extends AbstractProtocolHandler implements IProtocolService {
 		use LazyHostUrlTrait;
@@ -33,9 +33,9 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function createPacket(IElement $reference = null, string $origin = null): IPacket {
+		public function createPacket(IElement $reference = null, string $origin = null): IElement {
 			$packet = new Packet($origin ?: $this->hostUrl->getAbsoluteUrl());
-			$reference ? $packet->setReference($reference) : null;
+			$packet->setReference($reference);
 			return $packet;
 		}
 
@@ -43,7 +43,8 @@
 		 * @inheritdoc
 		 */
 		public function canHandle(IElement $element): bool {
-			return $this->getProtocolHandler($element)->canHandle($element);
+			return $this->getProtocolHandler($element)
+				->canHandle($element);
 		}
 
 		/**
@@ -51,7 +52,8 @@
 		 */
 		public function execute(IElement $element) {
 			try {
-				return $response = $this->getProtocolHandler($element)->execute($element);
+				return $response = $this->getProtocolHandler($element)
+					->execute($element);
 			} catch (\Throwable $exception) {
 				$response = new Error(-102, $exception->getMessage());
 				$response->setException(get_class($exception));
