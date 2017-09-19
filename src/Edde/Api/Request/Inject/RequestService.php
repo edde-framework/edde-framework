@@ -5,7 +5,7 @@
 
 	use Edde\Api\Request\IRequestService;
 
-	trait LazyRequestServiceTrait {
+	trait RequestService {
 		/**
 		 * @var IRequestService
 		 */

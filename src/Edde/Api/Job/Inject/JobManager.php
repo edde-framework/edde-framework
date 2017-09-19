@@ -5,7 +5,7 @@
 
 	use Edde\Api\Job\IJobManager;
 
-	trait LazyJobManagerTrait {
+	trait JobManager {
 		/**
 		 * @var IJobManager
 		 */

@@ -8,7 +8,7 @@
 	/**
 	 * Lazy log service dependency.
 	 */
-	trait LazyLogServiceTrait {
+	trait LogService {
 		/**
 		 * @var ILogService
 		 */

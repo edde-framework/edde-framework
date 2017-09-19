@@ -1,9 +1,11 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Router;
+	namespace Edde\Api\Router\Inject;
 
-	trait LazyRouterServiceTrait {
+	use Edde\Api\Router\IRouterService;
+
+	trait RouterService {
 		/**
 		 * @var IRouterService
 		 */

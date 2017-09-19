@@ -3,8 +3,8 @@
 
 	namespace Edde\Common\Container;
 
+	use Edde\Api\Container\Container;
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\EddeException;
 	use Edde\Common\Container\Exception\UnknownFactoryException;
 	use Edde\Common\Container\Factory\CallbackFactory;
@@ -22,7 +22,7 @@
 	require_once __DIR__ . '/../assets/assets.php';
 
 	class ContainerTest extends TestCase {
-		use LazyContainerTrait;
+		use Container;
 
 		public function testUnknownFactory() {
 			$this->expectException(UnknownFactoryException::class);

@@ -3,12 +3,12 @@
 
 	namespace Edde\Ext\Job;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Container;
 	use Edde\Api\Thread\IThreadManager;
 	use Edde\Common\Config\AbstractConfigurator;
 
 	class ThreadManagerConfigurator extends AbstractConfigurator {
-		use LazyContainerTrait;
+		use Container;
 
 		/**
 		 * @param IThreadManager $instance

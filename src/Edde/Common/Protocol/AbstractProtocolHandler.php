@@ -3,16 +3,19 @@
 
 	namespace Edde\Common\Protocol;
 
+	use Edde\Api\Job\Inject\JobManager;
+	use Edde\Api\Log\Inject\LogService;
 	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Protocol\Inject\ElementStore;
 	use Edde\Api\Protocol\IProtocolHandler;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object\Object;
 	use Edde\Common\Protocol\Exception\UnsupportedElementException;
 
 	abstract class AbstractProtocolHandler extends Object implements IProtocolHandler {
-		use \Edde\Api\Protocol\Inject\LazyElementStoreTrait;
-		use Edde\Api\Job\Inject\LazyJobManagerTrait;
-		use Edde\Api\Log\Inject\LazyLogServiceTrait;
+		use ElementStore;
+		use JobManager;
+		use LogService;
 		use ConfigurableTrait;
 
 		/**

@@ -3,13 +3,14 @@
 
 	namespace Edde\Common\Router;
 
+	use Edde\Api\Log\Inject\LogService;
 	use Edde\Api\Router\Exception\BadRequestException;
 	use Edde\Api\Router\IRequest;
 	use Edde\Api\Router\IRouter;
 	use Edde\Api\Router\IRouterService;
 
 	class RouterService extends AbstractRouter implements IRouterService {
-		use Edde\Api\Log\Inject\LazyLogServiceTrait;
+		use LogService;
 		/**
 		 * @var IRouter[]
 		 */

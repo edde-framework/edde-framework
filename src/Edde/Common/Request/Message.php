@@ -10,11 +10,4 @@
 			parent::__construct('message', $id);
 			$this->setAttribute('request', $request);
 		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getRequest(): string {
-			return (string)$this->getAttribute('request');
-		}
 	}

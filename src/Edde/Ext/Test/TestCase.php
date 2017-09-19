@@ -6,8 +6,9 @@
 	use Edde\Api\Container\IAutowire;
 	use Edde\Common\Container\AutowireTrait;
 	use Edde\Ext\Container\ContainerFactory;
+	use PHPUnit\Framework\TestCase as PhpUnitTestCase;
 
-	class TestCase extends \PHPUnit\Framework\TestCase implements IAutowire {
+	class TestCase extends PhpUnitTestCase implements IAutowire {
 		use AutowireTrait;
 
 		protected function setUp() {

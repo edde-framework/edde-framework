@@ -5,7 +5,7 @@
 
 	use Edde\Api\Application\IContext;
 
-	trait LazyContextTrait {
+	trait Context {
 		/**
 		 * @var IContext
 		 */

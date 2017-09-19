@@ -8,7 +8,7 @@
 	/**
 	 * Lazy http client dependency.
 	 */
-	trait LazyHttpClientTrait {
+	trait HttpClient {
 		/**
 		 * @var IHttpClient
 		 */

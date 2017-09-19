@@ -5,7 +5,7 @@
 
 	use Edde\Api\Protocol\IElementStore;
 
-	trait LazyElementStoreTrait {
+	trait ElementStore {
 		/**
 		 * @var IElementStore
 		 */

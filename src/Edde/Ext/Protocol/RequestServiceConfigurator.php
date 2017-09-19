@@ -3,7 +3,7 @@
 
 	namespace Edde\Ext\Protocol;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Container;
 	use Edde\Api\Request\IRequestService;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Ext\Protocol\Request\ClassRequestHandler;
@@ -12,7 +12,7 @@
 	use Edde\Ext\Protocol\Request\InstanceRequestHandler;
 
 	class RequestServiceConfigurator extends AbstractConfigurator {
-		use LazyContainerTrait;
+		use Container;
 
 		/**
 		 * @param IRequestService $instance

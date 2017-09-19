@@ -5,7 +5,7 @@
 
 	use Edde\Api\Lock\ILockManager;
 
-	trait LazyLockManagerTrait {
+	trait LockManager {
 		/**
 		 * @var ILockManager
 		 */

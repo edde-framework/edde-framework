@@ -3,8 +3,8 @@
 
 	namespace Edde\Common\Http\Client;
 
-	use Edde\Api\Container\LazyContainerTrait;
-	use Edde\Api\Converter\LazyConverterManagerTrait;
+	use Edde\Api\Container\Container;
+	use Edde\Api\Converter\Inject\ConverterManager;
 	use Edde\Api\Http\Client\Exception\ClientException;
 	use Edde\Api\Http\Client\IHttpClient;
 	use Edde\Api\Http\Client\IHttpHandler;
@@ -16,7 +16,6 @@
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\Request;
-	use Edde\Common\Http\RequestUrl;
 	use Edde\Common\Object\Object;
 	use Edde\Common\Url\Url;
 
@@ -24,8 +23,8 @@
 	 * Simple http client implementation.
 	 */
 	class HttpClient extends Object implements IHttpClient {
-		use LazyContainerTrait;
-		use LazyConverterManagerTrait;
+		use Container;
+		use ConverterManager;
 		use LazySessionManagerTrait;
 		use ConfigurableTrait;
 

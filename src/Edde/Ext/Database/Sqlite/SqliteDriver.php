@@ -3,7 +3,7 @@
 
 	namespace Edde\Ext\Database\Sqlite;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Container;
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
@@ -17,7 +17,7 @@
 	 * Sqlite database support.
 	 */
 	class SqliteDriver extends AbstractDriver {
-		use LazyContainerTrait;
+		use Container;
 		/**
 		 * @var PDO
 		 */

@@ -5,7 +5,7 @@
 
 	use Edde\Api\Job\IJobQueue;
 
-	trait LazyJobQueueTrait {
+	trait JobQueue {
 		/**
 		 * @var IJobQueue
 		 */

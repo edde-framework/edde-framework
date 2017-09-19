@@ -5,12 +5,13 @@
 
 	use Edde\Api\Job\IJobManager;
 	use Edde\Api\Job\IJobQueue;
-	use Edde\Api\Job\Inject\LazyJobQueueTrait;
+	use Edde\Api\Job\Inject\JobQueue;
 	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Protocol\Inject\ProtocolService;
 
 	abstract class AbstractJobManager extends AbstractJobQueue implements IJobManager {
-		use LazyJobQueueTrait;
-		use Edde\Api\Protocol\Inject\LazyProtocolServiceTrait;
+		use JobQueue;
+		use ProtocolService;
 
 		/**
 		 * @inheritdoc

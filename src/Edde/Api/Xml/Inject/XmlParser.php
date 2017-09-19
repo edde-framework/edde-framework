@@ -8,7 +8,7 @@
 	/**
 	 * Lazy xml parser dependency.
 	 */
-	trait LazyXmlParserTrait {
+	trait XmlParser {
 		/**
 		 * @var IXmlParser
 		 */

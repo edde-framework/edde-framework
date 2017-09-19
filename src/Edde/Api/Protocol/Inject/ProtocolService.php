@@ -5,7 +5,7 @@
 
 	use Edde\Api\Protocol\IProtocolService;
 
-	trait LazyProtocolServiceTrait {
+	trait ProtocolService {
 		/**
 		 * @var IProtocolService
 		 */

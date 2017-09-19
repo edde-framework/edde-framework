@@ -1,9 +1,11 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Thread;
+	namespace Edde\Api\Thread\Inject;
 
-	trait LazyExecutorTtrait {
+	use Edde\Api\Thread\IExecutor;
+
+	trait Executor {
 		/**
 		 * @var IExecutor
 		 */

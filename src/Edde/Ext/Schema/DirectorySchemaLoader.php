@@ -3,13 +3,12 @@
 
 	namespace Edde\Ext\Schema;
 
-	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\Node\INode;
 	use Edde\Common\Schema\AbstractSchemaLoader;
 
 	class DirectorySchemaLoader extends AbstractSchemaLoader {
-		use LazyConverterManagerTrait;
+		use Edde\Api\Converter\Inject\LazyConverterManagerTrait;
 		/**
 		 * @var IDirectory
 		 */

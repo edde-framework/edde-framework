@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Storage;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Container;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Storage\IBoundQuery;
@@ -13,7 +13,7 @@
 	use Edde\Common\Query\Select\SelectQuery;
 
 	abstract class AbstractRepository extends Object implements IRepository {
-		use LazyContainerTrait;
+		use Container;
 		use LazyStorageTrait;
 		/**
 		 * @var ISchema

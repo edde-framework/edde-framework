@@ -6,7 +6,7 @@
 	/**
 	 * Defines lazy dependency on a system dependency container.
 	 */
-	trait LazyContainerTrait {
+	trait Container {
 		/**
 		 * @var IContainer
 		 */

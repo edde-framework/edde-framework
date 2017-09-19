@@ -4,7 +4,6 @@
 	namespace Edde\Ext\Protocol;
 
 	use Edde\Api\Converter\IContent;
-	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Common\Converter\AbstractConverter;
@@ -13,7 +12,7 @@
 	use Edde\Common\Protocol\Element;
 
 	class ElementConverter extends AbstractConverter {
-		use LazyConverterManagerTrait;
+		use Edde\Api\Converter\Inject\LazyConverterManagerTrait;
 
 		public function __construct() {
 			$this->register(IElement::class, [

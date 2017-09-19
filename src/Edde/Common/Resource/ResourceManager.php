@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Resource;
 
-	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\File\FileException;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResource;
@@ -17,7 +16,7 @@
 	 * Default implementation of a resource manager.
 	 */
 	class ResourceManager extends AbstractResourceProvider implements IResourceManager {
-		use LazyConverterManagerTrait;
+		use Edde\Api\Converter\Inject\LazyConverterManagerTrait;
 		/**
 		 * @var IResourceProvider[]
 		 */

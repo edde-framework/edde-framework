@@ -5,7 +5,7 @@
 
 	use Edde\Api\Application\IApplication;
 
-	trait LazyApplicationTrait {
+	trait Application {
 		/**
 		 * @var IApplication
 		 */

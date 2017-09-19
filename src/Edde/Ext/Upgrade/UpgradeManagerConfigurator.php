@@ -3,12 +3,12 @@
 
 	namespace Edde\Ext\Upgrade;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Container;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Config\AbstractConfigurator;
 
 	class UpgradeManagerConfigurator extends AbstractConfigurator {
-		use LazyContainerTrait;
+		use Container;
 
 		/**
 		 * @param IUpgradeManager $instance

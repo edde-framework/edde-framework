@@ -3,9 +3,8 @@
 
 	namespace Edde\Common\Http\Client;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Container;
 	use Edde\Api\Converter\IContent;
-	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Http\Client\Exception\ClientException;
@@ -31,8 +30,8 @@
 	 * Http client handler; this should not be used in common; only as a result from HttpClient calls
 	 */
 	class HttpHandler extends Object implements IHttpHandler {
-		use LazyContainerTrait;
-		use LazyConverterManagerTrait;
+		use Container;
+		use Edde\Api\Converter\Inject\LazyConverterManagerTrait;
 		use LazyTempDirectoryTrait;
 		/**
 		 * @var IRequest

@@ -5,7 +5,7 @@
 
 	use Edde\Api\Xml\IXmlExport;
 
-	trait LazyXmlExportTrait {
+	trait XmlExport {
 		/**
 		 * @var IXmlExport
 		 */

@@ -3,7 +3,7 @@
 
 	namespace Edde\Ext\Protocol;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Container;
 	use Edde\Api\Event\IEventBus;
 	use Edde\Api\Protocol\IProtocolService;
 	use Edde\Api\Request\IRequestService;
@@ -11,7 +11,7 @@
 	use Edde\Common\Protocol\PacketProtocolHandler;
 
 	class ProtocolServiceConfigurator extends AbstractConfigurator {
-		use LazyContainerTrait;
+		use Container;
 
 		/**
 		 * @param IProtocolService $instance

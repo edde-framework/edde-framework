@@ -1,12 +1,14 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Converter;
+	namespace Edde\Api\Converter\Inject;
+
+	use Edde\Api\Converter\IConverterManager;
 
 	/**
 	 * Lazy dependency on a converter manager.
 	 */
-	trait LazyConverterManagerTrait {
+	trait ConverterManager {
 		/**
 		 * @var IConverterManager
 		 */

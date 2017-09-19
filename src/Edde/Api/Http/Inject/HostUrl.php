@@ -5,7 +5,7 @@
 
 	use Edde\Api\Http\IHostUrl;
 
-	trait LazyHostUrlTrait {
+	trait HostUrl {
 		/**
 		 * @var IHostUrl
 		 */

@@ -5,7 +5,7 @@
 
 	use Edde\Api\Protocol\IProtocolManager;
 
-	trait LazyProtocolManagerTrait {
+	trait ProtocolManager {
 		/**
 		 * @var IProtocolManager
 		 */

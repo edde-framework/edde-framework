@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Schema;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Container;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\INodeQuery;
 	use Edde\Api\Schema\ISchema;
@@ -16,7 +16,7 @@
 	use Edde\Common\Object\Object;
 
 	class SchemaManager extends Object implements ISchemaManager {
-		use LazyContainerTrait;
+		use Container;
 		use ConfigurableTrait;
 		/**
 		 * @var ISchemaLoader[]

@@ -51,6 +51,14 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function append(array $array): IList {
+			$_SESSION[$this->namespace][$this->name] = array_merge($_SESSION[$this->namespace][$this->name], $array);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function set(string $name, $value): IList {
 			$_SESSION[$this->namespace][$this->name][$name] = $value;
 			return $this;

@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Storage;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Container;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\LazyCrateFactoryTrait;
 	use Edde\Api\Query\IQuery;
@@ -24,7 +24,7 @@
 	abstract class AbstractStorage extends Object implements IStorage {
 		use LazySchemaManagerTrait;
 		use LazyCrateFactoryTrait;
-		use LazyContainerTrait;
+		use Container;
 		use ConfigurableTrait;
 
 		public function bound(string $query, ...$parameterList): IBoundQuery {

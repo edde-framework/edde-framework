@@ -5,7 +5,7 @@
 
 	use Edde\Api\Http\IHttpService;
 
-	trait LazyHttpServiceTrait {
+	trait HttpService {
 		/**
 		 * @var IHttpService
 		 */

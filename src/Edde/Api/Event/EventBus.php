@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Event;
 
-	trait LazyEventBusTrait {
+	trait EventBus {
 		/**
 		 * @var IEventBus
 		 */

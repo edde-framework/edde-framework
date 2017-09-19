@@ -5,11 +5,12 @@
 
 	use Edde\Api\Job\IJobQueue;
 	use Edde\Api\Protocol\IElement;
-	use Edde\Api\Store\LazyStoreTrait;
+	use Edde\Api\Protocol\Inject\ElementStore;
+	use Edde\Api\Store\Inject\Store;
 
 	class JobQueue extends AbstractJobQueue {
-		use Edde\Api\Protocol\Inject\LazyElementStoreTrait;
-		use LazyStoreTrait;
+		use ElementStore;
+		use Store;
 
 		/**
 		 * @inheritdoc

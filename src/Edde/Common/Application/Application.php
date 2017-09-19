@@ -4,13 +4,15 @@
 	namespace Edde\Common\Application;
 
 	use Edde\Api\Application\IApplication;
-	use Edde\Api\Router\LazyRouterServiceTrait;
+	use Edde\Api\Log\Inject\LogService;
+	use Edde\Api\Protocol\Inject\ProtocolService;
+	use Edde\Api\Router\Inject\RouterService;
 	use Edde\Common\Object\Object;
 
 	class Application extends Object implements IApplication {
-		use Edde\Api\Protocol\Inject\LazyProtocolServiceTrait;
-		use LazyRouterServiceTrait;
-		use Edde\Api\Log\Inject\LazyLogServiceTrait;
+		use RouterService;
+		use ProtocolService;
+		use LogService;
 		/**
 		 * return code from an application
 		 *

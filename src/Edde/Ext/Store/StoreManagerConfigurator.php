@@ -3,14 +3,14 @@
 
 	namespace Edde\Ext\Store;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Container;
 	use Edde\Api\Store\IStoreManager;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Store\FileStore;
 	use Edde\Ext\Session\SessionStore;
 
 	class StoreManagerConfigurator extends AbstractConfigurator {
-		use LazyContainerTrait;
+		use Container;
 
 		/**
 		 * @param IStoreManager $instance

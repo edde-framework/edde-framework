@@ -3,12 +3,12 @@
 
 	namespace Edde\Common\Router;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Container;
 	use Edde\Api\Router\IRequest;
 	use Edde\Api\Router\IRouter;
 
 	class ProxyRouter extends AbstractRouter {
-		use LazyContainerTrait;
+		use Container;
 		/**
 		 * @var string
 		 */

@@ -3,16 +3,17 @@
 
 	namespace Edde\Common\Thread;
 
-	use Edde\Api\Store\LazyStoreTrait;
+	use Edde\Api\Job\Inject\JobManager;
+	use Edde\Api\Store\Inject\Store;
+	use Edde\Api\Thread\Inject\Executor;
 	use Edde\Api\Thread\IThreadManager;
-	use Edde\Api\Thread\LazyExecutorTtrait;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object\Object;
 
 	abstract class AbstractThreadManager extends Object implements IThreadManager {
-		use LazyExecutorTtrait;
-		use LazyStoreTrait;
-		use Edde\Api\Job\Inject\LazyJobManagerTrait;
+		use Executor;
+		use Store;
+		use JobManager;
 		use ConfigurableTrait;
 		/**
 		 * @var int

@@ -3,7 +3,7 @@
 
 	namespace Edde\Ext\Protocol\Request;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Container;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Common\Request\AbstractRequestHandler;
 
@@ -11,7 +11,7 @@
 	 * Request handler connected to container.
 	 */
 	class ContainerRequestHandler extends AbstractRequestHandler {
-		use LazyContainerTrait;
+		use Container;
 
 		/**
 		 * @inheritdoc

@@ -3,13 +3,13 @@
 
 	namespace Edde\Ext\Log;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Container;
 	use Edde\Api\Log\ILogService;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Log\FileLog;
 
 	class LogServiceConfigurator extends AbstractConfigurator {
-		use LazyContainerTrait;
+		use Container;
 
 		/**
 		 * @param ILogService $instance

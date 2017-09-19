@@ -4,13 +4,13 @@
 	namespace Edde\Common\Request;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Container;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Request\IRequestHandler;
 	use Edde\Common\Protocol\AbstractProtocolHandler;
 
 	abstract class AbstractRequestHandler extends AbstractProtocolHandler implements IRequestHandler {
-		use LazyContainerTrait;
+		use Container;
 
 		/**
 		 * @inheritdoc

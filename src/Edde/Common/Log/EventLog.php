@@ -3,10 +3,10 @@
 
 	namespace Edde\Common\Log;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Container;
+	use Edde\Api\Event\EventBus;
 	use Edde\Api\Log\ILog;
 	use Edde\Api\Log\ILogRecord;
-	use Edde\Common\Log\Event\LogRecordEvent;
 
 	/**
 	 * Event based logged (log records are emitted as events).
@@ -33,8 +33,8 @@
 	 * And you thought blondes were dumb.
 	 */
 	class EventLog extends AbstractLog {
-		use LazyContainerTrait;
-		use Edde\Api\Event\LazyEventBusTrait;
+		use Container;
+		use EventBus;
 
 		/**
 		 * @inheritdoc

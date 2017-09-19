@@ -3,14 +3,14 @@
 
 	namespace Edde\App\Router;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Container;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Common\Request\Message;
 	use Edde\Common\Router\StaticRouter;
 	use Edde\Ext\Router\RouterServiceConfigurator as EddeRouterServiceConfigurator;
 
 	class RouterServiceConfigurator extends EddeRouterServiceConfigurator {
-		use LazyContainerTrait;
+		use Container;
 
 		/**
 		 * @param IRouterService $instance

@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Request;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Container;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Request\IRequestHandler;
 	use Edde\Api\Request\IRequestService;
@@ -11,7 +11,7 @@
 	use Edde\Common\Request\Exception\MissingResponseException;
 
 	class RequestService extends AbstractRequestHandler implements IRequestService {
-		use LazyContainerTrait;
+		use Container;
 		/**
 		 * @var IRequestHandler[]
 		 */

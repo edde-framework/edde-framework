@@ -10,7 +10,7 @@
 	use Edde\Ext\Session\SessionStore;
 
 	abstract class AbstractProtocolManager extends Object implements IProtocolManager {
-		use \Edde\Api\Protocol\Inject\LazyProtocolServiceTrait;
+		use \Edde\Api\Protocol\Inject\ProtocolService;
 		use LazyStoreManagerTrait;
 		const ELEMENT_LIST_ID = 'protocol-manager/element-list';
 

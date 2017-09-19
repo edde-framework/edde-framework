@@ -3,17 +3,19 @@
 
 	namespace Edde\Common\Router;
 
+	use Edde\Api\Http\Inject\HttpService;
+	use Edde\Api\Protocol\Inject\ProtocolService;
 	use Edde\Api\Router\IRequest;
-	use Edde\Api\Runtime\LazyRuntimeTrait;
+	use Edde\Api\Runtime\Inject\Runtime;
 	use Edde\Common\Request\Message;
 
 	/**
 	 * Router to check if the protocol is able to handle incoming request.
 	 */
 	class ProtocolRouter extends AbstractRouter {
-		use Edde\Api\Http\Inject\LazyHttpServiceTrait;
-		use Edde\Api\Protocol\Inject\LazyProtocolServiceTrait;
-		use LazyRuntimeTrait;
+		use HttpService;
+		use ProtocolService;
+		use Runtime;
 
 		public function canHandle(): bool {
 			$request = $this->httpService->createRequest();

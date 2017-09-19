@@ -3,14 +3,14 @@
 
 	namespace Edde\Ext\Converter;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Container;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Translator\Dictionary\CsvDictionaryConverter;
 	use Edde\Ext\Protocol\ElementConverter;
 
 	class ConverterManagerConfigurator extends AbstractConfigurator {
-		use LazyContainerTrait;
+		use Container;
 
 		/**
 		 * @param IConverterManager $instance

@@ -3,14 +3,16 @@
 
 	namespace Edde\Common\Protocol;
 
+	use Edde\Api\Http\Inject\HostUrl;
+	use Edde\Api\Log\Inject\LogService;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IProtocolHandler;
 	use Edde\Api\Protocol\IProtocolService;
 	use Edde\Common\Protocol\Exception\UnsupportedElementException;
 
 	class ProtocolService extends AbstractProtocolHandler implements IProtocolService {
-		use Edde\Api\Http\Inject\LazyHostUrlTrait;
-		use Edde\Api\Log\Inject\LazyLogServiceTrait;
+		use HostUrl;
+		use LogService;
 		/**
 		 * @var IProtocolHandler[]
 		 */

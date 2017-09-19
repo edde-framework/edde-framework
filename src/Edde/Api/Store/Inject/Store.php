@@ -1,9 +1,11 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Store;
+	namespace Edde\Api\Store\Inject;
 
-	trait LazyStoreTrait {
+	use Edde\Api\Store\IStore;
+
+	trait Store {
 		/**
 		 * @var IStore
 		 */
