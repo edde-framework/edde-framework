@@ -18,6 +18,9 @@
 		use Runtime;
 
 		public function canHandle(): bool {
+			if ($this->runtime->isConsoleMode()) {
+				return false;
+			}
 			$request = $this->httpService->createRequest();
 			$requestUrl = $request->getRequestUrl();
 			$message = new Message($requestUrl->getPath(false));

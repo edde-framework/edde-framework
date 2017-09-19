@@ -3,7 +3,11 @@
 
 	namespace Edde\Test {
 
+		use Edde\Api\Router\IRequest;
 		use Edde\Common\Object\Object;
+		use Edde\Common\Request\Message;
+		use Edde\Common\Router\AbstractRouter;
+		use Edde\Common\Router\Request;
 
 		class FooObject extends Object {
 			public $foo = 'foo';
@@ -73,6 +77,16 @@
 
 			public function lazyBarObject(BarObject $barObject) {
 				$this->barObject = $barObject;
+			}
+		}
+
+		class TestRouter extends AbstractRouter {
+			public function canHandle(): bool {
+				return true;
+			}
+
+			public function createRequest(): IRequest {
+				return new Request(new Message('foo.foo-service/foo-action'));
 			}
 		}
 	}
