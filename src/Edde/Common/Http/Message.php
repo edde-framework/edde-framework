@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Http\HttpMessageException;
+	use Edde\Api\Http\Exception\HttpMessageException;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IMessage;
 	use Edde\Common\Config\ConfigurableTrait;

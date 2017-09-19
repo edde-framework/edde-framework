@@ -8,7 +8,7 @@
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyTempDirectoryTrait;
-	use Edde\Api\Http\Client\ClientException;
+	use Edde\Api\Http\Client\Exception\ClientException;
 	use Edde\Api\Http\Client\IHttpHandler;
 	use Edde\Api\Http\Client\IResponse;
 	use Edde\Api\Http\IRequest;

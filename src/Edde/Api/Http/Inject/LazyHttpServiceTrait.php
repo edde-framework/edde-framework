@@ -1,7 +1,9 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Http;
+	namespace Edde\Api\Http\Inject;
+
+	use Edde\Api\Http\IHttpService;
 
 	trait LazyHttpServiceTrait {
 		/**

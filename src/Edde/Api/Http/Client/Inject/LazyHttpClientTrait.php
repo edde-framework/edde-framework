@@ -1,7 +1,9 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Http\Client;
+	namespace Edde\Api\Http\Client\Inject;
+
+	use Edde\Api\Http\Client\IHttpClient;
 
 	/**
 	 * Lazy http client dependency.

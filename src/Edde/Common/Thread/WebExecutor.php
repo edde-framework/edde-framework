@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Thread;
 
-	use Edde\Api\Http\Client\LazyHttpClientTrait;
 	use Edde\Api\Thread\IExecutor;
 	use Edde\Api\Url\IUrl;
 	use Edde\Api\Url\UrlException;
@@ -11,7 +10,7 @@
 	use Edde\Common\Url\Url;
 
 	class WebExecutor extends AbstractExecutor {
-		use LazyHttpClientTrait;
+		use Edde\Api\Http\Client\Inject\LazyHttpClientTrait;
 		/**
 		 * @var IUrl
 		 */

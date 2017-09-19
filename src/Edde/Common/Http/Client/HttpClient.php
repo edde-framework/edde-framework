@@ -5,7 +5,7 @@
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Converter\LazyConverterManagerTrait;
-	use Edde\Api\Http\Client\ClientException;
+	use Edde\Api\Http\Client\Exception\ClientException;
 	use Edde\Api\Http\Client\IHttpClient;
 	use Edde\Api\Http\Client\IHttpHandler;
 	use Edde\Api\Http\IRequest;
@@ -125,7 +125,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws ClientException
+		 * @throws \Edde\Api\Http\Client\Exception\ClientException
 		 */
 		protected function handleInit() {
 			parent::handleInit();

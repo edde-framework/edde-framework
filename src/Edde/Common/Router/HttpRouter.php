@@ -3,13 +3,12 @@
 
 	namespace Edde\Common\Router;
 
-	use Edde\Api\Http\LazyHttpServiceTrait;
 	use Edde\Api\Router\IRequest;
 	use Edde\Api\Runtime\LazyRuntimeTrait;
 
 	class HttpRouter extends AbstractRouter {
 		use LazyRuntimeTrait;
-		use LazyHttpServiceTrait;
+		use Edde\Api\Http\Inject\LazyHttpServiceTrait;
 
 		/**
 		 * @inheritdoc

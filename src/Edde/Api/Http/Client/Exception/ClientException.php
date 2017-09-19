@@ -1,9 +1,10 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Http\Client;
+	namespace Edde\Api\Http\Client\Exception;
 
 	use Edde\Api\EddeException;
+	use Edde\Api\Http\IResponse;
 	use Exception;
 
 	class ClientException extends EddeException {

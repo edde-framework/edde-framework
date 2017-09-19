@@ -1,7 +1,9 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Job;
+	namespace Edde\Api\Job\Inject;
+
+	use Edde\Api\Job\IJobQueue;
 
 	trait LazyJobQueueTrait {
 		/**

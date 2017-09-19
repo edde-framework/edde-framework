@@ -3,12 +3,11 @@
 
 	namespace Edde\App\Rest;
 
-	use Edde\Api\Http\LazyHostUrlTrait;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\Rest\AbstractService;
 
 	class UserService extends AbstractService {
-		use LazyHostUrlTrait;
+		use Edde\Api\Http\Inject\LazyHostUrlTrait;
 
 		public function match(IUrl $url): bool {
 			return $url->match('~^/api/v1/user$~') !== null;

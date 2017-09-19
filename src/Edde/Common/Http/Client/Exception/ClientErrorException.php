@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Http\Client\Exception;
 
-	use Edde\Api\Http\Client\ClientException;
+	use Edde\Api\Http\Client\Exception\ClientException;
 
 	class ClientErrorException extends ClientException {
 	}

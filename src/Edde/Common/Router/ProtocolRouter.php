@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Router;
 
-	use Edde\Api\Http\LazyHttpServiceTrait;
 	use Edde\Api\Router\IRequest;
 	use Edde\Api\Runtime\LazyRuntimeTrait;
 	use Edde\Common\Request\Message;
@@ -12,7 +11,7 @@
 	 * Router to check if the protocol is able to handle incoming request.
 	 */
 	class ProtocolRouter extends AbstractRouter {
-		use LazyHttpServiceTrait;
+		use Edde\Api\Http\Inject\LazyHttpServiceTrait;
 		use Edde\Api\Protocol\Inject\LazyProtocolServiceTrait;
 		use LazyRuntimeTrait;
 
