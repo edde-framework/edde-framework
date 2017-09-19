@@ -4,7 +4,7 @@
 	namespace Edde\Common\Query\Select;
 
 	use Edde\Api\Node\INode;
-	use Edde\Api\Query\QueryException;
+	use Edde\Api\Query\Exception\QueryException;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractQuery;
 	use Edde\Common\Query\Where\WhereExpressionFragment;

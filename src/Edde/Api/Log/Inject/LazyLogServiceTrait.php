@@ -1,7 +1,9 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Log;
+	namespace Edde\Api\Log\Inject;
+
+	use Edde\Api\Log\ILogService;
 
 	/**
 	 * Lazy log service dependency.

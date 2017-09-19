@@ -4,7 +4,6 @@
 	namespace Edde\Common\Protocol;
 
 	use Edde\Api\Job\LazyJobManagerTrait;
-	use Edde\Api\Log\LazyLogServiceTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IProtocolHandler;
 	use Edde\Common\Config\ConfigurableTrait;
@@ -14,7 +13,7 @@
 	abstract class AbstractProtocolHandler extends Object implements IProtocolHandler {
 		use \Edde\Api\Protocol\Inject\LazyElementStoreTrait;
 		use LazyJobManagerTrait;
-		use LazyLogServiceTrait;
+		use Edde\Api\Log\Inject\LazyLogServiceTrait;
 		use ConfigurableTrait;
 
 		/**

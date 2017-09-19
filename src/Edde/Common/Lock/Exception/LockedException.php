@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Lock\Exception;
 
-	use Edde\Api\Lock\LockException;
+	use Edde\Api\Lock\Exception\LockException;
 
 	class LockedException extends LockException {
 	}

@@ -4,7 +4,6 @@
 	namespace Edde\Common\Protocol;
 
 	use Edde\Api\Http\LazyHostUrlTrait;
-	use Edde\Api\Log\LazyLogServiceTrait;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IProtocolHandler;
 	use Edde\Api\Protocol\IProtocolService;
@@ -12,7 +11,7 @@
 
 	class ProtocolService extends AbstractProtocolHandler implements IProtocolService {
 		use LazyHostUrlTrait;
-		use LazyLogServiceTrait;
+		use Edde\Api\Log\Inject\LazyLogServiceTrait;
 		/**
 		 * @var IProtocolHandler[]
 		 */
