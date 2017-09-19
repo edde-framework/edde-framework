@@ -1,7 +1,9 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Xml;
+	namespace Edde\Api\Xml\Inject;
+
+	use Edde\Api\Xml\IXmlParser;
 
 	/**
 	 * Lazy xml parser dependency.

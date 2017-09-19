@@ -1,7 +1,9 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Upgrade;
+	namespace Edde\Api\Upgrade\Inject;
+
+	use Edde\Api\Upgrade\IUpgradeManager;
 
 	/**
 	 * Lazy upgrade manager dependency.

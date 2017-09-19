@@ -7,10 +7,10 @@
 	use Edde\Api\Crate\LazyCrateFactoryTrait;
 	use Edde\Api\Schema\LazySchemaManagerTrait;
 	use Edde\Api\Storage\LazyStorageTrait;
+	use Edde\Api\Upgrade\Exception\UpgradeException;
 	use Edde\Api\Upgrade\IUpgrade;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Upgrade\IUpgradeStorable;
-	use Edde\Api\Upgrade\UpgradeException;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object\Object;
 	use Edde\Common\Query\Schema\CreateSchemaQuery;
@@ -30,12 +30,12 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws UpgradeException
+		 * @throws \Edde\Api\Upgrade\Inject\\Edde\Api\Upgrade\Exception\UpgradeException
 		 */
 		public function registerUpgrade(IUpgrade $upgrade, bool $force = false): IUpgradeManager {
 			$version = $upgrade->getVersion();
 			if ($force === false && isset($this->upgradeList[$version])) {
-				throw new UpgradeException(sprintf('Cannot register upgrade [%s] with version [%s] - version is already present.', get_class($upgrade), $version));
+				throw new \Edde\Api\Upgrade\Exception\UpgradeException(sprintf('Cannot register upgrade [%s] with version [%s] - version is already present.', get_class($upgrade), $version));
 			}
 			$this->upgradeList[$upgrade->getVersion()] = $upgrade;
 			return $this;
@@ -76,7 +76,7 @@
 				throw new UpgradeException('Cannot run upgrade - there are no upgrades.');
 			}
 			if (isset($this->upgradeList[$version]) === false) {
-				throw new UpgradeException(sprintf('Cannot run upgrade - unknown upgrade version [%s].', $version));
+				throw new \Edde\Api\Upgrade\Exception\UpgradeException(sprintf('Cannot run upgrade - unknown upgrade version [%s].', $version));
 			}
 			$last = null;
 			try {
@@ -102,7 +102,7 @@
 				$this->onUpgradeFailed($exception, $last);
 			}
 			if ($last === null) {
-				throw new UpgradeException(sprintf('No upgrades has been run for version [%s].', $version));
+				throw new \Edde\Api\Upgrade\Exception\UpgradeException(sprintf('No upgrades has been run for version [%s].', $version));
 			}
 			return $last;
 		}

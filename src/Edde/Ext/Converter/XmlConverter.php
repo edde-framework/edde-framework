@@ -8,9 +8,7 @@
 	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResource;
-	use Edde\Api\Xml\LazyXmlExportTrait;
-	use Edde\Api\Xml\LazyXmlParserTrait;
-	use Edde\Api\Xml\XmlParserException;
+	use Edde\Api\Xml\Exception\XmlParserException;
 	use Edde\Common\Converter\AbstractConverter;
 	use Edde\Common\Converter\Content;
 	use Edde\Common\Node\NodeIterator;
@@ -21,8 +19,8 @@
 	 */
 	class XmlConverter extends AbstractConverter {
 		use LazyConverterManagerTrait;
-		use LazyXmlParserTrait;
-		use LazyXmlExportTrait;
+		use Edde\Api\Xml\Inject\LazyXmlParserTrait;
+		use Edde\Api\Xml\Inject\LazyXmlExportTrait;
 
 		/**
 		 * Only 3 things that are infinite
