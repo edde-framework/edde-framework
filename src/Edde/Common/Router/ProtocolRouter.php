@@ -4,6 +4,7 @@
 	namespace Edde\Common\Router;
 
 	use Edde\Api\Http\Inject\HttpService;
+	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\Inject\ProtocolService;
 	use Edde\Api\Router\IRequest;
 	use Edde\Api\Runtime\Inject\Runtime;
@@ -16,18 +17,34 @@
 		use HttpService;
 		use ProtocolService;
 		use Runtime;
+		/**
+		 * @var IElement
+		 */
+		protected $element;
 
 		public function canHandle(): bool {
 			if ($this->runtime->isConsoleMode()) {
-				return false;
+				return $this->canHandleCli();
 			}
-			$request = $this->httpService->createRequest();
-			$requestUrl = $request->getRequestUrl();
-			$message = new Message($requestUrl->getPath(false));
-			$message->appendAttributeList($requestUrl->getParameterList());
-			return $this->runtime->isConsoleMode() === false && $this->protocolService->canHandle($message);
+			return $this->canHandleHttp();
 		}
 
+		protected function canHandleHttp(): bool {
+			$request = $this->httpService->createRequest();
+			$requestUrl = $request->getRequestUrl();
+			$this->element = $message = new Message($requestUrl->getPath(false));
+			$message->appendAttributeList($requestUrl->getParameterList());
+			return $this->protocolService->canHandle($message);
+		}
+
+		protected function canHandleCli(): bool {
+			return false;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function createRequest(): IRequest {
+			return new Request($this->element);
 		}
 	}
