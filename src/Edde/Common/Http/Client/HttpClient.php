@@ -9,7 +9,7 @@
 	use Edde\Api\Http\Client\IHttpClient;
 	use Edde\Api\Http\Client\IHttpHandler;
 	use Edde\Api\Http\IRequest;
-	use Edde\Api\Session\LazySessionManagerTrait;
+	use Edde\Api\Session\Inject\SessionManager;
 	use Edde\Api\Url\IUrl;
 	use Edde\Api\Url\UrlException;
 	use Edde\Common\Config\ConfigurableTrait;
@@ -25,7 +25,7 @@
 	class HttpClient extends Object implements IHttpClient {
 		use Container;
 		use ConverterManager;
-		use LazySessionManagerTrait;
+		use SessionManager;
 		use ConfigurableTrait;
 
 		/**

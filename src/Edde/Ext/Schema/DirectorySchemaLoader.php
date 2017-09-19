@@ -3,12 +3,13 @@
 
 	namespace Edde\Ext\Schema;
 
+	use Edde\Api\Converter\Inject\ConverterManager;
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\Node\INode;
 	use Edde\Common\Schema\AbstractSchemaLoader;
 
 	class DirectorySchemaLoader extends AbstractSchemaLoader {
-		use Edde\Api\Converter\Inject\LazyConverterManagerTrait;
+		use ConverterManager;
 		/**
 		 * @var IDirectory
 		 */
@@ -36,7 +37,9 @@
 		public function load() {
 			foreach ($this->directory as $file) {
 				if ($file->match($this->mask)) {
-					yield $this->converterManager->convert($file, $file->getMime(), [INode::class])->convert()->getContent();
+					yield $this->converterManager->convert($file, $file->getMime(), [INode::class])
+						->convert()
+						->getContent();
 				}
 			}
 		}

@@ -1,12 +1,14 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Session;
+	namespace Edde\Api\Session\Inject;
+
+	use Edde\Api\Session\ISessionManager;
 
 	/**
 	 * LAzy session manager dependency.
 	 */
-	trait LazySessionManagerTrait {
+	trait SessionManager {
 		/**
 		 * @var ISessionManager
 		 */

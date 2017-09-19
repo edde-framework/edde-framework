@@ -5,12 +5,13 @@
 
 	use Edde\Api\Container\Container;
 	use Edde\Api\Converter\IContent;
+	use Edde\Api\Converter\Inject\ConverterManager;
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Http\Client\Exception\ClientException;
 	use Edde\Api\Http\Client\IHttpHandler;
-	use Edde\Api\Http\Client\IResponse;
 	use Edde\Api\Http\IRequest;
+	use Edde\Api\Http\IResponse;
 	use Edde\Common\Converter\Content;
 	use Edde\Common\Http\Client\Exception\BadRequestException;
 	use Edde\Common\Http\Client\Exception\ForbiddenException;
@@ -22,6 +23,7 @@
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpUtils;
+	use Edde\Common\Http\Response;
 	use Edde\Common\Object\Object;
 	use Edde\Common\Strings\StringException;
 	use Edde\Ext\Converter\ArrayContent;
@@ -31,7 +33,7 @@
 	 */
 	class HttpHandler extends Object implements IHttpHandler {
 		use Container;
-		use Edde\Api\Converter\Inject\LazyConverterManagerTrait;
+		use ConverterManager;
 		use LazyTempDirectoryTrait;
 		/**
 		 * @var IRequest
@@ -75,7 +77,7 @@
 		public function basic(string $user, string $password): IHttpHandler {
 			curl_setopt_array($this->curl, [
 				CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
-				CURLOPT_USERPWD  => vsprintf('%s:%s', func_get_args()),
+				CURLOPT_USERPWD => vsprintf('%s:%s', func_get_args()),
 			]);
 			return $this;
 		}
@@ -86,7 +88,7 @@
 		public function digest(string $user, string $password): IHttpHandler {
 			curl_setopt_array($this->curl, [
 				CURLOPT_HTTPAUTH => CURLAUTH_DIGEST,
-				CURLOPT_USERPWD  => vsprintf('%s:%s', func_get_args()),
+				CURLOPT_USERPWD => vsprintf('%s:%s', func_get_args()),
 			]);
 			return $this;
 		}
@@ -221,7 +223,8 @@
 				}
 				return $length;
 			};
-			$options[CURLOPT_HTTPHEADER] = $this->request->getHeaderList()->headers();
+			$options[CURLOPT_HTTPHEADER] = $this->request->getHeaderList()
+				->headers();
 			$options[CURLOPT_FAILONERROR] = false;
 			curl_setopt_array($this->curl, $options);
 			if (($content = curl_exec($this->curl)) === false) {
