@@ -3,12 +3,12 @@
 
 	namespace Edde\Common\Crate;
 
-	use Edde\Api\Container\Container;
+	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\ICrateFactory;
-	use Edde\Api\Schema\LazySchemaManagerTrait;
+	use Edde\Api\Schema\Inject\SchemaManager;
 	use Edde\Api\Schema\SchemaException;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object\Object;
@@ -17,7 +17,7 @@
 	 * Factory for... creating crates.
 	 */
 	class CrateFactory extends Object implements ICrateFactory {
-		use LazySchemaManagerTrait;
+		use SchemaManager;
 		use Container;
 		use ConfigurableTrait;
 

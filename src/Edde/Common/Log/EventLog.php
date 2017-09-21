@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Log;
 
-	use Edde\Api\Container\Container;
+	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Event\EventBus;
 	use Edde\Api\Log\ILog;
 	use Edde\Api\Log\ILogRecord;

@@ -69,8 +69,7 @@
 			$request = null;
 			try {
 				foreach ($this->routerList as $router) {
-					$router->setup();
-					if ($router->canHandle()) {
+					if ($router->setup() && $router->canHandle()) {
 						$request = $router->createRequest();
 						break;
 					}

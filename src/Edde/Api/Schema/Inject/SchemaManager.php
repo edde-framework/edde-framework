@@ -1,12 +1,14 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Schema;
+	namespace Edde\Api\Schema\Inject;
+
+	use Edde\Api\Schema\ISchemaManager;
 
 	/**
 	 * Defines lazy dependency on a schema manager.
 	 */
-	trait LazySchemaManagerTrait {
+	trait SchemaManager {
 		/**
 		 * @var ISchemaManager
 		 */

@@ -4,7 +4,7 @@
 	namespace Edde\Common\Request;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Container\Container;
+	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Request\IRequestHandler;
 	use Edde\Common\Protocol\AbstractProtocolHandler;

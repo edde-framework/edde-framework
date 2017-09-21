@@ -5,5 +5,5 @@
 
 	use Edde\Api\Protocol\Exception\ProtocolHandlerException;
 
-	class UnsupportedElementException extends ProtocolHandlerException {
+	class UnhandledElementException extends ProtocolHandlerException {
 	}

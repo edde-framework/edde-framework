@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Router;
 
-	use Edde\Api\Container\Container;
+	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Router\IRequest;
 	use Edde\Api\Router\IRouter;
 

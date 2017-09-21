@@ -8,8 +8,8 @@
 	use Edde\Api\Cache\ICacheDirectory;
 	use Edde\Api\Cache\ICacheManager;
 	use Edde\Api\Cache\ICacheStorage;
-	use Edde\Api\Container\ContainerException;
-	use Edde\Api\Container\FactoryException;
+	use Edde\Api\Container\Exception\ContainerException;
+	use Edde\Api\Container\Exception\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Converter\IConverterManager;
@@ -101,7 +101,6 @@
 	use Edde\Ext\Converter\ConverterManagerConfigurator;
 	use Edde\Ext\Database\Sqlite\SqliteDriver;
 	use Edde\Ext\Database\Sqlite\SqliteDsn;
-	use Edde\Ext\Job\ThreadManagerConfigurator;
 	use Edde\Ext\Log\LogServiceConfigurator;
 	use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 	use Edde\Ext\Protocol\RequestServiceConfigurator;
@@ -113,7 +112,7 @@
 		 * @param array $factoryList
 		 *
 		 * @return IFactory[]
-		 * @throws FactoryException
+		 * @throws \Edde\Api\Container\Exception\FactoryException
 		 */
 		static public function createFactoryList(array $factoryList): array {
 			$factories = [];
@@ -147,7 +146,7 @@
 				} else if ($factory instanceof IFactory) {
 					$current = $factory;
 				} else if (is_callable($factory)) {
-					throw new FactoryException(sprintf('Closure is not supported in factory definition [%s].', $name));
+					throw new \Edde\Api\Container\Exception\FactoryException(sprintf('Closure is not supported in factory definition [%s].', $name));
 				}
 				if ($current === null) {
 					throw new FactoryException(sprintf('Unsupported factory definition [%s; %s].', is_string($name) ? $name : (is_object($name) ? get_class($name) : gettype($name)), is_string($factory) ? $factory : (is_object($factory) ? get_class($factory) : gettype($factory))));
@@ -198,8 +197,8 @@
 		 * @param string[] $configuratorList
 		 *
 		 * @return IContainer
-		 * @throws ContainerException
-		 * @throws FactoryException
+		 * @throws \Edde\Api\Container\Exception\ContainerException
+		 * @throws \Edde\Api\Container\Exception\FactoryException
 		 */
 		static public function container(array $factoryList = [], array $configuratorList = []): IContainer {
 			return self::create(array_merge(self::getDefaultFactoryList(), $factoryList), array_filter(array_merge(self::getDefaultConfiguratorList(), $configuratorList)));
@@ -213,7 +212,7 @@
 		 *
 		 * @return IContainer
 		 * @throws ContainerException
-		 * @throws FactoryException
+		 * @throws \Edde\Api\Container\Exception\FactoryException
 		 */
 		static public function containerWithRoot(array $factoryList = [], array $configuratorList = []): IContainer {
 			/**
@@ -477,7 +476,6 @@
 				IProtocolService::class => ProtocolServiceConfigurator::class,
 				IRequestService::class => RequestServiceConfigurator::class,
 				ILogService::class => LogServiceConfigurator::class,
-				IThreadManager::class => ThreadManagerConfigurator::class,
 				IStoreManager::class => StoreManagerConfigurator::class,
 			];
 		}

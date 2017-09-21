@@ -8,7 +8,7 @@
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Protocol\IProtocolHandler;
 	use Edde\Api\Protocol\IProtocolService;
-	use Edde\Common\Protocol\Exception\UnsupportedElementException;
+	use Edde\Common\Protocol\Exception\UnhandledElementException;
 
 	class ProtocolService extends AbstractProtocolHandler implements IProtocolService {
 		use HostUrl;
@@ -34,17 +34,18 @@
 		 * @inheritdoc
 		 */
 		public function createPacket(IElement $reference = null, string $origin = null): IElement {
-			$packet = new Packet($origin ?: $this->hostUrl->getAbsoluteUrl());
-			$packet->setReference($reference);
-			return $packet;
+			return (new Packet($origin ?: $this->hostUrl->getAbsoluteUrl()))->setReference($reference);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function canHandle(IElement $element): bool {
-			return $this->getProtocolHandler($element)
-				->canHandle($element);
+			try {
+				return $this->getProtocolHandler($element)->canHandle($element);
+			} catch (\Exception $exception) {
+				return false;
+			}
 		}
 
 		/**
@@ -58,28 +59,29 @@
 				$response = new Error(-102, $exception->getMessage());
 				$response->setException(get_class($exception));
 				$response->setReference($element);
-				$this->logService->exception($exception);
+				$this->logService->exception($exception, [
+					'edde',
+					'protocol',
+				]);
 				return $response;
-			} finally {
-				if ($element->getMeta('store', false)) {
-					$this->elementStore->save($element);
-					if (isset($response) && $response instanceof IElement) {
-						$this->elementStore->save($response);
-					}
-				}
 			}
 		}
 
+		/**
+		 * @param IElement $element
+		 *
+		 * @return IProtocolHandler
+		 * @throws UnhandledElementException
+		 */
 		protected function getProtocolHandler(IElement $element): IProtocolHandler {
 			if (isset($this->handleList[$type = $element->getType()])) {
 				return $this->handleList[$type];
 			}
 			foreach ($this->protocolHandlerList as $protocolHandler) {
-				$protocolHandler->setup();
-				if ($protocolHandler->canHandle($element)) {
+				if ($protocolHandler->setup() && $protocolHandler->canHandle($element)) {
 					return $this->handleList[$type] = $protocolHandler;
 				}
 			}
-			throw new UnsupportedElementException(sprintf('There is no protocol handler for the given element [%s].', $type));
+			throw new UnhandledElementException(sprintf('The given element is not supported or cannot be handled [%s].', $type));
 		}
 	}

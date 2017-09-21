@@ -1,12 +1,14 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Crate;
+	namespace Edde\Api\Crate\Inject;
+
+	use Edde\Api\Crate\ICrateFactory;
 
 	/**
 	 * Lazy crate cache dependency.
 	 */
-	trait LazyCrateFactoryTrait {
+	trait CrateFactory {
 		/**
 		 * @var ICrateFactory
 		 */

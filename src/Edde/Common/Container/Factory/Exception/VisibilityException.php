@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Container\Factory\Exception;
 
-	use Edde\Api\Container\FactoryException;
+	use Edde\Api\Container\Exception\FactoryException;
 
 	class VisibilityException extends FactoryException {
 	}

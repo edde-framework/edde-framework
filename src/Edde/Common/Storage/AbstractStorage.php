@@ -3,11 +3,13 @@
 
 	namespace Edde\Common\Storage;
 
-	use Edde\Api\Container\Container;
+	use Edde\Api\Container\Exception\ContainerException;
+	use Edde\Api\Container\Exception\FactoryException;
+	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Crate\ICrate;
-	use Edde\Api\Crate\LazyCrateFactoryTrait;
+	use Edde\Api\Crate\Inject\CrateFactory;
 	use Edde\Api\Query\IQuery;
-	use Edde\Api\Schema\LazySchemaManagerTrait;
+	use Edde\Api\Schema\Inject\SchemaManager;
 	use Edde\Api\Schema\SchemaException;
 	use Edde\Api\Storage\EmptyResultException;
 	use Edde\Api\Storage\IBoundQuery;
@@ -22,15 +24,28 @@
 	 * Base for all storage implementations.
 	 */
 	abstract class AbstractStorage extends Object implements IStorage {
-		use LazySchemaManagerTrait;
-		use LazyCrateFactoryTrait;
+		use SchemaManager;
+		use CrateFactory;
 		use Container;
 		use ConfigurableTrait;
 
+		/**
+		 * @param string $query
+		 * @param array  ...$parameterList
+		 *
+		 * @return IBoundQuery
+		 * @throws ContainerException
+		 * @throws FactoryException
+		 */
 		public function bound(string $query, ...$parameterList): IBoundQuery {
 			return (new BoundQuery())->bind($this->container->create($query, $parameterList, __METHOD__), $this);
 		}
 
+		/**
+		 * @return IBoundQuery
+		 * @throws ContainerException
+		 * @throws FactoryException
+		 */
 		public function query(): IBoundQuery {
 			return $this->bound(SelectQuery::class);
 		}

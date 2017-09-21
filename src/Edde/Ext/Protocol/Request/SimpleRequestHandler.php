@@ -4,10 +4,11 @@
 	namespace Edde\Ext\Protocol\Request;
 
 	use Edde\Api\Protocol\IElement;
+	use Edde\Common\Request\AbstractRequestHandler;
 	use Edde\Common\Strings\StringUtils;
 
-	class InstanceRequestHandler extends \Edde\Common\Request\AbstractRequestHandler {
-		const PREG = '~(?<class>[\\\a-zA-Z0-9-]+)::(?<action>[a-zA-Z0-9-]+)~';
+	class SimpleRequestHandler extends AbstractRequestHandler {
+		const PREG = '~(?<class>[.a-z0-9-]+)/(?<action>[a-z0-9-]+)~';
 
 		/**
 		 * @inheritdoc
@@ -23,7 +24,7 @@
 				'\\',
 				'',
 			], StringUtils::capitalize(str_replace('.', ' ', $match['class']))));
-			$element->setMeta('::method', $method = StringUtils::toCamelHump($match['action']));
-			return method_exists($class, $method);
+			$element->setMeta('::method', StringUtils::toCamelHump($match['action']));
+			return $this->container->canHandle($class);
 		}
 	}

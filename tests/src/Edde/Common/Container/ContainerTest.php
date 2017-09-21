@@ -3,10 +3,9 @@
 
 	namespace Edde\Common\Container;
 
-	use Edde\Api\Container\Container;
+	use Edde\Api\Container\Exception\UnknownFactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\EddeException;
-	use Edde\Common\Container\Exception\UnknownFactoryException;
 	use Edde\Common\Container\Factory\CallbackFactory;
 	use Edde\Common\Container\Factory\ExceptionFactory;
 	use Edde\Common\Container\Factory\InstanceFactory;
@@ -22,7 +21,7 @@
 	require_once __DIR__ . '/../assets/assets.php';
 
 	class ContainerTest extends TestCase {
-		use Container;
+		use \Edde\Api\Container\Inject\Container;
 
 		public function testUnknownFactory() {
 			$this->expectException(UnknownFactoryException::class);

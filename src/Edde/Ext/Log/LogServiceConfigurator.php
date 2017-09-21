@@ -3,7 +3,9 @@
 
 	namespace Edde\Ext\Log;
 
-	use Edde\Api\Container\Container;
+	use Edde\Api\Container\Exception\ContainerException;
+	use Edde\Api\Container\Exception\FactoryException;
+	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Log\ILogService;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Log\FileLog;
@@ -13,6 +15,9 @@
 
 		/**
 		 * @param ILogService $instance
+		 *
+		 * @throws ContainerException
+		 * @throws FactoryException
 		 */
 		public function configure($instance) {
 			$instance->registerLog($this->container->create(FileLog::class, ['default'], __METHOD__), [

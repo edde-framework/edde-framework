@@ -4,9 +4,9 @@
 	namespace Edde\Common\Upgrade;
 
 	use Edde\Api\Crate\ICrate;
-	use Edde\Api\Crate\LazyCrateFactoryTrait;
-	use Edde\Api\Schema\LazySchemaManagerTrait;
-	use Edde\Api\Storage\LazyStorageTrait;
+	use Edde\Api\Crate\Inject\CrateFactory;
+	use Edde\Api\Schema\Inject\SchemaManager;
+	use Edde\Api\Storage\Inject\Storage;
 	use Edde\Api\Upgrade\Exception\UpgradeException;
 	use Edde\Api\Upgrade\IUpgrade;
 	use Edde\Api\Upgrade\IUpgradeManager;
@@ -19,9 +19,9 @@
 	 * Default implementation of a upgrade manager.
 	 */
 	abstract class AbstractUpgradeManager extends Object implements IUpgradeManager {
-		use LazyStorageTrait;
-		use LazySchemaManagerTrait;
-		use LazyCrateFactoryTrait;
+		use Storage;
+		use SchemaManager;
+		use CrateFactory;
 		use ConfigurableTrait;
 		/**
 		 * @var IUpgrade[]

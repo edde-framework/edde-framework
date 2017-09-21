@@ -1,9 +1,7 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Common\Container\Exception;
-
-	use Edde\Api\Container\ContainerException;
+	namespace Edde\Api\Container\Exception;
 
 	class UnknownFactoryException extends ContainerException {
 	}

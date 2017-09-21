@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Request;
 
-	use Edde\Api\Container\Container;
+	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Protocol\IElement;
 	use Edde\Api\Request\IRequestHandler;
 	use Edde\Api\Request\IRequestService;
@@ -49,21 +49,31 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function canHandle(IElement $element): bool {
+			foreach ($this->requestHandlerList as $requestHandler) {
+				if ($requestHandler->setup() && $requestHandler->canHandle($element)) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function onExecute(IElement $element) {
 			foreach ($this->requestHandlerList as $requestHandler) {
 				/** @var $response IElement */
-				if ($requestHandler->canHandle($element)) {
+				if ($requestHandler->setup() && $requestHandler->canHandle($element)) {
 					if (($response = $requestHandler->execute($element)) !== null && $response instanceof IElement) {
 						return $this->responseList[$element->getId()] = $response->setReference($element);
 					}
 					if ($element->isType('request')) {
-						return (new Error(100, sprintf('Internal error; request [%s] got no answer (response).', $element->getAttribute('request'))))->setException(MissingResponseException::class)
-							->setReference($element);
+						return (new Error(100, sprintf('Internal error; request [%s] got no answer (response).', $element->getAttribute('request'))))->setException(MissingResponseException::class)->setReference($element);
 					}
 					return null;
 				}
 			}
-			return (new Error(100, sprintf('Unhandled request [%s].', $element->getAttribute('request'))))->setException(Exception\UnhandledRequestException::class)
-				->setReference($element);
+			return (new Error(100, sprintf('Unhandled request [%s].', $element->getAttribute('request'))))->setException(Exception\UnhandledRequestException::class)->setReference($element);
 		}
 	}

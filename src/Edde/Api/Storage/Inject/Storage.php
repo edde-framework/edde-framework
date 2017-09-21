@@ -1,12 +1,14 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Storage;
+	namespace Edde\Api\Storage\Inject;
+
+	use Edde\Api\Storage\IStorage;
 
 	/**
 	 * Implements dependency for a storage interface.
 	 */
-	trait LazyStorageTrait {
+	trait Storage {
 		/**
 		 * @var IStorage
 		 */

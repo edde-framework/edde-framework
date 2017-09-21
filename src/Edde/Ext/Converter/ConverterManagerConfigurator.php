@@ -3,10 +3,11 @@
 
 	namespace Edde\Ext\Converter;
 
-	use Edde\Api\Container\Container;
+	use Edde\Api\Container\Exception\ContainerException;
+	use Edde\Api\Container\Exception\FactoryException;
+	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Common\Config\AbstractConfigurator;
-	use Edde\Common\Translator\Dictionary\CsvDictionaryConverter;
 	use Edde\Ext\Protocol\ElementConverter;
 
 	class ConverterManagerConfigurator extends AbstractConfigurator {
@@ -14,6 +15,9 @@
 
 		/**
 		 * @param IConverterManager $instance
+		 *
+		 * @throws ContainerException
+		 * @throws FactoryException
 		 */
 		public function configure($instance) {
 			static $converterList = [
@@ -21,7 +25,6 @@
 				JsonConverter::class,
 				NodeConverter::class,
 				PhpConverter::class,
-				CsvDictionaryConverter::class,
 				XmlConverter::class,
 				ElementConverter::class,
 				PostConverter::class,

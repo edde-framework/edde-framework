@@ -3,8 +3,8 @@
 
 	namespace Edde\Common\Container\Factory;
 
-	use Edde\Api\Container\ContainerException;
-	use Edde\Api\Container\DependencyException;
+	use Edde\Api\Container\Exception\ContainerException;
+	use Edde\Api\Container\Exception\DependencyException;
 	use Edde\Api\Container\IAutowire;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;

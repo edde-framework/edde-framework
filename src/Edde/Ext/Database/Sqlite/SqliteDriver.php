@@ -3,7 +3,7 @@
 
 	namespace Edde\Ext\Database\Sqlite;
 
-	use Edde\Api\Container\Container;
+	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Database\DriverException;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
@@ -125,19 +125,22 @@
 		protected function handleInit() {
 			parent::handleInit();
 			$this->setTypeList([
-				null       => 'TEXT',
-				'int'      => 'INTEGER',
-				'bool'     => 'INTEGER',
-				'float'    => 'FLOAT',
-				'long'     => 'INTEGER',
-				'string'   => 'TEXT',
-				'text'     => 'TEXT',
+				null => 'TEXT',
+				'int' => 'INTEGER',
+				'bool' => 'INTEGER',
+				'float' => 'FLOAT',
+				'long' => 'INTEGER',
+				'string' => 'TEXT',
+				'text' => 'TEXT',
 				'datetime' => 'TIMESTAMP',
 			]);
 			$this->container->setup();
 			$this->staticQueryFactory = $this->container->create(SqliteQueryFactory::class, [$this], __METHOD__);
 		}
 
+		/**
+		 * @throws DriverException
+		 */
 		protected function handleSetup() {
 			parent::handleSetup();
 			if (extension_loaded('pdo_sqlite') === false) {

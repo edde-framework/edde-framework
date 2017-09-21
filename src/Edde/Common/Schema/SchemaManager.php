@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Schema;
 
-	use Edde\Api\Container\Container;
+	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\INodeQuery;
 	use Edde\Api\Schema\ISchema;

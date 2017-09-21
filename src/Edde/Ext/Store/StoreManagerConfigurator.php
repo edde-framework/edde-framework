@@ -3,7 +3,9 @@
 
 	namespace Edde\Ext\Store;
 
-	use Edde\Api\Container\Container;
+	use Edde\Api\Container\Exception\ContainerException;
+	use Edde\Api\Container\Exception\FactoryException;
+	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Store\IStoreManager;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Store\FileStore;
@@ -14,6 +16,9 @@
 
 		/**
 		 * @param IStoreManager $instance
+		 *
+		 * @throws ContainerException
+		 * @throws FactoryException
 		 */
 		public function configure($instance) {
 			parent::configure($instance);

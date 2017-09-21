@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Http\Client;
 
-	use Edde\Api\Container\Container;
+	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Converter\Inject\ConverterManager;
 	use Edde\Api\Http\Client\Exception\ClientException;
 	use Edde\Api\Http\Client\IHttpClient;

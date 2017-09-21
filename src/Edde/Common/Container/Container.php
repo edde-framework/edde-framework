@@ -4,12 +4,12 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Container\FactoryException;
+	use Edde\Api\Container\Exception\FactoryException;
+	use Edde\Api\Container\Exception\UnknownFactoryException;
 	use Edde\Api\Container\IAutowire;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Reflection\IReflectionParameter;
-	use Edde\Common\Container\Exception\UnknownFactoryException;
 	use Edde\Common\Container\Factory\ClassFactory;
 
 	/**

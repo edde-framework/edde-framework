@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Lock;
 
-	use Edde\Api\Container\Container;
+	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Lock\ILock;
 
 	class FileLockManager extends AbstractLockManager {
