@@ -41,7 +41,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setup() {
+		protected function handleSetup() {
+			parent::handleSetup();
 			$this->router = $this->container->create($this->proxy, $this->parameterList, __METHOD__);
 			$this->router->setup();
 		}

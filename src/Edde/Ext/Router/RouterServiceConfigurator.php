@@ -6,7 +6,6 @@
 	use Edde\Api\Container\Container;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Common\Config\AbstractConfigurator;
-	use Edde\Common\Router\HttpRouter;
 	use Edde\Common\Router\ProtocolRouter;
 
 	class RouterServiceConfigurator extends AbstractConfigurator {
@@ -16,7 +15,7 @@
 		 * @param IRouterService $instance
 		 */
 		public function configure($instance) {
+			parent::configure($instance);
 			$instance->registerRouter($this->container->create(ProtocolRouter::class, [], __METHOD__));
-			$instance->registerRouter($this->container->create(HttpRouter::class, [], __METHOD__));
 		}
 	}
