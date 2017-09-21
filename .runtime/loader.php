@@ -65,16 +65,16 @@
 		]), [
 			IRouterService::class => RouterServiceConfigurator::class,
 		]);
+		/**
+		 * This one is one of the most magical: this factory uses IContext::cascade() to search for class; this is quite
+		 * epic feature, but also less transparent, useful to seamlessly switch context.
+		 *
+		 * Analyze every factory for dependencies is quite expensive task, so this feature has been removed. Becuase of that it's
+		 * necessary to register cascade factory by container as it has some dependencies.
+		 */
+		$container->registerFactory($container->create(CascadeFactory::class, [], __FILE__));
+		return $container;
 	} catch (\Throwable $e) {
 		Debugger::log($e);
 		die(sprintf('Critical application Exception [%s]; see logs.', get_class($e)));
 	}
-	/**
-	 * This one is one of the most magical: this factory uses IContext::cascade() to search for class; this is quite
-	 * epic feature, but also less transparent, useful to seamlessly switch context.
-	 *
-	 * Analyze every factory for dependencies is quite expensive task, so this feature has been removed. Becuase of that it's
-	 * necessary to register cascade factory by container as it has some dependencies.
-	 */
-	$container->registerFactory($container->create(CascadeFactory::class, [], __FILE__));
-	return $container;
