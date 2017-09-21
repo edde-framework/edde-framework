@@ -4,8 +4,8 @@
 	namespace Edde\Common\Database;
 
 	use Edde\Api\Crate\ICrate;
-	use Edde\Api\Database\DriverException;
-	use Edde\Api\Database\LazyDriverTrait;
+	use Edde\Api\Database\Exception\DriverException;
+	use Edde\Api\Database\Inject\Driver;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Storage\IStorage;
@@ -21,7 +21,7 @@
 	 * Database (persistant) storage implementation.
 	 */
 	class DatabaseStorage extends AbstractStorage {
-		use LazyDriverTrait;
+		use Driver;
 		/**
 		 * @var int
 		 */
@@ -67,7 +67,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws DriverException
+		 * @throws \Edde\Api\Database\Exception\DriverException
 		 * @throws StorageException
 		 */
 		public function store(ICrate $crate): IStorage {
@@ -113,7 +113,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws DriverException
+		 * @throws \Edde\Api\Database\Exception\DriverException
 		 */
 		public function execute(IQuery $query) {
 			try {
@@ -121,20 +121,20 @@
 				$this->driver->setup();
 				return $this->driver->execute($query);
 			} catch (PDOException $e) {
-				throw new DriverException(sprintf('Driver [%s] execution failed: %s.', get_class($this->driver), $e->getMessage()), 0, $e);
+				throw new \Edde\Api\Database\Exception\DriverException(sprintf('Driver [%s] execution failed: %s.', get_class($this->driver), $e->getMessage()), 0, $e);
 			}
 		}
 
 		/**
 		 * @inheritdoc
-		 * @throws DriverException
+		 * @throws \Edde\Api\Database\Exception\DriverException
 		 */
 		public function native(IStaticQuery $staticQuery) {
 			try {
 				$this->driver->setup();
 				return $this->driver->native($staticQuery);
 			} catch (PDOException $e) {
-				throw new DriverException(sprintf('Driver [%s] execution failed: %s.', get_class($this->driver), $e->getMessage()), 0, $e);
+				throw new \Edde\Api\Database\Exception\DriverException(sprintf('Driver [%s] execution failed: %s.', get_class($this->driver), $e->getMessage()), 0, $e);
 			}
 		}
 

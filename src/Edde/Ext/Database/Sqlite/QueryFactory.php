@@ -3,11 +3,11 @@
 
 	namespace Edde\Ext\Database\Sqlite;
 
-	use Edde\Api\Database\LazyDriverTrait;
+	use Edde\Api\Database\Inject\Driver;
 	use Edde\Common\Query\AbstractStaticQueryFactory;
 
-	class SqliteQueryFactory extends AbstractStaticQueryFactory {
-		use LazyDriverTrait;
+	class QueryFactory extends AbstractStaticQueryFactory {
+		use Driver;
 
 		/**
 		 * @inheritdoc

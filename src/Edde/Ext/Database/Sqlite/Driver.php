@@ -4,7 +4,7 @@
 	namespace Edde\Ext\Database\Sqlite;
 
 	use Edde\Api\Container\Inject\Container;
-	use Edde\Api\Database\DriverException;
+	use Edde\Api\Database\Exception\DriverException;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Query\IStaticQueryFactory;
@@ -16,7 +16,7 @@
 	/**
 	 * Sqlite database support.
 	 */
-	class SqliteDriver extends AbstractDriver {
+	class Driver extends AbstractDriver {
 		use Container;
 		/**
 		 * @var PDO
@@ -120,7 +120,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws DriverException
+		 * @throws \Edde\Api\Database\Exception\DriverException
 		 */
 		protected function handleInit() {
 			parent::handleInit();
@@ -135,7 +135,7 @@
 				'datetime' => 'TIMESTAMP',
 			]);
 			$this->container->setup();
-			$this->staticQueryFactory = $this->container->create(SqliteQueryFactory::class, [$this], __METHOD__);
+			$this->staticQueryFactory = $this->container->create(QueryFactory::class, [$this], __METHOD__);
 		}
 
 		/**

@@ -1,9 +1,11 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Database;
+	namespace Edde\Api\Database\Inject;
 
-	trait LazyDriverTrait {
+	use Edde\Api\Database\IDriver;
+
+	trait Driver {
 		/**
 		 * @var IDriver
 		 */

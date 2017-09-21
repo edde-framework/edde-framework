@@ -92,8 +92,8 @@
 	use Edde\Common\Xml\XmlExport;
 	use Edde\Common\Xml\XmlParser;
 	use Edde\Ext\Converter\ConverterManagerConfigurator;
-	use Edde\Ext\Database\Sqlite\SqliteDriver;
-	use Edde\Ext\Database\Sqlite\SqliteDsn;
+	use Edde\Ext\Database\Sqlite\Driver;
+	use Edde\Ext\Database\Sqlite\Dsn;
 	use Edde\Ext\Log\LogServiceConfigurator;
 	use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 	use Edde\Ext\Protocol\RequestServiceConfigurator;
@@ -341,8 +341,8 @@
 				 * Storage (database) related stuff
 				 */
 				IStorage::class => DatabaseStorage::class,
-				IDriver::class => SqliteDriver::class,
-				IDsn::class => self::instance(SqliteDsn::class, ['storage.sqlite']),
+				IDriver::class => Driver::class,
+				IDsn::class => self::instance(Dsn::class, ['storage.sqlite']),
 
 				/**
 				 * General crate support

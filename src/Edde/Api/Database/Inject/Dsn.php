@@ -1,9 +1,11 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Database;
+	namespace Edde\Api\Database\Inject;
 
-	trait LazyDsnTrait {
+	use Edde\Api\Database\IDsn;
+
+	trait Dsn {
 		/**
 		 * @var IDsn
 		 */

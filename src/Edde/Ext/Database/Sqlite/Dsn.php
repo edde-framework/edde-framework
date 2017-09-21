@@ -13,7 +13,7 @@
 	 * "Well," said the teacher nervously, "I guess the one sucking the cone."
 	 * "No," said Little Johnny, "the one with the wedding ring on her finger, but I like the way you're thinking."
 	 */
-	class SqliteDsn extends AbstractDsn {
+	class Dsn extends AbstractDsn {
 		public function __construct(string $filename, array $optionList = []) {
 			parent::__construct($filename, $optionList);
 		}
