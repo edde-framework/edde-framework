@@ -1,4 +1,4 @@
 <?php
 	declare(strict_types = 1);
 
-	require_once __DIR__ . '/Edde/loader.php';
+	require_once __DIR__ . '/App/loader.php';
