@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Cache;
+	namespace Edde\Api\Cache\Exception;
 
 	use Edde\Api\EddeException;
 
