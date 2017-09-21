@@ -4,7 +4,7 @@
 	namespace Edde\Common\Crate;
 
 	use ArrayIterator;
-	use Edde\Api\Crate\CrateException;
+	use Edde\Api\Crate\Exception\CrateException;
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\ICrateFactory;

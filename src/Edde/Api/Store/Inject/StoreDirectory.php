@@ -1,9 +1,11 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Store;
+	namespace Edde\Api\Store\Inject;
 
-	trait LazyStoreDirectoryTrait {
+	use Edde\Api\Store\IStoreDirectory;
+
+	trait StoreDirectory {
 		/**
 		 * @var IStoreDirectory
 		 */

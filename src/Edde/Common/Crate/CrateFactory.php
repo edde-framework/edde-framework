@@ -4,7 +4,7 @@
 	namespace Edde\Common\Crate;
 
 	use Edde\Api\Container\Inject\Container;
-	use Edde\Api\Crate\CrateException;
+	use Edde\Api\Crate\Exception\CrateException;
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\ICrateFactory;
@@ -24,7 +24,7 @@
 		/**
 		 * @inheritdoc
 		 * @throws SchemaException
-		 * @throws CrateException
+		 * @throws \Edde\Api\Crate\Exception\CrateException
 		 */
 		public function crate(string $schema, array $load = null, string $crate = null): ICrate {
 			/** @var $crate ICrate */
@@ -79,7 +79,7 @@
 					/** @var $value array */
 					foreach ($value as $collectionValue) {
 						if (is_array($collectionValue) === false) {
-							throw new CrateException(sprintf('Cannot push source value into the crate [%s]; value [%s] is not an array (collection).', $schema->getSchemaName(), $property));
+							throw new \Edde\Api\Crate\Exception\CrateException(sprintf('Cannot push source value into the crate [%s]; value [%s] is not an array (collection).', $schema->getSchemaName(), $property));
 						}
 						$collection->addCrate($this->crate($targetSchema, $collectionValue));
 					}

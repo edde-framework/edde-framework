@@ -5,7 +5,7 @@
 
 	use Edde\Api\Lock\ILockDirectory;
 
-	trait LazyLockDirectoryTrait {
+	trait LockDirectory {
 		/**
 		 * @var ILockDirectory
 		 */

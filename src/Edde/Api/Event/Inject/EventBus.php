@@ -1,7 +1,9 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Event;
+	namespace Edde\Api\Event\Inject;
+
+	use Edde\Api\Event\IEventBus;
 
 	trait EventBus {
 		/**

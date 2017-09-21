@@ -5,7 +5,7 @@
 
 	use Edde\Api\Job\IQueueList;
 
-	trait LazyQueueListTrait {
+	trait QueueList {
 		/**
 		 * @var IQueueList
 		 */

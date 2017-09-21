@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Crate;
 
-	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\IProperty;
 	use Edde\Api\Schema\IProperty as ISchemaProperty;
 	use Edde\Common\Object\Object;
@@ -51,11 +50,11 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws CrateException
+		 * @throws \Edde\Api\Crate\Exception\CrateException
 		 */
 		public function getSchemaProperty(): ISchemaProperty {
 			if ($this->property === null) {
-				throw new CrateException(sprintf('Property [%s] has no schema property definition.', static::class));
+				throw new \Edde\Api\Crate\Exception\CrateException(sprintf('Property [%s] has no schema property definition.', static::class));
 			}
 			return $this->property;
 		}

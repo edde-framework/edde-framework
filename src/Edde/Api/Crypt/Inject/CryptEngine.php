@@ -1,12 +1,14 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Api\Crypt;
+	namespace Edde\Api\Crypt\Inject;
+
+	use Edde\Api\Crypt\ICryptEngine;
 
 	/**
 	 * Lazy dependency on a crypt engine.
 	 */
-	trait LazyCryptEngineTrait {
+	trait CryptEngine {
 		/**
 		 * @var ICryptEngine
 		 */

@@ -7,7 +7,7 @@
 	use Edde\Api\Lock\ILock;
 
 	class FileLock extends AbstractLock {
-		use \Edde\Api\Lock\Inject\LazyLockDirectoryTrait;
+		use \Edde\Api\Lock\Inject\LockDirectory;
 		/**
 		 * @var IFile
 		 */
