@@ -45,14 +45,21 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function getRouter(): IRouter {
+			foreach ($this->routerList as $router) {
+				if ($router->setup() && $router->canHandle()) {
+					return $router;
+				}
+			}
+			return null;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function canHandle(): bool {
 			try {
-				foreach ($this->routerList as $router) {
-					if ($router->setup() && $router->canHandle()) {
-						$this->router = $router;
-						return true;
-					}
-				}
+				return ($this->router = $this->getRouter()) !== null;
 			} catch (\Exception $exception) {
 				$this->logService->exception($exception, [
 					'edde',
@@ -68,18 +75,10 @@
 		public function createRequest(): IRequest {
 			if ($this->request) {
 				return $this->request;
-			} else if ($this->router) {
-				return $this->request = $this->router->createRequest();
 			}
-			$request = null;
-			foreach ($this->routerList as $router) {
-				if ($router->setup() && $router->canHandle() && ($request = $router->createRequest())) {
-					break;
-				}
-			}
-			if ($request === null) {
+			if ($this->router === null && ($this->router = $this->getRouter()) === null) {
 				throw new BadRequestException('Cannot handle current request.');
 			}
-			return $this->request = $request;
+			return $this->request = $this->router->createRequest();
 		}
 	}

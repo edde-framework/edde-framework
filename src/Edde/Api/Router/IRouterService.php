@@ -24,4 +24,11 @@
 		 * @return IRouterService
 		 */
 		public function registerRouterList(array $routerList): IRouterService;
+
+		/**
+		 * return router able to handle current request or null if nobody is able to handle it
+		 *
+		 * @return IRouter|null
+		 */
+		public function getRouter();
 	}
