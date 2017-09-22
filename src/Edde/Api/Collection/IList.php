@@ -24,13 +24,13 @@
 		public function put(array $array): IList;
 
 		/**
-		 * append the given array
+		 * merge the given array
 		 *
 		 * @param array $array
 		 *
 		 * @return IList
 		 */
-		public function append(array $array): IList;
+		public function merge(array $array): IList;
 
 		/**
 		 * @param string $name

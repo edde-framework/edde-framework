@@ -20,6 +20,7 @@
 		 * @throws FactoryException
 		 */
 		public function configure($instance) {
+			parent::configure($instance);
 			$instance->registerLog($this->container->create(FileLog::class, ['default'], __METHOD__), [
 				'info',
 				'error',

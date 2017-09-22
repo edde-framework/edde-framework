@@ -3,13 +3,7 @@
 
 	namespace Edde\Api\Application;
 
-	use Edde\Api\Resource\IResourceProvider;
-
-	/**
-	 * Application context; basically defines application type (so under one source root could run
-	 * more applications, e.g. backend, administration and frontend, ...).
-	 */
-	interface IContext extends IResourceProvider {
+	interface IContext {
 		/**
 		 * return current id of context; could be any type of string
 		 *

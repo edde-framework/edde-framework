@@ -44,7 +44,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function append(array $array): IList {
+		public function merge(array $array): IList {
 			$this->list = array_merge($this->list, $array);
 			return $this;
 		}

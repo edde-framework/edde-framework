@@ -5,13 +5,11 @@
 
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Log\Inject\LogService;
-	use Edde\Api\Protocol\Inject\ProtocolService;
 	use Edde\Api\Router\Inject\RouterService;
 	use Edde\Common\Object\Object;
 
 	class Application extends Object implements IApplication {
 		use RouterService;
-		use ProtocolService;
 		use LogService;
 		/**
 		 * return code from an application

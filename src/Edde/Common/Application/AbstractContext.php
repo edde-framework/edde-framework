@@ -4,14 +4,9 @@
 	namespace Edde\Common\Application;
 
 	use Edde\Api\Application\IContext;
-	use Edde\Api\Resource\IResource;
-	use Edde\Api\Resource\LazyResourceManagerTrait;
-	use Edde\Common\Resource\AbstractResourceProvider;
-	use Edde\Common\Resource\UnknownResourceException;
+	use Edde\Common\Object\Object;
 
-	abstract class AbstractContext extends AbstractResourceProvider implements IContext {
-		use LazyResourceManagerTrait;
-
+	abstract class AbstractContext extends Object implements IContext {
 		/**
 		 * @return string
 		 */
@@ -31,17 +26,5 @@
 		 */
 		public function cascade(string $delimiter, string $name = null): array {
 			return [];
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getResource(string $name, string $namespace = null, ...$parameters): IResource {
-			foreach (array_merge($this->cascade('/'), [null]) as $cascade) {
-				if ($this->resourceManager->hasResource($name, $cascade, ...$parameters)) {
-					return $this->resourceManager->getResource($name, $cascade, ...$parameters);
-				}
-			}
-			throw new UnknownResourceException(sprintf('Requested unknown resource [%s].', $name));
 		}
 	}
