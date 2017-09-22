@@ -18,11 +18,11 @@
 		/**
 		 * @var IRouter
 		 */
-		protected $defaultRouter;
+		protected $errorRouter;
 		/**
 		 * @var IRouter
 		 */
-		protected $errorRouter;
+		protected $router;
 		/**
 		 * @var IRequest
 		 */
@@ -39,14 +39,6 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function registerDefaultRouter(IRouter $router): IRouterService {
-			$this->defaultRouter = $router;
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
 		public function registerErrorRouter(IRouter $router): IRouterService {
 			$this->errorRouter = $router;
 			return $this;
@@ -56,7 +48,20 @@
 		 * @inheritdoc
 		 */
 		public function canHandle(): bool {
-			return true;
+			try {
+				foreach ($this->routerList as $router) {
+					if ($router->setup() && $router->canHandle()) {
+						$this->router = $router;
+						return true;
+					}
+				}
+			} catch (\Exception $exception) {
+				$this->logService->exception($exception, [
+					'edde',
+					'router-service',
+				]);
+			}
+			return false;
 		}
 
 		/**
@@ -65,6 +70,8 @@
 		public function createRequest(): IRequest {
 			if ($this->request) {
 				return $this->request;
+			} else if ($this->router) {
+				return $this->request = $this->router->createRequest();
 			}
 			$request = null;
 			try {
@@ -77,13 +84,8 @@
 			} catch (\Throwable $exception) {
 				$this->logService->exception($exception);
 				if ($this->errorRouter) {
-					$this->errorRouter->setup();
-					$this->errorRouter->canHandle() && ($request = $this->errorRouter->createRequest());
+					$this->errorRouter->setup() && $this->errorRouter->canHandle() && ($request = $this->errorRouter->createRequest());
 				}
-			}
-			if ($request === null && $this->defaultRouter) {
-				$this->defaultRouter->setup();
-				$this->defaultRouter->canHandle() && ($request = $this->defaultRouter->createRequest());
 			}
 			if ($request === null) {
 				throw new BadRequestException('Cannot handle current request.');

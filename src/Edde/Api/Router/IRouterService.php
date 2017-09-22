@@ -19,15 +19,6 @@
 		public function registerRouter(IRouter $router): IRouterService;
 
 		/**
-		 * when no other router catches a request, this one should be executed
-		 *
-		 * @param IRouter $router
-		 *
-		 * @return IRouterService
-		 */
-		public function registerDefaultRouter(IRouter $router): IRouterService;
-
-		/**
 		 * when there is an exception, this router should be executed
 		 *
 		 * @param IRouter $router

@@ -3,6 +3,8 @@
 
 	namespace App\Common\Router;
 
+	use Edde\Api\Container\Exception\ContainerException;
+	use Edde\Api\Container\Exception\FactoryException;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Common\Request\Message;
 	use Edde\Common\Router\StaticRouter;
@@ -11,9 +13,15 @@
 	class RouterServiceConfigurator extends EddeRouterServiceConfigurator {
 		/**
 		 * @param IRouterService $instance
+		 *
+		 * @throws ContainerException
+		 * @throws FactoryException
 		 */
 		public function configure($instance) {
 			parent::configure($instance);
-			$instance->registerDefaultRouter($this->container->create(StaticRouter::class, [new Message('index.index-view/action-index')], __METHOD__));
+			/**
+			 * last router is considered as a default
+			 */
+			$instance->registerRouter($this->container->create(StaticRouter::class, [new Message('index.index-view/action-index')], __METHOD__));
 		}
 	}
