@@ -41,14 +41,17 @@
 			$injectList = [];
 			$lazyList = [];
 			$configuratorList = [];
-			foreach (ReflectionUtils::getMethodList($dependency) as $reflectionMethod) {
+			$reflectionClass = new \ReflectionClass($dependency);
+			foreach ($reflectionClass->getMethods() as $reflectionMethod) {
 				$injectList = array_merge($injectList, $this->getParameterList($reflectionClass = $reflectionMethod->getDeclaringClass(), $reflectionMethod, 'inject'));
 				if ($reflectionClass->implementsInterface(IAutowire::class)) {
 					$lazyList = array_merge($lazyList, $this->getParameterList($reflectionClass, $reflectionMethod, 'lazy'));
 				}
 			}
 			$parameterList = [];
-			foreach (ReflectionUtils::getParameterList($dependency) as $reflectionParameter) {
+			$constructor = $reflectionClass->getConstructor() ?: new \ReflectionFunction(function () {
+			});
+			foreach ($constructor->getParameters() as $reflectionParameter) {
 				$parameterList[] = new Parameter($reflectionParameter->getName(), $reflectionParameter->isOptional(), ($class = $reflectionParameter->getClass()) ? $class->getName() : null);
 			}
 			if ($dependency !== null) {

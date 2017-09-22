@@ -3,15 +3,15 @@
 
 	namespace Edde\Common\Log;
 
-	use Edde\Api\File\IFile;
 	use Edde\Api\Log\ILog;
 	use Edde\Api\Log\ILogRecord;
+	use Edde\Api\Log\Inject\LazyLogDirectoryTrait;
 
 	/**
 	 * Default file based log.
 	 */
 	class FileLog extends AbstractLog {
-		use \Edde\Api\Log\Inject\LazyLogDirectoryTrait;
+		use LazyLogDirectoryTrait;
 		/**
 		 * @var string
 		 */

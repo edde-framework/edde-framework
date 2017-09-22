@@ -3,21 +3,18 @@
 
 	namespace Edde\Common\Utils;
 
-	use Edde\Api\Http\ICookie;
 	use Edde\Api\Utils\IHttpUtils;
-	use Edde\Common\Http\Cookie;
+	use Edde\Api\Utils\Inject\StringUtils;
 	use Edde\Common\Object\Object;
 
 	/**
 	 * Static set of helper functions around http protocol.
 	 */
 	class HttpUtils extends Object implements IHttpUtils {
+		use StringUtils;
+
 		/**
-		 * parse accept header and return an ordered array with accept mime types
-		 *
-		 * @param string $accept
-		 *
-		 * @return array
+		 * @inheritdoc
 		 */
 		public function accept(string $accept = null): array {
 			if ($accept === null) {
@@ -25,7 +22,7 @@
 			}
 			$accepts = [];
 			foreach (explode(',', $accept) as $part) {
-				if (($match = preg_match('~\s*(?<mime>.+\/.+?)(?:\s*;\s*[qQ]\=(?<weight>[01](?:\.\d*)?))?\s*$~', $part)) === null) {
+				if (($match = $this->stringUtils->match($part, '~\s*(?<mime>.+\/.+?)(?:\s*;\s*[qQ]\=(?<weight>[01](?:\.\d*)?))?\s*$~', true)) === null) {
 					continue;
 				}
 				$weight = isset($match['weight']) ? (float)$match['weight'] : 1;
@@ -68,19 +65,14 @@
 		}
 
 		/**
-		 * parse an input language string (Accept-Language header) and return langauge order
-		 *
-		 * @param string $language
-		 * @param string $default
-		 *
-		 * @return array
+		 * @inheritdoc
 		 */
-		static public function language(string $language = null, string $default = 'en'): array {
+		public function language(string $language = null, string $default = 'en'): array {
 			if ($language === null) {
 				return [$default];
 			}
 			foreach (explode(',', $language) as $part) {
-				if (($match = preg_match('~\s*(?<lang>[^;]+)(?:\s*;\s*[qQ]\=(?<weight>[01](?:\.\d*)?))?\s*~', $part)) === null) {
+				if (($match = $this->stringUtils->match($part, '~\s*(?<lang>[^;]+)(?:\s*;\s*[qQ]\=(?<weight>[01](?:\.\d*)?))?\s*~', true)) === null) {
 					continue;
 				}
 				$weight = isset($match['weight']) ? (float)$match['weight'] : 1;
@@ -102,7 +94,10 @@
 			return $languageList;
 		}
 
-		static public function charset(string $charset = null, $default = 'utf-8'): array {
+		/**
+		 * @inheritdoc
+		 */
+		public function charset(string $charset = null, $default = 'utf-8'): array {
 			if ($charset === null) {
 				return [$default];
 			}
@@ -130,13 +125,9 @@
 		}
 
 		/**
-		 * this method does some really dark magic, so if the output is wrong, try to look here and report a bug
-		 *
-		 * @param string $contentType
-		 *
-		 * @return \stdClass
+		 * @inheritdoc
 		 */
-		static public function contentType(string $contentType): \stdClass {
+		public function contentType(string $contentType): \stdClass {
 			/**
 			 * this is fuckin' trick how to parse mime using native php's csv parser
 			 *
@@ -168,43 +159,40 @@
 			foreach ($type as $part) {
 				$key = trim(substr($part, 0, $index = strpos($part, '=')));
 				$value = trim(trim(substr($part, $index + 1)), '"');
-				/** @noinspection PhpVariableVariableInspection */
 				$stdClass->params[$key] = $value;
 			}
 			return $stdClass;
 		}
 
 		/**
-		 * parse cookie and return array of values
-		 *
-		 * @param string $cookie
-		 *
-		 * @return ICookie
+		 * @inheritdoc
 		 */
-		static public function cookie(string $cookie): ICookie {
-			$cookie = preg_match('~(?<name>[^\s()<>@,;:\"/\\[\\]?={}]+)=(?<value>[^=;\s]+)\s*(?<misc>.*)?~', $cookie);
-			$path = '/';
-			$domain = '';
-			$expires = '';
+		public function cookie(string $cookie): \stdClass {
+			$cookie = $this->stringUtils->match($cookie, '~(?<name>[^\s()<>@,;:\"/\\[\\]?={}]+)=(?<value>[^=;\s]+)\s*(?<misc>.*)?~', true);
 			if (isset($cookie['misc'])) {
-				if ($match = preg_match('~path=(?<path>[a-z0-9/._-]+);?~i', $cookie['misc'])) {
-					$path = $match['path'];
+				if ($match = $this->stringUtils->match($cookie['misc'], '~path=(?<path>[a-z0-9/._-]+);?~i', true)) {
+					$cookie['path'] = $match['path'];
 				}
-				if ($match = preg_match('~domain=(?<domain>[a-z0-9._-]+);?~i', $cookie['misc'])) {
-					$domain = $match['domain'];
+				if ($match = $this->stringUtils->match($cookie['misc'], '~domain=(?<domain>[a-z0-9._-]+);?~i', true)) {
+					$cookie['domain'] = $match['domain'];
 				}
-				if ($match = preg_match('~expires=(?<expires>[a-z0-9:\s,-]+\s+GMT);?~i', $cookie['misc'])) {
-					$expires = $match['expires'];
+				if ($match = $this->stringUtils->match($cookie['misc'], '~expires=(?<expires>[a-z0-9:\s,-]+);?~i', true)) {
+					$cookie['expires'] = $match['expires'];
 				}
 			}
-			return new Cookie($cookie['name'], $cookie['value'], $expires, $path, $domain, stripos($cookie['misc'], 'secure') !== false, stripos($cookie['misc'], 'httponly') !== false);
+			$cookie['secure'] = strpos($cookie['misc'], 'secure') !== false;
+			$cookie['httpOnly'] = stripos($cookie['misc'], 'httponly') !== false;
+			unset($cookie['misc']);
+			return (object)$cookie;
 		}
 
-		static public function headerList(string $headers, bool $process = true) {
-			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
+		/**
+		 * @inheritdoc
+		 */
+		public function headerList(string $headers, bool $process = true): array {
 			$headers = explode("\r\n", $headers);
 			$headerList = [];
-			if (stripos($headers[0], 'http') === 0) {
+			if ($this->stringUtils->match($headers[0], '~HTTP/[0-9.]+~')) {
 				$headerList['http'] = array_shift($headers);
 			}
 			foreach ($headers as $header) {
@@ -216,27 +204,44 @@
 			return $process ? self::headers($headerList) : $headerList;
 		}
 
-		static public function headers(array $headerList) {
-			static $map = [
+		/**
+		 * @inheritdoc
+		 */
+		public function headers(array $headerList): array {
+			$map = [
 				'Content-Type' => [
-					self::class,
+					$this,
 					'contentType',
 				],
 				'http' => [
-					self::class,
+					$this,
 					'http',
+				],
+				'Accept' => [
+					$this,
+					'accept',
+				],
+				'Accept-Language' => [
+					$this,
+					'language',
 				],
 			];
 			foreach ($headerList as $name => &$header) {
 				if (isset($map[$name]) === false) {
 					continue;
 				}
-				$header = call_user_func($map[$name], $header);
+				$header = $map[$name]($header);
 			}
 			return $headerList;
 		}
 
-		static public function http(string $http) {
-			return (object)preg_match('~^HTTP/(?<version>\d+(\.\d+)?)\s(?<status>\d+)(\s(?<message>.*))?$~', $http);
+		/**
+		 * @inheritdoc
+		 */
+		public function http(string $http): \stdClass {
+			if ($match = $this->stringUtils->match($http, '~(?<method>[A-Z]+)\s+(?<path>.*?)\s+HTTP/(?<http>[0-9.]+)~', true)) {
+				return (object)$match;
+			}
+			return (object)$this->stringUtils->match($http, '~^HTTP/(?<http>[0-9.]+)\s(?<status>\d+)(\s(?<message>.*))?$~', true);
 		}
 	}

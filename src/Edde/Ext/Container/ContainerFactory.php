@@ -14,6 +14,8 @@
 	use Edde\Api\Log\ILogService;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Runtime\IRuntime;
+	use Edde\Api\Utils\IHttpUtils;
+	use Edde\Api\Utils\IStringUtils;
 	use Edde\Common\Application\Application;
 	use Edde\Common\Container\Container;
 	use Edde\Common\Container\Factory\CallbackFactory;
@@ -29,7 +31,8 @@
 	use Edde\Common\Object\Object;
 	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\Runtime;
-	use Edde\Ext\Log\LogServiceConfigurator;
+	use Edde\Common\Utils\HttpUtils;
+	use Edde\Common\Utils\StringUtils;
 
 	class ContainerFactory extends Object {
 		/**
@@ -129,27 +132,6 @@
 		}
 
 		/**
-		 * this magical method tries to guess root directory based on a stack trace
-		 *
-		 * @param array $factoryList
-		 * @param array $configuratorList
-		 *
-		 * @return IContainer
-		 * @throws ContainerException
-		 * @throws \Edde\Api\Container\Exception\FactoryException
-		 */
-		static public function containerWithRoot(array $factoryList = [], array $configuratorList = []): IContainer {
-			/**
-			 * micro optimization to do not call backtrace every request
-			 */
-			if (isset($factoryList[IRootDirectory::class]) === false) {
-				list(, $trace) = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-				$factoryList[IRootDirectory::class] = self::instance(RootDirectory::class, [dirname($trace['file'])]);
-			}
-			return self::container($factoryList, $configuratorList);
-		}
-
-		/**
 		 * shortcut for autowiring (for example in tests, ...)
 		 *
 		 * @param mixed $instance
@@ -161,7 +143,7 @@
 		 * @throws FactoryException
 		 */
 		static public function inject($instance, array $factoryList = [], array $configuratorList = []): IContainer {
-			$container = self::containerWithRoot(empty($factoryList) ? [new ClassFactory()] : $factoryList, $configuratorList);
+			$container = self::container(empty($factoryList) ? [new ClassFactory()] : $factoryList, $configuratorList);
 			$container->inject($instance);
 			return $container;
 		}
@@ -242,24 +224,55 @@
 
 		static public function getDefaultFactoryList(): array {
 			return [
+				/**
+				 * utils
+				 */
+				IHttpUtils::class => HttpUtils::class,
+				IStringUtils::class => StringUtils::class,
+
+				/**
+				 * container implementation
+				 */
 				IContainer::class => Container::class,
+
+				/**
+				 * runtime info provider
+				 */
 				IRuntime::class => Runtime::class,
+
+				/**
+				 * if needed, host url provider (host name is used for absolute links)
+				 */
 				IHostUrl::class => HostUrl::class . '::factory',
+
+				/**
+				 * log support
+				 */
 				ILogService::class => LogService::class,
+
+				/**
+				 * user request into protocol element translation
+				 */
 				IRouterService::class => RouterService::class,
+
+				/**
+				 * general service for http request/response
+				 */
 				IHttpService::class => HttpService::class,
+
+				/**
+				 * an application handles lifecycle workflow
+				 */
 				IApplication::class => Application::class,
+
+				/**
+				 * magical factory for an application execution
+				 */
 				'run' => IApplication::class . '::run',
 			];
 		}
 
 		static public function getDefaultConfiguratorList(): array {
-			return [
-				/**
-				 * router configuration
-				 */
-				IRouterService::class => RouterService::class,
-				ILogService::class => LogServiceConfigurator::class,
-			];
+			return [];
 		}
 	}
