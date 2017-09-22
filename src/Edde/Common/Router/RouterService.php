@@ -18,10 +18,6 @@
 		/**
 		 * @var IRouter
 		 */
-		protected $errorRouter;
-		/**
-		 * @var IRouter
-		 */
 		protected $router;
 		/**
 		 * @var IRequest
@@ -39,8 +35,10 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function registerErrorRouter(IRouter $router): IRouterService {
-			$this->errorRouter = $router;
+		public function registerRouterList(array $routerList): IRouterService {
+			foreach ($routerList as $router) {
+				$this->registerRouter($router);
+			}
 			return $this;
 		}
 
@@ -74,17 +72,9 @@
 				return $this->request = $this->router->createRequest();
 			}
 			$request = null;
-			try {
-				foreach ($this->routerList as $router) {
-					if ($router->setup() && $router->canHandle()) {
-						$request = $router->createRequest();
-						break;
-					}
-				}
-			} catch (\Throwable $exception) {
-				$this->logService->exception($exception);
-				if ($this->errorRouter) {
-					$this->errorRouter->setup() && $this->errorRouter->canHandle() && ($request = $this->errorRouter->createRequest());
+			foreach ($this->routerList as $router) {
+				if ($router->setup() && $router->canHandle() && ($request = $router->createRequest())) {
+					break;
 				}
 			}
 			if ($request === null) {

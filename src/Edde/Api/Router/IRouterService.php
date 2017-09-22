@@ -19,11 +19,9 @@
 		public function registerRouter(IRouter $router): IRouterService;
 
 		/**
-		 * when there is an exception, this router should be executed
-		 *
-		 * @param IRouter $router
+		 * @param array $routerList
 		 *
 		 * @return IRouterService
 		 */
-		public function registerErrorRouter(IRouter $router): IRouterService;
+		public function registerRouterList(array $routerList): IRouterService;
 	}
