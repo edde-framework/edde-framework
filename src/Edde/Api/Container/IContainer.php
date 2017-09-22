@@ -84,17 +84,6 @@
 		public function create(string $name, array $parameterList = [], string $source = null);
 
 		/**
-		 * execute given callback with autowired dependencies
-		 *
-		 * @param callable $callable
-		 * @param array    $parameterList
-		 * @param string   $source
-		 *
-		 * @return mixed
-		 */
-		public function call(callable $callable, array $parameterList = [], string $source = null);
-
-		/**
 		 * general method for dependency creation (so call and create should call this one)
 		 *
 		 * @param IFactory    $factory

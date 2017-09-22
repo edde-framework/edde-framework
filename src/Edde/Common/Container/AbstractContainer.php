@@ -4,11 +4,9 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Config\IConfigurator;
-	use Edde\Api\Container\Exception\ContainerException;
 	use Edde\Api\Container\Exception\UnknownFactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
-	use Edde\Common\Container\Factory\CallbackFactory;
 	use Edde\Common\Object\Object;
 
 	abstract class AbstractContainer extends Object implements IContainer {
@@ -80,14 +78,5 @@
 		 */
 		public function create(string $name, array $parameterList = [], string $source = null) {
 			return $this->factory($this->getFactory($name, $source), $parameterList, $name, $source);
-		}
-
-		/**
-		 * @inheritdoc
-		 * @throws \Edde\Api\Container\Exception\FactoryException
-		 * @throws ContainerException
-		 */
-		public function call(callable $callable, array $parameterList = [], string $source = null) {
-			return $this->factory(new CallbackFactory($callable), $parameterList, $source);
 		}
 	}
