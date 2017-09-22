@@ -8,6 +8,7 @@
 	use Edde\Api\Http\IMessage;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Object\Object;
+	use Edde\Common\Utils\HttpUtils;
 
 	class Message extends Object implements IMessage {
 		use ConfigurableTrait;

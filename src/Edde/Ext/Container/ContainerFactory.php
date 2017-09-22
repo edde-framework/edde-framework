@@ -8,45 +8,12 @@
 	use Edde\Api\Container\Exception\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
-	use Edde\Api\Converter\IConverterManager;
-	use Edde\Api\Crate\ICrate;
-	use Edde\Api\Crate\ICrateFactory;
-	use Edde\Api\Crypt\ICryptEngine;
-	use Edde\Api\Database\IDriver;
-	use Edde\Api\Database\IDsn;
 	use Edde\Api\EddeException;
-	use Edde\Api\Event\IEventBus;
-	use Edde\Api\File\IRootDirectory;
-	use Edde\Api\File\ITempDirectory;
-	use Edde\Api\Html\IHtmlGenerator;
-	use Edde\Api\Http\Client\IHttpClient;
 	use Edde\Api\Http\IHostUrl;
 	use Edde\Api\Http\IHttpService;
-	use Edde\Api\Job\IJobManager;
-	use Edde\Api\Job\IJobQueue;
-	use Edde\Api\Lock\ILockManager;
-	use Edde\Api\Log\ILogDirectory;
 	use Edde\Api\Log\ILogService;
-	use Edde\Api\Protocol\IElementStore;
-	use Edde\Api\Protocol\IProtocolManager;
-	use Edde\Api\Protocol\IProtocolService;
-	use Edde\Api\Request\IRequestService;
-	use Edde\Api\Resource\IResourceManager;
-	use Edde\Api\Resource\IResourceProvider;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Runtime\IRuntime;
-	use Edde\Api\Schema\ISchemaManager;
-	use Edde\Api\Session\IFingerprint;
-	use Edde\Api\Session\ISessionDirectory;
-	use Edde\Api\Session\ISessionManager;
-	use Edde\Api\Storage\IStorage;
-	use Edde\Api\Store\IStore;
-	use Edde\Api\Store\IStoreManager;
-	use Edde\Api\Thread\IExecutor;
-	use Edde\Api\Thread\IThreadManager;
-	use Edde\Api\Upgrade\IUpgradeManager;
-	use Edde\Api\Xml\IXmlExport;
-	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Application\Application;
 	use Edde\Common\Container\Container;
 	use Edde\Common\Container\Factory\CallbackFactory;
@@ -56,49 +23,13 @@
 	use Edde\Common\Container\Factory\InterfaceFactory;
 	use Edde\Common\Container\Factory\LinkFactory;
 	use Edde\Common\Container\Factory\ProxyFactory;
-	use Edde\Common\Converter\ConverterManager;
-	use Edde\Common\Crate\Crate;
-	use Edde\Common\Crate\CrateFactory;
-	use Edde\Common\Crypt\CryptEngine;
-	use Edde\Common\Database\DatabaseStorage;
-	use Edde\Common\Event\EventBus;
-	use Edde\Common\File\RootDirectory;
-	use Edde\Common\File\TempDirectory;
-	use Edde\Common\Html\Html5Generator;
-	use Edde\Common\Http\Client\HttpClient;
 	use Edde\Common\Http\HostUrl;
 	use Edde\Common\Http\HttpService;
-	use Edde\Common\Job\JobManager;
-	use Edde\Common\Job\JobQueue;
-	use Edde\Common\Lock\FileLockManager;
-	use Edde\Common\Log\LogDirectory;
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Object\Object;
-	use Edde\Common\Protocol\ElementStore;
-	use Edde\Common\Protocol\ProtocolManager;
-	use Edde\Common\Protocol\ProtocolService;
-	use Edde\Common\Request\RequestService;
-	use Edde\Common\Resource\ResourceManager;
 	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\Runtime;
-	use Edde\Common\Schema\SchemaManager;
-	use Edde\Common\Session\SessionDirectory;
-	use Edde\Common\Session\SessionFingerprint;
-	use Edde\Common\Session\SessionManager;
-	use Edde\Common\Store\StoreManager;
-	use Edde\Common\Thread\ThreadManager;
-	use Edde\Common\Thread\WebExecutor;
-	use Edde\Common\Upgrade\AbstractUpgradeManager;
-	use Edde\Common\Xml\XmlExport;
-	use Edde\Common\Xml\XmlParser;
-	use Edde\Ext\Converter\ConverterManagerConfigurator;
-	use Edde\Ext\Database\Sqlite\Driver;
-	use Edde\Ext\Database\Sqlite\Dsn;
 	use Edde\Ext\Log\LogServiceConfigurator;
-	use Edde\Ext\Protocol\ProtocolServiceConfigurator;
-	use Edde\Ext\Protocol\RequestServiceConfigurator;
-	use Edde\Ext\Router\RouterServiceConfigurator;
-	use Edde\Ext\Store\StoreManagerConfigurator;
 
 	class ContainerFactory extends Object {
 		/**
@@ -312,130 +243,9 @@
 		static public function getDefaultFactoryList(): array {
 			return [
 				IContainer::class => Container::class,
-				IRootDirectory::class => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
-				ITempDirectory::class => self::proxy(IRootDirectory::class, 'directory', [
-					'temp',
-					TempDirectory::class,
-				]),
-				ILogDirectory::class => self::proxy(IRootDirectory::class, 'directory', [
-					'logs',
-					LogDirectory::class,
-				]),
-
 				IRuntime::class => Runtime::class,
-
 				IHostUrl::class => HostUrl::class . '::factory',
-
-				/**
-				 * Support for general content conversion (which also powers server content negotiation)
-				 */
-				IConverterManager::class => ConverterManager::class,
-
-				/**
-				 * Resource related stuff
-				 */
-				IResourceManager::class => ResourceManager::class,
-				IResourceProvider::class => IResourceManager::class,
-
-				/**
-				 * Storage (database) related stuff
-				 */
-				IStorage::class => DatabaseStorage::class,
-				IDriver::class => Driver::class,
-				IDsn::class => self::instance(Dsn::class, ['storage.sqlite']),
-
-				/**
-				 * General crate support
-				 */
-				ICrate::class => self::instance(Crate::class, [], true),
-				ICrateFactory::class => CrateFactory::class,
-				ISchemaManager::class => SchemaManager::class,
-
-				/**
-				 * Http client support
-				 */
-				IHttpClient::class => HttpClient::class,
-
-				/**
-				 * General log service
-				 */
 				ILogService::class => LogService::class,
-
-				/**
-				 * Custom simple XML parser
-				 */
-				IXmlParser::class => XmlParser::class,
-
-				/**
-				 * General support for html generator and template engine
-				 */
-				IHtmlGenerator::class => Html5Generator::class,
-
-				/**
-				 * It's nice when it is possible to upgrade you application...
-				 */
-				IUpgradeManager::class => self::exception(sprintf('Upgrade manager is not available; you must register [%s] interface; optionally default [%s] implementation should help you.', IUpgradeManager::class, AbstractUpgradeManager::class)),
-
-				/**
-				 * Simple crypto layer
-				 */
-				ICryptEngine::class => CryptEngine::class,
-
-				/**
-				 * Access control, session and Identity (user session)
-				 */
-				ISessionManager::class => SessionManager::class,
-				ISessionDirectory::class => self::proxy(ITempDirectory::class, 'directory', [
-					'session',
-					SessionDirectory::class,
-				]),
-				IFingerprint::class => SessionFingerprint::class,
-
-				/**
-				 * Protocol implementation support
-				 */
-				IProtocolManager::class => ProtocolManager::class,
-				IProtocolService::class => ProtocolService::class,
-				IRequestService::class => RequestService::class,
-				IEventBus::class => EventBus::class,
-				IElementStore::class => ElementStore::class,
-
-				/**
-				 * Job related implementation
-				 */
-				IJobManager::class => JobManager::class,
-				IJobQueue::class => JobQueue::class,
-
-				/**
-				 * Thread support
-				 */
-				IThreadManager::class => ThreadManager::class,
-				IExecutor::class => WebExecutor::class,
-
-				/**
-				 * Store related stuff
-				 */
-				IStoreManager::class => StoreManager::class,
-				IStore::class => IStoreManager::class,
-				// IStoreDirectory::class   => self::proxy(IAssetDirectory::class, 'directory', [
-				// 	'store',
-				// 	StoreDirectory::class,
-				// ]),
-
-				/**
-				 * xml support
-				 */
-				IXmlExport::class => XmlExport::class,
-
-				/**
-				 * General Locking support
-				 */
-				ILockManager::class => FileLockManager::class,
-				// ILockDirectory::class    => self::proxy(IAssetDirectory::class, 'directory', [
-				// 	'.lock',
-				// 	LockDirectory::class,
-				// ]),
-
 				IRouterService::class => RouterService::class,
 				IHttpService::class => HttpService::class,
 				IApplication::class => Application::class,
@@ -448,17 +258,8 @@
 				/**
 				 * router configuration
 				 */
-				IRouterService::class => RouterServiceConfigurator::class,
-				/**
-				 * To enable general content exchange, we have to setup converter manager; it basically allows to do arbitrary
-				 * data conversions for example json to array, xml file to INode, ... this component is kind of fundamental part
-				 * of the framework.
-				 */
-				IConverterManager::class => ConverterManagerConfigurator::class,
-				IProtocolService::class => ProtocolServiceConfigurator::class,
-				IRequestService::class => RequestServiceConfigurator::class,
+				IRouterService::class => RouterService::class,
 				ILogService::class => LogServiceConfigurator::class,
-				IStoreManager::class => StoreManagerConfigurator::class,
 			];
 		}
 	}

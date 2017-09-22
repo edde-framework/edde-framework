@@ -7,7 +7,6 @@
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IRequest;
 	use Edde\Api\Url\IUrl;
-	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Url\Url;
 
 	class Request extends AbstractHttp implements IRequest {
@@ -58,7 +57,10 @@
 		 * @inheritdoc
 		 */
 		public function setMethod(string $method): IRequest {
-			$this->method = StringUtils::upper($method);
+			/**
+			 * here is safe to use PHP function because $method is (should be) simple string
+			 */
+			$this->method = strtoupper($method);
 			return $this;
 		}
 

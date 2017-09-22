@@ -1,33 +1,31 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Common\Http;
+	namespace Edde\Common\Utils;
 
 	use Edde\Api\Http\ICookie;
+	use Edde\Api\Utils\IHttpUtils;
+	use Edde\Common\Http\Cookie;
 	use Edde\Common\Object\Object;
-	use Edde\Common\Strings\StringException;
-	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Static set of helper functions around http protocol.
 	 */
-	class HttpUtils extends Object {
+	class HttpUtils extends Object implements IHttpUtils {
 		/**
 		 * parse accept header and return an ordered array with accept mime types
 		 *
 		 * @param string $accept
 		 *
 		 * @return array
-		 * @throws StringException
 		 */
-		static public function accept(string $accept = null): array {
+		public function accept(string $accept = null): array {
 			if ($accept === null) {
 				return ['*/*'];
 			}
 			$accepts = [];
 			foreach (explode(',', $accept) as $part) {
-				$match = StringUtils::match($part, '~\s*(?<mime>.+\/.+?)(?:\s*;\s*[qQ]\=(?<weight>[01](?:\.\d*)?))?\s*$~', true);
-				if ($match === null) {
+				if (($match = preg_match('~\s*(?<mime>.+\/.+?)(?:\s*;\s*[qQ]\=(?<weight>[01](?:\.\d*)?))?\s*$~', $part)) === null) {
 					continue;
 				}
 				$weight = isset($match['weight']) ? (float)$match['weight'] : 1;
@@ -35,7 +33,7 @@
 					continue;
 				}
 				$accepts[] = [
-					'mime'   => $match['mime'],
+					'mime' => $match['mime'],
 					'weight' => $weight,
 				];
 			}
@@ -76,15 +74,13 @@
 		 * @param string $default
 		 *
 		 * @return array
-		 * @throws StringException
 		 */
 		static public function language(string $language = null, string $default = 'en'): array {
 			if ($language === null) {
 				return [$default];
 			}
 			foreach (explode(',', $language) as $part) {
-				$match = StringUtils::match($part, '~\s*(?<lang>[^;]+)(?:\s*;\s*[qQ]\=(?<weight>[01](?:\.\d*)?))?\s*~', true);
-				if ($match === null) {
+				if (($match = preg_match('~\s*(?<lang>[^;]+)(?:\s*;\s*[qQ]\=(?<weight>[01](?:\.\d*)?))?\s*~', $part)) === null) {
 					continue;
 				}
 				$weight = isset($match['weight']) ? (float)$match['weight'] : 1;
@@ -92,7 +88,7 @@
 					continue;
 				}
 				$langs[] = [
-					'lang'   => $match['lang'],
+					'lang' => $match['lang'],
 					'weight' => $weight,
 				];
 			}
@@ -111,8 +107,7 @@
 				return [$default];
 			}
 			foreach (explode(',', $charset) as $part) {
-				$match = StringUtils::match($part, '~\s*(?<charset>[^;]+)(?:\s*;\s*[qQ]\=(?<weight>[01](?:\.\d*)?))?\s*~', true);
-				if ($match === null) {
+				if (($match = preg_match('~\s*(?<charset>[^;]+)(?:\s*;\s*[qQ]\=(?<weight>[01](?:\.\d*)?))?\s*~', $part)) === null) {
 					continue;
 				}
 				$weight = isset($match['weight']) ? (float)$match['weight'] : 1;
@@ -121,7 +116,7 @@
 				}
 				$charsets[] = [
 					'charset' => $match['charset'],
-					'weight'  => $weight,
+					'weight' => $weight,
 				];
 			}
 			usort($charsets, function ($alpha, $beta) {
@@ -185,22 +180,20 @@
 		 * @param string $cookie
 		 *
 		 * @return ICookie
-		 * @throws StringException
 		 */
 		static public function cookie(string $cookie): ICookie {
-			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
-			$cookie = StringUtils::match($cookie, '~(?<name>[^\s()<>@,;:\"/\\[\\]?={}]+)=(?<value>[^=;\s]+)\s*(?<misc>.*)?~', true);
+			$cookie = preg_match('~(?<name>[^\s()<>@,;:\"/\\[\\]?={}]+)=(?<value>[^=;\s]+)\s*(?<misc>.*)?~', $cookie);
 			$path = '/';
 			$domain = '';
 			$expires = '';
 			if (isset($cookie['misc'])) {
-				if ($match = StringUtils::match($cookie['misc'], '~path=(?<path>[a-z0-9/._-]+);?~i', true, true)) {
+				if ($match = preg_match('~path=(?<path>[a-z0-9/._-]+);?~i', $cookie['misc'])) {
 					$path = $match['path'];
 				}
-				if ($match = StringUtils::match($cookie['misc'], '~domain=(?<domain>[a-z0-9._-]+);?~i', true, true)) {
+				if ($match = preg_match('~domain=(?<domain>[a-z0-9._-]+);?~i', $cookie['misc'])) {
 					$domain = $match['domain'];
 				}
-				if ($match = StringUtils::match($cookie['misc'], '~expires=(?<expires>[a-z0-9:\s,-]+\s+GMT);?~i', true, true)) {
+				if ($match = preg_match('~expires=(?<expires>[a-z0-9:\s,-]+\s+GMT);?~i', $cookie['misc'])) {
 					$expires = $match['expires'];
 				}
 			}
@@ -229,7 +222,7 @@
 					self::class,
 					'contentType',
 				],
-				'http'         => [
+				'http' => [
 					self::class,
 					'http',
 				],
@@ -244,6 +237,6 @@
 		}
 
 		static public function http(string $http) {
-			return (object)StringUtils::match($http, '~^HTTP/(?<version>\d+(\.\d+)?)\s(?<status>\d+)(\s(?<message>.*))?$~', true);
+			return (object)preg_match('~^HTTP/(?<version>\d+(\.\d+)?)\s(?<status>\d+)(\s(?<message>.*))?$~', $http);
 		}
 	}

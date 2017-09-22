@@ -6,6 +6,7 @@
 	use Edde\Api\Http\IContentType;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Common\Collection\AbstractList;
+	use Edde\Common\Utils\HttpUtils;
 
 	/**
 	 * Simple header list implementation over an array.

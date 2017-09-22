@@ -6,7 +6,6 @@
 	use Edde\Api\Url\IUrl;
 	use Edde\Api\Url\UrlException;
 	use Edde\Common\Object\Object;
-	use Edde\Common\Strings\StringUtils;
 
 	class Url extends Object implements IUrl {
 		/**
@@ -58,15 +57,15 @@
 				parse_str($parsed['query'], $parsed['parameter-list']);
 			}
 			static $copy = [
-				'scheme'         => 'setScheme',
-				'user'           => 'setUser',
-				'pass'           => 'setPassword',
-				'host'           => 'setHost',
-				'port'           => 'setPort',
-				'path'           => 'setPath',
-				'query'          => 'setQuery',
+				'scheme' => 'setScheme',
+				'user' => 'setUser',
+				'pass' => 'setPassword',
+				'host' => 'setHost',
+				'port' => 'setPort',
+				'path' => 'setPath',
+				'query' => 'setQuery',
 				'parameter-list' => 'setParameterList',
-				'fragment'       => 'setFragment',
+				'fragment' => 'setFragment',
 			];
 			foreach ($copy as $item => $func) {
 				if (isset($parsed[$item])) {
@@ -290,7 +289,7 @@
 		 * @inheritdoc
 		 */
 		public function match(string $match, bool $path = true) {
-			return StringUtils::match($path ? $this->getPath(false) : $this->getAbsoluteUrl(), $match);
+			return preg_match($match, $path ? $this->getPath(false) : $this->getAbsoluteUrl());
 		}
 
 		/**
@@ -306,7 +305,6 @@
 		 * @param null $url
 		 *
 		 * @return IUrl|$this
-		 * @throws UrlException
 		 */
 		static public function create($url = null) {
 			return new static($url);

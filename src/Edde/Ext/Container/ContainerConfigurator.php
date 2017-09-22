@@ -4,6 +4,8 @@
 	namespace Edde\Ext\Container;
 
 	use Edde\Api\Config\IConfigurator;
+	use Edde\Api\Container\Exception\ContainerException;
+	use Edde\Api\Container\Exception\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
 	use Edde\Common\Config\AbstractConfigurator;
@@ -25,8 +27,12 @@
 
 		/**
 		 * @param IContainer $instance
+		 *
+		 * @throws ContainerException
+		 * @throws FactoryException
 		 */
 		public function configure($instance) {
+			parent::configure($instance);
 			$instance->registerFactoryList($this->factoryList);
 			$configuratorList = [];
 			foreach ($this->configuratorList as $name => $configHandler) {

@@ -5,6 +5,7 @@
 
 	use Edde\Api\Http\IContentType;
 	use Edde\Common\Collection\AbstractList;
+	use Edde\Common\Utils\HttpUtils;
 
 	class ContentType extends AbstractList implements IContentType {
 		/**

@@ -4,7 +4,7 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Container\IDependency;
-	use Edde\Api\Reflection\IReflectionParameter;
+	use Edde\Api\Container\IParameter;
 	use Edde\Common\Object\Object;
 
 	class Dependency extends Object implements IDependency {
@@ -21,10 +21,10 @@
 		 * She hears the little boy continue, "For those of you just boarding, we ask you to stow all of your hand luggage under your seat. Remember, there is no smoking on the train. We hope you will have a pleasant and relaxing journey with us today."
 		 * As the mother began to smile, the child added, "For those of you who are pissed off about the TWO HOUR delay, please see the b*tch in the kitchen."
 		 *
-		 * @param IReflectionParameter[] $parameterList
-		 * @param IReflectionParameter[] $injectList
-		 * @param IReflectionParameter[] $lazyList
-		 * @param string[]               $configuratorList
+		 * @param IParameter[] $parameterList
+		 * @param IParameter[] $injectList
+		 * @param IParameter[] $lazyList
+		 * @param string[]     $configuratorList
 		 */
 		public function __construct(array $parameterList = [], array $injectList = [], array $lazyList = [], array $configuratorList = []) {
 			$this->parameterList = $parameterList;

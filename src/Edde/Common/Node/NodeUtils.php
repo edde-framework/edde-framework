@@ -6,8 +6,6 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
 	use Edde\Common\Object\Object;
-	use Edde\Common\Strings\StringException;
-	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Set of tools for work with nodes.
@@ -170,13 +168,12 @@
 		 * @param string $preg
 		 *
 		 * @throws NodeException
-		 * @throws StringException
 		 */
 		static public function namespace(INode $root, string $preg) {
 			foreach (NodeIterator::recursive($root, true) as $node) {
 				$attributeList = $node->getAttributeList();
 				foreach ($attributeList as $k => $value) {
-					if (($match = StringUtils::match($k, $preg, true)) !== null) {
+					if (($match = preg_match($preg, $k)) !== null && isset($match['namespace'], $match['name'])) {
 						$attributeList->set($match['namespace'], $namespace = $attributeList->get($match['namespace'], new AttributeList()));
 						$namespace->set($match['name'], $value);
 						$attributeList->remove($k);

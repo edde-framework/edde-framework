@@ -10,9 +10,9 @@
 	use Edde\Api\Container\IDependency;
 	use Edde\Common\Container\Dependency;
 	use Edde\Common\Container\Factory\Exception\MethodVisibilityException;
+	use Edde\Common\Container\Factory\Exception\MissingClassException;
 	use Edde\Common\Container\Factory\Exception\PropertyVisibilityException;
-	use Edde\Common\Reflection\ReflectionParameter;
-	use Edde\Common\Reflection\ReflectionUtils;
+	use Edde\Common\Container\Parameter;
 
 	class ClassFactory extends AbstractFactory {
 		/**
@@ -49,10 +49,10 @@
 			}
 			$parameterList = [];
 			foreach (ReflectionUtils::getParameterList($dependency) as $reflectionParameter) {
-				$parameterList[] = new ReflectionParameter($reflectionParameter->getName(), $reflectionParameter->isOptional(), ($class = $reflectionParameter->getClass()) ? $class->getName() : null);
+				$parameterList[] = new Parameter($reflectionParameter->getName(), $reflectionParameter->isOptional(), ($class = $reflectionParameter->getClass()) ? $class->getName() : null);
 			}
 			if ($dependency !== null) {
-				$configuratorList = array_reverse(array_merge([$dependency], ReflectionUtils::getReflectionClass($dependency)->getInterfaceNames()));
+				$configuratorList = array_reverse(array_merge([$dependency], (new \ReflectionClass($dependency))->getInterfaceNames()));
 			}
 			return self::$dependencyCache[$dependency] = new Dependency($parameterList, $injectList, $lazyList, $configuratorList);
 		}
@@ -68,6 +68,16 @@
 			return new $name(...$parameterList);
 		}
 
+		/**
+		 * @param \ReflectionClass  $reflectionClass
+		 * @param \ReflectionMethod $reflectionMethod
+		 * @param string            $method
+		 *
+		 * @return array
+		 * @throws MethodVisibilityException
+		 * @throws PropertyVisibilityException
+		 * @throws MissingClassException
+		 */
 		protected function getParameterList(\ReflectionClass $reflectionClass, \ReflectionMethod $reflectionMethod, string $method) {
 			$parameterList = [];
 			if (strlen($name = $reflectionMethod->getName()) > strlen($method) && strpos($name, $method, 0) === 0) {
@@ -77,10 +87,12 @@
 				foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
 					if ($reflectionClass->hasProperty($name = $reflectionParameter->getName()) === false) {
 						throw new PropertyVisibilityException(sprintf('Class [%s] must have property [$%s] of the same name as parameter in method [%s::%s(..., %s$%s, ...)].', $reflectionClass->getName(), $name, $reflectionClass->getName(), $reflectionMethod->getName(), ($class = $reflectionParameter->getClass()) ? $class->getName() . ' ' : null, $name));
+					} else if (($class = $reflectionParameter->getClass()) === null) {
+						throw new MissingClassException(sprintf('Class [%s] must have property [$%s] with class type hint in method [%s::%s(..., %s$%s, ...)].', $reflectionClass->getName(), $name, $reflectionClass->getName(), $reflectionMethod->getName(), ($class = $reflectionParameter->getClass()) ? $class->getName() . ' ' : null, $name));
 					}
 					$reflectionProperty = $reflectionClass->getProperty($name);
 					$reflectionProperty->setAccessible(true);
-					$parameterList[] = new ReflectionParameter($reflectionProperty->getName(), false, ($class = $reflectionParameter->getClass()) ? $class->getName() : $reflectionParameter->getName());
+					$parameterList[] = new Parameter($reflectionProperty->getName(), false, $class->getName());
 				}
 			}
 			return $parameterList;
