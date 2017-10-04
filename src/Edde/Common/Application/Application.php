@@ -6,9 +6,9 @@
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Log\Inject\LogService;
 	use Edde\Api\Router\Inject\RouterService;
-	use Edde\Common\Object\Object;
+	use Edde\Common\Service\AbstractService;
 
-	class Application extends Object implements IApplication {
+	class Application extends AbstractService implements IApplication {
 		use RouterService;
 		use LogService;
 		/**
@@ -42,7 +42,7 @@
 				$request = $this->routerService->createRequest();
 				$this->protocolService->execute($request->getElement());
 				return $this->code ?: 0;
-			} catch (\Throwable $exception) {
+			} catch(\Throwable $exception) {
 				$this->logService->exception($exception, ['edde']);
 				/**
 				 * if somebody already set a code, respect it or try to guess one

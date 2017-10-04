@@ -34,7 +34,7 @@
 	Debugger::enable(($isLocal = file_exists($local = __DIR__ . '/loader.local.php')) ? Debugger::DEVELOPMENT : Debugger::PRODUCTION, __DIR__ . '/logs');
 	Debugger::$strictMode = true;
 	Debugger::$showBar = $isLocal;
-	Debugger::$onFatalError[] = function ($e) {
+	Debugger::$onFatalError[] = function($e) {
 		Debugger::log($e);
 	};
 
@@ -46,24 +46,19 @@
 	 * you are heavy masochist).
 	 */
 	try {
-		$container = ContainerFactory::containerWithRoot($factoryList = array_merge([
+		$container = ContainerFactory::container($factoryList = array_merge([
 			/**
 			 * This application is using specific contexts to separate user experience
 			 */
-			IContext::class => Context::class,
-			/**
-			 * When context is changes, one also should (not necessarily) change resource provider to get
-			 * ability to search for assets (resources) based on the current context.
-			 */
-			IResourceProvider::class => IContext::class,
+				IContext::class => Context::class,
 		], is_array($local = @include $local) ? $local : [], [
 			/**
 			 * This stranger here must (should be) be last, because it's canHandle method is able to kill a lot of dependencies and
 			 * create not so much nice surprises. Thus, it must be last as kind of dependency fallback.
 			 */
-			new ClassFactory(),
+				new ClassFactory(),
 		]), [
-			IRouterService::class => RouterServiceConfigurator::class,
+				IRouterService::class => RouterServiceConfigurator::class,
 		]);
 		/**
 		 * This one is one of the most magical: this factory uses IContext::cascade() to search for class; this is quite
@@ -74,7 +69,7 @@
 		 */
 		$container->registerFactory($container->create(CascadeFactory::class, [], __FILE__));
 		return $container;
-	} catch (\Throwable $e) {
+	} catch(\Throwable $e) {
 		Debugger::log($e);
 		die(sprintf('Critical application Exception [%s]; see logs.', get_class($e)));
 	}
