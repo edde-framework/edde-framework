@@ -1,13 +1,18 @@
 <?php
 	declare(strict_types=1);
-
 	namespace Edde\Test {
 
 		use Edde\Api\Router\IRequest;
 		use Edde\Common\Object\Object;
-		use Edde\Common\Request\Message;
 		use Edde\Common\Router\AbstractRouter;
 		use Edde\Common\Router\Request;
+
+		/**
+		 * just fake function
+		 */
+		function foo(FooObject $fooObject): FooObject {
+			return $fooObject;
+		}
 
 		class FooObject extends Object {
 			public $foo = 'foo';
@@ -90,7 +95,6 @@
 			}
 		}
 	}
-
 	namespace Foo {
 
 		use Edde\Api\Protocol\IElement;

@@ -1,6 +1,5 @@
 <?php
 	declare(strict_types=1);
-
 	namespace Edde\Common\Container\Factory;
 
 	use Edde\Api\Container\IContainer;
@@ -9,6 +8,10 @@
 
 	/**
 	 * Interface to class binding factory.
+	 *
+	 * Practical thought:
+	 * A husband is supposed to make his wife's panties wet, not her eyes.
+	 * A wife is supposed to make her husband's dick hard, not his life...!
 	 */
 	class InterfaceFactory extends ClassFactory {
 		/**
@@ -25,10 +28,6 @@
 		protected $instance;
 
 		/**
-		 * Practical thought:
-		 * A husband is supposed to make his wife's panties wet, not her eyes.
-		 * A wife is supposed to make her husband's dick hard, not his life...!
-		 *
 		 * @param string $interface
 		 * @param string $class
 		 */
