@@ -1,14 +1,13 @@
 <?php
 	declare(strict_types=1);
-
 	namespace Edde\Common\Application;
 
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Log\Inject\LogService;
 	use Edde\Api\Router\Inject\RouterService;
-	use Edde\Common\Service\AbstractService;
+	use Edde\Common\Object\Object;
 
-	class Application extends AbstractService implements IApplication {
+	class Application extends Object implements IApplication {
 		use RouterService;
 		use LogService;
 		/**
@@ -42,7 +41,7 @@
 				$request = $this->routerService->createRequest();
 				$this->protocolService->execute($request->getElement());
 				return $this->code ?: 0;
-			} catch(\Throwable $exception) {
+			} catch (\Throwable $exception) {
 				$this->logService->exception($exception, ['edde']);
 				/**
 				 * if somebody already set a code, respect it or try to guess one

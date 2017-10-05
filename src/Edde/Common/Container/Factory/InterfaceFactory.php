@@ -64,7 +64,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
-			return $this->instance ?: $this->instance = parent::execute($container, $parameterList, $dependency, $this->class);
+		public function factory(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
+			return $this->instance ?: $this->instance = parent::factory($container, $parameterList, $dependency, $this->class);
 		}
 	}

@@ -52,7 +52,7 @@
 		 *
 		 * @return mixed
 		 */
-		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null);
+		public function factory(IContainer $container, array $parameterList, IDependency $dependency, string $name = null);
 
 		/**
 		 * factory can optionally push dependency to some kind of cache (this instance should be returned on fetch())

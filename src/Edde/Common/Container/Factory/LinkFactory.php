@@ -1,6 +1,5 @@
 <?php
 	declare(strict_types=1);
-
 	namespace Edde\Common\Container\Factory;
 
 	use Edde\Api\Container\IContainer;
@@ -42,7 +41,7 @@
 		 * @param string $source
 		 * @param string $target
 		 */
-		public function __construct($source, $target) {
+		public function __construct(string $source, string $target) {
 			$this->source = $source;
 			$this->target = $target;
 		}
@@ -68,13 +67,13 @@
 			if ($this->instance) {
 				return new Dependency();
 			}
-			return $container->getFactory($this->target, $this->source)->createDependency($container, $dependency);
+			return $this->getFactory($container)->createDependency($container, $dependency);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
-			return $this->instance ?: $this->instance = $container->getFactory($this->target, $this->source)->execute($container, $parameterList, $dependency, $name);
+		public function factory(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
+			return $this->instance ?: $this->instance = $this->getFactory($container)->factory($container, $parameterList, $dependency, $name);
 		}
 	}

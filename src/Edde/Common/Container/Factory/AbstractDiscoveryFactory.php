@@ -35,8 +35,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
-			return parent::execute($container, $parameterList, $dependency, $this->search($name));
+		public function factory(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
+			return parent::factory($container, $parameterList, $dependency, $this->search($name));
 		}
 
 		protected function search(string $name) {

@@ -83,9 +83,9 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
+		public function factory(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
 			if ($this->instance === null) {
-				$this->instance = $container->dependency($this->instance = parent::execute($container, $this->parameterList, $dependency, $this->class), $dependency);
+				$this->instance = $container->dependency($this->instance = parent::factory($container, $this->parameterList, $dependency, $this->class), $dependency);
 			}
 			/**
 			 * immediate clone is necessary because otherwise base class could be (surprisingly) changed

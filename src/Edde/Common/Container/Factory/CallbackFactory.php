@@ -52,7 +52,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
+		public function factory(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
 			return call_user_func_array($this->callback, $this->parameters($container, $parameterList, $dependency));
 		}
 	}
