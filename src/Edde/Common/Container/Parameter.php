@@ -1,6 +1,5 @@
 <?php
 	declare(strict_types=1);
-
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Container\IParameter;
@@ -25,7 +24,7 @@
 		 * @param string $class
 		 * @param bool   $optional
 		 */
-		public function __construct(string $name, bool $optional, string $class = null) {
+		public function __construct(string $name, bool $optional, string $class) {
 			$this->name = $name;
 			$this->optional = $optional;
 			$this->class = $class;
@@ -45,7 +44,10 @@
 			return $this->optional;
 		}
 
-		public function getClass() {
+		/**
+		 * @inheritdoc
+		 */
+		public function getClass(): string {
 			return $this->class;
 		}
 	}

@@ -1,6 +1,5 @@
 <?php
 	declare(strict_types=1);
-
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Config\IConfigurable;
@@ -9,7 +8,7 @@
 	use Edde\Api\Container\IAutowire;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
-	use Edde\Api\Reflection\IReflectionParameter;
+	use Edde\Api\Container\IParameter;
 	use Edde\Common\Container\Factory\ClassFactory;
 
 	/**
@@ -139,21 +138,21 @@
 				$class = get_class($instance);
 				$lazyList = $dependency->getLazyList();
 				/** @var $instance IAutowire */
-				/** @var $reflectionParameter IReflectionParameter */
+				/** @var $parameter IParameter */
 				/**
 				 * a trick to remove duplicated code - if we are not lazy, autowire all dependencies
 				 */
-				foreach (array_merge($dependency->getInjectList(), $lazy ? [] : $lazyList) as $reflectionParameter) {
+				foreach (array_merge($dependency->getInjectList(), $lazy ? [] : $lazyList) as $parameter) {
 					/**
 					 * it's important to keep all parameters there to keep track of dependency chain in case of an exception
 					 */
-					$instance->autowire($reflectionParameter->getName(), $this->create($reflectionParameter->getClass(), [], $class));
+					$instance->autowire($parameter->getName(), $this->create($parameter->getClass(), [], $class));
 				}
 				/**
 				 * do lazy autowiring if the $lazy flag is not false
 				 */
-				foreach ($lazy ? $lazyList : [] as $reflectionParameter) {
-					$instance->lazy($reflectionParameter->getName(), $this, $reflectionParameter->getClass());
+				foreach ($lazy ? $lazyList : [] as $parameter) {
+					$instance->lazy($parameter->getName(), $this, $parameter->getClass());
 				}
 			}
 			/**

@@ -1,13 +1,14 @@
 <?php
 	declare(strict_types=1);
-
 	namespace Edde\Api\Application;
+
+	use Edde\Api\Config\IConfigurable;
 
 	/**
 	 * Application should connect services for user input translation to
 	 * a response, for example router service to protocol service.
 	 */
-	interface IApplication {
+	interface IApplication extends IConfigurable {
 		/**
 		 * set an exit code from an application
 		 *
