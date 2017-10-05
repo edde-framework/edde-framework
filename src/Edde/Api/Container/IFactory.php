@@ -24,7 +24,7 @@
 		 *
 		 * @return IReflection
 		 */
-		public function getReflection(IContainer $container, string $dependency = null): IReflection;
+		public function getReflection(IContainer $container, string $dependency): IReflection;
 
 		/**
 		 * 90% usecase is to return self, but in some rare cases factory can return another factory

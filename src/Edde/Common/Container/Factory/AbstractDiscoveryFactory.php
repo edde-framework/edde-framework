@@ -28,7 +28,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getReflection(IContainer $container, string $dependency = null): IReflection {
+		public function getReflection(IContainer $container, string $dependency): IReflection {
 			return parent::getReflection($container, $this->search($dependency));
 		}
 

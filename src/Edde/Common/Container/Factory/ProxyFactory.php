@@ -58,7 +58,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getReflection(IContainer $container, string $dependency = null): IReflection {
+		public function getReflection(IContainer $container, string $dependency): IReflection {
 			return $container->getFactory($this->target, $this->name)->getReflection($container, $this->target);
 		}
 

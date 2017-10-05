@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Container\Factory;
 
-	use Edde\Api\Container\Exception\FactoryException;
 	use Edde\Api\Container\IAutowire;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IReflection;
@@ -11,12 +10,15 @@
 	use Edde\Common\Container\Factory\Exception\PropertyVisibilityException;
 	use Edde\Common\Container\Parameter;
 	use Edde\Common\Container\Reflection;
+	use ReflectionClass;
+	use ReflectionFunction;
+	use ReflectionMethod;
 
 	class ClassFactory extends AbstractFactory {
 		/**
 		 * @var IReflection[]
 		 */
-		static protected $dependencyCache = [];
+		static protected $reflectionCache = [];
 
 		/**
 		 * @inheritdoc
@@ -28,17 +30,14 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getReflection(IContainer $container, string $dependency = null): IReflection {
-			if ($dependency === null) {
-				throw new FactoryException('The $dependency parameter has not been provided for [%s], oops!', __METHOD__);
-			}
-			if (isset(self::$dependencyCache[$dependency])) {
-				return self::$dependencyCache[$dependency];
+		public function getReflection(IContainer $container, string $dependency): IReflection {
+			if (isset(self::$reflectionCache[$dependency])) {
+				return self::$reflectionCache[$dependency];
 			}
 			$injectList = [];
 			$lazyList = [];
 			$configuratorList = [];
-			$reflectionClass = new \ReflectionClass($dependency);
+			$reflectionClass = new ReflectionClass($dependency);
 			foreach ($reflectionClass->getMethods() as $reflectionMethod) {
 				$injectList = array_merge($injectList, $this->getParameterList($parameterReflectionClass = $reflectionMethod->getDeclaringClass(), $reflectionMethod, 'inject'));
 				if ($parameterReflectionClass->implementsInterface(IAutowire::class)) {
@@ -46,7 +45,7 @@
 				}
 			}
 			$parameterList = [];
-			$constructor = $reflectionClass->getConstructor() ?: new \ReflectionFunction(function () {
+			$constructor = $reflectionClass->getConstructor() ?: new ReflectionFunction(function () {
 			});
 			foreach ($constructor->getParameters() as $reflectionParameter) {
 				if (($parameterReflectionClass = $reflectionParameter->getClass()) === null) {
@@ -55,9 +54,9 @@
 				$parameterList[] = new Parameter($reflectionParameter->getName(), $reflectionParameter->isOptional(), $parameterReflectionClass->getName());
 			}
 			if ($dependency !== null) {
-				$configuratorList = array_reverse(array_merge([$dependency], (new \ReflectionClass($dependency))->getInterfaceNames()));
+				$configuratorList = array_reverse(array_merge([$dependency], (new ReflectionClass($dependency))->getInterfaceNames()));
 			}
-			return self::$dependencyCache[$dependency] = new Reflection($parameterList, $injectList, $lazyList, $configuratorList);
+			return self::$reflectionCache[$dependency] = new Reflection($parameterList, $injectList, $lazyList, $configuratorList);
 		}
 
 		/**
@@ -72,16 +71,16 @@
 		}
 
 		/**
-		 * @param \ReflectionClass  $reflectionClass
-		 * @param \ReflectionMethod $reflectionMethod
-		 * @param string            $method
+		 * @param ReflectionClass  $reflectionClass
+		 * @param ReflectionMethod $reflectionMethod
+		 * @param string           $method
 		 *
 		 * @return array
 		 * @throws MethodVisibilityException
 		 * @throws PropertyVisibilityException
 		 * @throws MissingClassException
 		 */
-		protected function getParameterList(\ReflectionClass $reflectionClass, \ReflectionMethod $reflectionMethod, string $method) {
+		protected function getParameterList(ReflectionClass $reflectionClass, ReflectionMethod $reflectionMethod, string $method) {
 			$parameterList = [];
 			if (strlen($name = $reflectionMethod->getName()) > strlen($method) && strpos($name, $method, 0) === 0) {
 				if ($reflectionMethod->isPublic() === false) {

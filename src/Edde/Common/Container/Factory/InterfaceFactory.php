@@ -46,7 +46,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getReflection(IContainer $container, string $dependency = null): IReflection {
+		public function getReflection(IContainer $container, string $dependency): IReflection {
 			if ($this->instance) {
 				return new Reflection();
 			}

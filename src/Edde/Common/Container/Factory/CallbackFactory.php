@@ -42,7 +42,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getReflection(IContainer $container, string $dependency = null): IReflection {
+		public function getReflection(IContainer $container, string $dependency): IReflection {
 			$parameterList = [];
 			foreach ($this->reflectionFunction->getParameters() as $reflectionParameter) {
 				if (($parameterReflectionClass = $reflectionParameter->getClass()) === null) {

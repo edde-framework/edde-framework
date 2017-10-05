@@ -13,7 +13,7 @@
 	class CallbackFactoryTest extends TestCase {
 		public function testFactoryReflection() {
 			$factory = new CallbackFactory('\Edde\Test\foo');
-			$reflection = $factory->getReflection($container = new Container());
+			$reflection = $factory->getReflection($container = new Container(), 'foo');
 			self::assertEquals(new Reflection([
 				new Parameter('fooObject', false, FooObject::class),
 			]), $reflection);
