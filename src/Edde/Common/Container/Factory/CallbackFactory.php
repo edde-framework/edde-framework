@@ -3,7 +3,6 @@
 	namespace Edde\Common\Container\Factory;
 
 	use Closure;
-	use Edde\Api\Container\Exception\ReflectionException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IReflection;
 	use Edde\Common\Container\Parameter;
@@ -16,11 +15,7 @@
 		 */
 		protected $callback;
 		/**
-		 * @var \Closure
-		 */
-		protected $closure;
-		/**
-		 * @var \ReflectionFunction
+		 * @var ReflectionFunction
 		 */
 		protected $reflectionFunction;
 		/**
@@ -33,18 +28,14 @@
 		 * @param callable $callback
 		 */
 		public function __construct(callable $callback, string $name = null) {
-			$this->callback = $callback;
-			$this->reflectionFunction = new ReflectionFunction($this->closure = Closure::fromCallable($this->callback));
-			$this->name = $name;
+			$this->reflectionFunction = new ReflectionFunction(Closure::fromCallable($this->callback = $callback));
+			$this->name = $name ?: (string)$this->reflectionFunction->getReturnType();
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function canHandle(IContainer $container, string $dependency): bool {
-			if ($this->name === null) {
-				$this->name = (string)$this->reflectionFunction->getReturnType();
-			}
 			return $dependency === $this->name;
 		}
 
@@ -55,10 +46,7 @@
 			$parameterList = [];
 			foreach ($this->reflectionFunction->getParameters() as $reflectionParameter) {
 				if (($parameterReflectionClass = $reflectionParameter->getClass()) === null) {
-					if ($reflectionParameter->isOptional()) {
-						break;
-					}
-					throw new ReflectionException(sprintf('Function [%s] parameter [%s] has missing class type hint or it is a scalar type.', $this->reflectionFunction->getName(), $reflectionParameter->getName()));
+					break;
 				}
 				$parameterList[] = new Parameter($reflectionParameter->getName(), $reflectionParameter->isOptional(), $parameterReflectionClass->getName());
 			}
@@ -69,6 +57,7 @@
 		 * @inheritdoc
 		 */
 		public function factory(IContainer $container, array $parameterList, IReflection $dependency, string $name = null) {
-			return call_user_func_array($this->callback, $this->parameters($container, $parameterList, $dependency));
+			$callback = $this->callback;
+			return $callback(...$this->parameters($container, $parameterList, $dependency));
 		}
 	}

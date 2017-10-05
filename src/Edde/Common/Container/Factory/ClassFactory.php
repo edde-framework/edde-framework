@@ -3,7 +3,6 @@
 	namespace Edde\Common\Container\Factory;
 
 	use Edde\Api\Container\Exception\FactoryException;
-	use Edde\Api\Container\Exception\ReflectionException;
 	use Edde\Api\Container\IAutowire;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IReflection;
@@ -51,10 +50,7 @@
 			});
 			foreach ($constructor->getParameters() as $reflectionParameter) {
 				if (($parameterReflectionClass = $reflectionParameter->getClass()) === null) {
-					if ($reflectionParameter->isOptional()) {
-						break;
-					}
-					throw new ReflectionException(sprintf('Constructor [%s] parameter [%s] has missing class type hint or it is a scalar type.', $dependency, $reflectionParameter->getName()));
+					break;
 				}
 				$parameterList[] = new Parameter($reflectionParameter->getName(), $reflectionParameter->isOptional(), $parameterReflectionClass->getName());
 			}
