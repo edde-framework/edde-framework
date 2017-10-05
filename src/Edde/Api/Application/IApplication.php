@@ -3,6 +3,7 @@
 	namespace Edde\Api\Application;
 
 	use Edde\Api\Config\IConfigurable;
+	use Edde\Api\Router\IResponse;
 
 	/**
 	 * Application should connect services for user input translation to
@@ -12,11 +13,11 @@
 		/**
 		 * set an exit code from an application
 		 *
-		 * @param int $code
+		 * @param IResponse $response
 		 *
 		 * @return IApplication
 		 */
-		public function setCode(int $code): IApplication;
+		public function setResponse(IResponse $response): IApplication;
 
 		/**
 		 * execute the application and return a status code; application should not

@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Router;
 
-	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Element\IElement;
 	use Edde\Api\Router\IRequest;
 	use Edde\Common\Object\Object;
 

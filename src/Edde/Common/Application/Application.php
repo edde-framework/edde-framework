@@ -5,23 +5,22 @@
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Log\Inject\LogService;
 	use Edde\Api\Router\Inject\RouterService;
+	use Edde\Api\Router\IResponse;
 	use Edde\Common\Object\Object;
 
 	class Application extends Object implements IApplication {
 		use RouterService;
 		use LogService;
 		/**
-		 * return code from an application
-		 *
-		 * @var int
+		 * @var IResponse
 		 */
-		protected $code;
+		protected $response;
 
 		/**
 		 * @inheritdoc
 		 */
-		public function setCode(int $code): IApplication {
-			$this->code = $code;
+		public function setResponse(IResponse $response): IApplication {
+			$this->response = $response;
 			return $this;
 		}
 
@@ -40,7 +39,7 @@
 				 */
 				$request = $this->routerService->createRequest();
 				$this->protocolService->execute($request->getElement());
-				return $this->code ?: 0;
+				return $this->response ? $this->response->execute() : 0;
 			} catch (\Throwable $exception) {
 				$this->logService->exception($exception, [
 					'edde',
