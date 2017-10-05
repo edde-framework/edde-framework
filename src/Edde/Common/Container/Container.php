@@ -10,6 +10,7 @@
 	use Edde\Api\Container\IParameter;
 	use Edde\Api\Container\IReflection;
 	use Edde\Common\Container\Factory\ClassFactory;
+	use SplStack;
 
 	/**
 	 * Default implementation of a dependency container.
@@ -36,7 +37,7 @@
 	 */
 	class Container extends AbstractContainer {
 		/**
-		 * @var \SplStack
+		 * @var SplStack
 		 */
 		protected $stack;
 		/**
@@ -52,7 +53,7 @@
 			/**
 			 * stack to track list of dependencies
 			 */
-			$this->stack = new \SplStack();
+			$this->stack = new SplStack();
 			$this->factoryMap = [];
 			$this->autowireList = [];
 		}
