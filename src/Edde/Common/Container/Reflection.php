@@ -3,11 +3,11 @@
 
 	namespace Edde\Common\Container;
 
-	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IParameter;
+	use Edde\Api\Container\IReflection;
 	use Edde\Common\Object\Object;
 
-	class Dependency extends Object implements IDependency {
+	class Reflection extends Object implements IReflection {
 		protected $parameterList;
 		protected $injectList;
 		protected $lazyInjectList;

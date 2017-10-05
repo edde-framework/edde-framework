@@ -1,22 +1,20 @@
 <?php
 	declare(strict_types=1);
-
 	namespace Edde\Common\Container\Factory;
 
-	use Edde\Api\Container\Exception\ContainerException;
-	use Edde\Api\Container\Exception\DependencyException;
+	use Edde\Api\Container\Exception\FactoryException;
 	use Edde\Api\Container\IAutowire;
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IDependency;
-	use Edde\Common\Container\Dependency;
+	use Edde\Api\Container\IReflection;
 	use Edde\Common\Container\Factory\Exception\MethodVisibilityException;
 	use Edde\Common\Container\Factory\Exception\MissingClassException;
 	use Edde\Common\Container\Factory\Exception\PropertyVisibilityException;
 	use Edde\Common\Container\Parameter;
+	use Edde\Common\Container\Reflection;
 
 	class ClassFactory extends AbstractFactory {
 		/**
-		 * @var IDependency[]
+		 * @var IReflection[]
 		 */
 		static protected $dependencyCache = [];
 
@@ -29,11 +27,10 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws ContainerException
 		 */
-		public function createDependency(IContainer $container, string $dependency = null): IDependency {
+		public function getReflection(IContainer $container, string $dependency = null): IReflection {
 			if ($dependency === null) {
-				throw new DependencyException('The $dependency parameter has not been provided for [%s], oops!', __METHOD__);
+				throw new FactoryException('The $dependency parameter has not been provided for [%s], oops!', __METHOD__);
 			}
 			if (isset(self::$dependencyCache[$dependency])) {
 				return self::$dependencyCache[$dependency];
@@ -57,13 +54,13 @@
 			if ($dependency !== null) {
 				$configuratorList = array_reverse(array_merge([$dependency], (new \ReflectionClass($dependency))->getInterfaceNames()));
 			}
-			return self::$dependencyCache[$dependency] = new Dependency($parameterList, $injectList, $lazyList, $configuratorList);
+			return self::$dependencyCache[$dependency] = new Reflection($parameterList, $injectList, $lazyList, $configuratorList);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
+		public function factory(IContainer $container, array $parameterList, IReflection $dependency, string $name = null) {
 			$parameterList = $this->parameters($container, $parameterList, $dependency);
 			if (empty($parameterList)) {
 				return new $name();

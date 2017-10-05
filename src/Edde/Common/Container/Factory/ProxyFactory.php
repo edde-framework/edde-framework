@@ -5,7 +5,7 @@
 
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IDependency;
+	use Edde\Api\Container\IReflection;
 
 	/**
 	 * Proxy factory is bound to method of some other object.
@@ -58,14 +58,14 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function createDependency(IContainer $container, string $dependency = null): IDependency {
-			return $container->getFactory($this->target, $this->name)->createDependency($container, $this->target);
+		public function getReflection(IContainer $container, string $dependency = null): IReflection {
+			return $container->getFactory($this->target, $this->name)->getReflection($container, $this->target);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
+		public function factory(IContainer $container, array $parameterList, IReflection $dependency, string $name = null) {
 			/** @var $instance IConfigurable */
 			if (($instance = $container->create($this->target, $parameterList, $this->name)) instanceof IConfigurable) {
 				$instance->setup();

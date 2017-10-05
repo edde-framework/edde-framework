@@ -77,6 +77,6 @@
 		 * @inheritdoc
 		 */
 		public function create(string $name, array $parameterList = [], string $source = null) {
-			return $this->factory($this->getFactory($name, $source), $parameterList, $name, $source);
+			return $this->factory($this->getFactory($name, $source), $name, $parameterList, $source);
 		}
 	}

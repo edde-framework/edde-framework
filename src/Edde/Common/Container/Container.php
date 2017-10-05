@@ -6,13 +6,33 @@
 	use Edde\Api\Container\Exception\FactoryException;
 	use Edde\Api\Container\Exception\UnknownFactoryException;
 	use Edde\Api\Container\IAutowire;
-	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\IParameter;
+	use Edde\Api\Container\IReflection;
 	use Edde\Common\Container\Factory\ClassFactory;
 
 	/**
 	 * Default implementation of a dependency container.
+	 *
+	 * One day, Little Johnny saw his grandpa smoking his cigarettes. Little Johnny asked,
+	 * "Grandpa, can I smoke some of your cigarettes?" His grandpa replied,
+	 * "Can your penis reach your asshole?"
+	 * "No", said Little Johnny.
+	 * His grandpa replied,
+	 * "Then you're not old enough."
+	 *
+	 * The next day, Little Johnny saw his grandpa drinking beer. He asked,
+	 * "Grandpa, can I drink some of your beer?"
+	 * His grandpa replied,
+	 * "Can your penis reach your asshole?"
+	 * "No" said Little Johhny.
+	 * "Then you're not old enough." his grandpa replied.
+	 *
+	 * The next day, Little Johnny was eating cookies.
+	 * His grandpa asked, "Can I have some of your cookies?"
+	 * Little Johnny replied, "Can your penis reach your asshole?"
+	 * His grandpa replied, "It most certainly can!"
+	 * Little Johnny replied, "Then go fuck yourself.
 	 */
 	class Container extends AbstractContainer {
 		/**
@@ -24,31 +44,10 @@
 		 */
 		protected $factoryMap;
 		/**
-		 * @var IDependency
+		 * @var IReflection
 		 */
 		protected $autowireList;
 
-		/**
-		 * One day, Little Johnny saw his grandpa smoking his cigarettes. Little Johnny asked,
-		 * "Grandpa, can I smoke some of your cigarettes?" His grandpa replied,
-		 * "Can your penis reach your asshole?"
-		 * "No", said Little Johnny.
-		 * His grandpa replied,
-		 * "Then you're not old enough."
-		 *
-		 * The next day, Little Johnny saw his grandpa drinking beer. He asked,
-		 * "Grandpa, can I drink some of your beer?"
-		 * His grandpa replied,
-		 * "Can your penis reach your asshole?"
-		 * "No" said Little Johhny.
-		 * "Then you're not old enough." his grandpa replied.
-		 *
-		 * The next day, Little Johnny was eating cookies.
-		 * His grandpa asked, "Can I have some of your cookies?"
-		 * Little Johnny replied, "Can your penis reach your asshole?"
-		 * His grandpa replied, "It most certainly can!"
-		 * Little Johnny replied, "Then go fuck yourself.
-		 */
 		public function __construct() {
 			/**
 			 * stack to track list of dependencies
@@ -90,7 +89,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IFactory $factory, array $parameterList = [], string $name = null, string $source = null) {
+		public function factory(IFactory $factory, string $name, array $parameterList = [], string $source = null) {
 			try {
 				/**
 				 * track current name of requested dependency; in common almost all dependencies should be named
@@ -108,7 +107,7 @@
 				 * and autowire rest of dependencies (property/method/lazy injects); the factory also could save current
 				 * instance under given id
 				 */
-				return $factory->push($this, $fetchId, $this->dependency($instance = $factory->factory($this, $parameterList, $dependency = $factory->createDependency($this, $name), $name), $dependency));
+				return $factory->push($this, $fetchId, $this->dependency($instance = $factory->factory($this, $parameterList, $dependency = $factory->getReflection($this, $name), $name), $dependency));
 			} finally {
 				$this->stack->pop();
 			}
@@ -121,13 +120,13 @@
 			/**
 			 * expensive trick to inject dependencies to an object; class factory is responsible to analyze the dependency, container is than responsible to do the rest of job
 			 */
-			return is_object($instance) ? $this->dependency($instance, $this->autowireList[$class = get_class($instance)] ?? $this->autowireList[$class] = (new ClassFactory())->createDependency($this, $class), $force !== true) : $instance;
+			return is_object($instance) ? $this->dependency($instance, $this->autowireList[$class = get_class($instance)] ?? $this->autowireList[$class] = (new ClassFactory())->getReflection($this, $class), $force !== true) : $instance;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function dependency($instance, IDependency $dependency, bool $lazy = true) {
+		public function dependency($instance, IReflection $dependency, bool $lazy = true) {
 			if (is_object($instance) === false) {
 				return $instance;
 			}

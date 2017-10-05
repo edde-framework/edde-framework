@@ -4,9 +4,9 @@
 	namespace Edde\Common\Container\Factory;
 
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IDependency;
-	use Edde\Common\Container\Dependency;
+	use Edde\Api\Container\IReflection;
 	use Edde\Common\Container\Parameter;
+	use Edde\Common\Container\Reflection;
 
 	class CallbackFactory extends AbstractFactory {
 		/**
@@ -41,18 +41,18 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function createDependency(IContainer $container, string $dependency = null): IDependency {
+		public function getReflection(IContainer $container, string $dependency = null): IReflection {
 			$parameterList = [];
 			foreach (ReflectionUtils::getParameterList($this->callback) as $reflectionParameter) {
 				$parameterList[] = new Parameter($reflectionParameter->getName(), $reflectionParameter->isOptional(), ($class = $reflectionParameter->getClass()) ? $class->getName() : null);
 			}
-			return new Dependency($parameterList);
+			return new Reflection($parameterList);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
+		public function factory(IContainer $container, array $parameterList, IReflection $dependency, string $name = null) {
 			return call_user_func_array($this->callback, $this->parameters($container, $parameterList, $dependency));
 		}
 	}

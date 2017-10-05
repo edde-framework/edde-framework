@@ -1,6 +1,5 @@
 <?php
 	declare(strict_types=1);
-
 	namespace Edde\Api\Container;
 
 	use Edde\Api\Config\IConfigurable;
@@ -86,14 +85,14 @@
 		/**
 		 * general method for dependency creation (so call and create should call this one)
 		 *
-		 * @param IFactory    $factory
-		 * @param array       $parameterList
-		 * @param string|null $name
-		 * @param string      $source
+		 * @param IFactory $factory
+		 * @param string   $name
+		 * @param array    $parameterList
+		 * @param string   $source
 		 *
 		 * @return mixed
 		 */
-		public function factory(IFactory $factory, array $parameterList = [], string $name = null, string $source = null);
+		public function factory(IFactory $factory, string $name, array $parameterList = [], string $source = null);
 
 		/**
 		 * try to autowire dependencies to $instance
@@ -109,10 +108,10 @@
 		 * execute injects on the given instance
 		 *
 		 * @param mixed       $instance
-		 * @param IDependency $dependency
+		 * @param IReflection $dependency
 		 * @param bool        $lazy
 		 *
 		 * @return mixed
 		 */
-		public function dependency($instance, IDependency $dependency, bool $lazy = true);
+		public function dependency($instance, IReflection $dependency, bool $lazy = true);
 	}

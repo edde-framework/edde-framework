@@ -4,7 +4,7 @@
 	namespace Edde\Common\Container\Factory;
 
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IDependency;
+	use Edde\Api\Container\IReflection;
 
 	/**
 	 * When there is need to search for a class in namespace hierarchy.
@@ -28,14 +28,14 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function createDependency(IContainer $container, string $dependency = null): IDependency {
-			return parent::createDependency($container, $this->search($dependency));
+		public function getReflection(IContainer $container, string $dependency = null): IReflection {
+			return parent::getReflection($container, $this->search($dependency));
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
+		public function factory(IContainer $container, array $parameterList, IReflection $dependency, string $name = null) {
 			return parent::factory($container, $parameterList, $dependency, $this->search($name));
 		}
 

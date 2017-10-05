@@ -3,9 +3,9 @@
 	namespace Edde\Common\Container\Factory;
 
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
-	use Edde\Common\Container\Dependency;
+	use Edde\Api\Container\IReflection;
+	use Edde\Common\Container\Reflection;
 
 	/**
 	 * Translate the given factory into another one.
@@ -63,17 +63,17 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function createDependency(IContainer $container, string $dependency = null): IDependency {
+		public function getReflection(IContainer $container, string $dependency = null): IReflection {
 			if ($this->instance) {
-				return new Dependency();
+				return new Reflection();
 			}
-			return $this->getFactory($container)->createDependency($container, $dependency);
+			return $this->getFactory($container)->getReflection($container, $dependency);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
+		public function factory(IContainer $container, array $parameterList, IReflection $dependency, string $name = null) {
 			return $this->instance ?: $this->instance = $this->getFactory($container)->factory($container, $parameterList, $dependency, $name);
 		}
 	}

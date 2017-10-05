@@ -11,9 +11,16 @@
 		public function getName(): string;
 
 		/**
+		 * is this parameter optional?
+		 *
+		 * @return bool
+		 */
+		public function isOptional(): bool;
+
+		/**
 		 * return class name of the parameter
 		 *
-		 * @return null|string
+		 * @return string
 		 */
 		public function getClass(): string;
 	}

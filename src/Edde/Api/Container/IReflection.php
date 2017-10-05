@@ -1,12 +1,12 @@
 <?php
 	declare(strict_types=1);
-
 	namespace Edde\Api\Container;
 
 	/**
-	 * Describes dependency from point of view of object (or closure); so dependency is "me".
+	 * Container dependency reflection: holds mandatory parameters description, inject
+	 * method reflection, lazy method reflection and names of configurators.
 	 */
-	interface IDependency {
+	interface IReflection {
 		/**
 		 * get list of mandatory parameters
 		 *

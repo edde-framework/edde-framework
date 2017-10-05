@@ -4,8 +4,8 @@
 	namespace Edde\Common\Container\Factory;
 
 	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IDependency;
-	use Edde\Common\Container\Dependency;
+	use Edde\Api\Container\IReflection;
+	use Edde\Common\Container\Reflection;
 
 	/**
 	 * This factory will create singleton instance of the given class.
@@ -66,11 +66,11 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function createDependency(IContainer $container, string $dependency = null): IDependency {
+		public function getReflection(IContainer $container, string $dependency = null): IReflection {
 			if ($this->instance) {
-				return new Dependency();
+				return new Reflection();
 			}
-			return parent::createDependency($container, $this->class);
+			return parent::getReflection($container, $this->class);
 		}
 
 		/**
@@ -83,7 +83,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameterList, IDependency $dependency, string $name = null) {
+		public function factory(IContainer $container, array $parameterList, IReflection $dependency, string $name = null) {
 			if ($this->instance === null) {
 				$this->instance = $container->dependency($this->instance = parent::factory($container, $this->parameterList, $dependency, $this->class), $dependency);
 			}

@@ -1,6 +1,5 @@
 <?php
 	declare(strict_types=1);
-
 	namespace Edde\Api\Container;
 
 	/**
@@ -18,12 +17,14 @@
 		public function canHandle(IContainer $container, string $dependency): bool;
 
 		/**
+		 * create a reflection for the given dependency
+		 *
 		 * @param IContainer $container
 		 * @param string     $dependency
 		 *
-		 * @return IDependency
+		 * @return IReflection
 		 */
-		public function createDependency(IContainer $container, string $dependency = null): IDependency;
+		public function getReflection(IContainer $container, string $dependency = null): IReflection;
 
 		/**
 		 * 90% usecase is to return self, but in some rare cases factory can return another factory
@@ -47,12 +48,12 @@
 		/**
 		 * @param IContainer  $container
 		 * @param array       $parameterList
-		 * @param IDependency $dependency
+		 * @param IReflection $dependency
 		 * @param string      $name
 		 *
 		 * @return mixed
 		 */
-		public function factory(IContainer $container, array $parameterList, IDependency $dependency, string $name = null);
+		public function factory(IContainer $container, array $parameterList, IReflection $dependency, string $name = null);
 
 		/**
 		 * factory can optionally push dependency to some kind of cache (this instance should be returned on fetch())
