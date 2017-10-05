@@ -100,15 +100,15 @@
 				 * this is an optimization for dependency creation when a factory could return an instance without
 				 * analyzing dependencies (or in singleton case it could return singleton directly)
 				 */
-				if (($instance = $factory->fetch($this, $fetchId = (get_class($factory) . count($parameterList) . $name . $source))) !== null) {
+				if (($instance = $factory->fetch($this, $name, $parameterList)) !== null) {
 					return $instance;
 				}
 				/**
-				 * the expensive part: analyze dependencies (create IDependency object), create a dependency itself
+				 * the expensive part: analyze dependencies (create reflection object), create a dependency itself
 				 * and autowire rest of dependencies (property/method/lazy injects); the factory also could save current
 				 * instance under given id
 				 */
-				return $factory->push($this, $fetchId, $this->dependency($instance = $factory->factory($this, $parameterList, $reflection = $factory->getReflection($this, $name), $name), $reflection));
+				return $factory->push($this, $this->dependency($instance = $factory->factory($this, $parameterList, $reflection = $factory->getReflection($this, $name), $name), $reflection));
 			} finally {
 				$this->stack->pop();
 			}

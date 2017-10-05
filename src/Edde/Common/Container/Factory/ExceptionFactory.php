@@ -60,7 +60,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function fetch(IContainer $container, string $id) {
+		public function fetch(IContainer $container, string $name, array $parameterList) {
 			$exception = $this->exception;
 			throw new $exception($this->message);
 		}

@@ -39,11 +39,12 @@
 		 * try to prefetch dependency before heavy computations are done
 		 *
 		 * @param IContainer $container
-		 * @param string     $id
+		 * @param string     $name
+		 * @param array      $parameterList
 		 *
-		 * @return mixed|null if null is returned, container should execute... execute() on this factory
+		 * @return mixed|null if null is returned, container should execute dependency creation
 		 */
-		public function fetch(IContainer $container, string $id);
+		public function fetch(IContainer $container, string $name, array $parameterList);
 
 		/**
 		 * @param IContainer  $container
@@ -59,10 +60,9 @@
 		 * factory can optionally push dependency to some kind of cache (this instance should be returned on fetch())
 		 *
 		 * @param IContainer $container
-		 * @param string     $id
 		 * @param mixed      $instance
 		 *
 		 * @return mixed
 		 */
-		public function push(IContainer $container, string $id, $instance);
+		public function push(IContainer $container, $instance);
 	}

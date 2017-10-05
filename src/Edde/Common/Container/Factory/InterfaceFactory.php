@@ -56,7 +56,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function fetch(IContainer $container, string $id) {
+		public function fetch(IContainer $container, string $name, array $parameterList) {
 			return $this->instance;
 		}
 

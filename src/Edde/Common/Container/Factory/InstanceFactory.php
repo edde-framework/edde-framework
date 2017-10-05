@@ -76,7 +76,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function fetch(IContainer $container, string $id) {
+		public function fetch(IContainer $container, string $name, array $parameterList) {
 			return $this->cloneable && $this->instance ? clone $this->instance : $this->instance;
 		}
 

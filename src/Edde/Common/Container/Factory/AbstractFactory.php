@@ -22,13 +22,13 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function fetch(IContainer $container, string $id) {
+		public function fetch(IContainer $container, string $name, array $parameterList) {
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function push(IContainer $container, string $id, $instance) {
+		public function push(IContainer $container, $instance) {
 			return $instance;
 		}
 
