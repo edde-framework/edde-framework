@@ -41,9 +41,9 @@
 			$configuratorList = [];
 			$reflectionClass = new \ReflectionClass($dependency);
 			foreach ($reflectionClass->getMethods() as $reflectionMethod) {
-				$injectList = array_merge($injectList, $this->getParameterList($reflectionClass = $reflectionMethod->getDeclaringClass(), $reflectionMethod, 'inject'));
-				if ($reflectionClass->implementsInterface(IAutowire::class)) {
-					$lazyList = array_merge($lazyList, $this->getParameterList($reflectionClass, $reflectionMethod, 'lazy'));
+				$injectList = array_merge($injectList, $this->getParameterList($parameterReflectionClass = $reflectionMethod->getDeclaringClass(), $reflectionMethod, 'inject'));
+				if ($parameterReflectionClass->implementsInterface(IAutowire::class)) {
+					$lazyList = array_merge($lazyList, $this->getParameterList($parameterReflectionClass, $reflectionMethod, 'lazy'));
 				}
 			}
 			$parameterList = [];

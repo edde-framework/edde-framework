@@ -107,7 +107,7 @@
 				 * and autowire rest of dependencies (property/method/lazy injects); the factory also could save current
 				 * instance under given id
 				 */
-				return $factory->push($this, $fetchId, $this->dependency($instance = $factory->factory($this, $parameterList, $dependency = $factory->getReflection($this, $name), $name), $dependency));
+				return $factory->push($this, $fetchId, $this->dependency($instance = $factory->factory($this, $parameterList, $reflection = $factory->getReflection($this, $name), $name), $reflection));
 			} finally {
 				$this->stack->pop();
 			}
@@ -126,7 +126,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function dependency($instance, IReflection $dependency, bool $lazy = true) {
+		public function dependency($instance, IReflection $reflection, bool $lazy = true) {
 			if (is_object($instance) === false) {
 				return $instance;
 			}
@@ -135,13 +135,13 @@
 			 */
 			if ($instance instanceof IAutowire) {
 				$class = get_class($instance);
-				$lazyList = $dependency->getLazyList();
+				$lazyList = $reflection->getLazyList();
 				/** @var $instance IAutowire */
 				/** @var $parameter IParameter */
 				/**
 				 * a trick to remove duplicated code - if we are not lazy, autowire all dependencies
 				 */
-				foreach (array_merge($dependency->getInjectList(), $lazy ? [] : $lazyList) as $parameter) {
+				foreach (array_merge($reflection->getInjectList(), $lazy ? [] : $lazyList) as $parameter) {
 					/**
 					 * it's important to keep all parameters there to keep track of dependency chain in case of an exception
 					 */
@@ -165,7 +165,7 @@
 				 * dependency could have more names for configurators (for example Foo class could implements
 				 * IFoo; analysis could return both names for configurator)
 				 */
-				foreach ($dependency->getConfiguratorList() as $configurator) {
+				foreach ($reflection->getConfiguratorList() as $configurator) {
 					$configuratorList = array_merge($configuratorList, $this->configuratorList[$configurator] ?? []);
 				}
 				$instance->setConfiguratorList($configuratorList);

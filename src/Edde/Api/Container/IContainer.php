@@ -108,10 +108,10 @@
 		 * execute injects on the given instance
 		 *
 		 * @param mixed       $instance
-		 * @param IReflection $dependency
+		 * @param IReflection $reflection
 		 * @param bool        $lazy
 		 *
 		 * @return mixed
 		 */
-		public function dependency($instance, IReflection $dependency, bool $lazy = true);
+		public function dependency($instance, IReflection $reflection, bool $lazy = true);
 	}

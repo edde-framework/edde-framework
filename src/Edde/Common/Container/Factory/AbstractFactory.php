@@ -35,16 +35,16 @@
 		/**
 		 * @param IContainer  $container
 		 * @param array       $parameterList
-		 * @param IReflection $dependency
+		 * @param IReflection $reflection
 		 * @param string|null $name
 		 *
 		 * @return array
 		 * @throws UnknownFactoryException
 		 */
-		protected function parameters(IContainer $container, array $parameterList, IReflection $dependency, string $name = null) {
+		protected function parameters(IContainer $container, array $parameterList, IReflection $reflection, string $name = null) {
 			$grab = count($parameterList);
 			$dependencyList = [];
-			foreach ($dependency->getParameterList() as $parameter) {
+			foreach ($reflection->getParameterList() as $parameter) {
 				if (--$grab >= 0 || $parameter->isOptional()) {
 					continue;
 				}
