@@ -42,7 +42,10 @@
 				$this->protocolService->execute($request->getElement());
 				return $this->code ?: 0;
 			} catch (\Throwable $exception) {
-				$this->logService->exception($exception, ['edde']);
+				$this->logService->exception($exception, [
+					'edde',
+					'application',
+				]);
 				/**
 				 * if somebody already set a code, respect it or try to guess one
 				 *
