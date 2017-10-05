@@ -45,7 +45,7 @@
 		 */
 		protected $factoryMap;
 		/**
-		 * @var IReflection
+		 * @var IReflection[]
 		 */
 		protected $autowireList;
 
@@ -93,11 +93,11 @@
 		public function factory(IFactory $factory, string $name, array $parameterList = [], string $source = null) {
 			try {
 				/**
-				 * track current name of requested dependency; in common almost all dependencies should be named
+				 * track current name of requested dependency; in common all dependencies should be named
 				 */
-				$this->stack->push($name ?: '[no name]');
+				$this->stack->push($name);
 				/**
-				 * this is an optimization for dependency creation when a factory could return instance without
+				 * this is an optimization for dependency creation when a factory could return an instance without
 				 * analyzing dependencies (or in singleton case it could return singleton directly)
 				 */
 				if (($instance = $factory->fetch($this, $fetchId = (get_class($factory) . count($parameterList) . $name . $source))) !== null) {

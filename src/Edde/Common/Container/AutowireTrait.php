@@ -1,9 +1,10 @@
 <?php
 	declare(strict_types=1);
-
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Config\IConfigurable;
+	use Edde\Api\Container\Exception\ContainerException;
+	use Edde\Api\Container\Exception\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Common\Object\Exception\PropertyReadException;
 	use Edde\Common\Object\Exception\PropertyWriteException;
@@ -35,6 +36,8 @@
 		 *
 		 * @return mixed
 		 * @throws PropertyReadException
+		 * @throws ContainerException
+		 * @throws FactoryException
 		 */
 		public function __get(string $name) {
 			if (isset($this->tLazyList[$name])) {
