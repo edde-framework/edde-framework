@@ -1,8 +1,9 @@
 <?php
 	declare(strict_types=1);
-
 	namespace Edde\Common\Router;
 
+	use Edde\Api\Container\Exception\ContainerException;
+	use Edde\Api\Container\Exception\FactoryException;
 	use Edde\Api\Router\Inject\RouterService;
 	use Edde\Ext\Test\TestCase;
 	use Edde\Test\TestRouter;
@@ -23,9 +24,12 @@
 			self::assertSame('foo.foo-service/foo-action', $element->getAttribute('request'));
 		}
 
+		/**
+		 * @throws ContainerException
+		 * @throws FactoryException
+		 */
 		protected function setUp() {
 			parent::setUp();
 			$this->routerService->registerRouter(new TestRouter());
 		}
-
 	}

@@ -7,11 +7,9 @@
 	 * to do any other tasks here.
 	 */
 	declare(strict_types=1);
-
 	use App\Common\Application\Context;
 	use App\Common\Router\RouterServiceConfigurator;
 	use Edde\Api\Application\IContext;
-	use Edde\Api\Resource\IResourceProvider;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Common\Container\Factory\CascadeFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
