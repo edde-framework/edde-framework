@@ -4,9 +4,10 @@
 
 	interface IResponse {
 		/**
-		 * execute an application response (this should echo the things, do computations)
+		 * even an application is executed in http mode, it could return
+		 * a return code
 		 *
 		 * @return int
 		 */
-		public function execute(): int;
+		public function getCode(): int;
 	}

@@ -10,6 +10,9 @@
 	use Edde\Api\Http\IHostUrl;
 	use Edde\Api\Http\IHttpService;
 	use Edde\Api\Log\ILogService;
+	use Edde\Api\Router\Inject\ResponseService;
+	use Edde\Api\Router\IRequestService;
+	use Edde\Api\Router\IResponseService;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Api\Utils\IHttpUtils;
@@ -27,6 +30,7 @@
 	use Edde\Common\Http\HttpService;
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Object\Object;
+	use Edde\Common\Router\RequestService;
 	use Edde\Common\Router\RouterService;
 	use Edde\Common\Runtime\Runtime;
 	use Edde\Common\Utils\HttpUtils;
@@ -152,40 +156,42 @@
 				/**
 				 * utils
 				 */
-				IHttpUtils::class     => HttpUtils::class,
-				IStringUtils::class   => StringUtils::class,
+				IHttpUtils::class       => HttpUtils::class,
+				IStringUtils::class     => StringUtils::class,
 				/**
 				 * container implementation
 				 */
-				IContainer::class     => Container::class,
+				IContainer::class       => Container::class,
 				/**
 				 * runtime info provider
 				 */
-				IRuntime::class       => Runtime::class,
+				IRuntime::class         => Runtime::class,
 				/**
 				 * if needed, host url provider (host name is used for absolute links)
 				 */
-				IHostUrl::class       => HostUrl::class . '::factory',
+				IHostUrl::class         => HostUrl::class . '::factory',
 				/**
 				 * log support
 				 */
-				ILogService::class    => LogService::class,
+				ILogService::class      => LogService::class,
 				/**
 				 * user request into protocol element translation
 				 */
-				IRouterService::class => RouterService::class,
+				IRouterService::class   => RouterService::class,
+				IRequestService::class  => RequestService::class,
+				IResponseService::class => ResponseService::class,
 				/**
 				 * general service for http request/response
 				 */
-				IHttpService::class   => HttpService::class,
+				IHttpService::class     => HttpService::class,
 				/**
 				 * an application handles lifecycle workflow
 				 */
-				IApplication::class   => Application::class,
+				IApplication::class     => Application::class,
 				/**
 				 * magical factory for an application execution
 				 */
-				'run'                 => IApplication::class . '::run',
+				'run'                   => IApplication::class . '::run',
 			];
 		}
 

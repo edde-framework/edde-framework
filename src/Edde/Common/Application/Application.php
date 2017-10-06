@@ -4,25 +4,16 @@
 
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Log\Inject\LogService;
+	use Edde\Api\Router\Inject\RequestService;
+	use Edde\Api\Router\Inject\ResponseService;
 	use Edde\Api\Router\Inject\RouterService;
-	use Edde\Api\Router\IResponse;
 	use Edde\Common\Object\Object;
 
 	class Application extends Object implements IApplication {
 		use RouterService;
+		use RequestService;
+		use ResponseService;
 		use LogService;
-		/**
-		 * @var IResponse
-		 */
-		protected $response;
-
-		/**
-		 * @inheritdoc
-		 */
-		public function setResponse(IResponse $response): IApplication {
-			$this->response = $response;
-			return $this;
-		}
 
 		/**
 		 * @inheritdoc
@@ -30,28 +21,18 @@
 		public function run(): int {
 			try {
 				/**
-				 * nothing special - protocol service is connected to service responsible for
-				 * providing a request
-				 *
-				 * a protocol service should only execute the application logic, do whatever is
-				 * needed but without any output; output (aka response) should be handled after
-				 * execution is done
+				 * the flow is simple:
+				 * - router service is responsible for "global space" request resolution (are we cli? Are we in http mode? Is there a devil kitten?, ...)
+				 * - we have request, so it's time to translate it into response (just data, computation, no output)
+				 * - and at the end we can send http headers, if required, echo the things, do heavy processing, do output, kill devil kitten, whatever, ...
 				 */
-				$request = $this->routerService->createRequest();
-				$this->protocolService->execute($request->getElement());
-				return $this->response ? $this->response->execute() : 0;
+				return $this->responseService->execute($this->requestService->execute($this->routerService->createRequest()))->getCode();
 			} catch (\Throwable $exception) {
 				$this->logService->exception($exception, [
 					'edde',
 					'application',
 				]);
-				/**
-				 * if somebody already set a code, respect it or try to guess one
-				 *
-				 * the code could be 0; so change it to something else to keep track of an
-				 * error state of an application
-				 */
-				return $this->code ?: (($code = $exception->getCode()) === 0 ? -1 : $code);
+				return ($code = $exception->getCode()) === 0 ? -1 : $code;
 			}
 		}
 	}
