@@ -21,7 +21,7 @@
 	 * should see all other required loaders.
 	 */
 	require_once __DIR__ . '/lib/autoload.php';
-	require_once __DIR__ . '/../loader.php';
+	require_once __DIR__ . '/../../loader.php';
 	require_once __DIR__ . '/src/loader.php';
 	/**
 	 * Tracy is a bit piece of shit, but quite useful; there is only problem with not so much

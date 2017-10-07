@@ -4,7 +4,6 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f4fab26c94c74dc39cca60125a1930e9",
     "content-hash": "46db3fb8d63732829663c10dc0ea0ccb",
     "packages": [
         {
@@ -143,7 +142,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2017-09-11 12:05:25"
+            "time": "2017-09-11T12:05:25+00:00"
         }
     ],
     "packages-dev": [
@@ -153,12 +152,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tracy.git",
-                "reference": "5b302790edd71924dfe4ec44f499ef61df3f53a2"
+                "reference": "7b4b8f5d677b56cb7dc3f5b38078de32b74d7ec7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tracy/zipball/5b302790edd71924dfe4ec44f499ef61df3f53a2",
-                "reference": "5b302790edd71924dfe4ec44f499ef61df3f53a2",
+                "url": "https://api.github.com/repos/nette/tracy/zipball/7b4b8f5d677b56cb7dc3f5b38078de32b74d7ec7",
+                "reference": "7b4b8f5d677b56cb7dc3f5b38078de32b74d7ec7",
                 "shasum": ""
             },
             "require": {
@@ -212,7 +211,7 @@
                 "nette",
                 "profiler"
             ],
-            "time": "2017-10-04 18:43:42"
+            "time": "2017-10-06T18:46:39+00:00"
         }
     ],
     "aliases": [],
