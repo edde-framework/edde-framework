@@ -23,7 +23,6 @@
 	require_once __DIR__ . '/lib/autoload.php';
 	require_once __DIR__ . '/../loader.php';
 	require_once __DIR__ . '/src/loader.php';
-
 	/**
 	 * Tracy is a bit piece of shit, but quite useful; there is only problem with not so much
 	 * transparent configuration through properties (this is the only example of acceptable
@@ -32,10 +31,9 @@
 	Debugger::enable(($isLocal = file_exists($local = __DIR__ . '/loader.local.php')) ? Debugger::DEVELOPMENT : Debugger::PRODUCTION, __DIR__ . '/logs');
 	Debugger::$strictMode = true;
 	Debugger::$showBar = $isLocal;
-	Debugger::$onFatalError[] = function($e) {
+	Debugger::$onFatalError[] = function ($e) {
 		Debugger::log($e);
 	};
-
 	/**
 	 * Container factory is the simplest way how to create dependency container; in this particular case container is also
 	 * configured to get "default" set of services defined in Edde.
@@ -48,15 +46,15 @@
 			/**
 			 * This application is using specific contexts to separate user experience
 			 */
-				IContext::class => Context::class,
+			IContext::class => Context::class,
 		], is_array($local = @include $local) ? $local : [], [
 			/**
 			 * This stranger here must (should be) be last, because it's canHandle method is able to kill a lot of dependencies and
 			 * create not so much nice surprises. Thus, it must be last as kind of dependency fallback.
 			 */
-				new ClassFactory(),
+			new ClassFactory(),
 		]), [
-				IRouterService::class => RouterServiceConfigurator::class,
+			IRouterService::class => RouterServiceConfigurator::class,
 		]);
 		/**
 		 * This one is one of the most magical: this factory uses IContext::cascade() to search for class; this is quite
@@ -67,7 +65,7 @@
 		 */
 		$container->registerFactory($container->create(CascadeFactory::class, [], __FILE__));
 		return $container;
-	} catch(\Throwable $e) {
+	} catch (\Throwable $e) {
 		Debugger::log($e);
 		die(sprintf('Critical application Exception [%s]; see logs.', get_class($e)));
 	}
