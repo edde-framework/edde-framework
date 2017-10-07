@@ -1,0 +1,5 @@
+version: '2'
+services:
+  server:
+    build:
+      dockerfile: ./.docker/Dockerfile.production

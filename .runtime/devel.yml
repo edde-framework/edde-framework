@@ -1,0 +1,8 @@
+version: '2'
+services:
+  server:
+    environment:
+      - "HOST_IP=${HOST_IP}"
+    volumes:
+        - ./server/.docker/mod-disable.ini:/etc/php/7.1/fpm/conf.d/10-opcache.ini
+        - ./server/.docker/xdebug.ini:/etc/php/7.1/fpm/conf.d/21-xdebug-custom.ini
